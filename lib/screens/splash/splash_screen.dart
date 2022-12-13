@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/user_params.dart';
-import 'package:izowork/screens/deal_calendar/deal_calendar.dart';
+import 'package:izowork/screens/deal_calendar/deal_calendar_screen.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 
 class SplashScreenWidget extends StatefulWidget {
