@@ -43,9 +43,14 @@ dependencies:
   dio: any
   badges: ^1.1.6
   modal_bottom_sheet: ^2.0.0
-  google_maps_flutter:
   scrollable_clean_calendar: 1.4.0
   wheel_chooser: ^1.0.0
+  blur: ^3.1.0
+  geolocator: ^8.1.1
+  google_maps_flutter:
+  google_place: ^0.4.7
+  google_geocoding_api: ^1.0.1+2
+  google_maps_cluster_manager: ^3.0.0+1
 
   # flutter_icons:
   #   android: 'launcher_icon'

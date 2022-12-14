@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:intl/intl.dart';
 import 'package:izowork/helpers/string_casing_extension.dart';
@@ -57,7 +58,7 @@ class YearMonthSelectionWidget extends StatelessWidget {
                               children: [
                             Text(Titles.month, style: _titleTextStyle),
                             Text(
-                                DateFormat.MMMM('ru')
+                                DateFormat.MMMM(locale)
                                     .format(dateTime)
                                     .toCapitalized(),
                                 style: _subtitleTextStyle)

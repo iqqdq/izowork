@@ -1,9 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/helpers/same_date_time_checker.dart';
 import 'package:izowork/models/deal_calendar_view_model.dart';
@@ -45,9 +44,9 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
         Provider.of<DealCalendarViewModel>(context, listen: true);
 
     _cleanCalendarController = CleanCalendarController(
-        minDate: DateTime(DateTime.now().year, 1),
-        maxDate: DateTime(DateTime.now().year, 12),
-        initialDateSelected: _dealCalendarViewModel.selectedDateTime,
+        minDate: DateTime(_dealCalendarViewModel.pickedDateTime.year, 1),
+        maxDate: DateTime(_dealCalendarViewModel.pickedDateTime.year, 12),
+        initialFocusDate: _dealCalendarViewModel.pickedDateTime,
         onAfterMaxDateTapped: (dateTime) =>
             _dealCalendarViewModel.selectDateTime(dateTime),
         onDayTapped: (dateTime) =>
@@ -77,7 +76,7 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
                   /// CALENDAR
                   ScrollableCleanCalendar(
                       calendarController: _cleanCalendarController!,
-                      locale: 'ru',
+                      locale: locale,
                       monthTextStyle: _textStyle.copyWith(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
@@ -87,7 +86,7 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
                             margin: const EdgeInsets.only(
                                 bottom: 4.0, left: 2.0, right: 2.0),
                             decoration: BoxDecoration(
-                                color: _dealCalendarViewModel.dateTimes
+                                color: _dealCalendarViewModel.eventDateTimes
                                         .contains(values.day)
                                     ? HexColors.white
                                     : Colors.transparent,
@@ -113,7 +112,7 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
                                             ? HexColors.primaryMain
                                             : Colors.transparent),
                                 borderRadius: BorderRadius.circular(6.0),
-                                boxShadow: _dealCalendarViewModel.dateTimes
+                                boxShadow: _dealCalendarViewModel.eventDateTimes
                                         .contains(values.day)
                                     ? [
                                         BoxShadow(
@@ -127,7 +126,7 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   /// EVENT COUNT
-                                  _dealCalendarViewModel.dateTimes
+                                  _dealCalendarViewModel.eventDateTimes
                                           .contains(values.day)
                                       ? Container(
                                           margin:
@@ -171,17 +170,21 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
               child: Align(
                   alignment: Alignment.bottomCenter,
                   child: YearMonthSelectionWidget(
-                      dateTime: DateTime.now(),
+                      dateTime: _dealCalendarViewModel.pickedDateTime,
                       onTap: () =>
-                          // SCROLL TO MONTH
-                          // _cleanCalendarController?.scrollToMonth(
-                          //     date: DateTime(
-                          //         DateTime.now().year, Random().nextInt(12)),
-                          //     duration: const Duration(milliseconds: 300),
-                          //     curve: Curves.easeIn)
-
-                          _dealCalendarViewModel
-                              .showDateTimeSelectionSheet(context)))),
+                          _dealCalendarViewModel.showDateTimeSelectionSheet(
+                              context,
+                              _textStyle,
+                              (dateTimeDidUpdate) => {
+                                    // // SCROLL TO MONTH
+                                    if (dateTimeDidUpdate)
+                                      _cleanCalendarController?.scrollToMonth(
+                                          date: _dealCalendarViewModel
+                                              .pickedDateTime,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          curve: Curves.bounceIn)
+                                  })))),
 
           /// INDICATOR
           _dealCalendarViewModel.loadingStatus == LoadingStatus.searching

@@ -45,5 +45,14 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Разрешите Izowork доступ к геолокации, чтобы отображать Ваше текущее местоположение на карте</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Разрешите Izowork доступ к геолокации, чтобы отображать Ваше текущее местоположение на карте</string>
 </dict>
 </plist>

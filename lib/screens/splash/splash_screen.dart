@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/user_params.dart';
-import 'package:izowork/screens/deal_calendar/deal_calendar_screen.dart';
+import 'package:izowork/screens/tab_controller/tab_controller_screen_body.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 
 class SplashScreenWidget extends StatefulWidget {
@@ -36,8 +36,8 @@ class _SplashScreenState extends State<SplashScreenWidget> {
             context,
             MaterialPageRoute(
                 builder: (context) => _isTokenExist
-                    ? const DealCalendarScreenWidget()
-                    : const DealCalendarScreenWidget()),
+                    ? const TabControllerScreenWidget()
+                    : const TabControllerScreenWidget()),
             (route) => false));
   }
 
