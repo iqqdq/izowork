@@ -42,7 +42,7 @@ class _TabControllerScreenBodyState extends State<TabControllerScreenWidget> {
   @override
   Widget build(BuildContext context) {
     final textStyle = TextStyle(
-        color: HexColors.gray40,
+        color: HexColors.grey40,
         fontSize: 12.0,
         fontFamily: 'PT Root UI',
         fontWeight: FontWeight.w500);
@@ -67,7 +67,7 @@ class _TabControllerScreenBodyState extends State<TabControllerScreenWidget> {
                 textStyle.copyWith(color: HexColors.primaryMain),
             unselectedLabelStyle: textStyle,
             fixedColor: HexColors.primaryMain,
-            unselectedItemColor: HexColors.gray40,
+            unselectedItemColor: HexColors.grey40,
             type: BottomNavigationBarType.fixed,
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(

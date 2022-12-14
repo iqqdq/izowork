@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/locale.dart';
+import 'package:izowork/components/shadows.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:intl/intl.dart';
-import 'package:izowork/helpers/string_casing_extension.dart';
+import 'package:izowork/extensions/string_casing_extension.dart';
 
-class YearMonthSelectionWidget extends StatelessWidget {
+class MonthYearSelectionWidget extends StatelessWidget {
   final DateTime dateTime;
   final VoidCallback onTap;
 
-  const YearMonthSelectionWidget(
+  const MonthYearSelectionWidget(
       {Key? key, required this.dateTime, required this.onTap})
       : super(key: key);
 
@@ -20,7 +21,7 @@ class YearMonthSelectionWidget extends StatelessWidget {
         fontWeight: FontWeight.w500,
         overflow: TextOverflow.ellipsis,
         fontFamily: 'PT Root UI',
-        color: HexColors.gray70);
+        color: HexColors.grey70);
 
     TextStyle _subtitleTextStyle = TextStyle(
         fontSize: 16.0,
@@ -35,12 +36,7 @@ class YearMonthSelectionWidget extends StatelessWidget {
         decoration: BoxDecoration(
             color: HexColors.white,
             borderRadius: BorderRadius.circular(16.0),
-            boxShadow: [
-              BoxShadow(
-                  offset: const Offset(0.0, 10.0),
-                  blurRadius: 20.0,
-                  color: HexColors.black.withOpacity(0.05))
-            ]),
+            boxShadow: [Shadows.shadow]),
         child: Material(
             color: Colors.transparent,
             child: InkWell(
@@ -66,7 +62,7 @@ class YearMonthSelectionWidget extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 12.0),
                         width: 1.0,
-                        color: HexColors.gray20,
+                        color: HexColors.grey20,
                       ),
 
                       /// YEAR

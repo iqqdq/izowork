@@ -34,7 +34,7 @@ class ButtonWidget extends StatelessWidget {
         height: 54.0,
         decoration: BoxDecoration(
             color: _isDisabled
-                ? HexColors.gray20
+                ? HexColors.grey20
                 : _isTransparent
                     ? Colors.transparent
                     : HexColors.primaryMain,

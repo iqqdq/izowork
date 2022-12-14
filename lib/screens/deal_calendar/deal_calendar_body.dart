@@ -3,12 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
+import 'package:izowork/components/shadows.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/helpers/same_date_time_checker.dart';
 import 'package:izowork/models/deal_calendar_view_model.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/year_month_selection_widget.dart';
+import 'package:izowork/views/month_year_selection_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
 import 'package:scrollable_clean_calendar/models/day_values_model.dart';
@@ -53,7 +54,7 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
             _dealCalendarViewModel.selectDateTime(dateTime));
 
     return Scaffold(
-        backgroundColor: HexColors.gray,
+        backgroundColor: HexColors.grey,
         appBar: AppBar(
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -80,7 +81,7 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
                       monthTextStyle: _textStyle.copyWith(
                           fontSize: 18.0,
                           fontWeight: FontWeight.w500,
-                          color: HexColors.gray40),
+                          color: HexColors.grey40),
                       dayBuilder: (BuildContext context, DayValues values) =>
                           Container(
                             margin: const EdgeInsets.only(
@@ -114,13 +115,7 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
                                 borderRadius: BorderRadius.circular(6.0),
                                 boxShadow: _dealCalendarViewModel.eventDateTimes
                                         .contains(values.day)
-                                    ? [
-                                        BoxShadow(
-                                            offset: const Offset(0.0, 2.0),
-                                            blurRadius: 4.0,
-                                            color: HexColors.black
-                                                .withOpacity(0.05))
-                                      ]
+                                    ? [Shadows.calendarEventShadow]
                                     : []),
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -169,7 +164,7 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
                       : MediaQuery.of(context).padding.bottom),
               child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: YearMonthSelectionWidget(
+                  child: MonthYearSelectionWidget(
                       dateTime: _dealCalendarViewModel.pickedDateTime,
                       onTap: () =>
                           _dealCalendarViewModel.showDateTimeSelectionSheet(

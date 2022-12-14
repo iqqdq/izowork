@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:wheel_chooser/wheel_chooser.dart';
 
 class Month {
@@ -197,16 +198,11 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
                 shrinkWrap: true,
                 padding: const EdgeInsets.only(top: 8.0),
                 children: [
-                  Center(
-                      child: Container(
-                          width: 40.0,
-                          height: 4.0,
-                          decoration: BoxDecoration(
-                              color: HexColors.gray30,
-                              borderRadius: BorderRadius.circular(4.0)))),
+                  /// DISSMIS INDICATOR
+                  const DismissIndicatorWidget(),
                   Container(
                       margin: EdgeInsets.only(
-                          top: 32.0, left: margin, right: margin),
+                          top: 18.0, left: margin, right: margin),
                       height: 191.0,
                       child: Stack(children: [
                         Center(

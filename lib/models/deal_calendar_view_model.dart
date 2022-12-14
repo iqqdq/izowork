@@ -55,7 +55,7 @@ class DealCalendarViewModel with ChangeNotifier {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.gray,
+        backgroundColor: HexColors.grey,
         context: context,
         builder: (context) => DateTimeWheelPickerWidget(
             minDateTime: _minDateTime,
@@ -77,7 +77,7 @@ class DealCalendarViewModel with ChangeNotifier {
                 fontWeight: FontWeight.w400),
             unselectedTextStyle: textStyle.copyWith(
                 fontSize: 12.0,
-                color: HexColors.gray70,
+                color: HexColors.grey70,
                 fontWeight: FontWeight.w400),
             onTap: (dateTime) => {
                   Navigator.pop(context),

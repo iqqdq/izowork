@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/screens/splash/splash_screen.dart';
+import 'package:oktoast/oktoast.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,6 @@ class IzoworkApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: SplashScreenWidget());
+    return const OKToast(child: MaterialApp(home: SplashScreenWidget()));
   }
 }
