@@ -3,6 +3,7 @@ import 'package:izowork/components/hex_colors.dart';
 
 class ButtonWidget extends StatelessWidget {
   final String title;
+  final EdgeInsets? margin;
   final bool? isDisabled;
   final bool? isTransparent;
   final VoidCallback onTap;
@@ -10,6 +11,7 @@ class ButtonWidget extends StatelessWidget {
   const ButtonWidget(
       {Key? key,
       required this.title,
+      this.margin,
       this.isDisabled,
       this.isTransparent,
       required this.onTap})
@@ -23,26 +25,19 @@ class ButtonWidget extends StatelessWidget {
             ? true
             : false;
 
-    final _isTransparent = isTransparent == null
-        ? false
-        : isTransparent!
-            ? true
-            : false;
-
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        margin: margin == null
+            ? const EdgeInsets.symmetric(horizontal: 16.0)
+            : margin!,
         height: 54.0,
         decoration: BoxDecoration(
-            color: _isDisabled
-                ? HexColors.grey20
-                : _isTransparent
-                    ? Colors.transparent
-                    : HexColors.primaryMain,
+            color: _isDisabled ? HexColors.grey20 : HexColors.primaryMain,
             borderRadius: BorderRadius.circular(16.0)),
         child: Material(
             color: Colors.transparent,
             child: InkWell(
                 highlightColor: HexColors.primaryDark,
+                splashColor: Colors.transparent,
                 borderRadius: BorderRadius.circular(16.0),
                 child: Center(
                     child: Text(title,
@@ -52,7 +47,9 @@ class ButtonWidget extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             fontFamily: 'PT Root UI',
                             fontWeight: FontWeight.w700,
-                            color: HexColors.black))),
-                onTap: () => onTap())));
+                            color: _isDisabled
+                                ? HexColors.grey40
+                                : HexColors.black))),
+                onTap: _isDisabled ? null : () => onTap())));
   }
 }

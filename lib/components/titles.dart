@@ -19,6 +19,7 @@ abstract class Titles {
   static const filter = 'Фильтр';
   static const search = 'Поиск';
   static const addObject = 'Добавить объект';
+  static const showDetail = 'Подробнее';
 
   /// NAVIGATION TITLES
   static const dealCalendar = 'Календарь сделок';
@@ -38,4 +39,6 @@ abstract class Titles {
       'Неверный логин или пароль, проверьте правильность введенных данных';
   static const enterEmailAddress =
       'Укажите электронную почту, на которую мы отправим инструкцию по восстановлению';
+  static const enterObjectName =
+      'Введите адрес или название\nобъекта в строку поиска';
 }

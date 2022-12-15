@@ -52,4 +52,11 @@ abstract class HexColors {
 
   /// SHADOW
   static var card = black.withOpacity(0.05);
+
+  /// BUTTON
+  static var shadowButtonHighlightColor = HexColor("#EEEEEE");
+  static var shadowButtonDisableColor = white.withOpacity(0.3);
+  static var shadowButtonDisableTitleColor = HexColor("#BDBDC7");
+  static var borderButtonHighlightColor = secondaryDark.withOpacity(0.6);
+  static var borderButtonDisableTitleColor = HexColor("#D7D7E0");
 }

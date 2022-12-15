@@ -160,7 +160,8 @@ class _MapBodyState extends State<MapBodyWidget>
               onZoomOutTap: () => _mapViewModel.zoomOut(_googleMapController),
               onShowLocationTap: () =>
                   _mapViewModel.showUserLocation(_googleMapController),
-              onSearchTap: () => {})),
+              onSearchTap: () =>
+                  _mapViewModel.showSearchMapObjectSheet(context))),
 
       /// FILTER BUTTON
       Align(

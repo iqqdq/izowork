@@ -49,6 +49,7 @@ class _TabControllerScreenBodyState extends State<TabControllerScreenWidget> {
 
     return Scaffold(
         extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
             toolbarHeight: 0.0,
             elevation: 0.0,

@@ -198,7 +198,7 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
                 shrinkWrap: true,
                 padding: const EdgeInsets.only(top: 8.0),
                 children: [
-                  /// DISSMIS INDICATOR
+                  /// DISMISS INDICATOR
                   const DismissIndicatorWidget(),
                   Container(
                       margin: EdgeInsets.only(

@@ -29,7 +29,7 @@ class AddMapObjectWidget extends StatelessWidget {
                         ? 12.0
                         : MediaQuery.of(context).padding.bottom),
                 children: [
-                  /// DISSMIS INDICATOR
+                  /// DISMISS INDICATOR
                   const DismissIndicatorWidget(),
 
                   /// ADDRESS
