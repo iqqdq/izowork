@@ -5,7 +5,7 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/map_object.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
-import 'package:izowork/views/map_object_stage_list_widget.dart';
+import 'package:izowork/views/map_object_stage_list_item_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
@@ -89,7 +89,7 @@ class MapObjectWidget extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: 3,
                       itemBuilder: (context, index) {
-                        return MapObjectStageListWidget(
+                        return MapObjectStageListItemWidget(
                             number: index + 1, text: 'Стадия');
                       }),
 

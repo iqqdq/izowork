@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 
-class MapObjectStageListWidget extends StatelessWidget {
+class MapObjectStageListItemWidget extends StatelessWidget {
   final int number;
   final String text;
 
-  const MapObjectStageListWidget(
+  const MapObjectStageListItemWidget(
       {Key? key, required this.number, required this.text})
       : super(key: key);
 
