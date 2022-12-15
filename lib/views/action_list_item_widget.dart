@@ -29,103 +29,113 @@ class ActionListItemWidget extends StatelessWidget {
 
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0),
-        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-            color: HexColors.white,
             borderRadius: BorderRadius.circular(16.0),
             border: Border.all(width: 0.5, color: HexColors.grey30)),
-        child: ListView(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            children: [
-              /// ACTION NAME
-              const TitleWidget(
-                  text: 'Название задачи', padding: EdgeInsets.zero),
-              const SizedBox(height: 10.0),
+        child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+                highlightColor: HexColors.grey20,
+                splashColor: Colors.transparent,
+                borderRadius: BorderRadius.circular(16.0),
+                child: ListView(
+                    padding: const EdgeInsets.all(16.0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    children: [
+                      /// ACTION NAME
+                      const TitleWidget(
+                          text: 'Название задачи', padding: EdgeInsets.zero),
+                      const SizedBox(height: 10.0),
 
-              /// DEADLINE
-              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const SubtitleWidget(
-                    text: '${Titles.deadline}:', padding: EdgeInsets.zero),
-                const SizedBox(width: 10.0),
-                Expanded(
-                  child: SubtitleWidget(
-                      text: '$_day.$_month.$_year',
-                      fontWeight: FontWeight.w700,
-                      textAlign: TextAlign.end,
-                      padding: EdgeInsets.zero),
-                )
-              ]),
-              const SizedBox(height: 10.0),
+                      /// DEADLINE
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SubtitleWidget(
+                                text: '${Titles.deadline}:',
+                                padding: EdgeInsets.zero),
+                            const SizedBox(width: 10.0),
+                            Expanded(
+                              child: SubtitleWidget(
+                                  text: '$_day.$_month.$_year',
+                                  fontWeight: FontWeight.w700,
+                                  textAlign: TextAlign.end,
+                                  padding: EdgeInsets.zero),
+                            )
+                          ]),
+                      const SizedBox(height: 10.0),
 
-              /// RESPONSIBLE
-              Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    SubtitleWidget(
-                        text: '${Titles.responsible}:',
-                        padding: EdgeInsets.zero),
-                    SizedBox(width: 10.0),
-                    Expanded(
-                      child: SubtitleWidget(
-                          text: 'Аликпер',
-                          fontWeight: FontWeight.w700,
-                          textAlign: TextAlign.end,
-                          padding: EdgeInsets.zero),
-                    )
-                  ]),
-              const SizedBox(height: 10.0),
+                      /// RESPONSIBLE
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            SubtitleWidget(
+                                text: '${Titles.responsible}:',
+                                padding: EdgeInsets.zero),
+                            SizedBox(width: 10.0),
+                            Expanded(
+                              child: SubtitleWidget(
+                                  text: 'Аликпер',
+                                  fontWeight: FontWeight.w700,
+                                  textAlign: TextAlign.end,
+                                  padding: EdgeInsets.zero),
+                            )
+                          ]),
+                      const SizedBox(height: 10.0),
 
-              /// STATUS
-              Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    SubtitleWidget(
-                        text: '${Titles.status}:', padding: EdgeInsets.zero),
-                    SizedBox(width: 10.0),
-                    Expanded(
-                      child: SubtitleWidget(
-                          text: 'Название статуса',
-                          fontWeight: FontWeight.w700,
-                          textAlign: TextAlign.end,
-                          padding: EdgeInsets.zero),
-                    )
-                  ]),
-              const SizedBox(height: 10.0),
-              const SeparatorWidget(),
-              const SizedBox(height: 10.0),
+                      /// STATUS
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            SubtitleWidget(
+                                text: '${Titles.status}:',
+                                padding: EdgeInsets.zero),
+                            SizedBox(width: 10.0),
+                            Expanded(
+                              child: SubtitleWidget(
+                                  text: 'Название статуса',
+                                  fontWeight: FontWeight.w700,
+                                  textAlign: TextAlign.end,
+                                  padding: EdgeInsets.zero),
+                            )
+                          ]),
+                      const SizedBox(height: 10.0),
+                      const SeparatorWidget(),
+                      const SizedBox(height: 10.0),
 
-              /// ACTION TEXT
-              Text(
-                  'Мы вынуждены отталкиваться от того, что семантический разбор внешних противодействий играет определяющее значение для стандартных подходов. Прежде всего, перспективное планирование, в своём классическом представлении, допускает внедрение своевременного выполнения сверхзадачи.',
-                  style: TextStyle(
-                      color: HexColors.black,
-                      fontSize: 14.0,
-                      fontFamily: 'PT Root UI',
-                      fontWeight: FontWeight.w400)),
-              const SizedBox(height: 10.0),
+                      /// ACTION TEXT
+                      Text(
+                          'Мы вынуждены отталкиваться от того, что семантический разбор внешних противодействий играет определяющее значение для стандартных подходов. Прежде всего, перспективное планирование, в своём классическом представлении, допускает внедрение своевременного выполнения сверхзадачи.',
+                          style: TextStyle(
+                              color: HexColors.black,
+                              fontSize: 14.0,
+                              fontFamily: 'PT Root UI',
+                              fontWeight: FontWeight.w400)),
+                      const SizedBox(height: 10.0),
 
-              /// CREATOR
-              Row(children: [
-                /// CREATOR AVATAR
-                Stack(children: [
-                  Image.asset('assets/ic_avatar.png'),
-                  // ClipRRect(
-                  //   borderRadius: BorderRadius.circular(12.0),
-                  //   child:
-                  // CachedNetworkImage(imageUrl: '', width: 24.0, height: 24.0, fit: BoxFit.cover)),
-                ]),
-                const SizedBox(width: 10.0),
+                      /// CREATOR
+                      Row(children: [
+                        /// CREATOR AVATAR
+                        Stack(children: [
+                          Image.asset('assets/ic_avatar.png'),
+                          // ClipRRect(
+                          //   borderRadius: BorderRadius.circular(12.0),
+                          //   child:
+                          // CachedNetworkImage(imageUrl: '', width: 24.0, height: 24.0, fit: BoxFit.cover)),
+                        ]),
+                        const SizedBox(width: 10.0),
 
-                /// CREATOR NAME
-                Expanded(
-                    child: Text('Имя создателя карточки',
-                        style: TextStyle(
-                            color: HexColors.grey50,
-                            fontSize: 14.0,
-                            fontFamily: 'PT Root UI',
-                            fontWeight: FontWeight.w700)))
-              ])
-            ]));
+                        /// CREATOR NAME
+                        Expanded(
+                            child: Text('Имя создателя карточки',
+                                style: TextStyle(
+                                    color: HexColors.grey50,
+                                    fontSize: 14.0,
+                                    fontFamily: 'PT Root UI',
+                                    fontWeight: FontWeight.w700)))
+                      ])
+                    ]),
+                onTap: () => onTap())));
   }
 }

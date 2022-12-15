@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/shadows.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
@@ -23,10 +22,12 @@ class SearchMapObjectListItemWidget extends StatelessWidget {
         decoration: BoxDecoration(
             color: HexColors.white,
             borderRadius: BorderRadius.circular(16.0),
-            boxShadow: [Shadows.shadow]),
+            border: Border.all(width: 0.5, color: HexColors.grey20)),
         child: Material(
             color: Colors.transparent,
             child: InkWell(
+                highlightColor: HexColors.grey20,
+                splashColor: Colors.transparent,
                 borderRadius: BorderRadius.circular(10.0),
                 child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 11.0),

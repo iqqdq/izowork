@@ -72,17 +72,17 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                                 placeholder: '${Titles.search}...',
                                 onTap: () => setState,
                                 onChange: (text) => {
-                                      // TODO SEARCH DEAL / TASK
+                                      // TODO SEARCH OBJECTS
                                     },
                                 onClearTap: () => {
-                                      // TODO CLEAR DEAL / TASK SEARCH
+                                      // TODO CLEAR OBJECTS SEARCH
                                     })),
 
                     /// FILTER BUTTON
                     AssetImageButton(
                         imagePath: 'assets/ic_filter.png',
                         onTap: () => {
-                              // TODO SHOW DEAL / TASK FILTER
+                              // TODO SHOW OBJECT FILTER
                             }),
                   ])),
               const SizedBox(height: 16.0),
@@ -90,11 +90,11 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
             ])),
         floatingActionButton: FloatingButtonWidget(
             onTap: () => {
-                  // TODO ADD DEAL / TASK
+                  // TODO ADD OBJECT
                 }),
         body: SizedBox.expand(
             child: Stack(children: [
-          /// DEALS / TASKS LIST VIEW
+          /// OBJECTS LIST VIEW
           ListView.builder(
               shrinkWrap: true,
               padding: const EdgeInsets.only(

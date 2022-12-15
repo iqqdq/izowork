@@ -28,6 +28,16 @@ abstract class Titles {
   static const deals = 'Сделки';
   static const tasks = 'Задачи';
 
+  /// MORE
+  static const news = 'Новости';
+  static const employees = 'Сотрудники';
+  static const contacts = 'Контакты';
+  static const companies = 'Компании';
+  static const products = 'Товары';
+  static const analytics = 'Аналитика';
+  static const documents = 'Документы';
+  static const notifications = 'Уведомления';
+
   /// OTHER
   static const placeAddress = 'Адрес места';
   static const manager = 'Менеджер';

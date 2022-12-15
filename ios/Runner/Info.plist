@@ -54,5 +54,11 @@
 	<string>Разрешите Izowork доступ к геолокации, чтобы отображать Ваше текущее местоположение на карте</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Разрешите Izowork доступ к геолокации, чтобы отображать Ваше текущее местоположение на карте</string>
+    <key>NSCameraUsageDescription</key>
+        <string>Разрешите Izowork доступ к камере для снимка фото Вашего профиля</string>
+    <key>NSMicrophoneUsageDescription</key>
+        <string>Разрешите Izowork доступ к микрофону для записи аудиосообщений</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+        <string>Разрешите Izowork доступ к галерее для выбора фото Вашего профиля</string>
 </dict>
 </plist>

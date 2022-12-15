@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/screens/actions/actions_screen.dart';
+import 'package:izowork/screens/chat/chat_screen.dart';
 import 'package:izowork/screens/map/map_screen.dart';
+import 'package:izowork/screens/more/more_screen.dart';
 import 'package:izowork/screens/objects/objects_screen.dart';
 
 class TabControllerScreenWidget extends StatefulWidget {
@@ -27,8 +29,8 @@ class _TabControllerScreenBodyState extends State<TabControllerScreenWidget> {
       const MapScreenWidget(),
       const ObjectsScreenWidget(),
       const ActionsScreenWidget(),
-      Container(),
-      Container(),
+      const ChatScreenWidget(),
+      const MoreScreenWidget()
     ];
 
     _pageController = PageController(initialPage: 0);

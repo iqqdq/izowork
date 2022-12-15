@@ -37,7 +37,7 @@ class _SearchMapObjectState extends State<SearchMapObjectWidget> {
         type: MaterialType.transparency,
         child: Container(
             height: _height,
-            color: HexColors.grey,
+            color: HexColors.white,
             padding: const EdgeInsets.only(top: 8.0),
             child: Stack(children: [
               ListView(children: [
