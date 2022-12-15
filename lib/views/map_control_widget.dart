@@ -38,6 +38,8 @@ class MapControlWidget extends StatelessWidget {
                   child: Material(
                       color: Colors.transparent,
                       child: InkWell(
+                          highlightColor: HexColors.grey20,
+                          splashColor: Colors.transparent,
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(10.0)),
                           child: Image.asset('assets/ic_plus.png'),
@@ -46,18 +48,24 @@ class MapControlWidget extends StatelessWidget {
                   child: Material(
                       color: Colors.transparent,
                       child: InkWell(
+                          highlightColor: HexColors.grey20,
+                          splashColor: Colors.transparent,
                           child: Image.asset('assets/ic_minus.png'),
                           onTap: onZoomOutTap))),
               Expanded(
                   child: Material(
                       color: Colors.transparent,
                       child: InkWell(
+                          highlightColor: HexColors.grey20,
+                          splashColor: Colors.transparent,
                           child: Image.asset('assets/ic_location.png'),
                           onTap: onShowLocationTap))),
               Expanded(
                   child: Material(
                       color: Colors.transparent,
                       child: InkWell(
+                          highlightColor: HexColors.grey20,
+                          splashColor: Colors.transparent,
                           borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(10.0)),
                           child: Image.asset('assets/ic_search.png'),

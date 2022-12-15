@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/screens/deal_calendar/deal_calendar_screen.dart';
+import 'package:izowork/screens/actions/actions_screen.dart';
 import 'package:izowork/screens/map/map_screen.dart';
 
 class TabControllerScreenWidget extends StatefulWidget {
@@ -22,12 +22,12 @@ class _TabControllerScreenBodyState extends State<TabControllerScreenWidget> {
   void initState() {
     super.initState();
 
-    _pages = const [
-      MapScreenWidget(),
-      DealCalendarScreenWidget(),
-      MapScreenWidget(),
-      MapScreenWidget(),
-      MapScreenWidget()
+    _pages = [
+      const MapScreenWidget(),
+      Container(),
+      const ActionsScreenWidget(),
+      Container(),
+      Container(),
     ];
 
     _pageController = PageController(initialPage: 0);

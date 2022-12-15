@@ -40,6 +40,8 @@ class MonthYearSelectionWidget extends StatelessWidget {
         child: Material(
             color: Colors.transparent,
             child: InkWell(
+                highlightColor: HexColors.grey20,
+                splashColor: Colors.transparent,
                 onTap: () => onTap(),
                 borderRadius: BorderRadius.circular(16.0),
                 child: Padding(

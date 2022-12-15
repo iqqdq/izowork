@@ -16,16 +16,15 @@ import 'package:scrollable_clean_calendar/models/day_values_model.dart';
 import 'package:scrollable_clean_calendar/scrollable_clean_calendar.dart';
 import 'package:scrollable_clean_calendar/utils/enums.dart';
 
-class DealCalendarBodyWidget extends StatefulWidget {
-  const DealCalendarBodyWidget({Key? key}) : super(key: key);
+class DealCalendarScreenBodyWidget extends StatefulWidget {
+  const DealCalendarScreenBodyWidget({Key? key}) : super(key: key);
 
   @override
-  _DealCalendarBodyState createState() => _DealCalendarBodyState();
+  _DealCalendarScreenBodyState createState() => _DealCalendarScreenBodyState();
 }
 
-class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
-  final TextStyle _textStyle = const TextStyle(
-      overflow: TextOverflow.ellipsis, fontFamily: 'PT Root UI');
+class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
+  late DealCalendarViewModel _dealCalendarViewModel;
   CleanCalendarController? _cleanCalendarController;
 
   @override
@@ -41,7 +40,9 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final _dealCalendarViewModel =
+    const TextStyle _textStyle =
+        TextStyle(overflow: TextOverflow.ellipsis, fontFamily: 'PT Root UI');
+    _dealCalendarViewModel =
         Provider.of<DealCalendarViewModel>(context, listen: true);
 
     _cleanCalendarController = CleanCalendarController(
@@ -54,7 +55,7 @@ class _DealCalendarBodyState extends State<DealCalendarBodyWidget> {
             _dealCalendarViewModel.selectDateTime(dateTime));
 
     return Scaffold(
-        backgroundColor: HexColors.grey,
+        backgroundColor: HexColors.white,
         appBar: AppBar(
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,

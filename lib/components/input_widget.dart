@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/shadows.dart';
 
 class InputWidget extends StatefulWidget {
   final bool? isSearchInput;
@@ -72,11 +71,10 @@ class _InputWidgetState extends State<InputWidget> {
             borderRadius: BorderRadius.circular(16.0),
             color: HexColors.white,
             border: Border.all(
-                width: _focusNode.hasFocus ? 1.0 : 0.0,
+                width: _focusNode.hasFocus ? 1.0 : 0.5,
                 color: _focusNode.hasFocus
                     ? HexColors.primaryDark
-                    : Colors.transparent),
-            boxShadow: [Shadows.shadow]),
+                    : HexColors.grey30)),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           _isSearchInput
               ? Image.asset('assets/ic_search.png', color: HexColors.grey30)

@@ -24,6 +24,10 @@ abstract class Titles {
   /// NAVIGATION TITLES
   static const dealCalendar = 'Календарь сделок';
 
+  /// SEGMENTED CONTROL TITLES
+  static const deals = 'Сделки';
+  static const tasks = 'Задачи';
+
   /// OTHER
   static const placeAddress = 'Адрес места';
   static const manager = 'Менеджер';
@@ -33,6 +37,9 @@ abstract class Titles {
   static const effectiveness = 'Эффективность';
   static const month = 'Месяц';
   static const year = 'Год';
+  static const deadline = 'Сроки';
+  static const responsible = 'Ответственный';
+  static const status = 'Статус';
 
   /// MESSAGES
   static const invalidLogin =

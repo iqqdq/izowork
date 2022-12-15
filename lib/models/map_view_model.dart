@@ -106,7 +106,7 @@ class MapViewModel with ChangeNotifier {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.grey,
+        backgroundColor: HexColors.white,
         context: context,
         builder: (context) => AddMapObjectWidget(
             address: address,
@@ -120,7 +120,7 @@ class MapViewModel with ChangeNotifier {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.grey,
+        backgroundColor: HexColors.white,
         context: context,
         builder: (context) => MapObjectWidget(
             mapObject: MapObject(),
@@ -136,7 +136,7 @@ class MapViewModel with ChangeNotifier {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.grey,
+        backgroundColor: HexColors.white,
         context: context,
         builder: (context) => SearchMapObjectWidget(
             onObjectReturn: (object) => {
@@ -153,9 +153,11 @@ class MapViewModel with ChangeNotifier {
 
     _userPosition = LatLng(position.latitude, position.longitude);
     _position ??= _userPosition;
+
+    updatePlaces();
   }
 
-  void getAddressName() async {
+  Future getAddressName() async {
     GoogleGeocodingApi api = GoogleGeocodingApi(google_geocoding_api_key,
         isLogged: false); // TODO - isLogged: false
     GoogleGeocodingResponse reversedSearchResults = await api.reverse(
@@ -259,10 +261,9 @@ class MapViewModel with ChangeNotifier {
   void updateMarkers(Set<Marker> markers) {
     debugPrint('Updated ${markers.length} markers');
     this.markers = markers;
-    notifyListeners();
   }
 
-  void updatePlaces() {
+  Future updatePlaces() async {
     if (_position != null) {
       places = [
         for (int i = 0; i < 4; i++)

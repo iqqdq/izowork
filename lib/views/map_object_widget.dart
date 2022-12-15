@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/map_object.dart';
+import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/map_object_stage_list_widget.dart';
-import 'package:izowork/views/shadow_button.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
@@ -26,7 +26,7 @@ class MapObjectWidget extends StatelessWidget {
     return Material(
         type: MaterialType.transparency,
         child: Container(
-            color: HexColors.grey,
+            color: HexColors.white,
             child: ListView(
                 shrinkWrap: true,
                 padding: EdgeInsets.only(
@@ -100,13 +100,13 @@ class MapObjectWidget extends StatelessWidget {
                   const SizedBox(height: 16.0),
                   Row(children: [
                     Expanded(
-                        child: ShadowButtonWidget(
+                        child: BorderButtonWidget(
                             title: Titles.showDetail,
                             margin:
                                 const EdgeInsets.only(left: 16.0, right: 5.0),
                             onTap: () => onDetailTap())),
                     Expanded(
-                        child: ShadowButtonWidget(
+                        child: BorderButtonWidget(
                             title: Titles.chat,
                             margin:
                                 const EdgeInsets.only(left: 5.0, right: 16.0),

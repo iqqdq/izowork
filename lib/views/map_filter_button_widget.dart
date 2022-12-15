@@ -3,11 +3,11 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/shadows.dart';
 import 'package:izowork/components/titles.dart';
 
-class FilterButtonWidget extends StatelessWidget {
+class MapFilterButtonWidget extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback? onClearTap;
 
-  const FilterButtonWidget({Key? key, required this.onTap, this.onClearTap})
+  const MapFilterButtonWidget({Key? key, required this.onTap, this.onClearTap})
       : super(key: key);
 
   @override
@@ -23,6 +23,8 @@ class FilterButtonWidget extends StatelessWidget {
             child: Material(
                 color: Colors.transparent,
                 child: InkWell(
+                    highlightColor: HexColors.grey20,
+                    splashColor: Colors.transparent,
                     borderRadius: BorderRadius.circular(10.0),
                     child: Padding(
                         padding: EdgeInsets.only(
@@ -31,7 +33,11 @@ class FilterButtonWidget extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(children: [
-                                Image.asset('assets/ic_filter.png'),
+                                Image.asset('assets/ic_filter.png',
+                                    color: HexColors.grey50,
+                                    width: 16.0,
+                                    height: 16.0,
+                                    fit: BoxFit.cover),
                                 const SizedBox(width: 10.0),
                                 Text(Titles.filter,
                                     style: TextStyle(

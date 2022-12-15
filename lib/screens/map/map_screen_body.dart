@@ -7,7 +7,7 @@ import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/place_model.dart';
 import 'package:izowork/views/map_control_widget.dart';
-import 'package:izowork/views/filter_button_widget.dart';
+import 'package:izowork/views/map_filter_button_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:izowork/models/map_view_model.dart';
 
@@ -133,11 +133,10 @@ class _MapBodyState extends State<MapBodyWidget>
 
                 /// UPDATE LOCATION
                 if (_mapViewModel.hasPermission)
-                  _mapViewModel
-                      .getUserLocation()
-                      .then((value) =>
-                          _mapViewModel.showUserLocation(_googleMapController))
-                      .then((value) => _mapViewModel.updatePlaces())
+                  {
+                    _mapViewModel.getUserLocation().then((value) =>
+                        _mapViewModel.showUserLocation(_googleMapController))
+                  }
               },
           onCameraMove: (position) => {
                 /// UPDATE CAMERA POSITION
@@ -145,9 +144,13 @@ class _MapBodyState extends State<MapBodyWidget>
                 _clusterManager?.onCameraMove
               },
           onCameraIdle: () => {
-                _mapViewModel.getAddressName(),
-                _clusterManager?.onCameraMove,
-                _clusterManager?.setItems(_mapViewModel.places),
+                _mapViewModel
+                    .updatePlaces()
+                    .then((value) => {
+                          _clusterManager?.onCameraMove,
+                          _clusterManager?.setItems(_mapViewModel.places),
+                        })
+                    .then((value) => _mapViewModel.getAddressName())
               },
           onLongPress: (position) =>
               _mapViewModel.showAddMapObjectSheet(context)),
@@ -166,7 +169,7 @@ class _MapBodyState extends State<MapBodyWidget>
       /// FILTER BUTTON
       Align(
           alignment: Alignment.bottomCenter,
-          child: FilterButtonWidget(onTap: () => {}
+          child: MapFilterButtonWidget(onTap: () => {}
               // onClearTap: () => {}
               ))
     ]));

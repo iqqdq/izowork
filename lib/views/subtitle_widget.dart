@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
 
 class SubtitleWidget extends StatelessWidget {
   final String text;
+  final FontWeight? fontWeight;
+  final TextAlign? textAlign;
   final EdgeInsets? padding;
 
-  const SubtitleWidget({Key? key, required this.text, this.padding})
+  const SubtitleWidget(
+      {Key? key,
+      required this.text,
+      this.fontWeight,
+      this.textAlign,
+      this.padding})
       : super(key: key);
 
   @override
@@ -15,10 +21,10 @@ class SubtitleWidget extends StatelessWidget {
             ? const EdgeInsets.symmetric(horizontal: 16.0)
             : padding!,
         child: Text(text,
+            textAlign: textAlign,
             style: TextStyle(
                 fontSize: 14.0,
-                fontWeight: FontWeight.w400,
-                color: HexColors.black,
+                fontWeight: fontWeight ?? FontWeight.w400,
                 fontFamily: 'PT Root UI')));
   }
 }

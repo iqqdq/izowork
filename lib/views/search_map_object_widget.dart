@@ -41,8 +41,11 @@ class _SearchMapObjectState extends State<SearchMapObjectWidget> {
                     placeholder: '${Titles.search}...',
                     onTap: () => setState,
                     onChange: (text) =>
+                        // TODO SEARCH MAP OBJECT
                         setState(() => _show = text.isEmpty ? false : true),
-                    onClearTap: () => setState(() => _show = false)),
+                    onClearTap: () =>
+                        // TODO CLEAR MAP OBJECT SEARCH
+                        setState(() => _show = false)),
                 const SizedBox(height: 16.0),
 
                 /// SEPARATOR
