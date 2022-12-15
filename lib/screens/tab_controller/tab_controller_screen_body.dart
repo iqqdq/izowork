@@ -4,6 +4,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/screens/actions/actions_screen.dart';
 import 'package:izowork/screens/map/map_screen.dart';
+import 'package:izowork/screens/objects/objects_screen.dart';
 
 class TabControllerScreenWidget extends StatefulWidget {
   const TabControllerScreenWidget({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class _TabControllerScreenBodyState extends State<TabControllerScreenWidget> {
 
     _pages = [
       const MapScreenWidget(),
-      Container(),
+      const ObjectsScreenWidget(),
       const ActionsScreenWidget(),
       Container(),
       Container(),

@@ -4,6 +4,8 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/deal.dart';
+import 'package:izowork/entities/task.dart';
 import 'package:izowork/models/actions_view_model.dart';
 import 'package:izowork/views/action_list_item_widget.dart';
 import 'package:izowork/views/asset_image_button_widget.dart';
@@ -22,6 +24,8 @@ class ActionsScreenBodyWidget extends StatefulWidget {
 
 class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
+  final TextEditingController _textEditingController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   late ActionsViewModel _actionsViewModel;
 
   @override
@@ -34,6 +38,8 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
 
   @override
   void dispose() {
+    _textEditingController.dispose();
+    _focusNode.dispose();
     _actionsViewModel.dispose();
     super.dispose();
   }
@@ -61,8 +67,11 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
                   disableColor: HexColors.grey40,
                   thumbColor: HexColors.white,
                   borderColor: HexColors.grey20,
-                  onTap: (index) =>
-                      _actionsViewModel.changeSegmentedControlIndex(index)),
+                  onTap: (index) => {
+                        _textEditingController.clear(),
+                        FocusScope.of(context).unfocus(),
+                        _actionsViewModel.changeSegmentedControlIndex(index)
+                      }),
               const SizedBox(height: 16.0),
 
               Padding(
@@ -73,6 +82,8 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
 
                             /// SEARCH INPUT
                             InputWidget(
+                                textEditingController: _textEditingController,
+                                focusNode: _focusNode,
                                 margin: const EdgeInsets.only(right: 18.0),
                                 isSearchInput: true,
                                 placeholder: '${Titles.search}...',
@@ -115,13 +126,7 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
               itemCount: 10,
               itemBuilder: (context, index) {
                 return ActionListItemWidget(
-                    actionName: 'Название задачи',
-                    responsibleName: 'Аликпер',
-                    dateTime: DateTime.now().add(Duration(days: index)),
-                    status: index + 1,
-                    text:
-                        'Мы вынуждены отталкиваться от того, что семантический разбор внешних противодействий играет определяющее значение для стандартных подходов. Прежде всего, перспективное планирование, в своём классическом представлении, допускает внедрение своевременного выполнения сверхзадачи.',
-                    onTap: () => {});
+                    deal: Deal(), task: Task(), onTap: () => {});
               }),
 
           /// INDICATOR

@@ -18,7 +18,16 @@ class SearchMapObjectWidget extends StatefulWidget {
 }
 
 class _SearchMapObjectState extends State<SearchMapObjectWidget> {
+  final TextEditingController _textEditingController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   bool _show = false; // TODO DELETE
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +46,8 @@ class _SearchMapObjectState extends State<SearchMapObjectWidget> {
 
                 /// SEARCH INPUT
                 InputWidget(
+                    textEditingController: _textEditingController,
+                    focusNode: _focusNode,
                     isSearchInput: true,
                     placeholder: '${Titles.search}...',
                     onTap: () => setState,

@@ -2,30 +2,31 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/deal.dart';
+import 'package:izowork/entities/task.dart';
 import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class ActionListItemWidget extends StatelessWidget {
-  final String actionName;
-  final String responsibleName;
-  final DateTime dateTime;
-  final int status;
-  final String text;
+  final Deal? deal;
+  final Task? task;
   final VoidCallback onTap;
 
   const ActionListItemWidget(
-      {Key? key,
-      required this.actionName,
-      required this.responsibleName,
-      required this.dateTime,
-      required this.status,
-      required this.text,
-      required this.onTap})
+      {Key? key, this.deal, this.task, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _day = DateTime.now().day.toString().length == 1
+        ? '0${DateTime.now().day}'
+        : '${DateTime.now().day}';
+    final _month = DateTime.now().month.toString().length == 1
+        ? '0${DateTime.now().month}'
+        : '${DateTime.now().month}';
+    final _year = '${DateTime.now().year}';
+
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0),
         padding: const EdgeInsets.all(16.0),
@@ -38,17 +39,18 @@ class ActionListItemWidget extends StatelessWidget {
             shrinkWrap: true,
             children: [
               /// ACTION NAME
-              TitleWidget(text: actionName, padding: EdgeInsets.zero),
+              const TitleWidget(
+                  text: 'Название задачи', padding: EdgeInsets.zero),
               const SizedBox(height: 10.0),
 
               /// DEADLINE
-              Row(children: [
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const SubtitleWidget(
                     text: '${Titles.deadline}:', padding: EdgeInsets.zero),
                 const SizedBox(width: 10.0),
                 Expanded(
                   child: SubtitleWidget(
-                      text: actionName,
+                      text: '$_day.$_month.$_year',
                       fontWeight: FontWeight.w700,
                       textAlign: TextAlign.end,
                       padding: EdgeInsets.zero),
@@ -57,39 +59,45 @@ class ActionListItemWidget extends StatelessWidget {
               const SizedBox(height: 10.0),
 
               /// RESPONSIBLE
-              Row(children: [
-                const SubtitleWidget(
-                    text: '${Titles.responsible}:', padding: EdgeInsets.zero),
-                const SizedBox(width: 10.0),
-                Expanded(
-                  child: SubtitleWidget(
-                      text: responsibleName,
-                      fontWeight: FontWeight.w700,
-                      textAlign: TextAlign.end,
-                      padding: EdgeInsets.zero),
-                )
-              ]),
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    SubtitleWidget(
+                        text: '${Titles.responsible}:',
+                        padding: EdgeInsets.zero),
+                    SizedBox(width: 10.0),
+                    Expanded(
+                      child: SubtitleWidget(
+                          text: 'Аликпер',
+                          fontWeight: FontWeight.w700,
+                          textAlign: TextAlign.end,
+                          padding: EdgeInsets.zero),
+                    )
+                  ]),
               const SizedBox(height: 10.0),
 
               /// STATUS
-              Row(children: [
-                const SubtitleWidget(
-                    text: '${Titles.status}:', padding: EdgeInsets.zero),
-                const SizedBox(width: 10.0),
-                Expanded(
-                  child: SubtitleWidget(
-                      text: status > -1 ? 'Название статуса' : '',
-                      fontWeight: FontWeight.w700,
-                      textAlign: TextAlign.end,
-                      padding: EdgeInsets.zero),
-                )
-              ]),
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    SubtitleWidget(
+                        text: '${Titles.status}:', padding: EdgeInsets.zero),
+                    SizedBox(width: 10.0),
+                    Expanded(
+                      child: SubtitleWidget(
+                          text: 'Название статуса',
+                          fontWeight: FontWeight.w700,
+                          textAlign: TextAlign.end,
+                          padding: EdgeInsets.zero),
+                    )
+                  ]),
               const SizedBox(height: 10.0),
               const SeparatorWidget(),
               const SizedBox(height: 10.0),
 
               /// ACTION TEXT
-              Text(text,
+              Text(
+                  'Мы вынуждены отталкиваться от того, что семантический разбор внешних противодействий играет определяющее значение для стандартных подходов. Прежде всего, перспективное планирование, в своём классическом представлении, допускает внедрение своевременного выполнения сверхзадачи.',
                   style: TextStyle(
                       color: HexColors.black,
                       fontSize: 14.0,

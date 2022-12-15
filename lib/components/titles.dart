@@ -34,6 +34,7 @@ abstract class Titles {
   static const developer = 'Застройщик';
   static const stages = 'Стадии';
   static const stage = 'Стадия реализации';
+  static const realizations = 'Реализации';
   static const effectiveness = 'Эффективность';
   static const month = 'Месяц';
   static const year = 'Год';
