@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/locale.dart';
-import 'package:izowork/components/shadows.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:intl/intl.dart';
 import 'package:izowork/extensions/string_casing_extension.dart';
@@ -36,7 +35,9 @@ class MonthYearSelectionWidget extends StatelessWidget {
         decoration: BoxDecoration(
             color: HexColors.white,
             borderRadius: BorderRadius.circular(16.0),
-            boxShadow: [Shadows.shadow]),
+            border: Border.all(width: 1.0, color: HexColors.grey20)
+            // boxShadow: [Shadows.shadow]
+            ),
         child: Material(
             color: Colors.transparent,
             child: InkWell(
@@ -46,7 +47,7 @@ class MonthYearSelectionWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.0),
                 child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 11.0),
+                        horizontal: 16.0, vertical: 10.0),
                     child: Row(children: [
                       /// MONTH
                       Expanded(

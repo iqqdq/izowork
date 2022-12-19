@@ -59,4 +59,9 @@ abstract class Titles {
       'Укажите электронную почту, на которую мы отправим инструкцию по восстановлению';
   static const enterObjectName =
       'Введите адрес или название\nобъекта в строку поиска';
+
+  /// ALERTS
+  static const warning = 'Внимание';
+  static const locationPermissionDenied =
+      'Разрешите определение местоположения для IZOWORK в настройках телефона';
 }

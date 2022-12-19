@@ -51,7 +51,7 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
-            toolbarHeight: 70.0,
+            toolbarHeight: 74.0,
             titleSpacing: 0.0,
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,

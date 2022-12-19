@@ -53,9 +53,14 @@ class _SplashScreenState extends State<SplashScreenWidget> {
             child: SizedBox.expand(
                 child: Stack(children: [
           Center(child: Image.asset('assets/logo.png')),
-          const Align(
+          Align(
               alignment: Alignment.bottomCenter,
-              child: LoadingIndicatorWidget(onlyIndicator: true))
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom == 0.0
+                          ? 12.0
+                          : MediaQuery.of(context).padding.bottom),
+                  child: const LoadingIndicatorWidget(onlyIndicator: true)))
         ]))));
   }
 }

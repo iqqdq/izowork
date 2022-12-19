@@ -56,6 +56,7 @@ class DealCalendarViewModel with ChangeNotifier {
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
+        enableDrag: false,
         context: context,
         builder: (context) => DateTimeWheelPickerWidget(
             minDateTime: _minDateTime,

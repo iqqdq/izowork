@@ -1,9 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
-import 'package:izowork/components/shadows.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/helpers/same_date_time_checker.dart';
 import 'package:izowork/models/deal_calendar_view_model.dart';
@@ -57,10 +57,13 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
+            centerTitle: true,
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
-            leading: BackButtonWidget(onTap: () => Navigator.pop(context)),
+            leading: Padding(
+                padding: EdgeInsets.only(left: Platform.isAndroid ? 16.0 : 0.0),
+                child: BackButtonWidget(onTap: () => Navigator.pop(context))),
             title: Text(Titles.dealCalendar,
                 style: _textStyle.copyWith(
                     fontSize: 18.0,
@@ -68,10 +71,10 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
                     color: HexColors.black))),
         body: SizedBox.expand(
             child: Stack(children: [
-          Container(
-              margin: EdgeInsets.only(
+          Padding(
+              padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom == 0.0
-                      ? 12.0 + 56.0
+                      ? 56.0
                       : MediaQuery.of(context).padding.bottom + 56.0),
               child:
 
@@ -85,39 +88,40 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
                           color: HexColors.grey40),
                       dayBuilder: (BuildContext context, DayValues values) =>
                           Container(
-                            margin: const EdgeInsets.only(
-                                bottom: 4.0, left: 2.0, right: 2.0),
+                            // margin: const EdgeInsets.only(
+                            //     bottom: 4.0, left: 2.0, right: 2.0),
                             decoration: BoxDecoration(
-                                color: _dealCalendarViewModel.eventDateTimes
-                                        .contains(values.day)
-                                    ? HexColors.white
-                                    : Colors.transparent,
-                                border: Border.all(
-                                    width: _dealCalendarViewModel
-                                                .selectedDateTime ==
-                                            null
-                                        ? 0.0
-                                        : isSameDate(
-                                                _dealCalendarViewModel
-                                                    .selectedDateTime!,
-                                                values.day)
-                                            ? 1.0
-                                            : 0.0,
-                                    color: _dealCalendarViewModel
-                                                .selectedDateTime ==
-                                            null
-                                        ? Colors.transparent
-                                        : isSameDate(
-                                                _dealCalendarViewModel
-                                                    .selectedDateTime!,
-                                                values.day)
-                                            ? HexColors.primaryMain
-                                            : Colors.transparent),
-                                borderRadius: BorderRadius.circular(6.0),
-                                boxShadow: _dealCalendarViewModel.eventDateTimes
-                                        .contains(values.day)
-                                    ? [Shadows.calendarEventShadow]
-                                    : []),
+                              color: _dealCalendarViewModel.eventDateTimes
+                                      .contains(values.day)
+                                  ? HexColors.grey10
+                                  : Colors.transparent,
+                              border: Border.all(
+                                  width:
+                                      _dealCalendarViewModel.selectedDateTime ==
+                                              null
+                                          ? 0.0
+                                          : isSameDate(
+                                                  _dealCalendarViewModel
+                                                      .selectedDateTime!,
+                                                  values.day)
+                                              ? 1.0
+                                              : 0.0,
+                                  color:
+                                      _dealCalendarViewModel.selectedDateTime ==
+                                              null
+                                          ? Colors.transparent
+                                          : isSameDate(
+                                                  _dealCalendarViewModel
+                                                      .selectedDateTime!,
+                                                  values.day)
+                                              ? HexColors.primaryMain
+                                              : Colors.transparent),
+                              borderRadius: BorderRadius.circular(6.0),
+                              // boxShadow: _dealCalendarViewModel.eventDateTimes
+                              //         .contains(values.day)
+                              //     ? [Shadows.calendarEventShadow]
+                              //     : []
+                            ),
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -125,14 +129,14 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
                                   _dealCalendarViewModel.eventDateTimes
                                           .contains(values.day)
                                       ? Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 2.0),
+                                          // margin:
+                                          //     const EdgeInsets.only(top: 2.0),
                                           width: 18.0,
                                           height: 18.0,
                                           decoration: BoxDecoration(
                                               color: HexColors.primaryMain,
                                               borderRadius:
-                                                  BorderRadius.circular(8.0)),
+                                                  BorderRadius.circular(9.0)),
                                           child: Center(
                                               child: Text('1',
                                                   textAlign: TextAlign.center,
@@ -143,8 +147,8 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
                                                       color: HexColors.black))),
                                         )
                                       : Container(
-                                          margin:
-                                              const EdgeInsets.only(top: 2.0),
+                                          // margin:
+                                          //     const EdgeInsets.only(top: 2.0),
                                           height: 18.0),
 
                                   /// DAY TEXT
@@ -157,7 +161,7 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
                           ),
                       layout: Layout.BEAUTY)),
 
-          /// YEAR / MONTH SELECTION
+          /// MONTH / YEAR SELECTION
           Container(
               margin: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom == 0.0

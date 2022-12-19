@@ -60,7 +60,10 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                         ? ListView(
                             physics: const NeverScrollableScrollPhysics(),
                             padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height / 5.5,
+                                top: MediaQuery.of(context).size.height /
+                                    (MediaQuery.of(context).padding.top == 0.0
+                                        ? 6.5
+                                        : 5.0),
                                 left: 16.0,
                                 bottom: 14.0,
                                 right: 16.0),

@@ -29,20 +29,13 @@ class MapViewModel with ChangeNotifier {
   // PERMISSION
   bool _hasPermission = false;
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
-  static const String _kLocationServicesDisabledMessage =
-      'Location services are disabled.';
-  static const String _kPermissionDeniedMessage = 'Permission denied.';
-  static const String _kPermissionDeniedForeverMessage =
-      'Permission denied forever.';
-  static const String _kPermissionGrantedMessage = 'Permission granted.';
 
   // GEOCODER
-  final List<AutocompletePrediction> _predictions = [];
   String _city = '';
   String _address = '';
 
   // DATA
-  String _error = '';
+  String? _error;
 
   bool get hasPermission {
     return _hasPermission;
@@ -56,10 +49,6 @@ class MapViewModel with ChangeNotifier {
     return _position;
   }
 
-  List<AutocompletePrediction> get predictions {
-    return _predictions;
-  }
-
   String get city {
     return _city;
   }
@@ -68,12 +57,12 @@ class MapViewModel with ChangeNotifier {
     return _address;
   }
 
-  String get error {
+  String? get error {
     return _error;
   }
 
   MapViewModel() {
-    getCurrentPosition();
+    getLocationPermission();
   }
 
   // MARK: -
@@ -198,61 +187,45 @@ class MapViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PERMISSION
 
-  Future<void> getCurrentPosition() async {
-    _hasPermission = await handlePermission();
+  Future<void> getLocationPermission() async {
+    await handlePermission()
+        .then((value) => {_hasPermission = value, notifyListeners()});
 
-    notifyListeners();
+    if (_hasPermission) {
+      getUserLocation();
+    }
   }
 
   Future<bool> handlePermission() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
     serviceEnabled = await _geolocatorPlatform.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      updatePositionList(_kLocationServicesDisabledMessage);
 
-      return false;
+    if (!serviceEnabled) {
+      _hasPermission = false;
     }
 
     permission = await _geolocatorPlatform.checkPermission();
+
     if (permission == LocationPermission.denied) {
       permission = await _geolocatorPlatform.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        updatePositionList(_kPermissionDeniedMessage);
 
-        return false;
+      if (permission == LocationPermission.denied) {
+        _hasPermission = false;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      updatePositionList(_kPermissionDeniedForeverMessage);
-
-      return false;
+      _hasPermission = false;
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    updatePositionList(_kPermissionGrantedMessage);
-
-    return true;
-  }
-
-  void updatePositionList(String displayValue) {
-    if (displayValue != _kPermissionGrantedMessage) {
-      _error = displayValue;
-      notifyListeners();
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      _hasPermission = true;
     }
+
+    return _hasPermission;
   }
 
   // MARK: -

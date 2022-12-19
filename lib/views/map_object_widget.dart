@@ -49,6 +49,12 @@ class MapObjectWidget extends StatelessWidget {
                           itemCount: 10,
                           itemBuilder: (context, index) {
                             return Container(
+                                width: 84.0,
+                                height: 88.0,
+                                decoration: BoxDecoration(
+                                  color: HexColors.grey10,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
                                 margin: EdgeInsets.only(
                                     right: index == 10 ? 0.0 : 10.0),
                                 child: ClipRRect(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ class _MapBodyState extends State<MapBodyWidget>
 
   // MARK: -
   // MARK: - FUNCTIONS
+
   ClusterManager _initClusterManager() {
     return ClusterManager<Place>(
         _mapViewModel.places, _mapViewModel.updateMarkers,
@@ -68,6 +70,8 @@ class _MapBodyState extends State<MapBodyWidget>
       };
 
   Future<BitmapDescriptor> _getMarkerBitmap(int size, {String? text}) async {
+    num newSize = Platform.isAndroid ? size / 1.25 : size;
+
     final PictureRecorder pictureRecorder = PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
     final Paint paint1 = Paint()..color = HexColors.primaryMain;
@@ -75,13 +79,19 @@ class _MapBodyState extends State<MapBodyWidget>
     final Paint paint3 = Paint()..color = HexColors.black;
 
     if (text == null) {
-      canvas.drawCircle(Offset(size / 2, size / 2), size / 2.5, paint1);
-      canvas.drawCircle(Offset(size / 2, size / 2), size / 4.0, paint2);
-      canvas.drawCircle(Offset(size / 2, size / 2), size / 7.0, paint3);
+      canvas.drawCircle(
+          Offset(newSize / 2, newSize / 2), newSize / 2.5, paint1);
+      canvas.drawCircle(
+          Offset(newSize / 2, newSize / 2), newSize / 4.0, paint2);
+      canvas.drawCircle(
+          Offset(newSize / 2, newSize / 2), newSize / 7.0, paint3);
     } else {
-      canvas.drawCircle(Offset(size / 2, size / 2), size / 2.0, paint1);
-      canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
-      canvas.drawCircle(Offset(size / 2, size / 2), size / 2.4, paint1);
+      canvas.drawCircle(
+          Offset(newSize / 2, newSize / 2), newSize / 2.0, paint1);
+      canvas.drawCircle(
+          Offset(newSize / 2, newSize / 2), newSize / 2.2, paint2);
+      canvas.drawCircle(
+          Offset(newSize / 2, newSize / 2), newSize / 2.4, paint1);
     }
 
     if (text != null) {
@@ -89,18 +99,21 @@ class _MapBodyState extends State<MapBodyWidget>
       painter.text = TextSpan(
         text: text,
         style: TextStyle(
-            fontSize: size / 2.0,
+            fontSize: newSize / 2.0,
             color: HexColors.black,
             fontWeight: FontWeight.w700),
       );
       painter.layout();
       painter.paint(
         canvas,
-        Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
+        Offset(
+            newSize / 2 - painter.width / 2, newSize / 2 - painter.height / 2),
       );
     }
 
-    final img = await pictureRecorder.endRecording().toImage(size, size);
+    final img = await pictureRecorder
+        .endRecording()
+        .toImage(newSize.toInt(), newSize.toInt());
     final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
 
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
@@ -117,6 +130,7 @@ class _MapBodyState extends State<MapBodyWidget>
         child: Stack(children: [
       /// GOOGLE MAP
       GoogleMap(
+          mapToolbarEnabled: false,
           zoomControlsEnabled: false,
           myLocationButtonEnabled: false,
           myLocationEnabled: _mapViewModel.hasPermission,
@@ -161,8 +175,9 @@ class _MapBodyState extends State<MapBodyWidget>
           child: MapControlWidget(
               onZoomInTap: () => _mapViewModel.zoomIn(_googleMapController),
               onZoomOutTap: () => _mapViewModel.zoomOut(_googleMapController),
-              onShowLocationTap: () =>
-                  _mapViewModel.showUserLocation(_googleMapController),
+              onShowLocationTap: () => _mapViewModel.hasPermission
+                  ? _mapViewModel.showUserLocation(_googleMapController)
+                  : _mapViewModel.getLocationPermission(),
               onSearchTap: () =>
                   _mapViewModel.showSearchMapObjectSheet(context))),
 
