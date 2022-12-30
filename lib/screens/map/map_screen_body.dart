@@ -7,8 +7,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/place_model.dart';
-import 'package:izowork/views/map_control_widget.dart';
-import 'package:izowork/views/map_filter_button_widget.dart';
+import 'package:izowork/screens/map/views/map_control_widget.dart';
+import 'package:izowork/views/filter_button_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:izowork/models/map_view_model.dart';
 
@@ -184,7 +184,8 @@ class _MapBodyState extends State<MapBodyWidget>
       /// FILTER BUTTON
       Align(
           alignment: Alignment.bottomCenter,
-          child: MapFilterButtonWidget(onTap: () => {}
+          child: FilterButtonWidget(
+              onTap: () => _mapViewModel.showMapFilterSheet(context)
               // onClearTap: () => {}
               ))
     ]));

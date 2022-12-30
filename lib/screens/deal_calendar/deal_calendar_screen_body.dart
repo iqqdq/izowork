@@ -62,7 +62,7 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             leading: Padding(
-                padding: EdgeInsets.only(left: Platform.isAndroid ? 16.0 : 0.0),
+                padding: const EdgeInsets.only(left: 16.0),
                 child: BackButtonWidget(onTap: () => Navigator.pop(context))),
             title: Text(Titles.dealCalendar,
                 style: _textStyle.copyWith(

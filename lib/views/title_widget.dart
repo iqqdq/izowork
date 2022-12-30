@@ -25,7 +25,7 @@ class TitleWidget extends StatelessWidget {
             style: TextStyle(
                 fontSize: small ? 12.0 : 20.0,
                 fontWeight: small ? FontWeight.w400 : FontWeight.w700,
-                color: small ? HexColors.grey50 : HexColors.black,
+                color: small ? HexColors.grey40 : HexColors.black,
                 fontFamily: 'PT Root UI')));
   }
 }

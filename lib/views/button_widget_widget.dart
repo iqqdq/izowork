@@ -5,7 +5,6 @@ class ButtonWidget extends StatelessWidget {
   final String title;
   final EdgeInsets? margin;
   final bool? isDisabled;
-  final bool? isTransparent;
   final VoidCallback onTap;
 
   const ButtonWidget(
@@ -13,7 +12,6 @@ class ButtonWidget extends StatelessWidget {
       required this.title,
       this.margin,
       this.isDisabled,
-      this.isTransparent,
       required this.onTap})
       : super(key: key);
 

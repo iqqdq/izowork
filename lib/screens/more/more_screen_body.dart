@@ -4,7 +4,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/more_view_model.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/more_list_item_widget.dart';
+import 'package:izowork/screens/more/views/more_list_item_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 

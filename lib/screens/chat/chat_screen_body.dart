@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/input_widget.dart';
+import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/chat.dart';
 import 'package:izowork/models/chat_view_model.dart';
 import 'package:izowork/views/asset_image_button_widget.dart';
-import 'package:izowork/views/chat_list_item_widget.dart';
+import 'package:izowork/screens/chat/views/chat_list_item_widget.dart';
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';

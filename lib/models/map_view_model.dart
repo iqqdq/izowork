@@ -9,9 +9,10 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/place_model.dart';
 import 'package:izowork/entities/map_object.dart';
-import 'package:izowork/views/add_map_object_widget.dart';
-import 'package:izowork/views/map_object_widget.dart';
-import 'package:izowork/views/search_map_object_widget.dart';
+import 'package:izowork/screens/map/map_object_sheet/map_add_object_widget.dart';
+import 'package:izowork/screens/map/map_search_sheet/map_search_object_widget.dart';
+import 'package:izowork/views/map_filter_sheet/map_filter_page_view_widget.dart';
+import 'package:izowork/views/map_object_sheet/map_object_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class MapViewModel with ChangeNotifier {
@@ -91,13 +92,26 @@ class MapViewModel with ChangeNotifier {
     }
   }
 
+  // MARK: -
+  // MARK: - PUSH
+
+  void showMapFilterSheet(BuildContext context) {
+    showCupertinoModalBottomSheet(
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (context) => MapFilterPageViewWidget(
+            onApplyTap: () => {}, onResetTap: () => {}));
+  }
+
   void showAddMapObjectSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => AddMapObjectWidget(
+        builder: (context) => MapAddObjectWidget(
             address: address,
             onTap: () => {
                   // TODO ADD MAP OBJECT
@@ -127,7 +141,7 @@ class MapViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchMapObjectWidget(
+        builder: (context) => MapSearchObjectWidget(
             onObjectReturn: (object) => {
                   // TODO SHOW OBJECT ON MAP
                 }));
