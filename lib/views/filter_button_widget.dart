@@ -18,6 +18,7 @@ class FilterButtonWidget extends StatelessWidget {
             height: 38.0,
             decoration: BoxDecoration(
                 color: HexColors.white,
+                border: Border.all(width: 1.0, color: HexColors.grey20),
                 borderRadius: BorderRadius.circular(10.0),
                 boxShadow: [Shadows.shadow]),
             child: Material(

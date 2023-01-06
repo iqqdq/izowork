@@ -39,7 +39,6 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
 
   @override
   void dispose() {
-    _moreViewModel.dispose();
     super.dispose();
   }
 
@@ -92,7 +91,15 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                             ],
                           )
                         : MoreListItemWidget(
-                            title: _titles[index - 1], onTap: () => {});
+                            title: _titles[index - 1],
+                            onTap: () => {
+                                  index == 2
+                                      ? _moreViewModel.showStaffScreen(context)
+                                      : index == 3
+                                          ? _moreViewModel
+                                              .showContactsScreen(context)
+                                          : debugPrint(index.toString())
+                                });
                   })),
 
           /// INDICATOR

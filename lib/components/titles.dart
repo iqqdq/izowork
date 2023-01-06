@@ -8,11 +8,12 @@ abstract class Titles {
 
   /// TITLES
   static const authorization = 'Авторизация';
-  static const passwordRecovery = 'Восстановление пароля';
+  static const passwordRecovery = 'Восстановление\nпароля';
 
   /// BUTTONS
   static const enter = 'Войти';
   static const forgotPassword = 'Забыли пароль?';
+  static const back = 'Назад';
   static const send = 'Отправить';
   static const apply = 'Применить';
   static const reset = 'Сбросить';
@@ -20,9 +21,11 @@ abstract class Titles {
   static const search = 'Поиск';
   static const addObject = 'Добавить объект';
   static const showDetail = 'Подробнее';
+  static const goToChat = 'Перейти в чат';
 
   /// NAVIGATION TITLES
   static const dealCalendar = 'Календарь сделок';
+  static const staff = 'Сотрудники';
 
   /// SEGMENTED CONTROL TITLES
   static const deals = 'Сделки';
@@ -39,6 +42,10 @@ abstract class Titles {
   static const notifications = 'Уведомления';
 
   /// OTHER
+  static const phone = 'Телефон';
+  static const email = 'Электронная почта';
+  static const login = 'Email';
+  static const password = 'Пароль';
   static const placeAddress = 'Адрес места';
   static const manager = 'Менеджер';
   static const developer = 'Застройщик';
@@ -51,6 +58,9 @@ abstract class Titles {
   static const deadline = 'Сроки';
   static const responsible = 'Ответственный';
   static const status = 'Статус';
+  static const companyName = 'Название компании';
+  static const sorting = 'Сортировка';
+  static const type = 'Тип';
 
   /// MESSAGES
   static const invalidLogin =
@@ -59,6 +69,8 @@ abstract class Titles {
       'Укажите электронную почту, на которую мы отправим инструкцию по восстановлению';
   static const enterObjectName =
       'Введите адрес или название\nобъекта в строку поиска';
+  static const emailToRecovery =
+      'Укажите электронную почту, на которую мы отправим инструкцию по восстановлению';
 
   /// ALERTS
   static const warning = 'Внимание';

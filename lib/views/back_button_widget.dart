@@ -25,18 +25,22 @@ class _BackButtonState extends State<BackButtonWidget> {
         highlightColor: Colors.transparent,
         child: Row(children: [
           Image.asset('assets/ic_back_arrow.png',
-              color: HexColors.primaryDark, width: 24.0, height: 24.0),
-          SizedBox(width: widget.title == null ? 0.0 : 4.0),
+              color: _isHighlight
+                  ? HexColors.secondaryDark
+                  : HexColors.primaryDark,
+              width: 24.0,
+              height: 24.0),
+          SizedBox(width: widget.title == null ? 0.0 : 8.0),
           widget.title == null
               ? Container()
-              : Text('text',
+              : Text(widget.title!,
                   style: TextStyle(
                       color: _isHighlight
                           ? HexColors.secondaryDark
                           : HexColors.primaryDark,
-                      fontSize: 14.0,
+                      fontSize: 18.0,
                       fontFamily: 'PT Root UI',
-                      fontWeight: FontWeight.w400))
+                      fontWeight: FontWeight.bold))
         ]),
         onHighlightChanged: (value) => setState(() => _isHighlight = value),
         onTap: () => widget.onTap());

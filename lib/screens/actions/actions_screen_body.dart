@@ -40,7 +40,6 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
-    _actionsViewModel.dispose();
     super.dispose();
   }
 
@@ -58,6 +57,7 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
+            automaticallyImplyLeading: false,
             title: Column(children: [
               /// SEGMENTED CONTROL
               SegmentedControlWidget(

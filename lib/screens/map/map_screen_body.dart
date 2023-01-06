@@ -37,7 +37,6 @@ class _MapBodyState extends State<MapBodyWidget>
   @override
   void dispose() {
     _googleMapController.dispose();
-    _mapViewModel.dispose();
     super.dispose();
   }
 

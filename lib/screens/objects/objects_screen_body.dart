@@ -38,7 +38,6 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
-    _objectsViewModel.dispose();
     super.dispose();
   }
 
@@ -56,6 +55,7 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
+            automaticallyImplyLeading: false,
             title: Column(children: [
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),

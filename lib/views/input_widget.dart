@@ -4,8 +4,10 @@ import 'package:izowork/components/hex_colors.dart';
 class InputWidget extends StatefulWidget {
   final TextEditingController textEditingController;
   final FocusNode focusNode;
+
   final bool? isSearchInput;
   final EdgeInsets? margin;
+  final double? height;
   final TextInputType? textInputType;
   final TextInputAction? textInputAction;
   final TextCapitalization? textCapitalization;
@@ -22,6 +24,7 @@ class InputWidget extends StatefulWidget {
       required this.focusNode,
       this.isSearchInput,
       this.margin,
+      this.height,
       this.textInputType,
       this.textInputAction,
       this.textCapitalization,
@@ -53,7 +56,7 @@ class _InputWidgetState extends State<InputWidget> {
         color: HexColors.black);
 
     return Container(
-        height: 44.0,
+        height: widget.height ?? 44.0,
         margin: widget.margin ?? const EdgeInsets.symmetric(horizontal: 16.0),
         padding: const EdgeInsets.only(left: 12.0),
         decoration: BoxDecoration(

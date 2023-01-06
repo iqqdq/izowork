@@ -30,7 +30,7 @@ class TransparentButtonWidget extends StatelessWidget {
                             fontSize: 18.0,
                             overflow: TextOverflow.ellipsis,
                             fontFamily: 'PT Root UI',
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.bold,
                             color: HexColors.primaryDark))),
                 onTap: () => onTap())));
   }

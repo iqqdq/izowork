@@ -38,6 +38,7 @@ abstract class HexColors {
   static var grey40 = HexColor("#ADADAC");
   static var grey50 = HexColor("#949492");
   static var grey70 = HexColor("#616160");
+  static var grey80 = HexColor("#474747");
 
   /// WHITE
   static var white90 = white.withOpacity(0.9);

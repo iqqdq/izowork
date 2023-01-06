@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/screens/map/map_filter_sheet/map_filter_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
-import 'package:izowork/views/map_filter_sheet/map_filter_widget.dart';
 
 class MapFilterPageViewWidget extends StatefulWidget {
   final VoidCallback onApplyTap;

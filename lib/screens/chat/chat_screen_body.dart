@@ -38,7 +38,6 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
-    _chatViewModel.dispose();
     super.dispose();
   }
 
@@ -56,6 +55,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
+            automaticallyImplyLeading: false,
             title: Column(children: [
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
