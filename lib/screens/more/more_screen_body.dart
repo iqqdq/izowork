@@ -56,8 +56,7 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                   itemCount: _titles.length + 1,
                   itemBuilder: (context, index) {
                     return index == 0
-                        ? ListView(
-                            physics: const NeverScrollableScrollPhysics(),
+                        ? Padding(
                             padding: EdgeInsets.only(
                                 top: MediaQuery.of(context).size.height /
                                     (MediaQuery.of(context).padding.top == 0.0
@@ -66,30 +65,30 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                 left: 16.0,
                                 bottom: 14.0,
                                 right: 16.0),
-                            shrinkWrap: true,
-                            children: [
-                              InkWell(
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                child: Stack(children: [
-                                  Image.asset('assets/ic_avatar.png',
-                                      width: 40.0,
-                                      height: 40.0,
-                                      fit: BoxFit.cover,
-                                      color: HexColors.primaryMain),
-                                  // ClipRRect(
-                                  //   borderRadius: BorderRadius.circular(12.0),
-                                  //   child:
-                                  // CachedNetworkImage(imageUrl: '', width: 24.0, height: 24.0, fit: BoxFit.cover)),
-                                ]),
-                                onTap: () => _moreViewModel.setAvatar(),
-                              ),
-                              const SizedBox(height: 14.0),
-                              const TitleWidget(
-                                  text: 'almaty_user18@kaspi.kz',
-                                  padding: EdgeInsets.zero)
-                            ],
-                          )
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    highlightColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    child: Stack(children: [
+                                      Image.asset('assets/ic_avatar.png',
+                                          width: 80.0,
+                                          height: 80.0,
+                                          fit: BoxFit.cover,
+                                          color: HexColors.primaryMain),
+                                      // ClipRRect(
+                                      //   borderRadius: BorderRadius.circular(12.0),
+                                      //   child:
+                                      // CachedNetworkImage(imageUrl: '', width: 80.0, height: 80.0, fit: BoxFit.cover)),
+                                    ]),
+                                    onTap: () => _moreViewModel.setAvatar(),
+                                  ),
+                                  const SizedBox(height: 14.0),
+                                  const TitleWidget(
+                                      text: 'almaty_user18@kaspi.kz',
+                                      padding: EdgeInsets.zero)
+                                ]))
                         : MoreListItemWidget(
                             title: _titles[index - 1],
                             onTap: () => {
@@ -101,7 +100,11 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                           : index == 3
                                               ? _moreViewModel
                                                   .showContactsScreen(context)
-                                              : debugPrint(index.toString())
+                                              : index == 8
+                                                  ? _moreViewModel
+                                                      .showNotificationsScreen(
+                                                          context)
+                                                  : debugPrint(index.toString())
                                 });
                   })),
 

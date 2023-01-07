@@ -86,9 +86,7 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
               const SeparatorWidget()
             ])),
         floatingActionButton: FloatingButtonWidget(
-            onTap: () => {
-                  // TODO ADD NEWS
-                }),
+            onTap: () => _newsViewModel.showNewsCreationScreen(context)),
         body: SizedBox.expand(
             child: Stack(children: [
           /// NEWS LIST VIEW
@@ -102,7 +100,12 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
               itemCount: 10,
               itemBuilder: (context, index) {
                 return NewsListItemWidget(
-                    onUserTap: () => {}, onShowCommentsTap: () => {});
+                    tag: index.toString(),
+                    dateTime: DateTime.now().subtract(Duration(days: index)),
+                    onTap: () =>
+                        _newsViewModel.showNewsPageScreen(context, index),
+                    onUserTap: () => {},
+                    onShowCommentsTap: () => {});
               }),
 
           /// FILTER BUTTON

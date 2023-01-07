@@ -47,9 +47,10 @@ class _BorderButtonState extends State<BorderButtonWidget> {
                 width: 1.0,
                 color: _isDisabled
                     ? Colors.transparent
-                    : HexColors.borderButtonHighlightColor),
-            borderRadius: BorderRadius.circular(12.0),
-            boxShadow: _isDisabled ? [] : [Shadows.shadow]),
+                    : _isHighlighted
+                        ? HexColors.primaryMain
+                        : HexColors.borderButtonHighlightColor),
+            borderRadius: BorderRadius.circular(12.0)),
         child: Material(
             color: Colors.transparent,
             child: InkWell(

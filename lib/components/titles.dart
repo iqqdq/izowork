@@ -22,18 +22,22 @@ abstract class Titles {
   static const addObject = 'Добавить объект';
   static const showDetail = 'Подробнее';
   static const goToChat = 'Перейти в чат';
+  static const comments = 'Комментарии';
+  static const comment = 'Комментарий';
   static const showAllComments = 'Показать все комментарии';
-
-  /// NAVIGATION TITLES
-  static const dealCalendar = 'Календарь сделок';
-  static const staff = 'Сотрудники';
+  static const publicate = 'Опуликовать';
+  static const clipMedia = 'Прикрепить медиа';
+  static const changeMedia = 'Изменить медиа';
 
   /// SEGMENTED CONTROL TITLES
   static const deals = 'Сделки';
   static const tasks = 'Задачи';
 
   /// MORE
+  static const title = 'Заголовок';
+  static const text = 'Текст';
   static const news = 'Новости';
+  static const newNews = 'Новая новость';
   static const employees = 'Сотрудники';
   static const contacts = 'Контакты';
   static const companies = 'Компании';
@@ -43,6 +47,8 @@ abstract class Titles {
   static const notifications = 'Уведомления';
 
   /// OTHER
+  static const dealCalendar = 'Календарь сделок';
+  static const staff = 'Сотрудники';
   static const phone = 'Телефон';
   static const email = 'Электронная почта';
   static const login = 'Email';
