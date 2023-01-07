@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/screens/contacts/contacts_screen.dart';
+import 'package:izowork/screens/news/news_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
 
 class MoreViewModel with ChangeNotifier {
@@ -22,6 +23,11 @@ class MoreViewModel with ChangeNotifier {
 
   // MARK: -
   // MARK: - ACTIONS
+
+  void showNewsScreen(BuildContext context) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const NewsScreenWidget()));
+  }
 
   void showStaffScreen(BuildContext context) {
     Navigator.push(context,

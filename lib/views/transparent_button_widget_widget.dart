@@ -3,11 +3,16 @@ import 'package:izowork/components/hex_colors.dart';
 
 class TransparentButtonWidget extends StatelessWidget {
   final String title;
+  final double? fontSize;
   final EdgeInsets? margin;
   final VoidCallback onTap;
 
   const TransparentButtonWidget(
-      {Key? key, required this.title, this.margin, required this.onTap})
+      {Key? key,
+      required this.title,
+      this.fontSize,
+      this.margin,
+      required this.onTap})
       : super(key: key);
 
   @override
@@ -27,7 +32,7 @@ class TransparentButtonWidget extends StatelessWidget {
                     child: Text(title,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 18.0,
+                            fontSize: fontSize ?? 18.0,
                             overflow: TextOverflow.ellipsis,
                             fontFamily: 'PT Root UI',
                             fontWeight: FontWeight.bold,

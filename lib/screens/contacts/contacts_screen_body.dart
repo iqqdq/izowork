@@ -89,8 +89,11 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
           /// CONTACTS LIST VIEW
           ListView.builder(
               shrinkWrap: true,
-              padding: const EdgeInsets.only(
-                  left: 16.0, right: 16.0, top: 16.0, bottom: 16.0 + 48.0),
+              padding: EdgeInsets.only(
+                  left: 16.0,
+                  right: 16.0,
+                  top: 16.0,
+                  bottom: 80.0 + MediaQuery.of(context).padding.bottom),
               itemCount: 10,
               itemBuilder: (context, index) {
                 return ContactListItemWidget(
@@ -99,7 +102,7 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
                     onLinkTap: () => {});
               }),
 
-          /// FILTER BUTTONS
+          /// FILTER BUTTON
           SafeArea(
               child: Align(
                   alignment: Alignment.bottomCenter,

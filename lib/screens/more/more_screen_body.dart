@@ -93,12 +93,15 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                         : MoreListItemWidget(
                             title: _titles[index - 1],
                             onTap: () => {
-                                  index == 2
-                                      ? _moreViewModel.showStaffScreen(context)
-                                      : index == 3
+                                  index == 1
+                                      ? _moreViewModel.showNewsScreen(context)
+                                      : index == 2
                                           ? _moreViewModel
-                                              .showContactsScreen(context)
-                                          : debugPrint(index.toString())
+                                              .showStaffScreen(context)
+                                          : index == 3
+                                              ? _moreViewModel
+                                                  .showContactsScreen(context)
+                                              : debugPrint(index.toString())
                                 });
                   })),
 

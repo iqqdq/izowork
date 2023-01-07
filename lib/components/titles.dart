@@ -22,6 +22,7 @@ abstract class Titles {
   static const addObject = 'Добавить объект';
   static const showDetail = 'Подробнее';
   static const goToChat = 'Перейти в чат';
+  static const showAllComments = 'Показать все комментарии';
 
   /// NAVIGATION TITLES
   static const dealCalendar = 'Календарь сделок';
