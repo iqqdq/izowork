@@ -44,15 +44,18 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
-            toolbarHeight: 124.0,
-            titleSpacing: 16.0,
+            toolbarHeight: 116.0,
+            titleSpacing: 0.0,
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             title: Column(children: [
               Stack(children: [
-                BackButtonWidget(onTap: () => Navigator.pop(context)),
+                Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child:
+                        BackButtonWidget(onTap: () => Navigator.pop(context))),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(Titles.news,
                       style: TextStyle(
@@ -71,7 +74,8 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
                         InputWidget(
                             textEditingController: _textEditingController,
                             focusNode: _focusNode,
-                            margin: EdgeInsets.zero,
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                             isSearchInput: true,
                             placeholder: '${Titles.search}...',
                             onTap: () => setState,
@@ -81,9 +85,7 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
                             onClearTap: () => {
                                   // TODO CLEAR NEWS SEARCH
                                 }))
-              ]),
-              const SizedBox(height: 16.0),
-              const SeparatorWidget()
+              ])
             ])),
         floatingActionButton: FloatingButtonWidget(
             onTap: () => _newsViewModel.showNewsCreationScreen(context)),
@@ -105,8 +107,10 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
                     onTap: () =>
                         _newsViewModel.showNewsPageScreen(context, index),
                     onUserTap: () => {},
-                    onShowCommentsTap: () => {});
+                    onShowCommentsTap: () =>
+                        _newsViewModel.showNewsCommentsScreen(context, index));
               }),
+          const SeparatorWidget(),
 
           /// FILTER BUTTON
           SafeArea(

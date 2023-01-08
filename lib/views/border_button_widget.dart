@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/shadows.dart';
 
 class BorderButtonWidget extends StatefulWidget {
   final String title;

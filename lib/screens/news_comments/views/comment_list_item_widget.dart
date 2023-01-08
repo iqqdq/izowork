@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 
 class CommentListItemWidget extends StatelessWidget {
@@ -52,8 +53,11 @@ class CommentListItemWidget extends StatelessWidget {
                         child: Row(children: [
                           ///   AVATAR
                           Stack(children: [
-                            Image.asset('assets/ic_avatar.png',
-                                width: 24.0, height: 24.0, fit: BoxFit.cover),
+                            SvgPicture.asset('assets/ic_avatar.svg',
+                                color: HexColors.grey40,
+                                width: 24.0,
+                                height: 24.0,
+                                fit: BoxFit.cover),
                             // ClipRRect(
                             //   borderRadius: BorderRadius.circular(12.0),
                             //   child:

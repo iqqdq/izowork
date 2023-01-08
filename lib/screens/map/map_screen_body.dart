@@ -183,10 +183,12 @@ class _MapBodyState extends State<MapBodyWidget>
       /// FILTER BUTTON
       Align(
           alignment: Alignment.bottomCenter,
-          child: FilterButtonWidget(
-              onTap: () => _mapViewModel.showMapFilterSheet(context)
-              // onClearTap: () => {}
-              ))
+          child: Padding(
+              padding: const EdgeInsets.only(bottom: 6.0),
+              child: FilterButtonWidget(
+                  onTap: () => _mapViewModel.showMapFilterSheet(context)
+                  // onClearTap: () => {}
+                  )))
     ]));
   }
 }

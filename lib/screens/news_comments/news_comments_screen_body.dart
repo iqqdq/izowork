@@ -9,7 +9,6 @@ import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/views/chat_message_bar_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 

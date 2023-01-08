@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/status_widget.dart';
@@ -39,8 +40,11 @@ class ContactListItemWidget extends StatelessWidget {
                       child: Row(children: [
                         /// STAFF AVATAR
                         Stack(children: [
-                          Image.asset('assets/ic_avatar.png',
-                              width: 40.0, height: 40.0, fit: BoxFit.cover),
+                          SvgPicture.asset('assets/ic_avatar.svg',
+                              color: HexColors.grey40,
+                              width: 40.0,
+                              height: 40.0,
+                              fit: BoxFit.cover),
                           // ClipRRect(
                           //   borderRadius: BorderRadius.circular(12.0),
                           //   child:

@@ -43,15 +43,18 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
-            toolbarHeight: 124.0,
-            titleSpacing: 16.0,
+            toolbarHeight: 116.0,
+            titleSpacing: 0.0,
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             title: Column(children: [
               Stack(children: [
-                BackButtonWidget(onTap: () => Navigator.pop(context)),
+                Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child:
+                        BackButtonWidget(onTap: () => Navigator.pop(context))),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(Titles.contacts,
                       style: TextStyle(
@@ -70,7 +73,8 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
                         InputWidget(
                             textEditingController: _textEditingController,
                             focusNode: _focusNode,
-                            margin: EdgeInsets.zero,
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                             isSearchInput: true,
                             placeholder: '${Titles.search}...',
                             onTap: () => setState,
@@ -80,9 +84,7 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
                             onClearTap: () => {
                                   // TODO CLEAR CONTACTS SEARCH
                                 }))
-              ]),
-              const SizedBox(height: 16.0),
-              const SeparatorWidget()
+              ])
             ])),
         body: SizedBox.expand(
             child: Stack(children: [
@@ -101,6 +103,7 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
                     onPhoneTap: () => {},
                     onLinkTap: () => {});
               }),
+          const SeparatorWidget(),
 
           /// FILTER BUTTON
           SafeArea(

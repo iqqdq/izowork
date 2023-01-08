@@ -28,31 +28,43 @@ abstract class Titles {
   static const publicate = 'Опуликовать';
   static const clipMedia = 'Прикрепить медиа';
   static const changeMedia = 'Изменить медиа';
-
-  /// SEGMENTED CONTROL TITLES
-  static const deals = 'Сделки';
-  static const tasks = 'Задачи';
+  static const edit = 'Редактировать';
+  static const save = 'Сохранить';
+  static const changeAvatar = 'Изменить аватар';
 
   /// MORE
+  static const description = 'Описание';
   static const title = 'Заголовок';
   static const text = 'Текст';
   static const news = 'Новости';
   static const newNews = 'Новая новость';
   static const employees = 'Сотрудники';
   static const contacts = 'Контакты';
+  static const company = 'Компания';
   static const companies = 'Компании';
   static const products = 'Товары';
   static const analytics = 'Аналитика';
   static const documents = 'Документы';
   static const notifications = 'Уведомления';
+  static const requisites = 'Реквизиты';
+  static const productType = 'Тип товара';
+  static const productSubtype = 'Подтип товара';
+  static const productsType = 'Тип товаров';
+  static const successDealCount = 'Кол-во успешных сделок';
+  static const myProfile = 'Мой профиль';
+  static const profileEdit = 'Редактирование профиля';
 
   /// OTHER
+  static const deals = 'Сделки';
+  static const tasks = 'Задачи';
+  static const info = 'Информация';
   static const dealCalendar = 'Календарь сделок';
   static const staff = 'Сотрудники';
   static const phone = 'Телефон';
   static const email = 'Электронная почта';
   static const login = 'Email';
   static const password = 'Пароль';
+  static const address = 'Адрес';
   static const placeAddress = 'Адрес места';
   static const manager = 'Менеджер';
   static const developer = 'Застройщик';
@@ -68,6 +80,8 @@ abstract class Titles {
   static const companyName = 'Название компании';
   static const sorting = 'Сортировка';
   static const type = 'Тип';
+  static const post = 'Должность';
+  static const socialLinks = 'Ссылки на социальные сети';
 
   /// MESSAGES
   static const invalidLogin =

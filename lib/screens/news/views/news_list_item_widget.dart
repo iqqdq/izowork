@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/transparent_button_widget_widget.dart';
@@ -124,7 +125,8 @@ class NewsListItemWidget extends StatelessWidget {
                             child: Row(children: [
                               /// COMMENT AVATAR
                               Stack(children: [
-                                Image.asset('assets/ic_avatar.png',
+                                SvgPicture.asset('assets/ic_avatar.svg',
+                                    color: HexColors.grey40,
                                     width: 24.0,
                                     height: 24.0,
                                     fit: BoxFit.cover),

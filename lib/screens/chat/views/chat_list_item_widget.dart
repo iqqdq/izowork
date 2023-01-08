@@ -1,5 +1,6 @@
 // import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
@@ -53,7 +54,11 @@ class ChatListItemWidget extends StatelessWidget {
                       Row(children: [
                         /// CREATOR AVATAR
                         Stack(children: [
-                          Image.asset('assets/ic_avatar.png'),
+                          SvgPicture.asset('assets/ic_avatar.svg',
+                              color: HexColors.grey40,
+                              width: 40.0,
+                              height: 40.0,
+                              fit: BoxFit.cover),
                           // ClipRRect(
                           //   borderRadius: BorderRadius.circular(12.0),
                           //   child:

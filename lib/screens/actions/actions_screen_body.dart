@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -99,15 +100,7 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
                     AssetImageButton(
                         imagePath: 'assets/ic_calendar.png',
                         onTap: () =>
-                            _actionsViewModel.showDealCalendarScreen(context)),
-                    const SizedBox(width: 18.0),
-
-                    /// FILTER BUTTON
-                    AssetImageButton(
-                        imagePath: 'assets/ic_filter.png',
-                        onTap: () => {
-                              // TODO SHOW DEAL / TASK FILTER
-                            }),
+                            _actionsViewModel.showDealCalendarScreen(context))
                   ])),
               const SizedBox(height: 16.0),
               const SeparatorWidget()
@@ -128,6 +121,17 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
                 return ActionListItemWidget(
                     deal: Deal(), task: Task(), onTap: () => {});
               }),
+
+          /// FILTER BUTTON
+          SafeArea(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: const EdgeInsets.only(bottom: 6.0),
+                      child: FilterButtonWidget(
+                        onTap: () => {},
+                        // onClearTap: () => {}
+                      )))),
 
           /// INDICATOR
           _actionsViewModel.loadingStatus == LoadingStatus.searching

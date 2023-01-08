@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/chat.dart';
 import 'package:izowork/models/chat_view_model.dart';
-import 'package:izowork/views/asset_image_button_widget.dart';
 import 'package:izowork/screens/chat/views/chat_list_item_widget.dart';
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
@@ -67,7 +67,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                             InputWidget(
                                 textEditingController: _textEditingController,
                                 focusNode: _focusNode,
-                                margin: const EdgeInsets.only(right: 18.0),
+                                margin: EdgeInsets.zero,
                                 isSearchInput: true,
                                 placeholder: '${Titles.search}...',
                                 onTap: () => setState,
@@ -77,13 +77,6 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                                 onClearTap: () => {
                                       // TODO CLEAR CHATS SEARCH
                                     })),
-
-                    /// FILTER BUTTON
-                    AssetImageButton(
-                        imagePath: 'assets/ic_filter.png',
-                        onTap: () => {
-                              // TODO SHOW CHATS FILTER
-                            }),
                   ])),
               const SizedBox(height: 16.0),
               const SeparatorWidget()
@@ -103,6 +96,17 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
               itemBuilder: (context, index) {
                 return ChatListItemWidget(chat: Chat(), onTap: () => {});
               }),
+
+          /// FILTER BUTTON
+          SafeArea(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: const EdgeInsets.only(bottom: 6.0),
+                      child: FilterButtonWidget(
+                        onTap: () => {},
+                        // onClearTap: () => {}
+                      )))),
 
           /// INDICATOR
           _chatViewModel.loadingStatus == LoadingStatus.searching

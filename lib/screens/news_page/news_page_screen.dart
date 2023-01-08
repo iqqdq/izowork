@@ -113,7 +113,7 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                   child: Container(
                       width: 40.0,
                       height: 40.0,
-                      margin: const EdgeInsets.only(left: 16.0),
+                      margin: const EdgeInsets.only(left: 10.0, top: 8.0),
                       padding: const EdgeInsets.only(left: 7.0),
                       decoration: BoxDecoration(
                           color: HexColors.white,

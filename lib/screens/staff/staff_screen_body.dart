@@ -42,15 +42,18 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
-            toolbarHeight: 124.0,
-            titleSpacing: 16.0,
+            toolbarHeight: 116.0,
+            titleSpacing: 0.0,
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             title: Column(children: [
               Stack(children: [
-                BackButtonWidget(onTap: () => Navigator.pop(context)),
+                Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child:
+                        BackButtonWidget(onTap: () => Navigator.pop(context))),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(Titles.staff,
                       style: TextStyle(
@@ -69,7 +72,8 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
                         InputWidget(
                             textEditingController: _textEditingController,
                             focusNode: _focusNode,
-                            margin: EdgeInsets.zero,
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                             isSearchInput: true,
                             placeholder: '${Titles.search}...',
                             onTap: () => setState,
@@ -79,9 +83,7 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
                             onClearTap: () => {
                                   // TODO CLEAR STAFF SEARCH
                                 }))
-              ]),
-              const SizedBox(height: 16.0),
-              const SeparatorWidget()
+              ])
             ])),
         body: SizedBox.expand(
             child: Stack(children: [
@@ -97,6 +99,7 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
                     onLinkTap: () => {},
                     onChatTap: () => {});
               }),
+          const SeparatorWidget(),
 
           /// INDICATOR
           _staffViewModel.loadingStatus == LoadingStatus.searching
