@@ -96,7 +96,8 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
               itemBuilder: (context, index) {
                 return StaffListItemWidget(
                     onUserTap: () => {},
-                    onLinkTap: () => {},
+                    onLinkTap: () =>
+                        _staffViewModel.openUrl('https://www.google.com/'),
                     onChatTap: () => {});
               }),
           const SeparatorWidget(),

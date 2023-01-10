@@ -66,98 +66,99 @@ class _ProductsFilterState extends State<ProductsFilterWidget> {
                   const SizedBox(height: 10.0),
 
                   /// SCROLLABLE LIST
-                  ListView(shrinkWrap: true, children: [
-                    const TitleWidget(text: Titles.sorting, isSmall: true),
-                    const SizedBox(height: 10.0),
+                  ListView(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.only(bottom: 24.0),
+                      children: [
+                        const TitleWidget(text: Titles.sorting, isSmall: true),
+                        const SizedBox(height: 10.0),
 
-                    /// SORTING GRID VIEW
-                    ChipsChoice<String>.multiple(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        wrapped: true,
-                        spacing: 6.0,
-                        runSpacing: 6.0,
-                        value: options,
-                        choiceBuilder: (item, index) => InkWell(
-                              onTap: () => setState(() => {
-                                    tags.contains(index)
-                                        ? tags.removeWhere(
-                                            (element) => element == index)
-                                        : tags.add(index)
-                                  }),
-                              child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0, vertical: 4.0),
-                                  decoration: BoxDecoration(
-                                      color: tags.contains(index)
-                                          ? HexColors.additionalViolet
-                                          : HexColors.grey10,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(18.0),
-                                      )),
-                                  child: Text(options[index],
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          fontWeight: tags.contains(index)
-                                              ? FontWeight.w500
-                                              : FontWeight.w400,
+                        /// SORTING GRID VIEW
+                        ChipsChoice<String>.multiple(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            wrapped: true,
+                            spacing: 6.0,
+                            runSpacing: 6.0,
+                            value: options,
+                            choiceBuilder: (item, index) => InkWell(
+                                  onTap: () => setState(
+                                      () => {tags.clear(), tags.add(index)}),
+                                  child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0, vertical: 4.0),
+                                      decoration: BoxDecoration(
                                           color: tags.contains(index)
-                                              ? HexColors.white
-                                              : HexColors.black,
-                                          fontFamily: 'PT Root UI'))),
-                            ),
-                        onChanged: (val) => {},
-                        choiceItems: C2Choice.listFrom<String, String>(
-                          source: options,
-                          value: (i, v) => v,
-                          label: (i, v) => v,
-                        )),
+                                              ? HexColors.additionalViolet
+                                              : HexColors.grey10,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(18.0),
+                                          )),
+                                      child: Text(options[index],
+                                          style: TextStyle(
+                                              fontSize: 14.0,
+                                              fontWeight: tags.contains(index)
+                                                  ? FontWeight.w500
+                                                  : FontWeight.w400,
+                                              color: tags.contains(index)
+                                                  ? HexColors.white
+                                                  : HexColors.black,
+                                              fontFamily: 'PT Root UI'))),
+                                ),
+                            onChanged: (val) => {},
+                            choiceItems: C2Choice.listFrom<String, String>(
+                              source: options,
+                              value: (i, v) => v,
+                              label: (i, v) => v,
+                            )),
 
-                    const SizedBox(height: 17.0),
-                    const TitleWidget(text: Titles.type, isSmall: true),
-                    const SizedBox(height: 10.0),
+                        const SizedBox(height: 17.0),
+                        const TitleWidget(text: Titles.type, isSmall: true),
+                        const SizedBox(height: 10.0),
 
-                    /// TYPE GRID VIEW
-                    ChipsChoice<String>.multiple(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        wrapped: true,
-                        spacing: 6.0,
-                        runSpacing: 6.0,
-                        value: options2,
-                        choiceBuilder: (item, index) => InkWell(
-                              onTap: () => setState(() => {
-                                    tags2.contains(index)
-                                        ? tags2.removeWhere(
-                                            (element) => element == index)
-                                        : tags2.add(index)
-                                  }),
-                              child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10.0, vertical: 4.0),
-                                  decoration: BoxDecoration(
-                                      color: tags2.contains(index)
-                                          ? HexColors.additionalViolet
-                                          : HexColors.grey10,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(18.0),
-                                      )),
-                                  child: Text(options2[index],
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          fontWeight: tags2.contains(index)
-                                              ? FontWeight.w500
-                                              : FontWeight.w400,
+                        /// TYPE GRID VIEW
+                        ChipsChoice<String>.multiple(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            wrapped: true,
+                            spacing: 6.0,
+                            runSpacing: 6.0,
+                            value: options2,
+                            choiceBuilder: (item, index) => InkWell(
+                                  onTap: () => setState(() => {
+                                        tags2.contains(index)
+                                            ? tags2.removeWhere(
+                                                (element) => element == index)
+                                            : tags2.add(index)
+                                      }),
+                                  child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0, vertical: 4.0),
+                                      decoration: BoxDecoration(
                                           color: tags2.contains(index)
-                                              ? HexColors.white
-                                              : HexColors.black,
-                                          fontFamily: 'PT Root UI'))),
-                            ),
-                        onChanged: (val) => {},
-                        choiceItems: C2Choice.listFrom<String, String>(
-                          source: options2,
-                          value: (i, v) => v,
-                          label: (i, v) => v,
-                        )),
-                  ]),
+                                              ? HexColors.additionalViolet
+                                              : HexColors.grey10,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(18.0),
+                                          )),
+                                      child: Text(options2[index],
+                                          style: TextStyle(
+                                              fontSize: 14.0,
+                                              fontWeight: tags2.contains(index)
+                                                  ? FontWeight.w500
+                                                  : FontWeight.w400,
+                                              color: tags2.contains(index)
+                                                  ? HexColors.white
+                                                  : HexColors.black,
+                                              fontFamily: 'PT Root UI'))),
+                                ),
+                            onChanged: (val) => {},
+                            choiceItems: C2Choice.listFrom<String, String>(
+                              source: options2,
+                              value: (i, v) => v,
+                              label: (i, v) => v,
+                            )),
+                      ]),
 
                   /// BUTTON's
                   Row(children: [

@@ -87,7 +87,7 @@ class StaffListItemWidget extends StatelessWidget {
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
                                 borderRadius: BorderRadius.circular(16.0),
-                                child: Text('https://facebook.com/yur_T',
+                                child: Text('https://www.google.com/',
                                     style: TextStyle(
                                         color: HexColors.primaryDark,
                                         fontSize: 14.0,

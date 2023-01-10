@@ -8,27 +8,27 @@ import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:izowork/views/transparent_button_widget_widget.dart';
 
-class NewsFilterWidget extends StatefulWidget {
-  final VoidCallback onResponsibleTap;
+class CompanyProductsFilterWidget extends StatefulWidget {
+  final VoidCallback onTypeTap;
   final VoidCallback onApplyTap;
   final VoidCallback onResetTap;
 
-  const NewsFilterWidget(
+  const CompanyProductsFilterWidget(
       {Key? key,
-      required this.onResponsibleTap,
+      required this.onTypeTap,
       required this.onApplyTap,
       required this.onResetTap})
       : super(key: key);
 
   @override
-  _NewsFilterState createState() => _NewsFilterState();
+  _CompanyProductsFilterState createState() => _CompanyProductsFilterState();
 }
 
-class _NewsFilterState extends State<NewsFilterWidget> {
-  final options = ['Все', 'Важные'];
+class _CompanyProductsFilterState extends State<CompanyProductsFilterWidget> {
+  final options = ['По возврастанию', 'По убыванию'];
   List<int> tags = [];
 
-  final options2 = ['Сначала новые', 'Сначала старые'];
+  final options2 = ['Проектировщик', 'Покупатель', 'Поставщик'];
   List<int> tags2 = [];
 
   @override
@@ -59,21 +59,21 @@ class _NewsFilterState extends State<NewsFilterWidget> {
                   const TitleWidget(text: Titles.filter),
                   const SizedBox(height: 17.0),
 
+                  SelectionInputWidget(
+                      title: Titles.type,
+                      value: 'Смеси',
+                      onTap: () => widget.onTypeTap()),
+                  const SizedBox(height: 10.0),
+
                   /// SCROLLABLE LIST
                   ListView(
                       shrinkWrap: true,
                       padding: const EdgeInsets.only(bottom: 24.0),
                       children: [
-                        /// RESPONSIBLE SELECTION INPUT
-                        SelectionInputWidget(
-                            title: Titles.responsible,
-                            value: 'Имя Фамилия',
-                            onTap: () => widget.onResponsibleTap()),
-                        const SizedBox(height: 16.0),
-                        const TitleWidget(text: Titles.status, isSmall: true),
+                        const TitleWidget(text: Titles.sorting, isSmall: true),
                         const SizedBox(height: 10.0),
 
-                        /// STATUS GRID VIEW
+                        /// SORTING GRID VIEW
                         ChipsChoice<String>.multiple(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
@@ -82,12 +82,8 @@ class _NewsFilterState extends State<NewsFilterWidget> {
                             runSpacing: 6.0,
                             value: options,
                             choiceBuilder: (item, index) => InkWell(
-                                  onTap: () => setState(() => {
-                                        tags.contains(index)
-                                            ? tags.removeWhere(
-                                                (element) => element == index)
-                                            : tags.add(index)
-                                      }),
+                                  onTap: () => setState(
+                                      () => {tags.clear(), tags.add(index)}),
                                   child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10.0, vertical: 4.0),
@@ -117,10 +113,10 @@ class _NewsFilterState extends State<NewsFilterWidget> {
                             )),
 
                         const SizedBox(height: 17.0),
-                        const TitleWidget(text: Titles.sorting, isSmall: true),
+                        const TitleWidget(text: Titles.type, isSmall: true),
                         const SizedBox(height: 10.0),
 
-                        /// SORTING GRID VIEW
+                        /// TYPE GRID VIEW
                         ChipsChoice<String>.multiple(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
@@ -161,7 +157,7 @@ class _NewsFilterState extends State<NewsFilterWidget> {
                               source: options2,
                               value: (i, v) => v,
                               label: (i, v) => v,
-                            ))
+                            )),
                       ]),
 
                   /// BUTTON's
@@ -187,7 +183,7 @@ class _NewsFilterState extends State<NewsFilterWidget> {
                                   }),
                                   widget.onResetTap()
                                 })),
-                  ]),
+                  ])
                 ])));
   }
 }

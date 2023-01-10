@@ -9,8 +9,6 @@ import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/separator_widget.dart';
-import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class ProfileEditScreenBodyWidget extends StatefulWidget {
@@ -21,18 +19,7 @@ class ProfileEditScreenBodyWidget extends StatefulWidget {
 }
 
 class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
-  bool _isHidden = true;
   late ProfileEditViewModel _profileEditViewModel;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +82,11 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
 
           Align(
               alignment: Alignment.bottomCenter,
-              child: SafeArea(
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom == 0.0
+                          ? 12.0
+                          : MediaQuery.of(context).padding.bottom),
                   child: ButtonWidget(title: Titles.save, onTap: () => {}))),
 
           /// INDICATOR

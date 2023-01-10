@@ -50,13 +50,14 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
-            toolbarHeight: 74.0,
+            toolbarHeight: 68.0,
             titleSpacing: 0.0,
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             title: Column(children: [
+              const SizedBox(height: 10.0),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(children: [
@@ -78,7 +79,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                                       // TODO CLEAR CHATS SEARCH
                                     })),
                   ])),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 12.0),
               const SeparatorWidget()
             ])),
         floatingActionButton: FloatingButtonWidget(
@@ -90,11 +91,11 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
           /// CHATS LIST VIEW
           ListView.builder(
               shrinkWrap: true,
-              padding: const EdgeInsets.only(
-                  left: 16.0, right: 16.0, top: 16.0, bottom: 16.0 + 48.0),
+              padding: const EdgeInsets.only(top: 16.0, bottom: 16.0 + 64.0),
               itemCount: 10,
               itemBuilder: (context, index) {
-                return ChatListItemWidget(chat: Chat(), onTap: () => {});
+                return ChatListItemWidget(
+                    chat: Chat(), isUnread: index < 2, onTap: () => {});
               }),
 
           /// FILTER BUTTON

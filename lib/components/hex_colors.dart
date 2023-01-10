@@ -28,6 +28,7 @@ abstract class HexColors {
   static var additionalBlue = HexColor("#2EFFF2");
   static var additionalDeepBlue = HexColor("#4664FF");
   static var additionalViolet = HexColor("#7C5BFF");
+  static var additionalVioletLight = HexColor("#F6F4FF");
   static var additionalPink = HexColor("#FF49AB");
 
   /// GREY

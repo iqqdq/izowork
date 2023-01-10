@@ -185,7 +185,11 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
 
           Align(
               alignment: Alignment.bottomCenter,
-              child: SafeArea(
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).padding.bottom == 0.0
+                          ? 12.0
+                          : MediaQuery.of(context).padding.bottom),
                   child: ButtonWidget(
                       title: Titles.edit,
                       onTap: () =>

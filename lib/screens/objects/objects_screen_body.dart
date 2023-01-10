@@ -50,13 +50,14 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
-            toolbarHeight: 74.0,
+            toolbarHeight: 68.0,
             titleSpacing: 0.0,
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             title: Column(children: [
+              const SizedBox(height: 10.0),
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(children: [
@@ -78,7 +79,7 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                                       // TODO CLEAR OBJECTS SEARCH
                                     }))
                   ])),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 12.0),
               const SeparatorWidget()
             ])),
         floatingActionButton: FloatingButtonWidget(

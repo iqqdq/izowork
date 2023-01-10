@@ -52,76 +52,69 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
     return Scaffold(
         backgroundColor: HexColors.white,
         body: Stack(children: [
-          SizedBox.expand(
-              child: ListView.builder(
-                  itemCount: _titles.length + 1,
-                  itemBuilder: (context, index) {
-                    return index == 0
-                        ? InkWell(
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height /
-                                        (MediaQuery.of(context).padding.top ==
-                                                0.0
-                                            ? 6.5
-                                            : 5.0),
-                                    left: 16.0,
-                                    bottom: 14.0,
-                                    right: 16.0),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Stack(children: [
-                                        SvgPicture.asset('assets/ic_avatar.svg',
-                                            width: 80.0,
-                                            height: 80.0,
-                                            fit: BoxFit.cover,
-                                            color: HexColors.primaryMain),
-                                        // ClipRRect(
-                                        //   borderRadius: BorderRadius.circular(12.0),
-                                        //   child:
-                                        // CachedNetworkImage(imageUrl: '', width: 80.0, height: 80.0, fit: BoxFit.cover)),
-                                      ]),
-                                      const SizedBox(height: 14.0),
-                                      const TitleWidget(
-                                          text: 'almaty_user18@kaspi.kz',
-                                          padding: EdgeInsets.zero)
-                                    ])),
-                            onTap: () =>
-                                _moreViewModel.showProfileScreen(context))
-                        : MoreListItemWidget(
-                            title: _titles[index - 1],
-                            onTap: () => {
-                                  index == 1
-                                      ? _moreViewModel.showNewsScreen(context)
-                                      : index == 2
-                                          ? _moreViewModel
-                                              .showStaffScreen(context)
-                                          : index == 3
-                                              ? _moreViewModel
-                                                  .showContactsScreen(context)
-                                              : index == 4
-                                                  ? _moreViewModel
-                                                      .showCompaniesScreen(
-                                                          context)
-                                                  : index == 5
-                                                      ? _moreViewModel
-                                                          .showProductsScreen(
-                                                              context)
-                                                      : index == 7
-                                                          ? _moreViewModel
-                                                              .showDocumentsScreen(
-                                                                  context)
-                                                          : index == 8
-                                                              ? _moreViewModel
-                                                                  .showNotificationsScreen(
-                                                                      context)
-                                                              : debugPrint(index
-                                                                  .toString())
-                                });
-                  })),
+          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: _titles.length + 1,
+                itemBuilder: (context, index) {
+                  return index == 0
+                      ? InkWell(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Stack(children: [
+                                  SvgPicture.asset('assets/ic_avatar.svg',
+                                      width: 80.0,
+                                      height: 80.0,
+                                      fit: BoxFit.cover,
+                                      color: HexColors.primaryMain),
+                                  // ClipRRect(
+                                  //   borderRadius: BorderRadius.circular(12.0),
+                                  //   child:
+                                  // CachedNetworkImage(imageUrl: '', width: 80.0, height: 80.0, fit: BoxFit.cover)),
+                                ]),
+                                const SizedBox(height: 14.0),
+                                const TitleWidget(
+                                    text: 'almaty_user18@kaspi.kz',
+                                    padding: EdgeInsets.zero),
+                                const SizedBox(height: 17.0),
+                              ]),
+                          onTap: () =>
+                              _moreViewModel.showProfileScreen(context))
+                      : MoreListItemWidget(
+                          title: _titles[index - 1],
+                          onTap: () => {
+                                index == 1
+                                    ? _moreViewModel.showNewsScreen(context)
+                                    : index == 2
+                                        ? _moreViewModel
+                                            .showStaffScreen(context)
+                                        : index == 3
+                                            ? _moreViewModel
+                                                .showContactsScreen(context)
+                                            : index == 4
+                                                ? _moreViewModel
+                                                    .showCompaniesScreen(
+                                                        context)
+                                                : index == 5
+                                                    ? _moreViewModel
+                                                        .showProductsScreen(
+                                                            context)
+                                                    : index == 7
+                                                        ? _moreViewModel
+                                                            .showDocumentsScreen(
+                                                                context)
+                                                        : index == 8
+                                                            ? _moreViewModel
+                                                                .showNotificationsScreen(
+                                                                    context)
+                                                            : debugPrint(index
+                                                                .toString())
+                              });
+                })
+          ]),
 
           /// INDICATOR
           _moreViewModel.loadingStatus == LoadingStatus.searching

@@ -138,7 +138,11 @@ class _NewsCreationScreenBodyState extends State<NewsCreationScreenBodyWidget> {
               ]),
 
           /// FILTER BUTTON
-          SafeArea(
+          Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom == 0.0
+                      ? 16.0
+                      : 0.0),
               child: Align(
                   alignment: Alignment.bottomCenter,
                   child: ButtonWidget(

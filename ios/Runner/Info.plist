@@ -60,5 +60,10 @@
         <string>Разрешите Izowork доступ к микрофону для записи аудиосообщений</string>
     <key>NSPhotoLibraryUsageDescription</key>
         <string>Разрешите Izowork доступ к галерее для выбора фото Вашего профиля</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  		<string>sms</string>
+  		<string>tel</string>
+	</array>
 </dict>
 </plist>

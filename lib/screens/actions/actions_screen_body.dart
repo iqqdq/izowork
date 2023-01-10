@@ -53,13 +53,15 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
-            toolbarHeight: 130.0,
+            toolbarHeight: 124.0,
             titleSpacing: 0.0,
             elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             title: Column(children: [
+              const SizedBox(height: 10.0),
+
               /// SEGMENTED CONTROL
               SegmentedControlWidget(
                   titles: const [Titles.deals, Titles.tasks],
@@ -73,7 +75,7 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
                         FocusScope.of(context).unfocus(),
                         _actionsViewModel.changeSegmentedControlIndex(index)
                       }),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 12.0),
 
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),

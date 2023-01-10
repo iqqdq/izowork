@@ -24,16 +24,16 @@ class _MapFilterPageViewState extends State<MapFilterPageViewWidget> {
     _pages = [
       MapFilterWidget(
           onDeveloperTap: () => {
-                setState(() => _isSearching = true),
-                _pageController.animateToPage(_pages.length,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn)
+                // setState(() => _isSearching = true),
+                // _pageController.animateToPage(_pages.length,
+                //     duration: const Duration(milliseconds: 300),
+                //     curve: Curves.easeIn)
               },
           onManagerTap: () => {
-                setState(() => _isSearching = true),
-                _pageController.animateToPage(_pages.length,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn)
+                // setState(() => _isSearching = true),
+                // _pageController.animateToPage(_pages.length,
+                //     duration: const Duration(milliseconds: 300),
+                //     curve: Curves.easeIn)
               },
           onApplyTap: widget.onApplyTap,
           onResetTap: widget.onResetTap),

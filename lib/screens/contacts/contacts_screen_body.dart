@@ -101,7 +101,8 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
                 return ContactListItemWidget(
                     onUserTap: () => {},
                     onPhoneTap: () => {},
-                    onLinkTap: () => {});
+                    onLinkTap: () =>
+                        _contactsViewModel.openUrl('https://www.google.com/'));
               }),
           const SeparatorWidget(),
 

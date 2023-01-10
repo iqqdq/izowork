@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/models/company_view_model.dart';
 import 'package:izowork/screens/products/views/product_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
@@ -11,6 +12,7 @@ import 'package:izowork/views/segmented_control_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/status_widget.dart';
 import 'package:izowork/views/title_widget.dart';
+import 'package:provider/provider.dart';
 
 class CompanyScreenBodyWidget extends StatefulWidget {
   const CompanyScreenBodyWidget({Key? key}) : super(key: key);
@@ -23,6 +25,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final PageController _pageController = PageController(initialPage: 0);
+  late CompanyViewModel _companyViewModel;
   int _index = 0;
 
   @override
@@ -171,7 +174,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                       onClearTap: () => {
                             // TODO CLEAR COMPANY PRODUCTS SEARCH
                           }))),
-      const SizedBox(height: 16.0),
+      const SizedBox(height: 8.0),
       const SeparatorWidget(),
 
       /// PRODUCTS LIST VIEW
@@ -186,23 +189,29 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               itemCount: 10,
               itemBuilder: (context, index) {
                 return ProductsListItemWidget(
-                    tag: index.toString(), onTap: () => {});
+                    tag: index.toString(),
+                    onTap: () => _companyViewModel.showProductPageScreen(
+                        context, index));
               }))
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
+    _companyViewModel = Provider.of<CompanyViewModel>(context, listen: true);
+
     return Scaffold(
         extendBodyBehindAppBar: false,
         appBar: AppBar(
-            toolbarHeight: 124.0,
+            toolbarHeight: _index == 0 ? 114.0 : 102.0,
             titleSpacing: 0.0,
             elevation: 0.0,
             backgroundColor: HexColors.white90,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             automaticallyImplyLeading: false,
-            title: Column(children: [
+            title:
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              const SizedBox(height: 17.0),
               Stack(children: [
                 Padding(
                     padding: const EdgeInsets.only(left: 16.0),
@@ -233,7 +242,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                             curve: Curves.linearToEaseOut),
                         setState(() => _index == index)
                       }),
-              const SizedBox(height: 16.0),
+              SizedBox(height: _index == 0.0 ? 16.0 : 4.0),
               _index == 0 ? const SeparatorWidget() : Container()
             ])),
         body: Stack(children: [
@@ -253,7 +262,8 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                       child: Padding(
                           padding: const EdgeInsets.only(bottom: 6.0),
                           child: FilterButtonWidget(
-                            onTap: () => {},
+                            onTap: () => _companyViewModel
+                                .showCompanyProductFilterSheet(context),
                             // onClearTap: () => {}
                           )))),
         ]));

@@ -23,7 +23,7 @@ class ProductsViewModel with ChangeNotifier {
                 ProductPageScreenWidget(tag: index.toString())));
   }
 
-  void showProdcutFilterSheet(BuildContext context) {
+  void showProductFilterSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),

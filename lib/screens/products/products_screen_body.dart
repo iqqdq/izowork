@@ -109,7 +109,7 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
                   alignment: Alignment.bottomCenter,
                   child: FilterButtonWidget(
                     onTap: () =>
-                        _productsViewModel.showProdcutFilterSheet(context),
+                        _productsViewModel.showProductFilterSheet(context),
                     // onClearTap: () => {}
                   ))),
 
