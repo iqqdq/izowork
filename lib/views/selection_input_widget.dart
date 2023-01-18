@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class SelectionInputWidget extends StatelessWidget {
   final String title;
   final String value;
+  final bool? isVertical;
   final VoidCallback onTap;
 
   const SelectionInputWidget(
-      {Key? key, required this.title, required this.value, required this.onTap})
+      {Key? key,
+      required this.title,
+      required this.value,
+      this.isVertical,
+      required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _isVertical = isVertical == null
+        ? false
+        : isVertical == false
+            ? false
+            : true;
+
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Material(
@@ -48,7 +60,9 @@ class SelectionInputWidget extends StatelessWidget {
                                     color: HexColors.black))
                           ])),
                       const SizedBox(width: 6.0),
-                      Image.asset('assets/ic_arrow_right.png')
+                      SvgPicture.asset(_isVertical
+                          ? 'assets/ic_arrow_down.svg'
+                          : 'assets/ic_arrow_right.svg')
                     ])),
                 onTap: () => onTap())));
   }

@@ -102,16 +102,20 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                                     ? _moreViewModel
                                                         .showProductsScreen(
                                                             context)
-                                                    : index == 7
+                                                    : index == 6
                                                         ? _moreViewModel
-                                                            .showDocumentsScreen(
+                                                            .showAnaliticsScreen(
                                                                 context)
-                                                        : index == 8
+                                                        : index == 7
                                                             ? _moreViewModel
-                                                                .showNotificationsScreen(
+                                                                .showDocumentsScreen(
                                                                     context)
-                                                            : debugPrint(index
-                                                                .toString())
+                                                            : index == 8
+                                                                ? _moreViewModel
+                                                                    .showNotificationsScreen(
+                                                                        context)
+                                                                : debugPrint(index
+                                                                    .toString())
                               });
                 })
           ]),

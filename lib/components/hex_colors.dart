@@ -21,7 +21,7 @@ abstract class HexColors {
   static var secondaryLight = primaryLight.withOpacity(0.1);
 
   /// ADDITIONAL
-  static var additionalRed = HexColor("#FF2C52");
+  static var additionalRed = HexColor("#CB2A2A");
   static var additionalOrange = HexColor("#FFA048");
   static var additionalYellow = HexColor("#FFF27E");
   static var additionalGreen = HexColor("#00BC8E");
@@ -40,6 +40,7 @@ abstract class HexColors {
   static var grey50 = HexColor("#949492");
   static var grey70 = HexColor("#616160");
   static var grey80 = HexColor("#474747");
+  static var grey90 = HexColor("#2E2E2D");
 
   /// WHITE
   static var white90 = white.withOpacity(0.9);
@@ -61,4 +62,11 @@ abstract class HexColors {
   static var shadowButtonDisableTitleColor = HexColor("#BDBDC7");
   static var borderButtonHighlightColor = secondaryDark.withOpacity(0.6);
   static var borderButtonDisableTitleColor = HexColor("#D7D7E0");
+
+  /// CHART
+  static var lightPinkColor = HexColor("#F0C9CC");
+  static var darkBlueColor = HexColor("#241F45");
+  static var pinkColor = HexColor("#EA3958");
+  static var blueColor = HexColor("#3F799C");
+  static var turquoiseColor = HexColor("#83BFB3");
 }

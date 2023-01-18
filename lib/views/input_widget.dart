@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 
 class InputWidget extends StatefulWidget {
@@ -95,7 +96,7 @@ class _InputWidgetState extends State<InputWidget> {
                         ? IconButton(
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
-                            icon: Image.asset('assets/ic_clear.png'),
+                            icon: SvgPicture.asset('assets/ic_clear.svg'),
                             onPressed: () => {
                               widget.textEditingController.clear(),
                               widget.onClearTap,
@@ -107,7 +108,7 @@ class _InputWidgetState extends State<InputWidget> {
                         : IconButton(
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
-                            icon: Image.asset('assets/ic_clear.png',
+                            icon: SvgPicture.asset('assets/ic_clear.svg',
                                 color: Colors.transparent),
                             onPressed: () => {}),
                     focusedBorder: InputBorder.none,

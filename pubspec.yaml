@@ -52,6 +52,7 @@ dependencies:
   adaptive_dialog: ^1.8.0+1
   chips_choice: ^3.0.0
   url_launcher: ^6.1.7
+  fl_chart: ^0.55.2
   
   geolocator: ^8.1.1
   google_maps_flutter:

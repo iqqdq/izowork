@@ -3,12 +3,12 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
-class MapSearchObjectListItemWidget extends StatelessWidget {
+class SearchObjectListItemWidget extends StatelessWidget {
   final String address;
   final String name;
   final VoidCallback onTap;
 
-  const MapSearchObjectListItemWidget(
+  const SearchObjectListItemWidget(
       {Key? key,
       required this.address,
       required this.name,

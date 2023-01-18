@@ -144,43 +144,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                                       fontSize: 14.0,
                                       fontFamily: 'PT Root UI',
                                       decoration: TextDecoration.underline))));
-                    }),
-                const SizedBox(height: 16.0),
-                const SeparatorWidget(),
-                const SizedBox(height: 16.0),
-
-                /// PASSWORD
-
-                Row(children: [
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const TitleWidget(
-                          text: Titles.password,
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          isSmall: true),
-                      Text(_isHidden ? '••••••' : '123456',
-                          style: TextStyle(
-                              color: HexColors.black,
-                              fontSize: 14.0,
-                              fontFamily: 'PT Root UI')),
-                    ],
-                  )),
-                  const SizedBox(width: 10.0),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(6.0),
-                    child: SvgPicture.asset(
-                        _isHidden
-                            ? 'assets/ic_eye_closed.svg'
-                            : 'assets/ic_eye.svg',
-                        color: HexColors.grey40,
-                        width: 34.0,
-                        height: 34.0,
-                        fit: BoxFit.scaleDown),
-                    onTap: () => setState(() => _isHidden = !_isHidden),
-                  )
-                ])
+                    })
               ]),
 
           Align(

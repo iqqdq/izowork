@@ -42,6 +42,9 @@ abstract class Titles {
   static const contacts = 'Контакты';
   static const company = 'Компания';
   static const companies = 'Компании';
+  static const product = 'Товар';
+  static const tonProductPlaceholder = 'Название товара, тонн';
+  static const literProductPlaceholder = 'Название товара, литров';
   static const products = 'Товары';
   static const analytics = 'Аналитика';
   static const documents = 'Документы';
@@ -54,7 +57,21 @@ abstract class Titles {
   static const myProfile = 'Мой профиль';
   static const profileEdit = 'Редактирование профиля';
 
+  /// CHART
+  static const generalContractor = 'Генподрядчик';
+  static const customer = 'Заказчик';
+  static const designer = 'Проектировщик';
+  static const administrationBuilding = 'Административное здание';
+  static const appartmentComplex = 'Многоквартирный ЖК';
+  static const schools = 'Школы';
+  static const hospitals = 'Больницы';
+  static const industrialObject = 'Промышленные объекты';
+  static const logicalCenters = 'Логические центры';
+  static const reconstructableObjects = 'Реконструируемые объекты';
+
   /// OTHER
+  static const object = 'Объект';
+  static const filial = 'Филиал';
   static const deals = 'Сделки';
   static const tasks = 'Задачи';
   static const info = 'Информация';
@@ -82,16 +99,28 @@ abstract class Titles {
   static const type = 'Тип';
   static const post = 'Должность';
   static const socialLinks = 'Ссылки на социальные сети';
+  static const companyTotal = 'Всего компаний';
+  static const pledgetProductValue = 'Обьем заложенного товара';
+  static const realizedProductValue = 'Обьем реализованного товара';
+  static const objectTotal = 'Всего обьектов, по видам';
+  static const dealTotal = 'Количество сделок всего';
+  static const managerTotal = 'Работа менеджеров';
+  static const dealTotalCount = 'Сделок по всем филиалам';
+  static const fromDate = 'Дата от';
+  static const toDate = 'Дата до';
 
   /// MESSAGES
   static const invalidLogin =
       'Неверный логин или пароль, проверьте правильность введенных данных';
   static const enterEmailAddress =
       'Укажите электронную почту, на которую мы отправим инструкцию по восстановлению';
-  static const enterObjectName =
-      'Введите адрес или название\nобъекта в строку поиска';
   static const emailToRecovery =
       'Укажите электронную почту, на которую мы отправим инструкцию по восстановлению';
+  static const enterObjectName =
+      'Введите адрес или название\nобъекта в строку поиска';
+  static const enterFilialName = 'Введите название филиала\nв строку поиска';
+  static const enterManagerName = 'Введите имя менеджера\nв строку поиска';
+  static const enterDeveloperName = 'Введите имя застройщика\nв строку поиска';
 
   /// ALERTS
   static const warning = 'Внимание';

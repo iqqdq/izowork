@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/shadows.dart';
 import 'package:izowork/components/titles.dart';
@@ -56,8 +57,8 @@ class FilterButtonWidget extends StatelessWidget {
                                           splashColor: Colors.transparent,
                                           borderRadius:
                                               BorderRadius.circular(10.0),
-                                          child: Image.asset(
-                                              'assets/ic_clear.png'),
+                                          child: SvgPicture.asset(
+                                              'assets/ic_clear.svg'),
                                           onTap: () => onClearTap!()))
                             ])),
                     onTap: () => onTap()))));

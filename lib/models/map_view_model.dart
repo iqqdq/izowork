@@ -9,9 +9,9 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/place_model.dart';
 import 'package:izowork/entities/map_object.dart';
-import 'package:izowork/screens/map/map_object_sheet/map_add_object_widget.dart';
-import 'package:izowork/screens/map/map_object_sheet/map_object_widget.dart';
-import 'package:izowork/screens/map/map_search_sheet/map_search_object_widget.dart';
+import 'package:izowork/screens/map/map_object_sheet/map_object_screen_widget.dart';
+import 'package:izowork/screens/map/map_object_sheet/views/map_add_object_widget.dart';
+import 'package:izowork/screens/map/map_search_sheet/map_search_object_screen_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../screens/map/map_filter_sheet/map_filter_page_view_widget.dart';
@@ -126,7 +126,7 @@ class MapViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => MapObjectWidget(
+        builder: (context) => MapObjectScreenWidget(
             mapObject: MapObject(),
             onDetailTap: () => {
                   // TODO SHOW CHAT
@@ -142,7 +142,7 @@ class MapViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => MapSearchObjectWidget(
+        builder: (context) => MapSearchObjectScreenWidget(
             onObjectReturn: (object) => {
                   // TODO SHOW OBJECT ON MAP
                 }));

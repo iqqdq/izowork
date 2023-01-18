@@ -16,6 +16,7 @@ class DateTimeWheelPickerWidget extends StatefulWidget {
   final DateTime maxDateTime;
   final DateTime? initialDateTime;
   final bool showDays;
+  final bool? hideDismissIndicator;
   final String? locale;
   final Color? backgroundColor;
   final Color? buttonColor;
@@ -32,6 +33,7 @@ class DateTimeWheelPickerWidget extends StatefulWidget {
       required this.maxDateTime,
       this.initialDateTime,
       required this.showDays,
+      this.hideDismissIndicator,
       this.locale,
       this.backgroundColor,
       this.buttonColor,
@@ -189,6 +191,12 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
       }
     }
 
+    final _hideDismissIndicator = widget.hideDismissIndicator == null
+        ? false
+        : widget.hideDismissIndicator == false
+            ? false
+            : true;
+
     return Material(
         type: MaterialType.transparency,
         child: Container(
@@ -199,7 +207,9 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
                 padding: const EdgeInsets.only(top: 8.0),
                 children: [
                   /// DISMISS INDICATOR
-                  const DismissIndicatorWidget(),
+                  _hideDismissIndicator
+                      ? Container()
+                      : const DismissIndicatorWidget(),
                   Container(
                       margin: EdgeInsets.only(
                           top: 18.0, left: margin, right: margin),

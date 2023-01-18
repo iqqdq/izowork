@@ -9,12 +9,12 @@ import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
-class MapObjectWidget extends StatelessWidget {
+class MapObjectScreenBodyWidget extends StatelessWidget {
   final MapObject mapObject;
   final VoidCallback onDetailTap;
   final VoidCallback onChatTap;
 
-  const MapObjectWidget(
+  const MapObjectScreenBodyWidget(
       {Key? key,
       required this.mapObject,
       required this.onDetailTap,
@@ -65,10 +65,15 @@ class MapObjectWidget extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: CachedNetworkImage(
                                           imageUrl:
-                                              'https://icdn.lenta.ru/images/2017/03/28/17/20170328174709071/pic_8c2737bc8f8577e384239fd55df08b8a.jpg',
+                                              'https://thumbs.dreamstime.com/b/construction-buildings-17322972.jpg',
                                           // cacheKey: ,
                                           width: 84.0,
                                           height: 88.0,
+                                          memCacheHeight:
+                                              (MediaQuery.of(context)
+                                                          .devicePixelRatio *
+                                                      88)
+                                                  .round(),
                                           fit: BoxFit.cover)));
                             })),
                     const SizedBox(height: 16.0),

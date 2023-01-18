@@ -2,18 +2,20 @@ import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/models/map_filter_view_model.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:izowork/views/transparent_button_widget_widget.dart';
+import 'package:provider/provider.dart';
 
-class MapFilterWidget extends StatefulWidget {
+class MapFilterScreenBodyWidget extends StatefulWidget {
   final VoidCallback onManagerTap;
   final VoidCallback onDeveloperTap;
   final VoidCallback onApplyTap;
   final VoidCallback onResetTap;
 
-  const MapFilterWidget(
+  const MapFilterScreenBodyWidget(
       {Key? key,
       required this.onManagerTap,
       required this.onDeveloperTap,
@@ -22,10 +24,12 @@ class MapFilterWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  _MapFilterState createState() => _MapFilterState();
+  _MapFilterScreenBodyState createState() => _MapFilterScreenBodyState();
 }
 
-class _MapFilterState extends State<MapFilterWidget> {
+class _MapFilterScreenBodyState extends State<MapFilterScreenBodyWidget> {
+  late MapFilterViewModel _mapFilterViewModel;
+
   final options = [
     'Проектирование',
     'Заморожен',
@@ -48,6 +52,9 @@ class _MapFilterState extends State<MapFilterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _mapFilterViewModel =
+        Provider.of<MapFilterViewModel>(context, listen: true);
+
     return Material(
         type: MaterialType.transparency,
         child: Container(

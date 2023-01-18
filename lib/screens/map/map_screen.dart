@@ -9,6 +9,7 @@ class MapScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => MapViewModel(), child: const MapBodyWidget());
+        create: (context) => MapViewModel(),
+        child: const MapScreenBodyWidget());
   }
 }

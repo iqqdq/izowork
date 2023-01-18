@@ -12,14 +12,14 @@ import 'package:izowork/views/filter_button_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:izowork/models/map_view_model.dart';
 
-class MapBodyWidget extends StatefulWidget {
-  const MapBodyWidget({Key? key}) : super(key: key);
+class MapScreenBodyWidget extends StatefulWidget {
+  const MapScreenBodyWidget({Key? key}) : super(key: key);
 
   @override
-  _MapBodyState createState() => _MapBodyState();
+  _MapScreenBodyState createState() => _MapScreenBodyState();
 }
 
-class _MapBodyState extends State<MapBodyWidget>
+class _MapScreenBodyState extends State<MapScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
   final Completer<GoogleMapController> _completer = Completer();
   late GoogleMapController _googleMapController;

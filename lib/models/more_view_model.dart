@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/screens/analytics/analytics_page_view_screen.dart';
 import 'package:izowork/screens/companies/companies_screen.dart';
 import 'package:izowork/screens/contacts/contacts_screen.dart';
 import 'package:izowork/screens/documents/documents_screen.dart';
@@ -46,7 +47,12 @@ class MoreViewModel with ChangeNotifier {
         MaterialPageRoute(builder: (context) => const ProductsScreenWidget()));
   }
 
-  void showAnaliticsScreen(BuildContext context) {}
+  void showAnaliticsScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const AnalyticsPageViewScreenBodyWidget()));
+  }
 
   void showDocumentsScreen(BuildContext context) {
     Navigator.push(context,

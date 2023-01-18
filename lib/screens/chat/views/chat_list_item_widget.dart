@@ -7,7 +7,6 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/entities/chat.dart';
 import 'package:izowork/views/count_widget.dart';
-import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class ChatListItemWidget extends StatelessWidget {

@@ -17,14 +17,12 @@ class TabControllerScreenWidget extends StatefulWidget {
 }
 
 class _TabControllerScreenBodyState extends State<TabControllerScreenWidget> {
+  final PageController? _pageController = PageController(initialPage: 0);
   List<Widget>? _pages;
-  PageController? _pageController;
   int _index = 0;
 
   @override
   void initState() {
-    super.initState();
-
     _pages = [
       const MapScreenWidget(),
       const ObjectsScreenWidget(),
@@ -33,7 +31,7 @@ class _TabControllerScreenBodyState extends State<TabControllerScreenWidget> {
       const MoreScreenWidget()
     ];
 
-    _pageController = PageController(initialPage: 0);
+    super.initState();
   }
 
   @override

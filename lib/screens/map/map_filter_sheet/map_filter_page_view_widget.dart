@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/screens/map/map_filter_sheet/map_filter_widget.dart';
+import 'package:izowork/screens/map/map_filter_sheet/map_filter/map_filter_screen.dart';
+import 'package:izowork/screens/map/map_filter_sheet/map_filter_search/map_filter_search_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 
 class MapFilterPageViewWidget extends StatefulWidget {
@@ -22,22 +23,49 @@ class _MapFilterPageViewState extends State<MapFilterPageViewWidget> {
   @override
   void initState() {
     _pages = [
-      MapFilterWidget(
+      MapFilterScreenWidget(
           onDeveloperTap: () => {
-                // setState(() => _isSearching = true),
-                // _pageController.animateToPage(_pages.length,
-                //     duration: const Duration(milliseconds: 300),
-                //     curve: Curves.easeIn)
+                setState(() => {
+                      _isSearching = true,
+                      _pages.add(MapFilterSearchScreenWidget(
+                          isManagerSearch: false,
+                          onPop: () => {
+                                setState(() => _isSearching = false),
+                                _pageController
+                                    .animateToPage(0,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeIn)
+                                    .then((value) =>
+                                        {if (mounted) _pages.removeLast()})
+                              }))
+                    }),
+                _pageController.animateToPage(1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn)
               },
           onManagerTap: () => {
-                // setState(() => _isSearching = true),
-                // _pageController.animateToPage(_pages.length,
-                //     duration: const Duration(milliseconds: 300),
-                //     curve: Curves.easeIn)
+                setState(() => {
+                      _isSearching = true,
+                      _pages.add(MapFilterSearchScreenWidget(
+                          isManagerSearch: true,
+                          onPop: () => {
+                                setState(() => _isSearching = false),
+                                _pageController
+                                    .animateToPage(0,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.easeIn)
+                                    .then((value) =>
+                                        {if (mounted) _pages.removeLast()})
+                              }))
+                    }),
+                _pageController.animateToPage(1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn)
               },
           onApplyTap: widget.onApplyTap,
           onResetTap: widget.onResetTap),
-      Container()
     ];
 
     super.initState();
