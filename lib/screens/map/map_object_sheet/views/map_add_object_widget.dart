@@ -34,7 +34,7 @@ class MapAddObjectWidget extends StatelessWidget {
 
                   /// ADDRESS
                   const TitleWidget(text: Titles.placeAddress),
-                  const SizedBox(height: 4.0),
+                  const SizedBox(height: 8.0),
                   SubtitleWidget(text: address),
                   const SizedBox(height: 16.0),
 

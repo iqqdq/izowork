@@ -95,7 +95,9 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
               itemCount: 10,
               itemBuilder: (context, index) {
                 return ChatListItemWidget(
-                    chat: Chat(), isUnread: index < 2, onTap: () => {});
+                    chat: Chat(),
+                    isUnread: index < 2,
+                    onTap: () => _chatViewModel.showDialogScreen(context));
               }),
 
           /// FILTER BUTTON

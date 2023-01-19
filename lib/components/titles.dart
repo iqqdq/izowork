@@ -20,6 +20,7 @@ abstract class Titles {
   static const filter = 'Фильтр';
   static const search = 'Поиск';
   static const addObject = 'Добавить объект';
+  static const createTask = 'Создать задачу';
   static const showDetail = 'Подробнее';
   static const goToChat = 'Перейти в чат';
   static const comments = 'Комментарии';
@@ -31,6 +32,7 @@ abstract class Titles {
   static const edit = 'Редактировать';
   static const save = 'Сохранить';
   static const changeAvatar = 'Изменить аватар';
+  static const cancel = 'Отменить';
 
   /// MORE
   static const description = 'Описание';
@@ -56,6 +58,8 @@ abstract class Titles {
   static const successDealCount = 'Кол-во успешных сделок';
   static const myProfile = 'Мой профиль';
   static const profileEdit = 'Редактирование профиля';
+  static const message = 'Сообщение';
+  static const typeMessage = 'Сообщение...';
 
   /// CHART
   static const generalContractor = 'Генподрядчик';
