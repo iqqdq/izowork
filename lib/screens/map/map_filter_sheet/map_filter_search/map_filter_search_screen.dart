@@ -14,7 +14,7 @@ class MapFilterSearchScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => MapFilterViewModel(),
+        create: (context) => MapManagerFilterViewModel(),
         child: MapFilterSearchBodyScreenWidget(
             isManagerSearch: isManagerSearch, onPop: onPop));
   }

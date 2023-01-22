@@ -20,7 +20,6 @@ class ProfileScreenBodyWidget extends StatefulWidget {
 }
 
 class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
-  bool _isHidden = true;
   late ProfileViewModel _profileViewModel;
 
   @override
@@ -107,6 +106,20 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                 const SeparatorWidget(),
                 const SizedBox(height: 16.0),
 
+                /// EMAIL
+                const TitleWidget(
+                    text: Titles.email,
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    isSmall: true),
+                Text('example@mail.ru',
+                    style: TextStyle(
+                        color: HexColors.black,
+                        fontSize: 14.0,
+                        fontFamily: 'PT Root UI')),
+                const SizedBox(height: 16.0),
+                const SeparatorWidget(),
+                const SizedBox(height: 16.0),
+
                 /// PHONE
                 const TitleWidget(
                     text: Titles.phone,
@@ -137,7 +150,8 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                           child: InkWell(
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
-                              onTap: () => {},
+                              onTap: () => _profileViewModel
+                                  .openSocialUrl('https://vk.com/yuriy_tim'),
                               child: Text('https://vk.com/yuriy_tim',
                                   style: TextStyle(
                                       color: HexColors.primaryDark,

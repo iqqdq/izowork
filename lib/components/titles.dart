@@ -33,6 +33,7 @@ abstract class Titles {
   static const save = 'Сохранить';
   static const changeAvatar = 'Изменить аватар';
   static const cancel = 'Отменить';
+  static const addSocial = 'Добавить соц.сеть';
 
   /// MORE
   static const description = 'Описание';
@@ -87,6 +88,7 @@ abstract class Titles {
   static const password = 'Пароль';
   static const address = 'Адрес';
   static const placeAddress = 'Адрес места';
+  static const employee = 'Сотрудник';
   static const manager = 'Менеджер';
   static const developer = 'Застройщик';
   static const stages = 'Стадии';
@@ -99,10 +101,12 @@ abstract class Titles {
   static const responsible = 'Ответственный';
   static const status = 'Статус';
   static const companyName = 'Название компании';
+  static const fullname = 'Фио';
   static const sorting = 'Сортировка';
   static const type = 'Тип';
   static const post = 'Должность';
   static const socialLinks = 'Ссылки на социальные сети';
+  static const socialLink = 'Ссылка на соц. сеть';
   static const companyTotal = 'Всего компаний';
   static const pledgetProductValue = 'Обьем заложенного товара';
   static const realizedProductValue = 'Обьем реализованного товара';
@@ -122,9 +126,13 @@ abstract class Titles {
       'Укажите электронную почту, на которую мы отправим инструкцию по восстановлению';
   static const enterObjectName =
       'Введите адрес или название\nобъекта в строку поиска';
-  static const enterFilialName = 'Введите название филиала\nв строку поиска';
+  static const enterFilialName = 'Введите имя сотрудника\nв строку поиска';
+  static const enterEmployeeName = 'Введите имя застройщика\nв строку поиска';
   static const enterManagerName = 'Введите имя менеджера\nв строку поиска';
   static const enterDeveloperName = 'Введите имя застройщика\nв строку поиска';
+  static const enterResponsibleName =
+      'Введите имя ответственного\nв строку поиска';
+  static const enterTypeName = 'Введите тип\nв строку поиска';
 
   /// ALERTS
   static const warning = 'Внимание';

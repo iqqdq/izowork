@@ -1,21 +1,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/models/analytics_companies_view_model.dart';
-import 'package:izowork/models/analytics_objects_view_model.dart';
-import 'package:izowork/screens/analytics/views/analitics_action_list_item_widget.dart';
-import 'package:izowork/screens/analytics/views/analitics_object_list_item_widget.dart';
 import 'package:izowork/screens/analytics/views/horizontal_chart/horizontal_chart_widget.dart';
 import 'package:izowork/screens/analytics/views/analitics_manager_list_item_widget.dart';
 import 'package:izowork/screens/analytics/views/pie_chart/pie_chart_widget.dart';
-import 'package:izowork/screens/analytics/views/sort_orbject_button_widget.dart';
-import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/segmented_control_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 

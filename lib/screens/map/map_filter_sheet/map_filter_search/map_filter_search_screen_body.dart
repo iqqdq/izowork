@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/models/map_filter_view_model.dart';
+import 'package:izowork/models/map_manager_view_model.dart';
 import 'package:izowork/screens/map/map_filter_sheet/map_filter_search/views/map_filter_search_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
@@ -24,7 +24,7 @@ class MapFilterSearchBodyScreenWidget extends StatefulWidget {
 class _MapFilterSearchBodyState extends State<MapFilterSearchBodyScreenWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  late MapFilterViewModel _mapFilterViewModel;
+  late MapManagerFilterViewModel _mapManagerFilterViewModel;
   bool _show = false; // TODO DELETE
 
   @override
@@ -38,8 +38,8 @@ class _MapFilterSearchBodyState extends State<MapFilterSearchBodyScreenWidget> {
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height * 0.8;
 
-    // _mapFilterViewModel =
-    //     Provider.of<MapFilterViewModel>(context, listen: true);
+    _mapManagerFilterViewModel =
+        Provider.of<MapManagerFilterViewModel>(context, listen: true);
 
     return Material(
         type: MaterialType.transparency,

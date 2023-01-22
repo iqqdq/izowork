@@ -29,13 +29,12 @@ class ChatMessageBarWidget extends StatefulWidget {
 
 class _ChatMessageBarState extends State<ChatMessageBarWidget> {
   final ScrollController _scrollController = ScrollController();
+  final double _maxScroll = 120.0;
   bool _isAudio = false;
   int _seconds = 0;
   int _minutes = 0;
   Timer? _timer;
   bool _isRecording = false;
-  double _maxScroll = 120.0;
-  double _opacity = 1.0;
 
   @override
   void dispose() {
@@ -88,8 +87,10 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
     )..layout())
         .size;
 
-    final _opacity = _scrollController.hasClients
-        ? ((_maxScroll - _scrollController.position.pixels) / _maxScroll)
+    final _opacity = _isRecording
+        ? _scrollController.hasClients
+            ? ((_maxScroll - _scrollController.position.pixels) / _maxScroll)
+            : 1.0
         : 1.0;
 
     final lineCount = (size.width /
@@ -136,202 +137,215 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
             ])));
 
     return Wrap(children: [
-      Container(
-          color: HexColors.white,
-          padding: const EdgeInsets.only(
-              left: 10.0, right: 10.0, top: 12.0, bottom: 12.0),
-          child: Stack(children: [
-            /// RECORD INDICATOR
-            _isRecording
-                ? AnimatedOpacity(
-                    opacity: _seconds % 2 == 0 ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 200),
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 16.0, top: 13.0),
-                      width: 10.0,
-                      height: 10.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          color: HexColors.additionalRed),
-                    ))
+      Stack(children: [
+        Container(
+            color: HexColors.white,
+            padding: const EdgeInsets.only(
+                left: 10.0, right: 10.0, top: 12.0, bottom: 12.0),
+            child: Stack(children: [
+              /// RECORD INDICATOR
+              _isRecording
+                  ? AnimatedOpacity(
+                      opacity: _seconds % 2 == 0 ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 200),
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 16.0, top: 13.0),
+                        width: 10.0,
+                        height: 10.0,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: HexColors.additionalRed),
+                      ))
 
-                /// CLIP BUTTON
-                : widget.onClipTap == null
-                    ? Container()
-                    : AnimatedContainer(
-                        duration: const Duration(milliseconds: 100),
-                        height: _textHeight,
-                        width: 38.0,
-                        constraints: const BoxConstraints(
-                            minHeight: 38.0, maxHeight: 90.0),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                      onTap: () => widget.onClipTap!(),
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      child: Center(
-                                          child: SvgPicture.asset(
-                                              'assets/ic_clip.svg',
-                                              width: 38.0,
-                                              height: 38.0,
-                                              fit: BoxFit.scaleDown))))
-                            ])),
+                  /// CLIP BUTTON
+                  : widget.onClipTap == null
+                      ? Container()
+                      : AnimatedContainer(
+                          duration: const Duration(milliseconds: 100),
+                          height: _textHeight,
+                          width: 38.0,
+                          constraints: const BoxConstraints(
+                              minHeight: 38.0, maxHeight: 90.0),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                        onTap: () => widget.onClipTap!(),
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        child: Center(
+                                            child: SvgPicture.asset(
+                                                'assets/ic_clip.svg',
+                                                width: 38.0,
+                                                height: 38.0,
+                                                fit: BoxFit.scaleDown))))
+                              ])),
 
-            _isRecording
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 40.0, top: 8.0),
-                    child: Text('$_min:$_sec',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: 'PT Root UI',
-                            color: HexColors.grey40)))
-                : Container(),
+              _isRecording
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 40.0, top: 8.0),
+                      child: Text('$_min:$_sec',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: 'PT Root UI',
+                              color: HexColors.grey40)))
+                  : Container(),
 
-            /// SCROLLABLE CHILD
-            _isRecording
-                ? SingleChildScrollView(
-                    controller: _scrollController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    child: SizedBox(
-                        width: MediaQuery.of(context).size.width - 20.0,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Opacity(
-                                  opacity: _opacity <= 0.0
-                                      ? 0.0
-                                      : _opacity >= 1.0
-                                          ? 1.0
-                                          : _opacity,
-                                  child: Row(children: [
-                                    SvgPicture.asset(
-                                        'assets/ic_arrow_cancel.svg',
-                                        fit: BoxFit.scaleDown,
-                                        color: _isRecording
-                                            ? null
-                                            : Colors.transparent),
-                                    const SizedBox(width: 8.0),
-                                    Material(
-                                        type: MaterialType.transparency,
-                                        child: Text(Titles.cancel,
-                                            style: TextStyle(
-                                                fontSize: 16.0,
-                                                fontFamily: 'PT Root UI',
-                                                color: _isRecording
-                                                    ? HexColors.grey50
-                                                    : Colors.transparent))),
-                                    const SizedBox(width: 8.0),
-                                  ])),
-                              _sendButton
-                            ])))
-                : Container(),
+              /// HIDDEN RECORD BUTTON
+              AnimatedOpacity(
+                  opacity: _isRecording ? 0.0 : 1.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [_sendButton])),
 
-            /// DRAGGABLE BUTTON
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              widget.textEditingController.text.isNotEmpty
-                  ? _sendButton
-                  : Draggable<int>(
-                      data: 1,
-                      axis: Axis.horizontal,
-                      child: Row(children: [_sendButton]),
-                      feedback: Container(),
-                      childWhenDragging: Container(),
-                      onDragUpdate: (details) => {
-                            if (_scrollController.hasClients)
-                              if (_scrollController.position.pixels <
-                                  _maxScroll)
-                                {
-                                  setState(() {
-                                    _scrollController.jumpTo(
-                                        _scrollController.position.pixels +
-                                            -(details.delta.dx));
+              /// DRAGGABLE BUTTON
+              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                widget.textEditingController.text.isNotEmpty
+                    ? _sendButton
+                    : Draggable<int>(
+                        data: 1,
+                        axis: Axis.horizontal,
+                        child: Container(
+                            color: Colors.transparent,
+                            width: 40.0,
+                            height: 40.0),
+                        feedback: Container(),
+                        childWhenDragging: Container(),
+                        onDragUpdate: (details) => {
+                              if (_scrollController.hasClients)
+                                if (_scrollController.position.pixels <
+                                    _maxScroll)
+                                  {
+                                    setState(() {
+                                      _scrollController.jumpTo(
+                                          _scrollController.position.pixels +
+                                              -(details.delta.dx));
+                                    }),
+                                    debugPrint(
+                                        (_scrollController.position.pixels)
+                                            .toString()),
+                                  }
+                                else
+                                  {
+                                    setState(() {
+                                      _isRecording = false;
+                                      _seconds = 0;
+                                      _minutes = 0;
+                                    }),
+                                    _timer?.cancel()
+                                  }
+                            },
+                        onDragStarted: () => {
+                              setState(() => {_isRecording = true}),
+                              startTimer()
+                            },
+                        onDraggableCanceled: (valocity, offset) => {
+                              setState(() => {
+                                    _isRecording = false,
+                                    _seconds = 0,
+                                    _minutes = 0
                                   }),
-                                  debugPrint((_scrollController.position.pixels)
-                                      .toString()),
-                                }
-                              else
-                                {
-                                  setState(() {
-                                    _isRecording = false;
-                                    _seconds = 0;
-                                    _minutes = 0;
-                                  }),
-                                  _timer?.cancel()
-                                }
-                          },
-                      onDragStarted: () => {
-                            setState(() => {_isRecording = true}),
-                            startTimer()
-                          },
-                      onDraggableCanceled: (valocity, offset) => {
-                            setState(() => {
-                                  _isRecording = false,
-                                  _seconds = 0,
-                                  _minutes = 0
-                                }),
-                            _timer?.cancel(),
-                          })
-            ]),
+                              _timer?.cancel(),
+                            })
+              ]),
 
-            /// TEXT INPUT
-            AnimatedOpacity(
-                opacity: _isRecording ? 0.0 : 1.0,
-                duration: const Duration(milliseconds: 300),
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: _isRecording
-                        ? Container(
-                            constraints: const BoxConstraints(minHeight: 42.0),
-                            height: _textHeight,
-                          )
-                        : AnimatedContainer(
-                            duration: const Duration(milliseconds: 100),
-                            margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            height: _textHeight,
-                            constraints: const BoxConstraints(
-                                minHeight: 42.0, maxHeight: 90.0),
-                            decoration: BoxDecoration(
-                                color: HexColors.white,
-                                border: Border.all(
-                                    width: 1.0, color: HexColors.grey30),
-                                borderRadius: BorderRadius.circular(18.0)),
-                            child: Center(
-                                child: TextFormField(
-                              autocorrect: false,
-                              enableSuggestions: false,
-                              textCapitalization: TextCapitalization.sentences,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              controller: widget.textEditingController,
-                              focusNode: widget.focusNode,
-                              cursorColor: HexColors.primaryDark,
-                              textInputAction: TextInputAction.send,
-                              decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.only(
-                                      left: 12.0, right: 12.0),
-                                  hintText: widget.hintText,
-                                  hintStyle:
-                                      _style.copyWith(color: HexColors.grey40),
-                                  focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.transparent)),
-                                  enabledBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.transparent,
-                                          width: 0.0))),
-                              style: _style,
-                              onChanged: (text) => setState(() {}),
-                              onEditingComplete: () =>
-                                  FocusScope.of(context).unfocus(),
-                            ))))),
-          ]))
+              /// TEXT INPUT
+              AnimatedOpacity(
+                  opacity: _isRecording ? 0.0 : 1.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                      child: _isRecording
+                          ? Container(
+                              constraints:
+                                  const BoxConstraints(minHeight: 42.0),
+                              height: _textHeight,
+                            )
+                          : AnimatedContainer(
+                              duration: const Duration(milliseconds: 100),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2.0),
+                              height: _textHeight,
+                              constraints: const BoxConstraints(
+                                  minHeight: 42.0, maxHeight: 90.0),
+                              decoration: BoxDecoration(
+                                  color: HexColors.white,
+                                  border: Border.all(
+                                      width: 1.0, color: HexColors.grey30),
+                                  borderRadius: BorderRadius.circular(18.0)),
+                              child: Center(
+                                  child: TextFormField(
+                                autocorrect: false,
+                                enableSuggestions: false,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                controller: widget.textEditingController,
+                                focusNode: widget.focusNode,
+                                cursorColor: HexColors.primaryDark,
+                                textInputAction: TextInputAction.send,
+                                decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                        left: 12.0, right: 12.0),
+                                    hintText: widget.hintText,
+                                    hintStyle: _style.copyWith(
+                                        color: HexColors.grey40),
+                                    focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent)),
+                                    enabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                            width: 0.0))),
+                                style: _style,
+                                onChanged: (text) => setState(() {}),
+                                onEditingComplete: () =>
+                                    FocusScope.of(context).unfocus(),
+                              ))))),
+            ])),
+
+        /// SCROLLABLE CHILD
+        _isRecording
+            ? SingleChildScrollView(
+                controller: _scrollController,
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  SizedBox(width: MediaQuery.of(context).size.width - 152.0),
+                  Opacity(
+                      opacity: _opacity <= 0.0
+                          ? 0.0
+                          : _opacity >= 1.0
+                              ? 1.0
+                              : _opacity,
+                      child: Row(children: [
+                        SvgPicture.asset('assets/ic_arrow_cancel.svg',
+                            fit: BoxFit.scaleDown,
+                            color: _isRecording ? null : Colors.transparent),
+                        const SizedBox(width: 8.0),
+                        Material(
+                            type: MaterialType.transparency,
+                            child: Text(Titles.cancel,
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontFamily: 'PT Root UI',
+                                    color: _isRecording
+                                        ? HexColors.grey50
+                                        : Colors.transparent))),
+                        const SizedBox(width: 8.0),
+                      ])),
+                  _sendButton,
+                  const SizedBox(height: 60.0, width: 152.0),
+                ]))
+            : Container(),
+      ])
     ]);
   }
 }

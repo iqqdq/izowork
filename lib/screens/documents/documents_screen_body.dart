@@ -24,7 +24,7 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
   final FocusNode _focusNode = FocusNode();
   late DocumentsViewModel _documentsViewModel;
 
-  List<int> _list = [];
+  final List<int> _list = [];
 
   @override
   void initState() {

@@ -2,33 +2,39 @@ import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/models/news_filter_view_model.dart';
 import 'package:izowork/views/button_widget_widget.dart';
-import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:izowork/views/transparent_button_widget_widget.dart';
+import 'package:provider/provider.dart';
 
-class NewsFilterWidget extends StatefulWidget {
-  final VoidCallback onResponsibleTap;
+class NewsFilterScreenBodyWidget extends StatefulWidget {
+  final VoidCallback onDeveloperTap;
   final VoidCallback onApplyTap;
   final VoidCallback onResetTap;
 
-  const NewsFilterWidget(
+  const NewsFilterScreenBodyWidget(
       {Key? key,
-      required this.onResponsibleTap,
+      required this.onDeveloperTap,
       required this.onApplyTap,
       required this.onResetTap})
       : super(key: key);
 
   @override
-  _NewsFilterState createState() => _NewsFilterState();
+  _NewsFilterScreenBodyState createState() => _NewsFilterScreenBodyState();
 }
 
-class _NewsFilterState extends State<NewsFilterWidget> {
+class _NewsFilterScreenBodyState extends State<NewsFilterScreenBodyWidget> {
+  late NewsFilterViewModel _newsFilterViewModel;
+
   final options = ['Все', 'Важные'];
   List<int> tags = [];
 
-  final options2 = ['Сначала новые', 'Сначала старые'];
+  final options2 = [
+    'Сначала новые',
+    'Сначала старые',
+  ];
   List<int> tags2 = [];
 
   @override
@@ -38,6 +44,9 @@ class _NewsFilterState extends State<NewsFilterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _newsFilterViewModel =
+        Provider.of<NewsFilterViewModel>(context, listen: true);
+
     return Material(
         type: MaterialType.transparency,
         child: Container(
@@ -45,16 +54,8 @@ class _NewsFilterState extends State<NewsFilterWidget> {
             child: ListView(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                padding: EdgeInsets.only(
-                    top: 8.0,
-                    bottom: MediaQuery.of(context).padding.bottom == 0.0
-                        ? 12.0
-                        : MediaQuery.of(context).padding.bottom),
+                padding: const EdgeInsets.only(top: 8.0),
                 children: [
-                  /// DISMISS INDICATOR
-                  const SizedBox(height: 6.0),
-                  const DismissIndicatorWidget(),
-
                   /// TITLE
                   const TitleWidget(text: Titles.filter),
                   const SizedBox(height: 17.0),
@@ -62,13 +63,17 @@ class _NewsFilterState extends State<NewsFilterWidget> {
                   /// SCROLLABLE LIST
                   ListView(
                       shrinkWrap: true,
-                      padding: const EdgeInsets.only(bottom: 24.0),
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 12.0
+                              : MediaQuery.of(context).padding.bottom),
                       children: [
                         /// RESPONSIBLE SELECTION INPUT
                         SelectionInputWidget(
                             title: Titles.responsible,
                             value: 'Имя Фамилия',
-                            onTap: () => widget.onResponsibleTap()),
+                            onTap: () => widget.onDeveloperTap()),
+
                         const SizedBox(height: 16.0),
                         const TitleWidget(text: Titles.status, isSmall: true),
                         const SizedBox(height: 10.0),
@@ -82,12 +87,8 @@ class _NewsFilterState extends State<NewsFilterWidget> {
                             runSpacing: 6.0,
                             value: options,
                             choiceBuilder: (item, index) => InkWell(
-                                  onTap: () => setState(() => {
-                                        tags.contains(index)
-                                            ? tags.removeWhere(
-                                                (element) => element == index)
-                                            : tags.add(index)
-                                      }),
+                                  onTap: () => setState(
+                                      () => {tags.clear(), tags.add(index)}),
                                   child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10.0, vertical: 4.0),
@@ -129,12 +130,8 @@ class _NewsFilterState extends State<NewsFilterWidget> {
                             runSpacing: 6.0,
                             value: options2,
                             choiceBuilder: (item, index) => InkWell(
-                                  onTap: () => setState(() => {
-                                        tags2.contains(index)
-                                            ? tags2.removeWhere(
-                                                (element) => element == index)
-                                            : tags2.add(index)
-                                      }),
+                                  onTap: () => setState(
+                                      () => {tags2.clear(), tags2.add(index)}),
                                   child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10.0, vertical: 4.0),
@@ -186,8 +183,8 @@ class _NewsFilterState extends State<NewsFilterWidget> {
                                     tags2.clear();
                                   }),
                                   widget.onResetTap()
-                                })),
-                  ]),
+                                }))
+                  ])
                 ])));
   }
 }

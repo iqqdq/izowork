@@ -5,8 +5,8 @@ import 'package:izowork/components/hex_colors.dart';
 class InputWidget extends StatefulWidget {
   final TextEditingController textEditingController;
   final FocusNode focusNode;
-
   final bool? isSearchInput;
+  final bool? obscureText;
   final EdgeInsets? margin;
   final double? height;
   final TextInputType? textInputType;
@@ -24,6 +24,7 @@ class InputWidget extends StatefulWidget {
       required this.textEditingController,
       required this.focusNode,
       this.isSearchInput,
+      this.obscureText,
       this.margin,
       this.height,
       this.textInputType,
@@ -76,6 +77,9 @@ class _InputWidgetState extends State<InputWidget> {
               child: TextField(
                   controller: widget.textEditingController,
                   focusNode: widget.focusNode,
+                  obscureText: widget.obscureText ?? false,
+                  enableSuggestions: false,
+                  autocorrect: false,
                   keyboardAppearance: Brightness.light,
                   keyboardType: widget.textInputType ?? TextInputType.text,
                   cursorColor: HexColors.primaryDark,
@@ -86,11 +90,10 @@ class _InputWidgetState extends State<InputWidget> {
                   style: _textStyle,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(
-                        left: _isSearchInput ? 10.0 : 0.0,
-                        top: widget.focusNode.hasFocus ? 8.0 : 10.0),
+                        left: _isSearchInput ? 10.0 : 0.0, top: 2.0),
                     counterText: '',
-                    hintText: widget.placeholder,
-                    hintStyle: _textStyle.copyWith(color: HexColors.grey30),
+                    labelText: widget.placeholder,
+                    labelStyle: _textStyle.copyWith(color: HexColors.grey30),
                     suffixIcon: widget.focusNode.hasFocus &&
                             widget.textEditingController.text.isNotEmpty
                         ? IconButton(
@@ -115,9 +118,11 @@ class _InputWidgetState extends State<InputWidget> {
                     enabledBorder: InputBorder.none,
                   ),
                   onTap: widget.onTap == null ? null : () => widget.onTap!(),
-                  onChanged: widget.onChange == null
-                      ? null
-                      : (text) => {setState, widget.onChange!(text)},
+                  onChanged: (text) => {
+                        setState(() {
+                          if (widget.onChange != null) widget.onChange!(text);
+                        }),
+                      },
                   onEditingComplete: widget.onEditingComplete == null
                       ? () => FocusScope.of(context).unfocus()
                       : () => {

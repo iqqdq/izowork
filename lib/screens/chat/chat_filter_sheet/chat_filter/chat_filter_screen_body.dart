@@ -2,33 +2,43 @@ import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/models/chat_filter_view_model.dart';
 import 'package:izowork/views/button_widget_widget.dart';
-import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:izowork/views/transparent_button_widget_widget.dart';
+import 'package:provider/provider.dart';
 
-class ProductsFilterWidget extends StatefulWidget {
-  final VoidCallback onTypeTap;
+class ChatFilterScreenBodyWidget extends StatefulWidget {
+  final VoidCallback onEmployeeTap;
   final VoidCallback onApplyTap;
   final VoidCallback onResetTap;
 
-  const ProductsFilterWidget(
+  const ChatFilterScreenBodyWidget(
       {Key? key,
-      required this.onTypeTap,
+      required this.onEmployeeTap,
       required this.onApplyTap,
       required this.onResetTap})
       : super(key: key);
 
   @override
-  _ProductsFilterState createState() => _ProductsFilterState();
+  _ChatFilterScreenBodyState createState() => _ChatFilterScreenBodyState();
 }
 
-class _ProductsFilterState extends State<ProductsFilterWidget> {
-  final options = ['По возврастанию', 'По убыванию'];
+class _ChatFilterScreenBodyState extends State<ChatFilterScreenBodyWidget> {
+  late ChatFilterViewModel _chatFilterViewModel;
+
+  final options = [
+    'Все',
+    'Прочитанные',
+    'Непрочитанные',
+  ];
   List<int> tags = [];
 
-  final options2 = ['Проектировщик', 'Покупатель', 'Поставщик'];
+  final options2 = [
+    'Сначала новые',
+    'Сначала старые',
+  ];
   List<int> tags2 = [];
 
   @override
@@ -38,6 +48,9 @@ class _ProductsFilterState extends State<ProductsFilterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _chatFilterViewModel =
+        Provider.of<ChatFilterViewModel>(context, listen: true);
+
     return Material(
         type: MaterialType.transparency,
         child: Container(
@@ -45,35 +58,31 @@ class _ProductsFilterState extends State<ProductsFilterWidget> {
             child: ListView(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                padding: EdgeInsets.only(
-                    top: 8.0,
-                    bottom: MediaQuery.of(context).padding.bottom == 0.0
-                        ? 12.0
-                        : MediaQuery.of(context).padding.bottom),
+                padding: const EdgeInsets.only(top: 8.0),
                 children: [
-                  /// DISMISS INDICATOR
-                  const SizedBox(height: 6.0),
-                  const DismissIndicatorWidget(),
-
                   /// TITLE
                   const TitleWidget(text: Titles.filter),
                   const SizedBox(height: 17.0),
 
-                  SelectionInputWidget(
-                      title: Titles.type,
-                      value: 'Смеси',
-                      onTap: () => widget.onTypeTap()),
-                  const SizedBox(height: 10.0),
-
                   /// SCROLLABLE LIST
                   ListView(
                       shrinkWrap: true,
-                      padding: const EdgeInsets.only(bottom: 24.0),
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 12.0
+                              : MediaQuery.of(context).padding.bottom),
                       children: [
-                        const TitleWidget(text: Titles.sorting, isSmall: true),
+                        /// EMPLOYEE SELECTION INPUT
+                        SelectionInputWidget(
+                            title: Titles.employee,
+                            value: 'Имя Фамилия',
+                            onTap: () => widget.onEmployeeTap()),
+
+                        const SizedBox(height: 16.0),
+                        const TitleWidget(text: Titles.status, isSmall: true),
                         const SizedBox(height: 10.0),
 
-                        /// SORTING GRID VIEW
+                        /// STATUS GRID VIEW
                         ChipsChoice<String>.multiple(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
@@ -113,10 +122,10 @@ class _ProductsFilterState extends State<ProductsFilterWidget> {
                             )),
 
                         const SizedBox(height: 17.0),
-                        const TitleWidget(text: Titles.type, isSmall: true),
+                        const TitleWidget(text: Titles.sorting, isSmall: true),
                         const SizedBox(height: 10.0),
 
-                        /// TYPE GRID VIEW
+                        /// SORTING GRID VIEW
                         ChipsChoice<String>.multiple(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
@@ -125,12 +134,8 @@ class _ProductsFilterState extends State<ProductsFilterWidget> {
                             runSpacing: 6.0,
                             value: options2,
                             choiceBuilder: (item, index) => InkWell(
-                                  onTap: () => setState(() => {
-                                        tags2.contains(index)
-                                            ? tags2.removeWhere(
-                                                (element) => element == index)
-                                            : tags2.add(index)
-                                      }),
+                                  onTap: () => setState(
+                                      () => {tags2.clear(), tags2.add(index)}),
                                   child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10.0, vertical: 4.0),
@@ -157,7 +162,7 @@ class _ProductsFilterState extends State<ProductsFilterWidget> {
                               source: options2,
                               value: (i, v) => v,
                               label: (i, v) => v,
-                            )),
+                            ))
                       ]),
 
                   /// BUTTON's
@@ -182,7 +187,7 @@ class _ProductsFilterState extends State<ProductsFilterWidget> {
                                     tags2.clear();
                                   }),
                                   widget.onResetTap()
-                                })),
+                                }))
                   ])
                 ])));
   }

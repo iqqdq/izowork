@@ -23,7 +23,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   final FocusNode _focusNode = FocusNode();
   late DialogViewModel _dialogViewModel;
 
-  List<String> _list = [
+  final List<String> _list = [
     'Ну ты совсем умный, книжки читал? 👍',
     'audio',
     'filename.pdf',

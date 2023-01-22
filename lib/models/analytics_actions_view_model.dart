@@ -21,6 +21,7 @@ class AnalyticsActionsViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) => AnalyticsActionsFilterPageViewWidget(
-            onApplyTap: () => {}, onResetTap: () => {}));
+            onApplyTap: () => {Navigator.pop(context)},
+            onResetTap: () => {Navigator.pop(context)}));
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/screens/companies/views/companies_filter_sheet/companies_filter_widget.dart';
+import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_widget.dart';
 import 'package:izowork/screens/company/company_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -25,9 +25,8 @@ class CompaniesViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => CompaniesFilterWidget(
-            onManagerTap: () => {},
-            onApplyTap: () => {},
-            onResetTap: () => {}));
+        builder: (context) => CompaniesFilterPageViewWidget(
+            onApplyTap: () => {Navigator.pop(context)},
+            onResetTap: () => {Navigator.pop(context)}));
   }
 }

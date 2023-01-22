@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/user_params.dart';
+import 'package:izowork/screens/authorization/authorization_screen.dart';
 import 'package:izowork/screens/tab_controller/tab_controller_screen_body.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 
@@ -36,7 +37,7 @@ class _SplashScreenState extends State<SplashScreenWidget> {
             context,
             MaterialPageRoute(
                 builder: (context) => _isTokenExist
-                    ? const TabControllerScreenWidget()
+                    ? const AuthorizationScreenWidget()
                     : const TabControllerScreenWidget()),
             (route) => false));
   }

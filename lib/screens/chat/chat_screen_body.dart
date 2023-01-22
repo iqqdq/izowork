@@ -107,7 +107,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                   child: Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: FilterButtonWidget(
-                        onTap: () => {},
+                        onTap: () => _chatViewModel.showMapFilterSheet(context),
                         // onClearTap: () => {}
                       )))),
 

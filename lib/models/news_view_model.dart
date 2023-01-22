@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/screens/news/views/news_filter_sheet/news_filter_widget.dart';
+import 'package:izowork/screens/news/news_filter_sheet/news_filter_page_view_widget.dart';
 import 'package:izowork/screens/news_comments/news_comments_screen.dart';
 import 'package:izowork/screens/news_creation/news_creation_screen.dart';
 import 'package:izowork/screens/news_page/news_page_screen.dart';
@@ -23,10 +23,8 @@ class NewsViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => NewsFilterWidget(
-            onResponsibleTap: () => {},
-            onApplyTap: () => Navigator.pop(context),
-            onResetTap: () => {}));
+        builder: (context) => NewsFilterPageViewWidget(
+            onApplyTap: () => Navigator.pop(context), onResetTap: () => {}));
   }
 
   void showNewsCreationScreen(BuildContext context) {

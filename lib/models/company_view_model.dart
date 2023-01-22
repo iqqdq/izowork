@@ -30,6 +30,8 @@ class CompanyViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) => CompanyProductsFilterWidget(
-            onTypeTap: () => {}, onApplyTap: () => {}, onResetTap: () => {}));
+            onTypeTap: () => {Navigator.pop(context)},
+            onApplyTap: () => {},
+            onResetTap: () => {Navigator.pop(context)}));
   }
 }
