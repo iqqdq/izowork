@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/news/news_filter_sheet/news_filter/news_filter_screen.dart';
-import 'package:izowork/screens/news/news_filter_sheet/news_filter_search/news_filter_search_screen.dart';
+import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 
 class NewsFilterPageViewWidget extends StatefulWidget {
@@ -26,7 +27,9 @@ class _NewsFilterPageViewState extends State<NewsFilterPageViewWidget> {
       NewsFilterScreenWidget(
           onDeveloperTap: () => {
                 setState(() => _isSearching = true),
-                _pages.add(NewsFilterSearchScreenWidget(
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.responsible,
                     onPop: () => {
                           setState(() => _isSearching = false),
                           _pageController

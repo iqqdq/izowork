@@ -20,7 +20,7 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
   final _titles = [
     Titles.news,
-    Titles.employees,
+    Titles.staff,
     Titles.contacts,
     Titles.companies,
     Titles.products,

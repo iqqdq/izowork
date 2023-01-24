@@ -41,7 +41,6 @@ abstract class Titles {
   static const text = 'Текст';
   static const news = 'Новости';
   static const newNews = 'Новая новость';
-  static const employees = 'Сотрудники';
   static const contacts = 'Контакты';
   static const company = 'Компания';
   static const companies = 'Компании';
@@ -128,8 +127,9 @@ abstract class Titles {
       'Укажите электронную почту, на которую мы отправим инструкцию по восстановлению';
   static const enterObjectName =
       'Введите адрес или название\nобъекта в строку поиска';
+  static const enterProductName = 'Введите название товара\nв строку поиска';
   static const enterCompanyName = 'Введите название компании\nв строку поиска';
-  static const enterFilialName = 'Введите имя сотрудника\nв строку поиска';
+  static const enterFilialName = 'Введите название филиала\nв строку поиска';
   static const enterEmployeeName = 'Введите имя застройщика\nв строку поиска';
   static const enterManagerName = 'Введите имя менеджера\nв строку поиска';
   static const enterDeveloperName = 'Введите имя застройщика\nв строку поиска';

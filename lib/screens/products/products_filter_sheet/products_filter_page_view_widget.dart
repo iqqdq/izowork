@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/products/products_filter_sheet/products_filter/products_filter_screen.dart';
-import 'package:izowork/screens/products/products_filter_sheet/products_filter_search/products_filter_search_screen.dart';
+import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 
 class ProuctsFilterPageViewWidget extends StatefulWidget {
@@ -26,7 +27,9 @@ class _ProuctsFilterPageViewState extends State<ProuctsFilterPageViewWidget> {
       ProductsFilterScreenWidget(
           onTypeTap: () => {
                 setState(() => _isSearching = true),
-                _pages.add(ProductsFilterSearchScreenWidget(
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.type,
                     onPop: () => {
                           setState(() => _isSearching = false),
                           _pageController

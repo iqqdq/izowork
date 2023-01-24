@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/chat/chat_filter_sheet/chat_filter/chat_filter_screen.dart';
-import 'package:izowork/screens/chat/chat_filter_sheet/chat_filter_search/chat_filter_search_screen.dart';
+import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 
 class ChatFilterPageViewWidget extends StatefulWidget {
@@ -28,7 +29,9 @@ class _ChatFilterPageViewState extends State<ChatFilterPageViewWidget> {
                 setState(
                   () => _isSearching = true,
                 ),
-                _pages.add(ChatFilterSearchScreenWidget(
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.employee,
                     onPop: () => {
                           setState(() => _isSearching = false),
                           _pageController

@@ -84,7 +84,7 @@ class _DealFilterScreenBodyState extends State<DealsFilterScreenBodyWidget> {
                         SelectionInputWidget(
                             title: Titles.company,
                             value: 'Название',
-                            onTap: () => widget.onObjectTap()),
+                            onTap: () => widget.onCompanyTap()),
 
                         const SizedBox(height: 16.0),
                         const TitleWidget(text: Titles.stages, isSmall: true),

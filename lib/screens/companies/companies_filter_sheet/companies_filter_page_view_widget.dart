@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter/companies_filter_screen.dart';
-import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_search/companies_filter_search_screen.dart';
+import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 
 class CompaniesFilterPageViewWidget extends StatefulWidget {
@@ -28,7 +29,9 @@ class _CompaniesFilterPageViewState
       CompaniesFilterScreenWidget(
           onManagerTap: () => {
                 setState(() => _isSearching = true),
-                _pages.add(CompaniesFilterSearchScreenWidget(
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.manager,
                     onPop: () => {
                           setState(() => _isSearching = false),
                           _pageController

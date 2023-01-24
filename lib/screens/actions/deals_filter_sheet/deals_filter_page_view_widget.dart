@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/actions/deals_filter_sheet/deals_filter/deals_filter_screen.dart';
-import 'package:izowork/screens/actions/deals_filter_sheet/deal_filter_search/deal_filter_search_screen.dart';
+import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 
 class DealsFilterPageViewWidget extends StatefulWidget {
@@ -26,8 +27,9 @@ class _DealsFilterPageViewState extends State<DealsFilterPageViewWidget> {
       DealsFilterScreenWidget(
           onResponsibleTap: () => {
                 setState(() => _isSearching = true),
-                _pages.add(DealsFilterSearchScreenWidget(
-                    type: 0,
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.responsible,
                     onPop: () => {
                           setState(() => _isSearching = false),
                           _pageController
@@ -45,8 +47,9 @@ class _DealsFilterPageViewState extends State<DealsFilterPageViewWidget> {
               },
           onObjectTap: () => {
                 setState(() => _isSearching = true),
-                _pages.add(DealsFilterSearchScreenWidget(
-                    type: 1,
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.object,
                     onPop: () => {
                           setState(() => _isSearching = false),
                           _pageController
@@ -64,8 +67,9 @@ class _DealsFilterPageViewState extends State<DealsFilterPageViewWidget> {
               },
           onCompanyTap: () => {
                 setState(() => _isSearching = true),
-                _pages.add(DealsFilterSearchScreenWidget(
-                    type: 2,
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.company,
                     onPop: () => {
                           setState(() => _isSearching = false),
                           _pageController

@@ -64,7 +64,8 @@ class _AnalyticsCompaniesScreenBodyState
                     title: Titles.product,
                     value: Titles.tonProductPlaceholder,
                     isVertical: true,
-                    onTap: () => {}),
+                    onTap: () => _analyticsCompaniesViewModel
+                        .showSearchScreenSheet(context)),
 
                 /// PRODUCT HORIZONTAL CHART
                 HorizontalChartWidget(onMaxScrollExtent: () => {}),
@@ -78,7 +79,9 @@ class _AnalyticsCompaniesScreenBodyState
                     value: Titles.literProductPlaceholder,
                     isVertical: true,
                     onTap: () => {}),
-                HorizontalChartWidget(onMaxScrollExtent: () => {}),
+                HorizontalChartWidget(
+                    onMaxScrollExtent: () => _analyticsCompaniesViewModel
+                        .showSearchScreenSheet(context)),
                 const SizedBox(height: 24.0),
 
                 /// COMPANY PIE CHART

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/screens/actions/tasks_filter_sheet%20/tasks_filter_search/task_filter_search_screen.dart';
+import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/actions/tasks_filter_sheet%20/tasks_filter/tasks_filter_screen.dart';
+import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 
 class TasksFilterPageViewWidget extends StatefulWidget {
@@ -26,7 +27,9 @@ class _TasksFilterPageViewState extends State<TasksFilterPageViewWidget> {
       TasksFilterScreenWidget(
           onResponsibleTap: () => {
                 setState(() => _isSearching = true),
-                _pages.add(TasksFilterSearchScreenWidget(
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.responsible,
                     onPop: () => {
                           setState(() => _isSearching = false),
                           _pageController

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/map/map_filter_sheet/map_filter/map_filter_screen.dart';
-import 'package:izowork/screens/map/map_filter_sheet/map_filter_search/map_filter_search_screen.dart';
+import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 
 class MapFilterPageViewWidget extends StatefulWidget {
@@ -26,8 +27,9 @@ class _MapFilterPageViewState extends State<MapFilterPageViewWidget> {
       MapFilterScreenWidget(
           onDeveloperTap: () => {
                 setState(() => _isSearching = true),
-                _pages.add(MapFilterSearchScreenWidget(
-                    type: 1,
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.developer,
                     onPop: () => {
                           setState(() => _isSearching = false),
                           _pageController
@@ -45,8 +47,9 @@ class _MapFilterPageViewState extends State<MapFilterPageViewWidget> {
               },
           onManagerTap: () => {
                 setState(() => _isSearching = true),
-                _pages.add(MapFilterSearchScreenWidget(
-                    type: 0,
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.manager,
                     onPop: () => {
                           setState(() => _isSearching = false),
                           _pageController
