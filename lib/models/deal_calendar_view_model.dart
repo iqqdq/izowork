@@ -3,6 +3,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/screens/deal_calendar/event_deal/event_deal_screen.dart';
 import 'package:izowork/views/date_time_wheel_picker_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -104,7 +105,20 @@ class DealCalendarViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void selectDateTime(DateTime dateTime) {
+  void selectDateTime(BuildContext context, DateTime dateTime) {
+    for (var eventDateTime in _eventDateTimes) {
+      if (eventDateTime.year == dateTime.year &&
+          eventDateTime.month == dateTime.month &&
+          eventDateTime.day == dateTime.day) {
+        showCupertinoModalBottomSheet(
+            topRadius: const Radius.circular(16.0),
+            barrierColor: Colors.black.withOpacity(0.6),
+            backgroundColor: HexColors.white,
+            context: context,
+            builder: (context) => EventDealScreenWidget(dateTime: dateTime));
+      }
+    }
+
     _selectedDateTime = dateTime;
     notifyListeners();
   }

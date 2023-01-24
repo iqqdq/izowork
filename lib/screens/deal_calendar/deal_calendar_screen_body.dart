@@ -43,10 +43,8 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
         minDate: DateTime(_dealCalendarViewModel.pickedDateTime.year, 1),
         maxDate: DateTime(_dealCalendarViewModel.pickedDateTime.year, 12),
         initialFocusDate: _dealCalendarViewModel.pickedDateTime,
-        onAfterMaxDateTapped: (dateTime) =>
-            _dealCalendarViewModel.selectDateTime(dateTime),
         onDayTapped: (dateTime) =>
-            _dealCalendarViewModel.selectDateTime(dateTime));
+            _dealCalendarViewModel.selectDateTime(context, dateTime));
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -80,33 +78,34 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
                   fontWeight: FontWeight.w500,
                   color: HexColors.grey40),
               dayBuilder: (BuildContext context, DayValues values) => Container(
-                    // margin: const EdgeInsets.only(
-                    //     bottom: 4.0, left: 2.0, right: 2.0),
                     decoration: BoxDecoration(
-                      color: _dealCalendarViewModel.eventDateTimes
-                              .contains(values.day)
-                          ? HexColors.grey10
-                          : Colors.transparent,
+                      color: Colors.transparent,
                       border: Border.all(
-                          width: _dealCalendarViewModel.selectedDateTime == null
-                              ? 0.0
-                              : isSameDate(
-                                      _dealCalendarViewModel.selectedDateTime!,
-                                      values.day)
-                                  ? 1.0
-                                  : 0.0,
+                          width: _dealCalendarViewModel.eventDateTimes
+                                  .contains(values.day)
+                              ? 1.0
+                              : _dealCalendarViewModel.selectedDateTime == null
+                                  ? 0.0
+                                  : isSameDate(
+                                          _dealCalendarViewModel
+                                              .selectedDateTime!,
+                                          values.day)
+                                      ? 1.0
+                                      : 0.0,
                           color: _dealCalendarViewModel.selectedDateTime == null
-                              ? Colors.transparent
+                              ? _dealCalendarViewModel.eventDateTimes
+                                      .contains(values.day)
+                                  ? HexColors.grey20
+                                  : Colors.transparent
                               : isSameDate(
                                       _dealCalendarViewModel.selectedDateTime!,
                                       values.day)
                                   ? HexColors.primaryMain
-                                  : Colors.transparent),
+                                  : _dealCalendarViewModel.eventDateTimes
+                                          .contains(values.day)
+                                      ? HexColors.grey20
+                                      : Colors.transparent),
                       borderRadius: BorderRadius.circular(6.0),
-                      // boxShadow: _dealCalendarViewModel.eventDateTimes
-                      //         .contains(values.day)
-                      //     ? [Shadows.calendarEventShadow]
-                      //     : []
                     ),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

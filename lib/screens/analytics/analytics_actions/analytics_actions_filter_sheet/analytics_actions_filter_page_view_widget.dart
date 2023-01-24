@@ -48,44 +48,42 @@ class _AnalyticsActionsFilterPageViewState
     _pages = [
       AnalyticsActionsFilterScreenWidget(
           onFilialTap: () => {
-                setState(() => {
-                      _isSearching = true,
-                      _pages.add(AnalyticsActionsFilterSearchScreen(
-                          isFilialSearch: true,
-                          onPop: () => {
-                                setState(() => _isSearching = false),
-                                _pageController
-                                    .animateToPage(0,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeIn)
-                                    .then((value) =>
-                                        {if (mounted) _pages.removeLast()})
-                              }))
-                    }),
-                _pageController.animateToPage(1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn)
+                setState(() => _isSearching = true),
+                _pages.add(AnalyticsActionsFilterSearchScreen(
+                    isFilialSearch: true,
+                    onPop: () => {
+                          setState(() => _isSearching = false),
+                          _pageController
+                              .animateToPage(0,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn)
+                              .then((value) =>
+                                  {if (mounted) _pages.removeLast()}),
+                          Future.delayed(
+                              const Duration(milliseconds: 100),
+                              () => _pageController.animateToPage(1,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn))
+                        })),
               },
           onManagerTap: () => {
-                setState(() => {
-                      _isSearching = true,
-                      _pages.add(AnalyticsActionsFilterSearchScreen(
-                          isFilialSearch: false,
-                          onPop: () => {
-                                setState(() => _isSearching = false),
-                                _pageController
-                                    .animateToPage(0,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeIn)
-                                    .then((value) =>
-                                        {if (mounted) _pages.removeLast()})
-                              }))
-                    }),
-                _pageController.animateToPage(1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn)
+                setState(() => _isSearching = true),
+                _pages.add(AnalyticsActionsFilterSearchScreen(
+                    isFilialSearch: false,
+                    onPop: () => {
+                          setState(() => _isSearching = false),
+                          _pageController
+                              .animateToPage(0,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn)
+                              .then(
+                                  (value) => {if (mounted) _pages.removeLast()})
+                        })),
+                Future.delayed(
+                    const Duration(milliseconds: 100),
+                    () => _pageController.animateToPage(1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn))
               },
           onFromDateTap: () => showDateTimeSelectionSheet(),
           onToDateTap: () => showDateTimeSelectionSheet(),
@@ -163,7 +161,9 @@ class _AnalyticsActionsFilterPageViewState
                       ? MediaQuery.of(context).size.height * 0.7
                       : _isDateSelection
                           ? 324.0
-                          : 440.0,
+                          : MediaQuery.of(context).padding.bottom == 0.0
+                              ? 400.0
+                              : 440.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),

@@ -105,7 +105,8 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                   child: Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: FilterButtonWidget(
-                        onTap: () => {},
+                        onTap: () =>
+                            _objectsViewModel.showObjectsFilterSheet(context),
                         // onClearTap: () => {}
                       )))),
 

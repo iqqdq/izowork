@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/models/map_manager_view_model.dart';
+import 'package:izowork/models/map_filter_search_view_model.dart';
 import 'package:izowork/screens/map/map_filter_sheet/map_filter_search/views/map_filter_search_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
@@ -10,11 +10,11 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class MapFilterSearchBodyScreenWidget extends StatefulWidget {
-  final bool isManagerSearch;
+  final int type;
   final VoidCallback onPop;
 
   const MapFilterSearchBodyScreenWidget(
-      {Key? key, required this.isManagerSearch, required this.onPop})
+      {Key? key, required this.type, required this.onPop})
       : super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class MapFilterSearchBodyScreenWidget extends StatefulWidget {
 class _MapFilterSearchBodyState extends State<MapFilterSearchBodyScreenWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  late MapManagerFilterViewModel _mapManagerFilterViewModel;
+  late MapFilterSearchViewModel _mapFilterSearchViewModel;
   bool _show = false; // TODO DELETE
 
   @override
@@ -38,8 +38,8 @@ class _MapFilterSearchBodyState extends State<MapFilterSearchBodyScreenWidget> {
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height * 0.8;
 
-    _mapManagerFilterViewModel =
-        Provider.of<MapManagerFilterViewModel>(context, listen: true);
+    _mapFilterSearchViewModel =
+        Provider.of<MapFilterSearchViewModel>(context, listen: true);
 
     return Material(
         type: MaterialType.transparency,
@@ -61,7 +61,7 @@ class _MapFilterSearchBodyState extends State<MapFilterSearchBodyScreenWidget> {
                           ),
                           Center(
                               child: TitleWidget(
-                                  text: widget.isManagerSearch
+                                  text: widget.type == 0
                                       ? Titles.manager
                                       : Titles.developer))
                         ])),
@@ -128,7 +128,7 @@ class _MapFilterSearchBodyState extends State<MapFilterSearchBodyScreenWidget> {
                           Row(children: [
                             Expanded(
                                 child: Text(
-                                    widget.isManagerSearch
+                                    widget.type == 0
                                         ? Titles.enterManagerName
                                         : Titles.enterDeveloperName,
                                     textAlign: TextAlign.center,

@@ -81,6 +81,7 @@ abstract class Titles {
   static const tasks = 'Задачи';
   static const info = 'Информация';
   static const dealCalendar = 'Календарь сделок';
+  static const taskCalendar = 'Календарь задач';
   static const staff = 'Сотрудники';
   static const phone = 'Телефон';
   static const email = 'Электронная почта';
@@ -92,7 +93,8 @@ abstract class Titles {
   static const manager = 'Менеджер';
   static const developer = 'Застройщик';
   static const stages = 'Стадии';
-  static const stage = 'Стадия реализации';
+  static const realizationStage = 'Стадия реализации';
+  static const stage = 'Стадия';
   static const realizations = 'Реализации';
   static const effectiveness = 'Эффективность';
   static const month = 'Месяц';
@@ -126,6 +128,7 @@ abstract class Titles {
       'Укажите электронную почту, на которую мы отправим инструкцию по восстановлению';
   static const enterObjectName =
       'Введите адрес или название\nобъекта в строку поиска';
+  static const enterCompanyName = 'Введите название компании\nв строку поиска';
   static const enterFilialName = 'Введите имя сотрудника\nв строку поиска';
   static const enterEmployeeName = 'Введите имя застройщика\nв строку поиска';
   static const enterManagerName = 'Введите имя менеджера\nв строку поиска';

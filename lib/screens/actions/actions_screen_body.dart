@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/screens/actions/views/action_task_list_item_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
@@ -8,7 +9,7 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/deal.dart';
 import 'package:izowork/entities/task.dart';
 import 'package:izowork/models/actions_view_model.dart';
-import 'package:izowork/screens/actions/views/action_list_item_widget.dart';
+import 'package:izowork/screens/actions/views/action_deal_list_item_widget.dart';
 import 'package:izowork/views/asset_image_button_widget.dart';
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
@@ -102,7 +103,7 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
                     AssetImageButton(
                         imagePath: 'assets/ic_calendar.png',
                         onTap: () =>
-                            _actionsViewModel.showDealCalendarScreen(context))
+                            _actionsViewModel.showCalendarScreen(context))
                   ])),
               const SizedBox(height: 16.0),
               const SeparatorWidget()
@@ -120,8 +121,9 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
                   left: 16.0, right: 16.0, top: 16.0, bottom: 16.0 + 48.0),
               itemCount: 10,
               itemBuilder: (context, index) {
-                return ActionListItemWidget(
-                    deal: Deal(), task: Task(), onTap: () => {});
+                return _actionsViewModel.segmentedControlIndex == 0
+                    ? ActionDealListItemWidget(deal: Deal(), onTap: () => {})
+                    : ActionTaskListItemWidget(task: Task(), onTap: () => {});
               }),
 
           /// FILTER BUTTON
@@ -131,9 +133,13 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
                   child: Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: FilterButtonWidget(
-                        onTap: () => {},
-                        // onClearTap: () => {}
-                      )))),
+                          onTap: () => _actionsViewModel
+                                      .segmentedControlIndex ==
+                                  0
+                              ? _actionsViewModel.showDealsFilterSheet(context)
+                              : _actionsViewModel.showTasksFilterSheet(context)
+                          // onClearTap: () => {}
+                          )))),
 
           /// INDICATOR
           _actionsViewModel.loadingStatus == LoadingStatus.searching

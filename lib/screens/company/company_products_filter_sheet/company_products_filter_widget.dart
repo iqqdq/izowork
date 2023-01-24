@@ -51,9 +51,11 @@ class _CompanyProductsFilterState extends State<CompanyProductsFilterWidget> {
                         ? 12.0
                         : MediaQuery.of(context).padding.bottom),
                 children: [
-                  /// DISMISS INDICATOR
-                  const SizedBox(height: 6.0),
-                  const DismissIndicatorWidget(),
+                  Column(children: const [
+                    /// DISMISS INDICATOR
+                    SizedBox(height: 6.0),
+                    DismissIndicatorWidget(),
+                  ]),
 
                   /// TITLE
                   const TitleWidget(text: Titles.filter),

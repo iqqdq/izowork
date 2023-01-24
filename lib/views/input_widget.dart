@@ -90,9 +90,11 @@ class _InputWidgetState extends State<InputWidget> {
                   style: _textStyle,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(
-                        left: _isSearchInput ? 10.0 : 0.0, top: 2.0),
+                        left: _isSearchInput ? 10.0 : 0.0,
+                        top: _isSearchInput ? 8.0 : 2.0),
                     counterText: '',
-                    labelText: widget.placeholder,
+                    labelText: _isSearchInput ? null : widget.placeholder,
+                    hintText: _isSearchInput ? widget.placeholder : null,
                     labelStyle: _textStyle.copyWith(color: HexColors.grey30),
                     suffixIcon: widget.focusNode.hasFocus &&
                             widget.textEditingController.text.isNotEmpty

@@ -37,8 +37,10 @@ class _SplashScreenState extends State<SplashScreenWidget> {
             context,
             MaterialPageRoute(
                 builder: (context) => _isTokenExist
-                    ? const AuthorizationScreenWidget()
+                    ? const TabControllerScreenWidget()
                     : const TabControllerScreenWidget()),
+            // ? const TabControllerScreenWidget()
+            // : const AuthorizationScreenWidget()),
             (route) => false));
   }
 

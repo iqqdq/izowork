@@ -1,0 +1,78 @@
+import 'package:flutter/material.dart';
+import 'package:izowork/screens/actions/tasks_filter_sheet%20/tasks_filter_search/task_filter_search_screen.dart';
+import 'package:izowork/screens/actions/tasks_filter_sheet%20/tasks_filter/tasks_filter_screen.dart';
+import 'package:izowork/views/dismiss_indicator_widget.dart';
+
+class TasksFilterPageViewWidget extends StatefulWidget {
+  final VoidCallback onApplyTap;
+  final VoidCallback onResetTap;
+
+  const TasksFilterPageViewWidget(
+      {Key? key, required this.onApplyTap, required this.onResetTap})
+      : super(key: key);
+
+  @override
+  _TasksFilterPageViewState createState() => _TasksFilterPageViewState();
+}
+
+class _TasksFilterPageViewState extends State<TasksFilterPageViewWidget> {
+  final PageController _pageController = PageController();
+  List<Widget> _pages = [];
+  bool _isSearching = false;
+
+  @override
+  void initState() {
+    _pages = [
+      TasksFilterScreenWidget(
+          onResponsibleTap: () => {
+                setState(() => _isSearching = true),
+                _pages.add(TasksFilterSearchScreenWidget(
+                    onPop: () => {
+                          setState(() => _isSearching = false),
+                          _pageController
+                              .animateToPage(0,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn)
+                              .then(
+                                  (value) => {if (mounted) _pages.removeLast()})
+                        })),
+                Future.delayed(
+                    const Duration(milliseconds: 100),
+                    () => _pageController.animateToPage(1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn))
+              },
+          onApplyTap: widget.onApplyTap,
+          onResetTap: widget.onResetTap),
+    ];
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+        type: MaterialType.transparency,
+        child: ListView(
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            children: [
+              /// DISMISS INDICATOR
+              const SizedBox(height: 6.0),
+              const DismissIndicatorWidget(),
+              AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  height: _isSearching
+                      ? MediaQuery.of(context).size.height * 0.7
+                      : MediaQuery.of(context).padding.bottom == 0.0
+                          ? 300.0
+                          : 330.0,
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: _pages,
+                  ))
+            ]));
+  }
+}

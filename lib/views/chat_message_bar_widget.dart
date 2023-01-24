@@ -165,7 +165,7 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                           height: _textHeight,
                           width: 38.0,
                           constraints: const BoxConstraints(
-                              minHeight: 38.0, maxHeight: 90.0),
+                              minHeight: 42.0, maxHeight: 90.0),
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -261,8 +261,8 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                       padding: const EdgeInsets.symmetric(horizontal: 40.0),
                       child: _isRecording
                           ? Container(
-                              constraints:
-                                  const BoxConstraints(minHeight: 42.0),
+                              constraints: const BoxConstraints(
+                                  minHeight: 42.0, maxHeight: 90.0),
                               height: _textHeight,
                             )
                           : AnimatedContainer(

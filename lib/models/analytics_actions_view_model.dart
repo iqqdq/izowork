@@ -9,9 +9,6 @@ class AnalyticsActionsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
   // MARK: -
-  // MARK: - FUNCTIONS
-
-  // MARK: -
   // MARK: - PUSH
 
   void showAnalyticsActionFilterSheet(BuildContext context) {
@@ -24,4 +21,7 @@ class AnalyticsActionsViewModel with ChangeNotifier {
             onApplyTap: () => {Navigator.pop(context)},
             onResetTap: () => {Navigator.pop(context)}));
   }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
 }

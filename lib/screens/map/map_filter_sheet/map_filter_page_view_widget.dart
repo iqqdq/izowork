@@ -25,44 +25,42 @@ class _MapFilterPageViewState extends State<MapFilterPageViewWidget> {
     _pages = [
       MapFilterScreenWidget(
           onDeveloperTap: () => {
-                setState(() => {
-                      _isSearching = true,
-                      _pages.add(MapFilterSearchScreenWidget(
-                          isManagerSearch: false,
-                          onPop: () => {
-                                setState(() => _isSearching = false),
-                                _pageController
-                                    .animateToPage(0,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeIn)
-                                    .then((value) =>
-                                        {if (mounted) _pages.removeLast()})
-                              }))
-                    }),
-                _pageController.animateToPage(1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn)
+                setState(() => _isSearching = true),
+                _pages.add(MapFilterSearchScreenWidget(
+                    type: 1,
+                    onPop: () => {
+                          setState(() => _isSearching = false),
+                          _pageController
+                              .animateToPage(0,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn)
+                              .then(
+                                  (value) => {if (mounted) _pages.removeLast()})
+                        })),
+                Future.delayed(
+                    const Duration(milliseconds: 100),
+                    () => _pageController.animateToPage(1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn))
               },
           onManagerTap: () => {
-                setState(() => {
-                      _isSearching = true,
-                      _pages.add(MapFilterSearchScreenWidget(
-                          isManagerSearch: true,
-                          onPop: () => {
-                                setState(() => _isSearching = false),
-                                _pageController
-                                    .animateToPage(0,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeIn)
-                                    .then((value) =>
-                                        {if (mounted) _pages.removeLast()})
-                              }))
-                    }),
-                _pageController.animateToPage(1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn)
+                setState(() => _isSearching = true),
+                _pages.add(MapFilterSearchScreenWidget(
+                    type: 0,
+                    onPop: () => {
+                          setState(() => _isSearching = false),
+                          _pageController
+                              .animateToPage(0,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn)
+                              .then(
+                                  (value) => {if (mounted) _pages.removeLast()})
+                        })),
+                Future.delayed(
+                    const Duration(milliseconds: 100),
+                    () => _pageController.animateToPage(1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn))
               },
           onApplyTap: widget.onApplyTap,
           onResetTap: widget.onResetTap),
@@ -87,7 +85,9 @@ class _MapFilterPageViewState extends State<MapFilterPageViewWidget> {
                   duration: const Duration(milliseconds: 300),
                   height: _isSearching
                       ? MediaQuery.of(context).size.height * 0.7
-                      : 480.0,
+                      : MediaQuery.of(context).padding.bottom == 0.0
+                          ? 450.0
+                          : 470.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),

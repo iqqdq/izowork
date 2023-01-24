@@ -182,8 +182,7 @@ class _MapFilterScreenBodyState extends State<MapFilterScreenBodyWidget> {
                               source: options2,
                               value: (i, v) => v,
                               label: (i, v) => v,
-                            )),
-                        const SizedBox(height: 17.0)
+                            ))
                       ]),
 
                   /// BUTTON's

@@ -36,8 +36,11 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                         ? 12.0
                         : MediaQuery.of(context).padding.bottom),
                 children: [
-                  /// DISMISS INDICATOR
-                  const DismissIndicatorWidget(),
+                  Column(children: const [
+                    /// DISMISS INDICATOR
+                    SizedBox(height: 6.0),
+                    DismissIndicatorWidget(),
+                  ]),
 
                   /// SCROLLABLE LIST
                   ListView(shrinkWrap: true, children: [
@@ -95,7 +98,8 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                     const SizedBox(height: 16.0),
 
                     /// STAGE LIST VIEW
-                    const TitleWidget(text: Titles.stage, isSmall: true),
+                    const TitleWidget(
+                        text: Titles.realizationStage, isSmall: true),
                     const SizedBox(height: 4.0),
 
                     ListView.builder(

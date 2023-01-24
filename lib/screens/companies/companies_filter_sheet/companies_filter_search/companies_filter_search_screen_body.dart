@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/models/companies_search_view_model.dart';
+import 'package:izowork/models/companies_filter_search_view_model.dart';
 import 'package:izowork/screens/map/map_filter_sheet/map_filter_search/views/map_filter_search_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
@@ -24,7 +24,7 @@ class _CompaniesFilterSearchBodyScreenState
     extends State<CompaniesFilterSearchBodyScreenWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  late CompaniesSearchViewModel _companiesSearchViewModel;
+  late CompaniesFilterSearchViewModel _companiesFilterSearchViewModel;
   bool _show = false; // TODO DELETE
 
   @override
@@ -38,8 +38,8 @@ class _CompaniesFilterSearchBodyScreenState
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height * 0.8;
 
-    _companiesSearchViewModel =
-        Provider.of<CompaniesSearchViewModel>(context, listen: true);
+    _companiesFilterSearchViewModel =
+        Provider.of<CompaniesFilterSearchViewModel>(context, listen: true);
 
     return Material(
         type: MaterialType.transparency,

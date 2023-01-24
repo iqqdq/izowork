@@ -25,23 +25,24 @@ class _ChatFilterPageViewState extends State<ChatFilterPageViewWidget> {
     _pages = [
       ChatFilterScreenWidget(
           onEmployeeTap: () => {
-                setState(() => {
-                      _isSearching = true,
-                      _pages.add(ChatFilterSearchScreenWidget(
-                          onPop: () => {
-                                setState(() => _isSearching = false),
-                                _pageController
-                                    .animateToPage(0,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeIn)
-                                    .then((value) =>
-                                        {if (mounted) _pages.removeLast()})
-                              }))
-                    }),
-                _pageController.animateToPage(1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn)
+                setState(
+                  () => _isSearching = true,
+                ),
+                _pages.add(ChatFilterSearchScreenWidget(
+                    onPop: () => {
+                          setState(() => _isSearching = false),
+                          _pageController
+                              .animateToPage(0,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn)
+                              .then(
+                                  (value) => {if (mounted) _pages.removeLast()})
+                        })),
+                Future.delayed(
+                    const Duration(milliseconds: 100),
+                    () => _pageController.animateToPage(1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn))
               },
           onApplyTap: widget.onApplyTap,
           onResetTap: widget.onResetTap),
@@ -59,14 +60,18 @@ class _ChatFilterPageViewState extends State<ChatFilterPageViewWidget> {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             children: [
-              /// DISMISS INDICATOR
-              const SizedBox(height: 6.0),
-              const DismissIndicatorWidget(),
+              Column(children: const [
+                /// DISMISS INDICATOR
+                SizedBox(height: 6.0),
+                DismissIndicatorWidget(),
+              ]),
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   height: _isSearching
                       ? MediaQuery.of(context).size.height * 0.7
-                      : 372.0,
+                      : MediaQuery.of(context).padding.bottom == 0.0
+                          ? 324.0
+                          : 372.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),

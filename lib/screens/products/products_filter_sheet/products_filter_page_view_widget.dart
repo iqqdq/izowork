@@ -25,23 +25,22 @@ class _ProuctsFilterPageViewState extends State<ProuctsFilterPageViewWidget> {
     _pages = [
       ProductsFilterScreenWidget(
           onTypeTap: () => {
-                setState(() => {
-                      _isSearching = true,
-                      _pages.add(ProductsFilterSearchScreenWidget(
-                          onPop: () => {
-                                setState(() => _isSearching = false),
-                                _pageController
-                                    .animateToPage(0,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeIn)
-                                    .then((value) =>
-                                        {if (mounted) _pages.removeLast()})
-                              }))
-                    }),
-                _pageController.animateToPage(1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn)
+                setState(() => _isSearching = true),
+                _pages.add(ProductsFilterSearchScreenWidget(
+                    onPop: () => {
+                          setState(() => _isSearching = false),
+                          _pageController
+                              .animateToPage(0,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn)
+                              .then(
+                                  (value) => {if (mounted) _pages.removeLast()})
+                        })),
+                Future.delayed(
+                    const Duration(milliseconds: 100),
+                    () => _pageController.animateToPage(1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn))
               },
           onApplyTap: widget.onApplyTap,
           onResetTap: widget.onResetTap),
@@ -66,7 +65,9 @@ class _ProuctsFilterPageViewState extends State<ProuctsFilterPageViewWidget> {
                   duration: const Duration(milliseconds: 300),
                   height: _isSearching
                       ? MediaQuery.of(context).size.height * 0.7
-                      : 372.0,
+                      : MediaQuery.of(context).padding.bottom == 0.0
+                          ? 324.0
+                          : 372.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
