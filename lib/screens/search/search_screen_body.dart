@@ -46,7 +46,7 @@ class _SearchBodyState extends State<SearchBodyScreenWidget> {
         child: Container(
             height: _height,
             color: HexColors.white,
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.only(top: widget.isRoot ? 16.0 : 8.0),
             child: Stack(children: [
               ListView(
                   physics: const NeverScrollableScrollPhysics(),

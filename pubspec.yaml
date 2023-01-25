@@ -53,6 +53,8 @@ dependencies:
   chips_choice: ^3.0.0
   url_launcher: ^6.1.7
   fl_chart: ^0.55.2
+  open_filex: ^4.3.2
+  file_picker: ^5.2.5
   
   geolocator: ^8.1.1
   google_maps_flutter:

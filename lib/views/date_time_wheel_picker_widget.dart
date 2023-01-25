@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
@@ -55,6 +56,13 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
   int _day = 1;
   int _month = 1;
   int _year = DateTime.now().year;
+
+  @override
+  void initState() {
+    super.initState();
+
+    initializeDateFormatting(widget.locale, null);
+  }
 
   // MARK: -
   // MARK: - FUNCTIONS
@@ -220,7 +228,7 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
                           padding: const EdgeInsets.symmetric(horizontal: 40.0),
                           width: double.infinity,
                           height: 32.0,
-                          color: HexColors.white,
+                          color: HexColors.grey10,
                         )),
                         Row(
                             crossAxisAlignment: CrossAxisAlignment.center,

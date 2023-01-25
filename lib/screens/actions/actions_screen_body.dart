@@ -109,9 +109,9 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
               const SeparatorWidget()
             ])),
         floatingActionButton: FloatingButtonWidget(
-            onTap: () => {
-                  // TODO ADD DEAL / TASK
-                }),
+            onTap: () => _actionsViewModel.segmentedControlIndex == 1
+                ? _actionsViewModel.showNewTaskScreen(context)
+                : null),
         body: SizedBox.expand(
             child: Stack(children: [
           /// DEALS / TASKS LIST VIEW
@@ -123,7 +123,10 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
               itemBuilder: (context, index) {
                 return _actionsViewModel.segmentedControlIndex == 0
                     ? ActionDealListItemWidget(deal: Deal(), onTap: () => {})
-                    : ActionTaskListItemWidget(task: Task(), onTap: () => {});
+                    : ActionTaskListItemWidget(
+                        task: Task(),
+                        onTap: () =>
+                            _actionsViewModel.showTaskScreenWidget(context));
               }),
 
           /// FILTER BUTTON

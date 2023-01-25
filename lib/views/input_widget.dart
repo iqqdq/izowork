@@ -9,6 +9,7 @@ class InputWidget extends StatefulWidget {
   final bool? obscureText;
   final EdgeInsets? margin;
   final double? height;
+  final int? maxLines;
   final TextInputType? textInputType;
   final TextInputAction? textInputAction;
   final TextCapitalization? textCapitalization;
@@ -27,6 +28,7 @@ class InputWidget extends StatefulWidget {
       this.obscureText,
       this.margin,
       this.height,
+      this.maxLines,
       this.textInputType,
       this.textInputAction,
       this.textCapitalization,
@@ -45,6 +47,8 @@ class InputWidget extends StatefulWidget {
 class _InputWidgetState extends State<InputWidget> {
   @override
   Widget build(BuildContext context) {
+    final _maxLines = widget.maxLines ?? 1;
+
     final _isSearchInput = widget.isSearchInput == null
         ? false
         : widget.isSearchInput == true
@@ -70,13 +74,16 @@ class _InputWidgetState extends State<InputWidget> {
                     ? HexColors.primaryDark
                     : HexColors.grey30)),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          _isSearchInput
-              ? Image.asset('assets/ic_search.png', color: HexColors.grey30)
-              : Container(),
+          _maxLines > 1
+              ? Container()
+              : _isSearchInput
+                  ? Image.asset('assets/ic_search.png', color: HexColors.grey30)
+                  : Container(),
           Expanded(
               child: TextField(
                   controller: widget.textEditingController,
                   focusNode: widget.focusNode,
+                  maxLines: widget.maxLines ?? 1,
                   obscureText: widget.obscureText ?? false,
                   enableSuggestions: false,
                   autocorrect: false,
@@ -89,15 +96,19 @@ class _InputWidgetState extends State<InputWidget> {
                       widget.textCapitalization ?? TextCapitalization.sentences,
                   style: _textStyle,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(
-                        left: _isSearchInput ? 10.0 : 0.0,
-                        top: _isSearchInput ? 8.0 : 2.0),
+                    contentPadding: _maxLines > 1
+                        ? const EdgeInsets.only(
+                            left: 10.0, top: 14.0, bottom: 14.0)
+                        : EdgeInsets.only(
+                            left: _isSearchInput ? 10.0 : 0.0,
+                            top: _isSearchInput ? 8.0 : 2.0),
                     counterText: '',
                     labelText: _isSearchInput ? null : widget.placeholder,
                     hintText: _isSearchInput ? widget.placeholder : null,
                     labelStyle: _textStyle.copyWith(color: HexColors.grey30),
                     suffixIcon: widget.focusNode.hasFocus &&
-                            widget.textEditingController.text.isNotEmpty
+                            widget.textEditingController.text.isNotEmpty &&
+                            widget.onClearTap != null
                         ? IconButton(
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
@@ -114,7 +125,7 @@ class _InputWidgetState extends State<InputWidget> {
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
                             icon: SvgPicture.asset('assets/ic_clear.svg',
-                                color: Colors.transparent),
+                                color: Colors.transparent, width: 0.0),
                             onPressed: () => {}),
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,

@@ -11,8 +11,8 @@ import 'package:izowork/components/place_model.dart';
 import 'package:izowork/entities/map_object.dart';
 import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/map/map_filter_sheet/map_filter_page_view_widget.dart';
-import 'package:izowork/screens/map/map_object_sheet/map_object_screen_widget.dart';
-import 'package:izowork/screens/map/map_object_sheet/views/map_add_object_widget.dart';
+import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
+import 'package:izowork/screens/map_object/views/map_add_object_widget.dart';
 import 'package:izowork/screens/search/search_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 

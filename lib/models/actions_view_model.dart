@@ -4,6 +4,8 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/screens/actions/deals_filter_sheet/deals_filter_page_view_widget.dart';
 import 'package:izowork/screens/actions/tasks_filter_sheet%20/tasks_filter_page_view_widget.dart';
 import 'package:izowork/screens/deal_calendar/deal_calendar_screen.dart';
+import 'package:izowork/screens/task/task_screen.dart';
+import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/screens/task_calendar/task_calendar_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -30,6 +32,13 @@ class ActionsViewModel with ChangeNotifier {
                 : const TaskCalendarScreenWidget()));
   }
 
+  void showNewTaskScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const TaskCreateScreenWidget()));
+  }
+
   void showDealsFilterSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
@@ -50,6 +59,11 @@ class ActionsViewModel with ChangeNotifier {
         builder: (context) => TasksFilterPageViewWidget(
             onApplyTap: () => {Navigator.pop(context)},
             onResetTap: () => {Navigator.pop(context)}));
+  }
+
+  void showTaskScreenWidget(BuildContext context) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const TaskScreenWidget()));
   }
 
   // MARK: -

@@ -3,7 +3,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/screens/deal_calendar/event_deal/event_deal_screen.dart';
+import 'package:izowork/screens/deal_event/deal_event_screen.dart';
 import 'package:izowork/views/date_time_wheel_picker_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -115,7 +115,7 @@ class DealCalendarViewModel with ChangeNotifier {
             barrierColor: Colors.black.withOpacity(0.6),
             backgroundColor: HexColors.white,
             context: context,
-            builder: (context) => EventDealScreenWidget(dateTime: dateTime));
+            builder: (context) => DealEventScreenWidget(dateTime: dateTime));
       }
     }
 

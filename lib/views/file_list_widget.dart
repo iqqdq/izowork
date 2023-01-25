@@ -14,7 +14,8 @@ class FileListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0),
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        height: 56.0,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
             border: Border.all(width: 0.5, color: HexColors.grey30)),

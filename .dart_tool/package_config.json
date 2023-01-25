@@ -170,6 +170,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "file_picker",
+      "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-5.2.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "fl_chart",
       "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/fl_chart-0.55.2",
       "packageUri": "lib/",
@@ -454,6 +460,12 @@
     {
       "name": "oktoast",
       "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/oktoast-3.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "open_filex",
+      "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/open_filex-4.3.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -806,7 +818,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2023-01-18T21:39:43.018425Z",
+  "generated": "2023-01-25T01:43:06.559829Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

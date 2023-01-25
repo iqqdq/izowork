@@ -19,6 +19,8 @@ abstract class Titles {
   static const reset = 'Сбросить';
   static const filter = 'Фильтр';
   static const search = 'Поиск';
+  static const add = 'Добавить';
+  static const addFile = 'Добавить файл';
   static const addObject = 'Добавить объект';
   static const createTask = 'Создать задачу';
   static const showDetail = 'Подробнее';
@@ -39,6 +41,8 @@ abstract class Titles {
   static const description = 'Описание';
   static const title = 'Заголовок';
   static const text = 'Текст';
+  static const file = 'Файл';
+  static const files = 'Файлы';
   static const news = 'Новости';
   static const newNews = 'Новая новость';
   static const contacts = 'Контакты';
@@ -60,6 +64,8 @@ abstract class Titles {
   static const profileEdit = 'Редактирование профиля';
   static const message = 'Сообщение';
   static const typeMessage = 'Сообщение...';
+  static const notSelected = 'Не выбран';
+  static const deadline = 'Дедлайн';
 
   /// CHART
   static const generalContractor = 'Генподрядчик';
@@ -74,11 +80,16 @@ abstract class Titles {
   static const reconstructableObjects = 'Реконструируемые объекты';
 
   /// OTHER
+  static const chooseProcess = 'Выберите процесс';
+  static const paymentReceipt = 'Счет на оплату';
   static const object = 'Объект';
+  static const objectType = 'Тип объекта';
   static const filial = 'Филиал';
   static const deals = 'Сделки';
   static const tasks = 'Задачи';
   static const info = 'Информация';
+  static const newTask = 'Новая задача';
+  static const editTask = 'Редактирование задачи';
   static const dealCalendar = 'Календарь сделок';
   static const taskCalendar = 'Календарь задач';
   static const staff = 'Сотрудники';
@@ -98,8 +109,10 @@ abstract class Titles {
   static const effectiveness = 'Эффективность';
   static const month = 'Месяц';
   static const year = 'Год';
-  static const deadline = 'Сроки';
+  static const terms = 'Сроки';
   static const responsible = 'Ответственный';
+  static const coExecutor = 'Соисполнитель';
+  static const taskManager = 'Постановщик задачи';
   static const status = 'Статус';
   static const companyName = 'Название компании';
   static const fullname = 'Фио';

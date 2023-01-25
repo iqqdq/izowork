@@ -7,6 +7,8 @@ class SelectionInputWidget extends StatelessWidget {
   final String title;
   final String value;
   final bool? isVertical;
+  final bool? isDate;
+  final EdgeInsets? margin;
   final VoidCallback onTap;
 
   const SelectionInputWidget(
@@ -14,11 +16,19 @@ class SelectionInputWidget extends StatelessWidget {
       required this.title,
       required this.value,
       this.isVertical,
+      this.isDate,
+      this.margin,
       required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _isDate = isDate == null
+        ? false
+        : isDate == false
+            ? false
+            : true;
+
     final _isVertical = isVertical == null
         ? false
         : isVertical == false
@@ -26,7 +36,7 @@ class SelectionInputWidget extends StatelessWidget {
             : true;
 
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: margin ?? const EdgeInsets.symmetric(horizontal: 16.0),
         child: Material(
             color: Colors.transparent,
             child: InkWell(
@@ -60,9 +70,11 @@ class SelectionInputWidget extends StatelessWidget {
                                     color: HexColors.black))
                           ])),
                       const SizedBox(width: 6.0),
-                      SvgPicture.asset(_isVertical
-                          ? 'assets/ic_arrow_down.svg'
-                          : 'assets/ic_arrow_right.svg')
+                      SvgPicture.asset(_isDate
+                          ? 'assets/ic_calendar.svg'
+                          : _isVertical
+                              ? 'assets/ic_arrow_down.svg'
+                              : 'assets/ic_arrow_right.svg')
                     ])),
                 onTap: () => onTap())));
   }

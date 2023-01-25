@@ -54,7 +54,7 @@ class ActionListItemWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SubtitleWidget(
-                                text: '${Titles.deadline}:',
+                                text: '${Titles.terms}:',
                                 padding: EdgeInsets.zero),
                             const SizedBox(width: 10.0),
                             Expanded(
