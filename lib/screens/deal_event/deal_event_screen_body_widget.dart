@@ -47,7 +47,9 @@ class _DealEventScreenBodyState extends State<DealEventScreenBodyWidget> {
                   itemCount: 10,
                   itemBuilder: (context, index) {
                     return ActionDealListItemWidget(
-                        deal: Deal(), onTap: () => {});
+                        deal: Deal(),
+                        onTap: () =>
+                            _dealEventViewModel.showDealScreenWidget(context));
                   })),
 
           Container(

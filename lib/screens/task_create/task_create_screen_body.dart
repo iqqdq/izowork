@@ -33,6 +33,13 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
   }
 
   @override
+  void dispose() {
+    _textEditingController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _taskCreateViewModel =
         Provider.of<TaskCreateViewModel>(context, listen: true);

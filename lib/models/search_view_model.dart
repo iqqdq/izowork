@@ -10,7 +10,8 @@ enum SearchType {
   object,
   type,
   filial,
-  product
+  product,
+  phase
 }
 
 class SearchViewModel with ChangeNotifier {

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/entities/deal.dart';
+import 'package:izowork/entities/task.dart';
 import 'package:izowork/screens/actions/deals_filter_sheet/deals_filter_page_view_widget.dart';
 import 'package:izowork/screens/actions/tasks_filter_sheet%20/tasks_filter_page_view_widget.dart';
+import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_calendar/deal_calendar_screen.dart';
+import 'package:izowork/screens/deal_create/deal_create_screen.dart';
 import 'package:izowork/screens/task/task_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/screens/task_calendar/task_calendar_screen.dart';
@@ -32,7 +36,14 @@ class ActionsViewModel with ChangeNotifier {
                 : const TaskCalendarScreenWidget()));
   }
 
-  void showNewTaskScreen(BuildContext context) {
+  void showDealCreateScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const DealCreateScreenWidget()));
+  }
+
+  void showTaskCreateScreen(BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -61,9 +72,18 @@ class ActionsViewModel with ChangeNotifier {
             onResetTap: () => {Navigator.pop(context)}));
   }
 
+  void showDealScreenWidget(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DealScreenWidget(deal: Deal())));
+  }
+
   void showTaskScreenWidget(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const TaskScreenWidget()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TaskScreenWidget(task: Task())));
   }
 
   // MARK: -

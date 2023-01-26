@@ -21,8 +21,12 @@ abstract class Titles {
   static const search = 'Поиск';
   static const add = 'Добавить';
   static const addFile = 'Добавить файл';
+  static const addProduct = 'Добавить товар';
   static const addObject = 'Добавить объект';
+  static const addProcess = 'Добавить процесс';
   static const createTask = 'Создать задачу';
+  static const createDeal = 'Создать сделку';
+  static const closeDeal = 'Закрыть сделку';
   static const showDetail = 'Подробнее';
   static const goToChat = 'Перейти в чат';
   static const comments = 'Комментарии';
@@ -32,17 +36,22 @@ abstract class Titles {
   static const clipMedia = 'Прикрепить медиа';
   static const changeMedia = 'Изменить медиа';
   static const edit = 'Редактировать';
+  static const stop = 'Остановить';
   static const save = 'Сохранить';
+  static const delete = 'Удалить';
   static const changeAvatar = 'Изменить аватар';
   static const cancel = 'Отменить';
   static const addSocial = 'Добавить соц.сеть';
 
   /// MORE
   static const description = 'Описание';
+  static const reason = 'Причина';
   static const title = 'Заголовок';
   static const text = 'Текст';
   static const file = 'Файл';
   static const files = 'Файлы';
+  static const process = 'Процесс';
+  static const processes = 'Процессы';
   static const news = 'Новости';
   static const newNews = 'Новая новость';
   static const contacts = 'Контакты';
@@ -66,6 +75,14 @@ abstract class Titles {
   static const typeMessage = 'Сообщение...';
   static const notSelected = 'Не выбран';
   static const deadline = 'Дедлайн';
+  static const startDate = 'Дата создания';
+  static const endDate = 'Дата завершения';
+  static const weight = 'Вес';
+  static const kg = 'кг';
+  static const price = 'Цена';
+  static const priceFor = 'Цена за';
+  static const totalPrice = 'Стоимость';
+  static const currency = '₸';
 
   /// CHART
   static const generalContractor = 'Генподрядчик';
@@ -90,6 +107,9 @@ abstract class Titles {
   static const info = 'Информация';
   static const newTask = 'Новая задача';
   static const editTask = 'Редактирование задачи';
+  static const deal = 'Сделка';
+  static const newDeal = 'Новая сделка';
+  static const editDeal = 'Редактировать сделку';
   static const dealCalendar = 'Календарь сделок';
   static const taskCalendar = 'Календарь задач';
   static const staff = 'Сотрудники';
@@ -105,6 +125,7 @@ abstract class Titles {
   static const stages = 'Стадии';
   static const realizationStage = 'Стадия реализации';
   static const stage = 'Стадия';
+  static const phase = 'Этап';
   static const realizations = 'Реализации';
   static const effectiveness = 'Эффективность';
   static const month = 'Месяц';
@@ -130,6 +151,8 @@ abstract class Titles {
   static const dealTotalCount = 'Сделок по всем филиалам';
   static const fromDate = 'Дата от';
   static const toDate = 'Дата до';
+  static const dealName = 'Название сделки';
+  static const textReason = 'Напишите причину';
 
   /// MESSAGES
   static const invalidLogin =
@@ -149,6 +172,7 @@ abstract class Titles {
   static const enterResponsibleName =
       'Введите имя ответственного\nв строку поиска';
   static const enterTypeName = 'Введите тип\nв строку поиска';
+  static const enterPhaseName = 'Введите этап\nв строку поиска';
 
   /// ALERTS
   static const warning = 'Внимание';

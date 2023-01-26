@@ -39,8 +39,10 @@ class _SortObjectButtonState extends State<SortObjectButtonWidget> {
                       fontSize: 14.0,
                       fontFamily: 'PT Root UI')),
               const SizedBox(width: 8.0),
-              SvgPicture.asset(widget.imagePath,
-                  color: _isHighlighted ? HexColors.grey80 : null)
+              widget.imagePath.isEmpty
+                  ? Container()
+                  : SvgPicture.asset(widget.imagePath,
+                      color: _isHighlighted ? HexColors.grey80 : null)
             ]),
             onTap: () => widget.onTap()));
   }

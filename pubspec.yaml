@@ -55,6 +55,7 @@ dependencies:
   fl_chart: ^0.55.2
   open_filex: ^4.3.2
   file_picker: ^5.2.5
+  spreadsheet_table: ^1.0.0
   
   geolocator: ^8.1.1
   google_maps_flutter:

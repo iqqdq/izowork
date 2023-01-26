@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/entities/task.dart';
 import 'package:izowork/screens/task/task_screen.dart';
 
 class TaskEventViewModel with ChangeNotifier {
@@ -13,7 +14,9 @@ class TaskEventViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showTaskScreenWidget(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const TaskScreenWidget()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TaskScreenWidget(task: Task())));
   }
 }

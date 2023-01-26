@@ -94,8 +94,14 @@ class _SearchBodyState extends State<SearchBodyScreenWidget> {
                                                                           .product
                                                                   ? Titles
                                                                       .product
-                                                                  : Titles
-                                                                      .object))
+                                                                  : _searchViewModel
+                                                                              .searchType ==
+                                                                          SearchType
+                                                                              .phase
+                                                                      ? Titles
+                                                                          .phase
+                                                                      : Titles
+                                                                          .object))
                         ])),
                     const SizedBox(height: 16.0),
 
@@ -200,8 +206,13 @@ class _SearchBodyState extends State<SearchBodyScreenWidget> {
                                                                             .product
                                                                     ? Titles
                                                                         .enterProductName
-                                                                    : Titles
-                                                                        .enterObjectName,
+                                                                    : _searchViewModel.searchType ==
+                                                                            SearchType
+                                                                                .phase
+                                                                        ? Titles
+                                                                            .enterPhaseName
+                                                                        : Titles
+                                                                            .enterObjectName,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 16.0,

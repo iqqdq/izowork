@@ -6,8 +6,7 @@ class FileListItemWidget extends StatelessWidget {
   final String fileName;
   final VoidCallback? onRemoveTap;
 
-  const FileListItemWidget(
-      {Key? key, required this.fileName, required this.onRemoveTap})
+  const FileListItemWidget({Key? key, required this.fileName, this.onRemoveTap})
       : super(key: key);
 
   @override
@@ -20,7 +19,7 @@ class FileListItemWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.0),
             border: Border.all(width: 0.5, color: HexColors.grey30)),
         child: Row(children: [
-          Image.asset('assets/ic_file.png', width: 24.0, height: 24.0),
+          SvgPicture.asset('assets/ic_file.svg', width: 24.0, height: 24.0),
           const SizedBox(width: 6.0),
           Expanded(
               child: Text(fileName,

@@ -3,23 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/task.dart';
-import 'package:izowork/models/task_create_view_model.dart';
-import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/models/task_view_model.dart';
 import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
-import 'package:izowork/views/input_widget.dart';
-import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class TaskScreenBodyWidget extends StatefulWidget {
-  final Task? task;
+  final Task task;
 
-  const TaskScreenBodyWidget({Key? key, this.task}) : super(key: key);
+  const TaskScreenBodyWidget({Key? key, required this.task}) : super(key: key);
 
   @override
   _TaskScreenBodyState createState() => _TaskScreenBodyState();
@@ -55,7 +50,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
                 child: BackButtonWidget(onTap: () => Navigator.pop(context))),
-            title: Text(widget.task == null ? Titles.newTask : Titles.editTask,
+            title: Text('Название задачи',
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontFamily: 'PT Root UI',

@@ -114,8 +114,6 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
                           _dealCalendarViewModel.eventDateTimes
                                   .contains(values.day)
                               ? Container(
-                                  // margin:
-                                  //     const EdgeInsets.only(top: 2.0),
                                   width: 18.0,
                                   height: 18.0,
                                   decoration: BoxDecoration(
@@ -129,10 +127,7 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
                                               fontWeight: FontWeight.w500,
                                               color: HexColors.black))),
                                 )
-                              : Container(
-                                  // margin:
-                                  //     const EdgeInsets.only(top: 2.0),
-                                  height: 18.0),
+                              : const SizedBox(height: 18.0),
 
                           /// DAY TEXT
                           Text(values.text,

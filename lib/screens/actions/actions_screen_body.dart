@@ -110,8 +110,8 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
             ])),
         floatingActionButton: FloatingButtonWidget(
             onTap: () => _actionsViewModel.segmentedControlIndex == 1
-                ? _actionsViewModel.showNewTaskScreen(context)
-                : null),
+                ? _actionsViewModel.showTaskCreateScreen(context)
+                : _actionsViewModel.showDealCreateScreen(context)),
         body: SizedBox.expand(
             child: Stack(children: [
           /// DEALS / TASKS LIST VIEW
@@ -122,7 +122,10 @@ class _ActionsScreenBodyState extends State<ActionsScreenBodyWidget>
               itemCount: 10,
               itemBuilder: (context, index) {
                 return _actionsViewModel.segmentedControlIndex == 0
-                    ? ActionDealListItemWidget(deal: Deal(), onTap: () => {})
+                    ? ActionDealListItemWidget(
+                        deal: Deal(),
+                        onTap: () =>
+                            _actionsViewModel.showDealScreenWidget(context))
                     : ActionTaskListItemWidget(
                         task: Task(),
                         onTap: () =>
