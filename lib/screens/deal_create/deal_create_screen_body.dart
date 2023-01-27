@@ -88,135 +88,149 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                 color: HexColors.white,
                 child: GestureDetector(
                     onTap: () => FocusScope.of(context).unfocus(),
-                    child: ListView(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.only(
-                            top: 14.0,
-                            left: 16.0,
-                            right: 16.0,
-                            bottom: MediaQuery.of(context).padding.bottom == 0.0
-                                ? 20.0
-                                : MediaQuery.of(context).padding.bottom),
-                        children: [
-                          /// DEAL NAME INPUT
-                          InputWidget(
-                            textEditingController: _textEditingController,
-                            focusNode: _focusNode,
-                            margin: const EdgeInsets.only(bottom: 10.0),
-                            height: 56.0,
-                            placeholder: Titles.dealName,
-                            onTap: () => setState,
-                            onChange: (text) => {
-                              // TODO DESCRTIPTION
-                            },
-                          ),
-
-                          /// START DATE SELECTION INPUT
-                          SelectionInputWidget(
+                    child: Stack(children: [
+                      ListView(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.only(
+                              top: 14.0,
+                              left: 16.0,
+                              right: 16.0,
+                              bottom:
+                                  MediaQuery.of(context).padding.bottom == 0.0
+                                      ? 20.0 + 54.0
+                                      : MediaQuery.of(context).padding.bottom +
+                                          54.0),
+                          children: [
+                            /// DEAL NAME INPUT
+                            InputWidget(
+                              textEditingController: _textEditingController,
+                              focusNode: _focusNode,
                               margin: const EdgeInsets.only(bottom: 10.0),
-                              isDate: true,
-                              title: Titles.startDate,
-                              value: '$_startDay.$_startMonth.$_startYear',
-                              onTap: () => _dealCreateViewModel
-                                  .showDateTimeSelectionSheet(context, 0)),
+                              height: 56.0,
+                              placeholder: Titles.dealName,
+                              onTap: () => setState,
+                              onChange: (text) => {
+                                // TODO DESCRTIPTION
+                              },
+                            ),
 
-                          /// END DATE SELECTION INPUT
-                          SelectionInputWidget(
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              isDate: true,
-                              title: Titles.endDate,
-                              value: '$_endDay.$_endMonth.$_endYear',
-                              onTap: () => _dealCreateViewModel
-                                  .showDateTimeSelectionSheet(context, 1)),
+                            /// START DATE SELECTION INPUT
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                isDate: true,
+                                title: Titles.startDate,
+                                value: '$_startDay.$_startMonth.$_startYear',
+                                onTap: () => _dealCreateViewModel
+                                    .showDateTimeSelectionSheet(context, 0)),
 
-                          /// RESPONSIBLE SELECTION INPUT
-                          SelectionInputWidget(
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              isVertical: true,
-                              title: Titles.responsible,
-                              value: Titles.notSelected,
-                              onTap: () =>
-                                  _dealCreateViewModel.showSearchScreenSheet(
-                                      context, SearchType.responsible)),
+                            /// END DATE SELECTION INPUT
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                isDate: true,
+                                title: Titles.endDate,
+                                value: '$_endDay.$_endMonth.$_endYear',
+                                onTap: () => _dealCreateViewModel
+                                    .showDateTimeSelectionSheet(context, 1)),
 
-                          /// OBJECT SELECTION INPUT
-                          SelectionInputWidget(
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              isVertical: true,
-                              title: Titles.object,
-                              value: Titles.notSelected,
-                              onTap: () =>
-                                  _dealCreateViewModel.showSearchScreenSheet(
-                                      context, SearchType.object)),
+                            /// RESPONSIBLE SELECTION INPUT
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                isVertical: true,
+                                title: Titles.responsible,
+                                value: Titles.notSelected,
+                                onTap: () =>
+                                    _dealCreateViewModel.showSearchScreenSheet(
+                                        context, SearchType.responsible)),
 
-                          /// STAGE SELECTION INPUT
-                          SelectionInputWidget(
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              isVertical: true,
-                              title: Titles.phase,
-                              value: Titles.notSelected,
-                              onTap: () =>
-                                  _dealCreateViewModel.showSearchScreenSheet(
-                                      context, SearchType.phase)),
+                            /// OBJECT SELECTION INPUT
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                isVertical: true,
+                                title: Titles.object,
+                                value: Titles.notSelected,
+                                onTap: () =>
+                                    _dealCreateViewModel.showSearchScreenSheet(
+                                        context, SearchType.object)),
 
-                          /// COMPANY SELECTION INPUT
-                          SelectionInputWidget(
-                              margin: const EdgeInsets.only(bottom: 20.0),
-                              isVertical: true,
-                              title: Titles.company,
-                              value: Titles.notSelected,
-                              onTap: () =>
-                                  _dealCreateViewModel.showSearchScreenSheet(
-                                      context, SearchType.company)),
+                            /// STAGE SELECTION INPUT
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                isVertical: true,
+                                title: Titles.phase,
+                                value: Titles.notSelected,
+                                onTap: () =>
+                                    _dealCreateViewModel.showSearchScreenSheet(
+                                        context, SearchType.phase)),
 
-                          /// PRODUCT LIST
-                          ListView.builder(
-                              shrinkWrap: true,
-                              padding: EdgeInsets.zero,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: 1,
-                              itemBuilder: (context, index) {
-                                return DealProductListItemWidget(
-                                    index: index + 1,
-                                    onDeleteTap: () => {},
-                                    onProductSearchTap: () =>
-                                        _dealCreateViewModel
-                                            .showProductSearchScreenSheet(
-                                                context, index));
-                              }),
+                            /// COMPANY SELECTION INPUT
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 20.0),
+                                isVertical: true,
+                                title: Titles.company,
+                                value: Titles.notSelected,
+                                onTap: () =>
+                                    _dealCreateViewModel.showSearchScreenSheet(
+                                        context, SearchType.company)),
 
-                          /// ADD PRODUCT BUTTON
-                          BorderButtonWidget(
-                              title: Titles.addProduct,
-                              margin: const EdgeInsets.only(bottom: 16.0),
-                              onTap: () => _dealCreateViewModel.addProduct()),
+                            /// PRODUCT LIST
+                            ListView.builder(
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: 1,
+                                itemBuilder: (context, index) {
+                                  return DealProductListItemWidget(
+                                      index: index + 1,
+                                      onDeleteTap: () => {},
+                                      onProductSearchTap: () =>
+                                          _dealCreateViewModel
+                                              .showProductSearchScreenSheet(
+                                                  context, index));
+                                }),
 
-                          /// FILE LIST
-                          ListView.builder(
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.only(top: 10.0),
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: 3,
-                              itemBuilder: (context, index) {
-                                return FileListItemWidget(
-                                    fileName: 'file.pdf',
-                                    onRemoveTap: () => {});
-                              }),
+                            /// ADD PRODUCT BUTTON
+                            BorderButtonWidget(
+                                title: Titles.addProduct,
+                                margin: const EdgeInsets.only(bottom: 16.0),
+                                onTap: () => _dealCreateViewModel.addProduct()),
 
-                          /// ADD FILE BUTTON
-                          BorderButtonWidget(
-                              title: Titles.addFile,
-                              margin: const EdgeInsets.only(bottom: 30.0),
-                              onTap: () => _dealCreateViewModel.addFile()),
+                            /// FILE LIST
+                            ListView.builder(
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.only(top: 10.0),
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: 3,
+                                itemBuilder: (context, index) {
+                                  return FileListItemWidget(
+                                      fileName: 'file.pdf',
+                                      onRemoveTap: () => {});
+                                }),
 
-                          /// ADD TASK BUTTON
-                          ButtonWidget(
+                            /// ADD FILE BUTTON
+                            BorderButtonWidget(
+                                title: Titles.addFile,
+                                margin: const EdgeInsets.only(bottom: 30.0),
+                                onTap: () => _dealCreateViewModel.addFile()),
+                          ]),
+
+                      /// ADD TASK BUTTON
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: ButtonWidget(
                               isDisabled: true,
                               title: widget.deal == null
                                   ? Titles.createDeal
                                   : Titles.save,
-                              margin: EdgeInsets.zero,
-                              onTap: () => {})
-                        ])))));
+                              margin: EdgeInsets.only(
+                                  left: 16.0,
+                                  right: 16.0,
+                                  bottom: MediaQuery.of(context)
+                                              .padding
+                                              .bottom ==
+                                          0.0
+                                      ? 20.0
+                                      : MediaQuery.of(context).padding.bottom),
+                              onTap: () => {}))
+                    ])))));
   }
 }

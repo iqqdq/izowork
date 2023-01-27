@@ -79,7 +79,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
               Container(
                   constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context).size.width * 0.7),
-                  child: Text('Аликджан Фахрутдинов',
+                  child: Text('Собеседник',
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,
                           color: HexColors.black,

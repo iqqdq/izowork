@@ -74,124 +74,135 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
             type: MaterialType.transparency,
             child: Container(
                 color: HexColors.white,
-                child: ListView(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(
-                        top: 14.0,
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: MediaQuery.of(context).padding.bottom == 0.0
-                            ? 20.0
-                            : MediaQuery.of(context).padding.bottom),
-                    children: [
-                      /// STATUS SELECTION INPUT
-                      SelectionInputWidget(
-                          margin: const EdgeInsets.only(bottom: 10.0),
-                          isVertical: true,
-                          title: Titles.status,
-                          value: Titles.notSelected,
-                          onTap: () => _taskCreateViewModel
-                              .showSelectionScreenSheet(context)),
+                child: Stack(children: [
+                  ListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          top: 14.0,
+                          left: 16.0,
+                          right: 16.0,
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 20.0 + 54.0
+                              : MediaQuery.of(context).padding.bottom + 54.0),
+                      children: [
+                        /// STATUS SELECTION INPUT
+                        SelectionInputWidget(
+                            margin: const EdgeInsets.only(bottom: 10.0),
+                            isVertical: true,
+                            title: Titles.status,
+                            value: Titles.notSelected,
+                            onTap: () => _taskCreateViewModel
+                                .showSelectionScreenSheet(context)),
 
-                      /// DEADLINE SELECTION INPUT
-                      SelectionInputWidget(
-                          margin: const EdgeInsets.only(bottom: 10.0),
-                          isDate: true,
-                          title: Titles.deadline,
-                          value: '$_day.$_month.$_year',
-                          onTap: () => _taskCreateViewModel
-                              .showDateTimeSelectionSheet(context)),
+                        /// DEADLINE SELECTION INPUT
+                        SelectionInputWidget(
+                            margin: const EdgeInsets.only(bottom: 10.0),
+                            isDate: true,
+                            title: Titles.deadline,
+                            value: '$_day.$_month.$_year',
+                            onTap: () => _taskCreateViewModel
+                                .showDateTimeSelectionSheet(context)),
 
-                      /// RESPONSIBLE SELECTION INPUT
-                      SelectionInputWidget(
-                          margin: const EdgeInsets.only(bottom: 10.0),
-                          isVertical: true,
-                          title: Titles.responsible,
-                          value: Titles.notSelected,
-                          onTap: () =>
-                              _taskCreateViewModel.showSearchScreenSheet(
-                                  context, SearchType.responsible)),
+                        /// RESPONSIBLE SELECTION INPUT
+                        SelectionInputWidget(
+                            margin: const EdgeInsets.only(bottom: 10.0),
+                            isVertical: true,
+                            title: Titles.responsible,
+                            value: Titles.notSelected,
+                            onTap: () =>
+                                _taskCreateViewModel.showSearchScreenSheet(
+                                    context, SearchType.responsible)),
 
-                      /// TASK MANAGER SELECTION INPUT
-                      SelectionInputWidget(
-                          margin: const EdgeInsets.only(bottom: 10.0),
-                          isVertical: true,
-                          title: Titles.taskManager,
-                          value: Titles.notSelected,
-                          onTap: () =>
-                              _taskCreateViewModel.showSearchScreenSheet(
-                                  context, SearchType.responsible)),
+                        /// TASK MANAGER SELECTION INPUT
+                        SelectionInputWidget(
+                            margin: const EdgeInsets.only(bottom: 10.0),
+                            isVertical: true,
+                            title: Titles.taskManager,
+                            value: Titles.notSelected,
+                            onTap: () =>
+                                _taskCreateViewModel.showSearchScreenSheet(
+                                    context, SearchType.responsible)),
 
-                      /// CO-EXECUTOR SELECTION INPUT
-                      SelectionInputWidget(
-                          margin: const EdgeInsets.only(bottom: 10.0),
-                          isVertical: true,
-                          title: Titles.coExecutor,
-                          value: Titles.notSelected,
-                          onTap: () =>
-                              _taskCreateViewModel.showSearchScreenSheet(
-                                  context, SearchType.responsible)),
+                        /// CO-EXECUTOR SELECTION INPUT
+                        SelectionInputWidget(
+                            margin: const EdgeInsets.only(bottom: 10.0),
+                            isVertical: true,
+                            title: Titles.coExecutor,
+                            value: Titles.notSelected,
+                            onTap: () =>
+                                _taskCreateViewModel.showSearchScreenSheet(
+                                    context, SearchType.responsible)),
 
-                      /// OBJECT SELECTION INPUT
-                      SelectionInputWidget(
-                          margin: const EdgeInsets.only(bottom: 10.0),
-                          isVertical: true,
-                          title: Titles.object,
-                          value: Titles.notSelected,
-                          onTap: () =>
-                              _taskCreateViewModel.showSearchScreenSheet(
-                                  context, SearchType.object)),
+                        /// OBJECT SELECTION INPUT
+                        SelectionInputWidget(
+                            margin: const EdgeInsets.only(bottom: 10.0),
+                            isVertical: true,
+                            title: Titles.object,
+                            value: Titles.notSelected,
+                            onTap: () =>
+                                _taskCreateViewModel.showSearchScreenSheet(
+                                    context, SearchType.object)),
 
-                      /// COMPANY SELECTION INPUT
-                      SelectionInputWidget(
-                          margin: const EdgeInsets.only(bottom: 10.0),
-                          isVertical: true,
-                          title: Titles.company,
-                          value: Titles.notSelected,
-                          onTap: () =>
-                              _taskCreateViewModel.showSearchScreenSheet(
-                                  context, SearchType.company)),
+                        /// COMPANY SELECTION INPUT
+                        SelectionInputWidget(
+                            margin: const EdgeInsets.only(bottom: 10.0),
+                            isVertical: true,
+                            title: Titles.company,
+                            value: Titles.notSelected,
+                            onTap: () =>
+                                _taskCreateViewModel.showSearchScreenSheet(
+                                    context, SearchType.company)),
 
-                      /// DESCRTIPTION INPUT
-                      InputWidget(
-                        textEditingController: _textEditingController,
-                        focusNode: _focusNode,
-                        height: 168.0,
-                        maxLines: 10,
-                        margin: EdgeInsets.zero,
-                        placeholder: '${Titles.description}...',
-                        onTap: () => setState,
-                        onChange: (text) => {
-                          // TODO DESCRTIPTION
-                        },
-                      ),
-                      const SizedBox(height: 10.0),
-
-                      /// FILE LIST
-                      ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return FileListItemWidget(
-                                fileName: 'file.pdf', onRemoveTap: () => {});
-                          }),
-                      const SizedBox(height: 16.0),
-
-                      /// ADD FILE BUTTON
-                      BorderButtonWidget(
-                          title: Titles.addFile,
+                        /// DESCRTIPTION INPUT
+                        InputWidget(
+                          textEditingController: _textEditingController,
+                          focusNode: _focusNode,
+                          height: 168.0,
+                          maxLines: 10,
                           margin: EdgeInsets.zero,
-                          onTap: () => _taskCreateViewModel.addFile()),
-                      const SizedBox(height: 30.0),
+                          placeholder: '${Titles.description}...',
+                          onTap: () => setState,
+                          onChange: (text) => {
+                            // TODO DESCRTIPTION
+                          },
+                        ),
+                        const SizedBox(height: 10.0),
 
-                      /// ADD TASK BUTTON
-                      ButtonWidget(
+                        /// FILE LIST
+                        ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 3,
+                            itemBuilder: (context, index) {
+                              return const FileListItemWidget(
+                                  fileName: 'file.pdf');
+                            }),
+                        const SizedBox(height: 16.0),
+
+                        /// ADD FILE BUTTON
+                        BorderButtonWidget(
+                            title: Titles.addFile,
+                            margin: const EdgeInsets.only(bottom: 30.0),
+                            onTap: () => _taskCreateViewModel.addFile()),
+                      ]),
+
+                  /// ADD TASK BUTTON
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ButtonWidget(
                           isDisabled: true,
-                          title: Titles.createTask,
-                          margin: EdgeInsets.zero,
-                          onTap: () => {})
-                    ]))));
+                          title: widget.task == null
+                              ? Titles.createTask
+                              : Titles.save,
+                          margin: EdgeInsets.only(
+                              left: 16.0,
+                              right: 16.0,
+                              bottom:
+                                  MediaQuery.of(context).padding.bottom == 0.0
+                                      ? 20.0
+                                      : MediaQuery.of(context).padding.bottom),
+                          onTap: () => {}))
+                ]))));
   }
 }

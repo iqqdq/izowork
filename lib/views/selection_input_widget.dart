@@ -44,8 +44,9 @@ class SelectionInputWidget extends StatelessWidget {
                 splashColor: Colors.transparent,
                 borderRadius: BorderRadius.circular(16.0),
                 child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 11.0),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: title.isEmpty ? 16.0 : 11.0),
                     decoration: BoxDecoration(
                         border: Border.all(width: 1.0, color: HexColors.grey20),
                         borderRadius: BorderRadius.circular(16.0)),
@@ -55,10 +56,12 @@ class SelectionInputWidget extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                             /// TITLE
-                            TitleWidget(
-                                text: title,
-                                isSmall: true,
-                                padding: EdgeInsets.zero),
+                            title.isEmpty
+                                ? Container()
+                                : TitleWidget(
+                                    text: title,
+                                    isSmall: true,
+                                    padding: EdgeInsets.zero),
 
                             /// VALUE
                             Text(value,

@@ -95,7 +95,9 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                   left: 16.0, right: 16.0, top: 16.0, bottom: 16.0 + 48.0),
               itemCount: 10,
               itemBuilder: (context, index) {
-                return ObjectListItemWidget(object: Object(), onTap: () => {});
+                return ObjectListItemWidget(
+                    object: Object(),
+                    onTap: () => _objectsViewModel.showObjectScreen(context));
               }),
 
           /// FILTER BUTTON

@@ -42,6 +42,8 @@ abstract class Titles {
   static const changeAvatar = 'Изменить аватар';
   static const cancel = 'Отменить';
   static const addSocial = 'Добавить соц.сеть';
+  static const addComment = 'Добавить комментарий';
+  static const goChat = 'Перейти в чат';
 
   /// MORE
   static const description = 'Описание';
@@ -100,6 +102,7 @@ abstract class Titles {
   static const chooseProcess = 'Выберите процесс';
   static const paymentReceipt = 'Счет на оплату';
   static const object = 'Объект';
+  static const objectName = 'Название объекта';
   static const objectType = 'Тип объекта';
   static const filial = 'Филиал';
   static const deals = 'Сделки';
@@ -126,8 +129,10 @@ abstract class Titles {
   static const realizationStage = 'Стадия реализации';
   static const stage = 'Стадия';
   static const phase = 'Этап';
+  static const phases = 'Этапы';
   static const realizations = 'Реализации';
   static const effectiveness = 'Эффективность';
+  static const readiness = 'Готовность';
   static const month = 'Месяц';
   static const year = 'Год';
   static const terms = 'Сроки';
@@ -153,6 +158,10 @@ abstract class Titles {
   static const toDate = 'Дата до';
   static const dealName = 'Название сделки';
   static const textReason = 'Напишите причину';
+  static const floorCount = 'Этажность';
+  static const area = 'Площадь, кв. м';
+  static const buildingTime = 'Сроки строительства, в годах';
+  static const kiso = 'КИСО';
 
   /// MESSAGES
   static const invalidLogin =
@@ -173,6 +182,7 @@ abstract class Titles {
       'Введите имя ответственного\nв строку поиска';
   static const enterTypeName = 'Введите тип\nв строку поиска';
   static const enterPhaseName = 'Введите этап\nв строку поиска';
+  static const didCopied = 'Скопировано в буфер обмена';
 
   /// ALERTS
   static const warning = 'Внимание';

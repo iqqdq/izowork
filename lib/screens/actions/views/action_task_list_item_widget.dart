@@ -130,7 +130,7 @@ class ActionTaskListItemWidget extends StatelessWidget {
 
                         /// CREATOR NAME
                         Expanded(
-                            child: Text('Имя создателя карточки',
+                            child: Text('Имя Фамилия',
                                 style: TextStyle(
                                     color: HexColors.grey50,
                                     fontSize: 14.0,

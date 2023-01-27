@@ -61,111 +61,121 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
             type: MaterialType.transparency,
             child: Container(
                 color: HexColors.white,
-                child: ListView(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(
-                        top: 14.0,
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: MediaQuery.of(context).padding.bottom == 0.0
-                            ? 20.0
-                            : MediaQuery.of(context).padding.bottom),
-                    children: [
-                      /// STATUS
-                      const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.status,
-                          isSmall: true),
-                      const SubtitleWidget(
-                          padding: EdgeInsets.only(bottom: 16.0),
-                          text: 'Завершенная'),
+                child: Stack(children: [
+                  ListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          top: 14.0,
+                          left: 16.0,
+                          right: 16.0,
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 20.0 + 54.0
+                              : MediaQuery.of(context).padding.bottom + 54.0),
+                      children: [
+                        /// STATUS
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.status,
+                            isSmall: true),
+                        const SubtitleWidget(
+                            padding: EdgeInsets.only(bottom: 16.0),
+                            text: 'Завершенная'),
 
-                      /// DEADLINE
-                      const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.deadline,
-                          isSmall: true),
-                      SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text: '$_day.$_month.$_year'),
+                        /// DEADLINE
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.deadline,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: '$_day.$_month.$_year'),
 
-                      /// RESPONSIBLE
-                      const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.responsible,
-                          isSmall: true),
-                      const SubtitleWidget(
-                          padding: EdgeInsets.only(bottom: 16.0),
-                          text: 'Имя Фамилия'),
+                        /// RESPONSIBLE
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.responsible,
+                            isSmall: true),
+                        const SubtitleWidget(
+                            padding: EdgeInsets.only(bottom: 16.0),
+                            text: 'Имя Фамилия'),
 
-                      /// TASK MANAGER
-                      const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.taskManager,
-                          isSmall: true),
-                      const SubtitleWidget(
-                          padding: EdgeInsets.only(bottom: 16.0),
-                          text: 'Имя Фамилия'),
+                        /// TASK MANAGER
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.taskManager,
+                            isSmall: true),
+                        const SubtitleWidget(
+                            padding: EdgeInsets.only(bottom: 16.0),
+                            text: 'Имя Фамилия'),
 
-                      /// CO-EXECUTOR
-                      const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.coExecutor,
-                          isSmall: true),
-                      const SubtitleWidget(
-                          padding: EdgeInsets.only(bottom: 16.0),
-                          text: 'Имя Фамилия'),
+                        /// CO-EXECUTOR
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.coExecutor,
+                            isSmall: true),
+                        const SubtitleWidget(
+                            padding: EdgeInsets.only(bottom: 16.0),
+                            text: 'Имя Фамилия'),
 
-                      /// OBJECT
-                      const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.object,
-                          isSmall: true),
-                      const SubtitleWidget(
-                          padding: EdgeInsets.only(bottom: 16.0),
-                          text: 'Название объекта'),
+                        /// OBJECT
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.object,
+                            isSmall: true),
+                        const SubtitleWidget(
+                            padding: EdgeInsets.only(bottom: 16.0),
+                            text: 'Название объекта'),
 
-                      /// COMPANY
-                      const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.company,
-                          isSmall: true),
-                      const SubtitleWidget(
-                          padding: EdgeInsets.only(bottom: 16.0),
-                          text: 'Название компании'),
+                        /// COMPANY
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.company,
+                            isSmall: true),
+                        const SubtitleWidget(
+                            padding: EdgeInsets.only(bottom: 16.0),
+                            text: 'Название компании'),
 
-                      /// DESCRTIPTION
-                      const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.description,
-                          isSmall: true),
-                      const SubtitleWidget(
-                          padding: EdgeInsets.only(bottom: 16.0),
-                          text:
-                              'Принимая во внимание показатели успешности, дальнейшее развитие различных форм деятельности влечет за собой процесс внедрения и модернизации форм воздействия.'),
+                        /// DESCRTIPTION
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.description,
+                            isSmall: true),
+                        const SubtitleWidget(
+                            padding: EdgeInsets.only(bottom: 16.0),
+                            text:
+                                'Принимая во внимание показатели успешности, дальнейшее развитие различных форм деятельности влечет за собой процесс внедрения и модернизации форм воздействия.'),
 
-                      /// FILE LIST
-                      const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 10.0),
-                          text: Titles.files,
-                          isSmall: true),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: 3,
-                          itemBuilder: (context, index) {
-                            return FileListItemWidget(
-                                fileName: 'file.pdf', onRemoveTap: () => {});
-                          }),
-                      const SizedBox(height: 16.0),
+                        /// FILE LIST
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 10.0),
+                            text: Titles.files,
+                            isSmall: true),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 3,
+                            itemBuilder: (context, index) {
+                              return FileListItemWidget(
+                                  fileName: 'file.pdf', onRemoveTap: () => {});
+                            }),
+                        const SizedBox(height: 16.0),
+                      ]),
 
-                      /// EDIT TASK BUTTON
-                      ButtonWidget(
+                  /// EDIT TASK BUTTON
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ButtonWidget(
                           title: Titles.edit,
-                          margin: EdgeInsets.zero,
-                          onTap: () =>
-                              _taskViewModel.showTaskCreateScreenSheet(context))
-                    ]))));
+                          margin: EdgeInsets.only(
+                              left: 16.0,
+                              right: 16.0,
+                              bottom:
+                                  MediaQuery.of(context).padding.bottom == 0.0
+                                      ? 20.0
+                                      : MediaQuery.of(context).padding.bottom),
+                          onTap: () => _taskViewModel
+                              .showTaskCreateScreenSheet(context)))
+                ]))));
   }
 }
