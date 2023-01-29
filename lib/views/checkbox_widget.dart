@@ -15,8 +15,8 @@ class CheckBoxWidget extends StatelessWidget {
             color: isChecked ? HexColors.primaryMain : Colors.transparent,
             borderRadius: BorderRadius.circular(6.0),
             border: Border.all(
-                width: isChecked ? 2.0 : 0.0,
-                color: isChecked ? HexColors.grey40 : Colors.transparent)),
+                width: isChecked ? 0.0 : 2.0,
+                color: isChecked ? Colors.transparent : HexColors.primaryMain)),
         child: isChecked
             ? Center(child: Image.asset('assets/ic_checkmark.png'))
             : Container());

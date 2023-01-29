@@ -53,9 +53,9 @@ class DateTimeWheelPickerWidget extends StatefulWidget {
 class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
   final List<Month> _months = [];
   final List<String> _monthNames = [];
-  int _day = 1;
-  int _month = 1;
-  int _year = DateTime.now().year;
+  int? _day;
+  int? _month;
+  int? _year;
 
   @override
   void initState() {
@@ -67,10 +67,10 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  List<int> _getDays() {
-    int dayCount = DateTime(_year, _month + 1, 0)
+  List<int> _getDays(int year, int month) {
+    int dayCount = DateTime(year, month + 1, 0)
         .toUtc()
-        .difference(DateTime(_year, _month, 0).toUtc())
+        .difference(DateTime(year, month, 0).toUtc())
         .inDays;
 
     List<int> days = [];
@@ -86,13 +86,13 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
     return days;
   }
 
-  List<String> _getMonthNames(String locale) {
+  List<String> _getMonthNames(String locale, int year) {
     _months.clear();
     _monthNames.clear();
 
     for (var i = 1; i <= 12; i++) {
       Month month = Month(
-          i, toCapitalized(DateFormat.MMMM(locale).format(DateTime(_year, i))));
+          i, toCapitalized(DateFormat.MMMM(locale).format(DateTime(year, i))));
 
       _months.add(month);
       _monthNames.add(month.name);
@@ -119,7 +119,11 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
 
   Widget _wheel(List<dynamic> data, int? startPosition, String? locale,
       Function(dynamic) onValueChanged) {
-    int position = startPosition == null ? 0 : startPosition - 1;
+    int position = startPosition == null
+        ? 0
+        : startPosition == 0
+            ? startPosition
+            : startPosition - 1;
 
     return SizedBox(
         width: double.infinity,
@@ -173,31 +177,25 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
             ? true
             : false;
 
-    List<int> days = _getDays();
-    List<String> months = _getMonthNames(locale);
     List<int> years = _getYears();
 
-    int initialDay = 0;
-    int initialMonth = 0;
-    int initialYear = 0;
+    _day ??= widget.initialDateTime?.day ?? 0;
+    _month ??= widget.initialDateTime?.month ?? 0;
 
-    if (isInitialDateTime) {
-      initialDay =
-          days.firstWhere((element) => element == widget.initialDateTime!.day);
+    int index = 0;
 
-      for (var month in _months) {
-        if (month.index == widget.initialDateTime!.month) {
-          initialMonth = month.index;
-        }
-      }
-
-      for (var year in years) {
-        initialYear++;
-        if (year == widget.initialDateTime!.year) {
-          break;
-        }
+    for (var year in years) {
+      if (year == widget.initialDateTime!.year) {
+        break;
+      } else {
+        index++;
       }
     }
+
+    _year ??= years[index];
+
+    List<int> days = _getDays(_year ?? 0, _month ?? 0);
+    List<String> months = _getMonthNames(locale, _year ?? 0);
 
     final _hideDismissIndicator = widget.hideDismissIndicator == null
         ? false
@@ -239,7 +237,7 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
                                   ? Expanded(
                                       child: _wheel(
                                           days,
-                                          isInitialDateTime ? initialDay : 0,
+                                          isInitialDateTime ? _day : 0,
                                           locale,
                                           (value) =>
                                               setState((() => _day = value))))
@@ -249,7 +247,7 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
                               Expanded(
                                   child: _wheel(
                                       months,
-                                      isInitialDateTime ? initialMonth : 0,
+                                      isInitialDateTime ? _month : 0,
                                       locale,
                                       (value) => setState((() {
                                             for (var month in _months) {
@@ -263,7 +261,7 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
                               Expanded(
                                   child: _wheel(
                                       years,
-                                      isInitialDateTime ? initialYear : 0,
+                                      isInitialDateTime ? index + 1 : 0,
                                       locale,
                                       (value) =>
                                           setState((() => _year = value))))
@@ -296,8 +294,8 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
                                               fontSize: 18.0,
                                               fontWeight: FontWeight.w700,
                                               color: Colors.white))),
-                              onTap: () =>
-                                  widget.onTap(DateTime(_year, _month, _day)))))
+                              onTap: () => widget
+                                  .onTap(DateTime(_year!, _month!, _day!)))))
                 ])));
   }
 }

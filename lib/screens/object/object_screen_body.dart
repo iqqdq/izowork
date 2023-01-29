@@ -38,14 +38,6 @@ class _ObjectScreenBodyState extends State<ObjectScreenBodyWidget> {
   Widget build(BuildContext context) {
     _objectViewModel = Provider.of<ObjectViewModel>(context, listen: true);
 
-    final _day = DateTime.now().day.toString().length == 1
-        ? '0${DateTime.now().day}'
-        : '${DateTime.now().day}';
-    final _month = DateTime.now().month.toString().length == 1
-        ? '0${DateTime.now().month}'
-        : '${DateTime.now().month}';
-    final _year = '${DateTime.now().year}';
-
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
@@ -244,7 +236,8 @@ class _ObjectScreenBodyState extends State<ObjectScreenBodyWidget> {
                             margin: const EdgeInsets.only(bottom: 10.0),
                             title: '',
                             value: Titles.analytics,
-                            onTap: () => {}),
+                            onTap: () => _objectViewModel
+                                .showObjectAnalyticsPageViewScreen(context)),
 
                         /// DOCUMENT BUTTON
                         SelectionInputWidget(

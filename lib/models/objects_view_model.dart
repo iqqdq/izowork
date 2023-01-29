@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/entities/object.dart';
 import 'package:izowork/screens/object/object_screen.dart';
+import 'package:izowork/screens/object_create/object_create_screen.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -27,7 +29,14 @@ class ObjectsViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const ObjectScreenWidget(object: Object())));
+            builder: (context) => ObjectScreenWidget(object: Object())));
+  }
+
+  void showObjectCreateScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const ObjectCreateScreenWidget()));
   }
 
   // MARK: -

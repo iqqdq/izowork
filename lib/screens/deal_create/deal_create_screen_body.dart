@@ -101,7 +101,7 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                       : MediaQuery.of(context).padding.bottom +
                                           54.0),
                           children: [
-                            /// DEAL NAME INPUT
+                            ///  NAME INPUT
                             InputWidget(
                               textEditingController: _textEditingController,
                               focusNode: _focusNode,

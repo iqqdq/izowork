@@ -83,9 +83,7 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
               const SeparatorWidget()
             ])),
         floatingActionButton: FloatingButtonWidget(
-            onTap: () => {
-                  // TODO ADD OBJECT
-                }),
+            onTap: () => _objectsViewModel.showObjectCreateScreen(context)),
         body: SizedBox.expand(
             child: Stack(children: [
           /// OBJECTS LIST VIEW

@@ -178,7 +178,6 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                               return const FileListItemWidget(
                                   fileName: 'file.pdf');
                             }),
-                        const SizedBox(height: 16.0),
 
                         /// ADD FILE BUTTON
                         BorderButtonWidget(

@@ -21,11 +21,13 @@ abstract class Titles {
   static const search = 'Поиск';
   static const add = 'Добавить';
   static const addFile = 'Добавить файл';
+  static const addPhoto = 'Добавить фото';
   static const addProduct = 'Добавить товар';
   static const addObject = 'Добавить объект';
   static const addProcess = 'Добавить процесс';
   static const createTask = 'Создать задачу';
   static const createDeal = 'Создать сделку';
+  static const createObject = 'Создать объект';
   static const closeDeal = 'Закрыть сделку';
   static const showDetail = 'Подробнее';
   static const goToChat = 'Перейти в чат';
@@ -87,7 +89,7 @@ abstract class Titles {
   static const currency = '₸';
 
   /// CHART
-  static const generalContractor = 'Генподрядчик';
+  static const generalContractor = 'Ген.подрядчик';
   static const customer = 'Заказчик';
   static const designer = 'Проектировщик';
   static const administrationBuilding = 'Административное здание';
@@ -113,6 +115,8 @@ abstract class Titles {
   static const deal = 'Сделка';
   static const newDeal = 'Новая сделка';
   static const editDeal = 'Редактировать сделку';
+  static const newObject = 'Новый объект';
+  static const editObject = 'Редактировать объект';
   static const dealCalendar = 'Календарь сделок';
   static const taskCalendar = 'Календарь задач';
   static const staff = 'Сотрудники';
@@ -121,6 +125,7 @@ abstract class Titles {
   static const login = 'Email';
   static const password = 'Пароль';
   static const address = 'Адрес';
+  static const photo = 'Фото';
   static const placeAddress = 'Адрес места';
   static const employee = 'Сотрудник';
   static const manager = 'Менеджер';
@@ -130,8 +135,12 @@ abstract class Titles {
   static const stage = 'Стадия';
   static const phase = 'Этап';
   static const phases = 'Этапы';
+  static const buildingPhases = 'Этапы строительства';
+  static const realization = 'Реализация';
+  static const totalEealization = 'Общая реализация';
   static const realizations = 'Реализации';
   static const effectiveness = 'Эффективность';
+  static const totalEffectiveness = 'Общая эффективность';
   static const readiness = 'Готовность';
   static const month = 'Месяц';
   static const year = 'Год';
@@ -162,6 +171,9 @@ abstract class Titles {
   static const area = 'Площадь, кв. м';
   static const buildingTime = 'Сроки строительства, в годах';
   static const kiso = 'КИСО';
+  static const createObjectFolder = 'Создать папку по объекту';
+  static const kisoDocumentNumber = 'Номер документа КИСО';
+  static const coordinates = 'Координаты';
 
   /// MESSAGES
   static const invalidLogin =
