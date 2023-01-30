@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/locale.dart';
@@ -14,6 +15,8 @@ class ObjectAnalitycsActionListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting(locale, null);
+
     final _minute = dateTime.minute.toString().length == 1
         ? '0${dateTime.minute}'
         : '${dateTime.minute}';

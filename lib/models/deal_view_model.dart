@@ -3,7 +3,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/entities/deal.dart';
 import 'package:izowork/models/selection_view_model.dart';
-import 'package:izowork/screens/deal/approve_deal_screen_body.dart';
+import 'package:izowork/screens/deal/complete_deal_screen_body.dart';
 import 'package:izowork/screens/deal/close_deal_screen_body.dart';
 import 'package:izowork/screens/deal/edit_deal_process_screen_body.dart';
 import 'package:izowork/screens/deal/process_action_screen_body.dart';
@@ -71,14 +71,14 @@ class DealViewModel with ChangeNotifier {
                 }));
   }
 
-  void showApproveDealScreenSheet(BuildContext context) {
+  void showCompleteDealScreenSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) =>
-            ApproveDealScreenBodyWidget(onApproveDealTap: (text, files) => {}));
+            CompleteDealScreenBodyWidget(onTap: (text, files) => {}));
   }
 
   void showEditDealProcessScreenSheet(BuildContext context) {
@@ -88,7 +88,7 @@ class DealViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) =>
-            EditDealProcessScreenBodyWidget(onAddTap: (text, files) => {}));
+            EditDealProcessScreenBodyWidget(onTap: (text, files) => {}));
   }
 
   void showCloseDealScreenSheet(BuildContext context) {
@@ -98,6 +98,6 @@ class DealViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) =>
-            CloseDealScreenBodyWidget(onCloseDealTap: (text, files) => {}));
+            CloseDealScreenBodyWidget(onTap: (text, files) => {}));
   }
 }

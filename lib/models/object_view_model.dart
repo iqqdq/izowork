@@ -5,9 +5,11 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/object.dart';
+import 'package:izowork/entities/phase.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/object_analytics/object_analytics_page_view_screen.dart';
 import 'package:izowork/screens/object_create/object_create_screen.dart';
+import 'package:izowork/screens/phase/phase_screen.dart';
 
 class ObjectViewModel with ChangeNotifier {
   // LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -42,5 +44,12 @@ class ObjectViewModel with ChangeNotifier {
         MaterialPageRoute(
             builder: (context) =>
                 const ObjectAnalyticsPageViewScreenBodyWidget()));
+  }
+
+  void showPhaseScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PhaseScreenWidget(phase: Phase())));
   }
 }

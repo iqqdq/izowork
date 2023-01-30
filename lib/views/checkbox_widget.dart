@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 
 class CheckBoxWidget extends StatelessWidget {
-  final bool isChecked;
+  final bool isSelected;
 
-  const CheckBoxWidget({Key? key, required this.isChecked}) : super(key: key);
+  const CheckBoxWidget({Key? key, required this.isSelected}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,12 +12,13 @@ class CheckBoxWidget extends StatelessWidget {
         width: 20.0,
         height: 20.0,
         decoration: BoxDecoration(
-            color: isChecked ? HexColors.primaryMain : Colors.transparent,
+            color: isSelected ? HexColors.primaryMain : Colors.transparent,
             borderRadius: BorderRadius.circular(6.0),
             border: Border.all(
-                width: isChecked ? 0.0 : 2.0,
-                color: isChecked ? Colors.transparent : HexColors.primaryMain)),
-        child: isChecked
+                width: isSelected ? 0.0 : 2.0,
+                color:
+                    isSelected ? Colors.transparent : HexColors.primaryMain)),
+        child: isSelected
             ? Center(child: Image.asset('assets/ic_checkmark.png'))
             : Container());
   }

@@ -11,9 +11,9 @@ import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class EditDealProcessScreenBodyWidget extends StatefulWidget {
-  final Function(String, List<PlatformFile>) onAddTap;
+  final Function(String, List<PlatformFile>) onTap;
 
-  const EditDealProcessScreenBodyWidget({Key? key, required this.onAddTap})
+  const EditDealProcessScreenBodyWidget({Key? key, required this.onTap})
       : super(key: key);
 
   @override
@@ -111,7 +111,7 @@ class _EditDealProcessScreenBodyState
                       title: Titles.closeDeal,
                       isDisabled: _textEditingController.text.isEmpty,
                       onTap: () =>
-                          widget.onAddTap(_textEditingController.text, _files))
+                          widget.onTap(_textEditingController.text, _files))
                 ])));
   }
 }

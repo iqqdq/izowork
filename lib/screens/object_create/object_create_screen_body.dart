@@ -285,7 +285,8 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                             GestureDetector(
                                 child: Row(children: [
                                   CheckBoxWidget(
-                                      isChecked: _objectCreateViewModel.isKiso),
+                                      isSelected:
+                                          _objectCreateViewModel.isKiso),
                                   const SizedBox(width: 8.0),
                                   Text(Titles.kiso,
                                       style: TextStyle(
@@ -317,7 +318,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                             GestureDetector(
                                 child: Row(children: [
                                   CheckBoxWidget(
-                                      isChecked: _objectCreateViewModel
+                                      isSelected: _objectCreateViewModel
                                           .isCreateFolder),
                                   const SizedBox(width: 8.0),
                                   Text(Titles.createObjectFolder,
@@ -353,17 +354,8 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 decoration: BoxDecoration(
                                     color: HexColors.white,
                                     borderRadius: BorderRadius.circular(16.0),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color:
-                                              HexColors.black.withOpacity(0.05),
-                                          blurRadius: 20.0,
-                                          offset: const Offset(0.0, 10.0)),
-                                      BoxShadow(
-                                          color:
-                                              HexColors.black.withOpacity(0.05),
-                                          offset: const Offset(0.0, -1.0))
-                                    ]),
+                                    border: Border.all(
+                                        width: 1.0, color: HexColors.grey20)),
                                 child: ListView(
                                     physics:
                                         const NeverScrollableScrollPhysics(),
@@ -375,14 +367,15 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                       const SeparatorWidget(),
                                       ListView.builder(
                                           shrinkWrap: true,
-                                          padding: const EdgeInsets.only(
-                                              bottom: 12.0),
+                                          padding: EdgeInsets.zero,
                                           physics:
                                               const NeverScrollableScrollPhysics(),
                                           itemCount: 10,
                                           itemBuilder: (context, index) {
                                             return ObjectStageListItemWidget(
-                                                onTap: () => {});
+                                              showSeparator: index < 9,
+                                              // onTap: () => {}
+                                            );
                                           })
                                     ])),
                             const SizedBox(height: 20.0),

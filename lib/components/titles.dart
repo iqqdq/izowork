@@ -25,9 +25,13 @@ abstract class Titles {
   static const addProduct = 'Добавить товар';
   static const addObject = 'Добавить объект';
   static const addProcess = 'Добавить процесс';
+  static const addTask = 'Добавить задачу';
   static const createTask = 'Создать задачу';
+  static const setTask = 'Поставить задачу';
   static const createDeal = 'Создать сделку';
   static const createObject = 'Создать объект';
+  static const createPhase = 'Создать этап';
+  static const openDeal = 'Открыть сделку';
   static const closeDeal = 'Закрыть сделку';
   static const showDetail = 'Подробнее';
   static const goToChat = 'Перейти в чат';
@@ -78,6 +82,7 @@ abstract class Titles {
   static const message = 'Сообщение';
   static const typeMessage = 'Сообщение...';
   static const notSelected = 'Не выбран';
+  static const notAssigned = 'Не назначен';
   static const deadline = 'Дедлайн';
   static const startDate = 'Дата создания';
   static const endDate = 'Дата завершения';
@@ -87,6 +92,11 @@ abstract class Titles {
   static const priceFor = 'Цена за';
   static const totalPrice = 'Стоимость';
   static const currency = '₸';
+  static const contractor = 'Подрядчик';
+  static const contractors = 'Подрядчики';
+  static const deliveryTime = 'Срок поставки';
+  static const deliveryTimeInMonth = 'Срок поставки, мес';
+  static const count = 'Кол-во';
 
   /// CHART
   static const generalContractor = 'Ген.подрядчик';
@@ -117,6 +127,8 @@ abstract class Titles {
   static const editDeal = 'Редактировать сделку';
   static const newObject = 'Новый объект';
   static const editObject = 'Редактировать объект';
+  static const newPhase = 'Новый этап';
+  static const editPhase = 'Редактировать этап';
   static const dealCalendar = 'Календарь сделок';
   static const taskCalendar = 'Календарь задач';
   static const staff = 'Сотрудники';
@@ -147,8 +159,10 @@ abstract class Titles {
   static const terms = 'Сроки';
   static const responsible = 'Ответственный';
   static const coExecutor = 'Соисполнитель';
+  static const observer = 'Наблюдатель';
   static const taskManager = 'Постановщик задачи';
   static const status = 'Статус';
+  static const checkList = 'Чек-лист';
   static const companyName = 'Название компании';
   static const fullname = 'Фио';
   static const sorting = 'Сортировка';
@@ -167,6 +181,7 @@ abstract class Titles {
   static const toDate = 'Дата до';
   static const dealName = 'Название сделки';
   static const textReason = 'Напишите причину';
+  static const taskCompleteInfo = 'Информация о выполнении задачи';
   static const floorCount = 'Этажность';
   static const area = 'Площадь, кв. м';
   static const buildingTime = 'Сроки строительства, в годах';

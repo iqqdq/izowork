@@ -10,9 +10,9 @@ import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class CloseDealScreenBodyWidget extends StatefulWidget {
-  final Function(String, List<PlatformFile>) onCloseDealTap;
+  final Function(String, List<PlatformFile>) onTap;
 
-  const CloseDealScreenBodyWidget({Key? key, required this.onCloseDealTap})
+  const CloseDealScreenBodyWidget({Key? key, required this.onTap})
       : super(key: key);
 
   @override
@@ -107,8 +107,8 @@ class _CloseDealScreenBodyState extends State<CloseDealScreenBodyWidget> {
                       margin: const EdgeInsets.only(top: 16.0),
                       title: Titles.closeDeal,
                       isDisabled: _textEditingController.text.isEmpty,
-                      onTap: () => widget.onCloseDealTap(
-                          _textEditingController.text, _files))
+                      onTap: () =>
+                          widget.onTap(_textEditingController.text, _files))
                 ])));
   }
 }

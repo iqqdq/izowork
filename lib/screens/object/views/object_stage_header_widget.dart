@@ -24,7 +24,7 @@ class ObjectStageHeaderWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Text(Titles.effectiveness.substring(0, 6) + '.',
                         maxLines: 1,
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.center,
                         style: _textStyle))),
 
             /// READINESS
@@ -34,7 +34,7 @@ class ObjectStageHeaderWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     child: Text(Titles.readiness,
                         maxLines: 1,
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.center,
                         style: _textStyle))),
           ],
         ));

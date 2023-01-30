@@ -61,23 +61,21 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
               Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(children: [
+                    /// SEARCH INPUT
                     Expanded(
-                        child:
-
-                            /// SEARCH INPUT
-                            InputWidget(
-                                textEditingController: _textEditingController,
-                                focusNode: _focusNode,
-                                margin: EdgeInsets.zero,
-                                isSearchInput: true,
-                                placeholder: '${Titles.search}...',
-                                onTap: () => setState,
-                                onChange: (text) => {
-                                      // TODO SEARCH OBJECTS
-                                    },
-                                onClearTap: () => {
-                                      // TODO CLEAR OBJECTS SEARCH
-                                    }))
+                        child: InputWidget(
+                            textEditingController: _textEditingController,
+                            focusNode: _focusNode,
+                            margin: EdgeInsets.zero,
+                            isSearchInput: true,
+                            placeholder: '${Titles.search}...',
+                            onTap: () => setState,
+                            onChange: (text) => {
+                                  // TODO SEARCH OBJECTS
+                                },
+                            onClearTap: () => {
+                                  // TODO CLEAR OBJECTS SEARCH
+                                }))
                   ])),
               const SizedBox(height: 12.0),
               const SeparatorWidget()

@@ -21,7 +21,6 @@ class SearchListItemWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.0),
                 child: Container(
                     decoration: BoxDecoration(
-                        color: HexColors.white,
                         borderRadius: BorderRadius.circular(16.0),
                         border:
                             Border.all(width: 1.0, color: HexColors.grey20)),
