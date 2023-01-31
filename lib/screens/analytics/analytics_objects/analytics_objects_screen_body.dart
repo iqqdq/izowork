@@ -6,6 +6,7 @@ import 'package:izowork/screens/analytics/views/analitics_object_list_item_widge
 import 'package:izowork/screens/analytics/views/sort_orbject_button_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -76,6 +77,18 @@ class _AnalyticsObjectsScreenBodyState
                       }))
             ],
           ),
+
+          /// FILTER BUTTON
+          SafeArea(
+              child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: const EdgeInsets.only(bottom: 6.0),
+                      child: FilterButtonWidget(
+                          onTap: () => _analyticsObjectsViewModel
+                              .showAnalyticsObjectsFilterSheet(context)
+                          // onClearTap: () => {}
+                          )))),
 
           /// INDICATOR
           _analyticsObjectsViewModel.loadingStatus == LoadingStatus.searching

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/entities/object.dart';
+import 'package:izowork/entities/phase.dart';
 import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/models/selection_view_model.dart';
+import 'package:izowork/screens/phase/phase_screen.dart';
 import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -18,6 +20,18 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   bool _isKiso = false;
   bool _isCreateFolder = false;
+  final List<String> _phases = [
+    'Фундамент',
+    'Стены',
+    'Кровля',
+    'Стяжка',
+    'Перегородки',
+    'Вентиляция',
+    'Дымоудаление',
+    'Водопровод',
+    'Отопление',
+    'Тепловые узлы'
+  ];
 
   bool get isKiso {
     return _isKiso;
@@ -25,6 +39,10 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   bool get isCreateFolder {
     return _isCreateFolder;
+  }
+
+  List<String> get phases {
+    return _phases;
   }
 
   ObjectCreateViewModel(this.object);
@@ -77,5 +95,12 @@ class ObjectCreateViewModel with ChangeNotifier {
             onPop: () => {
                   // TODO SET PRODUCT
                 }));
+  }
+
+  void showPhaseScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PhaseScreenWidget(phase: Phase())));
   }
 }

@@ -6,11 +6,15 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/locale.dart';
 
 class ObjectAnalitycsActionListItemWidget extends StatelessWidget {
+  final String text;
   final DateTime dateTime;
-  final VoidCallback onTap;
+  final VoidCallback onUserTap;
 
   const ObjectAnalitycsActionListItemWidget(
-      {Key? key, required this.dateTime, required this.onTap})
+      {Key? key,
+      required this.text,
+      required this.dateTime,
+      required this.onUserTap})
       : super(key: key);
 
   @override
@@ -30,43 +34,47 @@ class ObjectAnalitycsActionListItemWidget extends StatelessWidget {
     final _year = '${dateTime.year}';
 
     return Container(
-        margin: const EdgeInsets.only(bottom: 10.0, left: 16.0, right: 16.0),
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-            border: Border.all(width: 1.0, color: HexColors.grey20),
-            borderRadius: BorderRadius.circular(16.0)),
-        child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-                highlightColor: HexColors.grey20,
-                splashColor: Colors.transparent,
-                borderRadius: BorderRadius.circular(16.0),
-                child: ListView(
+            margin:
+                const EdgeInsets.only(bottom: 10.0, left: 16.0, right: 16.0),
+            decoration: BoxDecoration(
+                border: Border.all(width: 1.0, color: HexColors.grey20),
+                borderRadius: BorderRadius.circular(16.0)),
+            child:
+                // Material(
+                //     color: Colors.transparent,
+                //     child: InkWell(
+                //         highlightColor: HexColors.grey20,
+                //         splashColor: Colors.transparent,
+                //         borderRadius: BorderRadius.circular(16.0),
+                //         child:
+                ListView(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    padding: EdgeInsets.zero,
+                    padding: const EdgeInsets.all(16.0),
                     children: [
-                      /// DATE
-                      Text('$_hour:$_minute, $_day $_month $_year',
-                          style: TextStyle(
-                              color: HexColors.grey30,
-                              fontSize: 14.0,
-                              overflow: TextOverflow.ellipsis,
-                              fontFamily: 'PT Root UI',
-                              fontWeight: FontWeight.w500)),
+                  /// DATE
+                  Text('$_hour:$_minute, $_day $_month $_year',
+                      style: TextStyle(
+                          color: HexColors.grey30,
+                          fontSize: 14.0,
+                          overflow: TextOverflow.ellipsis,
+                          fontFamily: 'PT Root UI',
+                          fontWeight: FontWeight.w500)),
 
-                      const SizedBox(height: 6.0),
+                  const SizedBox(height: 6.0),
 
-                      /// TEXT
-                      Text('Задача “Название задачи” выполнена',
-                          style: TextStyle(
-                              color: HexColors.black,
-                              fontSize: 18.0,
-                              fontFamily: 'PT Root UI')),
-                      const SizedBox(height: 10.0),
+                  /// TEXT
+                  Text(text,
+                      style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 18.0,
+                          fontFamily: 'PT Root UI')),
+                  const SizedBox(height: 10.0),
 
-                      /// USER
-                      Row(children: [
+                  /// USER
+                  GestureDetector(
+                      onTap: () => onUserTap(),
+                      child: Row(children: [
                         /// AVATAR
                         Stack(children: [
                           SvgPicture.asset('assets/ic_avatar.svg',
@@ -90,8 +98,9 @@ class ObjectAnalitycsActionListItemWidget extends StatelessWidget {
                                     fontFamily: 'PT Root UI',
                                     overflow: TextOverflow.ellipsis,
                                     fontWeight: FontWeight.bold))),
-                      ]),
-                    ]),
-                onTap: () => onTap())));
+                      ]))
+                ]))
+        // ))
+        ;
   }
 }

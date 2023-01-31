@@ -109,7 +109,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
                 child: BackButtonWidget(onTap: () => Navigator.pop(context))),
-            title: Text('Название этапа',
+            title: Text('Фундамент',
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontFamily: 'PT Root UI',
@@ -136,7 +136,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                           54.0),
                           children: [
                             /// TITLE
-                            Text(Titles.contractors,
+                            Text(Titles.products,
                                 style: TextStyle(
                                     color: HexColors.black,
                                     fontSize: 18.0,

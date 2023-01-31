@@ -6,7 +6,6 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:spreadsheet_table/spreadsheet_table.dart';
@@ -45,18 +44,107 @@ class _ObjectAnalyticsScreenBodyState
               width: MediaQuery.of(context).size.width,
               height: 36.0 * 4,
               child: SpreadsheetTable(
+                  cellBuilder: (_, int row, int col) => Container(
+                      height: 36.0,
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(width: 0.65, color: HexColors.grey20)),
+                      child: Center(
+                          child: Text(
+                              col == 0
+                                  ? '${row + 1}'
+                                  : col == 1
+                                      ? '100 ${Titles.currency}'
+                                      : 'Задачи',
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: HexColors.black,
+                                  fontFamily: 'PT Root UI')))),
+                  legendBuilder: (_) => Container(
+                      height: 36.0,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(width: 0.65, color: HexColors.grey20)),
+                      child: Row(children: [
+                        Text(Titles.product,
+                            style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w500,
+                                color: HexColors.black,
+                                fontFamily: 'PT Root UI'))
+                      ])),
+                  rowHeaderBuilder: (_, index) => Container(
+                      height: 36.0,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(width: 0.65, color: HexColors.grey20)),
+                      child: Center(
+                          child: Text('Название товара',
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: HexColors.black,
+                                  fontFamily: 'PT Root UI')))),
+                  colHeaderBuilder: (_, index) => Container(
+                      height: 36.0,
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(width: 0.65, color: HexColors.grey20)),
+                      child: Center(
+                          child: Text(
+                              index == 0
+                                  ? Titles.count
+                                  : index == 1
+                                      ? Titles.totalPrice
+                                      : Titles.complition,
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: HexColors.black,
+                                  fontFamily: 'PT Root UI')))),
+                  rowHeaderWidth: 144.0,
+                  colsHeaderHeight: 36.0,
+                  cellHeight: 36.0,
+                  cellWidth: 100.0,
+                  rowsCount: 3,
+                  colCount: 3))
+        ]);
+  }
+
+  Widget _bottomTable(String title) {
+    return ListView(
+        padding: const EdgeInsets.only(bottom: 20.0),
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        children: [
+          TitleWidget(
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 4.0),
+              text: title,
+              isSmall: true),
+          const SizedBox(height: 10.0),
+
+          /// TABLE
+          SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 36.0 * 4,
+              child: SpreadsheetTable(
                 cellBuilder: (_, int row, int col) => Container(
                     height: 36.0,
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     decoration: BoxDecoration(
                         border:
                             Border.all(width: 0.65, color: HexColors.grey20)),
-                    child: Center(
-                        child: Text('Кол-во',
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                color: HexColors.black,
-                                fontFamily: 'PT Root UI')))),
+                    child: Row(children: [
+                      Text('85 %',
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              color: HexColors.black,
+                              fontFamily: 'PT Root UI'))
+                    ])),
                 legendBuilder: (_) => Container(
                     height: 36.0,
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -64,7 +152,7 @@ class _ObjectAnalyticsScreenBodyState
                         border:
                             Border.all(width: 0.65, color: HexColors.grey20)),
                     child: Row(children: [
-                      Text(Titles.product,
+                      Text(Titles.phases,
                           style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w500,
@@ -77,12 +165,13 @@ class _ObjectAnalyticsScreenBodyState
                     decoration: BoxDecoration(
                         border:
                             Border.all(width: 0.65, color: HexColors.grey20)),
-                    child: Center(
-                        child: Text('Название товара',
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                color: HexColors.black,
-                                fontFamily: 'PT Root UI')))),
+                    child: Row(children: [
+                      Text('Название этапа',
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              color: HexColors.black,
+                              fontFamily: 'PT Root UI'))
+                    ])),
                 colHeaderBuilder: (_, index) => Container(
                     height: 36.0,
                     padding: const EdgeInsets.symmetric(horizontal: 2.0),
@@ -90,7 +179,8 @@ class _ObjectAnalyticsScreenBodyState
                         border:
                             Border.all(width: 0.65, color: HexColors.grey20)),
                     child: Center(
-                        child: Text('$index',
+                        child: Text(
+                            index == 0 ? Titles.realization : Titles.checkLists,
                             style: TextStyle(
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w500,
@@ -99,9 +189,9 @@ class _ObjectAnalyticsScreenBodyState
                 rowHeaderWidth: 144.0,
                 colsHeaderHeight: 36.0,
                 cellHeight: 36.0,
-                cellWidth: 84.0,
+                cellWidth: 110.0,
                 rowsCount: 3,
-                colCount: 10,
+                colCount: 2,
               ))
         ]);
   }
@@ -135,17 +225,17 @@ class _ObjectAnalyticsScreenBodyState
                             fontFamily: 'PT Root UI',
                             fontWeight: FontWeight.bold))),
 
-                /// PRODUC TABLE LIST VIEW
+                /// PRODUCT TABLE LIST VIEW
                 ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.only(top: 20.0),
                     shrinkWrap: true,
-                    itemCount: 2,
+                    itemCount: 3,
                     itemBuilder: (context, index) =>
-                        _table('${Titles.stage} ${index + 1}')),
+                        _table('${Titles.phase} ${index + 1}')),
 
                 /// EFFECTIVENESS TABLE
-                _table(Titles.effectiveness),
+                _bottomTable(Titles.effectiveness),
 
                 const SizedBox(height: 20.0),
 
@@ -220,14 +310,14 @@ class _ObjectAnalyticsScreenBodyState
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: 3,
                     itemBuilder: (context, index) {
-                      return const FileListItemWidget(fileName: 'file.pdf');
+                      return const FileListItemWidget(fileName: 'image.png');
                     }),
 
                 /// ADD PHOTO BUTTON
                 BorderButtonWidget(
                     title: Titles.addPhoto,
                     margin: const EdgeInsets.only(
-                        left: 16.0, right: 16.0, bottom: 30.0),
+                        top: 8.0, left: 16.0, right: 16.0, bottom: 30.0),
                     onTap: () => _objectAnalyticsViewModel.pickImage()),
               ]),
 

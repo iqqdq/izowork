@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/entities/object.dart';
+import 'package:izowork/screens/dialog/dialog_screen.dart';
+import 'package:izowork/screens/object/object_screen.dart';
 
 class MapObjectViewModel with ChangeNotifier {
   // LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -7,4 +10,19 @@ class MapObjectViewModel with ChangeNotifier {
 
   // MARK: -
   // MARK: - FUNCTIONS
+
+  // MARK: -
+  // MARK: - PUSH
+
+  void showObjectScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ObjectScreenWidget(object: Object())));
+  }
+
+  void showDialogScreen(BuildContext context) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const DialogScreenWidget()));
+  }
 }

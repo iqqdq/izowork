@@ -5,8 +5,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ProfileViewModel with ChangeNotifier {
+  final bool isMine;
+
   // LoadingStatus loadingStatus = LoadingStatus.searching;
   LoadingStatus loadingStatus = LoadingStatus.empty;
+
+  ProfileViewModel(this.isMine);
 
   // MARK: -
   // MARK: - ACTIONS

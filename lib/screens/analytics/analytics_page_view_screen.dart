@@ -26,8 +26,8 @@ class _AnalyticsPageViewScreenBodyState
   void initState() {
     _pages = [
       const AnalyticsCompaniesScreenWidget(),
+      const AnalyticsObjectsScreenWidget(),
       const AnalyticsActionsScreenWidget(),
-      const AnalyticsObjectsScreenWidget()
     ];
 
     super.initState();

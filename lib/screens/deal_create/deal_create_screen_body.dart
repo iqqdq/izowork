@@ -24,21 +24,7 @@ class DealCreateScreenBodyWidget extends StatefulWidget {
 }
 
 class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
-  final TextEditingController _textEditingController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
   late DealCreateViewModel _dealCreateViewModel;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _textEditingController.dispose();
-    _focusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,19 +87,6 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                       : MediaQuery.of(context).padding.bottom +
                                           54.0),
                           children: [
-                            ///  NAME INPUT
-                            InputWidget(
-                              textEditingController: _textEditingController,
-                              focusNode: _focusNode,
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              height: 56.0,
-                              placeholder: Titles.dealName,
-                              onTap: () => setState,
-                              onChange: (text) => {
-                                // TODO DESCRTIPTION
-                              },
-                            ),
-
                             /// START DATE SELECTION INPUT
                             SelectionInputWidget(
                                 margin: const EdgeInsets.only(bottom: 10.0),

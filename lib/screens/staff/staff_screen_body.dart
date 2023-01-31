@@ -95,10 +95,10 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
               itemCount: 10,
               itemBuilder: (context, index) {
                 return StaffListItemWidget(
-                    onUserTap: () => {},
+                    onUserTap: () => _staffViewModel.showProfileScreen(context),
                     onLinkTap: () =>
                         _staffViewModel.openUrl('https://www.google.com/'),
-                    onChatTap: () => {});
+                    onChatTap: () => _staffViewModel.showDialogScreen(context));
               }),
           const SeparatorWidget(),
 

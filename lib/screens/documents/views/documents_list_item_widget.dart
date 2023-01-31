@@ -47,7 +47,7 @@ class DocumentListItemWidget extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               padding: const EdgeInsets.only(left: 16.0),
-              itemCount: 2,
+              itemCount: 4,
               itemBuilder: (context, index) {
                 return Material(
                     color: Colors.transparent,

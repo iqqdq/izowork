@@ -13,7 +13,9 @@ class HorizontalChartWidget extends StatefulWidget {
 }
 
 class _HorizontalChartState extends State<HorizontalChartWidget> {
+  final ScrollController _scrollController = ScrollController();
   final List<double> _values = [];
+
   double _maxValue = 0.0;
 
   @override
@@ -29,6 +31,13 @@ class _HorizontalChartState extends State<HorizontalChartWidget> {
     }
 
     super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        widget.onMaxScrollExtent();
+      }
+    });
   }
 
   @override
@@ -38,6 +47,7 @@ class _HorizontalChartState extends State<HorizontalChartWidget> {
     return SizedBox(
         height: _maxHeight * 1.5,
         child: ListView.builder(
+            controller: _scrollController,
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             itemCount: _values.length,

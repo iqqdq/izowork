@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/models/analytics_companies_view_model.dart';
+import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/analytics/views/horizontal_chart/horizontal_chart_widget.dart';
 import 'package:izowork/screens/analytics/views/analitics_manager_list_item_widget.dart';
 import 'package:izowork/screens/analytics/views/pie_chart/pie_chart_widget.dart';
@@ -65,7 +66,7 @@ class _AnalyticsCompaniesScreenBodyState
                     value: Titles.tonProductPlaceholder,
                     isVertical: true,
                     onTap: () => _analyticsCompaniesViewModel
-                        .showSearchScreenSheet(context)),
+                        .showSearchScreenSheet(context, SearchType.product)),
 
                 /// PRODUCT HORIZONTAL CHART
                 HorizontalChartWidget(onMaxScrollExtent: () => {}),
@@ -78,10 +79,9 @@ class _AnalyticsCompaniesScreenBodyState
                     title: Titles.product,
                     value: Titles.literProductPlaceholder,
                     isVertical: true,
-                    onTap: () => {}),
-                HorizontalChartWidget(
-                    onMaxScrollExtent: () => _analyticsCompaniesViewModel
-                        .showSearchScreenSheet(context)),
+                    onTap: () => _analyticsCompaniesViewModel
+                        .showSearchScreenSheet(context, SearchType.product)),
+                HorizontalChartWidget(onMaxScrollExtent: () => {}),
                 const SizedBox(height: 24.0),
 
                 /// COMPANY PIE CHART
@@ -118,10 +118,11 @@ class _AnalyticsCompaniesScreenBodyState
 
                 /// FILIAL SELECTION
                 SelectionInputWidget(
-                    title: Titles.product,
-                    value: Titles.tonProductPlaceholder,
+                    title: Titles.filial,
+                    value: Titles.notSelected,
                     isVertical: true,
-                    onTap: () => {}),
+                    onTap: () => _analyticsCompaniesViewModel
+                        .showSearchScreenSheet(context, SearchType.filial)),
                 const SizedBox(height: 26.0),
                 Padding(
                     padding: const EdgeInsets.symmetric(
@@ -146,10 +147,11 @@ class _AnalyticsCompaniesScreenBodyState
 
                 /// FILIAL SELECTION
                 SelectionInputWidget(
-                    title: Titles.product,
-                    value: Titles.tonProductPlaceholder,
+                    title: Titles.filial,
+                    value: Titles.notSelected,
                     isVertical: true,
-                    onTap: () => {}),
+                    onTap: () => _analyticsCompaniesViewModel
+                        .showSearchScreenSheet(context, SearchType.filial)),
                 const SizedBox(height: 20.0),
 
                 ListView.builder(

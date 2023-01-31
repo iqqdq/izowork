@@ -13,7 +13,9 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreenBodyWidget extends StatefulWidget {
-  const ProfileScreenBodyWidget({Key? key}) : super(key: key);
+  final bool isMine;
+  const ProfileScreenBodyWidget({Key? key, required this.isMine})
+      : super(key: key);
 
   @override
   _ProfileScreenBodyState createState() => _ProfileScreenBodyState();
@@ -51,7 +53,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     child:
                         BackButtonWidget(onTap: () => Navigator.pop(context))),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(Titles.myProfile,
+                  Text(widget.isMine ? Titles.myProfile : Titles.profile,
                       style: TextStyle(
                           color: HexColors.black,
                           fontSize: 18.0,
@@ -161,17 +163,19 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     })
               ]),
 
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).padding.bottom == 0.0
-                          ? 12.0
-                          : MediaQuery.of(context).padding.bottom),
-                  child: ButtonWidget(
-                      title: Titles.edit,
-                      onTap: () =>
-                          _profileViewModel.showProfileEditScreen(context)))),
+          widget.isMine
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 12.0
+                              : MediaQuery.of(context).padding.bottom),
+                      child: ButtonWidget(
+                          title: Titles.edit,
+                          onTap: () => _profileViewModel
+                              .showProfileEditScreen(context))))
+              : Container(),
 
           /// INDICATOR
           _profileViewModel.loadingStatus == LoadingStatus.searching

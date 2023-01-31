@@ -6,23 +6,16 @@ import 'package:provider/provider.dart';
 
 class MapObjectScreenWidget extends StatelessWidget {
   final MapObject mapObject;
-  final VoidCallback onDetailTap;
-  final VoidCallback onChatTap;
 
   const MapObjectScreenWidget({
     Key? key,
     required this.mapObject,
-    required this.onDetailTap,
-    required this.onChatTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => MapObjectViewModel(),
-        child: MapObjectScreenBodyWidget(
-            mapObject: mapObject,
-            onDetailTap: onDetailTap,
-            onChatTap: onChatTap));
+        child: MapObjectScreenBodyWidget(mapObject: mapObject));
   }
 }

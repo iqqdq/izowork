@@ -79,7 +79,7 @@ class _CompleteTaskScreenBodyState extends State<CompleteTaskScreenBodyWidget> {
                     height: 168.0,
                     maxLines: 10,
                     margin: EdgeInsets.zero,
-                    placeholder: '${Titles.reason}...',
+                    placeholder: '${Titles.description}...',
                     onTap: () => setState,
                     onChange: (text) => {
                       // TODO DESCRTIPTION
@@ -99,13 +99,17 @@ class _CompleteTaskScreenBodyState extends State<CompleteTaskScreenBodyWidget> {
                           onRemoveTap: () => _removeFile(index),
                         );
                       }),
+
+                  /// ADD FILE BUTTON
                   BorderButtonWidget(
                       margin: EdgeInsets.zero,
                       title: Titles.addFile,
                       onTap: () => _addFile()),
+
+                  /// ADD BUTTON
                   ButtonWidget(
                       margin: const EdgeInsets.only(top: 16.0),
-                      title: Titles.closeDeal,
+                      title: Titles.add,
                       isDisabled: _textEditingController.text.isEmpty,
                       onTap: () =>
                           widget.onTap(_textEditingController.text, _files))

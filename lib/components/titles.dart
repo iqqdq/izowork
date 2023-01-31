@@ -77,6 +77,7 @@ abstract class Titles {
   static const productSubtype = 'Подтип товара';
   static const productsType = 'Тип товаров';
   static const successDealCount = 'Кол-во успешных сделок';
+  static const profile = 'Профиль';
   static const myProfile = 'Мой профиль';
   static const profileEdit = 'Редактирование профиля';
   static const message = 'Сообщение';
@@ -97,6 +98,7 @@ abstract class Titles {
   static const deliveryTime = 'Срок поставки';
   static const deliveryTimeInMonth = 'Срок поставки, мес';
   static const count = 'Кол-во';
+  static const complition = 'Выполнение';
 
   /// CHART
   static const generalContractor = 'Ген.подрядчик';
@@ -138,7 +140,6 @@ abstract class Titles {
   static const password = 'Пароль';
   static const address = 'Адрес';
   static const photo = 'Фото';
-  static const placeAddress = 'Адрес места';
   static const employee = 'Сотрудник';
   static const manager = 'Менеджер';
   static const developer = 'Застройщик';
@@ -163,9 +164,12 @@ abstract class Titles {
   static const taskManager = 'Постановщик задачи';
   static const status = 'Статус';
   static const checkList = 'Чек-лист';
+  static const checkLists = 'Чек-листы';
   static const companyName = 'Название компании';
   static const fullname = 'Фио';
   static const sorting = 'Сортировка';
+  static const byAlphabet = 'По алфавиту';
+  static const byEffectiveness = 'По эффективности';
   static const type = 'Тип';
   static const post = 'Должность';
   static const socialLinks = 'Ссылки на социальные сети';
@@ -179,7 +183,7 @@ abstract class Titles {
   static const dealTotalCount = 'Сделок по всем филиалам';
   static const fromDate = 'Дата от';
   static const toDate = 'Дата до';
-  static const dealName = 'Название сделки';
+
   static const textReason = 'Напишите причину';
   static const taskCompleteInfo = 'Информация о выполнении задачи';
   static const floorCount = 'Этажность';

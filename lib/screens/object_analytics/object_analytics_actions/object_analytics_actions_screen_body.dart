@@ -40,11 +40,13 @@ class _ObjectAnalyticsActionsScreenBodyState
                       ? 12.0
                       : MediaQuery.of(context).padding.bottom),
               shrinkWrap: true,
-              itemCount: 20,
+              itemCount: _objectAnalyticsActionsViewModel.list.length,
               itemBuilder: (context, index) {
                 return ObjectAnalitycsActionListItemWidget(
+                  text: _objectAnalyticsActionsViewModel.list[index],
                   dateTime: DateTime.now().add(Duration(days: index)),
-                  onTap: () => {},
+                  onUserTap: () => _objectAnalyticsActionsViewModel
+                      .showProfileScreen(context),
                 );
               }),
 

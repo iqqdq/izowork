@@ -370,12 +370,19 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                           padding: EdgeInsets.zero,
                                           physics:
                                               const NeverScrollableScrollPhysics(),
-                                          itemCount: 10,
+                                          itemCount: _objectCreateViewModel
+                                              .phases.length,
                                           itemBuilder: (context, index) {
                                             return ObjectStageListItemWidget(
-                                              showSeparator: index < 9,
-                                              // onTap: () => {}
-                                            );
+                                                title: _objectCreateViewModel
+                                                    .phases[index],
+                                                effectivenes: 0,
+                                                readiness: 0,
+                                                showSeparator: index < 9,
+                                                onTap: () =>
+                                                    _objectCreateViewModel
+                                                        .showPhaseScreen(
+                                                            context));
                                           })
                                     ])),
                             const SizedBox(height: 20.0),

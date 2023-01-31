@@ -4,11 +4,19 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/views/separator_widget.dart';
 
 class ObjectStageListItemWidget extends StatelessWidget {
+  final String title;
+  final int effectivenes;
+  final int readiness;
   final bool showSeparator;
   final VoidCallback? onTap;
 
   const ObjectStageListItemWidget(
-      {Key? key, required this.showSeparator, this.onTap})
+      {Key? key,
+      required this.title,
+      required this.effectivenes,
+      required this.readiness,
+      required this.showSeparator,
+      this.onTap})
       : super(key: key);
 
   @override
@@ -31,7 +39,7 @@ class ObjectStageListItemWidget extends StatelessWidget {
                   Row(
                     children: [
                       /// PHASE
-                      Expanded(child: Text('Этап', style: _textStyle)),
+                      Expanded(child: Text(title, style: _textStyle)),
 
                       /// EFFECTIVENESS
                       SizedBox(
@@ -39,7 +47,7 @@ class ObjectStageListItemWidget extends StatelessWidget {
                           child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 4.0),
-                              child: Text('50%',
+                              child: Text('$effectivenes %',
                                   textAlign: TextAlign.center,
                                   style: _textStyle))),
 
@@ -48,7 +56,7 @@ class ObjectStageListItemWidget extends StatelessWidget {
                           child: Row(children: [
                             /// READINESS
                             Expanded(
-                                child: Text('50%',
+                                child: Text('$readiness %',
                                     textAlign: onTap == null
                                         ? TextAlign.center
                                         : TextAlign.end,

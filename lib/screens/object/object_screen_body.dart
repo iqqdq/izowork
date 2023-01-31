@@ -215,9 +215,13 @@ class _ObjectScreenBodyState extends State<ObjectScreenBodyWidget> {
                                       padding: EdgeInsets.zero,
                                       physics:
                                           const NeverScrollableScrollPhysics(),
-                                      itemCount: 10,
+                                      itemCount: _objectViewModel.phases.length,
                                       itemBuilder: (context, index) {
                                         return ObjectStageListItemWidget(
+                                            title:
+                                                _objectViewModel.phases[index],
+                                            effectivenes: 50,
+                                            readiness: 50,
                                             showSeparator: index < 9,
                                             onTap: () => _objectViewModel
                                                 .showPhaseScreen(context));
@@ -238,7 +242,8 @@ class _ObjectScreenBodyState extends State<ObjectScreenBodyWidget> {
                             margin: const EdgeInsets.only(bottom: 20.0),
                             title: '',
                             value: Titles.documents,
-                            onTap: () => {}),
+                            onTap: () =>
+                                _objectViewModel.showDocumentsScreen(context)),
 
                         /// COMMENT LIST VIEW
                         ListView.builder(
@@ -255,7 +260,8 @@ class _ObjectScreenBodyState extends State<ObjectScreenBodyWidget> {
                         BorderButtonWidget(
                             title: Titles.addComment,
                             margin: const EdgeInsets.only(bottom: 16.0),
-                            onTap: () => {}),
+                            onTap: () =>
+                                _objectViewModel.showCommentScreen(context)),
 
                         /// SHOW CHAT BUTTON
                         BorderButtonWidget(

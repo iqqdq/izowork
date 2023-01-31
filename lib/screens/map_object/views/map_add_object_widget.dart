@@ -33,7 +33,7 @@ class MapAddObjectWidget extends StatelessWidget {
                   const DismissIndicatorWidget(),
 
                   /// ADDRESS
-                  const TitleWidget(text: Titles.placeAddress),
+                  const TitleWidget(text: Titles.address),
                   const SizedBox(height: 8.0),
                   SubtitleWidget(text: address),
                   const SizedBox(height: 16.0),

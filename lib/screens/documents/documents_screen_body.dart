@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/object.dart';
 import 'package:izowork/models/documents_view_model.dart';
 import 'package:izowork/screens/documents/views/documents_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -13,7 +14,9 @@ import 'package:izowork/views/separator_widget.dart';
 import 'package:provider/provider.dart';
 
 class DocumentsScreenBodyWidget extends StatefulWidget {
-  const DocumentsScreenBodyWidget({Key? key}) : super(key: key);
+  final Object? object;
+
+  const DocumentsScreenBodyWidget({Key? key, this.object}) : super(key: key);
 
   @override
   _DocumentsScreenBodyState createState() => _DocumentsScreenBodyState();
@@ -98,10 +101,11 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
                   right: 16.0,
                   top: 16.0,
                   bottom: 80.0 + MediaQuery.of(context).padding.bottom),
-              itemCount: 10,
+              itemCount: widget.object == null ? 10 : 1,
               itemBuilder: (context, index) {
                 return DocumentListItemWidget(
-                    isExpanded: _list.contains(index),
+                    isExpanded:
+                        widget.object == null ? _list.contains(index) : true,
                     onTap: () => setState(() => _list.contains(index)
                         ? _list.removeWhere((element) => element == index)
                         : _list.add(index)));
