@@ -1,6 +1,6 @@
 class Pagination {
-  Pagination({required this.page, required this.size});
+  Pagination({required this.offset, required this.size});
 
-  int page;
+  int offset;
   int size;
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/phase.dart';
+import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/phase_create_view_model.dart';
 import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/phase/views/check_list_item_widget.dart';

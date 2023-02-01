@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/deal.dart';
+import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/models/deal_view_model.dart';
 import 'package:izowork/screens/deal/views/process_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';

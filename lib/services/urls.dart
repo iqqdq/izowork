@@ -1,0 +1,10 @@
+const baseUrl = 'http://185.116.194.234/api/';
+const socketUrl = '';
+const mediaUrl = baseUrl + 'resourses/';
+const avatarUrl = mediaUrl + 'avatar/';
+const uploadAvatarUrl = baseUrl + 'user/avatar';
+const loginUrl = baseUrl + 'auth/login';
+const profileUrl = baseUrl + 'user/me';
+const usersUrl = baseUrl + 'user/all';
+const userUrl = baseUrl + 'user/one';
+const userUpdateUrl = baseUrl + 'user/profile';

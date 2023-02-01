@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/entities/deal.dart';
-import 'package:izowork/entities/task.dart';
+import 'package:izowork/entities/response/deal.dart';
+import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/screens/actions/deals_filter_sheet/deals_filter_page_view_widget.dart';
 import 'package:izowork/screens/actions/tasks_filter_sheet%20/tasks_filter_page_view_widget.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';

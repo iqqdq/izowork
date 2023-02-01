@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
-import 'package:izowork/entities/task.dart';
+import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/models/task_event_view_model.dart';
 import 'package:izowork/screens/actions/views/action_task_list_item_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';

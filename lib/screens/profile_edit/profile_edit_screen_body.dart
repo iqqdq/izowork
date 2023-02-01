@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/models/profile_edit_view_model.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
@@ -20,7 +23,10 @@ class SocialInputModel {
 }
 
 class ProfileEditScreenBodyWidget extends StatefulWidget {
-  const ProfileEditScreenBodyWidget({Key? key}) : super(key: key);
+  final Function(User) onPop;
+
+  const ProfileEditScreenBodyWidget({Key? key, required this.onPop})
+      : super(key: key);
 
   @override
   _ProfileEditScreenBodyState createState() => _ProfileEditScreenBodyState();
@@ -39,11 +45,11 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
   final TextEditingController _phoneTextEditingConrtoller =
       TextEditingController();
   final FocusNode _phoneFocusNode = FocusNode();
-  final List<SocialInputModel> _socials = [
-    SocialInputModel(TextEditingController(), FocusNode())
-  ];
-  int _index = 0;
+  final List<SocialInputModel> _socials = [];
   late ProfileEditViewModel _profileEditViewModel;
+
+  int _index = 0;
+  bool _isRequesting = true;
 
   @override
   void dispose() {
@@ -66,6 +72,24 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
     _profileEditViewModel =
         Provider.of<ProfileEditViewModel>(context, listen: true);
 
+    if (_isRequesting && _profileEditViewModel.user != null) {
+      _isRequesting = false;
+      _emailTextEditingConrtoller.text = _profileEditViewModel.user!.email;
+      _nameTextEditingConrtoller.text = _profileEditViewModel.user!.name ?? '';
+      _postTextEditingConrtoller.text = _profileEditViewModel.user!.post ?? '';
+      _phoneTextEditingConrtoller.text =
+          _profileEditViewModel.user!.phone ?? '';
+
+      if (_profileEditViewModel.user!.social.isEmpty) {
+        _socials.add(SocialInputModel(TextEditingController(), FocusNode()));
+      } else {
+        for (var element in _profileEditViewModel.user!.social) {
+          _socials.add(SocialInputModel(
+              TextEditingController(text: element), FocusNode()));
+        }
+      }
+    }
+
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
@@ -78,8 +102,11 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
               Stack(children: [
                 Padding(
                     padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
+                    child: BackButtonWidget(
+                        onTap: () => {
+                              widget.onPop(_profileEditViewModel.user!),
+                              Navigator.pop(context)
+                            })),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(Titles.profileEdit,
                       style: TextStyle(
@@ -101,22 +128,48 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                       bottom: MediaQuery.of(context).padding.bottom + 140.0),
                   children: [
                     /// AVATAR
-                    Center(
-                        child: Stack(children: [
-                      SvgPicture.asset('assets/ic_avatar.svg',
-                          width: 80.0, height: 80.0, fit: BoxFit.cover),
-                      //   ClipRRect(
-                      //   borderRadius: BorderRadius.circular(40.0),
-                      //   child:
-                      // CachedNetworkImage(imageUrl: '', width: 80.0, height: 80.0, cacheWidth: 80 * (MediaQuery.of(context).devicePixelRatio).round(), cacheHeight: 80 * (MediaQuery.of(context).devicePixelRatio).round(), fit: BoxFit.cover)),
-                    ])),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      Stack(children: [
+                        SvgPicture.asset('assets/ic_avatar.svg',
+                            color: HexColors.grey40,
+                            width: 80.0,
+                            height: 80.0,
+                            fit: BoxFit.cover),
+                        _profileEditViewModel.user == null
+                            ? Container()
+                            : _profileEditViewModel.user!.avatar == null
+                                ? Container()
+                                : _profileEditViewModel.user!.avatar!.isEmpty
+                                    ? Container()
+                                    : ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(40.0),
+                                        child: CachedNetworkImage(
+                                            cacheKey: _profileEditViewModel
+                                                .user!.avatar!,
+                                            imageUrl: avatarUrl +
+                                                _profileEditViewModel
+                                                    .user!.avatar!,
+                                            width: 80.0,
+                                            height: 80.0,
+                                            memCacheWidth: 80 *
+                                                MediaQuery.of(context)
+                                                    .devicePixelRatio
+                                                    .round(),
+                                            memCacheHeight: 80 *
+                                                MediaQuery.of(context)
+                                                    .devicePixelRatio
+                                                    .round(),
+                                            fit: BoxFit.cover)),
+                      ])
+                    ]),
                     const SizedBox(height: 24.0),
 
                     /// CHANGE AVATAR BUTTON
                     BorderButtonWidget(
                         title: Titles.changeAvatar,
                         margin: EdgeInsets.zero,
-                        onTap: () => _profileEditViewModel.setAvatar()),
+                        onTap: () => _profileEditViewModel.pickImage(context)),
                     const SizedBox(height: 24.0),
 
                     /// NAME INPUT
@@ -125,6 +178,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                         height: 56.0,
                         textEditingController: _nameTextEditingConrtoller,
                         focusNode: _nameFocusNode,
+                        textCapitalization: TextCapitalization.words,
                         placeholder: Titles.fullname,
                         onTap: () => {
                               setState(() => {
@@ -142,6 +196,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                         height: 56.0,
                         textEditingController: _postTextEditingConrtoller,
                         focusNode: _postFocusNode,
+                        textCapitalization: TextCapitalization.sentences,
                         placeholder: Titles.post,
                         onTap: () => {
                               setState(() => {
@@ -176,6 +231,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                         height: 56.0,
                         textEditingController: _phoneTextEditingConrtoller,
                         focusNode: _phoneFocusNode,
+                        textInputType: TextInputType.phone,
                         placeholder: Titles.phone,
                         onTap: () => {
                               setState(() => {
@@ -202,6 +258,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                                   textEditingController:
                                       _socials[index].textEditingController,
                                   focusNode: _socials[index].focusNode,
+                                  textCapitalization: TextCapitalization.none,
                                   placeholder: Titles.socialLink,
                                   onTap: () => {
                                         setState(() => {
@@ -247,8 +304,23 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                   child: ButtonWidget(
                       title: Titles.save,
                       onTap: () => {
-                            // TODO UPDATE PROFILE
-                            Navigator.pop(context)
+                            FocusScope.of(context).unfocus(),
+                            _profileEditViewModel
+                                .changeUserInfo(
+                                    context,
+                                    _nameTextEditingConrtoller.text,
+                                    _postTextEditingConrtoller.text,
+                                    _emailTextEditingConrtoller.text,
+                                    _phoneTextEditingConrtoller.text,
+                                    _socials)
+                                .then((value) => {
+                                      if (_profileEditViewModel.user != null)
+                                        {
+                                          widget.onPop(
+                                              _profileEditViewModel.user!),
+                                          Navigator.pop(context)
+                                        }
+                                    })
                           }))),
 
           /// INDICATOR

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/analytics_objects_filter_view_model.dart';
-import 'package:izowork/models/products_filter_view_model.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/title_widget.dart';

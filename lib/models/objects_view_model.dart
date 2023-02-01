@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/entities/object.dart';
+import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/screens/object/object_screen.dart';
 import 'package:izowork/screens/object_create/object_create_screen.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_widget.dart';

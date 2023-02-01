@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
@@ -25,7 +24,7 @@ class _EditDealProcessScreenBodyState
     extends State<EditDealProcessScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  List<PlatformFile> _files = [];
+  final List<PlatformFile> _files = [];
 
   @override
   void dispose() {

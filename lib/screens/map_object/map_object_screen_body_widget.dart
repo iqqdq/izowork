@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/map_object.dart';
+import 'package:izowork/entities/response/map_object.dart';
 import 'package:izowork/models/map_object_view_model.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';

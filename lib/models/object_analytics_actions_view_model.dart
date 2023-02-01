@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/screens/actions/actions_screen.dart';
-import 'package:izowork/screens/analytics/analytics_actions/analytics_actions_filter_sheet/analytics_actions_filter_page_view_widget.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ObjectAnalyticsActionsViewModel with ChangeNotifier {
   // LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -29,7 +25,8 @@ class ObjectAnalyticsActionsViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const ProfileScreenWidget(isMine: false)));
+            builder: (context) =>
+                ProfileScreenWidget(user: null, onPop: (user) => null)));
   }
   // MARK: -
   // MARK: - FUNCTIONS

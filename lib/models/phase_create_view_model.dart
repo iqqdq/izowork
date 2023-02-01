@@ -2,15 +2,10 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/locale.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/phase.dart';
+import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/search_view_model.dart';
-import 'package:izowork/models/selection_view_model.dart';
 import 'package:izowork/screens/search/search_screen.dart';
-import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
-import 'package:izowork/views/date_time_wheel_picker_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class PhaseCreateViewModel with ChangeNotifier {

@@ -78,7 +78,6 @@ abstract class Titles {
   static const productsType = 'Тип товаров';
   static const successDealCount = 'Кол-во успешных сделок';
   static const profile = 'Профиль';
-  static const myProfile = 'Мой профиль';
   static const profileEdit = 'Редактирование профиля';
   static const message = 'Сообщение';
   static const typeMessage = 'Сообщение...';
@@ -99,6 +98,8 @@ abstract class Titles {
   static const deliveryTimeInMonth = 'Срок поставки, мес';
   static const count = 'Кол-во';
   static const complition = 'Выполнение';
+  static const noResult = 'Список пуст';
+  static const changesSuccess = 'Изменения сохранены';
 
   /// CHART
   static const generalContractor = 'Ген.подрядчик';

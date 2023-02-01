@@ -1,32 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/repositories/user_repository.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class ProfileViewModel with ChangeNotifier {
-  final bool isMine;
+  final User? currentUser;
 
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
   LoadingStatus loadingStatus = LoadingStatus.empty;
+  User? _user;
 
-  ProfileViewModel(this.isMine);
-
-  // MARK: -
-  // MARK: - ACTIONS
-
-  void showProfileEditScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const ProfileEditScreenWidget()));
+  User? get user {
+    return _user;
   }
 
-  void openSocialUrl(String url) async {
-    if (await canLaunchUrl(Uri(path: url))) {
-      launchUrl(Uri(path: url));
-    } else if (await canLaunchUrlString(url)) {
-      launchUrlString(url);
+  ProfileViewModel(this.currentUser) {
+    getUserProfile(currentUser?.id);
+  }
+
+  // MARK: -
+  // MARK: - API CALL
+
+  Future getUserProfile(String? id) async {
+    loadingStatus = LoadingStatus.searching;
+
+    await UserRepository().getUser(id).then((response) => {
+          if (response is User)
+            {
+              _user = response,
+              loadingStatus = LoadingStatus.completed,
+            }
+          else
+            {loadingStatus = LoadingStatus.error},
+          notifyListeners()
+        });
+  }
+
+  void openUrl(String url) async {
+    if (url.isNotEmpty) {
+      if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
+        launchUrl(Uri.parse(url.replaceAll(' ', '')));
+      } else {
+        if (await canLaunchUrl(
+            Uri.parse('https://' + url.replaceAll(' ', '')))) {
+          launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
+        } else {
+          if (await canLaunchUrl(
+              Uri.parse('https://' + url.replaceAll(' ', '')))) {
+            launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
+          }
+        }
+      }
+    }
+  }
+
+  // MARK: -
+  // MARK: - PUSH
+
+  void showProfileEditScreen(BuildContext context) {
+    if (_user != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProfileEditScreenWidget(
+                  user: _user!,
+                  onPop: (user) => {_user = user, notifyListeners()})));
     }
   }
 }

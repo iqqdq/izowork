@@ -5,7 +5,7 @@ import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/chat.dart';
+import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/models/chat_view_model.dart';
 import 'package:izowork/screens/chat/views/chat_list_item_widget.dart';
 import 'package:izowork/views/floating_button_widget.dart';

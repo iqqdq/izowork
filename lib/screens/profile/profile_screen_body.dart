@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/models/profile_view_model.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
@@ -13,8 +16,9 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreenBodyWidget extends StatefulWidget {
-  final bool isMine;
-  const ProfileScreenBodyWidget({Key? key, required this.isMine})
+  final Function(User) onPop;
+
+  const ProfileScreenBodyWidget({Key? key, required this.onPop})
       : super(key: key);
 
   @override
@@ -50,10 +54,13 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
               Stack(children: [
                 Padding(
                     padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
+                    child: BackButtonWidget(
+                        onTap: () => {
+                              widget.onPop(_profileViewModel.user!),
+                              Navigator.pop(context)
+                            })),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(widget.isMine ? Titles.myProfile : Titles.profile,
+                  Text(Titles.profile,
                       style: TextStyle(
                           color: HexColors.black,
                           fontSize: 18.0,
@@ -71,20 +78,46 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                   bottom: MediaQuery.of(context).padding.bottom + 60.0),
               children: [
                 /// AVATAR
-                Center(
-                    child: Stack(children: [
-                  SvgPicture.asset('assets/ic_avatar.svg',
-                      width: 80.0, height: 80.0, fit: BoxFit.cover),
-                  //   ClipRRect(
-                  //   borderRadius: BorderRadius.circular(40.0),
-                  //   child:
-                  // CachedNetworkImage(imageUrl: '', width: 80.0, height: 80.0, cacheWidth: 80 * (MediaQuery.of(context).devicePixelRatio).round(), cacheHeight: 80 * (MediaQuery.of(context).devicePixelRatio).round(), fit: BoxFit.cover)),
-                ])),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Stack(children: [
+                    SvgPicture.asset('assets/ic_avatar.svg',
+                        color: HexColors.grey40,
+                        width: 80.0,
+                        height: 80.0,
+                        fit: BoxFit.cover),
+                    _profileViewModel.user == null
+                        ? Container()
+                        : _profileViewModel.user!.avatar == null
+                            ? Container()
+                            : _profileViewModel.user!.avatar!.isEmpty
+                                ? Container()
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(40.0),
+                                    child: CachedNetworkImage(
+                                      cacheKey: _profileViewModel
+                                                    .user!.avatar!,
+                                        imageUrl: avatarUrl +
+                                            _profileViewModel.user!.avatar!,
+                                        width: 80.0,
+                                        height: 80.0,
+                                        memCacheWidth: 80 *
+                                            MediaQuery.of(context)
+                                                .devicePixelRatio
+                                                .round(),
+                                        memCacheHeight: 80 *
+                                            MediaQuery.of(context)
+                                                .devicePixelRatio
+                                                .round(),
+                                        fit: BoxFit.cover)),
+                  ])
+                ]),
                 const SizedBox(height: 14.0),
 
                 /// NAME
                 Text(
-                  'Имя Фамилия',
+                  _profileViewModel.user?.name ??
+                      _profileViewModel.currentUser?.name ??
+                      '',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: HexColors.black,
@@ -99,7 +132,10 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     text: Titles.post,
                     padding: EdgeInsets.only(bottom: 4.0),
                     isSmall: true),
-                Text('Менеджер по продажам',
+                Text(
+                    _profileViewModel.user?.post ??
+                        _profileViewModel.currentUser?.post ??
+                        '-',
                     style: TextStyle(
                         color: HexColors.black,
                         fontSize: 14.0,
@@ -113,7 +149,10 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     text: Titles.email,
                     padding: EdgeInsets.only(bottom: 4.0),
                     isSmall: true),
-                Text('example@mail.ru',
+                Text(
+                    _profileViewModel.user?.email ??
+                        _profileViewModel.currentUser?.email ??
+                        '-',
                     style: TextStyle(
                         color: HexColors.black,
                         fontSize: 14.0,
@@ -127,43 +166,66 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     text: Titles.phone,
                     padding: EdgeInsets.only(bottom: 4.0),
                     isSmall: true),
-                Text('+7 791 395 54 49',
+                Text(
+                    _profileViewModel.user?.phone ??
+                        _profileViewModel.currentUser?.phone ??
+                        '-',
                     style: TextStyle(
                         color: HexColors.black,
                         fontSize: 14.0,
                         fontFamily: 'PT Root UI')),
                 const SizedBox(height: 16.0),
-                const SeparatorWidget(),
+                _profileViewModel.user == null
+                    ? Container()
+                    : _profileViewModel.user!.social.isEmpty
+                        ? Container()
+                        : const SeparatorWidget(),
                 const SizedBox(height: 16.0),
 
                 /// SOCIAL
-                const TitleWidget(
-                    text: Titles.socialLinks,
-                    padding: EdgeInsets.only(bottom: 4.0),
-                    isSmall: true),
-                ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: InkWell(
-                              highlightColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              onTap: () => _profileViewModel
-                                  .openSocialUrl('https://vk.com/yuriy_tim'),
-                              child: Text('https://vk.com/yuriy_tim',
-                                  style: TextStyle(
-                                      color: HexColors.primaryDark,
-                                      fontSize: 14.0,
-                                      fontFamily: 'PT Root UI',
-                                      decoration: TextDecoration.underline))));
-                    })
+                _profileViewModel.user == null
+                    ? Container()
+                    : _profileViewModel.user!.social.isEmpty
+                        ? Container()
+                        : const TitleWidget(
+                            text: Titles.socialLinks,
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            isSmall: true),
+                _profileViewModel.user == null
+                    ? Container()
+                    : _profileViewModel.user!.social.isEmpty
+                        ? Container()
+                        : ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: _profileViewModel.user?.social.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                  padding: const EdgeInsets.only(bottom: 4.0),
+                                  child: InkWell(
+                                      highlightColor: Colors.transparent,
+                                      splashColor: Colors.transparent,
+                                      onTap: () => _profileViewModel.openUrl(
+                                          _profileViewModel.user?.social[index] ??
+                                              _profileViewModel
+                                                  .currentUser?.social[index] ??
+                                              ''),
+                                      child: Text(
+                                          _profileViewModel.user?.social[index] ??
+                                              _profileViewModel
+                                                  .currentUser?.social[index] ??
+                                              '-',
+                                          style: TextStyle(
+                                              color: HexColors.primaryDark,
+                                              fontSize: 14.0,
+                                              fontFamily: 'PT Root UI',
+                                              decoration:
+                                                  TextDecoration.underline))));
+                            })
               ]),
 
-          widget.isMine
+          _profileViewModel.currentUser == null
               ? Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(

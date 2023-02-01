@@ -5,7 +5,7 @@ import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/object.dart';
+import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/models/objects_view_model.dart';
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';

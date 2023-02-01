@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/entities/deal.dart';
-import 'package:izowork/entities/phase.dart';
-import 'package:izowork/models/search_view_model.dart';
+import 'package:izowork/entities/response/deal.dart';
+import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen.dart';
 import 'package:izowork/screens/phase/complete_task_screen_body.dart';
 import 'package:izowork/screens/phase_create/phase_create_screen.dart';
-import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 

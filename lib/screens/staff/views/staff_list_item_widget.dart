@@ -1,18 +1,23 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 
 class StaffListItemWidget extends StatelessWidget {
+  final User user;
   final VoidCallback onUserTap;
-  final VoidCallback onLinkTap;
+  final Function(String)? onLinkTap;
   final VoidCallback onChatTap;
 
   const StaffListItemWidget(
       {Key? key,
+      required this.user,
       required this.onUserTap,
-      required this.onLinkTap,
+      this.onLinkTap,
       required this.onChatTap})
       : super(key: key);
 
@@ -43,10 +48,25 @@ class StaffListItemWidget extends StatelessWidget {
                               width: 40.0,
                               height: 40.0,
                               fit: BoxFit.cover),
-                          // ClipRRect(
-                          //   borderRadius: BorderRadius.circular(12.0),
-                          //   child:
-                          // CachedNetworkImage(imageUrl: '', width: 40.0, height: 40.0, fit: BoxFit.cover)),
+                          user.avatar == null
+                              ? Container()
+                              : user.avatar!.isEmpty
+                                  ? Container()
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: CachedNetworkImage(
+                                          imageUrl: avatarUrl + user.avatar!,
+                                          width: 40.0,
+                                          height: 40.0,
+                                          memCacheWidth: 40 *
+                                              MediaQuery.of(context)
+                                                  .devicePixelRatio
+                                                  .round(),
+                                          memCacheHeight: 40 *
+                                              MediaQuery.of(context)
+                                                  .devicePixelRatio
+                                                  .round(),
+                                          fit: BoxFit.cover)),
                         ]),
                         const SizedBox(width: 10.0),
 
@@ -55,7 +75,7 @@ class StaffListItemWidget extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                               /// STAFF NAME
-                              Text('Имя сотрудника',
+                              Text(user.name ?? '',
                                   style: TextStyle(
                                       color: HexColors.black,
                                       fontSize: 14.0,
@@ -64,7 +84,7 @@ class StaffListItemWidget extends StatelessWidget {
                               const SizedBox(height: 2.0),
 
                               /// STAFF SPECIALIZATION
-                              Text('Специальность',
+                              Text(user.post ?? '',
                                   style: TextStyle(
                                       color: HexColors.grey50,
                                       fontSize: 12.0,
@@ -72,30 +92,33 @@ class StaffListItemWidget extends StatelessWidget {
                             ]))
                       ]),
                       onTap: () => onUserTap()),
-                  const SizedBox(height: 16.0),
+                  SizedBox(height: user.social.isEmpty ? 0.0 : 16.0),
 
                   /// LINK LIST VIEW
-                  ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      itemCount: 3,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                            padding: const EdgeInsets.only(bottom: 4.0),
-                            child: InkWell(
+                  onLinkTap == null
+                      ? Container()
+                      : ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemCount: user.social.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
                                 borderRadius: BorderRadius.circular(16.0),
-                                child: Text('https://www.google.com/',
-                                    style: TextStyle(
-                                        color: HexColors.primaryDark,
-                                        fontSize: 14.0,
-                                        fontFamily: 'PT Root UI',
-                                        fontWeight: FontWeight.w600,
-                                        decoration: TextDecoration.underline)),
-                                onTap: () => onLinkTap()));
-                      }),
+                                child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 4.0),
+                                    child: Text(user.social[index],
+                                        style: TextStyle(
+                                            color: HexColors.primaryDark,
+                                            fontSize: 14.0,
+                                            fontFamily: 'PT Root UI',
+                                            fontWeight: FontWeight.w600,
+                                            decoration:
+                                                TextDecoration.underline))),
+                                onTap: () => onLinkTap!(user.social[index]));
+                          }),
                   const SizedBox(height: 16.0),
 
                   ButtonWidget(

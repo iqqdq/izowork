@@ -70,8 +70,10 @@ class _AuthorizationScreenBodyState
                       textEditingController: _loginTextEditingController,
                       focusNode: _loginFocusNode,
                       textInputType: TextInputType.emailAddress,
+                      textCapitalization: TextCapitalization.none,
                       margin: EdgeInsets.zero,
                       placeholder: Titles.login,
+                      onTap: () => setState(() {}),
                       onChange: (text) => setState(() {}),
                       onClearTap: () => setState(() {}),
                       onEditingComplete: (() =>
@@ -84,8 +86,10 @@ class _AuthorizationScreenBodyState
                       textEditingController: _passwordTextEditingController,
                       focusNode: _passwordFocusNode,
                       obscureText: true,
+                      textCapitalization: TextCapitalization.none,
                       margin: EdgeInsets.zero,
                       placeholder: Titles.password,
+                      onTap: () => setState(() {}),
                       onChange: (text) => setState(() {}),
                       onClearTap: () => setState(() {})),
                   const SizedBox(height: 24.0),
@@ -94,21 +98,23 @@ class _AuthorizationScreenBodyState
                           _passwordTextEditingController.text.isEmpty,
                       title: Titles.enter,
                       margin: EdgeInsets.zero,
-                      onTap: () => _authorizationViewModel
-                          .showTabControllerScreen(context)),
+                      onTap: () => _authorizationViewModel.authorize(
+                          context,
+                          _loginTextEditingController.text,
+                          _passwordTextEditingController.text)),
                   const SizedBox(height: 24.0),
                   TransparentButtonWidget(
                       title: Titles.forgotPassword,
                       margin: EdgeInsets.zero,
                       onTap: () =>
                           _authorizationViewModel.showRecoveryScreen(context))
-                ]),
+                ])
+          ]),
 
-            /// INDICATOR
-            _authorizationViewModel.loadingStatus == LoadingStatus.searching
-                ? const LoadingIndicatorWidget()
-                : Container()
-          ])
+          /// INDICATOR
+          _authorizationViewModel.loadingStatus == LoadingStatus.searching
+              ? const LoadingIndicatorWidget()
+              : Container()
         ])));
   }
 }

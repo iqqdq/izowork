@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/phase.dart';
+import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/phase_view_model.dart';
 import 'package:izowork/screens/phase/phase_screen_body.dart';
 import 'package:provider/provider.dart';

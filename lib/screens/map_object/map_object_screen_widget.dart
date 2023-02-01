@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/map_object.dart';
+import 'package:izowork/entities/response/map_object.dart';
 import 'package:izowork/models/map_object_view_model.dart';
 import 'package:izowork/screens/map_object/map_object_screen_body_widget.dart';
 import 'package:provider/provider.dart';

@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/more_view_model.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/screens/more/views/more_list_item_widget.dart';
 import 'package:izowork/views/title_widget.dart';
@@ -58,28 +60,56 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                 itemCount: _titles.length + 1,
                 itemBuilder: (context, index) {
                   return index == 0
-                      ? InkWell(
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          child: Column(
+                      ? GestureDetector(
+                          child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Stack(children: [
-                                  SvgPicture.asset('assets/ic_avatar.svg',
-                                      width: 80.0,
-                                      height: 80.0,
-                                      fit: BoxFit.cover,
-                                      color: HexColors.primaryMain),
-                                  // ClipRRect(
-                                  //   borderRadius: BorderRadius.circular(12.0),
-                                  //   child:
-                                  // CachedNetworkImage(imageUrl: '', width: 80.0, height: 80.0, fit: BoxFit.cover)),
-                                ]),
-                                const SizedBox(height: 14.0),
-                                const TitleWidget(
-                                    text: 'almaty_user18@kaspi.kz',
-                                    padding: EdgeInsets.zero),
-                                const SizedBox(height: 17.0),
+                                Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      /// AVATAR
+
+                                      Stack(children: [
+                                        SvgPicture.asset('assets/ic_avatar.svg',
+                                            color: HexColors.grey40,
+                                            width: 80.0,
+                                            height: 80.0,
+                                            fit: BoxFit.cover),
+                                        _moreViewModel.user?.avatar == null
+                                            ? Container()
+                                            : _moreViewModel
+                                                    .user!.avatar!.isEmpty
+                                                ? Container()
+                                                : ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            40.0),
+                                                    child: CachedNetworkImage(
+                                                        cacheKey: _moreViewModel
+                                                            .user!.avatar!,
+                                                        imageUrl: avatarUrl +
+                                                            _moreViewModel
+                                                                .user!.avatar!,
+                                                        width: 80.0,
+                                                        height: 80.0,
+                                                        memCacheWidth: 80 *
+                                                            MediaQuery.of(
+                                                                    context)
+                                                                .devicePixelRatio
+                                                                .round(),
+                                                        memCacheHeight: 80 *
+                                                            MediaQuery.of(
+                                                                    context)
+                                                                .devicePixelRatio
+                                                                .round(),
+                                                        fit: BoxFit.cover)),
+                                      ]),
+                                      TitleWidget(
+                                          text:
+                                              _moreViewModel.user?.email ?? '',
+                                          padding: const EdgeInsets.only(
+                                              top: 14.0, bottom: 16.0)),
+                                    ])
                               ]),
                           onTap: () =>
                               _moreViewModel.showProfileScreen(context))

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/task.dart';
+import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/models/task_create_view_model.dart';
 import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/views/back_button_widget.dart';

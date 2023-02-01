@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/object.dart';
+import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/models/documents_view_model.dart';
 import 'package:izowork/screens/documents/views/documents_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';

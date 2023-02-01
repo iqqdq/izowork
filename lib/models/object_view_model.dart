@@ -1,12 +1,11 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/object.dart';
-import 'package:izowork/entities/phase.dart';
+import 'package:izowork/entities/response/object.dart';
+import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/documents/documents_screen.dart';
 import 'package:izowork/screens/object/comment_screen_body.dart';

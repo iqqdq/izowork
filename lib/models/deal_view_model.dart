@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/entities/deal.dart';
+import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/models/selection_view_model.dart';
 import 'package:izowork/screens/deal/complete_deal_screen_body.dart';
 import 'package:izowork/screens/deal/close_deal_screen_body.dart';

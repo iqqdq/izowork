@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/pagination.dart';
 import 'package:izowork/models/staff_view_model.dart';
 import 'package:izowork/screens/staff/views/staff_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -19,13 +21,27 @@ class StaffScreenBodyWidget extends StatefulWidget {
 }
 
 class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
+  final ScrollController _scrollController = ScrollController();
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
+
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   late StaffViewModel _staffViewModel;
 
+  Pagination _pagination = Pagination(offset: 0, size: 50);
+  bool _isSearching = false;
+
   @override
   void initState() {
     super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _pagination.offset += 1;
+        _staffViewModel.getUserList(_pagination, _textEditingController.text);
+      }
+    });
   }
 
   @override
@@ -33,6 +49,13 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
     _textEditingController.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    setState(() => _pagination = Pagination(offset: 0, size: 50));
   }
 
   @override
@@ -78,29 +101,70 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
                             placeholder: '${Titles.search}...',
                             onTap: () => setState,
                             onChange: (text) => {
-                                  // TODO SEARCH STAFF
+                                  setState(() => _isSearching = true),
+                                  _debouncer.run(() {
+                                    _pagination.offset = 0;
+
+                                    _staffViewModel
+                                        .getUserList(_pagination,
+                                            _textEditingController.text)
+                                        .then((value) => setState(
+                                            () => _isSearching = false));
+                                  })
                                 },
                             onClearTap: () => {
-                                  // TODO CLEAR STAFF SEARCH
+                                  _pagination.offset = 0,
+                                  _staffViewModel.getUserList(_pagination, '')
                                 }))
               ])
             ])),
         body: SizedBox.expand(
             child: Stack(children: [
           /// STAFF LIST VIEW
-          ListView.builder(
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(
-                  left: 16.0, right: 16.0, top: 16.0, bottom: 16.0 + 48.0),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return StaffListItemWidget(
-                    onUserTap: () => _staffViewModel.showProfileScreen(context),
-                    onLinkTap: () =>
-                        _staffViewModel.openUrl('https://www.google.com/'),
-                    onChatTap: () => _staffViewModel.showDialogScreen(context));
-              }),
+          RefreshIndicator(
+              onRefresh: _onRefresh,
+              color: HexColors.primaryMain,
+              backgroundColor: HexColors.white,
+              child: ListView.builder(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                      top: 16.0,
+                      bottom: MediaQuery.of(context).padding.bottom == 0.0
+                          ? 12.0
+                          : MediaQuery.of(context).padding.bottom),
+                  shrinkWrap: true,
+                  itemCount: _staffViewModel.users.length,
+                  itemBuilder: (context, index) {
+                    return StaffListItemWidget(
+                        user: _staffViewModel.users[index],
+                        onUserTap: () => _staffViewModel.showProfileScreen(
+                            context, _staffViewModel.users[index]),
+                        onLinkTap: _staffViewModel.users[index].social.isEmpty
+                            ? null
+                            : (url) => _staffViewModel.openUrl(url),
+                        onChatTap: () =>
+                            _staffViewModel.showDialogScreen(context));
+                  })),
           const SeparatorWidget(),
+
+          /// EMPTY LIST TEXT
+          _staffViewModel.loadingStatus == LoadingStatus.completed &&
+                  _staffViewModel.users.isEmpty &&
+                  !_isSearching
+              ? Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, bottom: 116.0),
+                      child: Text(Titles.noResult,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16.0,
+                              color: HexColors.grey50))))
+              : Container(),
 
           /// INDICATOR
           _staffViewModel.loadingStatus == LoadingStatus.searching

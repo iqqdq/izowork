@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/deal.dart';
+import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/models/deal_create_view_model.dart';
 import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/deal_create/views/deal_product_list_item_widget.dart';
@@ -10,7 +10,6 @@ import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
-import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 

@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
-import 'package:izowork/entities/deal.dart';
+import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/models/deal_event_view_model.dart';
 import 'package:izowork/screens/actions/views/action_deal_list_item_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';

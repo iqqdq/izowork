@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/deal.dart';
+import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/models/deal_create_view_model.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen_body.dart';
 import 'package:provider/provider.dart';
