@@ -170,6 +170,7 @@ abstract class Titles {
   static const fullname = 'Фио';
   static const sorting = 'Сортировка';
   static const byAlphabet = 'По алфавиту';
+  static const byPrice = 'По цене';
   static const byEffectiveness = 'По эффективности';
   static const type = 'Тип';
   static const post = 'Должность';

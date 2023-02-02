@@ -16,9 +16,11 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreenBodyWidget extends StatefulWidget {
+  final bool isMine;
   final Function(User) onPop;
 
-  const ProfileScreenBodyWidget({Key? key, required this.onPop})
+  const ProfileScreenBodyWidget(
+      {Key? key, required this.isMine, required this.onPop})
       : super(key: key);
 
   @override
@@ -41,6 +43,14 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
   @override
   Widget build(BuildContext context) {
     _profileViewModel = Provider.of<ProfileViewModel>(context, listen: true);
+
+    String? _url = _profileViewModel.user == null
+        ? _profileViewModel.currentUser.avatar.isEmpty
+            ? null
+            : _profileViewModel.currentUser.avatar
+        : _profileViewModel.user!.avatar.isEmpty
+            ? null
+            : _profileViewModel.user!.avatar;
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -85,30 +95,24 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                         width: 80.0,
                         height: 80.0,
                         fit: BoxFit.cover),
-                    _profileViewModel.user == null
+                    _url == null
                         ? Container()
-                        : _profileViewModel.user!.avatar == null
-                            ? Container()
-                            : _profileViewModel.user!.avatar!.isEmpty
-                                ? Container()
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(40.0),
-                                    child: CachedNetworkImage(
-                                      cacheKey: _profileViewModel
-                                                    .user!.avatar!,
-                                        imageUrl: avatarUrl +
-                                            _profileViewModel.user!.avatar!,
-                                        width: 80.0,
-                                        height: 80.0,
-                                        memCacheWidth: 80 *
-                                            MediaQuery.of(context)
-                                                .devicePixelRatio
-                                                .round(),
-                                        memCacheHeight: 80 *
-                                            MediaQuery.of(context)
-                                                .devicePixelRatio
-                                                .round(),
-                                        fit: BoxFit.cover)),
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(40.0),
+                            child: CachedNetworkImage(
+                                cacheKey: _url,
+                                imageUrl: avatarUrl + _url,
+                                width: 80.0,
+                                height: 80.0,
+                                memCacheWidth: 80 *
+                                    MediaQuery.of(context)
+                                        .devicePixelRatio
+                                        .round(),
+                                memCacheHeight: 80 *
+                                    MediaQuery.of(context)
+                                        .devicePixelRatio
+                                        .round(),
+                                fit: BoxFit.cover)),
                   ])
                 ]),
                 const SizedBox(height: 14.0),
@@ -116,8 +120,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                 /// NAME
                 Text(
                   _profileViewModel.user?.name ??
-                      _profileViewModel.currentUser?.name ??
-                      '',
+                      _profileViewModel.currentUser.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: HexColors.black,
@@ -134,8 +137,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     isSmall: true),
                 Text(
                     _profileViewModel.user?.post ??
-                        _profileViewModel.currentUser?.post ??
-                        '-',
+                        _profileViewModel.currentUser.post,
                     style: TextStyle(
                         color: HexColors.black,
                         fontSize: 14.0,
@@ -151,8 +153,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     isSmall: true),
                 Text(
                     _profileViewModel.user?.email ??
-                        _profileViewModel.currentUser?.email ??
-                        '-',
+                        _profileViewModel.currentUser.email,
                     style: TextStyle(
                         color: HexColors.black,
                         fontSize: 14.0,
@@ -168,8 +169,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     isSmall: true),
                 Text(
                     _profileViewModel.user?.phone ??
-                        _profileViewModel.currentUser?.phone ??
-                        '-',
+                        _profileViewModel.currentUser.phone,
                     style: TextStyle(
                         color: HexColors.black,
                         fontSize: 14.0,
@@ -209,13 +209,11 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                                       onTap: () => _profileViewModel.openUrl(
                                           _profileViewModel.user?.social[index] ??
                                               _profileViewModel
-                                                  .currentUser?.social[index] ??
-                                              ''),
+                                                  .currentUser.social[index]),
                                       child: Text(
                                           _profileViewModel.user?.social[index] ??
                                               _profileViewModel
-                                                  .currentUser?.social[index] ??
-                                              '-',
+                                                  .currentUser.social[index],
                                           style: TextStyle(
                                               color: HexColors.primaryDark,
                                               fontSize: 14.0,
@@ -225,7 +223,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                             })
               ]),
 
-          _profileViewModel.currentUser == null
+          widget.isMine
               ? Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(

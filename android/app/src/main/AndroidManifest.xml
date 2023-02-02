@@ -1,7 +1,32 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.izowork">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WIFI" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+     <!--#docregion android-queries-->
+    <!-- Provide required visibility configuration for API level 30 and above -->
+    <queries>
+        <!-- If your app checks for SMS support -->
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="sms" />
+    </intent>
+    <!-- If your app checks for call support -->
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="tel" />
+    </intent>
+    <!-- The "https" scheme is only required for integration tests of this package.
+         It shouldn't be needed in most actual apps, or show up in the README! -->
+    <intent>
+      <action android:name="android.intent.action.VIEW" />
+      <data android:scheme="https" />
+    </intent>
+  </queries>
+    
    <application
         android:label="izowork"
         android:name="${applicationName}"

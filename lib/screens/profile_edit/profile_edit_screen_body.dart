@@ -75,10 +75,9 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
     if (_isRequesting && _profileEditViewModel.user != null) {
       _isRequesting = false;
       _emailTextEditingConrtoller.text = _profileEditViewModel.user!.email;
-      _nameTextEditingConrtoller.text = _profileEditViewModel.user!.name ?? '';
-      _postTextEditingConrtoller.text = _profileEditViewModel.user!.post ?? '';
-      _phoneTextEditingConrtoller.text =
-          _profileEditViewModel.user!.phone ?? '';
+      _nameTextEditingConrtoller.text = _profileEditViewModel.user!.name;
+      _postTextEditingConrtoller.text = _profileEditViewModel.user!.post;
+      _phoneTextEditingConrtoller.text = _profileEditViewModel.user!.phone;
 
       if (_profileEditViewModel.user!.social.isEmpty) {
         _socials.add(SocialInputModel(TextEditingController(), FocusNode()));
@@ -89,6 +88,14 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
         }
       }
     }
+
+    String? _url = _profileEditViewModel.user == null
+        ? _profileEditViewModel.currentUser.avatar.isEmpty
+            ? null
+            : _profileEditViewModel.currentUser.avatar
+        : _profileEditViewModel.user!.avatar.isEmpty
+            ? null
+            : _profileEditViewModel.user!.avatar;
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -135,32 +142,24 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                             width: 80.0,
                             height: 80.0,
                             fit: BoxFit.cover),
-                        _profileEditViewModel.user == null
+                        _url == null
                             ? Container()
-                            : _profileEditViewModel.user!.avatar == null
-                                ? Container()
-                                : _profileEditViewModel.user!.avatar!.isEmpty
-                                    ? Container()
-                                    : ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        child: CachedNetworkImage(
-                                            cacheKey: _profileEditViewModel
-                                                .user!.avatar!,
-                                            imageUrl: avatarUrl +
-                                                _profileEditViewModel
-                                                    .user!.avatar!,
-                                            width: 80.0,
-                                            height: 80.0,
-                                            memCacheWidth: 80 *
-                                                MediaQuery.of(context)
-                                                    .devicePixelRatio
-                                                    .round(),
-                                            memCacheHeight: 80 *
-                                                MediaQuery.of(context)
-                                                    .devicePixelRatio
-                                                    .round(),
-                                            fit: BoxFit.cover)),
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(40.0),
+                                child: CachedNetworkImage(
+                                    cacheKey: _url,
+                                    imageUrl: avatarUrl + _url,
+                                    width: 80.0,
+                                    height: 80.0,
+                                    memCacheWidth: 80 *
+                                        MediaQuery.of(context)
+                                            .devicePixelRatio
+                                            .round(),
+                                    memCacheHeight: 80 *
+                                        MediaQuery.of(context)
+                                            .devicePixelRatio
+                                            .round(),
+                                    fit: BoxFit.cover)),
                       ])
                     ]),
                     const SizedBox(height: 24.0),

@@ -1,14 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/product.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class ProductPageScreenWidget extends StatefulWidget {
   final String tag;
+  final Product product;
 
-  const ProductPageScreenWidget({Key? key, required this.tag})
+  const ProductPageScreenWidget(
+      {Key? key, required this.tag, required this.product})
       : super(key: key);
 
   @override
@@ -34,7 +39,7 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                     child:
                         BackButtonWidget(onTap: () => Navigator.pop(context))),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text('Название товара',
+                  Text(widget.product.name,
                       style: TextStyle(
                           color: HexColors.black,
                           fontSize: 18.0,
@@ -60,19 +65,25 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                                 height: 160.0,
                                 decoration: BoxDecoration(
                                     color: HexColors.grey20,
-                                    borderRadius: BorderRadius.circular(6.0))))
-
-                        // CachedNetworkImage(imageUrl: '', width: 160.0, height: 160.0,  cacheWidth: 100160 *
-                        //     (MediaQuery.of(context).devicePixelRatio)
-                        //         .round(),
-                        // cacheHeight: 160 *
-                        //     (MediaQuery.of(context).devicePixelRatio)
-                        //         .round(), fit: BoxFit.cover),
+                                    borderRadius: BorderRadius.circular(6.0)))),
+                        widget.product.image == null
+                            ? Container()
+                            : CachedNetworkImage(
+                                imageUrl: mediaUrl + widget.product.image!,
+                                width: 160.0,
+                                height: 160.0,
+                                memCacheWidth: 160 *
+                                    (MediaQuery.of(context).devicePixelRatio)
+                                        .round(),
+                                memCacheHeight: 160 *
+                                    (MediaQuery.of(context).devicePixelRatio)
+                                        .round(),
+                                fit: BoxFit.cover),
                       ]))),
               const SizedBox(height: 16.0),
 
               /// PRICE
-              Text('17 548 ₸ / кг',
+              Text('${widget.product.price} ${Titles.currency} / ${Titles.kg}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: HexColors.primaryDark,
@@ -87,7 +98,7 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                   padding: EdgeInsets.zero,
                   isSmall: true),
               const SizedBox(height: 4.0),
-              Text('Уралкалий',
+              Text(widget.product.company.name,
                   style: TextStyle(
                       color: HexColors.primaryDark,
                       fontSize: 14.0,
@@ -102,7 +113,7 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                   padding: EdgeInsets.zero,
                   isSmall: true),
               const SizedBox(height: 4.0),
-              Text('Смеси',
+              Text(widget.product.productType.name,
                   style: TextStyle(
                       color: HexColors.black,
                       fontSize: 14.0,
@@ -115,7 +126,7 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                   padding: EdgeInsets.zero,
                   isSmall: true),
               const SizedBox(height: 4.0),
-              Text('Смеси',
+              Text(widget.product.productType.name,
                   style: TextStyle(
                       color: HexColors.black,
                       fontSize: 14.0,

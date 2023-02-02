@@ -48,25 +48,24 @@ class StaffListItemWidget extends StatelessWidget {
                               width: 40.0,
                               height: 40.0,
                               fit: BoxFit.cover),
-                          user.avatar == null
+                          user.avatar.isEmpty
                               ? Container()
-                              : user.avatar!.isEmpty
-                                  ? Container()
-                                  : ClipRRect(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      child: CachedNetworkImage(
-                                          imageUrl: avatarUrl + user.avatar!,
-                                          width: 40.0,
-                                          height: 40.0,
-                                          memCacheWidth: 40 *
-                                              MediaQuery.of(context)
-                                                  .devicePixelRatio
-                                                  .round(),
-                                          memCacheHeight: 40 *
-                                              MediaQuery.of(context)
-                                                  .devicePixelRatio
-                                                  .round(),
-                                          fit: BoxFit.cover)),
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: CachedNetworkImage(
+                                      cacheKey: user.avatar,
+                                      imageUrl: avatarUrl + user.avatar,
+                                      width: 40.0,
+                                      height: 40.0,
+                                      memCacheWidth: 40 *
+                                          MediaQuery.of(context)
+                                              .devicePixelRatio
+                                              .round(),
+                                      memCacheHeight: 40 *
+                                          MediaQuery.of(context)
+                                              .devicePixelRatio
+                                              .round(),
+                                      fit: BoxFit.cover)),
                         ]),
                         const SizedBox(width: 10.0),
 
@@ -75,7 +74,7 @@ class StaffListItemWidget extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                               /// STAFF NAME
-                              Text(user.name ?? '',
+                              Text(user.name,
                                   style: TextStyle(
                                       color: HexColors.black,
                                       fontSize: 14.0,
@@ -84,7 +83,7 @@ class StaffListItemWidget extends StatelessWidget {
                               const SizedBox(height: 2.0),
 
                               /// STAFF SPECIALIZATION
-                              Text(user.post ?? '',
+                              Text(user.post,
                                   style: TextStyle(
                                       color: HexColors.grey50,
                                       fontSize: 12.0,

@@ -18,13 +18,13 @@ class StaffViewModel with ChangeNotifier {
   }
 
   StaffViewModel() {
-    getUserList(Pagination(offset: 0, size: 50), '');
+    getUserList(pagination: Pagination(offset: 0, size: 50));
   }
 
   // MARK: -
   // MARK: - API CALL
 
-  Future getUserList(Pagination pagination, String search) async {
+  Future getUserList({required Pagination pagination, String? search}) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _users.clear();
@@ -34,37 +34,39 @@ class StaffViewModel with ChangeNotifier {
       });
     }
 
-    await UserRepository().getUsers(pagination, search).then((response) => {
-          if (response is List<User>)
-            {
-              if (_users.isEmpty)
+    await UserRepository()
+        .getUsers(pagination: pagination, search: search)
+        .then((response) => {
+              if (response is List<User>)
                 {
-                  response.forEach((user) {
-                    _users.add(user);
-                  })
+                  if (_users.isEmpty)
+                    {
+                      response.forEach((user) {
+                        _users.add(user);
+                      })
+                    }
+                  else
+                    {
+                      response.forEach((newUser) {
+                        bool found = false;
+
+                        _users.forEach((user) {
+                          if (newUser.id == user.id) {
+                            found = true;
+                          }
+                        });
+
+                        if (!found) {
+                          _users.add(newUser);
+                        }
+                      })
+                    },
+                  loadingStatus = LoadingStatus.completed
                 }
               else
-                {
-                  response.forEach((newUser) {
-                    bool found = false;
-
-                    _users.forEach((user) {
-                      if (newUser.id == user.id) {
-                        found = true;
-                      }
-                    });
-
-                    if (!found) {
-                      _users.add(newUser);
-                    }
-                  })
-                },
-              loadingStatus = LoadingStatus.completed
-            }
-          else
-            loadingStatus = LoadingStatus.error,
-          notifyListeners()
-        });
+                loadingStatus = LoadingStatus.error,
+              notifyListeners()
+            });
   }
 
   // MARK: -
@@ -74,8 +76,8 @@ class StaffViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ProfileScreenWidget(user: user, onPop: (user) => null)));
+            builder: (context) => ProfileScreenWidget(
+                isMine: false, user: user, onPop: (user) => null)));
   }
 
   void showDialogScreen(BuildContext context) {

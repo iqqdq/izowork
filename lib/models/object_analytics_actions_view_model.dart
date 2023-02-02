@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/screens/profile/profile_screen.dart';
 
 class ObjectAnalyticsActionsViewModel with ChangeNotifier {
   // LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -22,11 +21,11 @@ class ObjectAnalyticsActionsViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showProfileScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ProfileScreenWidget(user: null, onPop: (user) => null)));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) =>
+    //             ProfileScreenWidget(user: null, onPop: (user) => null)));
   }
   // MARK: -
   // MARK: - FUNCTIONS

@@ -16,11 +16,11 @@ class CompanyViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showProductPageScreen(BuildContext context, int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ProductPageScreenWidget(tag: index.toString())));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) =>
+    //             ProductPageScreenWidget(tag: index.toString(), product: )));
   }
 
   void showCompanyProductFilterSheet(BuildContext context) {

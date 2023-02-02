@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/company_view_model.dart';
-import 'package:izowork/screens/products/views/product_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
@@ -188,10 +187,11 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                   bottom: MediaQuery.of(context).padding.bottom + 70.0),
               itemCount: 10,
               itemBuilder: (context, index) {
-                return ProductsListItemWidget(
-                    tag: index.toString(),
-                    onTap: () => _companyViewModel.showProductPageScreen(
-                        context, index));
+                return Container();
+                // return ProductsListItemWidget(
+                //     tag: index.toString(),
+                //     onTap: () => _companyViewModel.showProductPageScreen(
+                //         context, index));
               }))
     ]);
   }

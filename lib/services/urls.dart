@@ -8,3 +8,5 @@ const profileUrl = baseUrl + 'user/me';
 const usersUrl = baseUrl + 'user/all';
 const userUrl = baseUrl + 'user/one';
 const userUpdateUrl = baseUrl + 'user/profile';
+const productsUrl = baseUrl + 'product/all';
+const productTypesUrl = baseUrl + 'product-type/all';

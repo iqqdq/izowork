@@ -34,6 +34,7 @@ class _CommentScreenBodyState extends State<CommentScreenBodyWidget> {
         child: Container(
             color: HexColors.white,
             child: ListView(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 padding: EdgeInsets.only(
                     top: 8.0,

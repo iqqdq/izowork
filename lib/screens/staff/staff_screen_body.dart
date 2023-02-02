@@ -21,11 +21,12 @@ class StaffScreenBodyWidget extends StatefulWidget {
 }
 
 class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
+  final TextEditingController _textEditingController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+
   final ScrollController _scrollController = ScrollController();
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
-  final TextEditingController _textEditingController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
   late StaffViewModel _staffViewModel;
 
   Pagination _pagination = Pagination(offset: 0, size: 50);
@@ -39,7 +40,8 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         _pagination.offset += 1;
-        _staffViewModel.getUserList(_pagination, _textEditingController.text);
+        _staffViewModel.getUserList(
+            pagination: _pagination, search: _textEditingController.text);
       }
     });
   }
@@ -48,6 +50,7 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -106,15 +109,17 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
                                     _pagination.offset = 0;
 
                                     _staffViewModel
-                                        .getUserList(_pagination,
-                                            _textEditingController.text)
+                                        .getUserList(
+                                            pagination: _pagination,
+                                            search: _textEditingController.text)
                                         .then((value) => setState(
                                             () => _isSearching = false));
                                   })
                                 },
                             onClearTap: () => {
                                   _pagination.offset = 0,
-                                  _staffViewModel.getUserList(_pagination, '')
+                                  _staffViewModel.getUserList(
+                                      pagination: _pagination)
                                 }))
               ])
             ])),
@@ -167,7 +172,8 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
               : Container(),
 
           /// INDICATOR
-          _staffViewModel.loadingStatus == LoadingStatus.searching
+          _staffViewModel.loadingStatus == LoadingStatus.searching ||
+                  _isSearching
               ? const LoadingIndicatorWidget()
               : Container()
         ])));

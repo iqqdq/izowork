@@ -6,7 +6,7 @@ import 'package:izowork/screens/profile_edit/profile_edit_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileViewModel with ChangeNotifier {
-  final User? currentUser;
+  final User currentUser;
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
   User? _user;
@@ -16,7 +16,7 @@ class ProfileViewModel with ChangeNotifier {
   }
 
   ProfileViewModel(this.currentUser) {
-    getUserProfile(currentUser?.id);
+    getUserProfile(currentUser.id);
   }
 
   // MARK: -

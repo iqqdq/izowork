@@ -25,8 +25,7 @@ class UserRepository {
         await WebService().patch(userUpdateUrl, jsonEncode(userRequest));
 
     try {
-      User user = User.fromJson(json["user"]);
-      return user;
+      return User.fromJson(json["user"]);
     } catch (e) {
       return ErrorResponse.fromJson(json).message ?? e.toString();
     }
@@ -36,8 +35,7 @@ class UserRepository {
     dynamic json = await WebService().put(uploadAvatarUrl, formData);
 
     try {
-      String avatar = json["avatar"];
-      return avatar;
+      return json["avatar"] as String;
     } catch (e) {
       return ErrorResponse.fromJson(json).message ??
           ErrorResponse(
@@ -46,11 +44,12 @@ class UserRepository {
     }
   }
 
-  Future<Object> getUsers(Pagination pagination, String search) async {
+  Future<Object> getUsers(
+      {required Pagination pagination, String? search}) async {
     var url =
         usersUrl + '?&offset=${pagination.offset}&limit=${pagination.size}';
 
-    if (search.isNotEmpty) {
+    if (search != null) {
       url += '&q=$search';
     }
 

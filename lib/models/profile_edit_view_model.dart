@@ -74,7 +74,7 @@ class ProfileEditViewModel with ChangeNotifier {
             }
           else if (response is ErrorResponse)
             {
-              Toast().showTopToast(context, response.message ?? ''),
+              Toast().showTopToast(context, response.message ?? 'Ошибка'),
               loadingStatus = LoadingStatus.error
             },
           notifyListeners()
@@ -100,7 +100,7 @@ class ProfileEditViewModel with ChangeNotifier {
           else if (response is ErrorResponse)
             {
               loadingStatus = LoadingStatus.error,
-              Toast().showTopToast(context, response.message ?? '')
+              Toast().showTopToast(context, response.message ?? 'Ошибка')
             },
           notifyListeners()
         });

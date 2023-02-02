@@ -18,25 +18,25 @@ class User {
   String id;
   DateTime createdAt;
   String state;
-  String? name;
+  String name;
   String email;
-  String? phone;
+  String phone;
   List<String> social;
-  String? post;
-  String? avatar;
+  String post;
+  String avatar;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         createdAt: DateTime.parse(json["created_at"]),
         state: json["state"],
-        name: json["name"],
+        name: json["name"] ?? '-',
         email: json["email"],
-        phone: json["phone"],
+        phone: json["phone"] ?? '-',
         social: json["social"] == null
             ? []
             : List<String>.from(json["social"].map((x) => x)),
-        post: json["post"],
-        avatar: json["avatar"],
+        post: json["post"] ?? '-',
+        avatar: json["avatar"] ?? '-',
       );
 
   Map<String, dynamic> toJson() => {

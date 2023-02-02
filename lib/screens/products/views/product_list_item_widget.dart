@@ -1,12 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/product.dart';
+import 'package:izowork/services/urls.dart';
 
 class ProductsListItemWidget extends StatelessWidget {
+  final Product product;
   final String tag;
   final VoidCallback onTap;
 
   const ProductsListItemWidget(
-      {Key? key, required this.tag, required this.onTap})
+      {Key? key, required this.product, required this.tag, required this.onTap})
       : super(key: key);
 
   @override
@@ -38,14 +43,22 @@ class ProductsListItemWidget extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         color: HexColors.grey20,
                                         borderRadius:
-                                            BorderRadius.circular(6.0))))
-
-                            // CachedNetworkImage(imageUrl: '', width: 100.0, height: 100.0,  cacheWidth: 100 *
-                            //     (MediaQuery.of(context).devicePixelRatio)
-                            //         .round(),
-                            // cacheHeight: 100 *
-                            //     (MediaQuery.of(context).devicePixelRatio)
-                            //         .round(), fit: BoxFit.cover),
+                                            BorderRadius.circular(6.0)))),
+                            product.image == null
+                                ? Container()
+                                : CachedNetworkImage(
+                                    imageUrl: mediaUrl + product.image!,
+                                    width: 100.0,
+                                    height: 100.0,
+                                    memCacheWidth: 100 *
+                                        (MediaQuery.of(context)
+                                                .devicePixelRatio)
+                                            .round(),
+                                    memCacheHeight: 100 *
+                                        (MediaQuery.of(context)
+                                                .devicePixelRatio)
+                                            .round(),
+                                    fit: BoxFit.cover),
                           ])),
                       const SizedBox(width: 10.0),
                       Expanded(
@@ -55,8 +68,7 @@ class ProductsListItemWidget extends StatelessWidget {
                               children: [
                             /// NAME
                             Expanded(
-                                child: Text(
-                                    'Грунтовка глубокого прониковения “Интерьер”',
+                                child: Text(product.name,
                                     maxLines: 3,
                                     style: TextStyle(
                                         color: HexColors.black,
@@ -66,7 +78,8 @@ class ProductsListItemWidget extends StatelessWidget {
 
                             /// PRICE
                             Expanded(
-                                child: Text('17 548 ₸ / кг',
+                                child: Text(
+                                    '${product.price} ${Titles.currency} / ${product.unit}',
                                     maxLines: 2,
                                     style: TextStyle(
                                         color: HexColors.primaryDark,

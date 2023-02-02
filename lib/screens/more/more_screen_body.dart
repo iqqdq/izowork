@@ -78,7 +78,7 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                         _moreViewModel.user?.avatar == null
                                             ? Container()
                                             : _moreViewModel
-                                                    .user!.avatar!.isEmpty
+                                                    .user!.avatar.isEmpty
                                                 ? Container()
                                                 : ClipRRect(
                                                     borderRadius:
@@ -86,10 +86,10 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                                             40.0),
                                                     child: CachedNetworkImage(
                                                         cacheKey: _moreViewModel
-                                                            .user!.avatar!,
+                                                            .user!.avatar,
                                                         imageUrl: avatarUrl +
                                                             _moreViewModel
-                                                                .user!.avatar!,
+                                                                .user!.avatar,
                                                         width: 80.0,
                                                         height: 80.0,
                                                         memCacheWidth: 80 *
@@ -151,9 +151,9 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
           ]),
 
           /// INDICATOR
-          _moreViewModel.loadingStatus == LoadingStatus.searching
-              ? const LoadingIndicatorWidget()
-              : Container()
+          // _moreViewModel.loadingStatus == LoadingStatus.searching
+          //     ? const LoadingIndicatorWidget()
+          //     : Container()
         ]));
   }
 }

@@ -46,12 +46,15 @@ class MoreViewModel with ChangeNotifier {
   // MARK: - ACTIONS
 
   void showProfileScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ProfileScreenWidget(
-                user: null,
-                onPop: (user) => {_user = user, notifyListeners()})));
+    if (_user != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProfileScreenWidget(
+                  isMine: true,
+                  user: _user!,
+                  onPop: (user) => {_user = user, notifyListeners()})));
+    }
   }
 
   void showNewsScreen(BuildContext context) {
