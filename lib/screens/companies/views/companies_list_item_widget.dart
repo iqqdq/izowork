@@ -1,15 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/company.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/status_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class CompaniesListItemWidget extends StatelessWidget {
+  final Company company;
   final VoidCallback onTap;
 
-  const CompaniesListItemWidget({Key? key, required this.onTap})
+  const CompaniesListItemWidget(
+      {Key? key, required this.company, required this.onTap})
       : super(key: key);
 
   @override
@@ -29,26 +34,39 @@ class CompaniesListItemWidget extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 children: [
-                  /// STAFF
                   Row(children: [
-                    /// STAFF AVATAR
+                    /// AVATAR
                     Stack(children: [
-                      SvgPicture.asset('assets/ic_avatar.svg',
-                          color: HexColors.grey40,
-                          width: 40.0,
-                          height: 40.0,
-                          fit: BoxFit.cover),
-                      //   ClipRRect(
-                      //   borderRadius: BorderRadius.circular(12.0),
-                      //   child:
-                      // CachedNetworkImage(imageUrl: '', width: 40.0, height: 40.0, fit: BoxFit.cover)),
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: company.image == null
+                              ? SvgPicture.asset('assets/ic_avatar.svg',
+                                  color: HexColors.grey40,
+                                  width: 40.0,
+                                  height: 40.0,
+                                  fit: BoxFit.cover)
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: CachedNetworkImage(
+                                      imageUrl:
+                                          companyMedialUrl + company.image!,
+                                      width: 40.0,
+                                      height: 40.0,
+                                      memCacheWidth: 40 *
+                                          (MediaQuery.of(context)
+                                                  .devicePixelRatio)
+                                              .round(),
+                                      memCacheHeight: 40 *
+                                          (MediaQuery.of(context)
+                                                  .devicePixelRatio)
+                                              .round(),
+                                      fit: BoxFit.cover)))
                     ]),
                     const SizedBox(width: 10.0),
 
-                    /// COMPANY NAME
+                    /// NAME
                     Expanded(
-                        child: Text('Арзамас Холдинг',
-                            maxLines: 2,
+                        child: Text(company.name,
                             style: TextStyle(
                                 color: HexColors.black,
                                 fontSize: 14.0,
@@ -61,16 +79,16 @@ class CompaniesListItemWidget extends StatelessWidget {
                     Expanded(
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                          TitleWidget(
+                            children: [
+                          const TitleWidget(
                               text: Titles.address,
                               padding: EdgeInsets.zero,
                               isSmall: true),
-                          SizedBox(height: 4.0),
+                          const SizedBox(height: 4.0),
 
                           /// ADDRESS
                           SubtitleWidget(
-                              text: 'г. Астана, ул. Сталелитейная, д. 185',
+                              text: company.address,
                               padding: EdgeInsets.zero,
                               fontWeight: FontWeight.normal),
                         ]))
@@ -78,9 +96,7 @@ class CompaniesListItemWidget extends StatelessWidget {
                   const SizedBox(height: 10.0),
 
                   /// TAG
-                  Row(children: const [
-                    StatusWidget(title: 'Поставщик', status: 0)
-                  ])
+                  Row(children: [StatusWidget(title: company.type, status: 0)])
                 ])));
   }
 }

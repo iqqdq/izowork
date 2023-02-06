@@ -13,7 +13,7 @@ class Company {
     required this.email,
     required this.details,
     required this.description,
-    required this.image,
+    this.image,
     required this.type,
   });
 
@@ -24,17 +24,17 @@ class Company {
   String email;
   String details;
   String description;
-  String image;
+  String? image;
   String type;
 
   factory Company.fromJson(Map<String, dynamic> json) => Company(
         id: json["id"],
         name: json["name"],
-        address: json["address"],
-        phone: json["phone"],
-        email: json["email"],
-        details: json["details"],
-        description: json["description"],
+        address: json["address"] ?? '-',
+        phone: json["phone"] ?? '-',
+        email: json["email"] ?? '-',
+        details: json["details"] ?? '-',
+        description: json["description"] ?? '-',
         image: json["image"],
         type: json["type"],
       );

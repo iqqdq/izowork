@@ -64,6 +64,10 @@
 	<array>
   		<string>sms</string>
   		<string>tel</string>
+		<string>whatsapp</string>
+		<string>instagram</string>
+		<string>tg</string>
+		<string>vk</string>
 	</array>
 </dict>
 </plist>

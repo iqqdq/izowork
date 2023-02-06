@@ -1,7 +1,8 @@
 const baseUrl = 'http://185.116.194.234/api/';
 const socketUrl = '';
-const mediaUrl = baseUrl + 'resourses/';
-const avatarUrl = mediaUrl + 'avatar/';
+const productMedialUrl = baseUrl + 'resourses/product-image/';
+const companyMedialUrl = baseUrl + 'resourses/company-image/';
+const avatarUrl = baseUrl + 'resourses/avatar/';
 const uploadAvatarUrl = baseUrl + 'user/avatar';
 const loginUrl = baseUrl + 'auth/login';
 const profileUrl = baseUrl + 'user/me';
@@ -10,3 +11,4 @@ const userUrl = baseUrl + 'user/one';
 const userUpdateUrl = baseUrl + 'user/profile';
 const productsUrl = baseUrl + 'product/all';
 const productTypesUrl = baseUrl + 'product-type/all';
+const companiesUrl = baseUrl + 'company/all';

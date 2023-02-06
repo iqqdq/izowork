@@ -115,7 +115,6 @@ class _InputWidgetState extends State<InputWidget> {
                             icon: SvgPicture.asset('assets/ic_clear.svg'),
                             onPressed: () => {
                               widget.textEditingController.clear(),
-                              widget.onClearTap,
                               widget.onClearTap == null
                                   ? null
                                   : widget.onClearTap!()

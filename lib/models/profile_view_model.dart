@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/entities/response/user.dart';
@@ -39,19 +42,41 @@ class ProfileViewModel with ChangeNotifier {
 
   void openUrl(String url) async {
     if (url.isNotEmpty) {
-      if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-        launchUrl(Uri.parse(url.replaceAll(' ', '')));
-      } else {
-        if (await canLaunchUrl(
-            Uri.parse('https://' + url.replaceAll(' ', '')))) {
-          launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
-        } else {
-          if (await canLaunchUrl(
-              Uri.parse('https://' + url.replaceAll(' ', '')))) {
-            launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
+      String? nativeUrl;
+
+      if (url.contains('t.me')) {
+        nativeUrl = 'tg:resolve?domain=${url.replaceAll('t.me/', '')}';
+      } else if (url.characters.first == '@') {
+        nativeUrl = 'instagram://user?username=${url.replaceAll('@', '')}';
+      }
+
+      if (Platform.isAndroid) {
+        if (nativeUrl != null) {
+          AndroidIntent intent = AndroidIntent(
+              action: 'android.intent.action.VIEW', data: nativeUrl);
+
+          if ((await intent.canResolveActivity()) == true) {
+            await intent.launch();
           }
+        } else {
+          openBrowser(url);
+        }
+      } else {
+        if (nativeUrl != null) {
+          openBrowser(nativeUrl);
+        } else {
+          openBrowser(url);
         }
       }
+    }
+  }
+
+  void openBrowser(String url) async {
+    if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
+      launchUrl(Uri.parse(url.replaceAll(' ', '')));
+    } else if (await canLaunchUrl(
+        Uri.parse('https://' + url.replaceAll(' ', '')))) {
+      launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
     }
   }
 

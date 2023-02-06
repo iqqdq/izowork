@@ -50,7 +50,8 @@ class _ProductTypeSelectionScreenBodyState
                     Expanded(
                         child: ListView.builder(
                             shrinkWrap: true,
-                            padding: const EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.only(
+                                left: 16.0, right: 16.0, bottom: 16.0),
                             itemCount: _productTypeSelectionViewModel
                                 .productTypes.length,
                             itemBuilder: (context, index) {

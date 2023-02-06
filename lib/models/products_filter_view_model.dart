@@ -56,6 +56,8 @@ class ProductsFilterViewModel with ChangeNotifier {
   }
 
   Future apply(Function(List<String>) didReturnParams) async {
+    String sortBy = '&sort_by=';
+    String sortOrder = '&sort_order=';
     List<String> params = [];
 
     if (_productType != null) {
@@ -63,11 +65,39 @@ class ProductsFilterViewModel with ChangeNotifier {
     }
 
     if (tags.isNotEmpty) {
-      params.add('&sort_by=name');
+      sortBy = sortBy.contains('price') ? sortBy + ',name' : sortBy + 'name';
+
+      if (tags.first == 0) {
+        sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
+            ? sortOrder + ',asc'
+            : sortOrder = sortOrder + 'asc';
+      } else {
+        sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
+            ? sortOrder + ',desc'
+            : sortOrder = sortOrder + 'desc';
+      }
     }
 
     if (tags2.isNotEmpty) {
-      params.add('&sort_by=price');
+      sortBy = sortBy.contains('name') ? sortBy + ',price' : sortBy + 'price';
+
+      if (tags2.first == 0) {
+        sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
+            ? sortOrder + ',desc'
+            : sortOrder = sortOrder + 'desc';
+      } else {
+        sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
+            ? sortOrder + ',asc'
+            : sortOrder = sortOrder + 'asc';
+      }
+    }
+
+    if (sortBy != '&sort_by=') {
+      params.add(sortBy);
+    }
+
+    if (sortBy != '&sort_order=') {
+      params.add(sortOrder);
     }
 
     didReturnParams(params);

@@ -36,7 +36,7 @@ class User {
             ? []
             : List<String>.from(json["social"].map((x) => x)),
         post: json["post"] ?? '-',
-        avatar: json["avatar"] ?? '-',
+        avatar: json["avatar"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {

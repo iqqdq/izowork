@@ -8,7 +8,7 @@ import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/product.dart';
 import 'package:izowork/repositories/product_repository.dart';
-import 'package:izowork/screens/product_page/product_page_screen.dart';
+import 'package:izowork/screens/product/product_screen.dart';
 import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen.dart';
 import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen_body.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -108,6 +108,10 @@ class ProductsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
+  void resetFilter() {
+    _productsFilter = null;
+  }
+
   // MARK: -
   // MARK: - PUSH
 
@@ -131,7 +135,7 @@ class ProductsViewModel with ChangeNotifier {
                   if (productsFilter == null)
                     {
                       // CLEAR
-                      _productsFilter = null,
+                      resetFilter(),
                       onFilter()
                     }
                   else

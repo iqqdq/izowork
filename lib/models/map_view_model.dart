@@ -164,23 +164,23 @@ class MapViewModel with ChangeNotifier {
   }
 
   Future getAddressName() async {
-    GoogleGeocodingApi api = GoogleGeocodingApi(google_geocoding_api_key,
-        isLogged: false); // TODO - isLogged: false
-    GoogleGeocodingResponse reversedSearchResults = await api.reverse(
-        '${_position?.latitude}, ${_position?.longitude}',
-        language: locale);
+    // GoogleGeocodingApi api = GoogleGeocodingApi(google_geocoding_api_key,
+    //     isLogged: false); // TODO - isLogged: false
+    // GoogleGeocodingResponse reversedSearchResults = await api.reverse(
+    //     '${_position?.latitude}, ${_position?.longitude}',
+    //     language: locale);
 
-    // GET CITY
-    for (var element in reversedSearchResults.results.first.addressComponents) {
-      if (element.types.contains('locality')) {
-        _city = element.longName;
-      }
+    // // GET CITY
+    // for (var element in reversedSearchResults.results.first.addressComponents) {
+    //   if (element.types.contains('locality')) {
+    //     _city = element.longName;
+    //   }
 
-      // GET FORMATTED ADDRESS
-      _address = reversedSearchResults.results.first.formattedAddress;
-    }
+    //   // GET FORMATTED ADDRESS
+    //   _address = reversedSearchResults.results.first.formattedAddress;
+    // }
 
-    notifyListeners();
+    // notifyListeners();
   }
 
   void getAddressDetails(GoogleMapController controller, String placeId) async {

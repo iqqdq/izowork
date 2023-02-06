@@ -116,7 +116,11 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
                                   })
                                 },
                             onClearTap: () => {
-                                  // TODO CLEAR PRODUCTS SEARCH
+                                  _productsViewModel.resetFilter(),
+                                  _pagination.offset = 0,
+                                  _productsViewModel.getProductList(
+                                      pagination: _pagination,
+                                      search: _textEditingController.text)
                                 }))
               ])
             ])),
@@ -129,7 +133,7 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
               backgroundColor: HexColors.white,
               child: ListView.builder(
                   controller: _scrollController,
-                  shrinkWrap: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.only(
                       left: 16.0,
                       right: 16.0,
@@ -178,7 +182,9 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
           /// INDICATOR
           _productsViewModel.loadingStatus == LoadingStatus.searching ||
                   _isSearching
-              ? const LoadingIndicatorWidget()
+              ? const Padding(
+                  padding: EdgeInsets.only(bottom: 90.0),
+                  child: LoadingIndicatorWidget())
               : Container()
         ])));
   }

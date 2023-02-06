@@ -2,13 +2,20 @@
     package="com.example.izowork">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WIFI" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
+    
      <!--#docregion android-queries-->
     <!-- Provide required visibility configuration for API level 30 and above -->
     <queries>
+      <package android:name="com.instagram.android" />
+      <package android:name="com.facebook.katana" />
+      <package android:name="com.facebook.orca" />
+      <package android:name="org.telegram.messenger" />
+      <package android:name="com.whatsapp" />
+      <package android:name="com.twitter.android" />
         <!-- If your app checks for SMS support -->
     <intent>
       <action android:name="android.intent.action.VIEW" />
@@ -28,8 +35,9 @@
   </queries>
     
    <application
-        android:label="izowork"
+        android:label="Izowork"
         android:name="${applicationName}"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

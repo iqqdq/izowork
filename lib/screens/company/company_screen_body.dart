@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/company_view_model.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
@@ -46,22 +48,35 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           /// IMAGE
           Center(
               child: Stack(children: [
-            SvgPicture.asset('assets/ic_avatar.svg',
-                color: HexColors.grey40,
-                width: 80.0,
-                height: 80.0,
-                fit: BoxFit.cover)
+            ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: _companyViewModel.company.image == null
+                    ? SvgPicture.asset('assets/ic_avatar.svg',
+                        color: HexColors.grey40,
+                        width: 80.0,
+                        height: 80.0,
+                        fit: BoxFit.cover)
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: CachedNetworkImage(
+                            imageUrl: companyMedialUrl +
+                                _companyViewModel.company.image!,
+                            width: 80.0,
+                            height: 80.0,
+                            memCacheWidth: 80 *
+                                (MediaQuery.of(context).devicePixelRatio)
+                                    .round(),
+                            memCacheHeight: 80 *
+                                (MediaQuery.of(context).devicePixelRatio)
+                                    .round(),
+                            fit: BoxFit.cover)))
           ])),
-          //   ClipRRect(
-          //   borderRadius: BorderRadius.circular(12.0),
-          //   child:
-          // CachedNetworkImage(imageUrl: '', width: 40.0, height: 40.0, fit: BoxFit.cover)),
           const SizedBox(height: 16.0),
 
           /// TAG
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [StatusWidget(title: 'Поставщик', status: 0)]),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            StatusWidget(title: _companyViewModel.company.type, status: 0)
+          ]),
           const SizedBox(height: 16.0),
 
           /// DESCRIPTION
@@ -70,8 +85,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               padding: EdgeInsets.zero,
               isSmall: true),
           const SizedBox(height: 4.0),
-          Text(
-              'А ещё представители современных социальных резервов набирают популярность среди определенных слоев населения, а значит, должны быть рассмотрены исключительно в разрезе маркетинговых и финансовых предпосылок.',
+          Text(_companyViewModel.company.description,
               style: TextStyle(
                   height: 1.4,
                   color: HexColors.black,
@@ -83,7 +97,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const TitleWidget(
               text: Titles.address, padding: EdgeInsets.zero, isSmall: true),
           const SizedBox(height: 4.0),
-          Text('г. Астана, ул. Сталелитейная, д. 185',
+          Text(_companyViewModel.company.address,
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -94,7 +108,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const TitleWidget(
               text: Titles.phone, padding: EdgeInsets.zero, isSmall: true),
           const SizedBox(height: 4.0),
-          Text('+7 791 395 54 49',
+          Text(_companyViewModel.company.phone,
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -105,7 +119,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const TitleWidget(
               text: Titles.email, padding: EdgeInsets.zero, isSmall: true),
           const SizedBox(height: 4.0),
-          Text('arzamas_holding@mail.kz',
+          Text(_companyViewModel.company.email,
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -116,8 +130,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const TitleWidget(
               text: Titles.requisites, padding: EdgeInsets.zero, isSmall: true),
           const SizedBox(height: 4.0),
-          Text(
-              'ИНН 348623486\nОГРН 436823960026\nКПП 348623406207\nБИК 2964262307237',
+          Text(_companyViewModel.company.details,
               style: TextStyle(
                   height: 1.4,
                   color: HexColors.black,
@@ -131,7 +144,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               padding: EdgeInsets.zero,
               isSmall: true),
           const SizedBox(height: 4.0),
-          Text('Смеси',
+          Text('???',
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -144,7 +157,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               padding: EdgeInsets.zero,
               isSmall: true),
           const SizedBox(height: 4.0),
-          Text('123',
+          Text('???',
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -217,14 +230,16 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                     padding: const EdgeInsets.only(left: 16.0),
                     child:
                         BackButtonWidget(onTap: () => Navigator.pop(context))),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text('Арзамас Холдинг',
-                      style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 18.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold)),
-                ])
+                Padding(
+                    padding: const EdgeInsets.only(left: 60.0, right: 16.0),
+                    child: Center(
+                        child: Text(_companyViewModel.company.name,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: HexColors.black,
+                                fontSize: 18.0,
+                                fontFamily: 'PT Root UI',
+                                fontWeight: FontWeight.bold))))
               ]),
               const SizedBox(height: 16.0),
 

@@ -46,19 +46,22 @@ class ProductsListItemWidget extends StatelessWidget {
                                             BorderRadius.circular(6.0)))),
                             product.image == null
                                 ? Container()
-                                : CachedNetworkImage(
-                                    imageUrl: mediaUrl + product.image!,
-                                    width: 100.0,
-                                    height: 100.0,
-                                    memCacheWidth: 100 *
-                                        (MediaQuery.of(context)
-                                                .devicePixelRatio)
-                                            .round(),
-                                    memCacheHeight: 100 *
-                                        (MediaQuery.of(context)
-                                                .devicePixelRatio)
-                                            .round(),
-                                    fit: BoxFit.cover),
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(6.0),
+                                    child: CachedNetworkImage(
+                                        imageUrl:
+                                            productMedialUrl + product.image!,
+                                        width: 100.0,
+                                        height: 100.0,
+                                        memCacheWidth: 100 *
+                                            (MediaQuery.of(context)
+                                                    .devicePixelRatio)
+                                                .round(),
+                                        memCacheHeight: 100 *
+                                            (MediaQuery.of(context)
+                                                    .devicePixelRatio)
+                                                .round(),
+                                        fit: BoxFit.cover))
                           ])),
                       const SizedBox(width: 10.0),
                       Expanded(
