@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 class ObjectsFilterScreenBodyWidget extends StatefulWidget {
   final VoidCallback onManagerTap;
   final VoidCallback onDeveloperTap;
+  final VoidCallback onContractorTap;
   final VoidCallback onApplyTap;
   final VoidCallback onResetTap;
 
@@ -19,6 +20,7 @@ class ObjectsFilterScreenBodyWidget extends StatefulWidget {
       {Key? key,
       required this.onManagerTap,
       required this.onDeveloperTap,
+      required this.onContractorTap,
       required this.onApplyTap,
       required this.onResetTap})
       : super(key: key);
@@ -84,6 +86,13 @@ class _ObjectsFilterScreenBodyState
                             title: Titles.developer,
                             value: 'Название',
                             onTap: () => widget.onDeveloperTap()),
+                        const SizedBox(height: 10.0),
+
+                        /// CONTRACTOR SELECTION INPUT
+                        SelectionInputWidget(
+                            title: Titles.contractor,
+                            value: 'Имя Фамилия',
+                            onTap: () => widget.onContractorTap()),
 
                         const SizedBox(height: 16.0),
                         const TitleWidget(text: Titles.stages, isSmall: true),
@@ -146,12 +155,8 @@ class _ObjectsFilterScreenBodyState
                             runSpacing: 6.0,
                             value: options2,
                             choiceBuilder: (item, index) => InkWell(
-                                  onTap: () => setState(() => {
-                                        tags2.contains(index)
-                                            ? tags2.removeWhere(
-                                                (element) => element == index)
-                                            : tags2.add(index)
-                                      }),
+                                  onTap: () => setState(
+                                      () => {tags2.clear(), tags2.add(index)}),
                                   child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 10.0, vertical: 4.0),

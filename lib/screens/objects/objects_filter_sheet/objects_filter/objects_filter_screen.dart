@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 class ObjectsFilterScreenWidget extends StatelessWidget {
   final VoidCallback onManagerTap;
   final VoidCallback onDeveloperTap;
+  final VoidCallback onContractorTap;
   final VoidCallback onApplyTap;
   final VoidCallback onResetTap;
 
@@ -13,6 +14,7 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
       {Key? key,
       required this.onManagerTap,
       required this.onDeveloperTap,
+      required this.onContractorTap,
       required this.onApplyTap,
       required this.onResetTap})
       : super(key: key);
@@ -25,6 +27,7 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
             onManagerTap: onManagerTap,
             onDeveloperTap: onDeveloperTap,
             onApplyTap: onApplyTap,
-            onResetTap: onResetTap));
+            onResetTap: onResetTap,
+            onContractorTap: onContractorTap));
   }
 }

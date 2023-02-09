@@ -3,10 +3,10 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/models/selection_view_model.dart';
-import 'package:izowork/screens/deal/complete_deal_screen_body.dart';
-import 'package:izowork/screens/deal/close_deal_screen_body.dart';
-import 'package:izowork/screens/deal/edit_deal_process_screen_body.dart';
-import 'package:izowork/screens/deal/process_action_screen_body.dart';
+import 'package:izowork/screens/deal/close_deal_sheet.dart';
+import 'package:izowork/screens/deal/complete_deal_sheet.dart';
+import 'package:izowork/screens/deal/edit_deal_process_sheet.dart';
+import 'package:izowork/screens/deal/process_action_sheet.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -60,7 +60,7 @@ class DealViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => ProcessActionScreenBodyWidget(
+        builder: (context) => ProcessActionSheet(
             title: 'Позиция',
             onTap: (index) => {
                   if (index == 0)
@@ -78,7 +78,7 @@ class DealViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) =>
-            CompleteDealScreenBodyWidget(onTap: (text, files) => {}));
+            CompleteDealSheetWidget(onTap: (text, files) => {}));
   }
 
   void showEditDealProcessScreenSheet(BuildContext context) {
@@ -88,7 +88,7 @@ class DealViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) =>
-            EditDealProcessScreenBodyWidget(onTap: (text, files) => {}));
+            EditDealProcessSheetWidget(onTap: (text, files) => {}));
   }
 
   void showCloseDealScreenSheet(BuildContext context) {
@@ -97,7 +97,6 @@ class DealViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) =>
-            CloseDealScreenBodyWidget(onTap: (text, files) => {}));
+        builder: (context) => CloseDealSheetWidget(onTap: (text, files) => {}));
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/object_view_model.dart';
-import 'package:izowork/screens/object/views/object_comment_list_item_widget.dart';
 import 'package:izowork/screens/object/views/object_stage_header_widget.dart';
 import 'package:izowork/screens/object/views/object_stage_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -229,6 +228,14 @@ class _ObjectScreenBodyState extends State<ObjectScreenBodyWidget> {
                                 ])),
                         const SizedBox(height: 20.0),
 
+                        /// ACTIONS BUTTON
+                        SelectionInputWidget(
+                            margin: const EdgeInsets.only(bottom: 10.0),
+                            title: '',
+                            value: Titles.actions,
+                            onTap: () => _objectViewModel
+                                .showObjectActionsScreen(context)),
+
                         /// ANALYTICS BUTTON
                         SelectionInputWidget(
                             margin: const EdgeInsets.only(bottom: 10.0),
@@ -244,24 +251,6 @@ class _ObjectScreenBodyState extends State<ObjectScreenBodyWidget> {
                             value: Titles.documents,
                             onTap: () =>
                                 _objectViewModel.showDocumentsScreen(context)),
-
-                        /// COMMENT LIST VIEW
-                        ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 2,
-                            itemBuilder: (context, index) {
-                              return ObjectCommentListItemWidget(
-                                  onTap: () => {});
-                            }),
-
-                        /// ADD COMMENT BUTTON
-                        BorderButtonWidget(
-                            title: Titles.addComment,
-                            margin: const EdgeInsets.only(bottom: 16.0),
-                            onTap: () =>
-                                _objectViewModel.showCommentScreen(context)),
 
                         /// SHOW CHAT BUTTON
                         BorderButtonWidget(

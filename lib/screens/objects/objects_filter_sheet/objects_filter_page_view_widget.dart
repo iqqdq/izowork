@@ -65,6 +65,26 @@ class _ObjectsFilterPageViewState extends State<ObjectsFilterPageViewWidget> {
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeIn))
               },
+          onContractorTap: () => {
+                setState(() => _isSearching = true),
+                _pages.add(SearchScreenWidget(
+                    isRoot: false,
+                    searchType: SearchType.contractor,
+                    onPop: () => {
+                          setState(() => _isSearching = false),
+                          _pageController
+                              .animateToPage(0,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn)
+                              .then(
+                                  (value) => {if (mounted) _pages.removeLast()})
+                        })),
+                Future.delayed(
+                    const Duration(milliseconds: 100),
+                    () => _pageController.animateToPage(1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeIn))
+              },
           onApplyTap: widget.onApplyTap,
           onResetTap: widget.onResetTap),
     ];
@@ -89,8 +109,8 @@ class _ObjectsFilterPageViewState extends State<ObjectsFilterPageViewWidget> {
                   height: _isSearching
                       ? MediaQuery.of(context).size.height * 0.7
                       : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 450.0
-                          : 470.0,
+                          ? 512.0
+                          : 532.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),

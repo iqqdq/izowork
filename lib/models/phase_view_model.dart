@@ -32,14 +32,15 @@ class PhaseViewModel with ChangeNotifier {
             builder: (context) => DealScreenWidget(deal: Deal())));
   }
 
-  void showCompleteTaskScreenSheet(BuildContext context) {
+  void showCompleteTaskScreenSheet(BuildContext context, bool isComplete) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) =>
-            CompleteTaskScreenBodyWidget(onTap: (text, files) => {}));
+        builder: (context) => CompleteTaskSheetWidget(
+            isComplete: isComplete,
+            onTap: (text, files) => {Navigator.pop(context)}));
   }
 
   void showDealCreateScreen(BuildContext context) {

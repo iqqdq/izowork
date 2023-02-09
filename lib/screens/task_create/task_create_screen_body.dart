@@ -23,19 +23,20 @@ class TaskCreateScreenBodyWidget extends StatefulWidget {
 }
 
 class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
-  final TextEditingController _textEditingController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  final TextEditingController _nameTextEditingController =
+      TextEditingController();
+  final FocusNode _nameFocusNode = FocusNode();
+  final TextEditingController _descriptionTextEditingController =
+      TextEditingController();
+  final FocusNode _descriptionFocusNode = FocusNode();
   late TaskCreateViewModel _taskCreateViewModel;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    _textEditingController.dispose();
-    _focusNode.dispose();
+    _nameTextEditingController.dispose();
+    _nameFocusNode.dispose();
+    _descriptionTextEditingController.dispose();
+    _descriptionFocusNode.dispose();
     super.dispose();
   }
 
@@ -85,6 +86,20 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                               ? 20.0 + 54.0
                               : MediaQuery.of(context).padding.bottom + 54.0),
                       children: [
+                        /// DESCRTIPTION INPUT
+                        InputWidget(
+                          textEditingController: _nameTextEditingController,
+                          focusNode: _nameFocusNode,
+                          margin: EdgeInsets.zero,
+                          height: 58.0,
+                          placeholder: Titles.taskName,
+                          onTap: () => setState,
+                          onChange: (text) => {
+                            // TODO DESCRTIPTION
+                          },
+                        ),
+                        const SizedBox(height: 10.0),
+
                         /// STATUS SELECTION INPUT
                         SelectionInputWidget(
                             margin: const EdgeInsets.only(bottom: 10.0),
@@ -155,8 +170,9 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
 
                         /// DESCRTIPTION INPUT
                         InputWidget(
-                          textEditingController: _textEditingController,
-                          focusNode: _focusNode,
+                          textEditingController:
+                              _descriptionTextEditingController,
+                          focusNode: _descriptionFocusNode,
                           height: 168.0,
                           maxLines: 10,
                           margin: EdgeInsets.zero,

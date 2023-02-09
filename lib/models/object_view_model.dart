@@ -8,8 +8,9 @@ import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/documents/documents_screen.dart';
-import 'package:izowork/screens/object/comment_screen_body.dart';
-import 'package:izowork/screens/object_analytics/object_analytics_page_view_screen.dart';
+import 'package:izowork/screens/object_actions/object_action_create_screen.dart';
+import 'package:izowork/screens/object_actions/object_actions_screen.dart';
+import 'package:izowork/screens/object_analytics/object_analytics_screen.dart';
 import 'package:izowork/screens/object_create/object_create_screen.dart';
 import 'package:izowork/screens/phase/phase_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -62,8 +63,14 @@ class ObjectViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                const ObjectAnalyticsPageViewScreenBodyWidget()));
+            builder: (context) => const ObjectAnalyticsScreenWidget()));
+  }
+
+  void showObjectActionsScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const ObjectActionsScreenWidget()));
   }
 
   void showDocumentsScreen(BuildContext context) {
@@ -78,14 +85,5 @@ class ObjectViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => PhaseScreenWidget(phase: Phase())));
-  }
-
-  void showCommentScreen(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (context) => CommentScreenBodyWidget(onTap: (comment) => {}));
   }
 }

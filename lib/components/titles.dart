@@ -2,7 +2,7 @@ abstract class Titles {
   /// TABS
   static const map = 'Карта';
   static const objects = 'Объекты';
-  static const actions = 'Действия';
+  static const myDoing = 'Мои дела';
   static const chat = 'Чат';
   static const more = 'Еще';
 
@@ -20,6 +20,8 @@ abstract class Titles {
   static const filter = 'Фильтр';
   static const search = 'Поиск';
   static const add = 'Добавить';
+  static const close = 'Закрыть';
+  static const addContractor = 'Добавить подрядчика';
   static const addFile = 'Добавить файл';
   static const addPhoto = 'Добавить фото';
   static const addProduct = 'Добавить товар';
@@ -49,9 +51,13 @@ abstract class Titles {
   static const cancel = 'Отменить';
   static const addSocial = 'Добавить соц.сеть';
   static const addComment = 'Добавить комментарий';
+  static const addAction = 'Добавить действие';
   static const goChat = 'Перейти в чат';
 
   /// MORE
+  static const taskName = 'Название задачи';
+  static const action = 'Действие';
+  static const actions = 'Действия';
   static const description = 'Описание';
   static const reason = 'Причина';
   static const title = 'Заголовок';
@@ -209,6 +215,7 @@ abstract class Titles {
   static const enterCompanyName = 'Введите название компании\nв строку поиска';
   static const enterFilialName = 'Введите название филиала\nв строку поиска';
   static const enterEmployeeName = 'Введите имя застройщика\nв строку поиска';
+  static const enterContactorName = 'Введите имя подрядчика\nв строку поиска';
   static const enterManagerName = 'Введите имя менеджера\nв строку поиска';
   static const enterDeveloperName = 'Введите имя застройщика\nв строку поиска';
   static const enterResponsibleName =

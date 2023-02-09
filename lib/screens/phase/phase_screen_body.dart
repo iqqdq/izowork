@@ -5,7 +5,6 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/phase_view_model.dart';
 import 'package:izowork/screens/phase/views/check_list_item_widget.dart';
-import 'package:izowork/screens/phase/views/contractor_list_item_widget.dart';
 import 'package:izowork/screens/search/views/search_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
@@ -13,6 +12,7 @@ import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:spreadsheet_table/spreadsheet_table.dart';
 
 class PhaseCreateScreenBodyWidget extends StatefulWidget {
   final Phase phase;
@@ -25,65 +25,7 @@ class PhaseCreateScreenBodyWidget extends StatefulWidget {
 }
 
 class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
-  final TextEditingController _nameTextEditingController =
-      TextEditingController();
-  final FocusNode _nameFocusNode = FocusNode();
-
-  final TextEditingController _addressTextEditingController =
-      TextEditingController();
-  final FocusNode _addressFocusNode = FocusNode();
-
-  final TextEditingController _coordinatesTextEditingController =
-      TextEditingController();
-  final FocusNode _coordinatesFocusNode = FocusNode();
-
-  final TextEditingController _floorCountTextEditingController =
-      TextEditingController();
-  final FocusNode _floorCountFocusNode = FocusNode();
-
-  final TextEditingController _areaCountTextEditingController =
-      TextEditingController();
-  final FocusNode _areaCountFocusNode = FocusNode();
-
-  final TextEditingController _buildingTimeTextEditingController =
-      TextEditingController();
-  final FocusNode _buildingTimeFocusNode = FocusNode();
-
-  final TextEditingController _stagesTextEditingController =
-      TextEditingController();
-  final FocusNode _stagesFocusNode = FocusNode();
-
-  final TextEditingController _kisoTextEditingController =
-      TextEditingController();
-  final FocusNode _kisoFocusNode = FocusNode();
-
   late PhaseViewModel _phaseViewModel;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _nameTextEditingController.dispose();
-    _nameFocusNode.dispose();
-    _addressTextEditingController.dispose();
-    _addressFocusNode.dispose();
-    _coordinatesTextEditingController.dispose();
-    _coordinatesFocusNode.dispose();
-    _floorCountTextEditingController.dispose();
-    _floorCountFocusNode.dispose();
-    _areaCountTextEditingController.dispose();
-    _areaCountFocusNode.dispose();
-    _buildingTimeTextEditingController.dispose();
-    _buildingTimeFocusNode.dispose();
-    _stagesTextEditingController.dispose();
-    _stagesFocusNode.dispose();
-    _kisoTextEditingController.dispose();
-    _kisoFocusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +59,6 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                           shrinkWrap: true,
                           padding: EdgeInsets.only(
                               top: 14.0,
-                              left: 16.0,
-                              right: 16.0,
                               bottom:
                                   MediaQuery.of(context).padding.bottom == 0.0
                                       ? 20.0 + 54.0
@@ -126,62 +66,145 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                           54.0),
                           children: [
                             /// TITLE
-                            Text(Titles.products,
-                                style: TextStyle(
-                                    color: HexColors.black,
-                                    fontSize: 18.0,
-                                    fontFamily: 'PT Root UI',
-                                    fontWeight: FontWeight.bold)),
+                            Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Text(Titles.products,
+                                    style: TextStyle(
+                                        color: HexColors.black,
+                                        fontSize: 18.0,
+                                        fontFamily: 'PT Root UI',
+                                        fontWeight: FontWeight.bold))),
 
-                            /// CONTRACTOR LIST
-                            ListView.builder(
-                                shrinkWrap: true,
-                                padding: const EdgeInsets.only(
-                                    top: 16.0, bottom: 10.0),
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: 2,
-                                itemBuilder: (context, index) {
-                                  return ContractorListItemWidget(
-                                      onTap: () => {});
-                                }),
+                            const SizedBox(height: 16.0),
+
+                            /// TABLE
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height: 36.0 * 4,
+                                child: SpreadsheetTable(
+                                  cellBuilder: (_, int row, int col) =>
+                                      Container(
+                                          height: 36.0,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 2.0),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  width: 0.65,
+                                                  color: HexColors.grey20)),
+                                          child: Center(
+                                              child: Text(
+                                                  (col * row).toString(),
+                                                  style: TextStyle(
+                                                      fontSize: 14.0,
+                                                      color: HexColors.black,
+                                                      fontFamily:
+                                                          'PT Root UI')))),
+                                  legendBuilder: (_) => Container(
+                                      height: 36.0,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 0.65,
+                                              color: HexColors.grey20)),
+                                      child: Row(children: [
+                                        Text(Titles.product,
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w500,
+                                                color: HexColors.black,
+                                                fontFamily: 'PT Root UI'))
+                                      ])),
+                                  rowHeaderBuilder: (_, index) => Container(
+                                      height: 36.0,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 0.65,
+                                              color: HexColors.grey20)),
+                                      child: Row(children: [
+                                        Text('Название товара',
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                color: HexColors.black,
+                                                fontFamily: 'PT Root UI'))
+                                      ])),
+                                  colHeaderBuilder: (_, index) => Container(
+                                      height: 36.0,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 2.0),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 0.65,
+                                              color: HexColors.grey20)),
+                                      child: Center(
+                                          child: Text(
+                                              index == 0
+                                                  ? Titles.deliveryTime
+                                                  : Titles.count,
+                                              style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: HexColors.black,
+                                                  fontFamily: 'PT Root UI')))),
+                                  rowHeaderWidth:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  colsHeaderHeight: 36.0,
+                                  cellHeight: 36.0,
+                                  cellWidth:
+                                      MediaQuery.of(context).size.width * 0.25,
+                                  rowsCount: 3,
+                                  colCount: 2,
+                                )),
+                            const SizedBox(height: 20.0),
 
                             /// RESPONSIBLE
                             const TitleWidget(
-                                padding: EdgeInsets.only(bottom: 4.0),
+                                padding: EdgeInsets.only(
+                                    bottom: 4.0, left: 16.0, right: 16.0),
                                 text: Titles.responsible,
                                 isSmall: true),
                             const SubtitleWidget(
-                                padding: EdgeInsets.only(bottom: 16.0),
+                                padding: EdgeInsets.only(
+                                    bottom: 16.0, left: 16.0, right: 16.0),
                                 text: 'Имя фамилия'),
 
                             /// CO-EXECUTOR
                             const TitleWidget(
-                                padding: EdgeInsets.only(bottom: 4.0),
+                                padding: EdgeInsets.only(
+                                    bottom: 4.0, left: 16.0, right: 16.0),
                                 text: Titles.coExecutor,
                                 isSmall: true),
                             const SubtitleWidget(
-                                padding: EdgeInsets.only(bottom: 16.0),
+                                padding: EdgeInsets.only(
+                                    bottom: 16.0, left: 16.0, right: 16.0),
                                 text: 'Имя фамилия'),
 
                             /// OBSERVER
                             const TitleWidget(
-                                padding: EdgeInsets.only(bottom: 4.0),
+                                padding: EdgeInsets.only(
+                                    bottom: 4.0, left: 16.0, right: 16.0),
                                 text: Titles.observer,
                                 isSmall: true),
                             const SubtitleWidget(
-                                padding: EdgeInsets.only(bottom: 16.0),
+                                padding: EdgeInsets.only(
+                                    bottom: 16.0, left: 16.0, right: 16.0),
                                 text: 'Имя фамилия'),
 
                             /// DEALS
                             const TitleWidget(
-                                padding: EdgeInsets.only(bottom: 10.0),
+                                padding: EdgeInsets.only(
+                                    bottom: 10.0, left: 16.0, right: 16.0),
                                 text: Titles.deals,
                                 isSmall: true),
 
                             /// DEAL LIST
                             ListView.builder(
                                 shrinkWrap: true,
-                                padding: const EdgeInsets.only(bottom: 10.0),
+                                padding: const EdgeInsets.only(
+                                    bottom: 10.0, left: 16.0, right: 16.0),
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: 2,
                                 itemBuilder: (context, index) {
@@ -193,14 +216,15 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
 
                             /// CHECK
                             const TitleWidget(
-                                padding: EdgeInsets.zero,
+                                padding: EdgeInsets.symmetric(horizontal: 16.0),
                                 text: Titles.checkList,
                                 isSmall: true),
 
                             /// CHECKBOX LIST
                             ListView.builder(
                                 shrinkWrap: true,
-                                padding: const EdgeInsets.only(bottom: 20.0),
+                                padding: const EdgeInsets.only(
+                                    bottom: 20.0, left: 16.0, right: 16.0),
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: 4,
                                 itemBuilder: (context, index) {
@@ -209,20 +233,22 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                       title: 'Позиция чек-листа ${index + 1}',
                                       onTap: () => _phaseViewModel
                                           .showCompleteTaskScreenSheet(
-                                              context));
+                                              context, index < 2));
                                 }),
 
                             /// SET TASK BUTTON
                             BorderButtonWidget(
                                 title: Titles.setTask,
-                                margin: const EdgeInsets.only(bottom: 20.0),
+                                margin: const EdgeInsets.only(
+                                    bottom: 20.0, left: 16.0, right: 16.0),
                                 onTap: () => _phaseViewModel
                                     .showTaskCreateScreen(context)),
 
                             /// OPEN DEAL BUTTON
                             BorderButtonWidget(
                                 title: Titles.openDeal,
-                                margin: const EdgeInsets.only(bottom: 16.0),
+                                margin: const EdgeInsets.only(
+                                    bottom: 16.0, left: 16.0, right: 16.0),
                                 onTap: () => _phaseViewModel
                                     .showDealCreateScreen(context)),
                           ])),

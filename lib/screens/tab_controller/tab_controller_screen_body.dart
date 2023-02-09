@@ -86,7 +86,7 @@ class _TabControllerScreenBodyState extends State<TabControllerScreenWidget> {
                   icon: Image.asset(_index == 2
                       ? 'assets/ic_actions_selected.png'
                       : 'assets/ic_actions.png'),
-                  label: Titles.actions),
+                  label: Titles.myDoing),
               BottomNavigationBarItem(
                   icon: Image.asset(_index == 3
                       ? 'assets/ic_chat_selected.png'

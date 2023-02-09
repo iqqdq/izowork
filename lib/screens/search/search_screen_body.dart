@@ -100,8 +100,13 @@ class _SearchBodyState extends State<SearchBodyScreenWidget> {
                                                                               .phase
                                                                       ? Titles
                                                                           .phase
-                                                                      : Titles
-                                                                          .object))
+                                                                      : _searchViewModel.searchType ==
+                                                                              SearchType
+                                                                                  .contractor
+                                                                          ? Titles
+                                                                              .contractor
+                                                                          : Titles
+                                                                              .object))
                         ])),
                     const SizedBox(height: 16.0),
 
@@ -211,8 +216,13 @@ class _SearchBodyState extends State<SearchBodyScreenWidget> {
                                                                                 .phase
                                                                         ? Titles
                                                                             .enterPhaseName
-                                                                        : Titles
-                                                                            .enterObjectName,
+                                                                        : _searchViewModel.searchType ==
+                                                                                SearchType
+                                                                                    .contractor
+                                                                            ? Titles
+                                                                                .enterContactorName
+                                                                            : Titles
+                                                                                .enterObjectName,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 16.0,

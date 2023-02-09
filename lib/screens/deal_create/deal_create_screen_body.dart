@@ -10,6 +10,7 @@ import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
+import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,17 @@ class DealCreateScreenBodyWidget extends StatefulWidget {
 }
 
 class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
+  final TextEditingController _textEditingController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+
   late DealCreateViewModel _dealCreateViewModel;
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,13 +147,27 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
 
                             /// COMPANY SELECTION INPUT
                             SelectionInputWidget(
-                                margin: const EdgeInsets.only(bottom: 20.0),
+                                margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.company,
                                 value: Titles.notSelected,
                                 onTap: () =>
                                     _dealCreateViewModel.showSearchScreenSheet(
                                         context, SearchType.company)),
+
+                            /// COMMENT INPUT
+                            InputWidget(
+                                textEditingController: _textEditingController,
+                                focusNode: _focusNode,
+                                height: 168.0,
+                                maxLines: 10,
+                                margin: EdgeInsets.zero,
+                                placeholder: '${Titles.comment}...',
+                                onTap: () => setState,
+                                onChange: (text) => {
+                                      // TODO COMMENT
+                                    }),
+                            const SizedBox(height: 10.0),
 
                             /// PRODUCT LIST
                             ListView.builder(

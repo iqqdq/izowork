@@ -87,20 +87,12 @@ class _PhaseProductListItemState extends State<PhaseProductListItemWidget> {
                         onTap: () => widget.onDeleteTap()),
                   ]),
 
-                  /// CONTRACTOR SELECTION INPUT
-                  SelectionInputWidget(
-                      margin: const EdgeInsets.symmetric(vertical: 10.0),
-                      isVertical: true,
-                      title: Titles.contractor,
-                      value: Titles.notSelected,
-                      onTap: () => widget.onContractorSearchTap()),
-
                   /// TIME INPUT
                   InputWidget(
                     textEditingController: _timeTextEditingController,
                     focusNode: _timeFocusNode,
                     textInputType: TextInputType.number,
-                    margin: const EdgeInsets.only(bottom: 10.0),
+                    margin: const EdgeInsets.only(top: 16.0, bottom: 10.0),
                     height: 56.0,
                     placeholder: Titles.deliveryTimeInMonth,
                     onTap: () => setState,

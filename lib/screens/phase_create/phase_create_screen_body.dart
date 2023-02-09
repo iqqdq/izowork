@@ -6,6 +6,7 @@ import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/phase_create_view_model.dart';
 import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/phase/views/check_list_item_widget.dart';
+import 'package:izowork/screens/phase_create/views/phase_contractor_list_item_widget.dart';
 import 'package:izowork/screens/phase_create/views/phase_product_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
@@ -117,35 +118,35 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 20.0),
                                 onTap: () => {}),
 
-                            /// RESPONSIBLE SELECTION INPUT
-                            SelectionInputWidget(
-                                margin: const EdgeInsets.only(bottom: 10.0),
-                                isVertical: true,
-                                title: Titles.responsible,
-                                value: Titles.notAssigned,
-                                onTap: () =>
-                                    _phaseCreateViewModel.showSearchScreenSheet(
-                                        context, SearchType.responsible)),
+                            /// CONTRACTOR LIST
+                            ListView.builder(
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.only(bottom: 4.0),
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: 1,
+                                itemBuilder: (context, index) {
+                                  return PhaseContractorListItemWidget(
+                                      index: index + 1,
+                                      onContractorTap: () => _phaseCreateViewModel
+                                          .showSearchScreenSheet(
+                                              context, SearchType.contractor),
+                                      onResponsibleTap: () => _phaseCreateViewModel
+                                          .showSearchScreenSheet(
+                                              context, SearchType.responsible),
+                                      onCoExecutorTap: () => _phaseCreateViewModel
+                                          .showSearchScreenSheet(
+                                              context, SearchType.responsible),
+                                      onObserverTap: () => _phaseCreateViewModel
+                                          .showSearchScreenSheet(
+                                              context, SearchType.responsible),
+                                      onDeleteTap: () => {});
+                                }),
 
-                            /// CO-EXECUTOR SELECTION INPUT
-                            SelectionInputWidget(
-                                margin: const EdgeInsets.only(bottom: 10.0),
-                                isVertical: true,
-                                title: Titles.coExecutor,
-                                value: Titles.notAssigned,
-                                onTap: () =>
-                                    _phaseCreateViewModel.showSearchScreenSheet(
-                                        context, SearchType.responsible)),
-
-                            /// OBSERVER SELECTION INPUT
-                            SelectionInputWidget(
+                            /// ADD CONTRACTOR BUTTON
+                            BorderButtonWidget(
+                                title: Titles.addContractor,
                                 margin: const EdgeInsets.only(bottom: 20.0),
-                                isVertical: true,
-                                title: Titles.observer,
-                                value: Titles.notAssigned,
-                                onTap: () =>
-                                    _phaseCreateViewModel.showSearchScreenSheet(
-                                        context, SearchType.responsible)),
+                                onTap: () => {}),
 
                             /// CHECK
                             const TitleWidget(

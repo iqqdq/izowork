@@ -6,6 +6,7 @@ enum SearchType {
   responsible,
   manager,
   developer,
+  contractor,
   company,
   object,
   type,
