@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/models/task_view_model.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
@@ -12,9 +11,7 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class TaskScreenBodyWidget extends StatefulWidget {
-  final Task task;
-
-  const TaskScreenBodyWidget({Key? key, required this.task}) : super(key: key);
+  const TaskScreenBodyWidget({Key? key}) : super(key: key);
 
   @override
   _TaskScreenBodyState createState() => _TaskScreenBodyState();
@@ -24,21 +21,16 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
   late TaskViewModel _taskViewModel;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     _taskViewModel = Provider.of<TaskViewModel>(context, listen: true);
 
-    final _day = DateTime.now().day.toString().length == 1
-        ? '0${DateTime.now().day}'
-        : '${DateTime.now().day}';
-    final _month = DateTime.now().month.toString().length == 1
-        ? '0${DateTime.now().month}'
-        : '${DateTime.now().month}';
-    final _year = '${DateTime.now().year}';
+    final _day = _taskViewModel.task.deadline.day.toString().length == 1
+        ? '0${_taskViewModel.task.deadline.day}'
+        : '${_taskViewModel.task.deadline.day}';
+    final _month = _taskViewModel.task.deadline.month.toString().length == 1
+        ? '0${_taskViewModel.task.deadline.month}'
+        : '${_taskViewModel.task.deadline.month}';
+    final _year = '${_taskViewModel.task.deadline.year}';
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -50,7 +42,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
                 child: BackButtonWidget(onTap: () => Navigator.pop(context))),
-            title: Text('Название задачи',
+            title: Text(_taskViewModel.task.name,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontFamily: 'PT Root UI',
@@ -77,9 +69,9 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             padding: EdgeInsets.only(bottom: 4.0),
                             text: Titles.status,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            text: 'Завершенная'),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _taskViewModel.task.state),
 
                         /// DEADLINE
                         const TitleWidget(
@@ -97,7 +89,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             isSmall: true),
                         const SubtitleWidget(
                             padding: EdgeInsets.only(bottom: 16.0),
-                            text: 'Имя Фамилия'),
+                            text: '???'),
 
                         /// TASK MANAGER
                         const TitleWidget(
@@ -106,7 +98,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             isSmall: true),
                         const SubtitleWidget(
                             padding: EdgeInsets.only(bottom: 16.0),
-                            text: 'Имя Фамилия'),
+                            text: '???'),
 
                         /// CO-EXECUTOR
                         const TitleWidget(
@@ -115,7 +107,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             isSmall: true),
                         const SubtitleWidget(
                             padding: EdgeInsets.only(bottom: 16.0),
-                            text: 'Имя Фамилия'),
+                            text: '???'),
 
                         /// OBJECT
                         const TitleWidget(
@@ -124,7 +116,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             isSmall: true),
                         const SubtitleWidget(
                             padding: EdgeInsets.only(bottom: 16.0),
-                            text: 'Название объекта'),
+                            text: '???'),
 
                         /// COMPANY
                         const TitleWidget(
@@ -133,31 +125,32 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             isSmall: true),
                         const SubtitleWidget(
                             padding: EdgeInsets.only(bottom: 16.0),
-                            text: 'Название компании'),
+                            text: '???'),
 
                         /// DESCRTIPTION
                         const TitleWidget(
                             padding: EdgeInsets.only(bottom: 4.0),
                             text: Titles.description,
                             isSmall: true),
-                        const SubtitleWidget(
+                        SubtitleWidget(
                             padding: EdgeInsets.only(bottom: 16.0),
-                            text:
-                                'Принимая во внимание показатели успешности, дальнейшее развитие различных форм деятельности влечет за собой процесс внедрения и модернизации форм воздействия.'),
+                            text: _taskViewModel.task.description),
 
                         /// FILE LIST
-                        const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 10.0),
-                            text: Titles.files,
-                            isSmall: true),
+                        _taskViewModel.task.files.isEmpty
+                            ? Container()
+                            : const TitleWidget(
+                                padding: EdgeInsets.only(bottom: 10.0),
+                                text: Titles.files,
+                                isSmall: true),
                         ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 3,
+                            itemCount: _taskViewModel.task.files.length,
                             itemBuilder: (context, index) {
                               return FileListItemWidget(
-                                  fileName: 'file.pdf', onRemoveTap: () => {});
+                                  fileName: '???.pdf', onRemoveTap: () => {});
                             }),
                         const SizedBox(height: 16.0),
                       ]),

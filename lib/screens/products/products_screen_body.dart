@@ -28,10 +28,10 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
   final ScrollController _scrollController = ScrollController();
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
-  late ProductsViewModel _productsViewModel;
-
   Pagination _pagination = Pagination(offset: 0, size: 50);
   bool _isSearching = false;
+
+  late ProductsViewModel _productsViewModel;
 
   @override
   void initState() {
@@ -49,6 +49,8 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
 
   @override
   void dispose() {
+    _textEditingController.dispose();
+    _focusNode.dispose();
     _scrollController.dispose();
     super.dispose();
   }

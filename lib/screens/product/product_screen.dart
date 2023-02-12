@@ -9,11 +9,9 @@ import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class ProductPageScreenWidget extends StatefulWidget {
-  final String tag;
   final Product product;
 
-  const ProductPageScreenWidget(
-      {Key? key, required this.tag, required this.product})
+  const ProductPageScreenWidget({Key? key, required this.product})
       : super(key: key);
 
   @override
@@ -32,23 +30,19 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
             backgroundColor: HexColors.white90,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             automaticallyImplyLeading: false,
-            title: Column(children: [
-              Stack(children: [
-                Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
-                Padding(
-                    padding: const EdgeInsets.only(left: 60.0, right: 60.0),
-                    child: Center(
-                        child: Text(widget.product.name,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: HexColors.black,
-                                fontSize: 18.0,
-                                fontFamily: 'PT Root UI',
-                                fontWeight: FontWeight.bold))))
-              ])
+            title: Row(children: [
+              const SizedBox(width: 16.0),
+              BackButtonWidget(onTap: () => Navigator.pop(context)),
+              Expanded(
+                  child: Text(widget.product.name,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 18.0,
+                          fontFamily: 'PT Root UI',
+                          fontWeight: FontWeight.bold))),
+              const SizedBox(width: 36.0)
             ])),
         body: ListView(
             padding:
@@ -57,32 +51,27 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
             children: [
               /// IMAGE
               Center(
-                  child: Hero(
-                      tag: widget.tag,
-                      child: Stack(children: [
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(6.0),
-                            child: Container(
-                                width: 160.0,
-                                height: 160.0,
-                                decoration: BoxDecoration(
-                                    color: HexColors.grey20,
-                                    borderRadius: BorderRadius.circular(6.0)))),
-                        widget.product.image == null
-                            ? Container()
-                            : CachedNetworkImage(
-                                imageUrl:
-                                    productMedialUrl + widget.product.image!,
-                                width: 160.0,
-                                height: 160.0,
-                                memCacheWidth: 160 *
-                                    (MediaQuery.of(context).devicePixelRatio)
-                                        .round(),
-                                memCacheHeight: 160 *
-                                    (MediaQuery.of(context).devicePixelRatio)
-                                        .round(),
-                                fit: BoxFit.cover),
-                      ]))),
+                  child: Stack(children: [
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(6.0),
+                    child: Container(
+                        width: 160.0,
+                        height: 160.0,
+                        decoration: BoxDecoration(
+                            color: HexColors.grey20,
+                            borderRadius: BorderRadius.circular(6.0)))),
+                widget.product.image == null
+                    ? Container()
+                    : CachedNetworkImage(
+                        imageUrl: productMedialUrl + widget.product.image!,
+                        width: 160.0,
+                        height: 160.0,
+                        memCacheWidth: 160 *
+                            (MediaQuery.of(context).devicePixelRatio).round(),
+                        memCacheHeight: 160 *
+                            (MediaQuery.of(context).devicePixelRatio).round(),
+                        fit: BoxFit.cover),
+              ])),
               const SizedBox(height: 16.0),
 
               /// PRICE
@@ -129,7 +118,7 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                   padding: EdgeInsets.zero,
                   isSmall: true),
               const SizedBox(height: 4.0),
-              Text(widget.product.productType.name,
+              Text('???',
                   style: TextStyle(
                       color: HexColors.black,
                       fontSize: 14.0,

@@ -96,7 +96,15 @@ class CompaniesListItemWidget extends StatelessWidget {
                   const SizedBox(height: 10.0),
 
                   /// TAG
-                  Row(children: [StatusWidget(title: company.type, status: 0)])
+                  Row(children: [
+                    StatusWidget(
+                        title: company.type,
+                        status: company.type == 'Поставщик'
+                            ? 0
+                            : company.type == 'Проектировщик'
+                                ? 1
+                                : 2)
+                  ])
                 ])));
   }
 }

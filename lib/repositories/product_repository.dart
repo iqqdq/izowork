@@ -7,7 +7,7 @@ import 'package:izowork/services/web_service.dart';
 
 class ProductRepository {
   Future<Object> getProduct(String id) async {
-    dynamic json = await WebService().get(productsUrl + '?id=$id');
+    dynamic json = await WebService().get(productUrl + id);
 
     try {
       return Product.fromJson(json["product"]);
@@ -19,12 +19,17 @@ class ProductRepository {
   Future<Object> getProducts(
       {required Pagination pagination,
       required String search,
+      String? companyId,
       List<String>? params}) async {
     var url =
         productsUrl + '?&offset=${pagination.offset}&limit=${pagination.size}';
 
     if (search.isNotEmpty) {
       url += '&q=$search';
+    }
+
+    if (companyId != null) {
+      url += '&company_id=$companyId';
     }
 
     if (params != null) {

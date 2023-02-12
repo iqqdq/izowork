@@ -5,7 +5,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/models/deal_event_view_model.dart';
-import 'package:izowork/screens/actions/views/action_deal_list_item_widget.dart';
+import 'package:izowork/screens/deals/views/deal_list_item_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:provider/provider.dart';
@@ -46,10 +46,11 @@ class _DealEventScreenBodyState extends State<DealEventScreenBodyWidget> {
                       left: 16.0, right: 16.0, top: 70.0, bottom: 16.0 + 48.0),
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return ActionDealListItemWidget(
-                        deal: Deal(),
-                        onTap: () =>
-                            _dealEventViewModel.showDealScreenWidget(context));
+                    return Container();
+                    // return ActionDealListItemWidget(
+                    //     deal: Deal(),
+                    //     onTap: () =>
+                    //         _dealEventViewModel.showDealScreenWidget(context));
                   })),
 
           Container(

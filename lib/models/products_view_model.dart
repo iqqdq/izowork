@@ -119,8 +119,8 @@ class ProductsViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ProductPageScreenWidget(
-                tag: index.toString(), product: _products[index])));
+            builder: (context) =>
+                ProductPageScreenWidget(product: _products[index])));
   }
 
   void showProductFilterSheet(BuildContext context, Function() onFilter) {

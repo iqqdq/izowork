@@ -3,9 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
-import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/models/task_event_view_model.dart';
-import 'package:izowork/screens/actions/views/action_task_list_item_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:provider/provider.dart';
@@ -46,10 +44,11 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
                       left: 16.0, right: 16.0, top: 70.0, bottom: 16.0 + 48.0),
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return ActionTaskListItemWidget(
-                        task: Task(),
-                        onTap: () =>
-                            _taskEventViewModel.showTaskScreenWidget(context));
+                    return Container();
+                    // return ActionTaskListItemWidget(
+                    //     task: Task(),
+                    //     onTap: () =>
+                    //         _taskEventViewModel.showTaskScreenWidget(context));
                   })),
 
           Container(

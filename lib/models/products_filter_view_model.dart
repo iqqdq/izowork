@@ -96,7 +96,7 @@ class ProductsFilterViewModel with ChangeNotifier {
       params.add(sortBy);
     }
 
-    if (sortBy != '&sort_order=') {
+    if (sortOrder != '&sort_order=') {
       params.add(sortOrder);
     }
 

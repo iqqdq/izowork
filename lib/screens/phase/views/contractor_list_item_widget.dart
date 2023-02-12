@@ -28,46 +28,45 @@ class ContractorListItemWidget extends StatelessWidget {
                         border:
                             Border.all(width: 1.0, color: HexColors.grey30)),
                     child: ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(16.0),
-                      shrinkWrap: true,
-                      children: [
-                        /// CONTRACTOR
-                        const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.contractor,
-                            isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            text: 'Название'),
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(16.0),
+                        shrinkWrap: true,
+                        children: [
+                          /// CONTRACTOR
+                          const TitleWidget(
+                              padding: EdgeInsets.only(bottom: 4.0),
+                              text: Titles.contractor,
+                              isSmall: true),
+                          const SubtitleWidget(
+                              padding: EdgeInsets.only(bottom: 16.0),
+                              text: 'Название'),
 
-                        /// DELIVERY TIME
-                        const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.deliveryTime,
-                            isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            text: 'Кол-во дней'),
+                          /// RESPONSIBLE
+                          const TitleWidget(
+                              padding: EdgeInsets.only(bottom: 4.0),
+                              text: Titles.responsible,
+                              isSmall: true),
+                          const SubtitleWidget(
+                              padding: EdgeInsets.only(bottom: 16.0),
+                              text: 'Имя Фамилия'),
 
-                        /// PRODUCT
-                        const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.product,
-                            isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            text: 'Название'),
+                          /// CO-EXECUTOR
+                          const TitleWidget(
+                              padding: EdgeInsets.only(bottom: 4.0),
+                              text: Titles.coExecutor,
+                              isSmall: true),
+                          const SubtitleWidget(
+                              padding: EdgeInsets.only(bottom: 16.0),
+                              text: 'Имя Фамилия'),
 
-                        /// COUNT
-                        const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.count,
-                            isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.zero, text: '1'),
-                      ],
-                    )),
+                          /// RESPONSIBLE
+                          const TitleWidget(
+                              padding: EdgeInsets.only(bottom: 4.0),
+                              text: Titles.responsible,
+                              isSmall: true),
+                          const SubtitleWidget(
+                              padding: EdgeInsets.zero, text: 'Имя Фамилия'),
+                        ])),
                 onTap: () => onTap())));
   }
 }

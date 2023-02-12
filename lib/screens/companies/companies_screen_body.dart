@@ -36,6 +36,15 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
   @override
   void initState() {
     super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _pagination.offset += 1;
+        _companiesViewModel.getCompanyList(
+            pagination: _pagination, search: _textEditingController.text);
+      }
+    });
   }
 
   @override
@@ -60,6 +69,7 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
 
     return Scaffold(
         backgroundColor: HexColors.white,
+        resizeToAvoidBottomInset: true,
         appBar: AppBar(
             toolbarHeight: 116.0,
             titleSpacing: 0.0,
@@ -163,8 +173,14 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
               child: Align(
                   alignment: Alignment.bottomCenter,
                   child: FilterButtonWidget(
-                    onTap: () =>
-                        _companiesViewModel.showCompaniesFilterSheet(context),
+                    onTap: () => _companiesViewModel.showCompaniesFilterSheet(
+                        context,
+                        () => {
+                              _pagination = Pagination(offset: 0, size: 50),
+                              _companiesViewModel.getCompanyList(
+                                  pagination: _pagination,
+                                  search: _textEditingController.text)
+                            }),
                     // onClearTap: () => {}
                   ))),
 

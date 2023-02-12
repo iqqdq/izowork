@@ -8,7 +8,8 @@ import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/repositories/company_repository.dart';
-import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_widget.dart';
+import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
+import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen_body.dart';
 import 'package:izowork/screens/company/company_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -17,7 +18,7 @@ class CompaniesViewModel with ChangeNotifier {
 
   final List<Company> _companies = [];
   Company? _company;
-  // CompaniesFilter? _companiesFilter;
+  CompaniesFilter? _companiesFilter;
 
   List<Company> get companies {
     return _companies;
@@ -27,9 +28,9 @@ class CompaniesViewModel with ChangeNotifier {
     return _company;
   }
 
-  // CompaniesFilter? get companiesFilter {
-  //   return _companiesFilter;
-  // }
+  CompaniesFilter? get companiesFilter {
+    return _companiesFilter;
+  }
 
   CompaniesViewModel() {
     getCompanyList(pagination: Pagination(offset: 0, size: 50), search: '');
@@ -68,10 +69,9 @@ class CompaniesViewModel with ChangeNotifier {
     }
     await CompanyRepository()
         .getCompanies(
-          pagination: pagination,
-          search: search,
-          // params: _companiesFilter?.params
-        )
+            pagination: pagination,
+            search: search,
+            params: _companiesFilter?.params)
         .then((response) => {
               if (response is List<Company>)
                 {
@@ -109,7 +109,7 @@ class CompaniesViewModel with ChangeNotifier {
   // MARK: - FUNCTIONS
 
   void resetFilter() {
-    // _companiesFilter = null;
+    _companiesFilter = null;
   }
 
   // MARK: -
@@ -123,14 +123,27 @@ class CompaniesViewModel with ChangeNotifier {
                 CompanyScreenWidget(company: _companies[index])));
   }
 
-  void showCompaniesFilterSheet(BuildContext context) {
+  void showCompaniesFilterSheet(BuildContext context, Function() onFilter) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => CompaniesFilterPageViewWidget(
-            onApplyTap: () => {Navigator.pop(context)},
-            onResetTap: () => {Navigator.pop(context)}));
+        builder: (context) => CompaniesFilterPageViewScreenWidget(
+            companiesFilter: _companiesFilter,
+            onPop: (companiesFilter) => {
+                  if (companiesFilter == null)
+                    {
+                      // CLEAR
+                      resetFilter(),
+                      onFilter()
+                    }
+                  else
+                    {
+                      // FILTER
+                      _companiesFilter = companiesFilter,
+                      onFilter()
+                    }
+                }));
   }
 }

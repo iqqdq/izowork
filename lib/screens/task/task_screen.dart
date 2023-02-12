@@ -12,7 +12,7 @@ class TaskScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => TaskViewModel(),
-        child: TaskScreenBodyWidget(task: task));
+        create: (context) => TaskViewModel(task),
+        child: const TaskScreenBodyWidget());
   }
 }

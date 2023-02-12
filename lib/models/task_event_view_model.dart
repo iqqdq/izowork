@@ -14,9 +14,9 @@ class TaskEventViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showTaskScreenWidget(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => TaskScreenWidget(task: Task())));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => TaskScreenWidget(task: Task())));
   }
 }

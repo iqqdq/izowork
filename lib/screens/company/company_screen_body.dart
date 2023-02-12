@@ -2,9 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/company_view_model.dart';
+import 'package:izowork/screens/products/views/product_list_item_widget.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
@@ -25,19 +29,44 @@ class CompanyScreenBodyWidget extends StatefulWidget {
 class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+
   final PageController _pageController = PageController(initialPage: 0);
+
+  final ScrollController _scrollController = ScrollController();
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
+
   late CompanyViewModel _companyViewModel;
+
+  Pagination _pagination = Pagination(offset: 0, size: 50);
+  bool _isSearching = false;
   int _index = 0;
 
   @override
   void initState() {
     super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _pagination.offset += 1;
+        _companyViewModel.getProductList(
+            pagination: _pagination, search: _textEditingController.text);
+      }
+    });
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    setState(() => _pagination = Pagination(offset: 0, size: 50));
   }
 
   Widget _page() {
@@ -75,7 +104,13 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
 
           /// TAG
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            StatusWidget(title: _companyViewModel.company.type, status: 0)
+            StatusWidget(
+                title: _companyViewModel.company.type,
+                status: _companyViewModel.company.type == 'Поставщик'
+                    ? 0
+                    : _companyViewModel.company.type == 'Покупатель'
+                        ? 1
+                        : 2)
           ]),
           const SizedBox(height: 16.0),
 
@@ -181,31 +216,52 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                       placeholder: '${Titles.search}...',
                       onTap: () => setState,
                       onChange: (text) => {
-                            // TODO SEARCH COMPANY PRODUCTS
+                            setState(() => _isSearching = true),
+                            _debouncer.run(() {
+                              _pagination.offset = 0;
+
+                              _companyViewModel
+                                  .getProductList(
+                                      pagination: _pagination,
+                                      search: _textEditingController.text)
+                                  .then((value) =>
+                                      setState(() => _isSearching = false));
+                            })
                           },
                       onClearTap: () => {
-                            // TODO CLEAR COMPANY PRODUCTS SEARCH
+                            _companyViewModel.resetFilter(),
+                            _pagination.offset = 0,
+                            _companyViewModel.getProductList(
+                                pagination: _pagination,
+                                search: _textEditingController.text)
                           }))),
       const SizedBox(height: 8.0),
       const SeparatorWidget(),
 
       /// PRODUCTS LIST VIEW
       Expanded(
-          child: ListView.builder(
-              shrinkWrap: true,
-              padding: EdgeInsets.only(
-                  left: 16.0,
-                  right: 16.0,
-                  top: 16.0,
-                  bottom: MediaQuery.of(context).padding.bottom + 70.0),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Container();
-                // return ProductsListItemWidget(
-                //     tag: index.toString(),
-                //     onTap: () => _companyViewModel.showProductPageScreen(
-                //         context, index));
-              }))
+          child: RefreshIndicator(
+              onRefresh: _onRefresh,
+              color: HexColors.primaryMain,
+              backgroundColor: HexColors.white,
+              child: GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: ListView.builder(
+                      controller: _scrollController,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          left: 16.0,
+                          right: 16.0,
+                          top: 16.0,
+                          bottom: MediaQuery.of(context).padding.bottom + 70.0),
+                      itemCount: _companyViewModel.products.length,
+                      itemBuilder: (context, index) {
+                        return ProductsListItemWidget(
+                            tag: index.toString(),
+                            product: _companyViewModel.products[index],
+                            onTap: () => _companyViewModel
+                                .showProductPageScreen(context, index));
+                      }))))
     ]);
   }
 
@@ -224,23 +280,21 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
             automaticallyImplyLeading: false,
             title:
                 Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              const SizedBox(height: 17.0),
-              Stack(children: [
-                Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
-                Padding(
-                    padding: const EdgeInsets.only(left: 60.0, right: 16.0),
-                    child: Center(
-                        child: Text(_companyViewModel.company.name,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: HexColors.black,
-                                fontSize: 18.0,
-                                fontFamily: 'PT Root UI',
-                                fontWeight: FontWeight.bold))))
+              Row(children: [
+                const SizedBox(width: 16.0),
+                BackButtonWidget(onTap: () => Navigator.pop(context)),
+                Expanded(
+                    child: Text(_companyViewModel.company.name,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: HexColors.black,
+                            fontSize: 18.0,
+                            fontFamily: 'PT Root UI',
+                            fontWeight: FontWeight.bold))),
+                const SizedBox(width: 36.0)
               ]),
+
               const SizedBox(height: 16.0),
 
               /// SEGMENTED CONTROL
@@ -266,7 +320,27 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               child: PageView(
                   controller: _pageController,
                   children: [_page(), _products()],
-                  onPageChanged: (page) => setState(() => _index = page))),
+                  onPageChanged: (page) => {
+                        setState(() => _index = page),
+                        FocusScope.of(context).unfocus()
+                      })),
+
+          /// EMPTY LIST TEXT
+          _index == 1 &&
+                  _companyViewModel.loadingStatus == LoadingStatus.completed &&
+                  _companyViewModel.products.isEmpty &&
+                  !_isSearching
+              ? Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, bottom: 116.0),
+                      child: Text(Titles.noResult,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16.0,
+                              color: HexColors.grey50))))
+              : Container(),
 
           /// FILTER BUTTON
           _index == 0
@@ -277,8 +351,17 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                       child: Padding(
                           padding: const EdgeInsets.only(bottom: 6.0),
                           child: FilterButtonWidget(
-                            onTap: () => _companyViewModel
-                                .showCompanyProductFilterSheet(context),
+                            onTap: () =>
+                                _companyViewModel.showProductFilterSheet(
+                                    context,
+                                    () => {
+                                          _pagination =
+                                              Pagination(offset: 0, size: 50),
+                                          _companyViewModel.getProductList(
+                                              pagination: _pagination,
+                                              search:
+                                                  _textEditingController.text)
+                                        }),
                             // onClearTap: () => {}
                           )))),
         ]));

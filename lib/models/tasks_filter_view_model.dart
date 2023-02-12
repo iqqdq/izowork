@@ -1,13 +1,72 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'package:flutter/material.dart';
-import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/screens/tasks/tasks_filter_sheet/tasks_filter_page_view_screen_body.dart';
 
 class TasksFilterViewModel with ChangeNotifier {
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
-  LoadingStatus loadingStatus = LoadingStatus.empty;
+  List<String> stages;
+  final TasksFilter? tasksFilter;
+
+  List<int> tags = [];
+  List<String> _options = [];
+
+  User? _user;
+
+  User? get user {
+    return _user;
+  }
+
+  List<String> get options {
+    return _options;
+  }
+
+  TasksFilterViewModel(this.stages, this.tasksFilter) {
+    _options = stages;
+
+    if (tasksFilter != null) {
+      _user = tasksFilter?.user;
+      tags = tasksFilter!.tags;
+    }
+
+    notifyListeners();
+  }
 
   // MARK: -
   // MARK: - FUNCTIONS
 
-  // MARK: -
-  // MARK: - PUSH
+  Future setUser(User? user) async {
+    _user = user;
+    notifyListeners();
+  }
+
+  void sortByStage(int index) {
+    tags.contains(index)
+        ? tags.removeWhere((element) => element == index)
+        : tags.add(index);
+    notifyListeners();
+  }
+
+  Future apply(Function(List<String>) didReturnParams) async {
+    List<String> params = [];
+
+    if (_user != null) {
+      params.add('&responsible_id=${_user!.id}');
+    }
+
+    if (tags.isNotEmpty) {
+      tags.forEach((element) {
+        params.add('&state=${_options[element]}');
+      });
+    }
+
+    didReturnParams(params);
+  }
+
+  void reset(VoidCallback onResetTap) {
+    _user = null;
+    tags.clear();
+    notifyListeners();
+    onResetTap();
+  }
 }

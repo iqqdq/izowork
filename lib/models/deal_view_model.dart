@@ -38,10 +38,10 @@ class DealViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showDealCreateScreenSheet(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DealCreateScreenWidget(deal: Deal())));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => DealCreateScreenWidget(deal: Deal())));
   }
 
   void showSelectionScreenSheet(BuildContext context) {

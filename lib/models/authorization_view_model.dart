@@ -7,7 +7,7 @@ import 'package:izowork/entities/response/authorization.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/repositories/authorization_repository.dart';
 import 'package:izowork/screens/recovery/recovery_screen.dart';
-import 'package:izowork/screens/tab_controller/tab_controller_screen_body.dart';
+import 'package:izowork/screens/tab_controller/tab_controller_screen.dart';
 
 class AuthorizationViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;

@@ -26,10 +26,10 @@ class PhaseViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showDealScreenWidget(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DealScreenWidget(deal: Deal())));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => DealScreenWidget(deal: Deal())));
   }
 
   void showCompleteTaskScreenSheet(BuildContext context, bool isComplete) {
@@ -39,8 +39,7 @@ class PhaseViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) => CompleteTaskSheetWidget(
-            isComplete: isComplete,
-            onTap: (text, files) => {Navigator.pop(context)}));
+            isComplete: isComplete, onTap: (text, files) => {}));
   }
 
   void showDealCreateScreen(BuildContext context) {

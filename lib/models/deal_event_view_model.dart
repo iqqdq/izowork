@@ -14,9 +14,9 @@ class DealEventViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showDealScreenWidget(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DealScreenWidget(deal: Deal())));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => DealScreenWidget(deal: Deal())));
   }
 }

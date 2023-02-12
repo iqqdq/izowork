@@ -5,6 +5,7 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/phase_view_model.dart';
 import 'package:izowork/screens/phase/views/check_list_item_widget.dart';
+import 'package:izowork/screens/phase/views/contractor_list_item_widget.dart';
 import 'package:izowork/screens/search/views/search_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
@@ -65,7 +66,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                       : MediaQuery.of(context).padding.bottom +
                                           54.0),
                           children: [
-                            /// TITLE
+                            /// PRODUCT TITLE
                             Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0),
@@ -78,7 +79,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
 
                             const SizedBox(height: 16.0),
 
-                            /// TABLE
+                            /// PRODUCT TABLE
                             SizedBox(
                                 width: MediaQuery.of(context).size.width,
                                 height: 36.0 * 4,
@@ -150,48 +151,76 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                                   color: HexColors.black,
                                                   fontFamily: 'PT Root UI')))),
                                   rowHeaderWidth:
-                                      MediaQuery.of(context).size.width * 0.5,
+                                      MediaQuery.of(context).size.width * 0.4,
                                   colsHeaderHeight: 36.0,
                                   cellHeight: 36.0,
                                   cellWidth:
-                                      MediaQuery.of(context).size.width * 0.25,
+                                      MediaQuery.of(context).size.width * 0.3,
                                   rowsCount: 3,
                                   colCount: 2,
                                 )),
                             const SizedBox(height: 20.0),
 
-                            /// RESPONSIBLE
-                            const TitleWidget(
-                                padding: EdgeInsets.only(
-                                    bottom: 4.0, left: 16.0, right: 16.0),
-                                text: Titles.responsible,
-                                isSmall: true),
-                            const SubtitleWidget(
-                                padding: EdgeInsets.only(
-                                    bottom: 16.0, left: 16.0, right: 16.0),
-                                text: 'Имя фамилия'),
+                            /// CONTRACTOR TITLE
+                            Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Text(Titles.contractors,
+                                    style: TextStyle(
+                                        color: HexColors.black,
+                                        fontSize: 18.0,
+                                        fontFamily: 'PT Root UI',
+                                        fontWeight: FontWeight.bold))),
 
-                            /// CO-EXECUTOR
-                            const TitleWidget(
-                                padding: EdgeInsets.only(
-                                    bottom: 4.0, left: 16.0, right: 16.0),
-                                text: Titles.coExecutor,
-                                isSmall: true),
-                            const SubtitleWidget(
-                                padding: EdgeInsets.only(
-                                    bottom: 16.0, left: 16.0, right: 16.0),
-                                text: 'Имя фамилия'),
+                            const SizedBox(height: 16.0),
 
-                            /// OBSERVER
-                            const TitleWidget(
-                                padding: EdgeInsets.only(
-                                    bottom: 4.0, left: 16.0, right: 16.0),
-                                text: Titles.observer,
-                                isSmall: true),
-                            const SubtitleWidget(
-                                padding: EdgeInsets.only(
-                                    bottom: 16.0, left: 16.0, right: 16.0),
-                                text: 'Имя фамилия'),
+                            /// CONTRACTOR LIST
+                            ListView.builder(
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.only(
+                                    bottom: 10.0, left: 16.0, right: 16.0),
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: 2,
+                                itemBuilder: (context, index) {
+                                  return IgnorePointer(
+                                      ignoring: true,
+                                      child: ContractorListItemWidget(
+                                          onTap: () => {}));
+                                }),
+                            // const SizedBox(height: 20.0),
+
+                            // /// RESPONSIBLE
+                            // const TitleWidget(
+                            //     padding: EdgeInsets.only(
+                            //         bottom: 4.0, left: 16.0, right: 16.0),
+                            //     text: Titles.responsible,
+                            //     isSmall: true),
+                            // const SubtitleWidget(
+                            //     padding: EdgeInsets.only(
+                            //         bottom: 16.0, left: 16.0, right: 16.0),
+                            //     text: 'Имя фамилия'),
+
+                            // /// CO-EXECUTOR
+                            // const TitleWidget(
+                            //     padding: EdgeInsets.only(
+                            //         bottom: 4.0, left: 16.0, right: 16.0),
+                            //     text: Titles.coExecutor,
+                            //     isSmall: true),
+                            // const SubtitleWidget(
+                            //     padding: EdgeInsets.only(
+                            //         bottom: 16.0, left: 16.0, right: 16.0),
+                            //     text: 'Имя фамилия'),
+
+                            // /// OBSERVER
+                            // const TitleWidget(
+                            //     padding: EdgeInsets.only(
+                            //         bottom: 4.0, left: 16.0, right: 16.0),
+                            //     text: Titles.observer,
+                            //     isSmall: true),
+                            // const SubtitleWidget(
+                            //     padding: EdgeInsets.only(
+                            //         bottom: 16.0, left: 16.0, right: 16.0),
+                            //     text: 'Имя фамилия'),
 
                             /// DEALS
                             const TitleWidget(
