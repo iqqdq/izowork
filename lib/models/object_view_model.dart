@@ -48,10 +48,10 @@ class ObjectViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showObjectCreateScreenSheet(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ObjectCreateScreenWidget(object: Object())));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => ObjectCreateScreenWidget(object: Object())));
   }
 
   void showDialogScreen(BuildContext context) {
@@ -74,10 +74,10 @@ class ObjectViewModel with ChangeNotifier {
   }
 
   void showDocumentsScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DocumentsScreenWidget(object: Object())));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => DocumentsScreenWidget(object: Object())));
   }
 
   void showPhaseScreen(BuildContext context) {

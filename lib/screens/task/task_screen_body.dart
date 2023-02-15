@@ -24,13 +24,20 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
   Widget build(BuildContext context) {
     _taskViewModel = Provider.of<TaskViewModel>(context, listen: true);
 
-    final _day = _taskViewModel.task.deadline.day.toString().length == 1
-        ? '0${_taskViewModel.task.deadline.day}'
-        : '${_taskViewModel.task.deadline.day}';
-    final _month = _taskViewModel.task.deadline.month.toString().length == 1
-        ? '0${_taskViewModel.task.deadline.month}'
-        : '${_taskViewModel.task.deadline.month}';
-    final _year = '${_taskViewModel.task.deadline.year}';
+    final dateTime = DateTime.parse(
+        _taskViewModel.task?.deadline ?? _taskViewModel.selectedTask.deadline);
+
+    final _day = dateTime.day.toString().length == 1
+        ? '0${dateTime.day}'
+        : '${dateTime.day}';
+    final _month = dateTime.month.toString().length == 1
+        ? '0${dateTime.month}'
+        : '${dateTime.month}';
+    final _year = '${dateTime.year}';
+
+    final _description = _taskViewModel.task?.description ??
+        _taskViewModel.selectedTask.description ??
+        '';
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -42,7 +49,8 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
                 child: BackButtonWidget(onTap: () => Navigator.pop(context))),
-            title: Text(_taskViewModel.task.name,
+            title: Text(
+                _taskViewModel.task?.name ?? _taskViewModel.selectedTask.name,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontFamily: 'PT Root UI',
@@ -71,7 +79,8 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             isSmall: true),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _taskViewModel.task.state),
+                            text: _taskViewModel.task?.state ??
+                                _taskViewModel.selectedTask.state),
 
                         /// DEADLINE
                         const TitleWidget(
@@ -87,45 +96,55 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             padding: EdgeInsets.only(bottom: 4.0),
                             text: Titles.responsible,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            text: '???'),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _taskViewModel.task?.responsible?.name ??
+                                _taskViewModel.selectedTask.responsible?.name ??
+                                '-'),
 
                         /// TASK MANAGER
                         const TitleWidget(
                             padding: EdgeInsets.only(bottom: 4.0),
                             text: Titles.taskManager,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            text: '???'),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _taskViewModel.task?.taskManager?.name ??
+                                _taskViewModel.selectedTask.taskManager?.name ??
+                                '-'),
 
                         /// CO-EXECUTOR
                         const TitleWidget(
                             padding: EdgeInsets.only(bottom: 4.0),
                             text: Titles.coExecutor,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            text: '???'),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _taskViewModel.task?.coExecutor?.name ??
+                                _taskViewModel.selectedTask.coExecutor?.name ??
+                                '-'),
 
                         /// OBJECT
                         const TitleWidget(
                             padding: EdgeInsets.only(bottom: 4.0),
                             text: Titles.object,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            text: '???'),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _taskViewModel.task?.object?.name ??
+                                _taskViewModel.selectedTask.object?.name ??
+                                '-'),
 
                         /// COMPANY
                         const TitleWidget(
                             padding: EdgeInsets.only(bottom: 4.0),
                             text: Titles.company,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            text: '???'),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _taskViewModel.task?.company?.name ??
+                                _taskViewModel.selectedTask.company?.name ??
+                                '-'),
 
                         /// DESCRTIPTION
                         const TitleWidget(
@@ -133,24 +152,36 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             text: Titles.description,
                             isSmall: true),
                         SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            text: _taskViewModel.task.description),
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _description.isEmpty ? '-' : _description),
 
                         /// FILE LIST
-                        _taskViewModel.task.files.isEmpty
+                        _taskViewModel.task == null
                             ? Container()
-                            : const TitleWidget(
-                                padding: EdgeInsets.only(bottom: 10.0),
-                                text: Titles.files,
-                                isSmall: true),
+                            : _taskViewModel.task!.files.isEmpty
+                                ? _taskViewModel.selectedTask.files.isEmpty
+                                    ? Container()
+                                    : const TitleWidget(
+                                        padding: EdgeInsets.only(bottom: 10.0),
+                                        text: Titles.files,
+                                        isSmall: true)
+                                : const TitleWidget(
+                                    padding: EdgeInsets.only(bottom: 10.0),
+                                    text: Titles.files,
+                                    isSmall: true),
                         ListView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _taskViewModel.task.files.length,
+                            itemCount: _taskViewModel.task?.files.length ??
+                                _taskViewModel.selectedTask.files.length,
                             itemBuilder: (context, index) {
                               return FileListItemWidget(
-                                  fileName: '???.pdf', onRemoveTap: () => {});
+                                  fileName: _taskViewModel
+                                          .task?.files[index].filename ??
+                                      _taskViewModel
+                                          .selectedTask.files[index].filename,
+                                  onRemoveTap: () => {});
                             }),
                         const SizedBox(height: 16.0),
                       ]),

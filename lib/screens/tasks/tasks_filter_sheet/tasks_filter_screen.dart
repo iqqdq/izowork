@@ -53,7 +53,7 @@ class TasksFilterScreenWidget extends StatelessWidget {
                       children: [
                         /// RESPONSBILE SELECTION INPUT
                         SelectionInputWidget(
-                            title: Titles.manager,
+                            title: Titles.responsible,
                             value: user?.name ?? Titles.notSelected,
                             onTap: () => onManagerTap()),
 

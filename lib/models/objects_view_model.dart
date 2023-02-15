@@ -26,10 +26,10 @@ class ObjectsViewModel with ChangeNotifier {
   }
 
   void showObjectScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ObjectScreenWidget(object: Object())));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => ObjectScreenWidget(object: Object())));
   }
 
   void showObjectCreateScreen(BuildContext context) {

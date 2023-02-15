@@ -74,13 +74,13 @@ class ObjectCreateViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showSelectionScreenSheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (context) => SelectionScreenWidget(
-            selectionType: SelectionType.object, onSelectTap: () => {}));
+    // showCupertinoModalBottomSheet(
+    //     topRadius: const Radius.circular(16.0),
+    //     barrierColor: Colors.black.withOpacity(0.6),
+    //     backgroundColor: HexColors.white,
+    //     context: context,
+    //     builder: (context) => SelectionScreenWidget(
+    //         selectionType: SelectionType.object, onSelectTap: () => {}));
   }
 
   void showSearchScreenSheet(BuildContext context, SearchType searchType) {

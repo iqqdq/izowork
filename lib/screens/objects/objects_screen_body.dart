@@ -5,11 +5,9 @@ import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/models/objects_view_model.dart';
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/screens/objects/views/object_list_item_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -91,9 +89,10 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                   left: 16.0, right: 16.0, top: 16.0, bottom: 16.0 + 48.0),
               itemCount: 10,
               itemBuilder: (context, index) {
-                return ObjectListItemWidget(
-                    object: Object(),
-                    onTap: () => _objectsViewModel.showObjectScreen(context));
+                return Container();
+                // return ObjectListItemWidget(
+                //     object: Object(),
+                //     onTap: () => _objectsViewModel.showObjectScreen(context));
               }),
 
           /// FILTER BUTTON

@@ -78,9 +78,17 @@ class CompaniesFilterViewModel with ChangeNotifier {
     }
 
     if (tags2.isNotEmpty) {
+      var state = '&type=';
+
       tags2.forEach((element) {
-        params.add('&type=${options2[element]}');
+        state += '${options2[element]},';
       });
+
+      state = state.characters.last == ','
+          ? state.substring(0, state.length - 1)
+          : state;
+
+      params.add(state);
     }
 
     if (sortBy != '&sort_by=') {

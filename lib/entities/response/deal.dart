@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:izowork/entities/response/document.dart';
+
 Deal dealFromJson(String str) => Deal.fromJson(json.decode(str));
 
 String dealToJson(Deal data) => json.encode(data.toJson());
@@ -36,7 +38,7 @@ class Deal {
         objectId: json["object_id"],
         companyId: json["company_id"],
         comment: json["comment"],
-        files: List<dynamic>.from(json["files"].map((x) => x)),
+        files: List<Document>.from(json["files"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,6 +50,6 @@ class Deal {
         "object_id": objectId,
         "company_id": companyId,
         "comment": comment,
-        "files": List<dynamic>.from(files.map((x) => x)),
+        "files": List<Document>.from(files.map((x) => x)),
       };
 }

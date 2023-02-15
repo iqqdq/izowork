@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/loading_status.dart';
-
-enum SelectionType { task, deal, object }
 
 class SelectionViewModel with ChangeNotifier {
-  // INIT
-  final SelectionType selectionType;
-
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
-  LoadingStatus loadingStatus = LoadingStatus.empty;
-
+  final List<String> items;
   int _index = 0;
 
   int get index {
     return _index;
   }
 
-  SelectionViewModel(this.selectionType);
+  SelectionViewModel(this.items);
 
   // MARK: -
   // MARK: - FUNCTIONS

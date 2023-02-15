@@ -55,9 +55,17 @@ class TasksFilterViewModel with ChangeNotifier {
     }
 
     if (tags.isNotEmpty) {
+      var state = '&state=';
+
       tags.forEach((element) {
-        params.add('&state=${_options[element]}');
+        state += '${_options[element]},';
       });
+
+      state = state.characters.last == ','
+          ? state.substring(0, state.length - 1)
+          : state;
+
+      params.add(state);
     }
 
     didReturnParams(params);

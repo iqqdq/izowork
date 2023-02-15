@@ -76,13 +76,13 @@ class DealCreateViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showSelectionScreenSheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (context) => SelectionScreenWidget(
-            selectionType: SelectionType.task, onSelectTap: () => {}));
+    // showCupertinoModalBottomSheet(
+    //     topRadius: const Radius.circular(16.0),
+    //     barrierColor: Colors.black.withOpacity(0.6),
+    //     backgroundColor: HexColors.white,
+    //     context: context,
+    //     builder: (context) => SelectionScreenWidget(
+    //         selectionType: SelectionType.task, onSelectTap: () => {}));
   }
 
   void showDateTimeSelectionSheet(BuildContext context, int index) {

@@ -4,17 +4,22 @@ import 'package:izowork/screens/selection/selection_screen_body.dart';
 import 'package:provider/provider.dart';
 
 class SelectionScreenWidget extends StatelessWidget {
-  final SelectionType selectionType;
-  final VoidCallback onSelectTap;
+  final String title;
+  final List<String> items;
+  final Function(String) onSelectTap;
 
   const SelectionScreenWidget(
-      {Key? key, required this.selectionType, required this.onSelectTap})
+      {Key? key,
+      required this.title,
+      required this.items,
+      required this.onSelectTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => SelectionViewModel(selectionType),
-        child: SelectionScreenBodyWidget(onSelectTap: onSelectTap));
+        create: (context) => SelectionViewModel(items),
+        child:
+            SelectionScreenBodyWidget(title: title, onSelectTap: onSelectTap));
   }
 }

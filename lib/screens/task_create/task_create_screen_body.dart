@@ -4,7 +4,6 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/models/task_create_view_model.dart';
-import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
@@ -15,8 +14,11 @@ import 'package:provider/provider.dart';
 
 class TaskCreateScreenBodyWidget extends StatefulWidget {
   final Task? task;
+  final Function(Task) onCreate;
 
-  const TaskCreateScreenBodyWidget({Key? key, this.task}) : super(key: key);
+  const TaskCreateScreenBodyWidget(
+      {Key? key, this.task, required this.onCreate})
+      : super(key: key);
 
   @override
   _TaskCreateScreenBodyState createState() => _TaskCreateScreenBodyState();
@@ -44,6 +46,17 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
   Widget build(BuildContext context) {
     _taskCreateViewModel =
         Provider.of<TaskCreateViewModel>(context, listen: true);
+
+    if (_taskCreateViewModel.task != null &&
+        _nameTextEditingController.text.isEmpty) {
+      _nameTextEditingController.text = _taskCreateViewModel.task!.name;
+    }
+
+    if (_taskCreateViewModel.task != null &&
+        _descriptionTextEditingController.text.isEmpty) {
+      _descriptionTextEditingController.text =
+          _taskCreateViewModel.task!.description ?? '';
+    }
 
     final _day = _taskCreateViewModel.pickedDateTime.day.toString().length == 1
         ? '0${_taskCreateViewModel.pickedDateTime.day}'
@@ -86,7 +99,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                               ? 20.0 + 54.0
                               : MediaQuery.of(context).padding.bottom + 54.0),
                       children: [
-                        /// DESCRTIPTION INPUT
+                        /// NAME INPUT
                         InputWidget(
                           textEditingController: _nameTextEditingController,
                           focusNode: _nameFocusNode,
@@ -94,9 +107,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                           height: 58.0,
                           placeholder: Titles.taskName,
                           onTap: () => setState,
-                          onChange: (text) => {
-                            // TODO DESCRTIPTION
-                          },
+                          onChange: (text) => setState,
                         ),
                         const SizedBox(height: 10.0),
 
@@ -105,7 +116,9 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                             margin: const EdgeInsets.only(bottom: 10.0),
                             isVertical: true,
                             title: Titles.status,
-                            value: Titles.notSelected,
+                            value: _taskCreateViewModel.state ??
+                                _taskCreateViewModel.task?.state ??
+                                Titles.notSelected,
                             onTap: () => _taskCreateViewModel
                                 .showSelectionScreenSheet(context)),
 
@@ -123,50 +136,55 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                             margin: const EdgeInsets.only(bottom: 10.0),
                             isVertical: true,
                             title: Titles.responsible,
-                            value: Titles.notSelected,
-                            onTap: () =>
-                                _taskCreateViewModel.showSearchScreenSheet(
-                                    context, SearchType.responsible)),
+                            value: _taskCreateViewModel.responsible?.name ??
+                                _taskCreateViewModel.task?.taskManager?.name ??
+                                Titles.notSelected,
+                            onTap: () => _taskCreateViewModel
+                                .showSearchUserScreenSheet(context, 0)),
 
                         /// TASK MANAGER SELECTION INPUT
                         SelectionInputWidget(
                             margin: const EdgeInsets.only(bottom: 10.0),
                             isVertical: true,
                             title: Titles.taskManager,
-                            value: Titles.notSelected,
-                            onTap: () =>
-                                _taskCreateViewModel.showSearchScreenSheet(
-                                    context, SearchType.responsible)),
+                            value: _taskCreateViewModel.taskManager?.name ??
+                                _taskCreateViewModel.task?.taskManager?.name ??
+                                Titles.notSelected,
+                            onTap: () => _taskCreateViewModel
+                                .showSearchUserScreenSheet(context, 1)),
 
                         /// CO-EXECUTOR SELECTION INPUT
                         SelectionInputWidget(
                             margin: const EdgeInsets.only(bottom: 10.0),
                             isVertical: true,
                             title: Titles.coExecutor,
-                            value: Titles.notSelected,
-                            onTap: () =>
-                                _taskCreateViewModel.showSearchScreenSheet(
-                                    context, SearchType.responsible)),
+                            value: _taskCreateViewModel.coExecutor?.name ??
+                                _taskCreateViewModel.task?.coExecutor?.name ??
+                                Titles.notSelected,
+                            onTap: () => _taskCreateViewModel
+                                .showSearchUserScreenSheet(context, 2)),
 
                         /// OBJECT SELECTION INPUT
                         SelectionInputWidget(
                             margin: const EdgeInsets.only(bottom: 10.0),
                             isVertical: true,
                             title: Titles.object,
-                            value: Titles.notSelected,
-                            onTap: () =>
-                                _taskCreateViewModel.showSearchScreenSheet(
-                                    context, SearchType.object)),
+                            value: _taskCreateViewModel.object?.name ??
+                                _taskCreateViewModel.task?.object?.name ??
+                                Titles.notSelected,
+                            onTap: () => _taskCreateViewModel
+                                .showSearchObjectScreenSheet(context)),
 
                         /// COMPANY SELECTION INPUT
                         SelectionInputWidget(
                             margin: const EdgeInsets.only(bottom: 10.0),
                             isVertical: true,
                             title: Titles.company,
-                            value: Titles.notSelected,
-                            onTap: () =>
-                                _taskCreateViewModel.showSearchScreenSheet(
-                                    context, SearchType.company)),
+                            value: _taskCreateViewModel.company?.name ??
+                                _taskCreateViewModel.task?.company?.name ??
+                                Titles.notSelected,
+                            onTap: () => _taskCreateViewModel
+                                .showSearchCompanyScreenSheet(context)),
 
                         /// DESCRTIPTION INPUT
                         InputWidget(
@@ -178,9 +196,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                           margin: EdgeInsets.zero,
                           placeholder: '${Titles.description}...',
                           onTap: () => setState,
-                          onChange: (text) => {
-                            // TODO DESCRTIPTION
-                          },
+                          onChange: (text) => setState,
                         ),
                         const SizedBox(height: 10.0),
 
@@ -189,10 +205,13 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 3,
+                            itemCount: _taskCreateViewModel.files.length,
                             itemBuilder: (context, index) {
-                              return const FileListItemWidget(
-                                  fileName: 'file.pdf');
+                              return FileListItemWidget(
+                                  fileName:
+                                      _taskCreateViewModel.files[index].name,
+                                  onRemoveTap: () =>
+                                      _taskCreateViewModel.removeFile(index));
                             }),
 
                         /// ADD FILE BUTTON
@@ -206,7 +225,10 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                   Align(
                       alignment: Alignment.bottomCenter,
                       child: ButtonWidget(
-                          isDisabled: true,
+                          isDisabled: _taskCreateViewModel.task == null
+                              ? _nameTextEditingController.text.isEmpty ||
+                                  _taskCreateViewModel.state == null
+                              : _nameTextEditingController.text.isEmpty,
                           title: widget.task == null
                               ? Titles.createTask
                               : Titles.save,
@@ -217,7 +239,23 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                   MediaQuery.of(context).padding.bottom == 0.0
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
-                          onTap: () => {}))
+                          onTap: () => _taskCreateViewModel.task == null
+                              ? _taskCreateViewModel.createNewTask(
+                                  context,
+                                  _nameTextEditingController.text,
+                                  _descriptionTextEditingController.text,
+                                  (task) => {
+                                        widget.onCreate(task),
+                                        Navigator.pop(context)
+                                      })
+                              : _taskCreateViewModel.editTask(
+                                  context,
+                                  _nameTextEditingController.text,
+                                  _descriptionTextEditingController.text,
+                                  (task) => {
+                                        widget.onCreate(task),
+                                        Navigator.pop(context)
+                                      })))
                 ]))));
   }
 }

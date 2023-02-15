@@ -60,11 +60,13 @@ class TasksViewModel with ChangeNotifier {
         notifyListeners();
       });
     }
+
     await TaskRepository()
         .getTasks(
             pagination: pagination,
             search: search,
-            params: _tasksFilter?.params)
+            params: _tasksFilter?.params ??
+                ["&sort_by=deadline", "&sort_order=desc"])
         .then((response) => {
               if (response is List<Task>)
                 {
@@ -119,7 +121,9 @@ class TasksViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const TaskCreateScreenWidget()));
+            builder: (context) => TaskCreateScreenWidget(
+                onCreate: (task) =>
+                    {_tasks.insert(0, task), notifyListeners()})));
   }
 
   void showTasksFilterSheet(BuildContext context, Function() onFilter) {

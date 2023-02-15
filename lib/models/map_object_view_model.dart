@@ -15,10 +15,10 @@ class MapObjectViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showObjectScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ObjectScreenWidget(object: Object())));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => ObjectScreenWidget(object: Object())));
   }
 
   void showDialogScreen(BuildContext context) {

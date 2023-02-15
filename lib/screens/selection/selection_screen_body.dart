@@ -9,9 +9,11 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class SelectionScreenBodyWidget extends StatefulWidget {
-  final VoidCallback onSelectTap;
+  final String title;
+  final Function(String) onSelectTap;
 
-  const SelectionScreenBodyWidget({Key? key, required this.onSelectTap})
+  const SelectionScreenBodyWidget(
+      {Key? key, required this.title, required this.onSelectTap})
       : super(key: key);
 
   @override
@@ -49,33 +51,29 @@ class _SelectionScreenBodyState extends State<SelectionScreenBodyWidget> {
                   const DismissIndicatorWidget(),
 
                   /// TITLE
-                  TitleWidget(
-                      text: _selectionViewModel.selectionType ==
-                              SelectionType.task
-                          ? Titles.status
-                          : _selectionViewModel.selectionType ==
-                                  SelectionType.deal
-                              ? Titles.chooseProcess
-                              : Titles.objectType),
+                  TitleWidget(text: widget.title),
                   const SizedBox(height: 17.0),
 
                   /// SCROLLABLE LIST
                   ListView.builder(
                       shrinkWrap: true,
                       padding: const EdgeInsets.all(16.0),
-                      itemCount: 4,
+                      itemCount: _selectionViewModel.items.length,
                       itemBuilder: (context, index) {
                         return SelectionListItemWidget(
                             isSelected: _selectionViewModel.index == index,
-                            name: index.toString(),
+                            name: _selectionViewModel.items[index],
                             onTap: () => _selectionViewModel.select(index));
                       }),
 
                   ButtonWidget(
                       title: Titles.apply,
                       margin: const EdgeInsets.only(left: 16.0, right: 5.0),
-                      onTap: () =>
-                          {widget.onSelectTap(), Navigator.pop(context)}),
+                      onTap: () => {
+                            widget.onSelectTap(_selectionViewModel
+                                .items[_selectionViewModel.index]),
+                            Navigator.pop(context)
+                          }),
                 ])));
   }
 }

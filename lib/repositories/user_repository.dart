@@ -8,7 +8,7 @@ import 'package:izowork/services/urls.dart';
 import 'package:izowork/services/web_service.dart';
 
 class UserRepository {
-  Future<Object> getUser(String? id) async {
+  Future<dynamic> getUser(String? id) async {
     dynamic json =
         await WebService().get(id == null ? profileUrl : userUrl + '?id=$id');
 
@@ -20,7 +20,7 @@ class UserRepository {
     }
   }
 
-  Future<Object> updateUser(UserRequest userRequest) async {
+  Future<dynamic> updateUser(UserRequest userRequest) async {
     dynamic json =
         await WebService().patch(userUpdateUrl, jsonEncode(userRequest));
 
@@ -31,7 +31,7 @@ class UserRepository {
     }
   }
 
-  Future<Object> updateAvatar(FormData formData) async {
+  Future<dynamic> updateAvatar(FormData formData) async {
     dynamic json = await WebService().put(uploadAvatarUrl, formData);
 
     try {
@@ -44,7 +44,7 @@ class UserRepository {
     }
   }
 
-  Future<Object> getUsers(
+  Future<dynamic> getUsers(
       {required Pagination pagination, String? search}) async {
     var url =
         usersUrl + '?&offset=${pagination.offset}&limit=${pagination.size}';

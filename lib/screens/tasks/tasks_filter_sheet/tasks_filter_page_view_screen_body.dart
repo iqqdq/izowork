@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/models/tasks_filter_view_model.dart';
-import 'package:izowork/screens/search_manager/search_manager_screen.dart';
+import 'package:izowork/screens/search_user/search_user_screen.dart';
 import 'package:izowork/screens/tasks/tasks_filter_sheet/tasks_filter_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +80,8 @@ class _TasksFilterPageViewScreenBodyState
                               },
                           onResetTap: () => _tasksFilterViewModel.reset(() =>
                               {widget.onPop(null), Navigator.pop(context)})),
-                      SearchManagerScreenWidget(
+                      SearchUserScreenWidget(
+                          isRoot: false,
                           onFocus: () => setState,
                           onPop: (user) => {
                                 _tasksFilterViewModel

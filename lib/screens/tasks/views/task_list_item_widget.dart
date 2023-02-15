@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/task.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
@@ -16,13 +18,15 @@ class TaskListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _day = task.deadline.day.toString().length == 1
-        ? '0${task.deadline.day}'
-        : '${task.deadline.day}';
-    final _month = task.deadline.month.toString().length == 1
-        ? '0${task.deadline.month}'
-        : '${task.deadline.month}';
-    final _year = '${task.deadline.year}';
+    final dateTime = DateTime.parse(task.deadline);
+
+    final _day = dateTime.day.toString().length == 1
+        ? '0${dateTime.day}'
+        : '${dateTime.day}';
+    final _month = dateTime.month.toString().length == 1
+        ? '0${dateTime.month}'
+        : '${dateTime.month}';
+    final _year = '${dateTime.year}';
 
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0),
@@ -65,14 +69,14 @@ class TaskListItemWidget extends StatelessWidget {
                       /// RESPONSIBLE
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            SubtitleWidget(
+                          children: [
+                            const SubtitleWidget(
                                 text: '${Titles.responsible}:',
                                 padding: EdgeInsets.zero),
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 10.0),
                             Expanded(
                               child: SubtitleWidget(
-                                  text: '???',
+                                  text: task.responsible?.name ?? '-',
                                   fontWeight: FontWeight.w700,
                                   textAlign: TextAlign.end,
                                   padding: EdgeInsets.zero),
@@ -83,14 +87,14 @@ class TaskListItemWidget extends StatelessWidget {
                       /// OBJECT
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            SubtitleWidget(
+                          children: [
+                            const SubtitleWidget(
                                 text: '${Titles.object}:',
                                 padding: EdgeInsets.zero),
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 10.0),
                             Expanded(
                               child: SubtitleWidget(
-                                  text: '???',
+                                  text: task.object?.name ?? '-',
                                   fontWeight: FontWeight.w700,
                                   textAlign: TextAlign.end,
                                   padding: EdgeInsets.zero),
@@ -101,7 +105,7 @@ class TaskListItemWidget extends StatelessWidget {
                       const SizedBox(height: 10.0),
 
                       /// ACTION TEXT
-                      Text(task.description,
+                      Text(task.description ?? '',
                           style: TextStyle(
                               color: HexColors.black,
                               fontSize: 14.0,
@@ -113,26 +117,33 @@ class TaskListItemWidget extends StatelessWidget {
                       Row(children: [
                         /// CREATOR AVATAR
                         Stack(children: [
-                          SvgPicture.asset('assets/ic_avatar.svg',
-                              color: HexColors.grey40,
-                              width: 24.0,
-                              height: 24.0,
-                              fit: BoxFit.cover),
-                          // ClipRRect(
-                          //   borderRadius: BorderRadius.circular(12.0),
-                          //   child:
-                          // CachedNetworkImage(imageUrl: '', width: 24.0, height: 24.0, fit: BoxFit.cover)),
+                          task.taskManager == null
+                              ? SvgPicture.asset('assets/ic_avatar.svg',
+                                  color: HexColors.grey40,
+                                  width: 24.0,
+                                  height: 24.0,
+                                  fit: BoxFit.cover)
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: CachedNetworkImage(
+                                      imageUrl:
+                                          avatarUrl + task.taskManager!.avatar,
+                                      width: 24.0,
+                                      height: 24.0,
+                                      fit: BoxFit.cover)),
                         ]),
                         const SizedBox(width: 10.0),
 
                         /// CREATOR NAME
-                        Expanded(
-                            child: Text('???',
-                                style: TextStyle(
-                                    color: HexColors.grey50,
-                                    fontSize: 14.0,
-                                    fontFamily: 'PT Root UI',
-                                    fontWeight: FontWeight.w700)))
+                        task.taskManager == null
+                            ? Container()
+                            : Expanded(
+                                child: Text(task.taskManager!.name,
+                                    style: TextStyle(
+                                        color: HexColors.grey50,
+                                        fontSize: 14.0,
+                                        fontFamily: 'PT Root UI',
+                                        fontWeight: FontWeight.w700)))
                       ])
                     ]),
                 onTap: () => onTap())));
