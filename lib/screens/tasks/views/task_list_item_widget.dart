@@ -130,6 +130,14 @@ class TaskListItemWidget extends StatelessWidget {
                                           avatarUrl + task.taskManager!.avatar,
                                       width: 24.0,
                                       height: 24.0,
+                                      memCacheWidth: 24 *
+                                          (MediaQuery.of(context)
+                                                  .devicePixelRatio)
+                                              .round(),
+                                      memCacheHeight: 24 *
+                                          (MediaQuery.of(context)
+                                                  .devicePixelRatio)
+                                              .round(),
                                       fit: BoxFit.cover)),
                         ]),
                         const SizedBox(width: 10.0),

@@ -61,7 +61,8 @@ class Task {
         description: json["description"],
         files: json["files"] == null
             ? []
-            : List<Document>.from(json["files"].map((x) => x)),
+            : List<Document>.from(
+                json["files"].map((x) => Document.fromJson(x))),
         responsible: json["responsible"] == null
             ? null
             : User.fromJson(json["responsible"]),

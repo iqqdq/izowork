@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/screens/task/task_screen.dart';
 
 class TaskEventViewModel with ChangeNotifier {
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
-  LoadingStatus loadingStatus = LoadingStatus.empty;
+  final List<Task> tasks;
 
-  // MARK: -
-  // MARK: - FUNCTIONS
+  TaskEventViewModel(this.tasks);
 
   // MARK: -
   // MARK: - PUSH
 
-  void showTaskScreenWidget(BuildContext context) {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => TaskScreenWidget(task: Task())));
+  void showTaskScreenWidget(BuildContext context, int index) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TaskScreenWidget(task: tasks[index])));
   }
 }

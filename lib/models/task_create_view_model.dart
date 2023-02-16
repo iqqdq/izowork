@@ -1,3 +1,7 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
@@ -5,6 +9,8 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
+import 'package:izowork/entities/request/delete_request.dart';
+import 'package:izowork/entities/request/file_request.dart';
 import 'package:izowork/entities/request/task_request.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
@@ -18,8 +24,13 @@ import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/search_object/search_object_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/date_time_wheel_picker_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io' as io;
 
 class TaskCreateViewModel with ChangeNotifier {
   // INIT
@@ -58,7 +69,13 @@ class TaskCreateViewModel with ChangeNotifier {
 
   Company? _company;
 
-  List<Document> _files = [];
+  List<Document> _documents = [];
+
+  final List<File> _files = [];
+
+  int _downloadIndex = -1;
+
+  int current = 0;
 
   TaskState? get taskState {
     return _taskState;
@@ -100,8 +117,16 @@ class TaskCreateViewModel with ChangeNotifier {
     return _pickedDateTime;
   }
 
-  List<Document> get files {
+  List<Document> get documents {
+    return _documents;
+  }
+
+  List<File> get files {
     return _files;
+  }
+
+  int get downloadIndex {
+    return _downloadIndex;
   }
 
   TaskCreateViewModel(this.task) {
@@ -109,7 +134,7 @@ class TaskCreateViewModel with ChangeNotifier {
       _pickedDateTime = DateTime.parse(task!.deadline);
 
       if (task!.files.isNotEmpty) {
-        _files = task!.files;
+        _documents = task!.files;
       }
 
       notifyListeners();
@@ -126,7 +151,11 @@ class TaskCreateViewModel with ChangeNotifier {
     notifyListeners();
 
     await TaskRepository().getTaskStates().then((response) => {
-          if (response is TaskState) {_taskState = response}
+          if (response is TaskState)
+            {loadingStatus = LoadingStatus.completed, _taskState = response}
+          else if (response is ErrorResponse)
+            {loadingStatus = LoadingStatus.error},
+          notifyListeners()
         });
   }
 
@@ -148,7 +177,19 @@ class TaskCreateViewModel with ChangeNotifier {
             objectId: object?.id))
         .then((response) => {
               if (response is Task)
-                {onCreate(response)}
+                {
+                  if (_files.isNotEmpty)
+                    {
+                      _files.forEach((element) async {
+                        await uploadFile(context, response.id, element)
+                            .then((value) => {
+                                  current++,
+                                  if (current == _files.length)
+                                    {onCreate(response)}
+                                });
+                      })
+                    }
+                }
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
@@ -188,23 +229,131 @@ class TaskCreateViewModel with ChangeNotifier {
             });
   }
 
-  // MARK: -
-  // MARK: - ACTIONS
+  Future uploadFile(BuildContext context, String id, File file) async {
+    await TaskRepository()
+        .addTaskFile(TaskFileRequest(id, file))
+        .then((response) => {
+              if (response is Document)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _documents.add(response)
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                }
+            });
+  }
 
-  Future addFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc']);
-
-    if (result != null) {
-      // _files.add(Document(filename: filename, id: id, mimeType: mimeType, name: name, taskId: taskId));
+  Future deleteFile(BuildContext context, int index) async {
+    if (task == null) {
+      _files.removeAt(index);
       notifyListeners();
+    } else {
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
+
+      await TaskRepository()
+          .deleteTaskFile(DeleteRequest(id: task!.id))
+          .then((response) => {
+                if (response == true)
+                  {
+                    loadingStatus = LoadingStatus.completed,
+                    _documents.removeAt(index)
+                  }
+                else if (response is ErrorResponse)
+                  {
+                    loadingStatus = LoadingStatus.error,
+                    Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  },
+                notifyListeners()
+              });
     }
   }
 
-  void removeFile(int index) {
-    _files.removeAt(index);
-    notifyListeners();
+  // MARK: -
+  // MARK: - ACTIONS
+
+  Future addFile(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowMultiple: true,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc']);
+
+    if (result != null) {
+      if (result.files.isNotEmpty) {
+        if (task == null) {
+          result.files.forEach((element) {
+            if (element.path != null) {
+              _files.add(File(element.path!));
+              notifyListeners();
+            }
+          });
+        } else {
+          loadingStatus = LoadingStatus.searching;
+          notifyListeners();
+
+          result.files.forEach((element) async {
+            if (element.path != null) {
+              await uploadFile(context, task!.id, File(element.path!))
+                  .then((value) => {
+                        current++,
+                        if (current == result.files.length)
+                          {
+                            loadingStatus = LoadingStatus.completed,
+                            notifyListeners()
+                          }
+                      });
+            }
+          });
+        }
+      }
+    }
+  }
+
+  Future openFile(BuildContext context, int index) async {
+    if (task == null) {
+      OpenResult openResult = await OpenFilex.open(_files[index].path);
+
+      if (openResult.type == ResultType.noAppToOpen) {
+        Toast().showTopToast(context, Titles.unsupportedFileFormat);
+      }
+    } else {
+      String url = taskMediaUrl + task!.files[index].filename;
+
+      if (Platform.isAndroid) {
+        Directory appDocumentsDirectory =
+            await getApplicationDocumentsDirectory();
+        String appDocumentsPath = appDocumentsDirectory.path;
+        String fileName = task?.files[index].name ?? task!.files[index].name;
+        String filePath = '$appDocumentsPath/$fileName';
+        bool isFileExists = await io.File(filePath).exists();
+
+        if (!isFileExists) {
+          _downloadIndex = index;
+          notifyListeners();
+
+          await Dio().download(url, filePath,
+              onReceiveProgress: (count, total) {
+            debugPrint('---Download----Rec: $count, Total: $total');
+          }).then((value) => {_downloadIndex = -1, notifyListeners()});
+        }
+
+        OpenResult openResult = await OpenFilex.open(filePath);
+
+        if (openResult.type == ResultType.noAppToOpen) {
+          Toast().showTopToast(context, Titles.unsupportedFileFormat);
+        }
+      } else {
+        if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
+          launchUrl(Uri.parse(url.replaceAll(' ', '')));
+        } else if (await canLaunchUrl(
+            Uri.parse('https://' + url.replaceAll(' ', '')))) {
+          launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
+        }
+      }
+    }
   }
 
   // MARK: -

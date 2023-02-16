@@ -18,6 +18,7 @@ class TasksViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
   final List<Task> _tasks = [];
+
   TasksFilter? _tasksFilter;
 
   TaskState? _taskState;
@@ -48,6 +49,21 @@ class TasksViewModel with ChangeNotifier {
             })
         .then((value) => getTaskList(
             pagination: Pagination(offset: 0, size: 50), search: ''));
+  }
+
+  Future getTaskById(String id) async {
+    loadingStatus = LoadingStatus.searching;
+
+    await TaskRepository().getTask(id).then((response) => {
+          if (response is Task)
+            {
+              _tasks.insert(0, response),
+              loadingStatus = LoadingStatus.completed,
+            }
+          else
+            {loadingStatus = LoadingStatus.error},
+          notifyListeners()
+        });
   }
 
   Future getTaskList(
@@ -122,8 +138,9 @@ class TasksViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => TaskCreateScreenWidget(
-                onCreate: (task) =>
-                    {_tasks.insert(0, task), notifyListeners()})));
+                onCreate: (task) => {
+                      if (task != null) {getTaskById(task.id)}
+                    })));
   }
 
   void showTasksFilterSheet(BuildContext context, Function() onFilter) {

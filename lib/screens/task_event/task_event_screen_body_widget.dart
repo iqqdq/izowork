@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/models/task_event_view_model.dart';
+import 'package:izowork/screens/tasks/views/task_list_item_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:provider/provider.dart';
 
 class TaskEventScreenBodyWidget extends StatefulWidget {
@@ -36,19 +35,18 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
     return SizedBox(
         height: MediaQuery.of(context).size.height * 0.8,
         child: Stack(children: [
-          /// DEALS LIST VIEW
+          /// TASK LIST VIEW
           Scrollbar(
               child: ListView.builder(
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(
-                      left: 16.0, right: 16.0, top: 70.0, bottom: 16.0 + 48.0),
-                  itemCount: 10,
+                      left: 16.0, right: 16.0, top: 70.0, bottom: 16.0),
+                  itemCount: _taskEventViewModel.tasks.length,
                   itemBuilder: (context, index) {
-                    return Container();
-                    // return ActionTaskListItemWidget(
-                    //     task: Task(),
-                    //     onTap: () =>
-                    //         _taskEventViewModel.showTaskScreenWidget(context));
+                    return TaskListItemWidget(
+                        task: _taskEventViewModel.tasks[index],
+                        onTap: () => _taskEventViewModel.showTaskScreenWidget(
+                            context, index));
                   })),
 
           Container(
@@ -73,12 +71,7 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
             /// DISMISS INDICATOR
             SizedBox(height: 6.0),
             DismissIndicatorWidget(),
-          ]),
-
-          /// INDICATOR
-          _taskEventViewModel.loadingStatus == LoadingStatus.searching
-              ? const LoadingIndicatorWidget()
-              : Container()
+          ])
         ]));
   }
 }

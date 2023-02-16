@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/task_view_model.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
+import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
@@ -177,11 +179,14 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                                 _taskViewModel.selectedTask.files.length,
                             itemBuilder: (context, index) {
                               return FileListItemWidget(
-                                  fileName: _taskViewModel
-                                          .task?.files[index].filename ??
-                                      _taskViewModel
-                                          .selectedTask.files[index].filename,
-                                  onRemoveTap: () => {});
+                                  fileName:
+                                      _taskViewModel.task?.files[index].name ??
+                                          _taskViewModel
+                                              .selectedTask.files[index].name,
+                                  isDownloading:
+                                      _taskViewModel.downloadIndex == index,
+                                  onTap: () =>
+                                      _taskViewModel.openFile(context, index));
                             }),
                         const SizedBox(height: 16.0),
                       ]),
@@ -199,7 +204,12 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
                           onTap: () => _taskViewModel
-                              .showTaskCreateScreenSheet(context)))
+                              .showTaskCreateScreenSheet(context))),
+
+                  /// INDICATOR
+                  _taskViewModel.loadingStatus == LoadingStatus.searching
+                      ? const LoadingIndicatorWidget()
+                      : Container()
                 ]))));
   }
 }

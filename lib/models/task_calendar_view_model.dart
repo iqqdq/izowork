@@ -1,16 +1,17 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/task.dart';
+import 'package:izowork/repositories/task_repository.dart';
 import 'package:izowork/screens/task_event/task_event_screen.dart';
 import 'package:izowork/views/date_time_wheel_picker_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TaskCalendarViewModel with ChangeNotifier {
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
-  LoadingStatus loadingStatus = LoadingStatus.empty;
-
   final DateTime _minDateTime = DateTime(
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
               .year -
@@ -25,11 +26,11 @@ class TaskCalendarViewModel with ChangeNotifier {
       1,
       1);
 
-  final List<DateTime> _eventDateTimes = [
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 1)
-        .subtract(const Duration(days: 1)), // TODAY
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 3)
-  ];
+  final List<DateTime> _eventDateTimes = [];
+
+  LoadingStatus loadingStatus = LoadingStatus.searching;
+
+  final List<Task> _tasks = [];
 
   DateTime _pickedDateTime =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -46,6 +47,70 @@ class TaskCalendarViewModel with ChangeNotifier {
 
   DateTime? get selectedDateTime {
     return _selectedDateTime;
+  }
+
+  List<Task> get tasks {
+    return _tasks;
+  }
+
+  TaskCalendarViewModel() {
+    getTaskList(_pickedDateTime);
+  }
+
+  // MARK: -
+  // MARK: - API CALL
+
+  Future getTaskList(DateTime dateTime) async {
+    loadingStatus = LoadingStatus.searching;
+    _tasks.clear();
+
+    Future.delayed(Duration.zero, () async {
+      notifyListeners();
+    });
+
+    await TaskRepository().getYearTasks(params: [
+      "deadline=gte:${_pickedDateTime.year}-01-01T00:00:00Z&deadline=lte:${_pickedDateTime.year}-12-31T00:00:00Z"
+    ]).then((response) => {
+          if (response is List<Task>)
+            {
+              if (_tasks.isEmpty)
+                {
+                  response.forEach((task) {
+                    _tasks.add(task);
+                  })
+                }
+              else
+                {
+                  response.forEach((newTask) {
+                    bool found = false;
+
+                    _tasks.forEach((task) {
+                      if (newTask.id == task.id) {
+                        found = true;
+                      }
+                    });
+
+                    if (!found) {
+                      _tasks.add(newTask);
+                    }
+                  })
+                },
+
+              // UPDATE CALENDART EVENT DAYS
+              _tasks.forEach((element) {
+                _eventDateTimes.add(DateTime(
+                    DateTime.parse(element.deadline).year,
+                    DateTime.parse(element.deadline).month,
+                    DateTime.parse(element.deadline).day));
+              }),
+
+              loadingStatus = LoadingStatus.completed,
+              notifyListeners()
+            }
+          else
+            {loadingStatus = LoadingStatus.error},
+          notifyListeners()
+        });
   }
 
   // MARK: -
@@ -83,43 +148,70 @@ class TaskCalendarViewModel with ChangeNotifier {
                 fontWeight: FontWeight.w400),
             onTap: (dateTime) => {
                   Navigator.pop(context),
-
-                  // UPDATE PICKED DATE TIME
-                  Future.delayed(
-                      const Duration(milliseconds: 400),
-                      () => {
-                            _pickedDateTime = dateTime,
-                            notifyListeners(),
-                          }).then((value) =>
-                      // CALL CALENDAR SCROLL TO PICKED DATE TIME
-                      Future.delayed(const Duration(milliseconds: 100),
-                          () => didUpdateDateTime(true)))
+                  if (_pickedDateTime.year == dateTime.year)
+                    {
+                      // UPDATE PICKED DATE TIME
+                      Future.delayed(
+                          const Duration(milliseconds: 400),
+                          () => {
+                                _pickedDateTime = dateTime,
+                                notifyListeners(),
+                              }).then((value) =>
+                          // CALL CALENDAR SCROLL TO PICKED DATE TIME
+                          Future.delayed(const Duration(milliseconds: 100),
+                              () => didUpdateDateTime(true)))
+                    }
+                  else
+                    {
+                      _tasks.clear(),
+                      _pickedDateTime = dateTime,
+                      getTaskList(_pickedDateTime)
+                    }
                 }));
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
 
-  void addDateTime(DateTime dateTime) {
-    _eventDateTimes.add(dateTime);
-    notifyListeners();
+  int getTaskCount(DateTime dateTime) {
+    int count = 0;
+
+    _tasks.forEach((element) {
+      if (dateTime.year == DateTime.parse(element.deadline).year &&
+          dateTime.month == DateTime.parse(element.deadline).month &&
+          dateTime.day == DateTime.parse(element.deadline).day) {
+        count++;
+      }
+    });
+
+    return count;
   }
 
-  void selectDateTime(BuildContext context, DateTime dateTime) {
-    for (var eventDateTime in _eventDateTimes) {
-      if (eventDateTime.year == dateTime.year &&
-          eventDateTime.month == dateTime.month &&
-          eventDateTime.day == dateTime.day) {
-        showCupertinoModalBottomSheet(
-            topRadius: const Radius.circular(16.0),
-            barrierColor: Colors.black.withOpacity(0.6),
-            backgroundColor: HexColors.white,
-            context: context,
-            builder: (context) => TaskEventScreenWidget(dateTime: dateTime));
-      }
-    }
+  // MARK: -
+  // MARK: - ACTIONS
 
+  void selectDateTime(BuildContext context, DateTime dateTime) {
     _selectedDateTime = dateTime;
     notifyListeners();
+
+    List<Task> tasks = [];
+
+    _tasks.forEach((element) {
+      if (dateTime.year == DateTime.parse(element.deadline).year &&
+          dateTime.month == DateTime.parse(element.deadline).month &&
+          dateTime.day == DateTime.parse(element.deadline).day) {
+        tasks.add(element);
+      }
+    });
+
+    if (tasks.isNotEmpty) {
+      showCupertinoModalBottomSheet(
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (context) =>
+              TaskEventScreenWidget(dateTime: dateTime, tasks: tasks));
+    }
   }
 }

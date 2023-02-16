@@ -40,6 +40,9 @@ class ProfileViewModel with ChangeNotifier {
         });
   }
 
+  // MARK: -
+  // MARK: - ACTIONS
+
   void openUrl(String url) async {
     if (url.isNotEmpty) {
       String? nativeUrl;
@@ -70,6 +73,9 @@ class ProfileViewModel with ChangeNotifier {
       }
     }
   }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
 
   void openBrowser(String url) async {
     if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {

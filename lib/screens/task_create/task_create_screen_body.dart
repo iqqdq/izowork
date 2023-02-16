@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/models/task_create_view_model.dart';
@@ -9,12 +10,13 @@ import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/input_widget.dart';
+import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 
 class TaskCreateScreenBodyWidget extends StatefulWidget {
   final Task? task;
-  final Function(Task) onCreate;
+  final Function(Task?) onCreate;
 
   const TaskCreateScreenBodyWidget(
       {Key? key, this.task, required this.onCreate})
@@ -76,7 +78,9 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
             backgroundColor: Colors.transparent,
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
-                child: BackButtonWidget(onTap: () => Navigator.pop(context))),
+                child: BackButtonWidget(
+                    onTap: () =>
+                        {widget.onCreate(null), Navigator.pop(context)})),
             title: Text(widget.task == null ? Titles.newTask : Titles.editTask,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
@@ -205,27 +209,50 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _taskCreateViewModel.files.length,
+                            itemCount: _taskCreateViewModel.task == null
+                                ? _taskCreateViewModel.files.length
+                                : _taskCreateViewModel.task!.files.length,
                             itemBuilder: (context, index) {
-                              return FileListItemWidget(
-                                  fileName:
-                                      _taskCreateViewModel.files[index].name,
-                                  onRemoveTap: () =>
-                                      _taskCreateViewModel.removeFile(index));
+                              return IgnorePointer(
+                                  ignoring:
+                                      _taskCreateViewModel.downloadIndex != -1,
+                                  child: FileListItemWidget(
+                                      fileName: _taskCreateViewModel.task == null
+                                          ? _taskCreateViewModel
+                                              .files[index].path
+                                              .substring(
+                                                  _taskCreateViewModel
+                                                          .files[index]
+                                                          .path
+                                                          .length -
+                                                      10,
+                                                  _taskCreateViewModel
+                                                      .files[index].path.length)
+                                          : _taskCreateViewModel
+                                              .task!.files[index].name,
+                                      isDownloading:
+                                          _taskCreateViewModel.downloadIndex ==
+                                              index,
+                                      onTap: () => _taskCreateViewModel
+                                          .openFile(context, index),
+                                      onRemoveTap: () => _taskCreateViewModel
+                                          .deleteFile(context, index)));
                             }),
 
                         /// ADD FILE BUTTON
                         BorderButtonWidget(
                             title: Titles.addFile,
                             margin: const EdgeInsets.only(bottom: 30.0),
-                            onTap: () => _taskCreateViewModel.addFile()),
+                            onTap: () => _taskCreateViewModel.addFile(context)),
                       ]),
 
                   /// ADD TASK BUTTON
                   Align(
                       alignment: Alignment.bottomCenter,
                       child: ButtonWidget(
-                          isDisabled: _taskCreateViewModel.task == null
+                          isDisabled: _taskCreateViewModel.loadingStatus ==
+                                      LoadingStatus.searching ||
+                                  _taskCreateViewModel.task == null
                               ? _nameTextEditingController.text.isEmpty ||
                                   _taskCreateViewModel.state == null
                               : _nameTextEditingController.text.isEmpty,
@@ -245,17 +272,28 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                   _nameTextEditingController.text,
                                   _descriptionTextEditingController.text,
                                   (task) => {
-                                        widget.onCreate(task),
-                                        Navigator.pop(context)
+                                        if (mounted)
+                                          {
+                                            widget.onCreate(task),
+                                            Navigator.pop(context)
+                                          }
                                       })
                               : _taskCreateViewModel.editTask(
                                   context,
                                   _nameTextEditingController.text,
                                   _descriptionTextEditingController.text,
                                   (task) => {
-                                        widget.onCreate(task),
-                                        Navigator.pop(context)
-                                      })))
+                                        if (mounted)
+                                          {
+                                            widget.onCreate(task),
+                                            Navigator.pop(context)
+                                          }
+                                      }))),
+
+                  /// INDICATOR
+                  _taskCreateViewModel.loadingStatus == LoadingStatus.searching
+                      ? const LoadingIndicatorWidget()
+                      : Container()
                 ]))));
   }
 }

@@ -226,6 +226,7 @@ abstract class Titles {
 
   /// ALERTS
   static const warning = 'Внимание';
+  static const unsupportedFileFormat = 'Неизвестный формат файла';
   static const locationPermissionDenied =
       'Разрешите определение местоположения для IZOWORK в настройках телефона';
 }

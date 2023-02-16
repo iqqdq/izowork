@@ -60,6 +60,21 @@ class WebService {
     }
   }
 
+  Future<dynamic> postFormData(String url, FormData formData) async {
+    try {
+      Response response =
+          await _dio.post(url, data: formData, options: await _options());
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response.data;
+      }
+    } catch (e) {
+      if (e is DioError) {
+        return e.response?.data;
+      }
+    }
+  }
+
   Future<dynamic> patch(String url, Object object) async {
     try {
       Response response =
@@ -90,9 +105,10 @@ class WebService {
     }
   }
 
-  Future<dynamic> delete(String url) async {
+  Future<dynamic> delete(String url, Object? object) async {
     try {
-      Response response = await _dio.delete(url, options: await _options());
+      Response response =
+          await _dio.delete(url, data: object, options: await _options());
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         return true;
@@ -104,7 +120,7 @@ class WebService {
     }
   }
 
-  Future<dynamic> upload(FormData formData, String url) async {
+  Future<dynamic> upload(String url, FormData formData) async {
     try {
       Response response =
           await _dio.post(url, data: formData, options: await _options());

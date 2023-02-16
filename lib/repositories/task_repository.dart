@@ -1,5 +1,8 @@
 import 'package:izowork/components/pagination.dart';
+import 'package:izowork/entities/request/delete_request.dart';
+import 'package:izowork/entities/request/file_request.dart';
 import 'package:izowork/entities/request/task_request.dart';
+import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/entities/response/task_state.dart';
@@ -47,6 +50,26 @@ class TaskRepository {
     }
   }
 
+  Future<dynamic> getYearTasks({required List<String> params}) async {
+    var url = tasksUrl + '?';
+
+    for (var element in params) {
+      url += element;
+    }
+
+    dynamic json = await WebService().get(url);
+    List<Task> tasks = [];
+
+    try {
+      json['tasks'].forEach((element) {
+        tasks.add(Task.fromJson(element));
+      });
+      return tasks;
+    } catch (e) {
+      return ErrorResponse.fromJson(json).message ?? e.toString();
+    }
+  }
+
   Future<dynamic> getTaskStates() async {
     dynamic json = await WebService().get(taskStatesUrl);
 
@@ -74,6 +97,27 @@ class TaskRepository {
       return Task.fromJson(json["task"]);
     } catch (e) {
       return ErrorResponse.fromJson(json).message ?? e.toString();
+    }
+  }
+
+  Future<dynamic> addTaskFile(TaskFileRequest taskFileRequest) async {
+    dynamic json = await WebService()
+        .postFormData(taskFileUrl, await taskFileRequest.toFormData());
+
+    try {
+      return Document.fromJson(json["task_file"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json).message ?? e.toString();
+    }
+  }
+
+  Future<dynamic> deleteTaskFile(DeleteRequest deleteRequest) async {
+    dynamic json = await WebService().delete(taskFileUrl, deleteRequest);
+
+    if (json == true) {
+      return json;
+    } else {
+      return ErrorResponse.fromJson(json).message ?? 'Ошибка';
     }
   }
 }

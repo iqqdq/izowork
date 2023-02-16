@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class TaskCreateScreenWidget extends StatelessWidget {
   final Task? task;
-  final Function(Task) onCreate;
+  final Function(Task?) onCreate;
 
   const TaskCreateScreenWidget({Key? key, this.task, required this.onCreate})
       : super(key: key);
