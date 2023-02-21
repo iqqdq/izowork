@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-Company authorizationFromJson(String str) => Company.fromJson(json.decode(str));
+Company companyJson(String str) => Company.fromJson(json.decode(str));
 
-String authorizationToJson(Company data) => json.encode(data.toJson());
+String companyToJson(Company data) => json.encode(data.toJson());
 
 class Company {
   Company({
@@ -10,9 +10,9 @@ class Company {
     required this.name,
     required this.address,
     required this.phone,
-    required this.email,
-    required this.details,
-    required this.description,
+    this.email,
+    this.details,
+    this.description,
     this.image,
     required this.type,
   });
@@ -21,17 +21,17 @@ class Company {
   String name;
   String address;
   String phone;
-  String email;
-  String details;
-  String description;
+  String? email;
+  String? details;
+  String? description;
   String? image;
   String type;
 
   factory Company.fromJson(Map<String, dynamic> json) => Company(
         id: json["id"],
         name: json["name"],
-        address: json["address"] ?? '-',
-        phone: json["phone"] ?? '-',
+        address: json["address"],
+        phone: json["phone"],
         email: json["email"] ?? '-',
         details: json["details"] ?? '-',
         description: json["description"] ?? '-',

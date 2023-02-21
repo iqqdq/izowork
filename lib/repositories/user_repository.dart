@@ -16,7 +16,7 @@ class UserRepository {
       User user = User.fromJson(json["user"]);
       return user;
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -27,7 +27,7 @@ class UserRepository {
     try {
       return User.fromJson(json["user"]);
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -37,10 +37,7 @@ class UserRepository {
     try {
       return json["avatar"] as String;
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ??
-          ErrorResponse(
-              statusCode: 413,
-              message: 'Произошла ошибка при попытке установить аватар');
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -62,7 +59,7 @@ class UserRepository {
       });
       return users;
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 }

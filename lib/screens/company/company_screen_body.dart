@@ -90,6 +90,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(20.0),
                         child: CachedNetworkImage(
+                            cacheKey: _companyViewModel.company.image!,
                             imageUrl: companyMedialUrl +
                                 _companyViewModel.company.image!,
                             width: 80.0,
@@ -122,7 +123,12 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               padding: EdgeInsets.zero,
               isSmall: true),
           const SizedBox(height: 4.0),
-          Text(_companyViewModel.company.description,
+          Text(
+              _companyViewModel.company.description == null
+                  ? '-'
+                  : _companyViewModel.company.description!.isEmpty
+                      ? '-'
+                      : _companyViewModel.company.description!,
               style: TextStyle(
                   height: 1.4,
                   color: HexColors.black,
@@ -156,7 +162,12 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const TitleWidget(
               text: Titles.email, padding: EdgeInsets.zero, isSmall: true),
           const SizedBox(height: 4.0),
-          Text(_companyViewModel.company.email,
+          Text(
+              _companyViewModel.company.email == null
+                  ? '-'
+                  : _companyViewModel.company.email!.isEmpty
+                      ? '-'
+                      : _companyViewModel.company.email!,
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -167,7 +178,12 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const TitleWidget(
               text: Titles.requisites, padding: EdgeInsets.zero, isSmall: true),
           const SizedBox(height: 4.0),
-          Text(_companyViewModel.company.details,
+          Text(
+              _companyViewModel.company.details == null
+                  ? '-'
+                  : _companyViewModel.company.details!.isEmpty
+                      ? '-'
+                      : _companyViewModel.company.details!,
               style: TextStyle(
                   height: 1.4,
                   color: HexColors.black,

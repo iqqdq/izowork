@@ -6,9 +6,8 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/company.dart';
-import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/models/company_create_view_model.dart';
-import 'package:izowork/models/profile_edit_view_model.dart';
+import 'package:izowork/screens/company/company_screen.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
@@ -19,7 +18,7 @@ import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 
 class CompanyCreateScreenBodyWidget extends StatefulWidget {
-  final Function(Company) onPop;
+  final Function(Company)? onPop;
 
   const CompanyCreateScreenBodyWidget({Key? key, required this.onPop})
       : super(key: key);
@@ -31,6 +30,9 @@ class CompanyCreateScreenBodyWidget extends StatefulWidget {
 
 class _CompanyCreateScreenBodyState
     extends State<CompanyCreateScreenBodyWidget> {
+  final TextEditingController _nameTextEditingController =
+      TextEditingController();
+  final FocusNode _nameFocusNode = FocusNode();
   final TextEditingController _descriptionTextEditingController =
       TextEditingController();
   final FocusNode _descriptionFocusNode = FocusNode();
@@ -46,14 +48,13 @@ class _CompanyCreateScreenBodyState
   final TextEditingController _requisitesTextEditingController =
       TextEditingController();
   final FocusNode _requisitesFocusNode = FocusNode();
-  final TextEditingController _dealsTextEditingController =
-      TextEditingController();
-  final FocusNode _dealsFocusNode = FocusNode();
 
   late CompanyCreateViewModel _companyCreateViewModel;
 
   @override
   void dispose() {
+    _nameTextEditingController.dispose();
+    _nameFocusNode.dispose();
     _descriptionTextEditingController.dispose();
     _descriptionFocusNode.dispose();
     _addressTextEditingConrtoller.dispose();
@@ -64,8 +65,6 @@ class _CompanyCreateScreenBodyState
     _phoneFocusNode.dispose();
     _requisitesTextEditingController.dispose();
     _requisitesFocusNode.dispose();
-    _dealsTextEditingController.dispose();
-    _dealsFocusNode.dispose();
 
     super.dispose();
   }
@@ -76,14 +75,21 @@ class _CompanyCreateScreenBodyState
         Provider.of<CompanyCreateViewModel>(context, listen: true);
 
     if (_companyCreateViewModel.company != null) {
-      // _emailTextEditingConrtoller.text = _profileEditViewModel.user!.email;
-      // _nameTextEditingConrtoller.text = _profileEditViewModel.user!.name;
-      // _postTextEditingConrtoller.text = _profileEditViewModel.user!.post;
-      // _phoneTextEditingConrtoller.text = _profileEditViewModel.user!.phone;
+      _nameTextEditingController.text = _companyCreateViewModel.company!.name;
+      _addressTextEditingConrtoller.text =
+          _companyCreateViewModel.company!.address;
+      _phoneTextEditingConrtoller.text = _companyCreateViewModel.company!.phone;
+      _emailTextEditingConrtoller.text =
+          _companyCreateViewModel.company!.email ?? '';
+      _descriptionTextEditingController.text =
+          _companyCreateViewModel.company!.description ?? '';
+      _requisitesTextEditingController.text =
+          _companyCreateViewModel.company!.details ?? '';
+// _dealsTextEditingController.text = _companyCreateViewModel.company!.;
+
     }
 
-    String? _url = _companyCreateViewModel.company?.image ??
-        _companyCreateViewModel.selectedCompany?.image;
+    String? _url = _companyCreateViewModel.company?.image;
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -101,7 +107,7 @@ class _CompanyCreateScreenBodyState
                         BackButtonWidget(onTap: () => Navigator.pop(context))),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
-                      _companyCreateViewModel.selectedCompany == null
+                      _companyCreateViewModel.company == null
                           ? Titles.newCompany
                           : Titles.editCompany,
                       style: TextStyle(
@@ -127,11 +133,19 @@ class _CompanyCreateScreenBodyState
                     /// AVATAR
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       Stack(children: [
-                        SvgPicture.asset('assets/ic_avatar.svg',
-                            color: HexColors.grey40,
-                            width: 80.0,
-                            height: 80.0,
-                            fit: BoxFit.cover),
+                        _companyCreateViewModel.selectedCompany == null &&
+                                _companyCreateViewModel.file != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(40.0),
+                                child: Image.file(_companyCreateViewModel.file!,
+                                    width: 80.0,
+                                    height: 80.0,
+                                    fit: BoxFit.cover))
+                            : SvgPicture.asset('assets/ic_avatar.svg',
+                                color: HexColors.grey40,
+                                width: 80.0,
+                                height: 80.0,
+                                fit: BoxFit.cover),
                         _url == null
                             ? Container()
                             : ClipRRect(
@@ -156,13 +170,41 @@ class _CompanyCreateScreenBodyState
 
                     /// CHANGE AVATAR BUTTON
                     BorderButtonWidget(
-                        title: _url == null
-                            ? Titles.addAvatar
-                            : Titles.changeAvatar,
+                        title:
+                            _url == null && _companyCreateViewModel.file == null
+                                ? Titles.addAvatar
+                                : Titles.changeAvatar,
                         margin: EdgeInsets.zero,
                         onTap: () =>
                             _companyCreateViewModel.pickImage(context)),
                     const SizedBox(height: 24.0),
+
+                    /// COMPANY TYPE SELECTION
+                    SelectionInputWidget(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        title: Titles.type,
+                        value: _companyCreateViewModel.type ??
+                            _companyCreateViewModel.company?.type ??
+                            Titles.notSelected,
+                        isVertical: true,
+                        onTap: () => _companyCreateViewModel
+                            .showCompanyTypeSelectionSheet(context)),
+
+                    /// NAME INPUT
+                    InputWidget(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        height: 56.0,
+                        textEditingController: _nameTextEditingController,
+                        focusNode: _nameFocusNode,
+                        textCapitalization: TextCapitalization.sentences,
+                        placeholder: Titles.companyName,
+                        onTap: () => setState(() => {
+                              FocusScope.of(context).unfocus(),
+                              _nameFocusNode.requestFocus()
+                            }),
+                        onEditingComplete: () =>
+                            FocusScope.of(context).unfocus(),
+                        onClearTap: () => _nameTextEditingController.clear()),
 
                     /// DESCRTIPTION INPUT
                     InputWidget(
@@ -172,7 +214,10 @@ class _CompanyCreateScreenBodyState
                       height: 168.0,
                       maxLines: 10,
                       placeholder: '${Titles.description}...',
-                      onTap: () => setState,
+                      onTap: () => setState(() => {
+                            FocusScope.of(context).unfocus(),
+                            _descriptionFocusNode.requestFocus()
+                          }),
                       onChange: (text) => setState,
                     ),
 
@@ -184,12 +229,10 @@ class _CompanyCreateScreenBodyState
                         focusNode: _addressFocusNode,
                         textCapitalization: TextCapitalization.sentences,
                         placeholder: Titles.address,
-                        onTap: () => {
-                              setState(() => {
-                                    FocusScope.of(context).unfocus(),
-                                    _addressFocusNode.requestFocus()
-                                  })
-                            },
+                        onTap: () => setState(() => {
+                              FocusScope.of(context).unfocus(),
+                              _addressFocusNode.requestFocus()
+                            }),
                         onEditingComplete: () =>
                             FocusScope.of(context).unfocus(),
                         onClearTap: () =>
@@ -203,12 +246,10 @@ class _CompanyCreateScreenBodyState
                         focusNode: _phoneFocusNode,
                         textInputType: TextInputType.phone,
                         placeholder: Titles.phone,
-                        onTap: () => {
-                              setState(() => {
-                                    FocusScope.of(context).unfocus(),
-                                    _phoneFocusNode.requestFocus()
-                                  })
-                            },
+                        onTap: () => setState(() => {
+                              FocusScope.of(context).unfocus(),
+                              _phoneFocusNode.requestFocus()
+                            }),
                         onEditingComplete: () =>
                             FocusScope.of(context).unfocus(),
                         onClearTap: () => _phoneTextEditingConrtoller.clear()),
@@ -218,14 +259,14 @@ class _CompanyCreateScreenBodyState
                         margin: const EdgeInsets.only(bottom: 10.0),
                         height: 56.0,
                         textEditingController: _emailTextEditingConrtoller,
+                        textInputType: TextInputType.emailAddress,
+                        textCapitalization: TextCapitalization.none,
                         focusNode: _emailFocusNode,
                         placeholder: Titles.email,
-                        onTap: () => {
-                              setState(() => {
-                                    FocusScope.of(context).unfocus(),
-                                    _emailFocusNode.requestFocus()
-                                  })
-                            },
+                        onTap: () => setState(() => {
+                              FocusScope.of(context).unfocus(),
+                              _emailFocusNode.requestFocus()
+                            }),
                         onEditingComplete: () =>
                             FocusScope.of(context).unfocus(),
                         onClearTap: () => _emailTextEditingConrtoller.clear()),
@@ -238,7 +279,10 @@ class _CompanyCreateScreenBodyState
                       height: 168.0,
                       maxLines: 10,
                       placeholder: '${Titles.requisites}...',
-                      onTap: () => setState,
+                      onTap: () => setState(() => {
+                            FocusScope.of(context).unfocus(),
+                            _requisitesFocusNode.requestFocus()
+                          }),
                       onChange: (text) => setState,
                     ),
 
@@ -246,29 +290,13 @@ class _CompanyCreateScreenBodyState
                     SelectionInputWidget(
                         margin: const EdgeInsets.only(bottom: 10.0),
                         title: Titles.productsType,
-                        value: _companyCreateViewModel.productType?.name ??
-                            Titles.notSelected,
+                        value:
+                            // _companyCreateViewModel.company.productType ??
+                            _companyCreateViewModel.productType?.name ??
+                                Titles.notSelected,
                         isVertical: true,
                         onTap: () => _companyCreateViewModel
-                            .showProductTypeSelectionSheet(context)),
-
-                    /// SUCCESS DEAL COUNT
-                    InputWidget(
-                        margin: const EdgeInsets.only(bottom: 10.0),
-                        height: 56.0,
-                        textEditingController: _dealsTextEditingController,
-                        focusNode: _dealsFocusNode,
-                        textInputType: TextInputType.number,
-                        placeholder: Titles.successDealCount,
-                        onTap: () => {
-                              setState(() => {
-                                    FocusScope.of(context).unfocus(),
-                                    _dealsFocusNode.requestFocus()
-                                  })
-                            },
-                        onEditingComplete: () =>
-                            FocusScope.of(context).unfocus(),
-                        onClearTap: () => _dealsTextEditingController.clear()),
+                            .showProductTypeSelectionSheet(context))
                   ])),
 
           /// CREATE BUTTON
@@ -277,8 +305,7 @@ class _CompanyCreateScreenBodyState
                       _addressFocusNode.hasFocus ||
                       _phoneFocusNode.hasFocus ||
                       _emailFocusNode.hasFocus ||
-                      _requisitesFocusNode.hasFocus ||
-                      _dealsFocusNode.hasFocus
+                      _requisitesFocusNode.hasFocus
                   ? 0.0
                   : 1.0,
               duration: const Duration(milliseconds: 300),
@@ -291,10 +318,36 @@ class _CompanyCreateScreenBodyState
                               : MediaQuery.of(context).padding.bottom),
                       child: ButtonWidget(
                           title: Titles.createCompany,
-                          isDisabled: true,
-                          onTap: () => {
-                                // TODO CREATE COMPANY
-                              })))),
+                          isDisabled:
+                              _addressTextEditingConrtoller.text.isEmpty ||
+                                  _nameTextEditingController.text.isEmpty ||
+                                  _phoneTextEditingConrtoller.text.isEmpty ||
+                                  _companyCreateViewModel.type == null ||
+                                  _companyCreateViewModel.productType == null,
+                          onTap: () => _companyCreateViewModel.createNewCompany(
+                              context,
+                              _addressTextEditingConrtoller.text,
+                              _nameTextEditingController.text,
+                              _phoneTextEditingConrtoller.text,
+                              _descriptionTextEditingController.text,
+                              _requisitesTextEditingController.text,
+                              _emailTextEditingConrtoller.text,
+                              (company) => {
+                                    if (widget.onPop == null)
+                                      {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CompanyScreenWidget(
+                                                        company: company)))
+                                      }
+                                    else
+                                      {
+                                        widget.onPop!(company),
+                                        Navigator.pop(context)
+                                      }
+                                  }))))),
 
           /// INDICATOR
           _companyCreateViewModel.loadingStatus == LoadingStatus.searching

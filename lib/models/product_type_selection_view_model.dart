@@ -35,28 +35,9 @@ class ProductTypeSelectionViewModel with ChangeNotifier {
     await ProductRepository().getProductTypes().then((response) => {
           if (response is List<ProductType>)
             {
-              if (_productTypes.isEmpty)
-                {
-                  response.forEach((productType) {
-                    _productTypes.add(productType);
-                  })
-                }
-              else
-                {
-                  response.forEach((newProductType) {
-                    bool found = false;
-
-                    _productTypes.forEach((productType) {
-                      if (newProductType.id == productType.id) {
-                        found = true;
-                      }
-                    });
-
-                    if (!found) {
-                      _productTypes.add(newProductType);
-                    }
-                  })
-                },
+              response.forEach((productType) {
+                _productTypes.add(productType);
+              }),
               loadingStatus = LoadingStatus.completed
             }
           else

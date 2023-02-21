@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
-import 'package:izowork/entities/response/user.dart';
 
 Object objectFromJson(String str) => Object.fromJson(json.decode(str));
 

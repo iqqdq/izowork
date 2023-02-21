@@ -33,7 +33,7 @@ class ProfileEditScreenBodyWidget extends StatefulWidget {
 }
 
 class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
-  final TextEditingController _nameTextEditingConrtoller =
+  final TextEditingController _nameTextEditingController =
       TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
   final TextEditingController _postTextEditingConrtoller =
@@ -53,7 +53,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
 
   @override
   void dispose() {
-    _nameTextEditingConrtoller.dispose();
+    _nameTextEditingController.dispose();
     _nameFocusNode.dispose();
     _postTextEditingConrtoller.dispose();
     _postFocusNode.dispose();
@@ -79,7 +79,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
     if (_isRequesting && _profileEditViewModel.user != null) {
       _isRequesting = false;
       _emailTextEditingConrtoller.text = _profileEditViewModel.user!.email;
-      _nameTextEditingConrtoller.text = _profileEditViewModel.user!.name;
+      _nameTextEditingController.text = _profileEditViewModel.user!.name;
       _postTextEditingConrtoller.text = _profileEditViewModel.user!.post;
       _phoneTextEditingConrtoller.text = _profileEditViewModel.user!.phone;
 
@@ -181,7 +181,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                     InputWidget(
                         margin: const EdgeInsets.only(bottom: 10.0),
                         height: 56.0,
-                        textEditingController: _nameTextEditingConrtoller,
+                        textEditingController: _nameTextEditingController,
                         focusNode: _nameFocusNode,
                         textCapitalization: TextCapitalization.words,
                         placeholder: Titles.fullname,
@@ -193,7 +193,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                             },
                         onEditingComplete: () =>
                             FocusScope.of(context).unfocus(),
-                        onClearTap: () => _nameTextEditingConrtoller.clear()),
+                        onClearTap: () => _nameTextEditingController.clear()),
 
                     /// POST INPUT
                     InputWidget(
@@ -313,7 +313,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                             _profileEditViewModel
                                 .changeUserInfo(
                                     context,
-                                    _nameTextEditingConrtoller.text,
+                                    _nameTextEditingController.text,
                                     _postTextEditingConrtoller.text,
                                     _emailTextEditingConrtoller.text,
                                     _phoneTextEditingConrtoller.text,

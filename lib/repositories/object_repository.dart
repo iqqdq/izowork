@@ -2,7 +2,7 @@ import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/entities/response/object_stage%20copy.dart';
+import 'package:izowork/entities/response/object_type.dart';
 import 'package:izowork/entities/response/object_stage.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/services/web_service.dart';
@@ -18,7 +18,7 @@ class ObjectRepository {
       });
       return objectTypes;
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -32,7 +32,7 @@ class ObjectRepository {
       });
       return objectStages;
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -42,7 +42,7 @@ class ObjectRepository {
     try {
       return Object.fromJson(json["object"]);
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -72,7 +72,7 @@ class ObjectRepository {
       });
       return objects;
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 

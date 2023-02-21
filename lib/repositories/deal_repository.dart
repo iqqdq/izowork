@@ -11,7 +11,7 @@ class DealRepository {
     try {
       return Deal.fromJson(json["deal"]);
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -41,7 +41,7 @@ class DealRepository {
       });
       return deals;
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 }

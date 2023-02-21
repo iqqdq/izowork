@@ -195,10 +195,7 @@ class _SearchCompanyScreenBodyState
                             onTap: () =>
                                 _searchCompanyViewModel.showCreateCompanyScreen(
                                     context,
-                                    (company) => {
-                                          widget.onPop(company),
-                                          Navigator.pop(context)
-                                        }))
+                                    (company) => widget.onPop(company)))
                       ],
                     )
                   : Container(),

@@ -13,7 +13,7 @@ import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/entities/response/object_stage%20copy.dart';
+import 'package:izowork/entities/response/object_type.dart';
 import 'package:izowork/entities/response/object_stage.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/search_view_model.dart';

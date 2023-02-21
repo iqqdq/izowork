@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-ProductType authorizationFromJson(String str) =>
+ProductType productTypeFromJson(String str) =>
     ProductType.fromJson(json.decode(str));
 
-String authorizationToJson(ProductType data) => json.encode(data.toJson());
+String productTypeToJson(ProductType data) => json.encode(data.toJson());
 
 class ProductType {
   ProductType({

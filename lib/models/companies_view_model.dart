@@ -11,6 +11,7 @@ import 'package:izowork/repositories/company_repository.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen_body.dart';
 import 'package:izowork/screens/company/company_screen.dart';
+import 'package:izowork/screens/company_create/company_create_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CompaniesViewModel with ChangeNotifier {
@@ -145,5 +146,13 @@ class CompaniesViewModel with ChangeNotifier {
                       onFilter()
                     }
                 }));
+  }
+
+  void showCreateCompanyScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                const CompanyCreateScreenWidget(onPop: null)));
   }
 }

@@ -16,7 +16,7 @@ class TaskRepository {
     try {
       return Task.fromJson(json["task"]);
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -46,7 +46,7 @@ class TaskRepository {
       });
       return tasks;
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -66,7 +66,7 @@ class TaskRepository {
       });
       return tasks;
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -76,7 +76,7 @@ class TaskRepository {
     try {
       return TaskState.fromJson(json);
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -86,7 +86,7 @@ class TaskRepository {
     try {
       return Task.fromJson(json["task"]);
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -96,7 +96,7 @@ class TaskRepository {
     try {
       return Task.fromJson(json["task"]);
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -107,7 +107,7 @@ class TaskRepository {
     try {
       return Document.fromJson(json["task_file"]);
     } catch (e) {
-      return ErrorResponse.fromJson(json).message ?? e.toString();
+      return ErrorResponse.fromJson(json);
     }
   }
 

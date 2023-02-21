@@ -7,6 +7,7 @@ import 'package:izowork/models/companies_view_model.dart';
 import 'package:izowork/screens/companies/views/companies_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
+import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -72,6 +73,8 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
     return Scaffold(
         backgroundColor: HexColors.white,
         resizeToAvoidBottomInset: true,
+        floatingActionButton: FloatingButtonWidget(
+            onTap: () => _companiesViewModel.showCreateCompanyScreen(context)),
         appBar: AppBar(
             toolbarHeight: 116.0,
             titleSpacing: 0.0,
@@ -174,17 +177,21 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
           SafeArea(
               child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: FilterButtonWidget(
-                    onTap: () => _companiesViewModel.showCompaniesFilterSheet(
-                        context,
-                        () => {
-                              _pagination = Pagination(offset: 0, size: 50),
-                              _companiesViewModel.getCompanyList(
-                                  pagination: _pagination,
-                                  search: _textEditingController.text)
-                            }),
-                    // onClearTap: () => {}
-                  ))),
+                  child: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: FilterButtonWidget(
+                        onTap: () =>
+                            _companiesViewModel.showCompaniesFilterSheet(
+                                context,
+                                () => {
+                                      _pagination =
+                                          Pagination(offset: 0, size: 50),
+                                      _companiesViewModel.getCompanyList(
+                                          pagination: _pagination,
+                                          search: _textEditingController.text)
+                                    }),
+                        // onClearTap: () => {}
+                      )))),
 
           /// INDICATOR
           _companiesViewModel.loadingStatus == LoadingStatus.searching
