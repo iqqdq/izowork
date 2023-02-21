@@ -53,7 +53,11 @@ class FileListItemWidget extends StatelessWidget {
                               width: 24.0, height: 24.0),
                       SizedBox(width: _isDownloading ? 2.0 : 6.0),
                       Expanded(
-                          child: Text(fileName,
+                          child: Text(
+                              fileName.characters.length > 16
+                                  ? '...${fileName.substring(fileName.characters.length - (fileName.characters.length ~/ 2), fileName.characters.length)}'
+                                  : fileName,
+                              maxLines: 1,
                               style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w400,

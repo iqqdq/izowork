@@ -30,7 +30,7 @@ class _BackButtonState extends State<BackButtonWidget> {
                   : HexColors.primaryDark,
               width: 24.0,
               height: 24.0),
-          SizedBox(width: widget.title == null ? 0.0 : 8.0),
+          SizedBox(width: widget.title == null ? 0.0 : 4.0),
           widget.title == null
               ? Container()
               : Text(widget.title!,

@@ -50,7 +50,7 @@ class _ProductsFilterPageViewScreenBodyState
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   height: _isSearching
-                      ? MediaQuery.of(context).size.height * 0.55
+                      ? MediaQuery.of(context).size.height * 0.9
                       : MediaQuery.of(context).padding.bottom == 0.0
                           ? 324.0
                           : 372.0,
@@ -65,13 +65,10 @@ class _ProductsFilterPageViewScreenBodyState
                           options2: _productsFilterViewModel.options2,
                           tags2: _productsFilterViewModel.tags2,
                           onTypeTap: () => {
-                                setState(() => _isSearching = true),
-                                Future.delayed(
-                                    const Duration(milliseconds: 100),
-                                    () => _pageController.animateToPage(1,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeIn))
+                                _pageController.animateToPage(1,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeIn),
+                                setState(() => _isSearching = true)
                               },
                           onTagTap: (index) =>
                               _productsFilterViewModel.sortByAlphabet(index),
@@ -95,11 +92,11 @@ class _ProductsFilterPageViewScreenBodyState
                                 _productsFilterViewModel
                                     .setProductType(productType)
                                     .then((value) => {
-                                          setState(() => _isSearching = false),
                                           _pageController.animateToPage(0,
                                               duration: const Duration(
                                                   milliseconds: 300),
-                                              curve: Curves.easeIn)
+                                              curve: Curves.easeIn),
+                                          setState(() => _isSearching = false)
                                         })
                               })
                     ],

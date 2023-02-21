@@ -1,57 +1,169 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/object.dart';
+import 'package:izowork/entities/response/object_stage%20copy.dart';
+import 'package:izowork/entities/response/object_stage.dart';
 import 'package:izowork/entities/response/phase.dart';
+import 'package:izowork/repositories/object_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/documents/documents_screen.dart';
-import 'package:izowork/screens/object_actions/object_action_create_screen.dart';
-import 'package:izowork/screens/object_actions/object_actions_screen.dart';
 import 'package:izowork/screens/object_analytics/object_analytics_screen.dart';
 import 'package:izowork/screens/object_create/object_create_screen.dart';
 import 'package:izowork/screens/phase/phase_screen.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:izowork/services/urls.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:io' as io;
 
-class ObjectViewModel with ChangeNotifier {
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
-  LoadingStatus loadingStatus = LoadingStatus.empty;
+class ObjectPageViewModel with ChangeNotifier {
+  final Object selectedObject;
 
-  final List<String> _phases = [
-    'Фундамент',
-    'Стены',
-    'Кровля',
-    'Стяжка',
-    'Перегородки',
-    'Вентиляция',
-    'Дымоудаление',
-    'Водопровод',
-    'Отопление',
-    'Тепловые узлы'
-  ];
+  LoadingStatus loadingStatus = LoadingStatus.searching;
 
-  List<String> get phases {
-    return _phases;
+  Object? _object;
+
+  ObjectStage? _objectStage;
+
+  List<ObjectStage> _objectStages = [];
+
+  ObjectType? _objectType;
+
+  List<ObjectType> _objectTypes = [];
+
+  int _downloadIndex = -1;
+
+  Object? get object {
+    return _object;
+  }
+
+  int get downloadIndex {
+    return _downloadIndex;
+  }
+
+  List<ObjectType> get objectTypes {
+    return _objectTypes;
+  }
+
+  ObjectType? get objectType {
+    return _objectType;
+  }
+
+  ObjectStage? get objectStage {
+    return _objectStage;
+  }
+
+  List<ObjectStage> get objectStages {
+    return _objectStages;
+  }
+
+  ObjectPageViewModel(this.selectedObject) {
+    _object = selectedObject;
+    notifyListeners();
+
+    getTypeList();
+  }
+
+  // MARK: -
+  // MARK: - API CALL
+
+  Future getTypeList() async {
+    await ObjectRepository()
+        .getObjectTypes()
+        .then((response) => {
+              if (response is List<ObjectType>)
+                {
+                  _objectTypes = response,
+                  _objectTypes.forEach((element) {
+                    if (_object?.objectTypeId == element.id) {
+                      _objectType = element;
+                      return;
+                    }
+                  })
+                }
+            })
+        .then((value) => getStageList());
+  }
+
+  Future getStageList() async {
+    await ObjectRepository()
+        .getObjectStages()
+        .then((response) => {
+              if (response is List<ObjectStage>)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _objectStages = response,
+                  _objectStages.forEach((element) {
+                    if (_object?.objectStageId == element.id) {
+                      _objectStage = element;
+                      return;
+                    }
+                  })
+                }
+            })
+        .then((value) => notifyListeners());
   }
 
   // MARK: -
   // MARK: - ACTIONS
 
-  void copyCoordinates(BuildContext context) {
-    Clipboard.setData(const ClipboardData(text: '49.359212, 55.230101'))
-        .then((value) => Toast().showTopToast(context, Titles.didCopied));
+  Future openFile(BuildContext context, int index) async {
+    String url = objectMediaUrl +
+        (_object?.files[index].filename ??
+            selectedObject.files[index].filename);
+
+    if (Platform.isAndroid) {
+      Directory appDocumentsDirectory =
+          await getApplicationDocumentsDirectory();
+      String appDocumentsPath = appDocumentsDirectory.path;
+      String fileName =
+          _object?.files[index].name ?? selectedObject.files[index].name;
+      String filePath = '$appDocumentsPath/$fileName';
+      bool isFileExists = await io.File(filePath).exists();
+
+      if (!isFileExists) {
+        _downloadIndex = index;
+        notifyListeners();
+
+        await Dio().download(url, filePath, onReceiveProgress: (count, total) {
+          debugPrint('---Download----Rec: $count, Total: $total');
+        }).then((value) => {_downloadIndex = -1, notifyListeners()});
+      }
+
+      OpenResult openResult = await OpenFilex.open(filePath);
+
+      if (openResult.type == ResultType.noAppToOpen) {
+        Toast().showTopToast(context, Titles.unsupportedFileFormat);
+      }
+    } else {
+      if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
+        launchUrl(Uri.parse(url.replaceAll(' ', '')));
+      } else if (await canLaunchUrl(
+          Uri.parse('https://' + url.replaceAll(' ', '')))) {
+        launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
+      }
+    }
+  }
+
+  Future copyCoordinates(BuildContext context, double lat, double long) async {
+    Clipboard.setData(ClipboardData(text: '$lat, $long'));
   }
 
   // MARK: -
   // MARK: - PUSH
 
   void showObjectCreateScreenSheet(BuildContext context) {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => ObjectCreateScreenWidget(object: Object())));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ObjectCreateScreenWidget(object: _object)));
   }
 
   void showDialogScreen(BuildContext context) {
@@ -66,18 +178,12 @@ class ObjectViewModel with ChangeNotifier {
             builder: (context) => const ObjectAnalyticsScreenWidget()));
   }
 
-  void showObjectActionsScreen(BuildContext context) {
+  void showDocumentsScreen(BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const ObjectActionsScreenWidget()));
-  }
-
-  void showDocumentsScreen(BuildContext context) {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => DocumentsScreenWidget(object: Object())));
+            builder: (context) =>
+                DocumentsScreenWidget(object: selectedObject)));
   }
 
   void showPhaseScreen(BuildContext context) {

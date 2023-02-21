@@ -5,6 +5,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/repositories/company_repository.dart';
+import 'package:izowork/screens/company_create/company_create_screen.dart';
 
 class SearchCompanyViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -66,5 +67,17 @@ class SearchCompanyViewModel with ChangeNotifier {
                 loadingStatus = LoadingStatus.error,
               notifyListeners()
             });
+  }
+
+  // MARK: -
+  // MARK: - PUSH
+
+  void showCreateCompanyScreen(
+      BuildContext context, Function(Company) onCreate) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CompanyCreateScreenWidget(
+                onPop: (company) => onCreate(company))));
   }
 }

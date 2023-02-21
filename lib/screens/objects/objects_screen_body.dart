@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/pagination.dart';
+import 'package:izowork/screens/objects/views/object_list_item_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
@@ -22,6 +25,13 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+
+  final ScrollController _scrollController = ScrollController();
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
+
+  Pagination _pagination = Pagination(offset: 0, size: 50);
+  bool _isSearching = false;
+
   late ObjectsViewModel _objectsViewModel;
 
   @override
@@ -30,13 +40,32 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
   @override
   void initState() {
     super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _pagination.offset += 1;
+        _objectsViewModel.getObjectList(
+            pagination: _pagination, search: _textEditingController.text);
+      }
+    });
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _textEditingController.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    _pagination = Pagination(offset: 0, size: 50);
+    _objectsViewModel.getObjectList(
+        pagination: _pagination, search: _textEditingController.text);
   }
 
   @override
@@ -69,31 +98,56 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                             placeholder: '${Titles.search}...',
                             onTap: () => setState,
                             onChange: (text) => {
-                                  // TODO SEARCH OBJECTS
+                                  setState(() => _isSearching = true),
+                                  _debouncer.run(() {
+                                    _pagination.offset = 0;
+
+                                    _objectsViewModel
+                                        .getObjectList(
+                                            pagination: _pagination,
+                                            search: _textEditingController.text)
+                                        .then((value) => setState(
+                                            () => _isSearching = false));
+                                  })
                                 },
                             onClearTap: () => {
-                                  // TODO CLEAR OBJECTS SEARCH
+                                  _objectsViewModel.resetFilter(),
+                                  _pagination.offset = 0,
+                                  _objectsViewModel.getObjectList(
+                                      pagination: _pagination,
+                                      search: _textEditingController.text)
                                 }))
                   ])),
               const SizedBox(height: 12.0),
               const SeparatorWidget()
             ])),
         floatingActionButton: FloatingButtonWidget(
-            onTap: () => _objectsViewModel.showObjectCreateScreen(context)),
+            onTap: () => _objectsViewModel.showObjectCreateScreen(
+                  context,
+                )),
         body: SizedBox.expand(
             child: Stack(children: [
           /// OBJECTS LIST VIEW
-          ListView.builder(
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(
-                  left: 16.0, right: 16.0, top: 16.0, bottom: 16.0 + 48.0),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Container();
-                // return ObjectListItemWidget(
-                //     object: Object(),
-                //     onTap: () => _objectsViewModel.showObjectScreen(context));
-              }),
+          RefreshIndicator(
+              onRefresh: _onRefresh,
+              color: HexColors.primaryMain,
+              backgroundColor: HexColors.white,
+              child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: ListView.builder(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.only(
+                          left: 16.0,
+                          right: 16.0,
+                          top: 16.0,
+                          bottom: 16.0 + 48.0),
+                      itemCount: _objectsViewModel.objects.length,
+                      itemBuilder: (context, index) {
+                        return ObjectListItemWidget(
+                            object: _objectsViewModel.objects[index],
+                            onTap: () => _objectsViewModel
+                                .showObjectPageViewScreen(context, index));
+                      }))),
 
           /// FILTER BUTTON
           SafeArea(
@@ -102,13 +156,35 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                   child: Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: FilterButtonWidget(
-                        onTap: () =>
-                            _objectsViewModel.showObjectsFilterSheet(context),
+                        onTap: () => _objectsViewModel.showObjectsFilterSheet(
+                            context,
+                            () => {
+                                  _pagination = Pagination(offset: 0, size: 50),
+                                  _objectsViewModel.getObjectList(
+                                      pagination: _pagination,
+                                      search: _textEditingController.text)
+                                }),
                         // onClearTap: () => {}
                       )))),
 
+          /// EMPTY LIST TEXT
+          _objectsViewModel.loadingStatus == LoadingStatus.completed &&
+                  _objectsViewModel.objects.isEmpty &&
+                  !_isSearching
+              ? Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: Text(Titles.noResult,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16.0,
+                              color: HexColors.grey50))))
+              : Container(),
+
           /// INDICATOR
-          _objectsViewModel.loadingStatus == LoadingStatus.searching
+          _objectsViewModel.loadingStatus == LoadingStatus.searching ||
+                  _isSearching
               ? const LoadingIndicatorWidget()
               : Container()
         ])));

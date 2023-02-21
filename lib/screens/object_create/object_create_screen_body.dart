@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/models/object_create_view_model.dart';
 import 'package:izowork/models/search_view_model.dart';
-import 'package:izowork/screens/object/views/object_stage_header_widget.dart';
-import 'package:izowork/screens/object/views/object_stage_list_item_widget.dart';
+import 'package:izowork/screens/object/object_page/views/object_stage_header_widget.dart';
+import 'package:izowork/screens/object/object_page/views/object_stage_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/checkbox_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/input_widget.dart';
+import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
 import 'package:provider/provider.dart';
@@ -51,20 +53,11 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
       TextEditingController();
   final FocusNode _buildingTimeFocusNode = FocusNode();
 
-  final TextEditingController _stagesTextEditingController =
-      TextEditingController();
-  final FocusNode _stagesFocusNode = FocusNode();
-
   final TextEditingController _kisoTextEditingController =
       TextEditingController();
   final FocusNode _kisoFocusNode = FocusNode();
 
   late ObjectCreateViewModel _objectCreateViewModel;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -80,8 +73,6 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
     _areaCountFocusNode.dispose();
     _buildingTimeTextEditingController.dispose();
     _buildingTimeFocusNode.dispose();
-    _stagesTextEditingController.dispose();
-    _stagesFocusNode.dispose();
     _kisoTextEditingController.dispose();
     _kisoFocusNode.dispose();
     super.dispose();
@@ -163,7 +154,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                               focusNode: _coordinatesFocusNode,
                               textInputType:
                                   const TextInputType.numberWithOptions(
-                                      decimal: true),
+                                      signed: true),
                               margin: const EdgeInsets.only(bottom: 10.0),
                               height: 56.0,
                               placeholder: Titles.coordinates,
@@ -178,10 +169,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.generalContractor,
-                                value: Titles.notSelected,
+                                value: _objectCreateViewModel.contractor?.name ?? Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showSearchScreenSheet(
-                                        context, SearchType.responsible)),
+                                    .showSearchCompanyScreenSheet(context, 0)),
 
                             /// DEVELOPER SELECTION INPUT
                             SelectionInputWidget(
@@ -190,37 +180,36 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 title: Titles.developer,
                                 value: Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showSearchScreenSheet(
-                                        context, SearchType.developer)),
+                                    .showSearchCompanyScreenSheet(context, 1)),
 
                             /// CUSTOMER SELECTION INPUT
                             SelectionInputWidget(
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.customer,
-                                value: Titles.notSelected,
+                                value: _objectCreateViewModel.customer?.name ?? Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showSearchScreenSheet(
-                                        context, SearchType.responsible)),
+                                    .showSearchCompanyScreenSheet(context, 2)),
 
                             /// DESIGNER SELECTION INPUT
                             SelectionInputWidget(
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.designer,
-                                value: Titles.notSelected,
+                                value: _objectCreateViewModel.designer?.name ?? Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showSearchScreenSheet(
-                                        context, SearchType.responsible)),
+                                    .showSearchCompanyScreenSheet(context, 3)),
 
                             /// TYPE SELECTION INPUT
                             SelectionInputWidget(
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.objectType,
-                                value: Titles.notSelected,
+                                value:
+                                    _objectCreateViewModel.objectType?.name ??
+                                        Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showSelectionScreenSheet(context)),
+                                    .showTypeSelectionScreenSheet(context)),
 
                             /// FLOOR COUNT INPUT
                             InputWidget(
@@ -267,19 +256,16 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                               },
                             ),
 
-                            /// STAGES INPUT
-                            InputWidget(
-                              textEditingController:
-                                  _stagesTextEditingController,
-                              focusNode: _stagesFocusNode,
-                              margin: const EdgeInsets.only(bottom: 20.0),
-                              height: 56.0,
-                              placeholder: Titles.stages,
-                              onTap: () => setState,
-                              onChange: (text) => {
-                                // TODO OBJECT STAGES
-                              },
-                            ),
+                            /// STAGES BUTTON
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 30.0),
+                                isVertical: true,
+                                title: Titles.stage,
+                                value:
+                                    _objectCreateViewModel.objectStage?.name ??
+                                        Titles.notSelected,
+                                onTap: () => _objectCreateViewModel
+                                    .showStageSelectionScreenSheet(context)),
 
                             /// KISO CHECKBOX
                             GestureDetector(
@@ -305,14 +291,14 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                     focusNode: _kisoFocusNode,
                                     textInputType: TextInputType.number,
                                     margin: const EdgeInsets.only(
-                                        top: 20.0, bottom: 20.0),
+                                        top: 20.0, bottom: 30.0),
                                     height: 56.0,
                                     placeholder: Titles.kisoDocumentNumber,
                                     onTap: () => setState,
                                     onChange: (text) => {
                                           // TODO OBJECT KISO
                                         })
-                                : const SizedBox(height: 20.0),
+                                : const SizedBox(height: 30.0),
 
                             /// CREATE FOLDER CHECKBOX
                             GestureDetector(
@@ -329,18 +315,44 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 ]),
                                 onTap: () =>
                                     _objectCreateViewModel.checkCreateFolder()),
-                            const SizedBox(height: 20.0),
+                            const SizedBox(height: 30.0),
 
                             /// FILE LIST
                             ListView.builder(
                                 shrinkWrap: true,
                                 padding: EdgeInsets.zero,
                                 physics: const NeverScrollableScrollPhysics(),
-                                itemCount: 3,
+                                itemCount: _objectCreateViewModel.object == null
+                                    ? _objectCreateViewModel.files.length
+                                    : _objectCreateViewModel
+                                        .object!.files.length,
                                 itemBuilder: (context, index) {
-                                  return FileListItemWidget(
-                                      fileName: 'file.pdf',
-                                      onRemoveTap: () => {});
+                                  return IgnorePointer(
+                                      ignoring: _objectCreateViewModel.downloadIndex !=
+                                          -1,
+                                      child: FileListItemWidget(
+                                          fileName: _objectCreateViewModel.object == null
+                                              ? _objectCreateViewModel
+                                                  .files[index].path
+                                                  .substring(
+                                                      _objectCreateViewModel
+                                                              .files[index]
+                                                              .path
+                                                              .length -
+                                                          10,
+                                                      _objectCreateViewModel
+                                                          .files[index]
+                                                          .path
+                                                          .length)
+                                              : _objectCreateViewModel
+                                                  .object!.files[index].name,
+                                          isDownloading:
+                                              _objectCreateViewModel.downloadIndex ==
+                                                  index,
+                                          onTap: () => _objectCreateViewModel
+                                              .openFile(context, index),
+                                          onRemoveTap: () =>
+                                              _objectCreateViewModel.deleteFile(context, index)));
                                 }),
 
                             /// ADD FILE BUTTON
@@ -350,42 +362,50 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 onTap: () => _objectCreateViewModel.addFile()),
 
                             /// PHASES TABLE
-                            Container(
-                                decoration: BoxDecoration(
-                                    color: HexColors.white,
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    border: Border.all(
-                                        width: 1.0, color: HexColors.grey20)),
-                                child: ListView(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    padding: EdgeInsets.zero,
-                                    shrinkWrap: true,
-                                    children: [
-                                      const ObjectStageHeaderWidget(),
-                                      const SizedBox(height: 10.0),
-                                      const SeparatorWidget(),
-                                      ListView.builder(
-                                          shrinkWrap: true,
-                                          padding: EdgeInsets.zero,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemCount: _objectCreateViewModel
-                                              .phases.length,
-                                          itemBuilder: (context, index) {
-                                            return ObjectStageListItemWidget(
-                                                title: _objectCreateViewModel
-                                                    .phases[index],
-                                                effectivenes: 0,
-                                                readiness: 0,
-                                                showSeparator: index < 9,
-                                                onTap: () =>
-                                                    _objectCreateViewModel
-                                                        .showPhaseScreen(
-                                                            context));
-                                          })
-                                    ])),
-                            const SizedBox(height: 20.0),
+                            _objectCreateViewModel.object == null
+                                ? Container()
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        color: HexColors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        border: Border.all(
+                                            width: 1.0,
+                                            color: HexColors.grey20)),
+                                    child: ListView(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        padding: EdgeInsets.zero,
+                                        shrinkWrap: true,
+                                        children: [
+                                          const ObjectStageHeaderWidget(),
+                                          const SizedBox(height: 10.0),
+                                          const SeparatorWidget(),
+                                          ListView.builder(
+                                              shrinkWrap: true,
+                                              padding: EdgeInsets.zero,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount: _objectCreateViewModel
+                                                  .phases.length,
+                                              itemBuilder: (context, index) {
+                                                return ObjectStageListItemWidget(
+                                                    title:
+                                                        _objectCreateViewModel
+                                                            .phases[index],
+                                                    effectivenes: 0,
+                                                    readiness: 0,
+                                                    showSeparator: index < 9,
+                                                    onTap: () =>
+                                                        _objectCreateViewModel
+                                                            .showPhaseScreen(
+                                                                context));
+                                              })
+                                        ])),
+                            SizedBox(
+                                height: _objectCreateViewModel.object == null
+                                    ? 0.0
+                                    : 20.0),
                           ])),
 
                   /// ADD TASK BUTTON
@@ -403,7 +423,13 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                   MediaQuery.of(context).padding.bottom == 0.0
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
-                          onTap: () => {}))
+                          onTap: () => {})),
+
+                  /// INDICATOR
+                  _objectCreateViewModel.loadingStatus ==
+                          LoadingStatus.searching
+                      ? const LoadingIndicatorWidget()
+                      : Container()
                 ]))));
   }
 }

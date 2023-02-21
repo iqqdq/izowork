@@ -14,7 +14,7 @@ class Toast {
         margin: EdgeInsets.only(
             left: 16.0,
             top: MediaQuery.of(context).padding.top == 0.0
-                ? 20.0
+                ? 30.0
                 : MediaQuery.of(context).padding.top,
             right: 20.0),
         backgroundColor: HexColors.additionalViolet,

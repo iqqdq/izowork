@@ -6,12 +6,20 @@ import 'package:izowork/screens/documents/documents_filter_sheet/documents_filte
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DocumentsViewModel with ChangeNotifier {
-  final Object? object;
+  final Object? selectedObject;
 
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
-  DocumentsViewModel(this.object);
+  Object? _object;
+
+  Object? get object {
+    return _object;
+  }
+
+  DocumentsViewModel(this.selectedObject) {
+    _object = selectedObject;
+    notifyListeners();
+  }
 
   // MARK: -
   // MARK: - FUNCTIONS

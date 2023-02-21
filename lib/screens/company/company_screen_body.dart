@@ -66,7 +66,9 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
   // MARK: - FUNCTIONS
 
   Future _onRefresh() async {
-    setState(() => _pagination = Pagination(offset: 0, size: 50));
+    _pagination = Pagination(offset: 0, size: 50);
+    _companyViewModel.getProductList(
+        pagination: _pagination, search: _textEditingController.text);
   }
 
   Widget _page() {

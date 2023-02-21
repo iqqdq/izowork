@@ -34,14 +34,12 @@ class ObjectListItemWidget extends StatelessWidget {
                     shrinkWrap: true,
                     children: [
                       /// OBJECT NAME
-                      const TitleWidget(
-                          text: 'Название объекта', padding: EdgeInsets.zero),
+                      TitleWidget(text: object.name, padding: EdgeInsets.zero),
                       const SizedBox(height: 10.0),
 
                       /// ADDRESS
-                      const SubtitleWidget(
-                          text: 'г. Астана,\nул, Косым Жомарта, д, 185',
-                          padding: EdgeInsets.zero),
+                      SubtitleWidget(
+                          text: object.address, padding: EdgeInsets.zero),
                       const SizedBox(height: 10.0),
                       const SeparatorWidget(),
                       const SizedBox(height: 10.0),
@@ -54,8 +52,7 @@ class ObjectListItemWidget extends StatelessWidget {
                       const SizedBox(height: 10.0),
 
                       const SubtitleWidget(
-                          text: 'Фахрутдинов Асмат Гилбарджанович',
-                          padding: EdgeInsets.zero),
+                          text: '???', padding: EdgeInsets.zero),
 
                       const SizedBox(height: 10.0),
                       const SeparatorWidget(),
@@ -73,7 +70,7 @@ class ObjectListItemWidget extends StatelessWidget {
                                   isSmall: true),
                               SizedBox(height: 2.0),
                               SubtitleWidget(
-                                  text: '32 %', padding: EdgeInsets.zero)
+                                  text: '??? %', padding: EdgeInsets.zero)
                             ])),
 
                         /// EFFECTIVENESS
@@ -87,7 +84,7 @@ class ObjectListItemWidget extends StatelessWidget {
                                   isSmall: true),
                               SizedBox(height: 2.0),
                               SubtitleWidget(
-                                  text: '32 %', padding: EdgeInsets.zero)
+                                  text: '??? %', padding: EdgeInsets.zero)
                             ])),
                       ])
                     ]),

@@ -59,7 +59,9 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
   // MARK: - FUNCTIONS
 
   Future _onRefresh() async {
-    setState(() => _pagination = Pagination(offset: 0, size: 50));
+    _pagination = Pagination(offset: 0, size: 50);
+    _productsViewModel.getProductList(
+        pagination: _pagination, search: _textEditingController.text);
   }
 
   @override

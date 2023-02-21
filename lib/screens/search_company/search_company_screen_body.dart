@@ -7,6 +7,7 @@ import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/models/search_company_view_model.dart';
 import 'package:izowork/screens/search_user/views/search_user_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
+import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
@@ -15,12 +16,14 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class SearchCompanyScreenBodyWidget extends StatefulWidget {
+  final String title;
   final bool isRoot;
   final VoidCallback onFocus;
   final Function(Company?) onPop;
 
   const SearchCompanyScreenBodyWidget(
       {Key? key,
+      required this.title,
       required this.isRoot,
       required this.onFocus,
       required this.onPop})
@@ -94,7 +97,7 @@ class _SearchCompanyScreenBodyState
                                   title: Titles.back,
                                   onTap: () => widget.onPop(null),
                                 ),
-                          const Center(child: TitleWidget(text: Titles.manager))
+                          Center(child: TitleWidget(text: widget.title))
                         ])),
                     const SizedBox(height: 16.0),
 
@@ -175,13 +178,29 @@ class _SearchCompanyScreenBodyState
                           LoadingStatus.completed &&
                       _searchCompanyViewModel.companies.isEmpty &&
                       !_isSearching
-                  ? Center(
-                      child: Text(Titles.noResult,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 16.0,
-                              color: HexColors.grey50)))
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(Titles.noResult,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 16.0,
+                                color: HexColors.grey50)),
+                        const SizedBox(height: 20.0),
+                        BorderButtonWidget(
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 44.0),
+                            title: Titles.addCompany,
+                            onTap: () =>
+                                _searchCompanyViewModel.showCreateCompanyScreen(
+                                    context,
+                                    (company) => {
+                                          widget.onPop(company),
+                                          Navigator.pop(context)
+                                        }))
+                      ],
+                    )
                   : Container(),
 
               /// INDICATOR

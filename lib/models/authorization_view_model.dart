@@ -43,9 +43,6 @@ class AuthorizationViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - FUNCTIONS
-
-  // MARK: -
   // MARK: - PUSH
 
   void showRecoveryScreen(BuildContext context) {

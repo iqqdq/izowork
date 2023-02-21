@@ -25,3 +25,6 @@ const dealUrl = baseUrl + 'deal/one?id=';
 const dealsUrl = baseUrl + 'deal/all';
 const objectUrl = baseUrl + 'object/one?id=';
 const objectsUrl = baseUrl + 'object/all';
+const objectTypesUrl = baseUrl + 'object-type/all';
+const objectStatesUrl = baseUrl + 'object-stage/all';
+const objectMediaUrl = baseUrl + 'resourses/object-file/';

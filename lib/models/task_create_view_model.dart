@@ -166,7 +166,7 @@ class TaskCreateViewModel with ChangeNotifier {
 
     await TaskRepository()
         .createTask(TaskRequest(
-            deadline: pickedDateTime.toUtc().toIso8601String(),
+            deadline: _pickedDateTime.toUtc().toLocal().toIso8601String() + 'Z',
             name: name,
             description: description,
             state: _state!,
@@ -189,6 +189,8 @@ class TaskCreateViewModel with ChangeNotifier {
                                 });
                       })
                     }
+                  else
+                    {onCreate(response)}
                 }
               else if (response is ErrorResponse)
                 {
@@ -255,7 +257,7 @@ class TaskCreateViewModel with ChangeNotifier {
       notifyListeners();
 
       await TaskRepository()
-          .deleteTaskFile(DeleteRequest(id: task!.id))
+          .deleteTaskFile(DeleteRequest(id: task!.files[index].id))
           .then((response) => {
                 if (response == true)
                   {
@@ -361,15 +363,17 @@ class TaskCreateViewModel with ChangeNotifier {
 
   void showSelectionScreenSheet(BuildContext context) {
     if (_taskState != null) {
-      showCupertinoModalBottomSheet(
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (context) => SelectionScreenWidget(
-              title: Titles.status,
-              items: _taskState!.states,
-              onSelectTap: (state) => {_state = state, notifyListeners()}));
+      if (_taskState!.states.isNotEmpty) {
+        showCupertinoModalBottomSheet(
+            topRadius: const Radius.circular(16.0),
+            barrierColor: Colors.black.withOpacity(0.6),
+            backgroundColor: HexColors.white,
+            context: context,
+            builder: (context) => SelectionScreenWidget(
+                title: Titles.status,
+                items: _taskState!.states,
+                onSelectTap: (state) => {_state = state, notifyListeners()}));
+      }
     }
   }
 
@@ -419,6 +423,11 @@ class TaskCreateViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) => SearchUserScreenWidget(
+            title: index == 1
+                ? Titles.manager
+                : index == 2
+                    ? Titles.coExecutor
+                    : Titles.responsible,
             isRoot: true,
             onFocus: () => {},
             onPop: (user) => {
@@ -452,6 +461,7 @@ class TaskCreateViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) => SearchCompanyScreenWidget(
+            title: Titles.company,
             isRoot: true,
             onFocus: () => {},
             onPop: (company) => {

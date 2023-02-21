@@ -1,0 +1,320 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/components/titles.dart';
+import 'package:izowork/models/object_view_model.dart';
+import 'package:izowork/screens/object/object_page/views/object_stage_header_widget.dart';
+import 'package:izowork/screens/object/object_page/views/object_stage_list_item_widget.dart';
+import 'package:izowork/views/back_button_widget.dart';
+import 'package:izowork/views/border_button_widget.dart';
+import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/file_list_widget.dart';
+import 'package:izowork/views/loading_indicator_widget.dart';
+import 'package:izowork/views/selection_input_widget.dart';
+import 'package:izowork/views/separator_widget.dart';
+import 'package:izowork/views/subtitle_widget.dart';
+import 'package:izowork/views/title_widget.dart';
+import 'package:provider/provider.dart';
+
+class ObjectPageScreenBodyWidget extends StatefulWidget {
+  final VoidCallback onCoordCopy;
+
+  const ObjectPageScreenBodyWidget({Key? key, required this.onCoordCopy})
+      : super(key: key);
+
+  @override
+  _ObjectPageScreenBodyState createState() => _ObjectPageScreenBodyState();
+}
+
+class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
+    with AutomaticKeepAliveClientMixin {
+  late ObjectPageViewModel _objectPageViewModel;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    _objectPageViewModel =
+        Provider.of<ObjectPageViewModel>(context, listen: true);
+
+    return Scaffold(
+        backgroundColor: HexColors.white,
+        body: Material(
+            type: MaterialType.transparency,
+            child: Container(
+                color: HexColors.white,
+                child: Stack(children: [
+                  const SeparatorWidget(),
+                  ListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          top: 14.0,
+                          left: 16.0,
+                          right: 16.0,
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 20.0 + 54.0
+                              : MediaQuery.of(context).padding.bottom + 54.0),
+                      children: [
+                        ///  NAME
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.objectName,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _objectPageViewModel.object?.name ??
+                                _objectPageViewModel.selectedObject.name),
+
+                        /// ADDRESS
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.address,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _objectPageViewModel.object?.address ??
+                                _objectPageViewModel.selectedObject.address),
+
+                        /// COORDINATES
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.address,
+                            isSmall: true),
+                        GestureDetector(
+                          onLongPress: () => _objectPageViewModel
+                              .copyCoordinates(
+                                  context,
+                                  _objectPageViewModel.object?.lat ??
+                                      _objectPageViewModel.selectedObject.lat,
+                                  _objectPageViewModel.object?.long ??
+                                      _objectPageViewModel.selectedObject.long)
+                              .then((value) => widget.onCoordCopy()),
+                          child: SubtitleWidget(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              text: _objectPageViewModel.object == null
+                                  ? '${_objectPageViewModel.selectedObject.lat}, ${_objectPageViewModel.selectedObject.long}'
+                                  : '${_objectPageViewModel.object?.lat}, ${_objectPageViewModel.object?.long}'),
+                        ),
+
+                        /// GENERAL CONTRACTOR
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.generalContractor,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text:
+                                _objectPageViewModel.object?.contractor?.name ??
+                                    '-'),
+
+                        /// CUSTOMER
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.customer,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _objectPageViewModel.object?.customer?.name ??
+                                '-'),
+
+                        /// DEGISNER
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.designer,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _objectPageViewModel.object?.designer?.name ??
+                                '-'),
+
+                        /// TYPE
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.objectType,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _objectPageViewModel.objectType?.name ?? '-'),
+
+                        /// FLOOR COUNT
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.floorCount,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _objectPageViewModel.object?.floors
+                                    .toString() ??
+                                _objectPageViewModel.selectedObject.floors
+                                    .toString()),
+
+                        /// AREA
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.area,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text:
+                                _objectPageViewModel.object?.area.toString() ??
+                                    _objectPageViewModel.selectedObject.area
+                                        .toString()),
+
+                        /// BUILDING TIME
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.buildingTime,
+                            isSmall: true),
+                        const SubtitleWidget(
+                            padding: EdgeInsets.only(bottom: 16.0), text: '15'),
+
+                        /// STAGE
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.stages,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text:
+                                _objectPageViewModel.objectStage?.name ?? '-'),
+
+                        /// KISO
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.kiso,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: '???'),
+
+                        /// FILE LIST
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 10.0),
+                            text: Titles.files,
+                            isSmall: true),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount:
+                                _objectPageViewModel.object?.files.length ??
+                                    _objectPageViewModel
+                                        .selectedObject.files.length,
+                            itemBuilder: (context, index) {
+                              return FileListItemWidget(
+                                  fileName: _objectPageViewModel
+                                          .object?.files[index].name ??
+                                      _objectPageViewModel
+                                          .selectedObject.files[index].name,
+                                  isDownloading:
+                                      _objectPageViewModel.downloadIndex ==
+                                          index,
+                                  onTap: () => _objectPageViewModel.openFile(
+                                      context, index));
+                            }),
+
+                        /// PHASES TABLE
+                        Container(
+                            decoration: BoxDecoration(
+                                color: HexColors.white,
+                                borderRadius: BorderRadius.circular(16.0),
+                                border: Border.all(
+                                    width: 1.0, color: HexColors.grey20)),
+                            child: ListView(
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                children: [
+                                  const ObjectStageHeaderWidget(),
+                                  const SizedBox(height: 10.0),
+                                  const SeparatorWidget(),
+                                  ListView.builder(
+                                      shrinkWrap: true,
+                                      padding: EdgeInsets.zero,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: [
+                                        'Фундамент',
+                                        'Стены',
+                                        'Кровля',
+                                        'Стяжка',
+                                        'Перегородки',
+                                        'Вентиляция',
+                                        'Дымоудаление',
+                                        'Водопровод',
+                                        'Отопление',
+                                        'Тепловые узлы'
+                                      ].length,
+                                      itemBuilder: (context, index) {
+                                        return ObjectStageListItemWidget(
+                                            title: [
+                                              'Фундамент',
+                                              'Стены',
+                                              'Кровля',
+                                              'Стяжка',
+                                              'Перегородки',
+                                              'Вентиляция',
+                                              'Дымоудаление',
+                                              'Водопровод',
+                                              'Отопление',
+                                              'Тепловые узлы'
+                                            ][index],
+                                            effectivenes: 50,
+                                            readiness: 50,
+                                            showSeparator: index < 9,
+                                            onTap: () => _objectPageViewModel
+                                                .showPhaseScreen(context));
+                                      })
+                                ])),
+                        const SizedBox(height: 20.0),
+
+                        /// DOCUMENTS BUTTON
+                        SelectionInputWidget(
+                            margin: const EdgeInsets.only(bottom: 10.0),
+                            title: '',
+                            value: Titles.documents,
+                            onTap: () => _objectPageViewModel
+                                .showDocumentsScreen(context)),
+
+                        /// ANALYTICS BUTTON
+                        SelectionInputWidget(
+                            margin: const EdgeInsets.only(bottom: 20.0),
+                            title: '',
+                            value: Titles.analytics,
+                            onTap: () => _objectPageViewModel
+                                .showObjectAnalyticsPageViewScreen(context)),
+
+                        /// SHOW CHAT BUTTON
+                        BorderButtonWidget(
+                            title: Titles.goChat,
+                            margin: const EdgeInsets.only(bottom: 30.0),
+                            onTap: () =>
+                                _objectPageViewModel.showDialogScreen(context)),
+                      ]),
+
+                  /// EDIT TASK BUTTON
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ButtonWidget(
+                          title: Titles.edit,
+                          margin: EdgeInsets.only(
+                              left: 16.0,
+                              right: 16.0,
+                              bottom:
+                                  MediaQuery.of(context).padding.bottom == 0.0
+                                      ? 20.0
+                                      : MediaQuery.of(context).padding.bottom),
+                          onTap: () => _objectPageViewModel
+                              .showObjectCreateScreenSheet(context))),
+
+                  /// INDICATOR
+                  _objectPageViewModel.loadingStatus == LoadingStatus.searching
+                      ? const LoadingIndicatorWidget()
+                      : Container()
+                ]))));
+  }
+}

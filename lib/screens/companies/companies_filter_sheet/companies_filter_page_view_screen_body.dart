@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/models/companies_filter_view_model.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_screen.dart';
@@ -90,6 +91,7 @@ class _CompaniesFilterPageViewScreenBodyState
                                     Navigator.pop(context)
                                   })),
                       SearchUserScreenWidget(
+                          title: Titles.manager,
                           isRoot: false,
                           onFocus: () => setState,
                           onPop: (user) => {

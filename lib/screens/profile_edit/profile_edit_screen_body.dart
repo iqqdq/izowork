@@ -54,9 +54,13 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
   @override
   void dispose() {
     _nameTextEditingConrtoller.dispose();
+    _nameFocusNode.dispose();
     _postTextEditingConrtoller.dispose();
+    _postFocusNode.dispose();
     _emailTextEditingConrtoller.dispose();
+    _emailFocusNode.dispose();
     _phoneTextEditingConrtoller.dispose();
+    _phoneFocusNode.dispose();
 
     if (_socials.isNotEmpty) {
       for (var element in _socials) {
@@ -166,7 +170,9 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
 
                     /// CHANGE AVATAR BUTTON
                     BorderButtonWidget(
-                        title: Titles.changeAvatar,
+                        title: _url == null
+                            ? Titles.addAvatar
+                            : Titles.changeAvatar,
                         margin: EdgeInsets.zero,
                         onTap: () => _profileEditViewModel.pickImage(context)),
                     const SizedBox(height: 24.0),
@@ -187,7 +193,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                             },
                         onEditingComplete: () =>
                             FocusScope.of(context).unfocus(),
-                        onClearTap: () => _phoneTextEditingConrtoller.clear()),
+                        onClearTap: () => _nameTextEditingConrtoller.clear()),
 
                     /// POST INPUT
                     InputWidget(
@@ -205,7 +211,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                             },
                         onEditingComplete: () =>
                             FocusScope.of(context).unfocus(),
-                        onClearTap: () => _phoneTextEditingConrtoller.clear()),
+                        onClearTap: () => _postTextEditingConrtoller.clear()),
 
                     /// EMAIL INPUT
                     InputWidget(
@@ -222,7 +228,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                             },
                         onEditingComplete: () =>
                             FocusScope.of(context).unfocus(),
-                        onClearTap: () => _phoneTextEditingConrtoller.clear()),
+                        onClearTap: () => _emailTextEditingConrtoller.clear()),
 
                     /// PHONE
                     InputWidget(

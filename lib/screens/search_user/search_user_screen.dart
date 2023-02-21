@@ -5,12 +5,14 @@ import 'package:izowork/screens/search_user/search_user_screen_body.dart';
 import 'package:provider/provider.dart';
 
 class SearchUserScreenWidget extends StatelessWidget {
+  final String title;
   final bool isRoot;
   final VoidCallback onFocus;
   final Function(User?) onPop;
 
   const SearchUserScreenWidget(
       {Key? key,
+      required this.title,
       required this.isRoot,
       required this.onFocus,
       required this.onPop})
@@ -21,6 +23,6 @@ class SearchUserScreenWidget extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => SearchUserViewModel(),
         child: SearchUserScreenBodyWidget(
-            isRoot: isRoot, onFocus: onFocus, onPop: onPop));
+            title: title, isRoot: isRoot, onFocus: onFocus, onPop: onPop));
   }
 }

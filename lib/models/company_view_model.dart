@@ -18,6 +18,7 @@ class CompanyViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
   final List<Product> _products = [];
+
   ProductsFilter? _productsFilter;
 
   List<Product> get products {

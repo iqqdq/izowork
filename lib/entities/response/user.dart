@@ -5,7 +5,7 @@ User userFromJson(String str) => User.fromJson(json.decode(str));
 class User {
   User({
     required this.id,
-    required this.createdAt,
+    this.createdAt,
     required this.state,
     required this.name,
     required this.email,
@@ -16,7 +16,7 @@ class User {
   });
 
   String id;
-  DateTime createdAt;
+  DateTime? createdAt;
   String state;
   String name;
   String email;
@@ -27,7 +27,9 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
         state: json["state"],
         name: json["name"] ?? '-',
         email: json["email"],
@@ -41,7 +43,7 @@ class User {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "created_at": createdAt.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
         "state": state,
         "name": name,
         "email": email,

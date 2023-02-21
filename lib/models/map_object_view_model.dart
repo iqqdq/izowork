@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
-import 'package:izowork/screens/object/object_screen.dart';
 
 class MapObjectViewModel with ChangeNotifier {
   // LoadingStatus loadingStatus = LoadingStatus.searching;

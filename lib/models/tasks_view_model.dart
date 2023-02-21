@@ -32,13 +32,13 @@ class TasksViewModel with ChangeNotifier {
   }
 
   TasksViewModel() {
-    getTaskStateList();
+    getStateList();
   }
 
   // MARK: -
   // MARK: - API CALL
 
-  Future getTaskStateList() async {
+  Future getStateList() async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 

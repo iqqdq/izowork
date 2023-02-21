@@ -13,6 +13,6 @@ class DocumentsScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => DocumentsViewModel(object),
-        child: DocumentsScreenBodyWidget(object: object));
+        child: const DocumentsScreenBodyWidget());
   }
 }

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
+import 'package:izowork/entities/response/user.dart';
 
 Object objectFromJson(String str) => Object.fromJson(json.decode(str));
 
@@ -16,11 +18,14 @@ class Object {
     required this.floors,
     required this.area,
     required this.constructionPeriod,
-    required this.contractorId,
-    required this.designerId,
-    required this.customerId,
-    required this.objectTypeId,
-    required this.objectStageId,
+    this.contractor,
+    this.designer,
+    this.customer,
+    this.contractorId,
+    this.designerId,
+    this.customerId,
+    this.objectTypeId,
+    this.objectStageId,
     required this.files,
   });
 
@@ -32,11 +37,14 @@ class Object {
   int floors;
   int area;
   int constructionPeriod;
-  String contractorId;
-  String designerId;
-  String customerId;
-  String objectTypeId;
-  String objectStageId;
+  Company? contractor;
+  Company? designer;
+  Company? customer;
+  String? contractorId;
+  String? designerId;
+  String? customerId;
+  String? objectTypeId;
+  String? objectStageId;
   List<Document> files;
 
   factory Object.fromJson(Map<String, dynamic> json) => Object(
@@ -48,6 +56,15 @@ class Object {
         floors: json["floors"],
         area: json["area"],
         constructionPeriod: json["construction_period"],
+        contractor: json["contractor"] == null
+            ? null
+            : Company.fromJson(json["contractor"]),
+        designer: json["designer"] == null
+            ? null
+            : Company.fromJson(json["designer"]),
+        customer: json["customer"] == null
+            ? null
+            : Company.fromJson(json["customer"]),
         contractorId: json["contractor_id"],
         designerId: json["designer_id"],
         customerId: json["customer_id"],

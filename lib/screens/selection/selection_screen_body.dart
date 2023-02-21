@@ -52,12 +52,12 @@ class _SelectionScreenBodyState extends State<SelectionScreenBodyWidget> {
 
                   /// TITLE
                   TitleWidget(text: widget.title),
-                  const SizedBox(height: 17.0),
+                  const SizedBox(height: 16.0),
 
                   /// SCROLLABLE LIST
                   ListView.builder(
                       shrinkWrap: true,
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       itemCount: _selectionViewModel.items.length,
                       itemBuilder: (context, index) {
                         return SelectionListItemWidget(
@@ -66,9 +66,11 @@ class _SelectionScreenBodyState extends State<SelectionScreenBodyWidget> {
                             onTap: () => _selectionViewModel.select(index));
                       }),
 
+                  const SizedBox(height: 16.0),
+
                   ButtonWidget(
                       title: Titles.apply,
-                      margin: const EdgeInsets.only(left: 16.0, right: 5.0),
+                      margin: const EdgeInsets.symmetric(horizontal: 16.0),
                       onTap: () => {
                             widget.onSelectTap(_selectionViewModel
                                 .items[_selectionViewModel.index]),

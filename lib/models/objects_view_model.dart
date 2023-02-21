@@ -1,35 +1,181 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/components/pagination.dart';
+import 'package:izowork/components/toast.dart';
+import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/screens/object/object_screen.dart';
+import 'package:izowork/entities/response/object_stage.dart';
+import 'package:izowork/repositories/object_repository.dart';
+import 'package:izowork/screens/object/object_page_view_screen.dart';
 import 'package:izowork/screens/object_create/object_create_screen.dart';
-import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_widget.dart';
+import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen.dart';
+import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen_body.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ObjectsViewModel with ChangeNotifier {
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
-  LoadingStatus loadingStatus = LoadingStatus.empty;
+  LoadingStatus loadingStatus = LoadingStatus.searching;
+
+  final List<Object> _objects = [];
+
+  Object? _object;
+  ObjectsFilter? _objectsFilter;
+  List<ObjectStage>? _objectStages;
+
+  List<Object> get objects {
+    return _objects;
+  }
+
+  Object? get object {
+    return _object;
+  }
+
+  ObjectsFilter? get objectsFilter {
+    return _objectsFilter;
+  }
+
+  List<ObjectStage>? get objectStages {
+    return _objectStages;
+  }
+
+  ObjectsViewModel() {
+    getStageList();
+  }
+
+  // MARK: -
+  // MARK: - API CALL
+
+  Future getStageList() async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await ObjectRepository()
+        .getObjectStages()
+        .then((response) => {
+              if (response is List<ObjectStage>) {_objectStages = response}
+            })
+        .then((value) => getObjectList(
+            pagination: Pagination(offset: 0, size: 50), search: ''));
+  }
+
+  Future getObjectById(BuildContext context, String id) async {
+    loadingStatus = LoadingStatus.searching;
+
+    await ObjectRepository().getObject(id).then((response) => {
+          if (response is Object)
+            {
+              _object = response,
+              loadingStatus = LoadingStatus.completed,
+            }
+          else if (response is ErrorResponse)
+            {
+              loadingStatus = LoadingStatus.error,
+              Toast().showTopToast(context, response.message ?? 'Ошибка')
+            },
+          notifyListeners()
+        });
+  }
+
+  Future getObjectList(
+      {required Pagination pagination, required String search}) async {
+    if (pagination.offset == 0) {
+      loadingStatus = LoadingStatus.searching;
+      _objects.clear();
+
+      Future.delayed(Duration.zero, () async {
+        notifyListeners();
+      });
+    }
+    await ObjectRepository()
+        .getObjects(
+            pagination: pagination,
+            search: search,
+            params: _objectsFilter?.params)
+        .then((response) => {
+              if (response is List<Object>)
+                {
+                  if (_objects.isEmpty)
+                    {
+                      response.forEach((object) {
+                        _objects.add(object);
+                      })
+                    }
+                  else
+                    {
+                      response.forEach((newObject) {
+                        bool found = false;
+
+                        _objects.forEach((object) {
+                          if (newObject.id == object.id) {
+                            found = true;
+                          }
+                        });
+
+                        if (!found) {
+                          _objects.add(newObject);
+                        }
+                      })
+                    },
+                  loadingStatus = LoadingStatus.completed
+                }
+              else
+                loadingStatus = LoadingStatus.error,
+              notifyListeners()
+            });
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  void resetFilter() {
+    _objectsFilter = null;
+  }
 
   // MARK: -
   // MARK: - PUSH
 
-  void showObjectsFilterSheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (context) => ObjectsFilterPageViewWidget(
-            onApplyTap: () => {Navigator.pop(context)},
-            onResetTap: () => {Navigator.pop(context)}));
+  void showObjectsFilterSheet(BuildContext context, Function() onFilter) {
+    if (_objectStages != null) {
+      if (_objectStages!.isNotEmpty) {
+        List<String> options = [];
+        _objectStages!.forEach((element) {
+          options.add(element.name);
+        });
+
+        showCupertinoModalBottomSheet(
+            topRadius: const Radius.circular(16.0),
+            barrierColor: Colors.black.withOpacity(0.6),
+            backgroundColor: HexColors.white,
+            context: context,
+            builder: (context) => ObjectsFilterPageViewScreenWidget(
+                options: options,
+                objectsFilter: _objectsFilter,
+                onPop: (objectsFilter) => {
+                      if (objectsFilter == null)
+                        {
+                          // CLEAR
+                          resetFilter(),
+                          onFilter()
+                        }
+                      else
+                        {
+                          // FILTER
+                          _objectsFilter = objectsFilter,
+                          onFilter()
+                        }
+                    }));
+      }
+    }
   }
 
-  void showObjectScreen(BuildContext context) {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => ObjectScreenWidget(object: Object())));
+  void showObjectPageViewScreen(BuildContext context, int index) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ObjectPageViewScreenWidget(object: _objects[index])));
   }
 
   void showObjectCreateScreen(BuildContext context) {
@@ -38,8 +184,4 @@ class ObjectsViewModel with ChangeNotifier {
         MaterialPageRoute(
             builder: (context) => const ObjectCreateScreenWidget()));
   }
-
-  // MARK: -
-  // MARK: - FUNCTIONS
-
 }

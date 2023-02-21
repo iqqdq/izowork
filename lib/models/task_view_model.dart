@@ -10,9 +10,8 @@ import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:io' as io;
-
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:io' as io;
 
 class TaskViewModel with ChangeNotifier {
   final Task selectedTask;
@@ -54,14 +53,14 @@ class TaskViewModel with ChangeNotifier {
 
   Future openFile(BuildContext context, int index) async {
     String url = taskMediaUrl +
-        (task?.files[index].filename ?? selectedTask.files[index].filename);
+        (_task?.files[index].filename ?? selectedTask.files[index].filename);
 
     if (Platform.isAndroid) {
       Directory appDocumentsDirectory =
           await getApplicationDocumentsDirectory();
       String appDocumentsPath = appDocumentsDirectory.path;
       String fileName =
-          task?.files[index].name ?? selectedTask.files[index].name;
+          _task?.files[index].name ?? selectedTask.files[index].name;
       String filePath = '$appDocumentsPath/$fileName';
       bool isFileExists = await io.File(filePath).exists();
 

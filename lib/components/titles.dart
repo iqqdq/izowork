@@ -20,6 +20,7 @@ abstract class Titles {
   static const filter = 'Фильтр';
   static const search = 'Поиск';
   static const add = 'Добавить';
+  static const addCompany = 'Добавить компанию';
   static const close = 'Закрыть';
   static const addContractor = 'Добавить подрядчика';
   static const addFile = 'Добавить файл';
@@ -35,6 +36,7 @@ abstract class Titles {
   static const createPhase = 'Создать этап';
   static const openDeal = 'Открыть сделку';
   static const closeDeal = 'Закрыть сделку';
+  static const createCompany = 'Создать компанию';
   static const showDetail = 'Подробнее';
   static const goToChat = 'Перейти в чат';
   static const comments = 'Комментарии';
@@ -47,6 +49,7 @@ abstract class Titles {
   static const stop = 'Остановить';
   static const save = 'Сохранить';
   static const delete = 'Удалить';
+  static const addAvatar = 'Добавить аватар';
   static const changeAvatar = 'Изменить аватар';
   static const cancel = 'Отменить';
   static const addSocial = 'Добавить соц.сеть';
@@ -138,6 +141,8 @@ abstract class Titles {
   static const editObject = 'Редактировать объект';
   static const newPhase = 'Новый этап';
   static const editPhase = 'Редактировать этап';
+  static const newCompany = 'Новая компания';
+  static const editCompany = 'Редактировать компанию';
   static const dealCalendar = 'Календарь сделок';
   static const taskCalendar = 'Календарь задач';
   static const staff = 'Сотрудники';

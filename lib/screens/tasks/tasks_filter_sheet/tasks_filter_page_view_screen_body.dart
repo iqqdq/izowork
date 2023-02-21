@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/models/tasks_filter_view_model.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
@@ -81,6 +82,7 @@ class _TasksFilterPageViewScreenBodyState
                           onResetTap: () => _tasksFilterViewModel.reset(() =>
                               {widget.onPop(null), Navigator.pop(context)})),
                       SearchUserScreenWidget(
+                          title: Titles.responsible,
                           isRoot: false,
                           onFocus: () => setState,
                           onPop: (user) => {

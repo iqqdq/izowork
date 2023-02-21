@@ -5,12 +5,14 @@ import 'package:izowork/screens/search_company/search_company_screen_body.dart';
 import 'package:provider/provider.dart';
 
 class SearchCompanyScreenWidget extends StatelessWidget {
+  final String title;
   final bool isRoot;
   final VoidCallback onFocus;
   final Function(Company?) onPop;
 
   const SearchCompanyScreenWidget(
       {Key? key,
+      required this.title,
       required this.isRoot,
       required this.onFocus,
       required this.onPop})
@@ -21,6 +23,6 @@ class SearchCompanyScreenWidget extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => SearchCompanyViewModel(),
         child: SearchCompanyScreenBodyWidget(
-            isRoot: isRoot, onFocus: onFocus, onPop: onPop));
+            title: title, isRoot: isRoot, onFocus: onFocus, onPop: onPop));
   }
 }
