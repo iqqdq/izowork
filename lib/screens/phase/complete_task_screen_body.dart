@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/phase_checklist_information.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
@@ -11,11 +12,11 @@ import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class CompleteTaskSheetWidget extends StatefulWidget {
-  final bool isComplete;
+  final PhaseChecklistInformation? phaseChecklistInformation;
   final Function(String, List<PlatformFile>) onTap;
 
   const CompleteTaskSheetWidget(
-      {Key? key, required this.isComplete, required this.onTap})
+      {Key? key, this.phaseChecklistInformation, required this.onTap})
       : super(key: key);
 
   @override
@@ -25,7 +26,7 @@ class CompleteTaskSheetWidget extends StatefulWidget {
 class _CompleteTaskSheetState extends State<CompleteTaskSheetWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  List<PlatformFile> _files = [];
+  final List<PlatformFile> _files = [];
 
   @override
   void dispose() {
@@ -77,12 +78,8 @@ class _CompleteTaskSheetState extends State<CompleteTaskSheetWidget> {
                   const SizedBox(height: 16.0),
 
                   /// REASON INPUT
-                  widget.isComplete
-                      ? const SubtitleWidget(
-                          text:
-                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                          padding: EdgeInsets.only(bottom: 4.0))
-                      : InputWidget(
+                  widget.phaseChecklistInformation == null
+                      ? InputWidget(
                           textEditingController: _textEditingController,
                           focusNode: _focusNode,
                           height: 168.0,
@@ -93,7 +90,11 @@ class _CompleteTaskSheetState extends State<CompleteTaskSheetWidget> {
                           onChange: (text) => {
                             // TODO DESCRTIPTION
                           },
-                        ),
+                        )
+                      : SubtitleWidget(
+                          text: widget.phaseChecklistInformation?.description ??
+                              '-',
+                          padding: const EdgeInsets.only(bottom: 4.0)),
                   const SizedBox(height: 16.0),
 
                   /// FILE LIST
@@ -101,36 +102,40 @@ class _CompleteTaskSheetState extends State<CompleteTaskSheetWidget> {
                       padding: EdgeInsets.zero,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: widget.isComplete ? 2 : _files.length,
+                      itemCount:
+                          widget.phaseChecklistInformation?.files.length ??
+                              _files.length,
                       itemBuilder: (context, index) {
                         return FileListItemWidget(
-                          fileName: widget.isComplete
-                              ? 'file.png'
-                              : _files[index].name,
-                          onRemoveTap: widget.isComplete
-                              ? null
-                              : () => _removeFile(index),
+                          fileName: widget.phaseChecklistInformation
+                                  ?.files[index].name ??
+                              _files[index].name,
+                          onRemoveTap: widget.phaseChecklistInformation == null
+                              ? () => _removeFile(index)
+                              : null,
                         );
                       }),
 
                   /// ADD FILE BUTTON
-                  widget.isComplete
-                      ? Container()
-                      : BorderButtonWidget(
+                  widget.phaseChecklistInformation == null
+                      ? BorderButtonWidget(
                           margin: EdgeInsets.zero,
                           title: Titles.addFile,
-                          onTap: () => _addFile()),
+                          onTap: () => _addFile())
+                      : Container(),
 
                   /// ADD BUTTON
                   ButtonWidget(
                       margin: const EdgeInsets.only(top: 16.0),
-                      title: widget.isComplete ? Titles.close : Titles.add,
-                      isDisabled: widget.isComplete
-                          ? false
-                          : _textEditingController.text.isEmpty,
-                      onTap: () => widget.isComplete
-                          ? Navigator.pop(context)
-                          : widget.onTap(_textEditingController.text, _files))
+                      title: widget.phaseChecklistInformation == null
+                          ? Titles.add
+                          : Titles.close,
+                      isDisabled: widget.phaseChecklistInformation == null
+                          ? _textEditingController.text.isEmpty
+                          : false,
+                      onTap: () => widget.phaseChecklistInformation == null
+                          ? widget.onTap(_textEditingController.text, _files)
+                          : Navigator.pop(context))
                 ])));
   }
 }

@@ -15,11 +15,7 @@ import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/object_type.dart';
 import 'package:izowork/entities/response/object_stage.dart';
-import 'package:izowork/entities/response/phase.dart';
-import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/repositories/object_repository.dart';
-import 'package:izowork/screens/phase/phase_screen.dart';
-import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/services/urls.dart';
@@ -37,18 +33,6 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   bool _isKiso = false;
   bool _isCreateFolder = false;
-  final List<String> _phases = [
-    'Фундамент',
-    'Стены',
-    'Кровля',
-    'Стяжка',
-    'Перегородки',
-    'Вентиляция',
-    'Дымоудаление',
-    'Водопровод',
-    'Отопление',
-    'Тепловые узлы'
-  ];
 
   ObjectType? _objectType;
 
@@ -78,10 +62,6 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   bool get isCreateFolder {
     return _isCreateFolder;
-  }
-
-  List<String> get phases {
-    return _phases;
   }
 
   List<Document> get documents {
@@ -344,12 +324,5 @@ class ObjectCreateViewModel with ChangeNotifier {
                   notifyListeners(),
                   Navigator.pop(context),
                 }));
-  }
-
-  void showPhaseScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PhaseScreenWidget(phase: Phase())));
   }
 }

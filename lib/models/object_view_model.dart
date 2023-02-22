@@ -12,6 +12,7 @@ import 'package:izowork/entities/response/object_stage.dart';
 import 'package:izowork/entities/response/object_type.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/repositories/object_repository.dart';
+import 'package:izowork/repositories/phase_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/documents/documents_screen.dart';
 import 'package:izowork/screens/object_analytics/object_analytics_screen.dart';
@@ -38,6 +39,8 @@ class ObjectPageViewModel with ChangeNotifier {
 
   List<ObjectType> _objectTypes = [];
 
+  List<Phase> _phases = [];
+
   int _downloadIndex = -1;
 
   Object? get object {
@@ -62,6 +65,10 @@ class ObjectPageViewModel with ChangeNotifier {
 
   List<ObjectStage> get objectStages {
     return _objectStages;
+  }
+
+  List<Phase> get phases {
+    return _phases;
   }
 
   ObjectPageViewModel(this.selectedObject) {
@@ -106,6 +113,19 @@ class ObjectPageViewModel with ChangeNotifier {
                       return;
                     }
                   })
+                }
+            })
+        .then((value) => {notifyListeners(), getPhaseList()});
+  }
+
+  Future getPhaseList() async {
+    await PhaseRepository()
+        .getPhases(selectedObject.id)
+        .then((response) => {
+              if (response is List<Phase>)
+                {
+                  _phases = response,
+                  loadingStatus = LoadingStatus.completed,
                 }
             })
         .then((value) => notifyListeners());
@@ -186,10 +206,10 @@ class ObjectPageViewModel with ChangeNotifier {
                 DocumentsScreenWidget(object: selectedObject)));
   }
 
-  void showPhaseScreen(BuildContext context) {
+  void showPhaseScreen(BuildContext context, int index) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => PhaseScreenWidget(phase: Phase())));
+            builder: (context) => PhaseScreenWidget(phase: _phases[index])));
   }
 }

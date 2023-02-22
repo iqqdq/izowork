@@ -6,12 +6,14 @@ import 'package:izowork/views/status_widget.dart';
 class CheckListItemWidget extends StatelessWidget {
   final bool isSelected;
   final String title;
+  final String? state;
   final VoidCallback onTap;
 
   const CheckListItemWidget(
       {Key? key,
       required this.isSelected,
       required this.title,
+      this.state,
       required this.onTap})
       : super(key: key);
 
@@ -30,7 +32,9 @@ class CheckListItemWidget extends StatelessWidget {
                         fontSize: 16.0,
                         fontFamily: 'PT Root UI'))),
             isSelected
-                ? const StatusWidget(title: 'На проверке', status: 0)
+                ? Container(
+                    margin: const EdgeInsets.only(left: 16.0),
+                    child: StatusWidget(title: state ?? '', status: 0))
                 : Container()
           ]),
           onTap: () => onTap()),

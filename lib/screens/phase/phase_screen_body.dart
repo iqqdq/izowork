@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/phase_view_model.dart';
@@ -10,7 +11,8 @@ import 'package:izowork/screens/search/views/search_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
-import 'package:izowork/views/subtitle_widget.dart';
+import 'package:izowork/views/loading_indicator_widget.dart';
+import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:spreadsheet_table/spreadsheet_table.dart';
@@ -42,7 +44,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
                 child: BackButtonWidget(onTap: () => Navigator.pop(context))),
-            title: Text('Фундамент',
+            title: Text(_phaseViewModel.phase.name,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontFamily: 'PT Root UI',
@@ -54,20 +56,19 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
             child: Container(
                 color: HexColors.white,
                 child: Stack(children: [
-                  GestureDetector(
-                      onTap: () => FocusScope.of(context).unfocus(),
-                      child: ListView(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.only(
-                              top: 14.0,
-                              bottom:
-                                  MediaQuery.of(context).padding.bottom == 0.0
-                                      ? 20.0 + 54.0
-                                      : MediaQuery.of(context).padding.bottom +
-                                          54.0),
-                          children: [
-                            /// PRODUCT TITLE
-                            Padding(
+                  const SeparatorWidget(),
+                  ListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          top: 14.0,
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 20.0 + 54.0
+                              : MediaQuery.of(context).padding.bottom + 54.0),
+                      children: [
+                        /// PRODUCT TITLE
+                        _phaseViewModel.phaseProducts.isEmpty
+                            ? Container()
+                            : Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0),
                                 child: Text(Titles.products,
@@ -77,12 +78,18 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                         fontFamily: 'PT Root UI',
                                         fontWeight: FontWeight.bold))),
 
-                            const SizedBox(height: 16.0),
+                        SizedBox(
+                            height: _phaseViewModel.phaseProducts.isEmpty
+                                ? 0.0
+                                : 16.0),
 
-                            /// PRODUCT TABLE
-                            SizedBox(
+                        /// PRODUCT TABLE
+                        _phaseViewModel.phaseProducts.isEmpty
+                            ? Container()
+                            : SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                height: 36.0 * 4,
+                                height: 36.0 *
+                                    (_phaseViewModel.phaseProducts.length + 1),
                                 child: SpreadsheetTable(
                                   cellBuilder: (_, int row, int col) =>
                                       Container(
@@ -95,7 +102,15 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                                   color: HexColors.grey20)),
                                           child: Center(
                                               child: Text(
-                                                  (col * row).toString(),
+                                                  col == 0
+                                                      ? _phaseViewModel
+                                                          .phaseProducts[row]
+                                                          .termInDays
+                                                          .toString()
+                                                      : _phaseViewModel
+                                                          .phaseProducts[row]
+                                                          .count
+                                                          .toString(),
                                                   style: TextStyle(
                                                       fontSize: 14.0,
                                                       color: HexColors.black,
@@ -126,7 +141,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                               width: 0.65,
                                               color: HexColors.grey20)),
                                       child: Row(children: [
-                                        Text('Название товара',
+                                        Text('???',
                                             style: TextStyle(
                                                 fontSize: 14.0,
                                                 color: HexColors.black,
@@ -156,131 +171,136 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                   cellHeight: 36.0,
                                   cellWidth:
                                       MediaQuery.of(context).size.width * 0.3,
-                                  rowsCount: 3,
+                                  rowsCount:
+                                      _phaseViewModel.phaseProducts.length,
                                   colCount: 2,
                                 )),
-                            const SizedBox(height: 20.0),
+                        const SizedBox(height: 20.0),
 
-                            /// CONTRACTOR TITLE
-                            Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: Text(Titles.contractors,
-                                    style: TextStyle(
-                                        color: HexColors.black,
-                                        fontSize: 18.0,
-                                        fontFamily: 'PT Root UI',
-                                        fontWeight: FontWeight.bold))),
+                        /// CONTRACTOR TITLE
+                        Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(Titles.contractors,
+                                style: TextStyle(
+                                    color: HexColors.black,
+                                    fontSize: 18.0,
+                                    fontFamily: 'PT Root UI',
+                                    fontWeight: FontWeight.bold))),
 
-                            const SizedBox(height: 16.0),
+                        const SizedBox(height: 16.0),
 
-                            /// CONTRACTOR LIST
-                            ListView.builder(
-                                shrinkWrap: true,
-                                padding: const EdgeInsets.only(
-                                    bottom: 10.0, left: 16.0, right: 16.0),
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: 2,
-                                itemBuilder: (context, index) {
-                                  return IgnorePointer(
-                                      ignoring: true,
-                                      child: ContractorListItemWidget(
-                                          onTap: () => {}));
-                                }),
-                            // const SizedBox(height: 20.0),
+                        /// CONTRACTOR LIST
+                        ListView.builder(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.only(
+                                bottom: 10.0, left: 16.0, right: 16.0),
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 2,
+                            itemBuilder: (context, index) {
+                              return IgnorePointer(
+                                  ignoring: true,
+                                  child: ContractorListItemWidget(
+                                      onTap: () => {}));
+                            }),
+                        // const SizedBox(height: 20.0),
 
-                            // /// RESPONSIBLE
-                            // const TitleWidget(
-                            //     padding: EdgeInsets.only(
-                            //         bottom: 4.0, left: 16.0, right: 16.0),
-                            //     text: Titles.responsible,
-                            //     isSmall: true),
-                            // const SubtitleWidget(
-                            //     padding: EdgeInsets.only(
-                            //         bottom: 16.0, left: 16.0, right: 16.0),
-                            //     text: 'Имя фамилия'),
+                        // /// RESPONSIBLE
+                        // const TitleWidget(
+                        //     padding: EdgeInsets.only(
+                        //         bottom: 4.0, left: 16.0, right: 16.0),
+                        //     text: Titles.responsible,
+                        //     isSmall: true),
+                        // const SubtitleWidget(
+                        //     padding: EdgeInsets.only(
+                        //         bottom: 16.0, left: 16.0, right: 16.0),
+                        //     text: 'Имя фамилия'),
 
-                            // /// CO-EXECUTOR
-                            // const TitleWidget(
-                            //     padding: EdgeInsets.only(
-                            //         bottom: 4.0, left: 16.0, right: 16.0),
-                            //     text: Titles.coExecutor,
-                            //     isSmall: true),
-                            // const SubtitleWidget(
-                            //     padding: EdgeInsets.only(
-                            //         bottom: 16.0, left: 16.0, right: 16.0),
-                            //     text: 'Имя фамилия'),
+                        // /// CO-EXECUTOR
+                        // const TitleWidget(
+                        //     padding: EdgeInsets.only(
+                        //         bottom: 4.0, left: 16.0, right: 16.0),
+                        //     text: Titles.coExecutor,
+                        //     isSmall: true),
+                        // const SubtitleWidget(
+                        //     padding: EdgeInsets.only(
+                        //         bottom: 16.0, left: 16.0, right: 16.0),
+                        //     text: 'Имя фамилия'),
 
-                            // /// OBSERVER
-                            // const TitleWidget(
-                            //     padding: EdgeInsets.only(
-                            //         bottom: 4.0, left: 16.0, right: 16.0),
-                            //     text: Titles.observer,
-                            //     isSmall: true),
-                            // const SubtitleWidget(
-                            //     padding: EdgeInsets.only(
-                            //         bottom: 16.0, left: 16.0, right: 16.0),
-                            //     text: 'Имя фамилия'),
+                        // /// OBSERVER
+                        // const TitleWidget(
+                        //     padding: EdgeInsets.only(
+                        //         bottom: 4.0, left: 16.0, right: 16.0),
+                        //     text: Titles.observer,
+                        //     isSmall: true),
+                        // const SubtitleWidget(
+                        //     padding: EdgeInsets.only(
+                        //         bottom: 16.0, left: 16.0, right: 16.0),
+                        //     text: 'Имя фамилия'),
 
-                            /// DEALS
-                            const TitleWidget(
-                                padding: EdgeInsets.only(
-                                    bottom: 10.0, left: 16.0, right: 16.0),
-                                text: Titles.deals,
-                                isSmall: true),
+                        /// DEALS
+                        const TitleWidget(
+                            padding: EdgeInsets.only(
+                                bottom: 10.0, left: 16.0, right: 16.0),
+                            text: Titles.deals,
+                            isSmall: true),
 
-                            /// DEAL LIST
-                            ListView.builder(
-                                shrinkWrap: true,
-                                padding: const EdgeInsets.only(
-                                    bottom: 10.0, left: 16.0, right: 16.0),
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: 2,
-                                itemBuilder: (context, index) {
-                                  return SearchListItemWidget(
-                                      name: '${Titles.deal}  №${index + 1}',
-                                      onTap: () => _phaseViewModel
-                                          .showDealScreenWidget(context));
-                                }),
+                        /// DEAL LIST
+                        ListView.builder(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.only(
+                                bottom: 10.0, left: 16.0, right: 16.0),
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 2,
+                            itemBuilder: (context, index) {
+                              return SearchListItemWidget(
+                                  name: '${Titles.deal}  №${index + 1}',
+                                  onTap: () => _phaseViewModel
+                                      .showDealScreenWidget(context));
+                            }),
 
-                            /// CHECK
-                            const TitleWidget(
-                                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                text: Titles.checkList,
-                                isSmall: true),
+                        /// CHECK
+                        const TitleWidget(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            text: Titles.checkList,
+                            isSmall: true),
 
-                            /// CHECKBOX LIST
-                            ListView.builder(
-                                shrinkWrap: true,
-                                padding: const EdgeInsets.only(
-                                    bottom: 20.0, left: 16.0, right: 16.0),
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: 4,
-                                itemBuilder: (context, index) {
-                                  return CheckListItemWidget(
-                                      isSelected: index < 2,
-                                      title: 'Позиция чек-листа ${index + 1}',
-                                      onTap: () => _phaseViewModel
-                                          .showCompleteTaskScreenSheet(
-                                              context, index < 2));
-                                }),
+                        /// CHECKBOX LIST
+                        ListView.builder(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.only(
+                                bottom: 20.0, left: 16.0, right: 16.0),
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _phaseViewModel.phaseChecklists.length,
+                            itemBuilder: (context, index) {
+                              return CheckListItemWidget(
+                                  isSelected: _phaseViewModel
+                                      .phaseChecklists[index].isCompleted,
+                                  title: _phaseViewModel
+                                      .phaseChecklists[index].name,
+                                  state: _phaseViewModel
+                                      .phaseChecklists[index].state,
+                                  onTap: () => _phaseViewModel
+                                      .showCompleteTaskScreenSheet(
+                                          context, index));
+                            }),
 
-                            /// SET TASK BUTTON
-                            BorderButtonWidget(
-                                title: Titles.setTask,
-                                margin: const EdgeInsets.only(
-                                    bottom: 20.0, left: 16.0, right: 16.0),
-                                onTap: () => _phaseViewModel
-                                    .showTaskCreateScreen(context)),
+                        /// SET TASK BUTTON
+                        BorderButtonWidget(
+                            title: Titles.setTask,
+                            margin: const EdgeInsets.only(
+                                bottom: 20.0, left: 16.0, right: 16.0),
+                            onTap: () =>
+                                _phaseViewModel.showTaskCreateScreen(context)),
 
-                            /// OPEN DEAL BUTTON
-                            BorderButtonWidget(
-                                title: Titles.openDeal,
-                                margin: const EdgeInsets.only(
-                                    bottom: 16.0, left: 16.0, right: 16.0),
-                                onTap: () => _phaseViewModel
-                                    .showDealCreateScreen(context)),
-                          ])),
+                        /// OPEN DEAL BUTTON
+                        BorderButtonWidget(
+                            title: Titles.openDeal,
+                            margin: const EdgeInsets.only(
+                                bottom: 16.0, left: 16.0, right: 16.0),
+                            onTap: () =>
+                                _phaseViewModel.showDealCreateScreen(context)),
+                      ]),
 
                   /// EDIT PHASE BUTTON
                   Align(
@@ -296,7 +316,12 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
                           onTap: () =>
-                              _phaseViewModel.showPhaseCreateScreen(context)))
+                              _phaseViewModel.showPhaseCreateScreen(context))),
+
+                  /// INDICATOR
+                  _phaseViewModel.loadingStatus == LoadingStatus.searching
+                      ? const LoadingIndicatorWidget()
+                      : Container()
                 ]))));
   }
 }

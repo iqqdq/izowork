@@ -232,43 +232,35 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                   const ObjectStageHeaderWidget(),
                                   const SizedBox(height: 10.0),
                                   const SeparatorWidget(),
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      padding: EdgeInsets.zero,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: [
-                                        'Фундамент',
-                                        'Стены',
-                                        'Кровля',
-                                        'Стяжка',
-                                        'Перегородки',
-                                        'Вентиляция',
-                                        'Дымоудаление',
-                                        'Водопровод',
-                                        'Отопление',
-                                        'Тепловые узлы'
-                                      ].length,
-                                      itemBuilder: (context, index) {
-                                        return ObjectStageListItemWidget(
-                                            title: [
-                                              'Фундамент',
-                                              'Стены',
-                                              'Кровля',
-                                              'Стяжка',
-                                              'Перегородки',
-                                              'Вентиляция',
-                                              'Дымоудаление',
-                                              'Водопровод',
-                                              'Отопление',
-                                              'Тепловые узлы'
-                                            ][index],
-                                            effectivenes: 50,
-                                            readiness: 50,
-                                            showSeparator: index < 9,
-                                            onTap: () => _objectPageViewModel
-                                                .showPhaseScreen(context));
-                                      })
+                                  _objectPageViewModel.phases.isEmpty
+                                      ? const SizedBox(
+                                          height: 400.0,
+                                          child: LoadingIndicatorWidget())
+                                      : ListView.builder(
+                                          shrinkWrap: true,
+                                          padding: EdgeInsets.zero,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: _objectPageViewModel
+                                              .phases.length,
+                                          itemBuilder: (context, index) {
+                                            return ObjectStageListItemWidget(
+                                                title: _objectPageViewModel
+                                                    .phases[index].name,
+                                                effectivenes:
+                                                    _objectPageViewModel
+                                                        .phases[index]
+                                                        .efficiency,
+                                                readiness: _objectPageViewModel
+                                                    .phases[index].readiness,
+                                                showSeparator: index <
+                                                    _objectPageViewModel
+                                                        .phases.length,
+                                                onTap: () =>
+                                                    _objectPageViewModel
+                                                        .showPhaseScreen(
+                                                            context, index));
+                                          })
                                 ])),
                         const SizedBox(height: 20.0),
 

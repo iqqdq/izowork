@@ -169,7 +169,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.generalContractor,
-                                value: _objectCreateViewModel.contractor?.name ?? Titles.notSelected,
+                                value:
+                                    _objectCreateViewModel.contractor?.name ??
+                                        Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchCompanyScreenSheet(context, 0)),
 
@@ -187,7 +189,8 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.customer,
-                                value: _objectCreateViewModel.customer?.name ?? Titles.notSelected,
+                                value: _objectCreateViewModel.customer?.name ??
+                                    Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchCompanyScreenSheet(context, 2)),
 
@@ -196,7 +199,8 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.designer,
-                                value: _objectCreateViewModel.designer?.name ?? Titles.notSelected,
+                                value: _objectCreateViewModel.designer?.name ??
+                                    Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchCompanyScreenSheet(context, 3)),
 
@@ -360,52 +364,6 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 title: Titles.addFile,
                                 margin: const EdgeInsets.only(bottom: 30.0),
                                 onTap: () => _objectCreateViewModel.addFile()),
-
-                            /// PHASES TABLE
-                            _objectCreateViewModel.object == null
-                                ? Container()
-                                : Container(
-                                    decoration: BoxDecoration(
-                                        color: HexColors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                        border: Border.all(
-                                            width: 1.0,
-                                            color: HexColors.grey20)),
-                                    child: ListView(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        padding: EdgeInsets.zero,
-                                        shrinkWrap: true,
-                                        children: [
-                                          const ObjectStageHeaderWidget(),
-                                          const SizedBox(height: 10.0),
-                                          const SeparatorWidget(),
-                                          ListView.builder(
-                                              shrinkWrap: true,
-                                              padding: EdgeInsets.zero,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount: _objectCreateViewModel
-                                                  .phases.length,
-                                              itemBuilder: (context, index) {
-                                                return ObjectStageListItemWidget(
-                                                    title:
-                                                        _objectCreateViewModel
-                                                            .phases[index],
-                                                    effectivenes: 0,
-                                                    readiness: 0,
-                                                    showSeparator: index < 9,
-                                                    onTap: () =>
-                                                        _objectCreateViewModel
-                                                            .showPhaseScreen(
-                                                                context));
-                                              })
-                                        ])),
-                            SizedBox(
-                                height: _objectCreateViewModel.object == null
-                                    ? 0.0
-                                    : 20.0),
                           ])),
 
                   /// ADD TASK BUTTON

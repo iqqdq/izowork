@@ -31,3 +31,8 @@ const objectsUrl = baseUrl + 'object/all';
 const objectTypesUrl = baseUrl + 'object-type/all';
 const objectStatesUrl = baseUrl + 'object-stage/all';
 const objectMediaUrl = baseUrl + 'resourses/object-file/';
+const phaseUrl = baseUrl + 'phase/all';
+const phaseProductsUrl = baseUrl + 'phase/product/all';
+const phaseChecklistUrl = baseUrl + '/phase/checklist/all';
+const phaseChecklistInformationUrl =
+    baseUrl + '/phase/checklist/information/all';
