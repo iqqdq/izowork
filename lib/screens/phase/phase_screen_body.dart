@@ -7,7 +7,6 @@ import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/phase_view_model.dart';
 import 'package:izowork/screens/phase/views/check_list_item_widget.dart';
 import 'package:izowork/screens/phase/views/contractor_list_item_widget.dart';
-import 'package:izowork/screens/search/views/search_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
@@ -36,6 +35,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
 
     return Scaffold(
         backgroundColor: HexColors.white,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
             centerTitle: true,
             elevation: 0.0,
@@ -56,7 +56,6 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
             child: Container(
                 color: HexColors.white,
                 child: Stack(children: [
-                  const SeparatorWidget(),
                   ListView(
                       shrinkWrap: true,
                       padding: EdgeInsets.only(
@@ -175,20 +174,28 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                       _phaseViewModel.phaseProducts.length,
                                   colCount: 2,
                                 )),
-                        const SizedBox(height: 20.0),
+                        SizedBox(
+                            height: _phaseViewModel.phaseProducts.isEmpty
+                                ? 0.0
+                                : 20.0),
 
                         /// CONTRACTOR TITLE
-                        Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Text(Titles.contractors,
-                                style: TextStyle(
-                                    color: HexColors.black,
-                                    fontSize: 18.0,
-                                    fontFamily: 'PT Root UI',
-                                    fontWeight: FontWeight.bold))),
+                        _phaseViewModel.phaseContractors.isEmpty
+                            ? Container()
+                            : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Text(Titles.contractors,
+                                    style: TextStyle(
+                                        color: HexColors.black,
+                                        fontSize: 18.0,
+                                        fontFamily: 'PT Root UI',
+                                        fontWeight: FontWeight.bold))),
 
-                        const SizedBox(height: 16.0),
+                        SizedBox(
+                            height: _phaseViewModel.phaseContractors.isEmpty
+                                ? 0.0
+                                : 16.0),
 
                         /// CONTRACTOR LIST
                         ListView.builder(
@@ -196,74 +203,23 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                             padding: const EdgeInsets.only(
                                 bottom: 10.0, left: 16.0, right: 16.0),
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 2,
+                            itemCount: _phaseViewModel.phaseContractors.length,
                             itemBuilder: (context, index) {
                               return IgnorePointer(
                                   ignoring: true,
                                   child: ContractorListItemWidget(
+                                      phaseContractor: _phaseViewModel
+                                          .phaseContractors[index],
                                       onTap: () => {}));
-                            }),
-                        // const SizedBox(height: 20.0),
-
-                        // /// RESPONSIBLE
-                        // const TitleWidget(
-                        //     padding: EdgeInsets.only(
-                        //         bottom: 4.0, left: 16.0, right: 16.0),
-                        //     text: Titles.responsible,
-                        //     isSmall: true),
-                        // const SubtitleWidget(
-                        //     padding: EdgeInsets.only(
-                        //         bottom: 16.0, left: 16.0, right: 16.0),
-                        //     text: 'Имя фамилия'),
-
-                        // /// CO-EXECUTOR
-                        // const TitleWidget(
-                        //     padding: EdgeInsets.only(
-                        //         bottom: 4.0, left: 16.0, right: 16.0),
-                        //     text: Titles.coExecutor,
-                        //     isSmall: true),
-                        // const SubtitleWidget(
-                        //     padding: EdgeInsets.only(
-                        //         bottom: 16.0, left: 16.0, right: 16.0),
-                        //     text: 'Имя фамилия'),
-
-                        // /// OBSERVER
-                        // const TitleWidget(
-                        //     padding: EdgeInsets.only(
-                        //         bottom: 4.0, left: 16.0, right: 16.0),
-                        //     text: Titles.observer,
-                        //     isSmall: true),
-                        // const SubtitleWidget(
-                        //     padding: EdgeInsets.only(
-                        //         bottom: 16.0, left: 16.0, right: 16.0),
-                        //     text: 'Имя фамилия'),
-
-                        /// DEALS
-                        const TitleWidget(
-                            padding: EdgeInsets.only(
-                                bottom: 10.0, left: 16.0, right: 16.0),
-                            text: Titles.deals,
-                            isSmall: true),
-
-                        /// DEAL LIST
-                        ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.only(
-                                bottom: 10.0, left: 16.0, right: 16.0),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 2,
-                            itemBuilder: (context, index) {
-                              return SearchListItemWidget(
-                                  name: '${Titles.deal}  №${index + 1}',
-                                  onTap: () => _phaseViewModel
-                                      .showDealScreenWidget(context));
                             }),
 
                         /// CHECK
-                        const TitleWidget(
-                            padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            text: Titles.checkList,
-                            isSmall: true),
+                        _phaseViewModel.phaseChecklists.isEmpty
+                            ? Container()
+                            : const TitleWidget(
+                                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                text: Titles.checkList,
+                                isSmall: true),
 
                         /// CHECKBOX LIST
                         ListView.builder(
@@ -286,37 +242,46 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                             }),
 
                         /// SET TASK BUTTON
-                        BorderButtonWidget(
-                            title: Titles.setTask,
-                            margin: const EdgeInsets.only(
-                                bottom: 20.0, left: 16.0, right: 16.0),
-                            onTap: () =>
-                                _phaseViewModel.showTaskCreateScreen(context)),
+                        _phaseViewModel.loadingStatus == LoadingStatus.searching
+                            ? Container()
+                            : BorderButtonWidget(
+                                title: Titles.setTask,
+                                margin: const EdgeInsets.only(
+                                    bottom: 20.0, left: 16.0, right: 16.0),
+                                onTap: () => _phaseViewModel
+                                    .showTaskCreateScreen(context)),
 
                         /// OPEN DEAL BUTTON
-                        BorderButtonWidget(
-                            title: Titles.openDeal,
-                            margin: const EdgeInsets.only(
-                                bottom: 16.0, left: 16.0, right: 16.0),
-                            onTap: () =>
-                                _phaseViewModel.showDealCreateScreen(context)),
+                        _phaseViewModel.loadingStatus == LoadingStatus.searching
+                            ? Container()
+                            : BorderButtonWidget(
+                                title: Titles.openDeal,
+                                margin: const EdgeInsets.only(
+                                    bottom: 16.0, left: 16.0, right: 16.0),
+                                onTap: () => _phaseViewModel
+                                    .showDealCreateScreen(context)),
                       ]),
 
                   /// EDIT PHASE BUTTON
-                  Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ButtonWidget(
-                          isDisabled: false,
-                          title: Titles.edit,
-                          margin: EdgeInsets.only(
-                              left: 16.0,
-                              right: 16.0,
-                              bottom:
-                                  MediaQuery.of(context).padding.bottom == 0.0
+                  _phaseViewModel.loadingStatus == LoadingStatus.searching
+                      ? Container()
+                      : Align(
+                          alignment: Alignment.bottomCenter,
+                          child: ButtonWidget(
+                              isDisabled: false,
+                              title: Titles.edit,
+                              margin: EdgeInsets.only(
+                                  left: 16.0,
+                                  right: 16.0,
+                                  bottom: MediaQuery.of(context)
+                                              .padding
+                                              .bottom ==
+                                          0.0
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
-                          onTap: () =>
-                              _phaseViewModel.showPhaseCreateScreen(context))),
+                              onTap: () => _phaseViewModel
+                                  .showPhaseCreateScreen(context))),
+                  const SeparatorWidget(),
 
                   /// INDICATOR
                   _phaseViewModel.loadingStatus == LoadingStatus.searching

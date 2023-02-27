@@ -196,6 +196,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                             padding: EdgeInsets.only(bottom: 10.0),
                             text: Titles.files,
                             isSmall: true),
+
                         ListView.builder(
                             shrinkWrap: true,
                             padding: const EdgeInsets.only(bottom: 10.0),

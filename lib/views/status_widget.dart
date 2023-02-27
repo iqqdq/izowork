@@ -17,7 +17,9 @@ class StatusWidget extends StatelessWidget {
                 ? HexColors.additionalViolet
                 : status == 1
                     ? HexColors.additionalDeepBlue
-                    : HexColors.additionalGreen,
+                    : status == 2
+                        ? HexColors.additionalGreen
+                        : HexColors.grey70,
             borderRadius: BorderRadius.circular(6.0)),
         child: Center(
             child: Text(title,

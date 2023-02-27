@@ -9,6 +9,8 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/delete_request.dart';
+import 'package:izowork/entities/request/object_file_request.dart';
+import 'package:izowork/entities/request/object_request.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -148,7 +150,117 @@ class ObjectCreateViewModel with ChangeNotifier {
         .then((value) => notifyListeners());
   }
 
-  Future deleteFile(BuildContext context, int index) async {
+  Future createNewObject(
+      BuildContext context,
+      String address,
+      int? area,
+      int? constructionPeriod,
+      int? floors,
+      double lat,
+      double long,
+      String name,
+      Function(Object) onCreate) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await ObjectRepository()
+        .createObject(ObjectRequest(
+            address: address,
+            area: area,
+            constructionPeriod: constructionPeriod,
+            contractorId: _contractor?.id,
+            customerId: _customer?.id,
+            designerId: _designer?.id,
+            floors: floors,
+            lat: lat,
+            long: long,
+            name: name,
+            objectStageId: _objectStage!.id,
+            objectTypeId: _objectType!.id))
+        .then((response) => {
+              if (response is Object)
+                {
+                  if (_files.isNotEmpty)
+                    {
+                      _files.forEach((element) async {
+                        await uploadFile(context, response.id, element)
+                            .then((value) => {
+                                  current++,
+                                  if (current == _files.length)
+                                    {onCreate(response)}
+                                });
+                      })
+                    }
+                  else
+                    {onCreate(response)}
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                },
+              notifyListeners()
+            });
+  }
+
+  Future editObject(
+      BuildContext context,
+      String address,
+      int? area,
+      int? constructionPeriod,
+      int? floors,
+      double lat,
+      double long,
+      String name,
+      Function(Object) onCreate) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await ObjectRepository()
+        .updateObject(ObjectRequest(
+            address: address,
+            area: area ?? object?.area,
+            constructionPeriod:
+                constructionPeriod ?? object?.constructionPeriod,
+            contractorId: _contractor?.id ?? object?.contractorId,
+            customerId: _customer?.id ?? object?.customerId,
+            designerId: _designer?.id ?? object?.designerId,
+            floors: floors ?? object?.floors,
+            lat: lat,
+            long: long,
+            name: name,
+            objectStageId: _objectStage?.id ?? object!.objectStageId!,
+            objectTypeId: _objectType?.id ?? object!.objectTypeId!))
+        .then((response) => {
+              if (response is Object)
+                {onCreate(response)}
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                },
+              notifyListeners()
+            });
+  }
+
+  Future uploadFile(BuildContext context, String id, File file) async {
+    await ObjectRepository()
+        .addObjectFile(ObjectFileRequest(id, file))
+        .then((response) => {
+              if (response is Document)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _documents.add(response)
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                }
+            });
+  }
+
+  Future deleteObjectFile(BuildContext context, int index) async {
     if (object == null) {
       _files.removeAt(index);
       notifyListeners();

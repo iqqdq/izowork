@@ -31,11 +31,20 @@ class CheckListItemWidget extends StatelessWidget {
                         color: HexColors.black,
                         fontSize: 16.0,
                         fontFamily: 'PT Root UI'))),
-            isSelected
-                ? Container(
+            state == null
+                ? Container()
+                : Container(
                     margin: const EdgeInsets.only(left: 16.0),
-                    child: StatusWidget(title: state ?? '', status: 0))
-                : Container()
+                    child: StatusWidget(
+                        title: state!,
+                        status:
+                            state == 'UNDER_REVIEW' || state == 'На проверке'
+                                ? 0
+                                : state == 'Принят'
+                                    ? 1
+                                    : state == 'NEW' || state == 'Новый'
+                                        ? 2
+                                        : 3))
           ]),
           onTap: () => onTap()),
     );

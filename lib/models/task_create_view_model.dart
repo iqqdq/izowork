@@ -10,7 +10,7 @@ import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/delete_request.dart';
-import 'package:izowork/entities/request/file_request.dart';
+import 'package:izowork/entities/request/task_file_request.dart';
 import 'package:izowork/entities/request/task_request.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
@@ -248,7 +248,7 @@ class TaskCreateViewModel with ChangeNotifier {
             });
   }
 
-  Future deleteFile(BuildContext context, int index) async {
+  Future deleteTaskFile(BuildContext context, int index) async {
     if (task == null) {
       _files.removeAt(index);
       notifyListeners();
@@ -328,7 +328,7 @@ class TaskCreateViewModel with ChangeNotifier {
         Directory appDocumentsDirectory =
             await getApplicationDocumentsDirectory();
         String appDocumentsPath = appDocumentsDirectory.path;
-        String fileName = task?.files[index].name ?? task!.files[index].name;
+        String fileName = task!.files[index].name;
         String filePath = '$appDocumentsPath/$fileName';
         bool isFileExists = await io.File(filePath).exists();
 

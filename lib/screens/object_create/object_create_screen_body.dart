@@ -5,9 +5,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/models/object_create_view_model.dart';
-import 'package:izowork/models/search_view_model.dart';
-import 'package:izowork/screens/object/object_page/views/object_stage_header_widget.dart';
-import 'package:izowork/screens/object/object_page/views/object_stage_list_item_widget.dart';
+import 'package:izowork/screens/object/object_page_view_screen.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
@@ -21,8 +19,11 @@ import 'package:provider/provider.dart';
 
 class ObjectCreateScreenBodyWidget extends StatefulWidget {
   final Object? object;
+  final Function(Object) onUpdate;
 
-  const ObjectCreateScreenBodyWidget({Key? key, this.object}) : super(key: key);
+  const ObjectCreateScreenBodyWidget(
+      {Key? key, this.object, required this.onUpdate})
+      : super(key: key);
 
   @override
   _ObjectCreateScreenBodyState createState() => _ObjectCreateScreenBodyState();
@@ -336,18 +337,14 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                           -1,
                                       child: FileListItemWidget(
                                           fileName: _objectCreateViewModel.object == null
-                                              ? _objectCreateViewModel
-                                                  .files[index].path
-                                                  .substring(
-                                                      _objectCreateViewModel
-                                                              .files[index]
-                                                              .path
-                                                              .length -
-                                                          10,
-                                                      _objectCreateViewModel
+                                              ? _objectCreateViewModel.files[index].path.substring(
+                                                  _objectCreateViewModel
                                                           .files[index]
                                                           .path
-                                                          .length)
+                                                          .length -
+                                                      10,
+                                                  _objectCreateViewModel
+                                                      .files[index].path.length)
                                               : _objectCreateViewModel
                                                   .object!.files[index].name,
                                           isDownloading:
@@ -355,8 +352,8 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                                   index,
                                           onTap: () => _objectCreateViewModel
                                               .openFile(context, index),
-                                          onRemoveTap: () =>
-                                              _objectCreateViewModel.deleteFile(context, index)));
+                                          onRemoveTap: () => _objectCreateViewModel
+                                              .deleteObjectFile(context, index)));
                                 }),
 
                             /// ADD FILE BUTTON
@@ -366,7 +363,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 onTap: () => _objectCreateViewModel.addFile()),
                           ])),
 
-                  /// ADD TASK BUTTON
+                  /// CREATE TASK BUTTON
                   Align(
                       alignment: Alignment.bottomCenter,
                       child: ButtonWidget(
@@ -381,7 +378,54 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                   MediaQuery.of(context).padding.bottom == 0.0
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
-                          onTap: () => {})),
+                          onTap: () => _objectCreateViewModel.object == null
+                              ? _objectCreateViewModel.createNewObject(
+                                  context,
+                                  _addressTextEditingController.text,
+                                  int.tryParse(
+                                      _areaCountTextEditingController.text),
+                                  int.tryParse(
+                                      _buildingTimeTextEditingController.text),
+                                  int.tryParse(
+                                      _floorCountTextEditingController.text),
+                                  (double.tryParse(
+                                      _coordinatesTextEditingController.text
+                                          .split(', ')[0]))!,
+                                  (double.tryParse(
+                                      _coordinatesTextEditingController.text
+                                          .split(', ')[1]))!,
+                                  _nameTextEditingController.text,
+                                  (object) => {
+                                        if (mounted)
+                                          {
+                                            Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ObjectPageViewScreenWidget(
+                                                            object: object)),
+                                                (route) => false)
+                                          }
+                                      })
+                              : _objectCreateViewModel.editObject(
+                                  context,
+                                  _addressTextEditingController.text,
+                                  int.tryParse(
+                                      _areaCountTextEditingController.text),
+                                  int.tryParse(
+                                      _buildingTimeTextEditingController.text),
+                                  int.tryParse(_floorCountTextEditingController.text),
+                                  (double.tryParse(_coordinatesTextEditingController.text.split(', ')[0]))!,
+                                  (double.tryParse(_coordinatesTextEditingController.text.split(', ')[1]))!,
+                                  _nameTextEditingController.text,
+                                  (object) => {
+                                        if (mounted)
+                                          {
+                                            widget.onUpdate(object),
+                                            Navigator.pop(context)
+                                          }
+                                      }))),
+                  const SeparatorWidget(),
 
                   /// INDICATOR
                   _objectCreateViewModel.loadingStatus ==

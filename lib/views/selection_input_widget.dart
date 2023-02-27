@@ -45,7 +45,7 @@ class SelectionInputWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.0),
                 child: Container(
                     padding: EdgeInsets.symmetric(
-                        horizontal: 16.0,
+                        horizontal: 12.0,
                         vertical: title.isEmpty ? 16.0 : 11.0),
                     decoration: BoxDecoration(
                         border: Border.all(width: 1.0, color: HexColors.grey20),

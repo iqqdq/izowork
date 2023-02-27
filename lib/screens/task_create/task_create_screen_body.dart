@@ -5,6 +5,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/models/task_create_view_model.dart';
+import 'package:izowork/screens/task/task_screen.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
@@ -236,7 +237,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                       onTap: () => _taskCreateViewModel
                                           .openFile(context, index),
                                       onRemoveTap: () => _taskCreateViewModel
-                                          .deleteFile(context, index)));
+                                          .deleteTaskFile(context, index)));
                             }),
 
                         /// ADD FILE BUTTON
@@ -274,8 +275,13 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                   (task) => {
                                         if (mounted)
                                           {
-                                            widget.onCreate(task),
-                                            Navigator.pop(context)
+                                            Navigator.pushAndRemoveUntil(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        TaskScreenWidget(
+                                                            task: task)),
+                                                (route) => false)
                                           }
                                       })
                               : _taskCreateViewModel.editTask(

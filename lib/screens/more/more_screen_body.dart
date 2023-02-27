@@ -2,11 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/more_view_model.dart';
 import 'package:izowork/services/urls.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/screens/more/views/more_list_item_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
@@ -53,10 +51,14 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
 
     return Scaffold(
         backgroundColor: HexColors.white,
-        body: Stack(children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            ListView.builder(
-                shrinkWrap: true,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          automaticallyImplyLeading: false,
+        ),
+        body: SizedBox.expand(
+            child: ListView.builder(
                 itemCount: _titles.length + 1,
                 itemBuilder: (context, index) {
                   return index == 0
@@ -147,13 +149,6 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                                                 : debugPrint(index
                                                                     .toString())
                               });
-                })
-          ]),
-
-          /// INDICATOR
-          // _moreViewModel.loadingStatus == LoadingStatus.searching
-          //     ? const LoadingIndicatorWidget()
-          //     : Container()
-        ]));
+                })));
   }
 }

@@ -1,24 +1,23 @@
 import 'dart:convert';
 
+String phaseProductToJson(PhaseProduct data) => json.encode(data.toJson());
 PhaseProduct phaseProductFromJson(String str) =>
     PhaseProduct.fromJson(json.decode(str));
 
-String phaseProductToJson(PhaseProduct data) => json.encode(data.toJson());
-
 class PhaseProduct {
   PhaseProduct({
-    required this.count,
+    this.count,
     required this.id,
     required this.phaseId,
-    required this.productId,
-    required this.termInDays,
+    this.productId,
+    this.termInDays,
   });
 
-  int count;
+  int? count;
   String id;
   String phaseId;
-  String productId;
-  int termInDays;
+  String? productId;
+  int? termInDays;
 
   factory PhaseProduct.fromJson(Map<String, dynamic> json) => PhaseProduct(
         count: json["count"],

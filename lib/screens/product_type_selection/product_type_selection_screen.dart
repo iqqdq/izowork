@@ -5,17 +5,24 @@ import 'package:izowork/screens/product_type_selection/product_type_selection_sc
 import 'package:provider/provider.dart';
 
 class ProductTypeSelectionScreenWidget extends StatelessWidget {
+  final bool isRoot;
+  final String title;
   final ProductType? productType;
   final Function(ProductType?) onSelect;
 
   const ProductTypeSelectionScreenWidget(
-      {Key? key, this.productType, required this.onSelect})
+      {Key? key,
+      required this.title,
+      this.productType,
+      required this.onSelect,
+      required this.isRoot})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => ProductTypeSelectionViewModel(productType),
-        child: ProductTypeSelectionScreenBodyWidget(onSelect: onSelect));
+        child: ProductTypeSelectionScreenBodyWidget(
+            isRoot: isRoot, title: title, onSelect: onSelect));
   }
 }

@@ -28,11 +28,26 @@ const dealUrl = baseUrl + 'deal/one?id=';
 const dealsUrl = baseUrl + 'deal/all';
 const objectUrl = baseUrl + 'object/one?id=';
 const objectsUrl = baseUrl + 'object/all';
+const objectCreateUrl = baseUrl + 'object/create';
+const objectUpdateUrl = baseUrl + 'object/update';
 const objectTypesUrl = baseUrl + 'object-type/all';
 const objectStatesUrl = baseUrl + 'object-stage/all';
 const objectMediaUrl = baseUrl + 'resourses/object-file/';
 const phaseUrl = baseUrl + 'phase/all';
 const phaseProductsUrl = baseUrl + 'phase/product/all';
-const phaseChecklistUrl = baseUrl + '/phase/checklist/all';
+const phaseContractorsUrl = baseUrl + 'phase/contractor/all';
+const phaseChecklistUrl = baseUrl + 'phase/checklist/all';
 const phaseChecklistInformationUrl =
-    baseUrl + '/phase/checklist/information/all';
+    baseUrl + 'phase/checklist/information/all';
+const phaseChecklistInformationCreateUrl =
+    baseUrl + 'phase/checklist/information/create';
+const phaseChecklistInformationFileUrl =
+    baseUrl + 'phase/checklist/information/file';
+const phaseChecklistInformationMediaUrl =
+    baseUrl + 'resourses/checklist-information-file/';
+const phaseContractorCreateUrl = baseUrl + 'phase/contractor/create';
+const phaseContractorUpdateUrl = baseUrl + 'phase/contractor/update';
+const phaseContractorDeleteUrl = baseUrl + 'phase/contractor/delete';
+const phaseProductCreateUrl = baseUrl + 'phase/product/create';
+const phaseProductUpdateUrl = baseUrl + 'phase/product/update';
+const phaseProductDeleteUrl = baseUrl + 'phase/product/delete';

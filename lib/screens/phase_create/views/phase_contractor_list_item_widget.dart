@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/phase_contractor.dart';
 import 'package:izowork/screens/analytics/views/sort_orbject_button_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 
 class PhaseContractorListItemWidget extends StatefulWidget {
   final int index;
+  final PhaseContractor? phaseContractor;
   final VoidCallback onDeleteTap;
   final VoidCallback onContractorTap;
   final VoidCallback onResponsibleTap;
@@ -15,6 +17,7 @@ class PhaseContractorListItemWidget extends StatefulWidget {
   const PhaseContractorListItemWidget(
       {Key? key,
       required this.index,
+      this.phaseContractor,
       required this.onDeleteTap,
       required this.onContractorTap,
       required this.onResponsibleTap,
@@ -29,39 +32,6 @@ class PhaseContractorListItemWidget extends StatefulWidget {
 
 class _PhaseContractorListItemState
     extends State<PhaseContractorListItemWidget> {
-  final TextEditingController _timeTextEditingController =
-      TextEditingController();
-  final FocusNode _timeFocusNode = FocusNode();
-  final TextEditingController _countTextEditingController =
-      TextEditingController();
-  final FocusNode _countFocusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-
-    _timeFocusNode.addListener(() {
-      if (_countFocusNode.hasFocus) {
-        setState(() => _timeFocusNode.unfocus());
-      }
-    });
-
-    _countFocusNode.addListener(() {
-      if (_timeFocusNode.hasFocus) {
-        setState(() => _countFocusNode.unfocus());
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timeTextEditingController.dispose();
-    _timeFocusNode.dispose();
-    _countTextEditingController.dispose();
-    _countFocusNode.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,7 +67,8 @@ class _PhaseContractorListItemState
                       margin: const EdgeInsets.symmetric(vertical: 10.0),
                       isVertical: true,
                       title: Titles.contractor,
-                      value: Titles.notSelected,
+                      value: widget.phaseContractor?.contractor?.name ??
+                          Titles.notSelected,
                       onTap: () => widget.onContractorTap()),
 
                   /// RESPONSIBLE SELECTION INPUT
@@ -105,7 +76,8 @@ class _PhaseContractorListItemState
                       margin: const EdgeInsets.only(bottom: 10.0),
                       isVertical: true,
                       title: Titles.responsible,
-                      value: Titles.notAssigned,
+                      value: widget.phaseContractor?.responsible?.name ??
+                          Titles.notAssigned,
                       onTap: () => widget.onResponsibleTap()),
 
                   /// CO-EXECUTOR SELECTION INPUT
@@ -113,15 +85,17 @@ class _PhaseContractorListItemState
                       margin: const EdgeInsets.only(bottom: 10.0),
                       isVertical: true,
                       title: Titles.coExecutor,
-                      value: Titles.notAssigned,
+                      value: widget.phaseContractor?.coExecutor?.name ??
+                          Titles.notAssigned,
                       onTap: () => widget.onCoExecutorTap()),
 
                   /// OBSERVER SELECTION INPUT
                   SelectionInputWidget(
-                      margin: const EdgeInsets.only(bottom: 20.0),
+                      margin: const EdgeInsets.only(bottom: 10.0),
                       isVertical: true,
                       title: Titles.observer,
-                      value: Titles.notAssigned,
+                      value: widget.phaseContractor?.observer?.name ??
+                          Titles.notAssigned,
                       onTap: () => widget.onObserverTap()),
                 ])));
   }

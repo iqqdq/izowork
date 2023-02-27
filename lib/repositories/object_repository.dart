@@ -1,5 +1,8 @@
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/delete_request.dart';
+import 'package:izowork/entities/request/object_file_request.dart';
+import 'package:izowork/entities/request/object_request.dart';
+import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/object_type.dart';
@@ -71,6 +74,37 @@ class ObjectRepository {
         objects.add(Object.fromJson(element));
       });
       return objects;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> createObject(ObjectRequest objectRequest) async {
+    dynamic json = await WebService().post(objectCreateUrl, objectRequest);
+
+    try {
+      return Object.fromJson(json["object"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> updateObject(ObjectRequest objectRequest) async {
+    dynamic json = await WebService().patch(objectUpdateUrl, objectRequest);
+
+    try {
+      return Object.fromJson(json["object"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> addObjectFile(ObjectFileRequest objectFileRequest) async {
+    dynamic json = await WebService()
+        .postFormData(taskFileUrl, await objectFileRequest.toFormData());
+
+    try {
+      return Document.fromJson(json["object_file"]);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }

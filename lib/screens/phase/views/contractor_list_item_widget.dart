@@ -3,13 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/phase_contractor.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class ContractorListItemWidget extends StatelessWidget {
+  final PhaseContractor phaseContractor;
   final VoidCallback onTap;
 
-  const ContractorListItemWidget({Key? key, required this.onTap})
+  const ContractorListItemWidget(
+      {Key? key, required this.phaseContractor, required this.onTap})
       : super(key: key);
 
   @override
@@ -37,35 +40,36 @@ class ContractorListItemWidget extends StatelessWidget {
                               padding: EdgeInsets.only(bottom: 4.0),
                               text: Titles.contractor,
                               isSmall: true),
-                          const SubtitleWidget(
-                              padding: EdgeInsets.only(bottom: 16.0),
-                              text: 'Название'),
+                          SubtitleWidget(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              text: phaseContractor.contractor?.name ?? '-'),
 
                           /// RESPONSIBLE
                           const TitleWidget(
                               padding: EdgeInsets.only(bottom: 4.0),
                               text: Titles.responsible,
                               isSmall: true),
-                          const SubtitleWidget(
-                              padding: EdgeInsets.only(bottom: 16.0),
-                              text: 'Имя Фамилия'),
+                          SubtitleWidget(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              text: phaseContractor.responsible?.name ?? '-'),
 
                           /// CO-EXECUTOR
                           const TitleWidget(
                               padding: EdgeInsets.only(bottom: 4.0),
                               text: Titles.coExecutor,
                               isSmall: true),
-                          const SubtitleWidget(
-                              padding: EdgeInsets.only(bottom: 16.0),
-                              text: 'Имя Фамилия'),
+                          SubtitleWidget(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              text: phaseContractor.coExecutor?.name ?? '-'),
 
-                          /// RESPONSIBLE
+                          /// OBSERVER
                           const TitleWidget(
                               padding: EdgeInsets.only(bottom: 4.0),
                               text: Titles.responsible,
                               isSmall: true),
-                          const SubtitleWidget(
-                              padding: EdgeInsets.zero, text: 'Имя Фамилия'),
+                          SubtitleWidget(
+                              padding: EdgeInsets.zero,
+                              text: phaseContractor.observer?.name ?? '-'),
                         ])),
                 onTap: () => onTap())));
   }

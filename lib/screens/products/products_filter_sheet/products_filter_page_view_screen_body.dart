@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/product_type.dart';
 import 'package:izowork/models/products_filter_view_model.dart';
 import 'package:izowork/screens/product_type_selection/product_type_selection_screen.dart';
@@ -87,6 +88,8 @@ class _ProductsFilterPageViewScreenBodyState
                           onResetTap: () => _productsFilterViewModel.reset(() =>
                               {widget.onPop(null), Navigator.pop(context)})),
                       ProductTypeSelectionScreenWidget(
+                          isRoot: false,
+                          title: Titles.productType,
                           productType: _productsFilterViewModel.productType,
                           onSelect: (productType) => {
                                 _productsFilterViewModel

@@ -6,13 +6,17 @@ import 'package:provider/provider.dart';
 
 class ObjectCreateScreenWidget extends StatelessWidget {
   final Object? object;
+  final Function(Object) onUpdate;
 
-  const ObjectCreateScreenWidget({Key? key, this.object}) : super(key: key);
+  const ObjectCreateScreenWidget(
+      {Key? key, this.object, required this.onUpdate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => ObjectCreateViewModel(object),
-        child: ObjectCreateScreenBodyWidget(object: object));
+        child:
+            ObjectCreateScreenBodyWidget(object: object, onUpdate: onUpdate));
   }
 }

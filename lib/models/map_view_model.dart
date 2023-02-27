@@ -122,8 +122,9 @@ class MapViewModel with ChangeNotifier {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              const ObjectCreateScreenWidget(object: null)))
+                          builder: (context) => ObjectCreateScreenWidget(
+                              onUpdate: (object) =>
+                                  {debugPrint('Object did create')})))
                 }));
   }
 

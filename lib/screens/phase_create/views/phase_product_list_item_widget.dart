@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/phase_product.dart';
 import 'package:izowork/screens/analytics/views/sort_orbject_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 
 class PhaseProductListItemWidget extends StatefulWidget {
   final int index;
+  final PhaseProduct? phaseProduct;
+  final Function(String) onTimeChange;
+  final Function(String) onCountChange;
   final VoidCallback onDeleteTap;
-  final VoidCallback onContractorSearchTap;
   final VoidCallback onProductSearchTap;
 
   const PhaseProductListItemWidget(
       {Key? key,
       required this.index,
+      this.phaseProduct,
       required this.onDeleteTap,
-      required this.onContractorSearchTap,
-      required this.onProductSearchTap})
+      required this.onProductSearchTap,
+      required this.onTimeChange,
+      required this.onCountChange})
       : super(key: key);
 
   @override
@@ -30,16 +36,23 @@ class _PhaseProductListItemState extends State<PhaseProductListItemWidget> {
   final TextEditingController _countTextEditingController =
       TextEditingController();
   final FocusNode _countFocusNode = FocusNode();
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
   @override
   void initState() {
     super.initState();
+
+    _timeTextEditingController.text =
+        widget.phaseProduct?.termInDays.toString() ?? '';
 
     _timeFocusNode.addListener(() {
       if (_countFocusNode.hasFocus) {
         setState(() => _timeFocusNode.unfocus());
       }
     });
+
+    _countTextEditingController.text =
+        widget.phaseProduct?.count.toString() ?? '';
 
     _countFocusNode.addListener(() {
       if (_timeFocusNode.hasFocus) {
@@ -89,24 +102,23 @@ class _PhaseProductListItemState extends State<PhaseProductListItemWidget> {
 
                   /// TIME INPUT
                   InputWidget(
-                    textEditingController: _timeTextEditingController,
-                    focusNode: _timeFocusNode,
-                    textInputType: TextInputType.number,
-                    margin: const EdgeInsets.only(top: 16.0, bottom: 10.0),
-                    height: 56.0,
-                    placeholder: Titles.deliveryTimeInMonth,
-                    onTap: () => setState,
-                    onChange: (text) => {
-                      // TODO DESCRTIPTION
-                    },
-                  ),
+                      textEditingController: _timeTextEditingController,
+                      focusNode: _timeFocusNode,
+                      textInputType: TextInputType.number,
+                      margin: const EdgeInsets.only(top: 16.0, bottom: 10.0),
+                      height: 56.0,
+                      placeholder: Titles.deliveryTimeInMonth,
+                      onTap: () => setState,
+                      onChange: (text) => _debouncer.run(() => widget
+                          .onTimeChange(_timeTextEditingController.text))),
 
                   /// PRODUCT SELECTION INPUT
                   SelectionInputWidget(
                       margin: const EdgeInsets.only(bottom: 10.0),
                       isVertical: true,
                       title: Titles.product,
-                      value: Titles.notSelected,
+                      value:
+                          widget.phaseProduct?.productId ?? Titles.notSelected,
                       onTap: () => widget.onProductSearchTap()),
 
                   /// COUNT INPUT
@@ -118,7 +130,8 @@ class _PhaseProductListItemState extends State<PhaseProductListItemWidget> {
                       height: 56.0,
                       placeholder: Titles.count,
                       onTap: () => setState,
-                      onChange: (text) => {}),
+                      onChange: (text) => _debouncer.run(() => widget
+                          .onCountChange(_countTextEditingController.text)))
                 ])));
   }
 }

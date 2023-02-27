@@ -182,6 +182,7 @@ class ObjectsViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const ObjectCreateScreenWidget()));
+            builder: (context) => ObjectCreateScreenWidget(
+                onUpdate: (object) => {debugPrint('Object did create')})));
   }
 }

@@ -6,14 +6,21 @@ import 'package:izowork/entities/response/product_type.dart';
 import 'package:izowork/models/product_type_selection_view_model.dart';
 import 'package:izowork/screens/selection/views/selection_list_item_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class ProductTypeSelectionScreenBodyWidget extends StatefulWidget {
+  final bool isRoot;
+  final String title;
   final Function(ProductType?) onSelect;
 
-  const ProductTypeSelectionScreenBodyWidget({Key? key, required this.onSelect})
+  const ProductTypeSelectionScreenBodyWidget(
+      {Key? key,
+      required this.title,
+      required this.onSelect,
+      required this.isRoot})
       : super(key: key);
 
   @override
@@ -36,47 +43,65 @@ class _ProductTypeSelectionScreenBodyState
             color: HexColors.white,
             child: SizedBox.expand(
                 child: Stack(children: [
-              Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).padding.bottom == 0.0
-                          ? 20.0
-                          : MediaQuery.of(context).padding.bottom),
-                  child: Column(children: [
+              SizedBox.expand(
+                  child: ListView(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 20.0 + 54.0
+                              : MediaQuery.of(context).padding.bottom + 54.0),
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                    SizedBox(height: widget.isRoot ? 8.0 : 0.0),
+                    widget.isRoot
+                        ? const DismissIndicatorWidget()
+                        : Container(),
+
                     /// TITLE
-                    const TitleWidget(text: Titles.objectType),
+                    Center(child: TitleWidget(text: widget.title)),
                     const SizedBox(height: 16.0),
 
                     /// SCROLLABLE LIST
-                    Expanded(
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 16.0),
-                            itemCount: _productTypeSelectionViewModel
-                                .productTypes.length,
-                            itemBuilder: (context, index) {
-                              bool isSelected =
-                                  _productTypeSelectionViewModel.productType ==
-                                          null
-                                      ? false
-                                      : _productTypeSelectionViewModel
-                                              .productType!.id ==
-                                          _productTypeSelectionViewModel
-                                              .productTypes[index].id;
+                    ListView.builder(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.only(
+                            left: 16.0, right: 16.0, bottom: 16.0),
+                        itemCount:
+                            _productTypeSelectionViewModel.productTypes.length,
+                        itemBuilder: (context, index) {
+                          bool isSelected =
+                              _productTypeSelectionViewModel.productType == null
+                                  ? false
+                                  : _productTypeSelectionViewModel
+                                          .productType!.id ==
+                                      _productTypeSelectionViewModel
+                                          .productTypes[index].id;
 
-                              return SelectionListItemWidget(
-                                  isSelected: isSelected,
-                                  name: _productTypeSelectionViewModel
-                                      .productTypes[index].name,
-                                  onTap: () => _productTypeSelectionViewModel
-                                      .select(index));
-                            })),
-                    ButtonWidget(
-                        title: Titles.apply,
-                        margin: const EdgeInsets.only(left: 16.0, right: 5.0),
-                        onTap: () => widget.onSelect(
-                            _productTypeSelectionViewModel.productType))
+                          return SelectionListItemWidget(
+                              isSelected: isSelected,
+                              name: _productTypeSelectionViewModel
+                                  .productTypes[index].name,
+                              onTap: () =>
+                                  _productTypeSelectionViewModel.select(index));
+                        })
                   ])),
+
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ButtonWidget(
+                      title: Titles.apply,
+                      isDisabled:
+                          _productTypeSelectionViewModel.productType == null,
+                      margin: EdgeInsets.only(
+                          left: 16.0,
+                          right: 16.0,
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 20.0
+                              : MediaQuery.of(context).padding.bottom),
+                      onTap: () => widget
+                          .onSelect(_productTypeSelectionViewModel.productType))
+                ],
+              ),
 
               /// INDICATOR
               _productTypeSelectionViewModel.loadingStatus ==

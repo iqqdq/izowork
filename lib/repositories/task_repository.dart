@@ -1,6 +1,6 @@
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/delete_request.dart';
-import 'package:izowork/entities/request/file_request.dart';
+import 'package:izowork/entities/request/task_file_request.dart';
 import 'package:izowork/entities/request/task_request.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';

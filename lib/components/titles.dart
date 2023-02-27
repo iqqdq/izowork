@@ -198,7 +198,7 @@ abstract class Titles {
   static const toDate = 'Дата до';
 
   static const textReason = 'Напишите причину';
-  static const taskCompleteInfo = 'Информация о выполнении задачи';
+  static const taskCompleteInfo = 'Информация о выполнении';
   static const floorCount = 'Этажность';
   static const area = 'Площадь, кв. м';
   static const buildingTime = 'Сроки строительства, в годах';

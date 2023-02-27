@@ -183,7 +183,12 @@ class ObjectPageViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ObjectCreateScreenWidget(object: _object)));
+            builder: (context) => ObjectCreateScreenWidget(
+                object: _object,
+                onUpdate: (object) {
+                  _object = object;
+                  notifyListeners();
+                })));
   }
 
   void showDialogScreen(BuildContext context) {
