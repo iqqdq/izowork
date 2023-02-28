@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/entities/response/phase_checklist.dart';
 import 'package:izowork/views/checkbox_widget.dart';
 import 'package:izowork/views/status_widget.dart';
 
@@ -31,20 +32,23 @@ class CheckListItemWidget extends StatelessWidget {
                         color: HexColors.black,
                         fontSize: 16.0,
                         fontFamily: 'PT Root UI'))),
-            state == null
+            state == PhaseChecklistState().created
                 ? Container()
                 : Container(
                     margin: const EdgeInsets.only(left: 16.0),
                     child: StatusWidget(
-                        title: state!,
-                        status:
-                            state == 'UNDER_REVIEW' || state == 'На проверке'
-                                ? 0
-                                : state == 'Принят'
-                                    ? 1
-                                    : state == 'NEW' || state == 'Новый'
-                                        ? 2
-                                        : 3))
+                        title: state == PhaseChecklistState().underReview
+                            ? 'На проверке'
+                            : state == PhaseChecklistState().rejected
+                                ? 'Отклонен'
+                                : 'Принят',
+                        status: state == PhaseChecklistState().underReview
+                            ? 0
+                            : state == PhaseChecklistState().rejected
+                                ? 3
+                                : state == PhaseChecklistState().accepted
+                                    ? 2
+                                    : 3))
           ]),
           onTap: () => onTap()),
     );

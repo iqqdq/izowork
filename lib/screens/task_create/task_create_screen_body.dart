@@ -50,15 +50,17 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
     _taskCreateViewModel =
         Provider.of<TaskCreateViewModel>(context, listen: true);
 
-    if (_taskCreateViewModel.task != null &&
-        _nameTextEditingController.text.isEmpty) {
-      _nameTextEditingController.text = _taskCreateViewModel.task!.name;
-    }
+    if (_taskCreateViewModel.task != null) {
+      if (_nameTextEditingController.text.isEmpty &&
+          !_taskCreateViewModel.isUpdated) {
+        _nameTextEditingController.text = _taskCreateViewModel.task!.name;
+      }
 
-    if (_taskCreateViewModel.task != null &&
-        _descriptionTextEditingController.text.isEmpty) {
-      _descriptionTextEditingController.text =
-          _taskCreateViewModel.task!.description ?? '';
+      if (_descriptionTextEditingController.text.isEmpty &&
+          !_taskCreateViewModel.isUpdated) {
+        _descriptionTextEditingController.text =
+            _taskCreateViewModel.task!.description ?? '';
+      }
     }
 
     final _day = _taskCreateViewModel.pickedDateTime.day.toString().length == 1
@@ -275,13 +277,12 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                   (task) => {
                                         if (mounted)
                                           {
-                                            Navigator.pushAndRemoveUntil(
+                                            Navigator.pushReplacement(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         TaskScreenWidget(
-                                                            task: task)),
-                                                (route) => false)
+                                                            task: task)))
                                           }
                                       })
                               : _taskCreateViewModel.editTask(

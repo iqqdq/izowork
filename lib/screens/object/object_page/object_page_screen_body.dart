@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/models/object_view_model.dart';
 import 'package:izowork/screens/object/object_page/views/object_stage_header_widget.dart';
 import 'package:izowork/screens/object/object_page/views/object_stage_list_item_widget.dart';
-import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
@@ -19,8 +18,10 @@ import 'package:provider/provider.dart';
 
 class ObjectPageScreenBodyWidget extends StatefulWidget {
   final VoidCallback onCoordCopy;
+  final Function(Object) onUpdate;
 
-  const ObjectPageScreenBodyWidget({Key? key, required this.onCoordCopy})
+  const ObjectPageScreenBodyWidget(
+      {Key? key, required this.onCoordCopy, required this.onUpdate})
       : super(key: key);
 
   @override
@@ -48,7 +49,6 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
             child: Container(
                 color: HexColors.white,
                 child: Stack(children: [
-                  const SeparatorWidget(),
                   ListView(
                       shrinkWrap: true,
                       padding: EdgeInsets.only(
@@ -256,7 +256,8 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                                     .phases[index].readiness,
                                                 showSeparator: index <
                                                     _objectPageViewModel
-                                                        .phases.length,
+                                                            .phases.length -
+                                                        1,
                                                 onTap: () =>
                                                     _objectPageViewModel
                                                         .showPhaseScreen(
@@ -301,12 +302,18 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                   MediaQuery.of(context).padding.bottom == 0.0
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
-                          onTap: () => _objectPageViewModel
-                              .showObjectCreateScreenSheet(context))),
+                          onTap: () =>
+                              _objectPageViewModel.showObjectCreateScreenSheet(
+                                  context,
+                                  () => widget.onUpdate(
+                                      _objectPageViewModel.object!)))),
+                  const SeparatorWidget(),
 
                   /// INDICATOR
                   _objectPageViewModel.loadingStatus == LoadingStatus.searching
-                      ? const LoadingIndicatorWidget()
+                      ? const Padding(
+                          padding: EdgeInsets.only(bottom: 90.0),
+                          child: LoadingIndicatorWidget())
                       : Container()
                 ]))));
   }

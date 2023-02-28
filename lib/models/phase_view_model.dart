@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/request/checklist_request.dart';
+import 'package:izowork/entities/request/phase_checklist_request.dart';
 import 'package:izowork/entities/request/phase_checklist_information_file_request.dart';
+import 'package:izowork/entities/request/phase_checklist_state_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/entities/response/phase_checklist.dart';
@@ -58,23 +59,23 @@ class PhaseViewModel with ChangeNotifier {
   }
 
   PhaseViewModel(this.phase) {
-    getPhaseList();
+    getPhaseContractorList();
   }
 
   // MARK: -
   // MARK: - API CALL
 
-  Future getPhaseList() async {
+  Future getPhaseContractorList() async {
     await PhaseRepository()
         .getPhaseContractors(phase.id)
         .then((response) => {
               if (response is List<PhaseContractor>)
                 {_phaseContractors = response}
             })
-        .then((value) => getPhaseContractorList());
+        .then((value) => getPhaseProductList());
   }
 
-  Future getPhaseContractorList() async {
+  Future getPhaseProductList() async {
     await PhaseRepository()
         .getPhaseProducts(phase.id)
         .then((response) => {
@@ -131,20 +132,12 @@ class PhaseViewModel with ChangeNotifier {
                             .then((value) => {
                                   current++,
                                   if (current == _files.length)
-                                    {
-                                      loadingStatus = LoadingStatus.completed,
-                                      notifyListeners(),
-                                      Navigator.pop(context)
-                                    }
+                                    {updateChecklistState(context, index)}
                                 });
                       })
                     }
                   else
-                    {
-                      loadingStatus = LoadingStatus.completed,
-                      notifyListeners(),
-                      Navigator.pop(context)
-                    }
+                    {updateChecklistState(context, index)}
                 }
               else if (response is ErrorResponse)
                 {
@@ -153,6 +146,26 @@ class PhaseViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 }
             });
+  }
+
+  Future updateChecklistState(BuildContext context, int index) async {
+    await PhaseRepository()
+        .updatePhaseChecklistState(PhaseChecklistStateRequest(
+            id: _phaseChecklists[index].id,
+            state: PhaseChecklistState().accepted))
+        .then((response) => {
+              if (response is PhaseChecklist)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _phaseChecklists[index] = response
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка'),
+                }
+            })
+        .then((value) => {Navigator.pop(context), notifyListeners()});
   }
 
   Future uploadFile(BuildContext context, String id, File file) async {

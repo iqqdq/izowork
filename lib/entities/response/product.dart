@@ -10,24 +10,24 @@ class Product {
   Product({
     required this.id,
     required this.name,
-    required this.price,
-    required this.unit,
+    this.price,
+    this.unit,
     this.image,
-    required this.company,
-    required this.companyId,
-    required this.productType,
-    required this.productTypeId,
+    this.company,
+    this.companyId,
+    this.productType,
+    this.productTypeId,
   });
 
   String id;
   String name;
-  num price;
-  String unit;
+  num? price;
+  String? unit;
   String? image;
-  Company company;
-  String companyId;
-  ProductType productType;
-  String productTypeId;
+  Company? company;
+  String? companyId;
+  ProductType? productType;
+  String? productTypeId;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
@@ -35,9 +35,12 @@ class Product {
         price: json["price"],
         unit: json["unit"],
         image: json["image"],
-        company: Company.fromJson(json["company"]),
+        company:
+            json["company"] == null ? null : Company.fromJson(json["company"]),
         companyId: json["company_id"],
-        productType: ProductType.fromJson(json["product_type"]),
+        productType: json["product_type"] == null
+            ? null
+            : ProductType.fromJson(json["product_type"]),
         productTypeId: json["product_type_id"],
       );
 
@@ -47,9 +50,9 @@ class Product {
         "price": price,
         "unit": unit,
         "image": image,
-        "company": company.toJson(),
+        "company": company?.toJson(),
         "company_id": companyId,
-        "product_type": productType.toJson(),
+        "product_type": productType?.toJson(),
         "product_type_id": productTypeId,
       };
 }

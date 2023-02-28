@@ -39,75 +39,49 @@ class _ProductTypeSelectionScreenBodyState
 
     return Material(
         type: MaterialType.transparency,
-        child: Container(
-            color: HexColors.white,
-            child: SizedBox.expand(
-                child: Stack(children: [
-              SizedBox.expand(
-                  child: ListView(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).padding.bottom == 0.0
-                              ? 20.0 + 54.0
-                              : MediaQuery.of(context).padding.bottom + 54.0),
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                    SizedBox(height: widget.isRoot ? 8.0 : 0.0),
-                    widget.isRoot
-                        ? const DismissIndicatorWidget()
-                        : Container(),
+        child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom == 0.0
+                    ? 20.0
+                    : MediaQuery.of(context).padding.bottom),
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              SizedBox(height: widget.isRoot ? 8.0 : 0.0),
+              widget.isRoot ? const DismissIndicatorWidget() : Container(),
 
-                    /// TITLE
-                    Center(child: TitleWidget(text: widget.title)),
-                    const SizedBox(height: 16.0),
+              /// TITLE
+              TitleWidget(text: widget.title),
+              const SizedBox(height: 16.0),
 
-                    /// SCROLLABLE LIST
-                    ListView.builder(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(
-                            left: 16.0, right: 16.0, bottom: 16.0),
-                        itemCount:
-                            _productTypeSelectionViewModel.productTypes.length,
-                        itemBuilder: (context, index) {
-                          bool isSelected =
-                              _productTypeSelectionViewModel.productType == null
-                                  ? false
-                                  : _productTypeSelectionViewModel
-                                          .productType!.id ==
-                                      _productTypeSelectionViewModel
-                                          .productTypes[index].id;
+              /// SCROLLABLE LIST
+              ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  itemCount: _productTypeSelectionViewModel.productTypes.length,
+                  itemBuilder: (context, index) {
+                    bool isSelected =
+                        _productTypeSelectionViewModel.productType == null
+                            ? false
+                            : _productTypeSelectionViewModel.productType!.id ==
+                                _productTypeSelectionViewModel
+                                    .productTypes[index].id;
 
-                          return SelectionListItemWidget(
-                              isSelected: isSelected,
-                              name: _productTypeSelectionViewModel
-                                  .productTypes[index].name,
-                              onTap: () =>
-                                  _productTypeSelectionViewModel.select(index));
-                        })
-                  ])),
-
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ButtonWidget(
-                      title: Titles.apply,
-                      isDisabled:
-                          _productTypeSelectionViewModel.productType == null,
-                      margin: EdgeInsets.only(
-                          left: 16.0,
-                          right: 16.0,
-                          bottom: MediaQuery.of(context).padding.bottom == 0.0
-                              ? 20.0
-                              : MediaQuery.of(context).padding.bottom),
-                      onTap: () => widget
-                          .onSelect(_productTypeSelectionViewModel.productType))
-                ],
-              ),
-
-              /// INDICATOR
-              _productTypeSelectionViewModel.loadingStatus ==
-                      LoadingStatus.searching
-                  ? const LoadingIndicatorWidget()
-                  : Container()
-            ]))));
+                    return SelectionListItemWidget(
+                        isSelected: isSelected,
+                        name: _productTypeSelectionViewModel
+                            .productTypes[index].name,
+                        onTap: () =>
+                            _productTypeSelectionViewModel.select(index));
+                  }),
+              const SizedBox(height: 16.0),
+              ButtonWidget(
+                  title: Titles.apply,
+                  isDisabled:
+                      _productTypeSelectionViewModel.productType == null,
+                  margin: const EdgeInsets.only(left: 16.0, right: 5.0),
+                  onTap: () => widget
+                      .onSelect(_productTypeSelectionViewModel.productType))
+            ]));
   }
 }

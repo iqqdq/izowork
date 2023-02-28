@@ -5,6 +5,13 @@ PhaseChecklist phaseChecklistFromJson(String str) =>
 
 String phaseChecklistToJson(PhaseChecklist data) => json.encode(data.toJson());
 
+class PhaseChecklistState {
+  String created = 'NEW';
+  String rejected = 'REJECTED';
+  String accepted = 'ACCEPTED';
+  String underReview = 'UNDER_REVIEW';
+}
+
 class PhaseChecklist {
   PhaseChecklist({
     required this.id,

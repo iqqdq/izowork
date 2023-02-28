@@ -2,16 +2,16 @@ import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:izowork/views/transparent_button_widget_widget.dart';
 
 class ObjectsFilterScreenWidget extends StatelessWidget {
-  final User? designer;
-  final User? contractor;
-  final User? customer;
+  final Company? designer;
+  final Company? contractor;
+  final Company? customer;
   final List<String> options;
   final List<int> tags;
   final List<String> options2;

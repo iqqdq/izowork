@@ -53,7 +53,9 @@ class _ObjectActionsScreenBodyState
 
           /// INDICATOR
           _objectActionsViewModel.loadingStatus == LoadingStatus.searching
-              ? const LoadingIndicatorWidget()
+              ? const Padding(
+                  padding: EdgeInsets.only(bottom: 90.0),
+                  child: LoadingIndicatorWidget())
               : Container()
         ])));
   }

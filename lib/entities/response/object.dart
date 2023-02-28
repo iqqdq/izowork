@@ -13,9 +13,9 @@ class Object {
     required this.address,
     required this.long,
     required this.lat,
-    required this.floors,
-    required this.area,
-    required this.constructionPeriod,
+    this.floors,
+    this.area,
+    this.constructionPeriod,
     this.contractor,
     this.designer,
     this.customer,
@@ -32,9 +32,9 @@ class Object {
   String address;
   double long;
   double lat;
-  int floors;
-  int area;
-  int constructionPeriod;
+  int? floors;
+  int? area;
+  int? constructionPeriod;
   Company? contractor;
   Company? designer;
   Company? customer;

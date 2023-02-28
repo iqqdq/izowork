@@ -50,6 +50,8 @@ class TaskCreateViewModel with ChangeNotifier {
       1,
       1);
 
+  bool isUpdated = false;
+
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
   TaskState? _taskState;
@@ -136,6 +138,8 @@ class TaskCreateViewModel with ChangeNotifier {
       if (task!.files.isNotEmpty) {
         _documents = task!.files;
       }
+
+      isUpdated = true;
 
       notifyListeners();
     }

@@ -11,6 +11,7 @@ import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/request/object_file_request.dart';
 import 'package:izowork/entities/request/object_request.dart';
+import 'package:izowork/entities/request/object_update_request.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -31,9 +32,12 @@ class ObjectCreateViewModel with ChangeNotifier {
   // INIT
   final Object? object;
 
+  bool isUpdated = false;
+
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
-  bool _isKiso = false;
+  bool _isKiso = true;
+
   bool _isCreateFolder = false;
 
   ObjectType? _objectType;
@@ -147,7 +151,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                   })
                 }
             })
-        .then((value) => notifyListeners());
+        .then((value) => {isUpdated = true, notifyListeners()});
   }
 
   Future createNewObject(
@@ -217,7 +221,8 @@ class ObjectCreateViewModel with ChangeNotifier {
     notifyListeners();
 
     await ObjectRepository()
-        .updateObject(ObjectRequest(
+        .updateObject(ObjectUpdateRequest(
+            id: object!.id,
             address: address,
             area: area ?? object?.area,
             constructionPeriod:

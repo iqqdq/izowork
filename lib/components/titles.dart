@@ -130,6 +130,7 @@ abstract class Titles {
   static const objectType = 'Тип объекта';
   static const filial = 'Филиал';
   static const deals = 'Сделки';
+  static const task = 'Задача';
   static const tasks = 'Задачи';
   static const info = 'Информация';
   static const newTask = 'Новая задача';

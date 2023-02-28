@@ -33,7 +33,7 @@ class CompanyRepository {
       required String search,
       List<String>? params}) async {
     var url =
-        companiesUrl + '?&offset=${pagination.offset}&limit=${pagination.size}';
+        companiesUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
     if (search.isNotEmpty) {
       url += '&q=$search';

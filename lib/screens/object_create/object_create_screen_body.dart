@@ -18,11 +18,9 @@ import 'package:izowork/views/separator_widget.dart';
 import 'package:provider/provider.dart';
 
 class ObjectCreateScreenBodyWidget extends StatefulWidget {
-  final Object? object;
-  final Function(Object) onUpdate;
+  final Function(Object) onCreate;
 
-  const ObjectCreateScreenBodyWidget(
-      {Key? key, this.object, required this.onUpdate})
+  const ObjectCreateScreenBodyWidget({Key? key, required this.onCreate})
       : super(key: key);
 
   @override
@@ -84,6 +82,48 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
     _objectCreateViewModel =
         Provider.of<ObjectCreateViewModel>(context, listen: true);
 
+    if (_objectCreateViewModel.object != null) {
+      if (_nameTextEditingController.text.isEmpty &&
+          !_objectCreateViewModel.isUpdated) {
+        _nameTextEditingController.text = _objectCreateViewModel.object!.name;
+      }
+
+      if (_addressTextEditingController.text.isEmpty &&
+          !_objectCreateViewModel.isUpdated) {
+        _addressTextEditingController.text =
+            _objectCreateViewModel.object!.address;
+      }
+
+      if (_coordinatesTextEditingController.text.isEmpty &&
+          !_objectCreateViewModel.isUpdated) {
+        _coordinatesTextEditingController.text =
+            '${_objectCreateViewModel.object!.lat}, ${_objectCreateViewModel.object!.long}';
+      }
+
+      if (_floorCountTextEditingController.text.isEmpty &&
+          !_objectCreateViewModel.isUpdated) {
+        _floorCountTextEditingController.text =
+            _objectCreateViewModel.object!.floors.toString();
+      }
+
+      if (_areaCountTextEditingController.text.isEmpty &&
+          !_objectCreateViewModel.isUpdated) {
+        _areaCountTextEditingController.text =
+            _objectCreateViewModel.object!.area.toString();
+      }
+
+      if (_buildingTimeTextEditingController.text.isEmpty &&
+          !_objectCreateViewModel.isUpdated) {
+        _buildingTimeTextEditingController.text =
+            _objectCreateViewModel.object!.constructionPeriod.toString();
+      }
+
+      if (_kisoTextEditingController.text.isEmpty &&
+          !_objectCreateViewModel.isUpdated) {
+        // _kisoTextEditingController.text =_objectCreateViewModel.object!.kiso;
+      }
+    }
+
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
@@ -95,7 +135,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                 padding: const EdgeInsets.only(left: 16.0),
                 child: BackButtonWidget(onTap: () => Navigator.pop(context))),
             title: Text(
-                widget.object == null ? Titles.newObject : Titles.editObject,
+                _objectCreateViewModel.object == null
+                    ? Titles.newObject
+                    : Titles.editObject,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontFamily: 'PT Root UI',
@@ -123,75 +165,73 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                           children: [
                             /// NAME INPUT
                             InputWidget(
-                              textEditingController: _nameTextEditingController,
-                              focusNode: _nameFocusNode,
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              height: 56.0,
-                              placeholder: Titles.objectName,
-                              onTap: () => setState,
-                              onChange: (text) => {
-                                // TODO OBJECT NAME
-                              },
-                            ),
+                                textEditingController:
+                                    _nameTextEditingController,
+                                focusNode: _nameFocusNode,
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                height: 56.0,
+                                placeholder: Titles.objectName,
+                                onTap: () => setState,
+                                onChange: (text) => setState(() {})),
 
                             /// ADDRESS INPUT
                             InputWidget(
-                              textEditingController:
-                                  _addressTextEditingController,
-                              focusNode: _addressFocusNode,
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              height: 56.0,
-                              placeholder: Titles.address,
-                              onTap: () => setState,
-                              onChange: (text) => {
-                                // TODO OBJECT ADDRESS NAME
-                              },
-                            ),
+                                textEditingController:
+                                    _addressTextEditingController,
+                                focusNode: _addressFocusNode,
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                height: 56.0,
+                                placeholder: Titles.address,
+                                onTap: () => setState,
+                                onChange: (text) => setState(() {})),
 
                             /// COORDINATES INPUT
                             InputWidget(
-                              textEditingController:
-                                  _coordinatesTextEditingController,
-                              focusNode: _coordinatesFocusNode,
-                              textInputType:
-                                  const TextInputType.numberWithOptions(
-                                      signed: true),
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              height: 56.0,
-                              placeholder: Titles.coordinates,
-                              onTap: () => setState,
-                              onChange: (text) => {
-                                // TODO OBJECT COORDINATES
-                              },
-                            ),
+                                textEditingController:
+                                    _coordinatesTextEditingController,
+                                focusNode: _coordinatesFocusNode,
+                                textInputType:
+                                    const TextInputType.numberWithOptions(
+                                        signed: true),
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                height: 56.0,
+                                placeholder: Titles.coordinates,
+                                onTap: () => setState,
+                                onChange: (text) => setState(() {})),
 
                             /// GENERAL CONTRACTOR SELECTION INPUT
                             SelectionInputWidget(
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.generalContractor,
-                                value:
+                                value: 
                                     _objectCreateViewModel.contractor?.name ??
+                                          _objectCreateViewModel.object?.contractor?.name ??
                                         Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchCompanyScreenSheet(context, 0)),
 
                             /// DEVELOPER SELECTION INPUT
-                            SelectionInputWidget(
-                                margin: const EdgeInsets.only(bottom: 10.0),
-                                isVertical: true,
-                                title: Titles.developer,
-                                value: Titles.notSelected,
-                                onTap: () => _objectCreateViewModel
-                                    .showSearchCompanyScreenSheet(context, 1)),
+                            // SelectionInputWidget(
+                            //     margin: const EdgeInsets.only(bottom: 10.0),
+                            //     isVertical: true,
+                            //     title: Titles.developer,
+                            //     value: _objectCreateViewModel.object == null ?
+                            //         _objectCreateViewModel.developer?.name ??
+                            //             Titles.notSelected : _objectCreateViewModel.object?.developer?.name ??
+                            //             Titles.notSelected,
+                            //     onTap: () => _objectCreateViewModel
+                            //         .showSearchCompanyScreenSheet(context, 1)),
 
                             /// CUSTOMER SELECTION INPUT
                             SelectionInputWidget(
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.customer,
-                                value: _objectCreateViewModel.customer?.name ??
-                                    Titles.notSelected,
+                                value:  
+                                    _objectCreateViewModel.customer?.name ??
+                                         _objectCreateViewModel.object?.customer?.name ??
+                                        Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchCompanyScreenSheet(context, 2)),
 
@@ -200,8 +240,10 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.designer,
-                                value: _objectCreateViewModel.designer?.name ??
-                                    Titles.notSelected,
+                                value: 
+                                    _objectCreateViewModel.designer?.name ??
+                                         _objectCreateViewModel.object?.designer?.name ??
+                                        Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchCompanyScreenSheet(context, 3)),
 
@@ -218,52 +260,43 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
 
                             /// FLOOR COUNT INPUT
                             InputWidget(
-                              textEditingController:
-                                  _floorCountTextEditingController,
-                              focusNode: _floorCountFocusNode,
-                              textInputType: TextInputType.number,
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              height: 56.0,
-                              placeholder: Titles.floorCount,
-                              onTap: () => setState,
-                              onChange: (text) => {
-                                // TODO OBJECT FLOOR COUNT
-                              },
-                            ),
+                                textEditingController:
+                                    _floorCountTextEditingController,
+                                focusNode: _floorCountFocusNode,
+                                textInputType: TextInputType.number,
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                height: 56.0,
+                                placeholder: Titles.floorCount,
+                                onTap: () => setState,
+                                onChange: (text) => setState(() {})),
 
                             /// AREA INPUT
                             InputWidget(
-                              textEditingController:
-                                  _areaCountTextEditingController,
-                              focusNode: _areaCountFocusNode,
-                              textInputType: TextInputType.number,
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              height: 56.0,
-                              placeholder: Titles.area,
-                              onTap: () => setState,
-                              onChange: (text) => {
-                                // TODO OBJECT AREA
-                              },
-                            ),
+                                textEditingController:
+                                    _areaCountTextEditingController,
+                                focusNode: _areaCountFocusNode,
+                                textInputType: TextInputType.number,
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                height: 56.0,
+                                placeholder: Titles.area,
+                                onTap: () => setState,
+                                onChange: (text) => setState(() {})),
 
                             /// BUILDING TIME INPUT
                             InputWidget(
-                              textEditingController:
-                                  _buildingTimeTextEditingController,
-                              focusNode: _buildingTimeFocusNode,
-                              textInputType: TextInputType.number,
-                              margin: const EdgeInsets.only(bottom: 10.0),
-                              height: 56.0,
-                              placeholder: Titles.buildingTime,
-                              onTap: () => setState,
-                              onChange: (text) => {
-                                // TODO OBJECT BUILDING TIME
-                              },
-                            ),
+                                textEditingController:
+                                    _buildingTimeTextEditingController,
+                                focusNode: _buildingTimeFocusNode,
+                                textInputType: TextInputType.number,
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                height: 56.0,
+                                placeholder: Titles.buildingTime,
+                                onTap: () => setState,
+                                onChange: (text) => setState(() {})),
 
                             /// STAGES BUTTON
                             SelectionInputWidget(
-                                margin: const EdgeInsets.only(bottom: 30.0),
+                                margin: const EdgeInsets.only(bottom: 20.0),
                                 isVertical: true,
                                 title: Titles.stage,
                                 value:
@@ -296,13 +329,11 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                     focusNode: _kisoFocusNode,
                                     textInputType: TextInputType.number,
                                     margin: const EdgeInsets.only(
-                                        top: 20.0, bottom: 30.0),
+                                        top: 20.0, bottom: 20.0),
                                     height: 56.0,
                                     placeholder: Titles.kisoDocumentNumber,
                                     onTap: () => setState,
-                                    onChange: (text) => {
-                                          // TODO OBJECT KISO
-                                        })
+                                    onChange: (text) => setState(() {}))
                                 : const SizedBox(height: 30.0),
 
                             /// CREATE FOLDER CHECKBOX
@@ -320,7 +351,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 ]),
                                 onTap: () =>
                                     _objectCreateViewModel.checkCreateFolder()),
-                            const SizedBox(height: 30.0),
+                            const SizedBox(height: 24.0),
 
                             /// FILE LIST
                             ListView.builder(
@@ -367,8 +398,11 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                   Align(
                       alignment: Alignment.bottomCenter,
                       child: ButtonWidget(
-                          isDisabled: true,
-                          title: widget.object == null
+                          isDisabled: _nameTextEditingController.text.isEmpty ||
+                              _addressTextEditingController.text.isEmpty ||
+                              !_coordinatesTextEditingController.text
+                                  .contains(','),
+                          title: _objectCreateViewModel.object == null
                               ? Titles.createObject
                               : Titles.save,
                           margin: EdgeInsets.only(
@@ -398,13 +432,12 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                   (object) => {
                                         if (mounted)
                                           {
-                                            Navigator.pushAndRemoveUntil(
+                                            Navigator.pushReplacement(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         ObjectPageViewScreenWidget(
-                                                            object: object)),
-                                                (route) => false)
+                                                            object: object)))
                                           }
                                       })
                               : _objectCreateViewModel.editObject(
@@ -412,8 +445,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                   _addressTextEditingController.text,
                                   int.tryParse(
                                       _areaCountTextEditingController.text),
-                                  int.tryParse(
-                                      _buildingTimeTextEditingController.text),
+                                  int.tryParse(_buildingTimeTextEditingController.text),
                                   int.tryParse(_floorCountTextEditingController.text),
                                   (double.tryParse(_coordinatesTextEditingController.text.split(', ')[0]))!,
                                   (double.tryParse(_coordinatesTextEditingController.text.split(', ')[1]))!,
@@ -421,7 +453,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                   (object) => {
                                         if (mounted)
                                           {
-                                            widget.onUpdate(object),
+                                            widget.onCreate(object),
                                             Navigator.pop(context)
                                           }
                                       }))),
@@ -430,7 +462,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                   /// INDICATOR
                   _objectCreateViewModel.loadingStatus ==
                           LoadingStatus.searching
-                      ? const LoadingIndicatorWidget()
+                      ? const Padding(
+                          padding: EdgeInsets.only(bottom: 60.0),
+                          child: LoadingIndicatorWidget())
                       : Container()
                 ]))));
   }

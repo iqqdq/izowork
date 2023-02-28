@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/models/objects_filter_view_model.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_screen.dart';
-import 'package:izowork/screens/search_user/search_user_screen.dart';
+import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:provider/provider.dart';
 
 class ObjectsFilter {
-  final User? designer;
-  final User? contractor;
-  final User? customer;
+  final Company? designer;
+  final Company? contractor;
+  final Company? customer;
   final List<int> tags;
   final List<int> tags2;
   final List<String> params;
@@ -110,7 +110,7 @@ class _ObjectsFilterPageViewScreenBodyState
                               },
                           onResetTap: () => _objectsFilterViewModel.reset(() =>
                               {widget.onPop(null), Navigator.pop(context)})),
-                      SearchUserScreenWidget(
+                      SearchCompanyScreenWidget(
                           title: _index == 0
                               ? Titles.designer
                               : _index == 1
@@ -118,9 +118,9 @@ class _ObjectsFilterPageViewScreenBodyState
                                   : Titles.contractor,
                           isRoot: false,
                           onFocus: () => setState,
-                          onPop: (user) => {
+                          onPop: (company) => {
                                 _objectsFilterViewModel
-                                    .setUser(user, _index)
+                                    .setCompany(company, _index)
                                     .then((value) => {
                                           _pageController.animateToPage(0,
                                               duration: const Duration(

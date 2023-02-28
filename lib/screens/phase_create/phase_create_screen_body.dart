@@ -7,21 +7,20 @@ import 'package:izowork/entities/response/phase_checklist.dart';
 import 'package:izowork/entities/response/phase_contractor.dart';
 import 'package:izowork/entities/response/phase_product.dart';
 import 'package:izowork/models/phase_create_view_model.dart';
-import 'package:izowork/screens/phase/views/check_list_item_widget.dart';
 import 'package:izowork/screens/phase_create/views/phase_contractor_list_item_widget.dart';
 import 'package:izowork/screens/phase_create/views/phase_product_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
-import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class PhaseCreateScreenBodyWidget extends StatefulWidget {
   final Function(
       List<PhaseProduct>, List<PhaseContractor>, List<PhaseChecklist>) onPop;
 
-  const PhaseCreateScreenBodyWidget({Key? key, required this.onPop}) : super(key: key);
+  const PhaseCreateScreenBodyWidget({Key? key, required this.onPop})
+      : super(key: key);
 
   @override
   _PhaseCreateScreenBodyState createState() => _PhaseCreateScreenBodyState();
@@ -53,10 +52,14 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
             backgroundColor: Colors.transparent,
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
-                child: BackButtonWidget(onTap: () =>{
-                  widget.onPop(_phaseCreateViewModel.phaseProducts, _phaseCreateViewModel.phaseContractors, _phaseCreateViewModel.phaseChecklists),
-                   Navigator.pop(context)
-                })),
+                child: BackButtonWidget(
+                    onTap: () => {
+                          widget.onPop(
+                              _phaseCreateViewModel.phaseProducts,
+                              _phaseCreateViewModel.phaseContractors,
+                              _phaseCreateViewModel.phaseChecklists),
+                          Navigator.pop(context)
+                        })),
             title: Text(_phaseCreateViewModel.phase.name,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
@@ -194,68 +197,16 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                             const EdgeInsets.only(bottom: 20.0),
                                         onTap: () => _phaseCreateViewModel
                                             .createContractor(context, null)),
-
-                                    /// CHECK
-                                    _phaseCreateViewModel
-                                            .phaseChecklists.isEmpty
-                                        ? Container()
-                                        : const TitleWidget(
-                                            padding: EdgeInsets.zero,
-                                            text: Titles.checkList,
-                                            isSmall: true),
-
-                                    /// CHECKBOX LIST
-                                    ListView.builder(
-                                        shrinkWrap: true,
-                                        padding:
-                                            const EdgeInsets.only(bottom: 20.0),
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: _phaseCreateViewModel
-                                            .phaseChecklists.length,
-                                        itemBuilder: (context, index) {
-                                          return CheckListItemWidget(
-                                              isSelected: _phaseCreateViewModel
-                                                  .phaseChecklists[index]
-                                                  .isCompleted,
-                                              title: _phaseCreateViewModel
-                                                  .phaseChecklists[index].name,
-                                              onTap: () => _phaseCreateViewModel
-                                                  .showCompleteTaskScreenSheet(
-                                                      context, index));
-                                        }),
-
-                                    /// SET TASK BUTTON
-                                    BorderButtonWidget(
-                                        title: Titles.addTask,
-                                        margin:
-                                            const EdgeInsets.only(bottom: 20.0),
-                                        onTap: () => _phaseCreateViewModel
-                                            .showTaskCreateScreen(context)),
                                   ]))),
 
-                      // /// ADD PHASE BUTTON
-                      // Align(
-                      //     alignment: Alignment.bottomCenter,
-                      //     child: ButtonWidget(
-                      //         isDisabled: true,
-                      //         title:  Titles.save,
-                      //         margin: EdgeInsets.only(
-                      //             left: 16.0,
-                      //             right: 16.0,
-                      //             bottom: MediaQuery.of(context)
-                      //                         .padding
-                      //                         .bottom ==
-                      //                     0.0
-                      //                 ? 20.0
-                      //                 : MediaQuery.of(context).padding.bottom),
-                      //         onTap: () => {})),
                       const SeparatorWidget(),
 
                       /// INDICATOR
                       _phaseCreateViewModel.loadingStatus ==
                               LoadingStatus.searching
-                          ? const LoadingIndicatorWidget()
+                          ? const Padding(
+                              padding: EdgeInsets.only(bottom: 60.0),
+                              child: LoadingIndicatorWidget())
                           : Container()
                     ])))));
   }

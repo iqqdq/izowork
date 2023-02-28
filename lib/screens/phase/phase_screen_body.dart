@@ -57,7 +57,6 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                 color: HexColors.white,
                 child: Stack(children: [
                   ListView(
-                      shrinkWrap: true,
                       padding: EdgeInsets.only(
                           top: 14.0,
                           bottom: MediaQuery.of(context).padding.bottom == 0.0
@@ -140,7 +139,10 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                               width: 0.65,
                                               color: HexColors.grey20)),
                                       child: Row(children: [
-                                        Text('???',
+                                        Text(
+                                            _phaseViewModel.phaseProducts[index]
+                                                    .product?.name ??
+                                                '-',
                                             style: TextStyle(
                                                 fontSize: 14.0,
                                                 color: HexColors.black,
@@ -284,9 +286,12 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                   const SeparatorWidget(),
 
                   /// INDICATOR
-                  _phaseViewModel.loadingStatus == LoadingStatus.searching
-                      ? const LoadingIndicatorWidget()
-                      : Container()
+                  Padding(
+                      padding: const EdgeInsets.only(bottom: 60.0),
+                      child: _phaseViewModel.loadingStatus ==
+                              LoadingStatus.searching
+                          ? const LoadingIndicatorWidget()
+                          : const SizedBox(height: 60.0))
                 ]))));
   }
 }

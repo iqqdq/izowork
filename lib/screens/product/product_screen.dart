@@ -90,7 +90,7 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                   padding: EdgeInsets.zero,
                   isSmall: true),
               const SizedBox(height: 4.0),
-              Text(widget.product.company.name,
+              Text(widget.product.company?.name ?? '-',
                   style: TextStyle(
                       color: HexColors.primaryDark,
                       fontSize: 14.0,
@@ -105,7 +105,7 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                   padding: EdgeInsets.zero,
                   isSmall: true),
               const SizedBox(height: 4.0),
-              Text(widget.product.productType.name,
+              Text(widget.product.productType?.name ?? '-',
                   style: TextStyle(
                       color: HexColors.black,
                       fontSize: 14.0,

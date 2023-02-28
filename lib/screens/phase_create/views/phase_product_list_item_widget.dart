@@ -117,8 +117,8 @@ class _PhaseProductListItemState extends State<PhaseProductListItemWidget> {
                       margin: const EdgeInsets.only(bottom: 10.0),
                       isVertical: true,
                       title: Titles.product,
-                      value:
-                          widget.phaseProduct?.productId ?? Titles.notSelected,
+                      value: widget.phaseProduct?.product?.name ??
+                          Titles.notSelected,
                       onTap: () => widget.onProductSearchTap()),
 
                   /// COUNT INPUT

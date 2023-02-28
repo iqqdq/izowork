@@ -6,7 +6,6 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/request/checklist_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/request/phase_checklist_information_file_request.dart';
 import 'package:izowork/entities/request/phase_contractor_request.dart';
@@ -16,18 +15,17 @@ import 'package:izowork/entities/request/phase_product_update_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/entities/response/phase_checklist.dart';
-import 'package:izowork/entities/response/phase_checklist_information.dart';
 import 'package:izowork/entities/response/phase_contractor.dart';
 import 'package:izowork/entities/response/phase_product.dart';
 import 'package:izowork/repositories/phase_repository.dart';
-import 'package:izowork/screens/complete_checklist/complete_checklist_screen.dart';
+import 'package:izowork/screens/product_selection/product_selection_screen.dart';
 import 'package:izowork/screens/product_type_selection/product_type_selection_screen.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
+import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class PhaseCreateViewModel with ChangeNotifier {
-  // INIT
   final Phase phase;
   final List<PhaseProduct> phaseProducts;
   final List<PhaseContractor> phaseContractors;
@@ -39,14 +37,8 @@ class PhaseCreateViewModel with ChangeNotifier {
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
-  List<PhaseChecklistInformation> _phaseChecklistInformations = [];
-
   List<File> get files {
     return _files;
-  }
-
-  List<PhaseChecklistInformation> get phaseChecklistInformations {
-    return _phaseChecklistInformations;
   }
 
   PhaseCreateViewModel(this.phase, this.phaseProducts, this.phaseContractors,
@@ -54,65 +46,6 @@ class PhaseCreateViewModel with ChangeNotifier {
 
   // MARK: -
   // MARK: - API CALL
-
-  Future getPhaseChecklistInformationList(String id) async {
-    loadingStatus = LoadingStatus.searching;
-    notifyListeners();
-
-    await PhaseRepository()
-        .getPhaseChecklistInformations(id)
-        .then((response) => {
-              if (response is List<PhaseChecklistInformation>)
-                {
-                  _phaseChecklistInformations = response,
-                  loadingStatus = LoadingStatus.completed,
-                }
-            })
-        .then((value) => notifyListeners());
-  }
-
-  Future createPhaseChecklistInfo(
-      BuildContext context, int index, String description) async {
-    loadingStatus = LoadingStatus.searching;
-    notifyListeners();
-
-    await PhaseRepository()
-        .createPhaseChecklistInformation(PhaseChecklistInformationRequest(
-            phaseChecklistId: phaseChecklists[index].id,
-            description: description))
-        .then((response) => {
-              if (response is PhaseChecklistInformation)
-                {
-                  if (_files.isNotEmpty)
-                    {
-                      _files.forEach((element) async {
-                        await uploadFile(context, response.id, element)
-                            .then((value) => {
-                                  current++,
-                                  if (current == _files.length)
-                                    {
-                                      loadingStatus = LoadingStatus.completed,
-                                      notifyListeners(),
-                                      Navigator.pop(context)
-                                    }
-                                });
-                      })
-                    }
-                  else
-                    {
-                      loadingStatus = LoadingStatus.completed,
-                      notifyListeners(),
-                      Navigator.pop(context)
-                    }
-                }
-              else if (response is ErrorResponse)
-                {
-                  loadingStatus = LoadingStatus.error,
-                  notifyListeners(),
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
-                }
-            });
-  }
 
   Future createContractor(BuildContext context, int? index) async {
     loadingStatus = LoadingStatus.searching;
@@ -344,56 +277,33 @@ class PhaseCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  void showCompleteTaskScreenSheet(BuildContext context, int index) {
-    PhaseChecklistInformation? phaseChecklistInformation;
-
-    getPhaseChecklistInformationList(phaseChecklists[index].id)
-        .then((value) => {
-              if (_phaseChecklistInformations.isNotEmpty)
-                {phaseChecklistInformation = _phaseChecklistInformations.first},
-              showCupertinoModalBottomSheet(
-                  topRadius: const Radius.circular(16.0),
-                  barrierColor: Colors.black.withOpacity(0.6),
-                  backgroundColor: HexColors.white,
-                  context: context,
-                  builder: (context) => CompleteChecklistScreenWidget(
-                      title: phaseChecklists[index].name,
-                      phaseChecklistInformation: phaseChecklistInformation,
-                      onTap: (text, files) => {
-                            files.forEach((element) {
-                              if (element.path != null) {
-                                _files.add(File(element.path!));
-                              }
-                            }),
-                            createPhaseChecklistInfo(context, index, text)
-                          }))
-            });
-  }
-
   void showProductSearchScreenSheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => ProductTypeSelectionScreenWidget(
-            isRoot: true,
+        builder: (context) => ProductSelectionScreenWidget(
             title: Titles.product,
-            // productType: phaseProducts[index].product,
-            onSelect: (productType) => {
-                  if (productType != null)
-                    {
-                      Navigator.pop(context),
-                      phaseProducts[index].productId = productType.id,
-                      updateProduct(context, index)
-                    }
+            onPop: (product) => {
+                  Navigator.pop(context),
+                  phaseProducts[index].productId = product.id,
+                  phaseProducts[index].product = product,
+                  updateProduct(context, index)
                 }));
   }
 
   void showTaskCreateScreen(BuildContext context) {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => const TaskCreateScreenWidget()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TaskCreateScreenWidget(
+                onCreate: (task) => {
+                      if (task != null)
+                        {
+                          Toast().showTopToast(
+                              context, '${Titles.task} "${task.name}" создана')
+                        }
+                    })));
   }
 }

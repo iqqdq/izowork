@@ -7,15 +7,20 @@ import 'package:provider/provider.dart';
 class ObjectPageScreenWidget extends StatelessWidget {
   final Object object;
   final VoidCallback onCoordCopy;
+  final Function(Object) onUpdate;
 
   const ObjectPageScreenWidget(
-      {Key? key, required this.object, required this.onCoordCopy})
+      {Key? key,
+      required this.object,
+      required this.onCoordCopy,
+      required this.onUpdate})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => ObjectPageViewModel(object),
-        child: ObjectPageScreenBodyWidget(onCoordCopy: onCoordCopy));
+        child: ObjectPageScreenBodyWidget(
+            onUpdate: onUpdate, onCoordCopy: onCoordCopy));
   }
 }

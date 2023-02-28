@@ -20,7 +20,7 @@ class DealRepository {
       required String search,
       List<String>? params}) async {
     var url =
-        dealsUrl + '?&offset=${pagination.offset}&limit=${pagination.size}';
+        dealsUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
     if (search.isNotEmpty) {
       url += '&q=$search';

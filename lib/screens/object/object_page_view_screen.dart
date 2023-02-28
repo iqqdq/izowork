@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/screens/documents/documents_screen.dart';
 import 'package:izowork/screens/object/object_page/object_page_screen.dart';
 import 'package:izowork/screens/object/object_actions/object_actions_screen.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -24,13 +23,15 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
   final PageController _pageController = PageController(initialPage: 0);
   List<Widget>? _pages;
   int _index = 0;
+  String? _title;
 
   @override
   void initState() {
     _pages = [
       ObjectPageScreenWidget(
           object: widget.object,
-          onCoordCopy: () => Toast().showTopToast(context, Titles.didCopied)),
+          onCoordCopy: () => Toast().showTopToast(context, Titles.didCopied),
+          onUpdate: (object) => setState(() => _title = object.name)),
       const ObjectActionsScreenWidget()
     ];
 
@@ -62,7 +63,7 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
                     child:
                         BackButtonWidget(onTap: () => Navigator.pop(context))),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(widget.object.name,
+                  Text(_title ?? widget.object.name,
                       style: TextStyle(
                           color: HexColors.black,
                           fontSize: 18.0,

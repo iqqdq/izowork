@@ -1,12 +1,13 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/entities/response/company.dart';
+import 'package:izowork/entities/response/object_stage.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen_body.dart';
 
 class ObjectsFilterViewModel with ChangeNotifier {
   final ObjectsFilter? objectsFilter;
-  List<String> stages;
+  List<ObjectStage> objectStages;
 
   List<String> _options = [];
   List<int> tags = [];
@@ -14,19 +15,19 @@ class ObjectsFilterViewModel with ChangeNotifier {
   List<String> options2 = ['Больше 50%', 'Меньше 50%'];
   List<int> tags2 = [];
 
-  User? _designer;
-  User? _contractor;
-  User? _customer;
+  Company? _designer;
+  Company? _contractor;
+  Company? _customer;
 
-  User? get designer {
+  Company? get designer {
     return _designer;
   }
 
-  User? get contractor {
+  Company? get contractor {
     return _contractor;
   }
 
-  User? get customer {
+  Company? get customer {
     return _customer;
   }
 
@@ -34,8 +35,10 @@ class ObjectsFilterViewModel with ChangeNotifier {
     return _options;
   }
 
-  ObjectsFilterViewModel(this.stages, this.objectsFilter) {
-    _options = stages;
+  ObjectsFilterViewModel(this.objectStages, this.objectsFilter) {
+    objectStages.forEach((element) {
+      _options.add(element.name);
+    });
 
     if (objectsFilter != null) {
       _designer = objectsFilter?.designer;
@@ -51,16 +54,16 @@ class ObjectsFilterViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  Future setUser(User? user, int index) async {
+  Future setCompany(Company? company, int index) async {
     switch (index) {
       case 0:
-        _designer = user;
+        _designer = company;
         break;
       case 1:
-        _contractor = user;
+        _contractor = company;
         break;
       case 2:
-        _customer = user;
+        _customer = company;
         break;
       default:
     }
@@ -104,10 +107,14 @@ class ObjectsFilterViewModel with ChangeNotifier {
     }
 
     if (tags.isNotEmpty) {
-      var state = '&stage=';
+      var state = '&object_stage_id=';
 
-      tags.forEach((element) {
-        state += '${options[element]},';
+      tags.forEach((tag) {
+        objectStages.forEach((objectStage) {
+          if (options[tag] == objectStage.name) {
+            state += '${objectStage.id},';
+          }
+        });
       });
 
       state = state.characters.last == ','

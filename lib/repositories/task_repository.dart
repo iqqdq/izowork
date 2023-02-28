@@ -25,7 +25,7 @@ class TaskRepository {
       required String search,
       List<String>? params}) async {
     var url =
-        tasksUrl + '?&offset=${pagination.offset}&limit=${pagination.size}';
+        tasksUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
     if (search.isNotEmpty) {
       url += '&q=$search';

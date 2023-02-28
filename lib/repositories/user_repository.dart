@@ -44,7 +44,7 @@ class UserRepository {
   Future<dynamic> getUsers(
       {required Pagination pagination, String? search}) async {
     var url =
-        usersUrl + '?&offset=${pagination.offset}&limit=${pagination.size}';
+        usersUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
     if (search != null) {
       url += '&q=$search';

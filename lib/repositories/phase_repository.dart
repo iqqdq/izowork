@@ -1,6 +1,7 @@
-import 'package:izowork/entities/request/checklist_request.dart';
+import 'package:izowork/entities/request/phase_checklist_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/request/phase_checklist_information_file_request.dart';
+import 'package:izowork/entities/request/phase_checklist_state_request.dart';
 import 'package:izowork/entities/request/phase_contractor_request.dart';
 import 'package:izowork/entities/request/phase_contractor_update_request.dart';
 import 'package:izowork/entities/request/phase_product_request.dart';
@@ -95,6 +96,18 @@ class PhaseRepository {
 
     try {
       return PhaseChecklistInformation.fromJson(json['checklist_information']);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> updatePhaseChecklistState(
+      PhaseChecklistStateRequest phaseChecklistStateRequest) async {
+    dynamic json = await WebService()
+        .patch(phaseChecklistStateUpdateUrl, phaseChecklistStateRequest);
+
+    try {
+      return PhaseChecklist.fromJson(json['phase_checklist']);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }

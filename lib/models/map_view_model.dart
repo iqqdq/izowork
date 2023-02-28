@@ -123,7 +123,7 @@ class MapViewModel with ChangeNotifier {
                       context,
                       MaterialPageRoute(
                           builder: (context) => ObjectCreateScreenWidget(
-                              onUpdate: (object) =>
+                              onCreate: (object) =>
                                   {debugPrint('Object did create')})))
                 }));
   }

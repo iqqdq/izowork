@@ -49,7 +49,7 @@ class ObjectListItemWidget extends StatelessWidget {
                           text: Titles.manager,
                           padding: EdgeInsets.zero,
                           isSmall: true),
-                      const SizedBox(height: 10.0),
+                      const SizedBox(height: 2.0),
 
                       const SubtitleWidget(
                           text: '???', padding: EdgeInsets.zero),

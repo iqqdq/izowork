@@ -138,35 +138,28 @@ class ObjectsViewModel with ChangeNotifier {
 
   void showObjectsFilterSheet(BuildContext context, Function() onFilter) {
     if (_objectStages != null) {
-      if (_objectStages!.isNotEmpty) {
-        List<String> options = [];
-        _objectStages!.forEach((element) {
-          options.add(element.name);
-        });
-
-        showCupertinoModalBottomSheet(
-            topRadius: const Radius.circular(16.0),
-            barrierColor: Colors.black.withOpacity(0.6),
-            backgroundColor: HexColors.white,
-            context: context,
-            builder: (context) => ObjectsFilterPageViewScreenWidget(
-                options: options,
-                objectsFilter: _objectsFilter,
-                onPop: (objectsFilter) => {
-                      if (objectsFilter == null)
-                        {
-                          // CLEAR
-                          resetFilter(),
-                          onFilter()
-                        }
-                      else
-                        {
-                          // FILTER
-                          _objectsFilter = objectsFilter,
-                          onFilter()
-                        }
-                    }));
-      }
+      showCupertinoModalBottomSheet(
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (context) => ObjectsFilterPageViewScreenWidget(
+              objectStages: _objectStages!,
+              objectsFilter: _objectsFilter,
+              onPop: (objectsFilter) => {
+                    if (objectsFilter == null)
+                      {
+                        // CLEAR
+                        resetFilter(),
+                        onFilter()
+                      }
+                    else
+                      {
+                        // FILTER
+                        _objectsFilter = objectsFilter,
+                        onFilter()
+                      }
+                  }));
     }
   }
 
@@ -183,6 +176,6 @@ class ObjectsViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => ObjectCreateScreenWidget(
-                onUpdate: (object) => {debugPrint('Object did create')})));
+                onCreate: (object) => {debugPrint('Object did create')})));
   }
 }

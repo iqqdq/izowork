@@ -23,7 +23,7 @@ class ProductRepository {
       String? companyId,
       List<String>? params}) async {
     var url =
-        productsUrl + '?&offset=${pagination.offset}&limit=${pagination.size}';
+        productsUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
     if (search.isNotEmpty) {
       url += '&q=$search';
