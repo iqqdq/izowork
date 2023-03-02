@@ -4,14 +4,27 @@ import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:intl/intl.dart';
 import 'package:izowork/extensions/string_casing_extension.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-class MonthYearSelectionWidget extends StatelessWidget {
+class MonthYearSelectionWidget extends StatefulWidget {
   final DateTime dateTime;
   final VoidCallback onTap;
 
   const MonthYearSelectionWidget(
       {Key? key, required this.dateTime, required this.onTap})
       : super(key: key);
+
+  @override
+  _MonthYearSelectionState createState() => _MonthYearSelectionState();
+}
+
+class _MonthYearSelectionState extends State<MonthYearSelectionWidget> {
+  @override
+  void initState() {
+    super.initState();
+
+    initializeDateFormatting(locale, null);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +56,7 @@ class MonthYearSelectionWidget extends StatelessWidget {
             child: InkWell(
                 highlightColor: HexColors.grey20,
                 splashColor: Colors.transparent,
-                onTap: () => onTap(),
+                onTap: () => widget.onTap(),
                 borderRadius: BorderRadius.circular(16.0),
                 child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -58,7 +71,7 @@ class MonthYearSelectionWidget extends StatelessWidget {
                             Text(Titles.month, style: _titleTextStyle),
                             Text(
                                 DateFormat.MMMM(locale)
-                                    .format(dateTime)
+                                    .format(widget.dateTime)
                                     .toCapitalized(),
                                 style: _subtitleTextStyle)
                           ])),
@@ -75,7 +88,7 @@ class MonthYearSelectionWidget extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                             Text(Titles.year, style: _titleTextStyle),
-                            Text(DateFormat.y().format(dateTime),
+                            Text(DateFormat.y().format(widget.dateTime),
                                 style: _subtitleTextStyle)
                           ]))
                     ])))));

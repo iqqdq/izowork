@@ -6,13 +6,15 @@ import 'package:provider/provider.dart';
 
 class DealCreateScreenWidget extends StatelessWidget {
   final Deal? deal;
+  final Function(Deal?) onCreate;
 
-  const DealCreateScreenWidget({Key? key, this.deal}) : super(key: key);
+  const DealCreateScreenWidget({Key? key, this.deal, required this.onCreate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => DealCreateViewModel(deal),
-        child: DealCreateScreenBodyWidget(deal: deal));
+        child: DealCreateScreenBodyWidget(onCreate: onCreate));
   }
 }

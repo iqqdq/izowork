@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/models/deal_event_view_model.dart';
 import 'package:izowork/screens/deal_event/deal_event_screen_body_widget.dart';
 import 'package:provider/provider.dart';
 
 class DealEventScreenWidget extends StatelessWidget {
   final DateTime dateTime;
+  final List<Deal> deals;
 
-  const DealEventScreenWidget({Key? key, required this.dateTime})
+  const DealEventScreenWidget(
+      {Key? key, required this.dateTime, required this.deals})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => DealEventViewModel(),
+        create: (context) => DealEventViewModel(deals),
         child: DealEventScreenBodyWidget(dateTime: dateTime));
   }
 }

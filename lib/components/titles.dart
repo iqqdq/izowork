@@ -197,6 +197,7 @@ abstract class Titles {
   static const dealTotalCount = 'Сделок по всем филиалам';
   static const fromDate = 'Дата от';
   static const toDate = 'Дата до';
+  static const unit = 'Ед.изм.';
 
   static const textReason = 'Напишите причину';
   static const taskCompleteInfo = 'Информация о выполнении';

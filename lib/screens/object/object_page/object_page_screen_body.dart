@@ -42,6 +42,10 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
     _objectPageViewModel =
         Provider.of<ObjectPageViewModel>(context, listen: true);
 
+    String _kiso = _objectPageViewModel.object?.kiso ??
+        _objectPageViewModel.selectedObject.kiso ??
+        '';
+
     return Scaffold(
         backgroundColor: HexColors.white,
         body: Material(
@@ -189,13 +193,15 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                             isSmall: true),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
-                            text: '???'),
+                            text: _kiso.isEmpty ? '-' : _kiso),
 
                         /// FILE LIST
-                        const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 10.0),
-                            text: Titles.files,
-                            isSmall: true),
+                        _objectPageViewModel.selectedObject.files.isEmpty
+                            ? Container()
+                            : const TitleWidget(
+                                padding: EdgeInsets.only(bottom: 10.0),
+                                text: Titles.files,
+                                isSmall: true),
 
                         ListView.builder(
                             shrinkWrap: true,

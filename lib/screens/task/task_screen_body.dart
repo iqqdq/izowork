@@ -158,22 +158,17 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             text: _description.isEmpty ? '-' : _description),
 
                         /// FILE LIST
-                        _taskViewModel.task == null
+                        _taskViewModel.task == null ||
+                                _taskViewModel.task!.files.isEmpty ||
+                                _taskViewModel.selectedTask.files.isEmpty
                             ? Container()
-                            : _taskViewModel.task!.files.isEmpty
-                                ? _taskViewModel.selectedTask.files.isEmpty
-                                    ? Container()
-                                    : const TitleWidget(
-                                        padding: EdgeInsets.only(bottom: 10.0),
-                                        text: Titles.files,
-                                        isSmall: true)
-                                : const TitleWidget(
-                                    padding: EdgeInsets.only(bottom: 10.0),
-                                    text: Titles.files,
-                                    isSmall: true),
+                            : const TitleWidget(
+                                padding: EdgeInsets.only(bottom: 10.0),
+                                text: Titles.files,
+                                isSmall: true),
                         ListView.builder(
                             shrinkWrap: true,
-                            padding: EdgeInsets.zero,
+                            padding: const EdgeInsets.only(bottom: 16.0),
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: _taskViewModel.task?.files.length ??
                                 _taskViewModel.selectedTask.files.length,
@@ -188,7 +183,6 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                                   onTap: () =>
                                       _taskViewModel.openFile(context, index));
                             }),
-                        const SizedBox(height: 16.0),
                       ]),
 
                   /// EDIT TASK BUTTON

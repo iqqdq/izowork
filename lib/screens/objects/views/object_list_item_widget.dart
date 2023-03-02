@@ -51,8 +51,9 @@ class ObjectListItemWidget extends StatelessWidget {
                           isSmall: true),
                       const SizedBox(height: 2.0),
 
-                      const SubtitleWidget(
-                          text: '???', padding: EdgeInsets.zero),
+                      SubtitleWidget(
+                          text: object.manager?.name ?? '-',
+                          padding: EdgeInsets.zero),
 
                       const SizedBox(height: 10.0),
                       const SeparatorWidget(),

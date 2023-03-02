@@ -16,7 +16,6 @@ enum SearchType {
 }
 
 class SearchViewModel with ChangeNotifier {
-  // INIT
   final SearchType searchType;
 
   // LoadingStatus loadingStatus = LoadingStatus.searching;

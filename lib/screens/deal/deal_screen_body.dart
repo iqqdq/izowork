@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/deal.dart';
+import 'package:izowork/entities/response/document.dart';
+import 'package:izowork/entities/response/product.dart';
 import 'package:izowork/models/deal_view_model.dart';
 import 'package:izowork/screens/deal/views/process_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -15,9 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:spreadsheet_table/spreadsheet_table.dart';
 
 class DealScreenBodyWidget extends StatefulWidget {
-  final Deal deal;
-
-  const DealScreenBodyWidget({Key? key, required this.deal}) : super(key: key);
+  const DealScreenBodyWidget({Key? key}) : super(key: key);
 
   @override
   _DealScreenBodyState createState() => _DealScreenBodyState();
@@ -27,29 +27,37 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
   late DealViewModel _dealViewModel;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     _dealViewModel = Provider.of<DealViewModel>(context, listen: true);
 
-    final _startDay = DateTime.now().day.toString().length == 1
-        ? '0${DateTime.now().day}'
-        : '${DateTime.now().day}';
-    final _startMonth = DateTime.now().month.toString().length == 1
-        ? '0${DateTime.now().month}'
-        : '${DateTime.now().month}';
-    final _startYear = '${DateTime.now().year}';
+    final startDateTime = DateTime.parse(_dealViewModel.deal?.createdAt ??
+        _dealViewModel.selectedDeal.createdAt);
 
-    final _endDay = DateTime.now().day.toString().length == 1
-        ? '0${DateTime.now().day}'
-        : '${DateTime.now().day}';
-    final _endMonth = DateTime.now().month.toString().length == 1
-        ? '0${DateTime.now().month}'
-        : '${DateTime.now().month}';
-    final _endYear = '${DateTime.now().year}';
+    final _startDay = startDateTime.day.toString().length == 1
+        ? '0${startDateTime.day}'
+        : '${startDateTime.day}';
+    final _startMonth = startDateTime.month.toString().length == 1
+        ? '0${startDateTime.month}'
+        : '${startDateTime.month}';
+    final _startYear = '${startDateTime.year}';
+
+    final endDateTime = DateTime.parse(
+        _dealViewModel.deal?.finishAt ?? _dealViewModel.selectedDeal.finishAt);
+
+    final _endDay = endDateTime.day.toString().length == 1
+        ? '0${endDateTime.day}'
+        : '${endDateTime.day}';
+    final _endMonth = endDateTime.month.toString().length == 1
+        ? '0${endDateTime.month}'
+        : '${endDateTime.month}';
+    final _endYear = '${endDateTime.year}';
+
+    final _comment = _dealViewModel.deal?.comment ??
+        _dealViewModel.selectedDeal.comment ??
+        '';
+
+    List<DealProduct> _products = _dealViewModel.deal?.dealProducts ??
+        _dealViewModel.selectedDeal.dealProducts;
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -61,7 +69,12 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
                 child: BackButtonWidget(onTap: () => Navigator.pop(context))),
-            title: Text('Название сделки',
+            title: Text(
+                Titles.deal +
+                    ' ' +
+                    (_dealViewModel.deal?.number ??
+                            _dealViewModel.selectedDeal.number)
+                        .toString(),
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontFamily: 'PT Root UI',
@@ -109,10 +122,10 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                 left: 16.0, right: 16.0, bottom: 4.0),
                             text: Titles.responsible,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 16.0),
-                            text: 'Имя Фамилия'),
+                            text: '???'),
 
                         /// OBJECT
                         const TitleWidget(
@@ -120,10 +133,10 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                 left: 16.0, right: 16.0, bottom: 4.0),
                             text: Titles.object,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 16.0),
-                            text: 'Название объекта'),
+                            text: '???'),
 
                         /// PHASE
                         const TitleWidget(
@@ -131,10 +144,10 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                 left: 16.0, right: 16.0, bottom: 4.0),
                             text: Titles.phase,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 16.0),
-                            text: 'Название этапа'),
+                            text: _dealViewModel.dealStage?.name ?? '???'),
 
                         /// COMPANY
                         const TitleWidget(
@@ -142,142 +155,172 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                 left: 16.0, right: 16.0, bottom: 4.0),
                             text: Titles.company,
                             isSmall: true),
-                        const SubtitleWidget(
+                        SubtitleWidget(
                             padding: EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 16.0),
-                            text: 'Название компании'),
+                            text: '???'),
 
-                        /// СCOMMENT
+                        /// COMMENT
                         const TitleWidget(
                             padding: EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 4.0),
                             text: Titles.comment,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 16.0),
-                            text:
-                                'Принимая во внимание показатели успешности, дальнейшее развитие различных форм деятельности влечет за собой процесс внедрения и модернизации форм воздействия.'),
+                            text: _comment),
 
-                        /// TABLE
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: 36.0 * 4,
-                            child: SpreadsheetTable(
-                              cellBuilder: (_, int row, int col) => Container(
-                                  height: 36.0,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 2.0),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 0.65,
-                                          color: HexColors.grey20)),
-                                  child: Center(
-                                      child: Text('Кол-во',
-                                          style: TextStyle(
-                                              fontSize: 14.0,
-                                              color: HexColors.black,
-                                              fontFamily: 'PT Root UI')))),
-                              legendBuilder: (_) => Container(
-                                  height: 36.0,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 0.65,
-                                          color: HexColors.grey20)),
-                                  child: Row(children: [
-                                    Text(Titles.product,
-                                        style: TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w500,
-                                            color: HexColors.black,
-                                            fontFamily: 'PT Root UI'))
-                                  ])),
-                              rowHeaderBuilder: (_, index) => Container(
-                                  height: 36.0,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 0.65,
-                                          color: HexColors.grey20)),
-                                  child: Center(
-                                      child: Text('Название товара',
-                                          style: TextStyle(
-                                              fontSize: 14.0,
-                                              color: HexColors.black,
-                                              fontFamily: 'PT Root UI')))),
-                              colHeaderBuilder: (_, index) => Container(
-                                  height: 36.0,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 2.0),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 0.65,
-                                          color: HexColors.grey20)),
-                                  child: Center(
-                                      child: Text('$index',
-                                          style: TextStyle(
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.w500,
-                                              color: HexColors.black,
-                                              fontFamily: 'PT Root UI')))),
-                              rowHeaderWidth: 144.0,
-                              colsHeaderHeight: 36.0,
-                              cellHeight: 36.0,
-                              cellWidth: 84.0,
-                              rowsCount: 3,
-                              colCount: 10,
-                            )),
+                        /// PRODUCT TABLE
+                        _products.isEmpty
+                            ? Container()
+                            : SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height: 36.0 * (_products.length + 1),
+                                child: SpreadsheetTable(
+                                  cellBuilder: (_, int row, int col) =>
+                                      Container(
+                                          height: 36.0,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 2.0),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  width: 0.65,
+                                                  color: HexColors.grey20)),
+                                          child: Center(
+                                              child: Text(
+                                                  col == 0
+                                                      ? _products[row]
+                                                              .product
+                                                              ?.unit ??
+                                                          '-'
+                                                      : col == 1
+                                                          ? _products[row]
+                                                              .count
+                                                              .toString()
+                                                          : _products[row]
+                                                                  .product
+                                                                  ?.price
+                                                                  .toString() ??
+                                                              '0',
+                                                  style: TextStyle(
+                                                      fontSize: 14.0,
+                                                      color: HexColors.black,
+                                                      fontFamily:
+                                                          'PT Root UI')))),
+                                  legendBuilder: (_) => Container(
+                                      height: 36.0,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 0.65,
+                                              color: HexColors.grey20)),
+                                      child: Row(children: [
+                                        Text(Titles.product,
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w500,
+                                                color: HexColors.black,
+                                                fontFamily: 'PT Root UI'))
+                                      ])),
+                                  rowHeaderBuilder: (_, index) => Container(
+                                      height: 36.0,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 0.65,
+                                              color: HexColors.grey20)),
+                                      child: Row(children: [
+                                        Text(
+                                            _products[index].product?.name ??
+                                                '-',
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                color: HexColors.black,
+                                                fontFamily: 'PT Root UI'))
+                                      ])),
+                                  colHeaderBuilder: (_, index) => Container(
+                                      height: 36.0,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 2.0),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              width: 0.65,
+                                              color: HexColors.grey20)),
+                                      child: Center(
+                                          child: Text(
+                                              index == 0
+                                                  ? Titles.unit
+                                                  : index == 1
+                                                      ? Titles.count
+                                                      : '${Titles.price}, ${Titles.currency}',
+                                              style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: HexColors.black,
+                                                  fontFamily: 'PT Root UI')))),
+                                  rowHeaderWidth:
+                                      MediaQuery.of(context).size.width * 0.4,
+                                  colsHeaderHeight: 36.0,
+                                  cellHeight: 36.0,
+                                  cellWidth:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  rowsCount: _products.length,
+                                  colCount: 3,
+                                )),
 
                         /// FILE LIST
-                        const TitleWidget(
-                            padding: EdgeInsets.only(
-                                top: 20.0,
-                                left: 16.0,
-                                right: 16.0,
-                                bottom: 10.0),
-                            text: Titles.files,
-                            isSmall: true),
-                        ListView.builder(
-                            shrinkWrap: true,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              return const FileListItemWidget(
-                                  fileName: 'file.pdf');
-                            }),
+                        _dealViewModel.deal == null ||
+                                _dealViewModel.deal!.files.isEmpty ||
+                                _dealViewModel.selectedDeal.files.isEmpty
+                            ? Container()
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.only(bottom: 16.0),
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _dealViewModel.deal?.files.length ??
+                                    _dealViewModel.selectedDeal.files.length,
+                                itemBuilder: (context, index) {
+                                  return FileListItemWidget(
+                                      fileName: _dealViewModel
+                                              .deal?.files[index].name ??
+                                          _dealViewModel
+                                              .selectedDeal.files[index].name,
+                                      isDownloading:
+                                          _dealViewModel.downloadIndex == index,
+                                      onTap: () => _dealViewModel.openFile(
+                                          context, index));
+                                }),
 
                         /// PROCESS LIST
-                        const TitleWidget(
-                            padding: EdgeInsets.only(
-                                top: 16.0,
-                                left: 16.0,
-                                right: 16.0,
-                                bottom: 10.0),
-                            text: Titles.processes,
-                            isSmall: true),
-                        ListView.builder(
-                            shrinkWrap: true,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: 2,
-                            itemBuilder: (context, index) {
-                              return ProcessListItemWidget(
-                                isExpanded:
-                                    _dealViewModel.expanded.contains(index),
-                                isReady: index == 0,
-                                onExpandTap: () => _dealViewModel.expand(index),
-                                onMenuTap: (index) => _dealViewModel
-                                    .showProcessActionScreenSheet(context),
-                                onAddProcessTap: () => _dealViewModel
-                                    .showSelectionScreenSheet(context),
-                              );
-                            }),
+                        // const TitleWidget(
+                        //     padding: EdgeInsets.only(
+                        //         top: 16.0,
+                        //         left: 16.0,
+                        //         right: 16.0,
+                        //         bottom: 10.0),
+                        //     text: Titles.processes,
+                        //     isSmall: true),
+                        // ListView.builder(
+                        //     shrinkWrap: true,
+                        //     padding:
+                        //         const EdgeInsets.symmetric(horizontal: 16.0),
+                        //     physics: const NeverScrollableScrollPhysics(),
+                        //     itemCount: 2,
+                        //     itemBuilder: (context, index) {
+                        //       return ProcessListItemWidget(
+                        //         isExpanded:
+                        //             _dealViewModel.expanded.contains(index),
+                        //         isReady: index == 0,
+                        //         onExpandTap: () => _dealViewModel.expand(index),
+                        //         onMenuTap: (index) => _dealViewModel
+                        //             .showProcessActionScreenSheet(context),
+                        //         onAddProcessTap: () => _dealViewModel
+                        //             .showSelectionScreenSheet(context),
+                        //       );
+                        //     }),
 
                         /// CLOSE DEAL BUTTON
                         BorderButtonWidget(

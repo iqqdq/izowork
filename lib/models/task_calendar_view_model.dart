@@ -28,14 +28,14 @@ class TaskCalendarViewModel with ChangeNotifier {
 
   final List<DateTime> _eventDateTimes = [];
 
-  LoadingStatus loadingStatus = LoadingStatus.searching;
-
-  final List<Task> _tasks = [];
-
   DateTime _pickedDateTime =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   DateTime? _selectedDateTime;
+
+  LoadingStatus loadingStatus = LoadingStatus.searching;
+
+  final List<Task> _tasks = [];
 
   List<DateTime> get eventDateTimes {
     return _eventDateTimes;

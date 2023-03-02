@@ -12,7 +12,7 @@ class DealScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => DealViewModel(),
-        child: DealScreenBodyWidget(deal: deal));
+        create: (context) => DealViewModel(deal),
+        child: const DealScreenBodyWidget());
   }
 }

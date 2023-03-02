@@ -1,55 +1,75 @@
 import 'dart:convert';
-
 import 'package:izowork/entities/response/document.dart';
+import 'package:izowork/entities/response/product.dart';
 
 Deal dealFromJson(String str) => Deal.fromJson(json.decode(str));
 
-String dealToJson(Deal data) => json.encode(data.toJson());
-
 class Deal {
   Deal({
+    this.comment,
+    this.companyId,
+    required this.createdAt,
+    required this.files,
+    required this.finishAt,
     required this.id,
     required this.number,
-    required this.createdAt,
-    required this.finishAt,
-    required this.responsibleId,
-    required this.objectId,
-    required this.companyId,
-    required this.comment,
-    required this.files,
+    this.objectId,
+    required this.dealProducts,
+    this.responsibleId,
   });
 
+  String? comment;
+  String? companyId;
+  String createdAt;
+  List<Document> files;
+  String finishAt;
   String id;
   int number;
-  DateTime createdAt;
-  DateTime finishAt;
-  String responsibleId;
-  String objectId;
-  String companyId;
-  String comment;
-  List<dynamic> files;
+  String? objectId;
+  List<DealProduct> dealProducts;
+  String? responsibleId;
 
   factory Deal.fromJson(Map<String, dynamic> json) => Deal(
+        comment: json["comment"],
+        companyId: json["company_id"],
+        createdAt: json["created_at"],
+        files: json["files"] == null
+            ? []
+            : List<Document>.from(
+                json["files"].map((x) => Document.fromJson(x))),
+        finishAt: json["finish_at"],
         id: json["id"],
         number: json["number"],
-        createdAt: DateTime.parse(json["created_at"]),
-        finishAt: DateTime.parse(json["finish_at"]),
-        responsibleId: json["responsible_id"],
         objectId: json["object_id"],
-        companyId: json["company_id"],
-        comment: json["comment"],
-        files: List<Document>.from(json["files"].map((x) => x)),
+        dealProducts: json["products"] == null
+            ? []
+            : List<DealProduct>.from(
+                json["products"].map((x) => DealProduct.fromJson(x))),
+        responsibleId: json["responsible_id"],
       );
+}
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "number": number,
-        "created_at": createdAt.toIso8601String(),
-        "finish_at": finishAt.toIso8601String(),
-        "responsible_id": responsibleId,
-        "object_id": objectId,
-        "company_id": companyId,
-        "comment": comment,
-        "files": List<Document>.from(files.map((x) => x)),
-      };
+class DealProduct {
+  DealProduct({
+    this.count,
+    this.dealId,
+    required this.id,
+    this.product,
+    this.productId,
+  });
+
+  int? count;
+  String? dealId;
+  String id;
+  Product? product;
+  String? productId;
+
+  factory DealProduct.fromJson(Map<String, dynamic> json) => DealProduct(
+        count: json["count"],
+        dealId: json["deal_id"],
+        id: json["id"],
+        product:
+            json["product"] == null ? null : Product.fromJson(json["product"]),
+        productId: json["product_id"],
+      );
 }

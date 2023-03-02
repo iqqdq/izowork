@@ -15,6 +15,6 @@ class TaskCreateScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => TaskCreateViewModel(task),
-        child: TaskCreateScreenBodyWidget(task: task, onCreate: onCreate));
+        child: TaskCreateScreenBodyWidget(onCreate: onCreate));
   }
 }

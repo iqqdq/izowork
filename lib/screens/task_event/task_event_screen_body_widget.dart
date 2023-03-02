@@ -36,18 +36,18 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
         height: MediaQuery.of(context).size.height * 0.8,
         child: Stack(children: [
           /// TASK LIST VIEW
-          Scrollbar(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.only(
-                      left: 16.0, right: 16.0, top: 70.0, bottom: 16.0),
-                  itemCount: _taskEventViewModel.tasks.length,
-                  itemBuilder: (context, index) {
-                    return TaskListItemWidget(
-                        task: _taskEventViewModel.tasks[index],
-                        onTap: () => _taskEventViewModel.showTaskScreenWidget(
-                            context, index));
-                  })),
+          SizedBox.expand(
+              child: Scrollbar(
+                  child: ListView.builder(
+                      padding: const EdgeInsets.only(
+                          left: 16.0, right: 16.0, top: 70.0, bottom: 16.0),
+                      itemCount: _taskEventViewModel.tasks.length,
+                      itemBuilder: (context, index) {
+                        return TaskListItemWidget(
+                            task: _taskEventViewModel.tasks[index],
+                            onTap: () => _taskEventViewModel
+                                .showTaskScreenWidget(context, index));
+                      }))),
 
           Container(
             width: double.infinity,

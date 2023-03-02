@@ -32,21 +32,21 @@ class CheckListItemWidget extends StatelessWidget {
                         color: HexColors.black,
                         fontSize: 16.0,
                         fontFamily: 'PT Root UI'))),
-            state == PhaseChecklistState().created
+            state == PhaseChecklistState.created
                 ? Container()
                 : Container(
                     margin: const EdgeInsets.only(left: 16.0),
                     child: StatusWidget(
-                        title: state == PhaseChecklistState().underReview
+                        title: state == PhaseChecklistState.underReview
                             ? 'На проверке'
-                            : state == PhaseChecklistState().rejected
+                            : state == PhaseChecklistState.rejected
                                 ? 'Отклонен'
                                 : 'Принят',
-                        status: state == PhaseChecklistState().underReview
+                        status: state == PhaseChecklistState.underReview
                             ? 0
-                            : state == PhaseChecklistState().rejected
+                            : state == PhaseChecklistState.rejected
                                 ? 3
-                                : state == PhaseChecklistState().accepted
+                                : state == PhaseChecklistState.accepted
                                     ? 2
                                     : 3))
           ]),

@@ -181,7 +181,9 @@ class _TaskCalendarScreenBodyState extends State<TaskCalendarScreenBodyWidget> {
 
           /// INDICATOR
           _taskCalendarViewModel.loadingStatus == LoadingStatus.searching
-              ? const LoadingIndicatorWidget()
+              ? const Padding(
+                  padding: EdgeInsets.only(bottom: 60.0),
+                  child: LoadingIndicatorWidget())
               : Container()
         ])));
   }

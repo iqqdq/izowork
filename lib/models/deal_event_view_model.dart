@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 
 class DealEventViewModel with ChangeNotifier {
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
-  LoadingStatus loadingStatus = LoadingStatus.empty;
+  final List<Deal> deals;
 
-  // MARK: -
-  // MARK: - FUNCTIONS
+  DealEventViewModel(this.deals);
 
   // MARK: -
   // MARK: - PUSH
 
-  void showDealScreenWidget(BuildContext context) {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => DealScreenWidget(deal: Deal())));
+  void showDealScreenWidget(BuildContext context, int index) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DealScreenWidget(deal: deals[index])));
   }
 }

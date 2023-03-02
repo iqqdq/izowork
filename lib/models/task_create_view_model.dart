@@ -33,7 +33,6 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io' as io;
 
 class TaskCreateViewModel with ChangeNotifier {
-  // INIT
   final Task? task;
 
   final DateTime _minDateTime = DateTime(
@@ -213,7 +212,7 @@ class TaskCreateViewModel with ChangeNotifier {
     await TaskRepository()
         .updateTask(TaskRequest(
           id: task!.id,
-          deadline: pickedDateTime.toUtc().toIso8601String(),
+          deadline: _pickedDateTime.toUtc().toLocal().toIso8601String() + 'Z',
           name: name,
           description: description,
           state: _state ?? task!.state,

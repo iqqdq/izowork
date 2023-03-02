@@ -59,6 +59,35 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
   late ObjectCreateViewModel _objectCreateViewModel;
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_objectCreateViewModel.object != null) {
+        _nameTextEditingController.text = _objectCreateViewModel.object!.name;
+
+        _addressTextEditingController.text =
+            _objectCreateViewModel.object!.address;
+
+        _coordinatesTextEditingController.text =
+            '${_objectCreateViewModel.object!.lat}, ${_objectCreateViewModel.object!.long}';
+
+        _floorCountTextEditingController.text =
+            _objectCreateViewModel.object!.floors.toString();
+
+        _areaCountTextEditingController.text =
+            _objectCreateViewModel.object!.area.toString();
+
+        _buildingTimeTextEditingController.text =
+            _objectCreateViewModel.object!.constructionPeriod.toString();
+
+        _kisoTextEditingController.text =
+            _objectCreateViewModel.object!.kiso ?? '';
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _nameTextEditingController.dispose();
     _nameFocusNode.dispose();
@@ -81,48 +110,6 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
   Widget build(BuildContext context) {
     _objectCreateViewModel =
         Provider.of<ObjectCreateViewModel>(context, listen: true);
-
-    if (_objectCreateViewModel.object != null) {
-      if (_nameTextEditingController.text.isEmpty &&
-          !_objectCreateViewModel.isUpdated) {
-        _nameTextEditingController.text = _objectCreateViewModel.object!.name;
-      }
-
-      if (_addressTextEditingController.text.isEmpty &&
-          !_objectCreateViewModel.isUpdated) {
-        _addressTextEditingController.text =
-            _objectCreateViewModel.object!.address;
-      }
-
-      if (_coordinatesTextEditingController.text.isEmpty &&
-          !_objectCreateViewModel.isUpdated) {
-        _coordinatesTextEditingController.text =
-            '${_objectCreateViewModel.object!.lat}, ${_objectCreateViewModel.object!.long}';
-      }
-
-      if (_floorCountTextEditingController.text.isEmpty &&
-          !_objectCreateViewModel.isUpdated) {
-        _floorCountTextEditingController.text =
-            _objectCreateViewModel.object!.floors.toString();
-      }
-
-      if (_areaCountTextEditingController.text.isEmpty &&
-          !_objectCreateViewModel.isUpdated) {
-        _areaCountTextEditingController.text =
-            _objectCreateViewModel.object!.area.toString();
-      }
-
-      if (_buildingTimeTextEditingController.text.isEmpty &&
-          !_objectCreateViewModel.isUpdated) {
-        _buildingTimeTextEditingController.text =
-            _objectCreateViewModel.object!.constructionPeriod.toString();
-      }
-
-      if (_kisoTextEditingController.text.isEmpty &&
-          !_objectCreateViewModel.isUpdated) {
-        // _kisoTextEditingController.text =_objectCreateViewModel.object!.kiso;
-      }
-    }
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -204,9 +191,10 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.generalContractor,
-                                value: 
+                                value:
                                     _objectCreateViewModel.contractor?.name ??
-                                          _objectCreateViewModel.object?.contractor?.name ??
+                                        _objectCreateViewModel
+                                            .object?.contractor?.name ??
                                         Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchCompanyScreenSheet(context, 0)),
@@ -228,10 +216,10 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.customer,
-                                value:  
-                                    _objectCreateViewModel.customer?.name ??
-                                         _objectCreateViewModel.object?.customer?.name ??
-                                        Titles.notSelected,
+                                value: _objectCreateViewModel.customer?.name ??
+                                    _objectCreateViewModel
+                                        .object?.customer?.name ??
+                                    Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchCompanyScreenSheet(context, 2)),
 
@@ -240,10 +228,10 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.designer,
-                                value: 
-                                    _objectCreateViewModel.designer?.name ??
-                                         _objectCreateViewModel.object?.designer?.name ??
-                                        Titles.notSelected,
+                                value: _objectCreateViewModel.designer?.name ??
+                                    _objectCreateViewModel
+                                        .object?.designer?.name ??
+                                    Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchCompanyScreenSheet(context, 3)),
 
@@ -391,7 +379,8 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                             BorderButtonWidget(
                                 title: Titles.addFile,
                                 margin: const EdgeInsets.only(bottom: 30.0),
-                                onTap: () => _objectCreateViewModel.addFile()),
+                                onTap: () =>
+                                    _objectCreateViewModel.addFile(context)),
                           ])),
 
                   /// CREATE TASK BUTTON
@@ -429,6 +418,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                       _coordinatesTextEditingController.text
                                           .split(', ')[1]))!,
                                   _nameTextEditingController.text,
+                                  _kisoTextEditingController.text,
                                   (object) => {
                                         if (mounted)
                                           {
@@ -450,6 +440,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                   (double.tryParse(_coordinatesTextEditingController.text.split(', ')[0]))!,
                                   (double.tryParse(_coordinatesTextEditingController.text.split(', ')[1]))!,
                                   _nameTextEditingController.text,
+                                  _kisoTextEditingController.text,
                                   (object) => {
                                         if (mounted)
                                           {

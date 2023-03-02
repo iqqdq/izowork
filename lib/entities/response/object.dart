@@ -1,31 +1,35 @@
 import 'dart:convert';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
+import 'package:izowork/entities/response/user.dart';
 
 Object objectFromJson(String str) => Object.fromJson(json.decode(str));
 
 String objectToJson(Object data) => json.encode(data.toJson());
 
 class Object {
-  Object({
-    required this.id,
-    required this.name,
-    required this.address,
-    required this.long,
-    required this.lat,
-    this.floors,
-    this.area,
-    this.constructionPeriod,
-    this.contractor,
-    this.designer,
-    this.customer,
-    this.contractorId,
-    this.designerId,
-    this.customerId,
-    this.objectTypeId,
-    this.objectStageId,
-    required this.files,
-  });
+  Object(
+      {required this.id,
+      required this.name,
+      required this.address,
+      required this.long,
+      required this.lat,
+      this.floors,
+      this.area,
+      this.constructionPeriod,
+      this.contractor,
+      this.designer,
+      this.customer,
+      this.contractorId,
+      this.designerId,
+      this.customerId,
+      this.objectTypeId,
+      this.objectStageId,
+      required this.files,
+      this.managerId,
+      this.manager,
+      this.kiso,
+      required this.hideDir});
 
   String id;
   String name;
@@ -44,6 +48,10 @@ class Object {
   String? objectTypeId;
   String? objectStageId;
   List<Document> files;
+  String? managerId;
+  User? manager;
+  String? kiso;
+  bool hideDir;
 
   factory Object.fromJson(Map<String, dynamic> json) => Object(
         id: json["id"],
@@ -72,6 +80,11 @@ class Object {
             ? []
             : List<Document>.from(
                 json["files"].map((x) => Document.fromJson(x))),
+        managerId: json["manager_id"],
+        manager:
+            json["manager"] == null ? null : User.fromJson(json["manager"]),
+        kiso: json["kiso"],
+        hideDir: json["hideDir"] == null ? false : true,
       );
 
   Map<String, dynamic> toJson() => {
@@ -89,5 +102,9 @@ class Object {
         "object_type_id": objectTypeId,
         "object_stage_id": objectStageId,
         "files": List<Document>.from(files.map((x) => x)),
+        "manager_id": managerId,
+        "manager": manager,
+        "kiso": kiso,
+        "hideDir": hideDir
       };
 }

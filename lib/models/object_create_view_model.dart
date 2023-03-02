@@ -11,7 +11,6 @@ import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/request/object_file_request.dart';
 import 'package:izowork/entities/request/object_request.dart';
-import 'package:izowork/entities/request/object_update_request.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -29,10 +28,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io' as io;
 
 class ObjectCreateViewModel with ChangeNotifier {
-  // INIT
   final Object? object;
-
-  bool isUpdated = false;
 
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
@@ -111,6 +107,16 @@ class ObjectCreateViewModel with ChangeNotifier {
   }
 
   ObjectCreateViewModel(this.object) {
+    if (object != null) {
+      _isKiso = object!.kiso == null
+          ? false
+          : object!.kiso!.isEmpty
+              ? false
+              : true;
+
+      _isCreateFolder = object!.hideDir;
+    }
+
     getTypeList();
   }
 
@@ -151,7 +157,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                   })
                 }
             })
-        .then((value) => {isUpdated = true, notifyListeners()});
+        .then((value) => notifyListeners());
   }
 
   Future createNewObject(
@@ -163,6 +169,7 @@ class ObjectCreateViewModel with ChangeNotifier {
       double lat,
       double long,
       String name,
+      String kiso,
       Function(Object) onCreate) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
@@ -180,7 +187,9 @@ class ObjectCreateViewModel with ChangeNotifier {
             long: long,
             name: name,
             objectStageId: _objectStage!.id,
-            objectTypeId: _objectType!.id))
+            objectTypeId: _objectType!.id,
+            hideDir: _isCreateFolder,
+            kiso: kiso))
         .then((response) => {
               if (response is Object)
                 {
@@ -216,12 +225,13 @@ class ObjectCreateViewModel with ChangeNotifier {
       double lat,
       double long,
       String name,
+      String kiso,
       Function(Object) onCreate) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
     await ObjectRepository()
-        .updateObject(ObjectUpdateRequest(
+        .updateObject(ObjectRequest(
             id: object!.id,
             address: address,
             area: area ?? object?.area,
@@ -235,7 +245,9 @@ class ObjectCreateViewModel with ChangeNotifier {
             long: long,
             name: name,
             objectStageId: _objectStage?.id ?? object!.objectStageId!,
-            objectTypeId: _objectType?.id ?? object!.objectTypeId!))
+            objectTypeId: _objectType?.id ?? object!.objectTypeId!,
+            hideDir: _isCreateFolder,
+            kiso: kiso))
         .then((response) => {
               if (response is Object)
                 {onCreate(response)}
@@ -293,14 +305,40 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   // MARK: -
   // MARK: - ACTIONS
-
-  Future addFile() async {
+  Future addFile(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
+        allowMultiple: true,
         allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc']);
 
     if (result != null) {
-      debugPrint(result.files.length.toString());
+      if (result.files.isNotEmpty) {
+        if (object == null) {
+          result.files.forEach((element) {
+            if (element.path != null) {
+              _files.add(File(element.path!));
+              notifyListeners();
+            }
+          });
+        } else {
+          loadingStatus = LoadingStatus.searching;
+          notifyListeners();
+
+          result.files.forEach((element) async {
+            if (element.path != null) {
+              await uploadFile(context, object!.id, File(element.path!))
+                  .then((value) => {
+                        current++,
+                        if (current == result.files.length)
+                          {
+                            loadingStatus = LoadingStatus.completed,
+                            notifyListeners()
+                          }
+                      });
+            }
+          });
+        }
+      }
     }
   }
 

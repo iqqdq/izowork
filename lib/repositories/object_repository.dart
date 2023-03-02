@@ -2,7 +2,6 @@ import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/request/object_file_request.dart';
 import 'package:izowork/entities/request/object_request.dart';
-import 'package:izowork/entities/request/object_update_request.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
@@ -90,9 +89,8 @@ class ObjectRepository {
     }
   }
 
-  Future<dynamic> updateObject(ObjectUpdateRequest objectUpdateRequest) async {
-    dynamic json =
-        await WebService().patch(objectUpdateUrl, objectUpdateRequest);
+  Future<dynamic> updateObject(ObjectRequest objectRequest) async {
+    dynamic json = await WebService().patch(objectUpdateUrl, objectRequest);
 
     try {
       return Object.fromJson(json["object"]);

@@ -152,7 +152,7 @@ class PhaseViewModel with ChangeNotifier {
     await PhaseRepository()
         .updatePhaseChecklistState(PhaseChecklistStateRequest(
             id: _phaseChecklists[index].id,
-            state: PhaseChecklistState().accepted))
+            state: PhaseChecklistState.underReview))
         .then((response) => {
               if (response is PhaseChecklist)
                 {
@@ -221,7 +221,10 @@ class PhaseViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const DealCreateScreenWidget()));
+            builder: (context) => DealCreateScreenWidget(
+                onCreate: (deal) => {
+                      // TODO ON DEAL CREATE
+                    })));
   }
 
   void showTaskCreateScreen(BuildContext context) {

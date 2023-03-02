@@ -16,11 +16,9 @@ import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 
 class TaskCreateScreenBodyWidget extends StatefulWidget {
-  final Task? task;
   final Function(Task?) onCreate;
 
-  const TaskCreateScreenBodyWidget(
-      {Key? key, this.task, required this.onCreate})
+  const TaskCreateScreenBodyWidget({Key? key, required this.onCreate})
       : super(key: key);
 
   @override
@@ -37,6 +35,20 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
   late TaskCreateViewModel _taskCreateViewModel;
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_taskCreateViewModel.task != null) {
+        _nameTextEditingController.text = _taskCreateViewModel.task!.name;
+
+        _descriptionTextEditingController.text =
+            _taskCreateViewModel.task!.description ?? '';
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _nameTextEditingController.dispose();
     _nameFocusNode.dispose();
@@ -49,19 +61,6 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
   Widget build(BuildContext context) {
     _taskCreateViewModel =
         Provider.of<TaskCreateViewModel>(context, listen: true);
-
-    if (_taskCreateViewModel.task != null) {
-      if (_nameTextEditingController.text.isEmpty &&
-          !_taskCreateViewModel.isUpdated) {
-        _nameTextEditingController.text = _taskCreateViewModel.task!.name;
-      }
-
-      if (_descriptionTextEditingController.text.isEmpty &&
-          !_taskCreateViewModel.isUpdated) {
-        _descriptionTextEditingController.text =
-            _taskCreateViewModel.task!.description ?? '';
-      }
-    }
 
     final _day = _taskCreateViewModel.pickedDateTime.day.toString().length == 1
         ? '0${_taskCreateViewModel.pickedDateTime.day}'
@@ -84,7 +83,10 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                 child: BackButtonWidget(
                     onTap: () =>
                         {widget.onCreate(null), Navigator.pop(context)})),
-            title: Text(widget.task == null ? Titles.newTask : Titles.editTask,
+            title: Text(
+                _taskCreateViewModel.task == null
+                    ? Titles.newTask
+                    : Titles.editTask,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontFamily: 'PT Root UI',
@@ -259,7 +261,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                               ? _nameTextEditingController.text.isEmpty ||
                                   _taskCreateViewModel.state == null
                               : _nameTextEditingController.text.isEmpty,
-                          title: widget.task == null
+                          title: _taskCreateViewModel.task == null
                               ? Titles.createTask
                               : Titles.save,
                           margin: EdgeInsets.only(

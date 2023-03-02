@@ -15,13 +15,15 @@ class DealListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _day = deal.finishAt.day.toString().length == 1
-        ? '0${deal.finishAt.day}'
-        : '${deal.finishAt.day}';
-    final _month = deal.finishAt.month.toString().length == 1
-        ? '0${deal.finishAt.month}'
-        : '${deal.finishAt.month}';
-    final _year = '${deal.finishAt.year}';
+    final dateTime = DateTime.parse(deal.finishAt);
+
+    final _day = dateTime.day.toString().length == 1
+        ? '0${dateTime.day}'
+        : '${dateTime.day}';
+    final _month = dateTime.month.toString().length == 1
+        ? '0${dateTime.month}'
+        : '${dateTime.month}';
+    final _year = '${dateTime.year}';
 
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0),

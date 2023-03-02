@@ -4,6 +4,7 @@ String objectRequestToJson(ObjectRequest data) => json.encode(data.toJson());
 
 class ObjectRequest {
   ObjectRequest({
+    this.id,
     required this.address,
     this.area,
     this.constructionPeriod,
@@ -16,8 +17,11 @@ class ObjectRequest {
     required this.name,
     required this.objectStageId,
     required this.objectTypeId,
+    required this.hideDir,
+    this.kiso,
   });
 
+  String? id;
   String address;
   int? area;
   int? constructionPeriod;
@@ -30,8 +34,11 @@ class ObjectRequest {
   String name;
   String objectStageId;
   String objectTypeId;
+  bool hideDir;
+  String? kiso;
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "address": address,
         "area": area,
         "construction_period": constructionPeriod,
@@ -44,5 +51,7 @@ class ObjectRequest {
         "name": name,
         "object_stage_id": objectStageId,
         "object_type_id": objectTypeId,
+        "hide_dir": hideDir,
+        "kiso": kiso,
       };
 }

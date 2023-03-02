@@ -1,15 +1,18 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/deal.dart';
+import 'package:izowork/repositories/deal_repository.dart';
 import 'package:izowork/screens/deal_event/deal_event_screen.dart';
 import 'package:izowork/views/date_time_wheel_picker_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DealCalendarViewModel with ChangeNotifier {
-  // LoadingStatus loadingStatus = LoadingStatus.searching;
-  LoadingStatus loadingStatus = LoadingStatus.empty;
+  LoadingStatus loadingStatus = LoadingStatus.searching;
 
   final DateTime _minDateTime = DateTime(
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
@@ -25,16 +28,14 @@ class DealCalendarViewModel with ChangeNotifier {
       1,
       1);
 
-  final List<DateTime> _eventDateTimes = [
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 1)
-        .subtract(const Duration(days: 1)), // TODAY
-    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 3)
-  ];
+  final List<DateTime> _eventDateTimes = [];
 
   DateTime _pickedDateTime =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   DateTime? _selectedDateTime;
+
+  final List<Deal> _deals = [];
 
   List<DateTime> get eventDateTimes {
     return _eventDateTimes;
@@ -46,6 +47,87 @@ class DealCalendarViewModel with ChangeNotifier {
 
   DateTime? get selectedDateTime {
     return _selectedDateTime;
+  }
+
+  List<Deal> get deals {
+    return _deals;
+  }
+
+  DealCalendarViewModel() {
+    getDealList(_pickedDateTime);
+  }
+
+  // MARK: -
+  // MARK: - API CALL
+
+  Future getDealList(DateTime dateTime) async {
+    loadingStatus = LoadingStatus.searching;
+    _deals.clear();
+
+    Future.delayed(Duration.zero, () async {
+      notifyListeners();
+    });
+
+    await DealRepository().getYearDeals(params: [
+      "deadline=gte:${_pickedDateTime.year}-01-01T00:00:00Z&deadline=lte:${_pickedDateTime.year}-12-31T00:00:00Z"
+    ]).then((response) => {
+          if (response is List<Deal>)
+            {
+              if (_deals.isEmpty)
+                {
+                  response.forEach((deal) {
+                    _deals.add(deal);
+                  })
+                }
+              else
+                {
+                  response.forEach((newDeal) {
+                    bool found = false;
+
+                    _deals.forEach((deal) {
+                      if (newDeal.id == deal.id) {
+                        found = true;
+                      }
+                    });
+
+                    if (!found) {
+                      _deals.add(newDeal);
+                    }
+                  })
+                },
+
+              // UPDATE CALENDART EVENT DAYS
+              _deals.forEach((element) {
+                _eventDateTimes.add(DateTime(
+                    DateTime.parse(element.finishAt).year,
+                    DateTime.parse(element.finishAt).month,
+                    DateTime.parse(element.finishAt).day));
+              }),
+
+              loadingStatus = LoadingStatus.completed,
+              notifyListeners()
+            }
+          else
+            {loadingStatus = LoadingStatus.error},
+          notifyListeners()
+        });
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  int getDealCount(DateTime dateTime) {
+    int count = 0;
+
+    _deals.forEach((element) {
+      if (dateTime.year == DateTime.parse(element.finishAt).year &&
+          dateTime.month == DateTime.parse(element.finishAt).month &&
+          dateTime.day == DateTime.parse(element.finishAt).day) {
+        count++;
+      }
+    });
+
+    return count;
   }
 
   // MARK: -
@@ -106,20 +188,27 @@ class DealCalendarViewModel with ChangeNotifier {
   }
 
   void selectDateTime(BuildContext context, DateTime dateTime) {
-    for (var eventDateTime in _eventDateTimes) {
-      if (eventDateTime.year == dateTime.year &&
-          eventDateTime.month == dateTime.month &&
-          eventDateTime.day == dateTime.day) {
-        showCupertinoModalBottomSheet(
-            topRadius: const Radius.circular(16.0),
-            barrierColor: Colors.black.withOpacity(0.6),
-            backgroundColor: HexColors.white,
-            context: context,
-            builder: (context) => DealEventScreenWidget(dateTime: dateTime));
-      }
-    }
-
     _selectedDateTime = dateTime;
     notifyListeners();
+
+    List<Deal> deals = [];
+
+    _deals.forEach((element) {
+      if (dateTime.year == DateTime.parse(element.finishAt).year &&
+          dateTime.month == DateTime.parse(element.finishAt).month &&
+          dateTime.day == DateTime.parse(element.finishAt).day) {
+        deals.add(element);
+      }
+    });
+
+    if (deals.isNotEmpty) {
+      showCupertinoModalBottomSheet(
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (context) =>
+              DealEventScreenWidget(dateTime: dateTime, deals: deals));
+    }
   }
 }

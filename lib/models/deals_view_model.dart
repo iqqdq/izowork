@@ -6,11 +6,10 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/repositories/deal_repository.dart';
-import 'package:izowork/repositories/task_repository.dart';
+import 'package:izowork/screens/deal_calendar/deal_calendar_screen.dart';
 import 'package:izowork/screens/deals/deals_filter_sheet/deals_filter_page_view_widget.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen.dart';
-import 'package:izowork/screens/task_calendar/task_calendar_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DealsViewModel with ChangeNotifier {
@@ -28,6 +27,21 @@ class DealsViewModel with ChangeNotifier {
 
   // MARK: -
   // MARK: - API CALL
+
+  Future getDealById(String id) async {
+    loadingStatus = LoadingStatus.searching;
+
+    await DealRepository().getDeal(id).then((response) => {
+          if (response is Deal)
+            {
+              _deals.insert(0, response),
+              loadingStatus = LoadingStatus.completed,
+            }
+          else
+            {loadingStatus = LoadingStatus.error},
+          notifyListeners()
+        });
+  }
 
   Future getDealList(
       {required Pagination pagination, required String search}) async {
@@ -92,14 +106,17 @@ class DealsViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const TaskCalendarScreenWidget()));
+            builder: (context) => const DealCalendarScreenWidget()));
   }
 
   void showDealCreateScreen(BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const DealCreateScreenWidget()));
+            builder: (context) => DealCreateScreenWidget(
+                onCreate: (deal) => {
+                      if (deal != null) {getDealById(deal.id)}
+                    })));
   }
 
   void showDealsFilterSheet(BuildContext context) {
