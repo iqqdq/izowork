@@ -222,7 +222,7 @@ class PhaseViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => DealCreateScreenWidget(
-                onCreate: (deal) => {
+                onCreate: (deal, dealProducts) => {
                       // TODO ON DEAL CREATE
                     })));
   }

@@ -101,7 +101,7 @@ class ObjectRepository {
 
   Future<dynamic> addObjectFile(ObjectFileRequest objectFileRequest) async {
     dynamic json = await WebService()
-        .postFormData(taskFileUrl, await objectFileRequest.toFormData());
+        .postFormData(objectFileUrl, await objectFileRequest.toFormData());
 
     try {
       return Document.fromJson(json["object_file"]);

@@ -5,7 +5,6 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/models/deal_create_view_model.dart';
-import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_create/views/deal_product_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -18,7 +17,7 @@ import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 
 class DealCreateScreenBodyWidget extends StatefulWidget {
-  final Function(Deal?) onCreate;
+  final Function(Deal?, List<DealProduct>) onCreate;
 
   const DealCreateScreenBodyWidget({Key? key, required this.onCreate})
       : super(key: key);
@@ -84,7 +83,12 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
             backgroundColor: Colors.transparent,
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
-                child: BackButtonWidget(onTap: () => Navigator.pop(context))),
+                child: BackButtonWidget(
+                    onTap: () => {
+                          widget.onCreate(_dealCreateViewModel.deal,
+                              _dealCreateViewModel.dealProducts),
+                          Navigator.pop(context)
+                        })),
             title: Text(
                 _dealCreateViewModel.deal == null
                     ? Titles.newDeal
@@ -115,20 +119,13 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                           54.0),
                           children: [
                             /// START DATE SELECTION INPUT
-                            Opacity(
-                                opacity: 0.5,
-                                child: IgnorePointer(
-                                    ignoring: true,
-                                    child: SelectionInputWidget(
-                                        margin:
-                                            const EdgeInsets.only(bottom: 10.0),
-                                        isDate: true,
-                                        title: Titles.startDate,
-                                        value:
-                                            '$_startDay.$_startMonth.$_startYear',
-                                        onTap: () => _dealCreateViewModel
-                                            .showDateTimeSelectionSheet(
-                                                context, 0)))),
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                isDate: true,
+                                title: Titles.startDate,
+                                value: '$_startDay.$_startMonth.$_startYear',
+                                onTap: () => _dealCreateViewModel
+                                    .showDateTimeSelectionSheet(context, 0)),
 
                             /// END DATE SELECTION INPUT
                             SelectionInputWidget(
@@ -145,7 +142,8 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                 isVertical: true,
                                 title: Titles.responsible,
                                 value: _dealCreateViewModel.responsible?.name ??
-                                    _dealCreateViewModel.deal?.responsibleId ??
+                                    _dealCreateViewModel
+                                        .deal?.responsible?.name ??
                                     Titles.notSelected,
                                 onTap: () => _dealCreateViewModel
                                     .showSearchUserScreenSheet(context)),
@@ -155,25 +153,31 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
                                 title: Titles.object,
-                                value: _dealCreateViewModel.deal?.objectId ??
+                                value: _dealCreateViewModel.object?.name ??
+                                    _dealCreateViewModel.deal?.object?.name ??
                                     Titles.notSelected,
                                 onTap: () => _dealCreateViewModel
                                     .showSearchObjectScreenSheet(context)),
 
                             /// STAGE SELECTION INPUT
                             Opacity(
-                                opacity: 0.5,
+                                opacity: _dealCreateViewModel.dealStages.isEmpty
+                                    ? 0.5
+                                    : 1.0,
                                 child: IgnorePointer(
-                                    ignoring: true,
+                                    ignoring:
+                                        _dealCreateViewModel.dealStages.isEmpty,
                                     child: SelectionInputWidget(
                                         margin:
                                             const EdgeInsets.only(bottom: 10.0),
                                         isVertical: true,
                                         title: Titles.phase,
-                                        value: Titles.notSelected,
-                                        onTap: () => {
-                                              // TODO STAGE
-                                            }))),
+                                        value: _dealCreateViewModel
+                                                .dealStage?.name ??
+                                            Titles.notSelected,
+                                        onTap: () => _dealCreateViewModel
+                                            .showSelectionScreenSheet(
+                                                context)))),
 
                             /// COMPANY SELECTION INPUT
                             SelectionInputWidget(
@@ -181,7 +185,7 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                 isVertical: true,
                                 title: Titles.company,
                                 value: _dealCreateViewModel.company?.name ??
-                                    _dealCreateViewModel.deal?.companyId ??
+                                    _dealCreateViewModel.deal?.company?.name ??
                                     Titles.notSelected,
                                 onTap: () => _dealCreateViewModel
                                     .showSearchCompanyScreenSheet(context)),
@@ -206,19 +210,26 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                     padding: EdgeInsets.zero,
                                     physics:
                                         const NeverScrollableScrollPhysics(),
-                                    itemCount:
-                                        _dealCreateViewModel.deal!.files.length,
+                                    itemCount: _dealCreateViewModel
+                                        .dealProducts.length,
                                     itemBuilder: (context, index) {
                                       return DealProductListItemWidget(
-                                          index: index + 1,
-                                          onDeleteTap: () => {},
-                                          onProductSearchTap: () => {
-                                                // TODO SHOW SEARCH PRODUCT
-                                              }
-                                          // _dealCreateViewModel
-                                          //     .showProductSearchScreenSheet(
-                                          //         context, index)
-                                          );
+                                        index: index + 1,
+                                        dealProduct: _dealCreateViewModel
+                                            .dealProducts[index],
+                                        onProductSearchTap: () =>
+                                            _dealCreateViewModel
+                                                .showSearchProductScreenSheet(
+                                                    context, index),
+                                        onWeightChange: (weight) =>
+                                            _dealCreateViewModel
+                                                .changeProductWeight(
+                                                    context,
+                                                    index,
+                                                    int.tryParse(weight) ?? 0),
+                                        onDeleteTap: () => _dealCreateViewModel
+                                            .deleteDealProduct(context, index),
+                                      );
                                     }),
 
                             /// ADD PRODUCT BUTTON
@@ -227,9 +238,8 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                 : BorderButtonWidget(
                                     title: Titles.addProduct,
                                     margin: const EdgeInsets.only(bottom: 16.0),
-                                    onTap: () =>
-// TODO ADD PRODUCT
-                                        {}),
+                                    onTap: () => _dealCreateViewModel
+                                        .addDealProduct(context)),
 
                             /// FILE LIST
                             ListView.builder(
@@ -264,7 +274,7 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                           onTap: () => _dealCreateViewModel
                                               .openFile(context, index),
                                           onRemoveTap: () => _dealCreateViewModel
-                                              .deleteTaskFile(context, index)));
+                                              .deleteFile(context, index)));
                                 }),
 
                             /// ADD FILE BUTTON
@@ -282,8 +292,8 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                               isDisabled: _dealCreateViewModel.loadingStatus ==
                                           LoadingStatus.searching ||
                                       _dealCreateViewModel.deal == null
-                                  ? _textEditingController.text.isEmpty
-                                  // || _dealCreateViewModel.dealStage == null
+                                  ? _textEditingController.text.isEmpty ||
+                                      _dealCreateViewModel.dealStage == null
                                   : _textEditingController.text.isEmpty,
                               title: _dealCreateViewModel.deal == null
                                   ? Titles.createDeal
@@ -318,7 +328,10 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                       (deal) => {
                                             if (mounted)
                                               {
-                                                widget.onCreate(deal),
+                                                widget.onCreate(
+                                                    deal,
+                                                    _dealCreateViewModel
+                                                        .dealProducts),
                                                 Navigator.pop(context)
                                               }
                                           }))),

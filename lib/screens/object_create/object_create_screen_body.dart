@@ -390,7 +390,8 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                           isDisabled: _nameTextEditingController.text.isEmpty ||
                               _addressTextEditingController.text.isEmpty ||
                               !_coordinatesTextEditingController.text
-                                  .contains(','),
+                                  .contains(',') ||
+                              _objectCreateViewModel.objectStage == null,
                           title: _objectCreateViewModel.object == null
                               ? Titles.createObject
                               : Titles.save,
@@ -411,12 +412,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                       _buildingTimeTextEditingController.text),
                                   int.tryParse(
                                       _floorCountTextEditingController.text),
-                                  (double.tryParse(
-                                      _coordinatesTextEditingController.text
-                                          .split(', ')[0]))!,
-                                  (double.tryParse(
-                                      _coordinatesTextEditingController.text
-                                          .split(', ')[1]))!,
+                                  _coordinatesTextEditingController.text,
                                   _nameTextEditingController.text,
                                   _kisoTextEditingController.text,
                                   (object) => {
@@ -435,10 +431,11 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                   _addressTextEditingController.text,
                                   int.tryParse(
                                       _areaCountTextEditingController.text),
-                                  int.tryParse(_buildingTimeTextEditingController.text),
-                                  int.tryParse(_floorCountTextEditingController.text),
-                                  (double.tryParse(_coordinatesTextEditingController.text.split(', ')[0]))!,
-                                  (double.tryParse(_coordinatesTextEditingController.text.split(', ')[1]))!,
+                                  int.tryParse(
+                                      _buildingTimeTextEditingController.text),
+                                  int.tryParse(
+                                      _floorCountTextEditingController.text),
+                                  _coordinatesTextEditingController.text,
                                   _nameTextEditingController.text,
                                   _kisoTextEditingController.text,
                                   (object) => {

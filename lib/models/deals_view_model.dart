@@ -114,7 +114,7 @@ class DealsViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => DealCreateScreenWidget(
-                onCreate: (deal) => {
+                onCreate: (deal, dealProducts) => {
                       if (deal != null) {getDealById(deal.id)}
                     })));
   }

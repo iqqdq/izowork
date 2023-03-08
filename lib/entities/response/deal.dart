@@ -1,22 +1,28 @@
 import 'dart:convert';
+import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
+import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/product.dart';
+import 'package:izowork/entities/response/user.dart';
 
 Deal dealFromJson(String str) => Deal.fromJson(json.decode(str));
 
 class Deal {
-  Deal({
-    this.comment,
-    this.companyId,
-    required this.createdAt,
-    required this.files,
-    required this.finishAt,
-    required this.id,
-    required this.number,
-    this.objectId,
-    required this.dealProducts,
-    this.responsibleId,
-  });
+  Deal(
+      {this.comment,
+      this.companyId,
+      required this.createdAt,
+      required this.files,
+      required this.finishAt,
+      required this.id,
+      required this.number,
+      this.objectId,
+      required this.dealProducts,
+      this.responsibleId,
+      required this.closed,
+      this.company,
+      this.responsible,
+      this.object});
 
   String? comment;
   String? companyId;
@@ -28,6 +34,10 @@ class Deal {
   String? objectId;
   List<DealProduct> dealProducts;
   String? responsibleId;
+  bool closed;
+  Company? company;
+  User? responsible;
+  Object? object;
 
   factory Deal.fromJson(Map<String, dynamic> json) => Deal(
         comment: json["comment"],
@@ -46,20 +56,27 @@ class Deal {
             : List<DealProduct>.from(
                 json["products"].map((x) => DealProduct.fromJson(x))),
         responsibleId: json["responsible_id"],
+        closed: json["closed"],
+        company:
+            json["company"] == null ? null : Company.fromJson(json["company"]),
+        responsible: json["responsible"] == null
+            ? null
+            : User.fromJson(json["responsible"]),
+        object: json["object"] == null ? null : Object.fromJson(json["object"]),
       );
 }
 
 class DealProduct {
   DealProduct({
-    this.count,
-    this.dealId,
+    required this.count,
+    required this.dealId,
     required this.id,
     this.product,
     this.productId,
   });
 
-  int? count;
-  String? dealId;
+  int count;
+  String dealId;
   String id;
   Product? product;
   String? productId;

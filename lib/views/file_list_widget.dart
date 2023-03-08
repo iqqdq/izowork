@@ -4,6 +4,7 @@ import 'package:izowork/components/hex_colors.dart';
 
 class FileListItemWidget extends StatelessWidget {
   final String fileName;
+  final bool? isFolder;
   final bool? isDownloading;
   final VoidCallback? onTap;
   final VoidCallback? onRemoveTap;
@@ -11,6 +12,7 @@ class FileListItemWidget extends StatelessWidget {
   const FileListItemWidget(
       {Key? key,
       required this.fileName,
+      this.isFolder,
       this.isDownloading,
       this.onTap,
       this.onRemoveTap})
@@ -18,6 +20,12 @@ class FileListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool _isFolder = isFolder == null
+        ? false
+        : isFolder == false
+            ? false
+            : true;
+
     bool _isDownloading = isDownloading == null
         ? false
         : isDownloading == false
@@ -49,18 +57,20 @@ class FileListItemWidget extends StatelessWidget {
                                   strokeWidth: 4.0,
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                       HexColors.primaryMain)))
-                          : SvgPicture.asset('assets/ic_file.svg',
-                              width: 24.0, height: 24.0),
+                          : SvgPicture.asset(
+                              _isFolder
+                                  ? 'assets/ic_folder.svg'
+                                  : 'assets/ic_file.svg',
+                              width: 24.0,
+                              height: 24.0),
                       SizedBox(width: _isDownloading ? 2.0 : 6.0),
                       Expanded(
-                          child: Text(
-                              fileName.characters.length > 16
-                                  ? '...${fileName.substring(fileName.characters.length - (fileName.characters.length ~/ 2), fileName.characters.length)}'
-                                  : fileName,
+                          child: Text(fileName,
                               maxLines: 1,
                               style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w400,
+                                  overflow: TextOverflow.ellipsis,
                                   color: HexColors.black,
                                   fontFamily: 'PT Root UI'))),
                       const SizedBox(width: 12.0),

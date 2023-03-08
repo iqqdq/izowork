@@ -230,6 +230,7 @@ abstract class Titles {
   static const enterTypeName = 'Введите тип\nв строку поиска';
   static const enterPhaseName = 'Введите этап\nв строку поиска';
   static const didCopied = 'Скопировано в буфер обмена';
+  static const wrongCoordFormat = 'Неверный формат координат';
 
   /// ALERTS
   static const warning = 'Внимание';

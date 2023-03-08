@@ -210,7 +210,7 @@ class ObjectPageViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                DocumentsScreenWidget(object: selectedObject)));
+                DocumentsScreenWidget(id: selectedObject.id)));
   }
 
   void showPhaseScreen(BuildContext context, int index) {

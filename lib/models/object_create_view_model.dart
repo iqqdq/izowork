@@ -166,54 +166,65 @@ class ObjectCreateViewModel with ChangeNotifier {
       int? area,
       int? constructionPeriod,
       int? floors,
-      double lat,
-      double long,
+      String coord,
       String name,
       String kiso,
       Function(Object) onCreate) async {
-    loadingStatus = LoadingStatus.searching;
-    notifyListeners();
+    if (coord.characters.length > 8 &&
+        coord.contains('.') &&
+        coord.contains(',')) {
+      double? lat = double.tryParse(coord.split(',')[0]);
+      double? long = double.tryParse(coord.split(',')[0]);
 
-    await ObjectRepository()
-        .createObject(ObjectRequest(
-            address: address,
-            area: area,
-            constructionPeriod: constructionPeriod,
-            contractorId: _contractor?.id,
-            customerId: _customer?.id,
-            designerId: _designer?.id,
-            floors: floors,
-            lat: lat,
-            long: long,
-            name: name,
-            objectStageId: _objectStage!.id,
-            objectTypeId: _objectType!.id,
-            hideDir: _isCreateFolder,
-            kiso: kiso))
-        .then((response) => {
-              if (response is Object)
-                {
-                  if (_files.isNotEmpty)
+      if (lat != null && long != null) {
+        loadingStatus = LoadingStatus.searching;
+        notifyListeners();
+
+        await ObjectRepository()
+            .createObject(ObjectRequest(
+                address: address,
+                area: area,
+                constructionPeriod: constructionPeriod,
+                contractorId: _contractor?.id,
+                customerId: _customer?.id,
+                designerId: _designer?.id,
+                floors: floors,
+                lat: lat,
+                long: long,
+                name: name,
+                objectStageId: _objectStage!.id,
+                objectTypeId: _objectType!.id,
+                hideDir: _isCreateFolder,
+                kiso: kiso))
+            .then((response) => {
+                  if (response is Object)
                     {
-                      _files.forEach((element) async {
-                        await uploadFile(context, response.id, element)
-                            .then((value) => {
-                                  current++,
-                                  if (current == _files.length)
-                                    {onCreate(response)}
-                                });
-                      })
+                      if (_files.isNotEmpty)
+                        {
+                          _files.forEach((element) async {
+                            await uploadFile(context, response.id, element)
+                                .then((value) => {
+                                      current++,
+                                      if (current == _files.length)
+                                        {onCreate(response)}
+                                    });
+                          })
+                        }
+                      else
+                        {onCreate(response)}
                     }
-                  else
-                    {onCreate(response)}
-                }
-              else if (response is ErrorResponse)
-                {
-                  loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
-                },
-              notifyListeners()
-            });
+                  else if (response is ErrorResponse)
+                    {
+                      loadingStatus = LoadingStatus.error,
+                      Toast()
+                          .showTopToast(context, response.message ?? 'Ошибка')
+                    },
+                  notifyListeners()
+                });
+      }
+    } else {
+      Toast().showTopToast(context, Titles.wrongCoordFormat);
+    }
   }
 
   Future editObject(
@@ -222,42 +233,53 @@ class ObjectCreateViewModel with ChangeNotifier {
       int? area,
       int? constructionPeriod,
       int? floors,
-      double lat,
-      double long,
+      String coord,
       String name,
       String kiso,
       Function(Object) onCreate) async {
-    loadingStatus = LoadingStatus.searching;
-    notifyListeners();
+    if (coord.characters.length > 8 &&
+        coord.contains('.') &&
+        coord.contains(',')) {
+      double? lat = double.tryParse(coord.split(',')[0]);
+      double? long = double.tryParse(coord.split(',')[0]);
 
-    await ObjectRepository()
-        .updateObject(ObjectRequest(
-            id: object!.id,
-            address: address,
-            area: area ?? object?.area,
-            constructionPeriod:
-                constructionPeriod ?? object?.constructionPeriod,
-            contractorId: _contractor?.id ?? object?.contractorId,
-            customerId: _customer?.id ?? object?.customerId,
-            designerId: _designer?.id ?? object?.designerId,
-            floors: floors ?? object?.floors,
-            lat: lat,
-            long: long,
-            name: name,
-            objectStageId: _objectStage?.id ?? object!.objectStageId!,
-            objectTypeId: _objectType?.id ?? object!.objectTypeId!,
-            hideDir: _isCreateFolder,
-            kiso: kiso))
-        .then((response) => {
-              if (response is Object)
-                {onCreate(response)}
-              else if (response is ErrorResponse)
-                {
-                  loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
-                },
-              notifyListeners()
-            });
+      if (lat != null && long != null) {
+        loadingStatus = LoadingStatus.searching;
+        notifyListeners();
+
+        await ObjectRepository()
+            .updateObject(ObjectRequest(
+                id: object!.id,
+                address: address,
+                area: area ?? object?.area,
+                constructionPeriod:
+                    constructionPeriod ?? object?.constructionPeriod,
+                contractorId: _contractor?.id ?? object?.contractorId,
+                customerId: _customer?.id ?? object?.customerId,
+                designerId: _designer?.id ?? object?.designerId,
+                floors: floors ?? object?.floors,
+                lat: lat,
+                long: long,
+                name: name,
+                objectStageId: _objectStage?.id ?? object!.objectStageId!,
+                objectTypeId: _objectType?.id ?? object!.objectTypeId!,
+                hideDir: _isCreateFolder,
+                kiso: kiso))
+            .then((response) => {
+                  if (response is Object)
+                    {onCreate(response)}
+                  else if (response is ErrorResponse)
+                    {
+                      loadingStatus = LoadingStatus.error,
+                      Toast()
+                          .showTopToast(context, response.message ?? 'Ошибка')
+                    },
+                  notifyListeners()
+                });
+      } else {
+        Toast().showTopToast(context, Titles.wrongCoordFormat);
+      }
+    }
   }
 
   Future uploadFile(BuildContext context, String id, File file) async {

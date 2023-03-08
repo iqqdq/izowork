@@ -22,7 +22,7 @@ class CompleteDealSheetWidget extends StatefulWidget {
 class _CompleteDealSheetState extends State<CompleteDealSheetWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  List<PlatformFile> _files = [];
+  final List<PlatformFile> _files = [];
 
   @override
   void dispose() {
@@ -81,9 +81,7 @@ class _CompleteDealSheetState extends State<CompleteDealSheetWidget> {
                     margin: EdgeInsets.zero,
                     placeholder: '${Titles.reason}...',
                     onTap: () => setState,
-                    onChange: (text) => {
-                      // TODO DESCRTIPTION
-                    },
+                    onChange: (text) => setState(() {}),
                   ),
                   const SizedBox(height: 16.0),
 

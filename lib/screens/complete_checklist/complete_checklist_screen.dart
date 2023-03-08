@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/entities/response/phase_checklist_information.dart';
-import 'package:izowork/models/chat_filter_view_model%20copy.dart';
+import 'package:izowork/models/complete_checklist_view_model.dart';
 import 'package:izowork/screens/complete_checklist/complete_checklist_screen_body.dart';
 import 'package:provider/provider.dart';
 

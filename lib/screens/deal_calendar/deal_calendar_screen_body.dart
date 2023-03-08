@@ -151,7 +151,6 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
                   layout: Layout.BEAUTY),
 
           /// MONTH / YEAR SELECTION
-
           Container(
               margin: EdgeInsets.only(
                   bottom: MediaQuery.of(context).padding.bottom == 0.0

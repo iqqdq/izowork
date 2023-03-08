@@ -13,9 +13,11 @@ class Toast {
         position: const ToastPosition(align: Alignment.topCenter),
         margin: EdgeInsets.only(
             left: 16.0,
-            top: MediaQuery.of(context).padding.top == 0.0
+            top: context.size == null
                 ? 30.0
-                : MediaQuery.of(context).padding.top,
+                : MediaQuery.of(context).padding.top == 0.0
+                    ? 30.0
+                    : MediaQuery.of(context).padding.top,
             right: 20.0),
         backgroundColor: HexColors.additionalViolet,
         duration: const Duration(seconds: 5),

@@ -11,6 +11,7 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/deal_create_request.dart';
 import 'package:izowork/entities/request/deal_file_request.dart';
+import 'package:izowork/entities/request/deal_product_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/deal.dart';
@@ -22,7 +23,9 @@ import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/deal_repository.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/search_object/search_object_screen.dart';
+import 'package:izowork/screens/search_product/search_product_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
+import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/date_time_wheel_picker_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -68,6 +71,8 @@ class DealCreateViewModel with ChangeNotifier {
 
   Company? _company;
 
+  List<DealProduct> _dealProducts = [];
+
   List<Document> _documents = [];
 
   final List<File> _files = [];
@@ -94,6 +99,10 @@ class DealCreateViewModel with ChangeNotifier {
 
   Company? get company {
     return _company;
+  }
+
+  List<DealProduct> get dealProducts {
+    return _dealProducts;
   }
 
   DateTime get minDateTime {
@@ -127,7 +136,7 @@ class DealCreateViewModel with ChangeNotifier {
   DealCreateViewModel(this.deal) {
     if (deal != null) {
       _startDateTime = DateTime.parse(deal!.createdAt);
-      // _endDateTime = DateTime.parse(deal!.deadline);
+      _endDateTime = DateTime.parse(deal!.finishAt);
 
       if (deal!.files.isNotEmpty) {
         _documents = deal!.files;
@@ -136,26 +145,31 @@ class DealCreateViewModel with ChangeNotifier {
       isUpdated = true;
 
       notifyListeners();
-    }
 
-    // getTaskStateList();
+      getDealStageList();
+    }
   }
 
   // MARK: -
   // MARK: - API CALL
 
-  // Future getTaskStateList() async {
-  //   loadingStatus = LoadingStatus.searching;
-  //   notifyListeners();
+  Future getDealStageList() async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
 
-  //   await DealRepository().getStage().then((response) => {
-  //         if (response is List<DealStage>)
-  //           {loadingStatus = LoadingStatus.completed, _dealStages = response}
-  //         else if (response is ErrorResponse)
-  //           {loadingStatus = LoadingStatus.error},
-  //         notifyListeners()
-  //       });
-  // }
+    await DealRepository()
+        .getStage(deal!.id)
+        .then((response) => {
+              if (response is List<DealStage>)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _dealStages = response
+                }
+              else if (response is ErrorResponse)
+                {loadingStatus = LoadingStatus.error}
+            })
+        .then((value) => getDealProductList());
+  }
 
   Future createNewDeal(
       BuildContext context, String? comment, Function(Deal) onCreate) async {
@@ -164,10 +178,12 @@ class DealCreateViewModel with ChangeNotifier {
 
     await DealRepository()
         .createDeal(DealCreateRequest(
+          closed: false,
           comment: comment,
           companyId: _company?.id,
           objectId: _object?.id,
           responsibleId: _responsible?.id,
+          createdAt: _startDateTime.toUtc().toLocal().toIso8601String() + 'Z',
           finishAt: _endDateTime.toUtc().toLocal().toIso8601String() + 'Z',
         ))
         .then((response) => {
@@ -203,11 +219,13 @@ class DealCreateViewModel with ChangeNotifier {
 
     await DealRepository()
         .updateDeal(DealCreateRequest(
+          closed: false,
           id: deal!.id,
           comment: comment,
           companyId: _company?.id,
           objectId: _object?.id,
           responsibleId: _responsible?.id,
+          createdAt: _startDateTime.toUtc().toLocal().toIso8601String() + 'Z',
           finishAt: _endDateTime.toUtc().toLocal().toIso8601String() + 'Z',
         ))
         .then((response) => {
@@ -222,9 +240,85 @@ class DealCreateViewModel with ChangeNotifier {
             });
   }
 
+  Future getDealProductList() async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await DealRepository().getProduts(deal!.id).then((response) => {
+          if (response is List<DealProduct>)
+            {loadingStatus = LoadingStatus.completed, _dealProducts = response}
+          else if (response is ErrorResponse)
+            {loadingStatus = LoadingStatus.error},
+          notifyListeners()
+        });
+  }
+
+  Future addDealProduct(BuildContext context) async {
+    if (deal != null) {
+      await DealRepository()
+          .addProduct(DealProductRequest(count: 0, dealId: deal!.id))
+          .then((response) => {
+                if (response is DealProduct)
+                  {
+                    loadingStatus = LoadingStatus.completed,
+                    _dealProducts.add(response),
+                    notifyListeners()
+                  }
+                else if (response is ErrorResponse)
+                  {
+                    loadingStatus = LoadingStatus.error,
+                    Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  }
+              });
+    }
+  }
+
+  Future updateDealProduct(BuildContext context, int index, String id,
+      String productId, int count) async {
+    await DealRepository()
+        .updateProduct(DealProductRequest(
+            count: count, id: id, dealId: deal!.id, productId: productId))
+        .then((response) => {
+              if (response is DealProduct)
+                {
+                  _dealProducts[index] = response,
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                }
+            })
+        .then((value) => notifyListeners());
+  }
+
+  Future deleteDealProduct(BuildContext context, int index) async {
+    if (deal != null && _dealProducts.isNotEmpty) {
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
+
+      await DealRepository()
+          .deleteProduct(DeleteRequest(id: _dealProducts[index].id))
+          .then((response) => {
+                if (response == true)
+                  {
+                    loadingStatus = LoadingStatus.completed,
+                    _dealProducts.removeAt(index)
+                  }
+                else if (response is ErrorResponse)
+                  {
+                    loadingStatus = LoadingStatus.error,
+                    Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  },
+                notifyListeners()
+              });
+    }
+  }
+
   Future uploadFile(BuildContext context, String id, File file) async {
     await DealRepository()
-        .addTaskFile(DealFileRequest(id, file))
+        .addDealFile(DealFileRequest(id, file))
         .then((response) => {
               if (response is Document)
                 {
@@ -239,7 +333,7 @@ class DealCreateViewModel with ChangeNotifier {
             });
   }
 
-  Future deleteTaskFile(BuildContext context, int index) async {
+  Future deleteFile(BuildContext context, int index) async {
     if (deal == null) {
       _files.removeAt(index);
       notifyListeners();
@@ -248,7 +342,7 @@ class DealCreateViewModel with ChangeNotifier {
       notifyListeners();
 
       await DealRepository()
-          .deleteTaskFile(DeleteRequest(id: deal!.files[index].id))
+          .deleteDealFile(DeleteRequest(id: deal!.files[index].id))
           .then((response) => {
                 if (response == true)
                   {
@@ -349,17 +443,39 @@ class DealCreateViewModel with ChangeNotifier {
     }
   }
 
+  void changeProductWeight(BuildContext context, int index, int weight) {
+    _dealProducts[index].count = weight;
+    updateDealProduct(context, index, _dealProducts[index].id,
+        _dealProducts[index].productId!, weight);
+  }
+
   // MARK: -
   // MARK: - PUSH
 
   void showSelectionScreenSheet(BuildContext context) {
-    // showCupertinoModalBottomSheet(
-    //     topRadius: const Radius.circular(16.0),
-    //     barrierColor: Colors.black.withOpacity(0.6),
-    //     backgroundColor: HexColors.white,
-    //     context: context,
-    //     builder: (context) => SelectionScreenWidget(
-    //         selectionType: SelectionType.task, onSelectTap: () => {}));
+    if (_dealStages.isNotEmpty) {
+      List<String> items = [];
+      _dealStages.forEach((element) {
+        items.add(element.name);
+      });
+
+      showCupertinoModalBottomSheet(
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (context) => SelectionScreenWidget(
+              title: Titles.stage,
+              items: items,
+              onSelectTap: (stage) => {
+                    _dealStages.forEach((element) {
+                      if (stage == element.name) {
+                        _dealStage = element;
+                        notifyListeners();
+                      }
+                    })
+                  }));
+    }
   }
 
   void showDateTimeSelectionSheet(BuildContext context, int index) {
@@ -450,17 +566,27 @@ class DealCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  // void showProductSearchScreenSheet(BuildContext context, int index) {
-  //   showCupertinoModalBottomSheet(
-  //       topRadius: const Radius.circular(16.0),
-  //       barrierColor: Colors.black.withOpacity(0.6),
-  //       backgroundColor: HexColors.white,
-  //       context: context,
-  //       builder: (context) => SearchScreenWidget(
-  //           isRoot: true,
-  //           searchType: SearchType.product,
-  //           onPop: () => {
-  //                 // TODO SET PRODUCT
-  //               }));
-  // }
+  void showSearchProductScreenSheet(BuildContext context, int index) {
+    showCupertinoModalBottomSheet(
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (context) => SearchProductScreenWidget(
+            isRoot: true,
+            onFocus: () => {},
+            onPop: (product) => {
+                  Navigator.pop(context),
+                  if (product != null)
+                    {
+                      _dealProducts[index].product = product,
+                      _dealProducts[index].productId = product.id,
+                      updateDealProduct(context, index, _dealProducts[index].id,
+                              product.id, _dealProducts[index].count)
+                          .then(
+                        (value) => notifyListeners(),
+                      )
+                    }
+                }));
+  }
 }

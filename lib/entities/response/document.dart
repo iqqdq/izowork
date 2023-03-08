@@ -5,26 +5,31 @@ Document documentFromJson(String str) => Document.fromJson(json.decode(str));
 String documentToJson(Document data) => json.encode(data.toJson());
 
 class Document {
-  Document({
-    required this.filename,
-    required this.id,
-    required this.mimeType,
-    required this.name,
-    required this.taskId,
-  });
+  Document(
+      {required this.filename,
+      required this.id,
+      required this.mimeType,
+      required this.name,
+      this.namespace,
+      this.type,
+      this.dealId});
 
   String filename;
   String id;
   String mimeType;
   String name;
-  String taskId;
+  String? namespace;
+  String? type;
+  String? dealId;
 
   factory Document.fromJson(Map<String, dynamic> json) => Document(
         filename: json["filename"],
         id: json["id"],
         mimeType: json["mime_type"],
         name: json["name"],
-        taskId: json["task_id"],
+        namespace: json["namespace"],
+        type: json["type"],
+        dealId: json["deal_id"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -32,6 +37,8 @@ class Document {
         "id": id,
         "mime_type": mimeType,
         "name": name,
-        "task_id": taskId,
+        "namespace": namespace,
+        "type": type,
+        "deal_id": dealId
       };
 }

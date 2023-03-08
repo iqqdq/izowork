@@ -1,8 +1,11 @@
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/deal_create_request.dart';
 import 'package:izowork/entities/request/deal_file_request.dart';
+import 'package:izowork/entities/request/deal_process_request.dart';
+import 'package:izowork/entities/request/deal_product_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/response/deal.dart';
+import 'package:izowork/entities/response/deal_process.dart';
 import 'package:izowork/entities/response/deal_stage.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -104,7 +107,51 @@ class DealRepository {
     }
   }
 
-  Future<dynamic> addTaskFile(DealFileRequest dealFileRequest) async {
+  Future<dynamic> getProduts(String id) async {
+    dynamic json = await WebService().get(dealProductUrl + '?deal_id=$id');
+    List<DealProduct> dealProducts = [];
+
+    try {
+      json['products'].forEach((element) {
+        dealProducts.add(DealProduct.fromJson(element));
+      });
+      return dealProducts;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> addProduct(DealProductRequest dealProductRequest) async {
+    dynamic json = await WebService().post(dealProductUrl, dealProductRequest);
+
+    try {
+      return DealProduct.fromJson(json["product"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> updateProduct(DealProductRequest dealProductRequest) async {
+    dynamic json = await WebService().patch(dealProductUrl, dealProductRequest);
+
+    try {
+      return DealProduct.fromJson(json["product"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> deleteProduct(DeleteRequest deleteRequest) async {
+    dynamic json = await WebService().delete(dealProductUrl, deleteRequest);
+
+    if (json == true) {
+      return json;
+    } else {
+      return ErrorResponse.fromJson(json).message ?? 'Ошибка';
+    }
+  }
+
+  Future<dynamic> addDealFile(DealFileRequest dealFileRequest) async {
     dynamic json = await WebService()
         .postFormData(dealFileUrl, await dealFileRequest.toFormData());
 
@@ -115,13 +162,37 @@ class DealRepository {
     }
   }
 
-  Future<dynamic> deleteTaskFile(DeleteRequest deleteRequest) async {
+  Future<dynamic> deleteDealFile(DeleteRequest deleteRequest) async {
     dynamic json = await WebService().delete(dealFileUrl, deleteRequest);
 
     if (json == true) {
       return json;
     } else {
       return ErrorResponse.fromJson(json).message ?? 'Ошибка';
+    }
+  }
+
+  Future<dynamic> getProcesses(String id) async {
+    dynamic json = await WebService().get(dealProcessUrl + '?deal_id=$id');
+    List<DealProcess> dealProcesses = [];
+
+    try {
+      json['processes'].forEach((element) {
+        dealProcesses.add(DealProcess.fromJson(element));
+      });
+      return dealProcesses;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> updateProcess(DealProcessRequest dealProcessRequest) async {
+    dynamic json = await WebService().patch(dealProcessUrl, dealProcessRequest);
+
+    try {
+      return DealProcess.fromJson(json["process"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
     }
   }
 }

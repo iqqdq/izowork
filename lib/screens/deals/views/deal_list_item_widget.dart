@@ -68,14 +68,14 @@ class DealListItemWidget extends StatelessWidget {
                       /// RESPONSIBLE
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            SubtitleWidget(
+                          children: [
+                            const SubtitleWidget(
                                 text: '${Titles.responsible}:',
                                 padding: EdgeInsets.zero),
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 10.0),
                             Expanded(
                               child: SubtitleWidget(
-                                  text: '???',
+                                  text: deal.responsible?.name ?? '-',
                                   fontWeight: FontWeight.w700,
                                   textAlign: TextAlign.end,
                                   padding: EdgeInsets.zero),
@@ -86,14 +86,14 @@ class DealListItemWidget extends StatelessWidget {
                       /// COMPANY
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            SubtitleWidget(
+                          children: [
+                            const SubtitleWidget(
                                 text: '${Titles.company}:',
                                 padding: EdgeInsets.zero),
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 10.0),
                             Expanded(
                               child: SubtitleWidget(
-                                  text: '???',
+                                  text: deal.company?.name ?? '-',
                                   fontWeight: FontWeight.w700,
                                   textAlign: TextAlign.end,
                                   padding: EdgeInsets.zero),
@@ -104,14 +104,14 @@ class DealListItemWidget extends StatelessWidget {
                       /// STATUS
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            SubtitleWidget(
+                          children: [
+                            const SubtitleWidget(
                                 text: '${Titles.status}:',
                                 padding: EdgeInsets.zero),
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 10.0),
                             Expanded(
                               child: SubtitleWidget(
-                                  text: '???',
+                                  text: deal.closed ? 'Закрыта' : 'В работе',
                                   fontWeight: FontWeight.w700,
                                   textAlign: TextAlign.end,
                                   padding: EdgeInsets.zero),
@@ -122,14 +122,14 @@ class DealListItemWidget extends StatelessWidget {
                       /// OBJECT
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            SubtitleWidget(
+                          children: [
+                            const SubtitleWidget(
                                 text: '${Titles.object}:',
                                 padding: EdgeInsets.zero),
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 10.0),
                             Expanded(
                               child: SubtitleWidget(
-                                  text: '???',
+                                  text: deal.object?.name ?? '-',
                                   fontWeight: FontWeight.w700,
                                   textAlign: TextAlign.end,
                                   padding: EdgeInsets.zero),

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/deal.dart';
-import 'package:izowork/entities/response/document.dart';
-import 'package:izowork/entities/response/product.dart';
 import 'package:izowork/models/deal_view_model.dart';
 import 'package:izowork/screens/deal/views/process_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
+import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
@@ -56,9 +56,6 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
         _dealViewModel.selectedDeal.comment ??
         '';
 
-    List<DealProduct> _products = _dealViewModel.deal?.dealProducts ??
-        _dealViewModel.selectedDeal.dealProducts;
-
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
@@ -87,7 +84,6 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                 color: HexColors.white,
                 child: Stack(children: [
                   ListView(
-                      shrinkWrap: true,
                       padding: EdgeInsets.only(
                           top: 14.0,
                           bottom: MediaQuery.of(context).padding.bottom == 0.0
@@ -125,7 +121,8 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                         SubtitleWidget(
                             padding: const EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 16.0),
-                            text: '???'),
+                            text:
+                                _dealViewModel.deal?.responsible?.name ?? '-'),
 
                         /// OBJECT
                         const TitleWidget(
@@ -136,7 +133,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                         SubtitleWidget(
                             padding: const EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 16.0),
-                            text: '???'),
+                            text: _dealViewModel.deal?.object?.name ?? '-'),
 
                         /// PHASE
                         const TitleWidget(
@@ -147,7 +144,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                         SubtitleWidget(
                             padding: const EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 16.0),
-                            text: _dealViewModel.dealStage?.name ?? '???'),
+                            text: _dealViewModel.dealStage?.name ?? '-'),
 
                         /// COMPANY
                         const TitleWidget(
@@ -156,9 +153,9 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             text: Titles.company,
                             isSmall: true),
                         SubtitleWidget(
-                            padding: EdgeInsets.only(
+                            padding: const EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 16.0),
-                            text: '???'),
+                            text: _dealViewModel.deal?.company?.name ?? '-'),
 
                         /// COMMENT
                         const TitleWidget(
@@ -172,11 +169,12 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             text: _comment),
 
                         /// PRODUCT TABLE
-                        _products.isEmpty
+                        _dealViewModel.dealProducts.isEmpty
                             ? Container()
                             : SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                height: 36.0 * (_products.length + 1),
+                                height: 36.0 *
+                                    (_dealViewModel.dealProducts.length + 1),
                                 child: SpreadsheetTable(
                                   cellBuilder: (_, int row, int col) =>
                                       Container(
@@ -190,15 +188,19 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                           child: Center(
                                               child: Text(
                                                   col == 0
-                                                      ? _products[row]
+                                                      ? _dealViewModel
+                                                              .dealProducts[row]
                                                               .product
                                                               ?.unit ??
                                                           '-'
                                                       : col == 1
-                                                          ? _products[row]
+                                                          ? _dealViewModel
+                                                              .dealProducts[row]
                                                               .count
                                                               .toString()
-                                                          : _products[row]
+                                                          : _dealViewModel
+                                                                  .dealProducts[
+                                                                      row]
                                                                   .product
                                                                   ?.price
                                                                   .toString() ??
@@ -234,7 +236,8 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                               color: HexColors.grey20)),
                                       child: Row(children: [
                                         Text(
-                                            _products[index].product?.name ??
+                                            _dealViewModel.dealProducts[index]
+                                                    .product?.name ??
                                                 '-',
                                             style: TextStyle(
                                                 fontSize: 14.0,
@@ -267,71 +270,70 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                   cellHeight: 36.0,
                                   cellWidth:
                                       MediaQuery.of(context).size.width * 0.3,
-                                  rowsCount: _products.length,
+                                  rowsCount: _dealViewModel.dealProducts.length,
                                   colCount: 3,
                                 )),
 
                         /// FILE LIST
-                        _dealViewModel.deal == null ||
-                                _dealViewModel.deal!.files.isEmpty ||
-                                _dealViewModel.selectedDeal.files.isEmpty
-                            ? Container()
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                padding: const EdgeInsets.only(bottom: 16.0),
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: _dealViewModel.deal?.files.length ??
-                                    _dealViewModel.selectedDeal.files.length,
-                                itemBuilder: (context, index) {
-                                  return FileListItemWidget(
-                                      fileName: _dealViewModel
-                                              .deal?.files[index].name ??
+                        ListView.builder(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.only(
+                                bottom: 16.0, left: 16.0, right: 16.0),
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _dealViewModel.deal?.files.length ??
+                                _dealViewModel.selectedDeal.files.length,
+                            itemBuilder: (context, index) {
+                              return FileListItemWidget(
+                                  fileName:
+                                      _dealViewModel.deal?.files[index].name ??
                                           _dealViewModel
                                               .selectedDeal.files[index].name,
-                                      isDownloading:
-                                          _dealViewModel.downloadIndex == index,
-                                      onTap: () => _dealViewModel.openFile(
-                                          context, index));
-                                }),
+                                  isDownloading:
+                                      _dealViewModel.downloadIndex == index,
+                                  onTap: () =>
+                                      _dealViewModel.openFile(context, index));
+                            }),
 
                         /// PROCESS LIST
-                        // const TitleWidget(
-                        //     padding: EdgeInsets.only(
-                        //         top: 16.0,
-                        //         left: 16.0,
-                        //         right: 16.0,
-                        //         bottom: 10.0),
-                        //     text: Titles.processes,
-                        //     isSmall: true),
-                        // ListView.builder(
-                        //     shrinkWrap: true,
-                        //     padding:
-                        //         const EdgeInsets.symmetric(horizontal: 16.0),
-                        //     physics: const NeverScrollableScrollPhysics(),
-                        //     itemCount: 2,
-                        //     itemBuilder: (context, index) {
-                        //       return ProcessListItemWidget(
-                        //         isExpanded:
-                        //             _dealViewModel.expanded.contains(index),
-                        //         isReady: index == 0,
-                        //         onExpandTap: () => _dealViewModel.expand(index),
-                        //         onMenuTap: (index) => _dealViewModel
-                        //             .showProcessActionScreenSheet(context),
-                        //         onAddProcessTap: () => _dealViewModel
-                        //             .showSelectionScreenSheet(context),
-                        //       );
-                        //     }),
+                        _dealViewModel.dealProcesses.isEmpty
+                            ? Container()
+                            : const TitleWidget(
+                                padding: EdgeInsets.only(
+                                    left: 16.0, right: 16.0, bottom: 10.0),
+                                text: Titles.processes,
+                                isSmall: true),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _dealViewModel.dealProcesses.length,
+                            itemBuilder: (context, index) {
+                              return ProcessListItemWidget(
+                                isExpanded:
+                                    _dealViewModel.expanded.contains(index),
+                                isReady: index == 0,
+                                onExpandTap: () => _dealViewModel.expand(index),
+                                onMenuTap: (index) => _dealViewModel
+                                    .showProcessActionScreenSheet(context),
+                                onAddProcessTap: () => _dealViewModel
+                                    .showSelectionScreenSheet(context),
+                              );
+                            }),
 
                         /// CLOSE DEAL BUTTON
-                        BorderButtonWidget(
-                            title: Titles.closeDeal,
-                            margin: const EdgeInsets.only(
-                                left: 16.0,
-                                top: 6.0,
-                                right: 16.0,
-                                bottom: 16.0),
-                            onTap: () => _dealViewModel
-                                .showCloseDealScreenSheet(context)),
+                        _dealViewModel.deal?.closed ??
+                                _dealViewModel.selectedDeal.closed
+                            ? Container()
+                            : BorderButtonWidget(
+                                title: Titles.closeDeal,
+                                margin: const EdgeInsets.only(
+                                    left: 16.0,
+                                    top: 6.0,
+                                    right: 16.0,
+                                    bottom: 16.0),
+                                onTap: () => _dealViewModel
+                                    .showCloseDealScreenSheet(context)),
                       ]),
 
                   /// EDIT DEAL BUTTON
@@ -347,7 +349,12 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
                           onTap: () => _dealViewModel
-                              .showDealCreateScreenSheet(context)))
+                              .showDealCreateScreenSheet(context))),
+
+                  /// INDICATOR
+                  _dealViewModel.loadingStatus == LoadingStatus.searching
+                      ? const LoadingIndicatorWidget()
+                      : Container()
                 ]))));
   }
 }

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class DealCreateScreenWidget extends StatelessWidget {
   final Deal? deal;
-  final Function(Deal?) onCreate;
+  final Function(Deal?, List<DealProduct>) onCreate;
 
   const DealCreateScreenWidget({Key? key, this.deal, required this.onCreate})
       : super(key: key);
