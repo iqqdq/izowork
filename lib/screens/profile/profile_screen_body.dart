@@ -31,16 +31,6 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
   late ProfileViewModel _profileViewModel;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     _profileViewModel = Provider.of<ProfileViewModel>(context, listen: true);
 

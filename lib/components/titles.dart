@@ -72,6 +72,8 @@ abstract class Titles {
   static const news = 'Новости';
   static const newNews = 'Новая новость';
   static const contacts = 'Контакты';
+  static const newContact = 'Новый контакт';
+  static const contactEdit = 'Редактирование контакта';
   static const company = 'Компания';
   static const companies = 'Компании';
   static const product = 'Товар';
@@ -186,6 +188,7 @@ abstract class Titles {
   static const byEffectiveness = 'По эффективности';
   static const type = 'Тип';
   static const post = 'Должность';
+  static const speciality = 'Специальность';
   static const socialLinks = 'Ссылки на социальные сети';
   static const socialLink = 'Ссылка на соц. сеть';
   static const companyTotal = 'Всего компаний';
@@ -231,6 +234,7 @@ abstract class Titles {
   static const enterPhaseName = 'Введите этап\nв строку поиска';
   static const didCopied = 'Скопировано в буфер обмена';
   static const wrongCoordFormat = 'Неверный формат координат';
+  static const contactWasDeleted = 'Контакт был удален';
 
   /// ALERTS
   static const warning = 'Внимание';

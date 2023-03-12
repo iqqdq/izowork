@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/deal.dart';
+import 'package:izowork/entities/response/deal_process.dart';
 import 'package:izowork/models/deal_view_model.dart';
 import 'package:izowork/screens/deal/views/process_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -144,7 +144,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                         SubtitleWidget(
                             padding: const EdgeInsets.only(
                                 left: 16.0, right: 16.0, bottom: 16.0),
-                            text: _dealViewModel.dealStage?.name ?? '-'),
+                            text: _dealViewModel.phase?.name ?? '-'),
 
                         /// COMPANY
                         const TitleWidget(
@@ -275,27 +275,38 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                 )),
 
                         /// FILE LIST
-                        ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.only(
-                                bottom: 16.0, left: 16.0, right: 16.0),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _dealViewModel.deal?.files.length ??
-                                _dealViewModel.selectedDeal.files.length,
-                            itemBuilder: (context, index) {
-                              return FileListItemWidget(
-                                  fileName:
-                                      _dealViewModel.deal?.files[index].name ??
-                                          _dealViewModel
-                                              .selectedDeal.files[index].name,
-                                  isDownloading:
-                                      _dealViewModel.downloadIndex == index,
-                                  onTap: () =>
-                                      _dealViewModel.openFile(context, index));
-                            }),
+                        _dealViewModel.deal == null
+                            ? const SizedBox(height: 16.0)
+                            : _dealViewModel.deal!.files.isEmpty
+                                ? const SizedBox(height: 16.0)
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: const EdgeInsets.only(
+                                        top: 20.0,
+                                        bottom: 16.0,
+                                        left: 16.0,
+                                        right: 16.0),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount:
+                                        _dealViewModel.deal?.files.length ??
+                                            _dealViewModel
+                                                .selectedDeal.files.length,
+                                    itemBuilder: (context, index) {
+                                      return FileListItemWidget(
+                                          fileName: _dealViewModel
+                                                  .deal?.files[index].name ??
+                                              _dealViewModel.selectedDeal
+                                                  .files[index].name,
+                                          isDownloading:
+                                              _dealViewModel.downloadIndex ==
+                                                  index,
+                                          onTap: () => _dealViewModel.openFile(
+                                              context, index));
+                                    }),
 
                         /// PROCESS LIST
-                        _dealViewModel.dealProcesses.isEmpty
+                        _dealViewModel.dealStages.isEmpty
                             ? Container()
                             : const TitleWidget(
                                 padding: EdgeInsets.only(
@@ -307,18 +318,40 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _dealViewModel.dealProcesses.length,
+                            itemCount: _dealViewModel.dealStages.length,
                             itemBuilder: (context, index) {
-                              return ProcessListItemWidget(
-                                isExpanded:
-                                    _dealViewModel.expanded.contains(index),
-                                isReady: index == 0,
-                                onExpandTap: () => _dealViewModel.expand(index),
-                                onMenuTap: (index) => _dealViewModel
-                                    .showProcessActionScreenSheet(context),
-                                onAddProcessTap: () => _dealViewModel
-                                    .showSelectionScreenSheet(context),
-                              );
+                              List<DealProcess> dealProcesses = index >
+                                      _dealViewModel.dealProcessList.length - 1
+                                  ? []
+                                  : _dealViewModel.dealProcessList[index];
+
+                              return _dealViewModel.dealProcessList.isEmpty
+                                  ? Container()
+                                  : ProcessListItemWidget(
+                                      dealStage:
+                                          _dealViewModel.dealStages[index],
+                                      dealProcesses: dealProcesses,
+                                      isExpanded: _dealViewModel.expanded
+                                          .contains(index),
+                                      onTap: () => _dealViewModel.expand(index),
+                                      onMenuTap: (dealProcess) => _dealViewModel
+                                          .showProcessActionScreenSheet(
+                                              context, dealProcess),
+                                      onProcessTap: (dealProcess) => {
+                                        // TODO
+                                      },
+                                      onAddProcessTap: _dealViewModel
+                                                      .dealStages[index]
+                                                      .position ==
+                                                  1 ||
+                                              _dealViewModel.dealStages[index]
+                                                      .position ==
+                                                  4
+                                          ? () => _dealViewModel
+                                              .showSelectionScreenSheet(
+                                                  context, index)
+                                          : null,
+                                    );
                             }),
 
                         /// CLOSE DEAL BUTTON

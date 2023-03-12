@@ -1,19 +1,24 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/contact.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/status_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class ContactListItemWidget extends StatelessWidget {
-  final VoidCallback onUserTap;
+  final Contact contact;
+  final VoidCallback onContactTap;
   final VoidCallback onPhoneTap;
   final VoidCallback onLinkTap;
 
   const ContactListItemWidget(
       {Key? key,
-      required this.onUserTap,
+      required this.contact,
+      required this.onContactTap,
       required this.onPhoneTap,
       required this.onLinkTap})
       : super(key: key);
@@ -32,23 +37,28 @@ class ContactListItemWidget extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 children: [
-                  /// STAFF
+                  /// CONTACT
                   InkWell(
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
                       borderRadius: BorderRadius.circular(16.0),
                       child: Row(children: [
-                        /// STAFF AVATAR
+                        /// CONTACT AVATAR
                         Stack(children: [
                           SvgPicture.asset('assets/ic_avatar.svg',
                               color: HexColors.grey40,
                               width: 40.0,
                               height: 40.0,
                               fit: BoxFit.cover),
-                          // ClipRRect(
-                          //   borderRadius: BorderRadius.circular(12.0),
-                          //   child:
-                          // CachedNetworkImage(imageUrl: '', width: 40.0, height: 40.0, fit: BoxFit.cover)),
+                          contact.avatar == null
+                              ? Container()
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: CachedNetworkImage(
+                                      imageUrl: avatarUrl + contact.avatar!,
+                                      width: 40.0,
+                                      height: 40.0,
+                                      fit: BoxFit.cover)),
                         ]),
                         const SizedBox(width: 10.0),
 
@@ -56,8 +66,8 @@ class ContactListItemWidget extends StatelessWidget {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                              /// STAFF NAME
-                              Text('Имя сотрудника',
+                              /// CONTACT NAME
+                              Text(contact.name,
                                   style: TextStyle(
                                       color: HexColors.black,
                                       fontSize: 14.0,
@@ -65,7 +75,7 @@ class ContactListItemWidget extends StatelessWidget {
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(height: 2.0),
 
-                              /// STAFF SPECIALIZATION
+                              /// CONTACT SPECIALIZATION
                               Text('Специальность',
                                   style: TextStyle(
                                       color: HexColors.grey50,
@@ -73,29 +83,32 @@ class ContactListItemWidget extends StatelessWidget {
                                       fontFamily: 'PT Root UI')),
                             ]))
                       ]),
-                      onTap: () => onUserTap()),
+                      onTap: () => onContactTap()),
                   const SizedBox(height: 16.0),
                   Row(children: [
                     Expanded(
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                          TitleWidget(
+                            children: [
+                          const TitleWidget(
                               text: Titles.companyName,
                               padding: EdgeInsets.zero,
                               isSmall: true),
-                          SizedBox(height: 4.0),
+                          const SizedBox(height: 4.0),
 
                           /// COMPANY NAME
                           SubtitleWidget(
-                              text: 'АрхитектСтрой',
+                              text: contact.company?.name ?? '-',
                               padding: EdgeInsets.zero,
                               fontWeight: FontWeight.normal),
                         ])),
-                    const SizedBox(width: 16.0),
+                    const SizedBox(width: 10.0),
 
                     /// TAG
-                    const StatusWidget(title: 'Поставщик', status: 0)
+                    contact.company == null
+                        ? Container()
+                        : StatusWidget(
+                            title: contact.company?.type ?? '-', status: 0)
                   ]),
                   const SizedBox(height: 10.0),
                   const TitleWidget(
@@ -105,8 +118,8 @@ class ContactListItemWidget extends StatelessWidget {
                   const SizedBox(height: 4.0),
 
                   /// PHONE
-                  const SubtitleWidget(
-                      text: '+7 999 99 99 99',
+                  SubtitleWidget(
+                      text: contact.phone ?? '-',
                       padding: EdgeInsets.zero,
                       fontWeight: FontWeight.normal),
                   const SizedBox(height: 10.0),
@@ -117,8 +130,8 @@ class ContactListItemWidget extends StatelessWidget {
                   const SizedBox(height: 4.0),
 
                   /// EMAIL
-                  const SubtitleWidget(
-                      text: 'example@gmail.com',
+                  SubtitleWidget(
+                      text: contact.email ?? '-',
                       padding: EdgeInsets.zero,
                       fontWeight: FontWeight.normal),
                   const SizedBox(height: 10.0),
@@ -128,7 +141,7 @@ class ContactListItemWidget extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
-                      itemCount: 3,
+                      itemCount: contact.social.length,
                       itemBuilder: (context, index) {
                         return Padding(
                             padding: const EdgeInsets.only(bottom: 4.0),
@@ -136,7 +149,7 @@ class ContactListItemWidget extends StatelessWidget {
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
                                 borderRadius: BorderRadius.circular(16.0),
-                                child: Text('https://facebook.com/yur_T',
+                                child: Text(contact.social[index],
                                     style: TextStyle(
                                         color: HexColors.primaryDark,
                                         fontSize: 14.0,

@@ -217,6 +217,7 @@ class ObjectPageViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => PhaseScreenWidget(phase: _phases[index])));
+            builder: (context) =>
+                PhaseScreenWidget(phase: _phases[index], object: object)));
   }
 }

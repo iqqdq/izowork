@@ -12,6 +12,7 @@ class DealCreateRequest {
     required this.finishAt,
     this.objectId,
     this.responsibleId,
+    this.phaseId,
     required this.closed,
   });
 
@@ -22,6 +23,7 @@ class DealCreateRequest {
   String finishAt;
   String? objectId;
   String? responsibleId;
+  String? phaseId;
   bool closed;
 
   Map<String, dynamic> toJson() => {
@@ -32,6 +34,7 @@ class DealCreateRequest {
         "created_at": createdAt,
         "object_id": objectId,
         "responsible_id": responsibleId,
+        "phase_id": phaseId,
         "closed": closed,
       };
 }

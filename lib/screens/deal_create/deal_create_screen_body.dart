@@ -149,35 +149,56 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                     .showSearchUserScreenSheet(context)),
 
                             /// OBJECT SELECTION INPUT
-                            SelectionInputWidget(
-                                margin: const EdgeInsets.only(bottom: 10.0),
-                                isVertical: true,
-                                title: Titles.object,
-                                value: _dealCreateViewModel.object?.name ??
-                                    _dealCreateViewModel.deal?.object?.name ??
-                                    Titles.notSelected,
-                                onTap: () => _dealCreateViewModel
-                                    .showSearchObjectScreenSheet(context)),
-
-                            /// STAGE SELECTION INPUT
                             Opacity(
-                                opacity: _dealCreateViewModel.dealStages.isEmpty
+                                opacity: _dealCreateViewModel.selectedObject !=
+                                        null
+                                    ? 0.5
+                                    : 1.0,
+                                child: IgnorePointer(
+                                    ignoring: _dealCreateViewModel
+                                            .selectedObject !=
+                                        null,
+                                    child: SelectionInputWidget(
+                                        margin: const EdgeInsets
+                                            .only(bottom: 10.0),
+                                        isVertical: true,
+                                        title: Titles.object,
+                                        value:
+                                            _dealCreateViewModel
+                                                    .object?.name ??
+                                                _dealCreateViewModel
+                                                    .deal?.object?.name ??
+                                                _dealCreateViewModel
+                                                    .selectedObject?.name ??
+                                                Titles.notSelected,
+                                        onTap: () => _dealCreateViewModel
+                                            .showSearchObjectScreenSheet(
+                                                context)))),
+
+                            /// PHASE SELECTION INPUT
+                            Opacity(
+                                opacity: _dealCreateViewModel.selectedPhase !=
+                                            null ||
+                                        _dealCreateViewModel.object == null
                                     ? 0.5
                                     : 1.0,
                                 child: IgnorePointer(
                                     ignoring:
-                                        _dealCreateViewModel.dealStages.isEmpty,
+                                        _dealCreateViewModel.selectedPhase !=
+                                                null ||
+                                            _dealCreateViewModel.object == null,
                                     child: SelectionInputWidget(
                                         margin:
                                             const EdgeInsets.only(bottom: 10.0),
                                         isVertical: true,
                                         title: Titles.phase,
                                         value: _dealCreateViewModel
-                                                .dealStage?.name ??
+                                                .phase?.name ??
+                                            _dealCreateViewModel
+                                                .selectedPhase?.name ??
                                             Titles.notSelected,
                                         onTap: () => _dealCreateViewModel
-                                            .showSelectionScreenSheet(
-                                                context)))),
+                                            .showSelectionScreenSheet(context)))),
 
                             /// COMPANY SELECTION INPUT
                             SelectionInputWidget(
@@ -292,8 +313,7 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                               isDisabled: _dealCreateViewModel.loadingStatus ==
                                           LoadingStatus.searching ||
                                       _dealCreateViewModel.deal == null
-                                  ? _textEditingController.text.isEmpty ||
-                                      _dealCreateViewModel.dealStage == null
+                                  ? _textEditingController.text.isEmpty
                                   : _textEditingController.text.isEmpty,
                               title: _dealCreateViewModel.deal == null
                                   ? Titles.createDeal
@@ -314,12 +334,23 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                       (deal) => {
                                             if (mounted)
                                               {
-                                                Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            DealScreenWidget(
-                                                                deal: deal)))
+                                                if (_dealCreateViewModel
+                                                        .phase ==
+                                                    null)
+                                                  {
+                                                    Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                DealScreenWidget(
+                                                                    deal:
+                                                                        deal)))
+                                                  }
+                                                else
+                                                  {
+                                                    widget.onCreate(deal, []),
+                                                    Navigator.pop(context)
+                                                  }
                                               }
                                           })
                                   : _dealCreateViewModel.editDeal(

@@ -7,15 +7,17 @@ import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/repositories/deal_repository.dart';
 import 'package:izowork/screens/deal_calendar/deal_calendar_screen.dart';
-import 'package:izowork/screens/deals/deals_filter_sheet/deals_filter_page_view_widget.dart';
+import 'package:izowork/screens/deals/deals_filter_sheet/deals_filter_page_view_screen.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen.dart';
+import 'package:izowork/screens/deals/deals_filter_sheet/deals_filter_page_view_screen_body.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DealsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
   final List<Deal> _deals = [];
+  DealsFilter? _dealsFilter;
 
   List<Deal> get deals {
     return _deals;
@@ -55,10 +57,9 @@ class DealsViewModel with ChangeNotifier {
     }
     await DealRepository()
         .getDeals(
-          pagination: pagination,
-          search: search,
-          // params: _dealsFilter?.params
-        )
+            pagination: pagination,
+            search: search,
+            params: _dealsFilter?.params)
         .then((response) => {
               if (response is List<Deal>)
                 {
@@ -96,7 +97,7 @@ class DealsViewModel with ChangeNotifier {
   // MARK: - FUNCTIONS
 
   void resetFilter() {
-    // _dealsFilter = null;
+    _dealsFilter = null;
   }
 
   // MARK: -
@@ -119,15 +120,28 @@ class DealsViewModel with ChangeNotifier {
                     })));
   }
 
-  void showDealsFilterSheet(BuildContext context) {
+  void showDealsFilterSheet(BuildContext context, Function() onFilter) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => DealsFilterPageViewWidget(
-            onApplyTap: () => {Navigator.pop(context)},
-            onResetTap: () => {Navigator.pop(context)}));
+        builder: (context) => DealsFilterPageViewScreenWidget(
+            dealsFilter: _dealsFilter,
+            onPop: (objectsFilter) => {
+                  if (objectsFilter == null)
+                    {
+                      // CLEAR
+                      resetFilter(),
+                      onFilter()
+                    }
+                  else
+                    {
+                      // FILTER
+                      _dealsFilter = objectsFilter,
+                      onFilter()
+                    }
+                }));
   }
 
   void showDealScreenWidget(BuildContext context, int index) {

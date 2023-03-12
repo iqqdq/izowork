@@ -13,6 +13,12 @@ const usersUrl = baseUrl + 'user/all';
 const userUrl = baseUrl + 'user/one';
 const userUpdateUrl = baseUrl + 'user/profile';
 
+const contactUrl = baseUrl + 'contact/one';
+const contactsUrl = baseUrl + 'contact/all';
+const contactCreateUrl = baseUrl + 'contact/create';
+const contactUpdateUrl = baseUrl + 'contact/update';
+const contactDeleteUrl = baseUrl + 'contact/delete';
+
 const productUrl = baseUrl + 'product/one?id=';
 const productsUrl = baseUrl + 'product/all';
 const productTypesUrl = baseUrl + 'product-type/all';

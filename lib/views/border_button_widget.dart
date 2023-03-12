@@ -3,6 +3,7 @@ import 'package:izowork/components/hex_colors.dart';
 
 class BorderButtonWidget extends StatefulWidget {
   final String title;
+  final bool? isDestructive;
   final bool? isDisabled;
   final EdgeInsets? margin;
   final VoidCallback onTap;
@@ -10,6 +11,7 @@ class BorderButtonWidget extends StatefulWidget {
   const BorderButtonWidget(
       {Key? key,
       required this.title,
+      this.isDestructive,
       this.isDisabled,
       this.margin,
       required this.onTap})
@@ -21,11 +23,18 @@ class BorderButtonWidget extends StatefulWidget {
 
 class _BorderButtonState extends State<BorderButtonWidget> {
   late bool _isDisabled;
+  late bool _isDestructive;
   bool _isHighlighted = false;
 
   @override
   void initState() {
     super.initState();
+
+    _isDestructive = widget.isDestructive == null
+        ? false
+        : widget.isDestructive!
+            ? true
+            : false;
 
     _isDisabled = widget.isDisabled == null
         ? false
@@ -47,8 +56,12 @@ class _BorderButtonState extends State<BorderButtonWidget> {
                 color: _isDisabled
                     ? Colors.transparent
                     : _isHighlighted
-                        ? HexColors.primaryMain
-                        : HexColors.borderButtonHighlightColor),
+                        ? _isDestructive
+                            ? HexColors.additionalRed
+                            : HexColors.primaryMain
+                        : _isDestructive
+                            ? HexColors.additionalRed.withOpacity(0.5)
+                            : HexColors.borderButtonHighlightColor),
             borderRadius: BorderRadius.circular(12.0)),
         child: Material(
             color: Colors.transparent,
@@ -67,8 +80,13 @@ class _BorderButtonState extends State<BorderButtonWidget> {
                             color: _isDisabled
                                 ? HexColors.borderButtonDisableTitleColor
                                 : _isHighlighted
-                                    ? HexColors.primaryMain
-                                    : HexColors.primaryDark))),
+                                    ? _isDestructive
+                                        ? HexColors.additionalRed
+                                        : HexColors.primaryMain
+                                    : _isDestructive
+                                        ? HexColors.additionalRed
+                                            .withOpacity(0.75)
+                                        : HexColors.primaryDark))),
                 onTap: _isDisabled ? null : () => widget.onTap(),
                 onHighlightChanged: (value) =>
                     setState(() => _isHighlighted = value))));

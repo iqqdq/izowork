@@ -451,6 +451,7 @@ class TaskCreateViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) => SearchObjectScreenWidget(
+            title: Titles.manager,
             isRoot: true,
             onFocus: () => {},
             onPop: (object) =>

@@ -4,11 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
+import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/phase_checklist_request.dart';
 import 'package:izowork/entities/request/phase_checklist_information_file_request.dart';
 import 'package:izowork/entities/request/phase_checklist_state_request.dart';
+import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/error_response.dart';
+import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/entities/response/phase_checklist.dart';
 import 'package:izowork/entities/response/phase_checklist_information.dart';
@@ -23,10 +26,13 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class PhaseViewModel with ChangeNotifier {
   final Phase phase;
+  final Object? object;
 
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
   final List<File> _files = [];
+
+  final List<Deal> _deals = [];
 
   int current = 0;
 
@@ -40,6 +46,10 @@ class PhaseViewModel with ChangeNotifier {
 
   List<File> get files {
     return _files;
+  }
+
+  List<Deal> get deals {
+    return _deals;
   }
 
   List<PhaseProduct> get phaseProducts {
@@ -58,7 +68,7 @@ class PhaseViewModel with ChangeNotifier {
     return _phaseChecklistInformations;
   }
 
-  PhaseViewModel(this.phase) {
+  PhaseViewModel(this.phase, this.object) {
     getPhaseContractorList();
   }
 
@@ -222,8 +232,16 @@ class PhaseViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => DealCreateScreenWidget(
+                phase: phase,
+                object: object,
                 onCreate: (deal, dealProducts) => {
-                      // TODO ON DEAL CREATE
+                      if (deal != null)
+                        {
+                          _deals.add(deal),
+                          notifyListeners(),
+                          Toast().showTopToast(context,
+                              '${Titles.deal} №${deal.number} добавлена')
+                        }
                     })));
   }
 

@@ -104,7 +104,8 @@ class _TasksScreenBodyState extends State<TasksScreenBodyWidget>
                                 onChange: (text) => {
                                       setState(() => _isSearching = true),
                                       _debouncer.run(() {
-                                        _pagination.offset = 0;
+                                        _pagination =
+                                            Pagination(offset: 0, size: 50);
 
                                         _tasksViewModel
                                             .getTaskList(

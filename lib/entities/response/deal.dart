@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:izowork/entities/response/company.dart';
+import 'package:izowork/entities/response/deal_stage.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/product.dart';
@@ -22,7 +23,9 @@ class Deal {
       required this.closed,
       this.company,
       this.responsible,
-      this.object});
+      this.object,
+      this.dealStage,
+      this.phaseId});
 
   String? comment;
   String? companyId;
@@ -38,32 +41,36 @@ class Deal {
   Company? company;
   User? responsible;
   Object? object;
+  DealStage? dealStage;
+  String? phaseId;
 
   factory Deal.fromJson(Map<String, dynamic> json) => Deal(
-        comment: json["comment"],
-        companyId: json["company_id"],
-        createdAt: json["created_at"],
-        files: json["files"] == null
-            ? []
-            : List<Document>.from(
-                json["files"].map((x) => Document.fromJson(x))),
-        finishAt: json["finish_at"],
-        id: json["id"],
-        number: json["number"],
-        objectId: json["object_id"],
-        dealProducts: json["products"] == null
-            ? []
-            : List<DealProduct>.from(
-                json["products"].map((x) => DealProduct.fromJson(x))),
-        responsibleId: json["responsible_id"],
-        closed: json["closed"],
-        company:
-            json["company"] == null ? null : Company.fromJson(json["company"]),
-        responsible: json["responsible"] == null
-            ? null
-            : User.fromJson(json["responsible"]),
-        object: json["object"] == null ? null : Object.fromJson(json["object"]),
-      );
+      comment: json["comment"],
+      companyId: json["company_id"],
+      createdAt: json["created_at"],
+      files: json["files"] == null
+          ? []
+          : List<Document>.from(json["files"].map((x) => Document.fromJson(x))),
+      finishAt: json["finish_at"],
+      id: json["id"],
+      number: json["number"],
+      objectId: json["object_id"],
+      dealProducts: json["products"] == null
+          ? []
+          : List<DealProduct>.from(
+              json["products"].map((x) => DealProduct.fromJson(x))),
+      responsibleId: json["responsible_id"],
+      closed: json["closed"],
+      company:
+          json["company"] == null ? null : Company.fromJson(json["company"]),
+      responsible: json["responsible"] == null
+          ? null
+          : User.fromJson(json["responsible"]),
+      object: json["object"] == null ? null : Object.fromJson(json["object"]),
+      dealStage: json["deal_stage"] == null
+          ? null
+          : DealStage.fromJson(json["deal_stage"]),
+      phaseId: json["phase_id"]);
 }
 
 class DealProduct {

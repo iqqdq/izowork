@@ -259,10 +259,10 @@ class _CompanyCreateScreenBodyState
                         margin: const EdgeInsets.only(bottom: 10.0),
                         height: 56.0,
                         textEditingController: _emailTextEditingConrtoller,
-                        textInputType: TextInputType.emailAddress,
-                        textCapitalization: TextCapitalization.none,
                         focusNode: _emailFocusNode,
                         placeholder: Titles.email,
+                        textInputType: TextInputType.emailAddress,
+                        textCapitalization: TextCapitalization.none,
                         onTap: () => setState(() => {
                               FocusScope.of(context).unfocus(),
                               _emailFocusNode.requestFocus()

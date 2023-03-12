@@ -15,12 +15,13 @@ import 'package:izowork/entities/request/deal_product_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/deal.dart';
-import 'package:izowork/entities/response/deal_stage.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
+import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/deal_repository.dart';
+import 'package:izowork/repositories/phase_repository.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/search_object/search_object_screen.dart';
 import 'package:izowork/screens/search_product/search_product_screen.dart';
@@ -36,6 +37,8 @@ import 'dart:io' as io;
 
 class DealCreateViewModel with ChangeNotifier {
   final Deal? deal;
+  final Object? selectedObject;
+  final Phase? selectedPhase;
 
   final DateTime _minDateTime = DateTime(
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
@@ -65,10 +68,6 @@ class DealCreateViewModel with ChangeNotifier {
 
   Object? _object;
 
-  List<DealStage> _dealStages = [];
-
-  DealStage? _dealStage;
-
   Company? _company;
 
   List<DealProduct> _dealProducts = [];
@@ -76,6 +75,10 @@ class DealCreateViewModel with ChangeNotifier {
   List<Document> _documents = [];
 
   final List<File> _files = [];
+
+  List<Phase> _phases = [];
+
+  Phase? _phase;
 
   int _downloadIndex = -1;
 
@@ -87,14 +90,6 @@ class DealCreateViewModel with ChangeNotifier {
 
   Object? get object {
     return _object;
-  }
-
-  List<DealStage> get dealStages {
-    return _dealStages;
-  }
-
-  DealStage? get dealStage {
-    return _dealStage;
   }
 
   Company? get company {
@@ -129,11 +124,19 @@ class DealCreateViewModel with ChangeNotifier {
     return _files;
   }
 
+  List<Phase> get phases {
+    return _phases;
+  }
+
+  Phase? get phase {
+    return _phase;
+  }
+
   int get downloadIndex {
     return _downloadIndex;
   }
 
-  DealCreateViewModel(this.deal) {
+  DealCreateViewModel(this.deal, this.selectedPhase, this.selectedObject) {
     if (deal != null) {
       _startDateTime = DateTime.parse(deal!.createdAt);
       _endDateTime = DateTime.parse(deal!.finishAt);
@@ -142,34 +145,26 @@ class DealCreateViewModel with ChangeNotifier {
         _documents = deal!.files;
       }
 
+      _object = deal!.object;
+      _phase = selectedPhase;
+
       isUpdated = true;
+    } else {
+      _object = selectedObject;
+      _phase = selectedPhase;
+    }
 
-      notifyListeners();
+    notifyListeners();
 
-      getDealStageList();
+    if (deal != null) {
+      getDealProductList().then((value) => {
+            if (deal!.object != null) {getPhaseList(deal!.object!.id)}
+          });
     }
   }
 
   // MARK: -
   // MARK: - API CALL
-
-  Future getDealStageList() async {
-    loadingStatus = LoadingStatus.searching;
-    notifyListeners();
-
-    await DealRepository()
-        .getStage(deal!.id)
-        .then((response) => {
-              if (response is List<DealStage>)
-                {
-                  loadingStatus = LoadingStatus.completed,
-                  _dealStages = response
-                }
-              else if (response is ErrorResponse)
-                {loadingStatus = LoadingStatus.error}
-            })
-        .then((value) => getDealProductList());
-  }
 
   Future createNewDeal(
       BuildContext context, String? comment, Function(Deal) onCreate) async {
@@ -183,6 +178,7 @@ class DealCreateViewModel with ChangeNotifier {
           companyId: _company?.id,
           objectId: _object?.id,
           responsibleId: _responsible?.id,
+          phaseId: _phase?.id,
           createdAt: _startDateTime.toUtc().toLocal().toIso8601String() + 'Z',
           finishAt: _endDateTime.toUtc().toLocal().toIso8601String() + 'Z',
         ))
@@ -222,9 +218,10 @@ class DealCreateViewModel with ChangeNotifier {
           closed: false,
           id: deal!.id,
           comment: comment,
-          companyId: _company?.id,
-          objectId: _object?.id,
-          responsibleId: _responsible?.id,
+          companyId: _company?.id ?? deal!.companyId,
+          objectId: selectedObject?.id ?? deal!.objectId,
+          responsibleId: _responsible?.id ?? deal!.responsibleId,
+          phaseId: _phase?.id ?? selectedPhase?.name,
           createdAt: _startDateTime.toUtc().toLocal().toIso8601String() + 'Z',
           finishAt: _endDateTime.toUtc().toLocal().toIso8601String() + 'Z',
         ))
@@ -251,6 +248,22 @@ class DealCreateViewModel with ChangeNotifier {
             {loadingStatus = LoadingStatus.error},
           notifyListeners()
         });
+  }
+
+  Future getPhaseList(String id) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await PhaseRepository()
+        .getPhases(id)
+        .then((response) => {
+              if (response is List<Phase>)
+                {
+                  _phases = response,
+                  loadingStatus = LoadingStatus.completed,
+                }
+            })
+        .then((value) => notifyListeners());
   }
 
   Future addDealProduct(BuildContext context) async {
@@ -453,9 +466,9 @@ class DealCreateViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showSelectionScreenSheet(BuildContext context) {
-    if (_dealStages.isNotEmpty) {
+    if (_phases.isNotEmpty) {
       List<String> items = [];
-      _dealStages.forEach((element) {
+      _phases.forEach((element) {
         items.add(element.name);
       });
 
@@ -465,12 +478,12 @@ class DealCreateViewModel with ChangeNotifier {
           backgroundColor: HexColors.white,
           context: context,
           builder: (context) => SelectionScreenWidget(
-              title: Titles.stage,
+              title: Titles.phase,
               items: items,
               onSelectTap: (stage) => {
-                    _dealStages.forEach((element) {
+                    _phases.forEach((element) {
                       if (stage == element.name) {
-                        _dealStage = element;
+                        _phase = element;
                         notifyListeners();
                       }
                     })
@@ -543,10 +556,19 @@ class DealCreateViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) => SearchObjectScreenWidget(
+            title: Titles.object,
             isRoot: true,
             onFocus: () => {},
-            onPop: (object) =>
-                {_object = object, notifyListeners(), Navigator.pop(context)}));
+            onPop: (object) => {
+                  if (object != null)
+                    {
+                      _object = object,
+                      _phases.clear(),
+                      _phase = null,
+                      getPhaseList(object.id)
+                    },
+                  Navigator.pop(context)
+                }));
   }
 
   void showSearchCompanyScreenSheet(BuildContext context) {

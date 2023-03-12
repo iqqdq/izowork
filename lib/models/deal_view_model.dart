@@ -14,13 +14,15 @@ import 'package:izowork/entities/response/deal_process.dart';
 import 'package:izowork/entities/response/deal_stage.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/entities/response/product.dart';
+import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/repositories/deal_repository.dart';
+import 'package:izowork/repositories/phase_repository.dart';
 import 'package:izowork/screens/deal/close_deal_sheet.dart';
 import 'package:izowork/screens/deal/complete_deal_sheet.dart';
 import 'package:izowork/screens/deal/edit_deal_process_sheet.dart';
 import 'package:izowork/screens/deal/process_action_sheet.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen.dart';
+import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:izowork/services/urls.dart';
@@ -37,11 +39,15 @@ class DealViewModel with ChangeNotifier {
 
   List<DealProduct> _dealProducts = [];
 
-  DealStage? _dealStage;
-
   List<Document> _documents = [];
 
-  List<DealProcess> _dealProcesses = [];
+  List<DealStage> _dealStages = [];
+
+  final List<List<DealProcess>> _dealProcessList = [];
+
+  List<Phase> _phases = [];
+
+  Phase? _phase;
 
   int _downloadIndex = -1;
 
@@ -53,10 +59,6 @@ class DealViewModel with ChangeNotifier {
     return _deal;
   }
 
-  DealStage? get dealStage {
-    return _dealStage;
-  }
-
   List<DealProduct> get dealProducts {
     return _dealProducts;
   }
@@ -65,8 +67,20 @@ class DealViewModel with ChangeNotifier {
     return _documents;
   }
 
-  List<DealProcess> get dealProcesses {
-    return _dealProcesses;
+  List<DealStage> get dealStages {
+    return _dealStages;
+  }
+
+  List<List<DealProcess>> get dealProcessList {
+    return _dealProcessList;
+  }
+
+  List<Phase> get phases {
+    return _phases;
+  }
+
+  Phase? get phase {
+    return _phase;
   }
 
   int get downloadIndex {
@@ -82,7 +96,8 @@ class DealViewModel with ChangeNotifier {
     _documents = selectedDeal.files;
     notifyListeners();
 
-    getDealProducts();
+    getDealProducts().then((value) => getPhaseList().then(
+        (value) => getDealStageList().then((value) => getDealProcesses())));
   }
 
   // MARK: -
@@ -96,12 +111,14 @@ class DealViewModel with ChangeNotifier {
               loadingStatus = LoadingStatus.completed,
             }
           else
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
+            {loadingStatus = LoadingStatus.error}
         });
   }
 
   Future getDealProducts() async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
     await DealRepository().getProduts(selectedDeal.id).then((response) => {
           if (response is List<DealProduct>)
             {
@@ -109,22 +126,61 @@ class DealViewModel with ChangeNotifier {
               loadingStatus = LoadingStatus.completed,
             }
           else
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
+            {loadingStatus = LoadingStatus.error}
+        });
+  }
+
+  Future getPhaseList() async {
+    if (deal!.object != null) {
+      await PhaseRepository().getPhases(deal!.object!.id).then((response) => {
+            if (response is List<Phase>)
+              {
+                _phases = response,
+                _phases.forEach((element) {
+                  if (deal!.phaseId == element.id) {
+                    _phase = element;
+                  }
+                }),
+                loadingStatus = LoadingStatus.completed,
+              }
+          });
+    }
+  }
+
+  Future getDealStageList() async {
+    await DealRepository().getStage(deal!.id).then((response) => {
+          if (response is List<DealStage>)
+            {loadingStatus = LoadingStatus.completed, _dealStages = response}
+          else if (response is ErrorResponse)
+            {loadingStatus = LoadingStatus.error}
         });
   }
 
   Future getDealProcesses() async {
-    await DealRepository().getProcesses(selectedDeal.id).then((response) => {
-          if (response is List<DealProcess>)
-            {
-              _dealProcesses = response,
-              loadingStatus = LoadingStatus.completed,
-            }
-          else
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
-        });
+    if (_dealStages.isNotEmpty) {
+      if (_dealProcessList.isNotEmpty) {
+        loadingStatus = LoadingStatus.searching;
+        notifyListeners();
+      }
+
+      _dealStages.forEach((element) async {
+        await DealRepository()
+            .getProcesses(element.id)
+            .then((response) => {
+                  if (response is List<DealProcess>)
+                    {
+                      _dealProcessList.add(response),
+                      loadingStatus = LoadingStatus.completed,
+                    }
+                  else
+                    {loadingStatus = LoadingStatus.error}
+                })
+            .then((value) => {
+                  //
+                  loadingStatus = LoadingStatus.completed, notifyListeners()
+                });
+      });
+    }
   }
 
   Future closeDeal(BuildContext context, String? comment) async {
@@ -212,11 +268,7 @@ class DealViewModel with ChangeNotifier {
   // MARK: - ACTIONS
 
   void expand(int index) {
-    if (_expanded.contains(index)) {
-      _expanded.removeWhere((element) => element == index);
-    } else {
-      _expanded.add(index);
-    }
+    _expanded.contains(index) ? _expanded.remove(index) : _expanded.add(index);
 
     notifyListeners();
   }
@@ -230,6 +282,7 @@ class DealViewModel with ChangeNotifier {
         MaterialPageRoute(
             builder: (context) => DealCreateScreenWidget(
                 deal: selectedDeal,
+                phase: _phase,
                 onCreate: (deal, dealProducts) => {
                       _deal = deal,
                       _dealProducts = dealProducts,
@@ -237,41 +290,56 @@ class DealViewModel with ChangeNotifier {
                     })));
   }
 
-  void showSelectionScreenSheet(BuildContext context) {
-    // showCupertinoModalBottomSheet(
-    //     topRadius: const Radius.circular(16.0),
-    //     barrierColor: Colors.black.withOpacity(0.6),
-    //     backgroundColor: HexColors.white,
-    //     context: context,
-    //     builder: (context) => SelectionScreenWidget(
-    //         selectionType: SelectionType.deal, onSelectTap: () => {}));
+  void showSelectionScreenSheet(BuildContext context, int index) {
+    List<String> dealProcessNames = [];
+
+    _dealProcessList[index].forEach((element) {
+      if (element.hidden) {
+        dealProcessNames.add(element.name);
+      }
+    });
+
+    showCupertinoModalBottomSheet(
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (context) => SelectionScreenWidget(
+            title: Titles.addProcess,
+            items: dealProcessNames,
+            onSelectTap: (value) => {
+                  // TODO UPDATE HIDDEN PROCESS
+                }));
   }
 
-  void showProcessActionScreenSheet(BuildContext context) {
+  void showProcessActionScreenSheet(BuildContext context, DealProcess process) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) => ProcessActionSheet(
-            title: 'Позиция',
+            title: process.name,
             onTap: (index) => {
                   if (index == 0)
                     {
-                      Future.delayed(const Duration(milliseconds: 200),
-                          () => showEditDealProcessScreenSheet(context))
+                      Future.delayed(
+                          const Duration(milliseconds: 200),
+                          () =>
+                              showEditDealProcessScreenSheet(context, process))
                     }
                 }));
   }
 
-  void showEditDealProcessScreenSheet(BuildContext context) {
+  void showEditDealProcessScreenSheet(
+      BuildContext context, DealProcess process) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) =>
-            EditDealProcessSheetWidget(onTap: (text, files) => {}));
+            CompleteDealSheetWidget(onTap: (text, files) => {}));
   }
 
   void showCloseDealScreenSheet(BuildContext context) {

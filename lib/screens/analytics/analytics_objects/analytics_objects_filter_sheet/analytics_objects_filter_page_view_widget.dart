@@ -72,7 +72,7 @@ class _AnalyticsObjectsFilterPageViewState
                       ? MediaQuery.of(context).size.height * 0.7
                       : MediaQuery.of(context).padding.bottom == 0.0
                           ? 324.0
-                          : 372.0,
+                          : 304.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),

@@ -106,7 +106,7 @@ class DocumentsViewModel with ChangeNotifier {
 
   Future openFile(BuildContext context, int index) async {
     String type = namespace ?? 'object';
-    String url = baseUrl + 'resources/$type-file/' + _documents[index].filename;
+    String url = baseUrl + 'resourses/$type-file/' + _documents[index].filename;
 
     if (Platform.isAndroid) {
       Directory appDocumentsDirectory =

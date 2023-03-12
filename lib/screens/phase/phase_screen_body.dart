@@ -7,6 +7,7 @@ import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/phase_view_model.dart';
 import 'package:izowork/screens/phase/views/check_list_item_widget.dart';
 import 'package:izowork/screens/phase/views/contractor_list_item_widget.dart';
+import 'package:izowork/screens/search/views/search_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
@@ -212,6 +213,33 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                   child: ContractorListItemWidget(
                                       phaseContractor: _phaseViewModel
                                           .phaseContractors[index],
+                                      onTap: () => {}));
+                            }),
+
+                        /// DEALS
+                        _phaseViewModel.deals.isEmpty
+                            ? Container()
+                            : const TitleWidget(
+                                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                text: Titles.deals,
+                                isSmall: true),
+
+                        /// DEAL LIST
+                        ListView.builder(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.only(
+                                top: 12.0,
+                                bottom: 10.0,
+                                left: 16.0,
+                                right: 16.0),
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: _phaseViewModel.deals.length,
+                            itemBuilder: (context, index) {
+                              return IgnorePointer(
+                                  ignoring: true,
+                                  child: SearchListItemWidget(
+                                      name:
+                                          '${Titles.deal} №${_phaseViewModel.deals[index].number}',
                                       onTap: () => {}));
                             }),
 

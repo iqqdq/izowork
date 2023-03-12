@@ -5,12 +5,14 @@ import 'package:izowork/screens/search_object/search_object_screen_body.dart';
 import 'package:provider/provider.dart';
 
 class SearchObjectScreenWidget extends StatelessWidget {
+  final String title;
   final bool isRoot;
   final VoidCallback onFocus;
   final Function(Object?) onPop;
 
   const SearchObjectScreenWidget(
       {Key? key,
+      required this.title,
       required this.isRoot,
       required this.onFocus,
       required this.onPop})
@@ -21,6 +23,6 @@ class SearchObjectScreenWidget extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => SearchObjectViewModel(),
         child: SearchObjectScreenBodyWidget(
-            isRoot: isRoot, onFocus: onFocus, onPop: onPop));
+            title: title, isRoot: isRoot, onFocus: onFocus, onPop: onPop));
   }
 }

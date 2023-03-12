@@ -15,12 +15,14 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class SearchObjectScreenBodyWidget extends StatefulWidget {
+  final String title;
   final bool isRoot;
   final VoidCallback onFocus;
   final Function(Object?) onPop;
 
   const SearchObjectScreenBodyWidget(
       {Key? key,
+      required this.title,
       required this.isRoot,
       required this.onFocus,
       required this.onPop})
@@ -37,7 +39,7 @@ class _SearchObjectScreenBodyState extends State<SearchObjectScreenBodyWidget> {
   final ScrollController _scrollController = ScrollController();
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
-  final Pagination _pagination = Pagination(offset: 0, size: 50);
+  Pagination _pagination = Pagination(offset: 0, size: 50);
   bool _isSearching = false;
 
   late SearchObjectViewModel _searchObjectViewModel;
@@ -92,7 +94,7 @@ class _SearchObjectScreenBodyState extends State<SearchObjectScreenBodyWidget> {
                                   title: Titles.back,
                                   onTap: () => widget.onPop(null),
                                 ),
-                          const Center(child: TitleWidget(text: Titles.manager))
+                          Center(child: TitleWidget(text: widget.title))
                         ])),
                     const SizedBox(height: 16.0),
 
@@ -106,7 +108,7 @@ class _SearchObjectScreenBodyState extends State<SearchObjectScreenBodyWidget> {
                         onChange: (text) => {
                               setState(() => _isSearching = true),
                               _debouncer.run(() {
-                                _pagination.offset = 0;
+                                _pagination = Pagination(offset: 0, size: 50);
 
                                 _searchObjectViewModel
                                     .getObjectList(

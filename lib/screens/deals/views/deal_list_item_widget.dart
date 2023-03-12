@@ -140,14 +140,14 @@ class DealListItemWidget extends StatelessWidget {
                       /// STAGE
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            SubtitleWidget(
+                          children: [
+                            const SubtitleWidget(
                                 text: '${Titles.stage}:',
                                 padding: EdgeInsets.zero),
-                            SizedBox(width: 10.0),
+                            const SizedBox(width: 10.0),
                             Expanded(
                               child: SubtitleWidget(
-                                  text: '???',
+                                  text: deal.dealStage?.name ?? '-',
                                   fontWeight: FontWeight.w700,
                                   textAlign: TextAlign.end,
                                   padding: EdgeInsets.zero),

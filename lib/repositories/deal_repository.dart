@@ -173,7 +173,8 @@ class DealRepository {
   }
 
   Future<dynamic> getProcesses(String id) async {
-    dynamic json = await WebService().get(dealProcessUrl + '?deal_id=$id');
+    dynamic json =
+        await WebService().get(dealProcessUrl + '?deal_stage_id=$id');
     List<DealProcess> dealProcesses = [];
 
     try {

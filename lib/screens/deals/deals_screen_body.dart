@@ -104,7 +104,8 @@ class _DealsScreenBodyState extends State<DealsScreenBodyWidget>
                                 onChange: (text) => {
                                       setState(() => _isSearching = true),
                                       _debouncer.run(() {
-                                        _pagination.offset = 0;
+                                        _pagination =
+                                            Pagination(offset: 0, size: 50);
 
                                         _dealsViewModel
                                             .getDealList(
@@ -161,8 +162,15 @@ class _DealsScreenBodyState extends State<DealsScreenBodyWidget>
                   child: Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: FilterButtonWidget(
-                          onTap: () =>
-                              _dealsViewModel.showDealsFilterSheet(context)
+                          onTap: () => _dealsViewModel.showDealsFilterSheet(
+                              context,
+                              () => {
+                                    _pagination =
+                                        Pagination(offset: 0, size: 50),
+                                    _dealsViewModel.getDealList(
+                                        pagination: _pagination,
+                                        search: _textEditingController.text)
+                                  })
                           // onClearTap: () => {}
                           )))),
 

@@ -34,7 +34,7 @@ class _ProductSelectionScreenBodyState
   final ScrollController _scrollController = ScrollController();
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
-  final Pagination _pagination = Pagination(offset: 0, size: 50);
+  Pagination _pagination = Pagination(offset: 0, size: 50);
   bool _isSearching = false;
 
   late ProductSelectionViewModel _productSelectionViewModel;
@@ -95,7 +95,7 @@ class _ProductSelectionScreenBodyState
                         onChange: (text) => {
                               setState(() => _isSearching = true),
                               _debouncer.run(() {
-                                _pagination.offset = 0;
+                                _pagination = Pagination(offset: 0, size: 50);
 
                                 _productSelectionViewModel
                                     .getProductList(

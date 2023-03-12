@@ -220,6 +220,8 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                         textEditingController: _emailTextEditingConrtoller,
                         focusNode: _emailFocusNode,
                         placeholder: Titles.email,
+                        textInputType: TextInputType.emailAddress,
+                        textCapitalization: TextCapitalization.none,
                         onTap: () => {
                               setState(() => {
                                     FocusScope.of(context).unfocus(),
@@ -255,47 +257,43 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                         padding: EdgeInsets.zero,
                         itemCount: _socials.length,
                         itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              InputWidget(
-                                  margin: const EdgeInsets.only(bottom: 10.0),
-                                  height: 56.0,
-                                  textEditingController:
-                                      _socials[index].textEditingController,
-                                  focusNode: _socials[index].focusNode,
-                                  textCapitalization: TextCapitalization.none,
-                                  placeholder: Titles.socialLink,
-                                  onTap: () => {
-                                        setState(() => {
-                                              _index = index,
-                                              FocusScope.of(context).unfocus(),
-                                              _socials[index]
-                                                  .focusNode
-                                                  .requestFocus()
-                                            })
-                                      },
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context).unfocus(),
-                                  onClearTap: () => _socials[index]
-                                      .textEditingController
-                                      .clear()),
-
-                              /// ADD SOCIAL BUTTON
-                              index == _socials.length - 1
-                                  ? BorderButtonWidget(
-                                      title: Titles.addSocial,
-                                      margin: EdgeInsets.zero,
-                                      onTap: () => setState(() => {
-                                            _socials[_index]
+                          return Column(children: [
+                            InputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                height: 56.0,
+                                textEditingController:
+                                    _socials[index].textEditingController,
+                                focusNode: _socials[index].focusNode,
+                                textCapitalization: TextCapitalization.none,
+                                placeholder: Titles.socialLink,
+                                onTap: () => {
+                                      setState(() => {
+                                            _index = index,
+                                            FocusScope.of(context).unfocus(),
+                                            _socials[index]
                                                 .focusNode
-                                                .unfocus(),
-                                            _socials.add(SocialInputModel(
-                                                TextEditingController(),
-                                                FocusNode())),
-                                          }))
-                                  : Container()
-                            ],
-                          );
+                                                .requestFocus()
+                                          })
+                                    },
+                                onEditingComplete: () =>
+                                    FocusScope.of(context).unfocus(),
+                                onClearTap: () => _socials[index]
+                                    .textEditingController
+                                    .clear()),
+
+                            /// ADD SOCIAL BUTTON
+                            index == _socials.length - 1
+                                ? BorderButtonWidget(
+                                    title: Titles.addSocial,
+                                    margin: EdgeInsets.zero,
+                                    onTap: () => setState(() => {
+                                          _socials[_index].focusNode.unfocus(),
+                                          _socials.add(SocialInputModel(
+                                              TextEditingController(),
+                                              FocusNode())),
+                                        }))
+                                : Container()
+                          ]);
                         })
                   ])),
 

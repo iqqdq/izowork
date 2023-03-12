@@ -3,9 +3,7 @@ import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
-import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/product.dart';
-import 'package:izowork/models/search_object_view_model.dart';
 import 'package:izowork/models/search_product_view_model.dart';
 import 'package:izowork/screens/search_user/views/search_user_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -41,7 +39,7 @@ class _SearchProductScreenBodyState
   final ScrollController _scrollController = ScrollController();
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
-  final Pagination _pagination = Pagination(offset: 0, size: 50);
+  Pagination _pagination = Pagination(offset: 0, size: 50);
   bool _isSearching = false;
 
   late SearchProductViewModel _searchProductViewModel;
@@ -110,7 +108,7 @@ class _SearchProductScreenBodyState
                         onChange: (text) => {
                               setState(() => _isSearching = true),
                               _debouncer.run(() {
-                                _pagination.offset = 0;
+                                _pagination = Pagination(offset: 0, size: 50);
 
                                 _searchProductViewModel
                                     .getProductList(

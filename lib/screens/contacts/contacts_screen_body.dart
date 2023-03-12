@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/pagination.dart';
 import 'package:izowork/models/contacts_view_model.dart';
 import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
+import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -22,6 +25,13 @@ class ContactsScreenBodyWidget extends StatefulWidget {
 class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+
+  final ScrollController _scrollController = ScrollController();
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
+
+  Pagination _pagination = Pagination(offset: 0, size: 50);
+  bool _isSearching = false;
+
   late ContactsViewModel _contactsViewModel;
 
   @override
@@ -42,6 +52,8 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
 
     return Scaffold(
         backgroundColor: HexColors.white,
+        floatingActionButton: FloatingButtonWidget(
+            onTap: () => _contactsViewModel.showContactEditScreen(context)),
         appBar: AppBar(
             toolbarHeight: 116.0,
             titleSpacing: 0.0,
@@ -79,10 +91,25 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
                             placeholder: '${Titles.search}...',
                             onTap: () => setState,
                             onChange: (text) => {
-                                  // TODO SEARCH CONTACTS
+                                  setState(() => _isSearching = true),
+                                  _debouncer.run(() {
+                                    _pagination =
+                                        Pagination(offset: 0, size: 50);
+
+                                    _contactsViewModel
+                                        .getContactList(
+                                            pagination: _pagination,
+                                            search: _textEditingController.text)
+                                        .then((value) => setState(
+                                            () => _isSearching = false));
+                                  })
                                 },
                             onClearTap: () => {
-                                  // TODO CLEAR CONTACTS SEARCH
+                                  _contactsViewModel.resetFilter(),
+                                  _pagination.offset = 0,
+                                  _contactsViewModel.getContactList(
+                                      pagination: _pagination,
+                                      search: _textEditingController.text)
                                 }))
               ])
             ])),
@@ -90,16 +117,19 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
             child: Stack(children: [
           /// CONTACTS LIST VIEW
           ListView.builder(
+              controller: _scrollController,
               shrinkWrap: true,
               padding: EdgeInsets.only(
                   left: 16.0,
                   right: 16.0,
                   top: 16.0,
                   bottom: 80.0 + MediaQuery.of(context).padding.bottom),
-              itemCount: 10,
+              itemCount: _contactsViewModel.contacts.length,
               itemBuilder: (context, index) {
                 return ContactListItemWidget(
-                    onUserTap: () => {},
+                    contact: _contactsViewModel.contacts[index],
+                    onContactTap: () =>
+                        _contactsViewModel.showContactScreen(context, index),
                     onPhoneTap: () => {},
                     onLinkTap: () =>
                         _contactsViewModel.openUrl('https://www.google.com/'));
@@ -111,10 +141,32 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
               child: Align(
                   alignment: Alignment.bottomCenter,
                   child: FilterButtonWidget(
-                    onTap: () =>
-                        _contactsViewModel.showContactsFilterSheet(context),
+                    onTap: () => _contactsViewModel.showContactsFilterSheet(
+                        context,
+                        () => {
+                              _pagination = Pagination(offset: 0, size: 50),
+                              _contactsViewModel.getContactList(
+                                  pagination: _pagination,
+                                  search: _textEditingController.text)
+                            }),
                     // onClearTap: () => {}
                   ))),
+
+          /// EMPTY LIST TEXT
+          _contactsViewModel.loadingStatus == LoadingStatus.completed &&
+                  _contactsViewModel.contacts.isEmpty &&
+                  !_isSearching
+              ? Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, bottom: 116.0),
+                      child: Text(Titles.noResult,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16.0,
+                              color: HexColors.grey50))))
+              : Container(),
 
           /// INDICATOR
           _contactsViewModel.loadingStatus == LoadingStatus.searching

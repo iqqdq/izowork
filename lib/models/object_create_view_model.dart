@@ -117,28 +117,25 @@ class ObjectCreateViewModel with ChangeNotifier {
       _isCreateFolder = object!.hideDir;
     }
 
-    getTypeList();
+    getTypeList().then((value) => getStageList());
   }
 
   // MARK: -
   // MARK: - API CALL
 
   Future getTypeList() async {
-    await ObjectRepository()
-        .getObjectTypes()
-        .then((response) => {
-              if (response is List<ObjectType>)
-                {
-                  _objectTypes = response,
-                  _objectTypes.forEach((element) {
-                    if (object?.objectTypeId == element.id) {
-                      _objectType = element;
-                      return;
-                    }
-                  })
+    await ObjectRepository().getObjectTypes().then((response) => {
+          if (response is List<ObjectType>)
+            {
+              _objectTypes = response,
+              _objectTypes.forEach((element) {
+                if (object?.objectTypeId == element.id) {
+                  _objectType = element;
+                  return;
                 }
-            })
-        .then((value) => getStageList());
+              })
+            }
+        });
   }
 
   Future getStageList() async {
