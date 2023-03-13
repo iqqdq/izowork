@@ -116,6 +116,7 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                           onTap: () =>
                               _moreViewModel.showProfileScreen(context))
                       : MoreListItemWidget(
+                          showSeparator: index > 1,
                           title: _titles[index - 1],
                           onTap: () => {
                                 index == 1

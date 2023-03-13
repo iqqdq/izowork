@@ -225,23 +225,25 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                 isSmall: true),
 
                         /// DEAL LIST
-                        ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.only(
-                                top: 12.0,
-                                bottom: 10.0,
-                                left: 16.0,
-                                right: 16.0),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _phaseViewModel.deals.length,
-                            itemBuilder: (context, index) {
-                              return IgnorePointer(
-                                  ignoring: true,
-                                  child: SearchListItemWidget(
-                                      name:
-                                          '${Titles.deal} №${_phaseViewModel.deals[index].number}',
-                                      onTap: () => {}));
-                            }),
+                        _phaseViewModel.deals.isEmpty
+                            ? Container()
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.only(
+                                    top: 12.0,
+                                    bottom: 10.0,
+                                    left: 16.0,
+                                    right: 16.0),
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _phaseViewModel.deals.length,
+                                itemBuilder: (context, index) {
+                                  return IgnorePointer(
+                                      ignoring: true,
+                                      child: SearchListItemWidget(
+                                          name:
+                                              '${Titles.deal} №${_phaseViewModel.deals[index].number}',
+                                          onTap: () => {}));
+                                }),
 
                         /// CHECK
                         _phaseViewModel.phaseChecklists.isEmpty
@@ -267,8 +269,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                   state: _phaseViewModel
                                       .phaseChecklists[index].state,
                                   onTap: () => _phaseViewModel
-                                      .showCompleteTaskScreenSheet(
-                                          context, index));
+                                      .showCompleteTaskSheet(context, index));
                             }),
 
                         /// SET TASK BUTTON

@@ -309,7 +309,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
                           onTap: () =>
-                              _objectPageViewModel.showObjectCreateScreenSheet(
+                              _objectPageViewModel.showObjectCreateSheet(
                                   context,
                                   () => widget.onUpdate(
                                       _objectPageViewModel.object!)))),

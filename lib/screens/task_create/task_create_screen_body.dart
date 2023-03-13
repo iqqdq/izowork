@@ -129,7 +129,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                 _taskCreateViewModel.task?.state ??
                                 Titles.notSelected,
                             onTap: () => _taskCreateViewModel
-                                .showSelectionScreenSheet(context)),
+                                .showSelectionSheet(context)),
 
                         /// DEADLINE SELECTION INPUT
                         SelectionInputWidget(
@@ -149,7 +149,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                 _taskCreateViewModel.task?.taskManager?.name ??
                                 Titles.notSelected,
                             onTap: () => _taskCreateViewModel
-                                .showSearchUserScreenSheet(context, 0)),
+                                .showSearchUserSheet(context, 0)),
 
                         /// TASK MANAGER SELECTION INPUT
                         SelectionInputWidget(
@@ -160,7 +160,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                 _taskCreateViewModel.task?.taskManager?.name ??
                                 Titles.notSelected,
                             onTap: () => _taskCreateViewModel
-                                .showSearchUserScreenSheet(context, 1)),
+                                .showSearchUserSheet(context, 1)),
 
                         /// CO-EXECUTOR SELECTION INPUT
                         SelectionInputWidget(
@@ -171,7 +171,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                 _taskCreateViewModel.task?.coExecutor?.name ??
                                 Titles.notSelected,
                             onTap: () => _taskCreateViewModel
-                                .showSearchUserScreenSheet(context, 2)),
+                                .showSearchUserSheet(context, 2)),
 
                         /// OBJECT SELECTION INPUT
                         SelectionInputWidget(
@@ -182,7 +182,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                 _taskCreateViewModel.task?.object?.name ??
                                 Titles.notSelected,
                             onTap: () => _taskCreateViewModel
-                                .showSearchObjectScreenSheet(context)),
+                                .showSearchObjectSheet(context)),
 
                         /// COMPANY SELECTION INPUT
                         SelectionInputWidget(
@@ -193,7 +193,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                 _taskCreateViewModel.task?.company?.name ??
                                 Titles.notSelected,
                             onTap: () => _taskCreateViewModel
-                                .showSearchCompanyScreenSheet(context)),
+                                .showSearchCompanySheet(context)),
 
                         /// DESCRTIPTION INPUT
                         InputWidget(

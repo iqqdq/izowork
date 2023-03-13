@@ -10,7 +10,8 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/repositories/document_repository.dart';
-import 'package:izowork/screens/documents/documents_filter_sheet/documents_filter_widget.dart';
+import 'package:izowork/screens/documents/documents_filter_sheet/documents_filter_page_view_screen.dart';
+import 'package:izowork/screens/documents/documents_filter_sheet/documents_filter_page_view_screen_body.dart';
 import 'package:izowork/screens/documents/documents_screen.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -27,15 +28,15 @@ class DocumentsViewModel with ChangeNotifier {
 
   final List<Document> _documents = [];
 
-  // DocumentsFilter? _documentsFilter;
+  DocumentsFilter? _documentsFilter;
 
   List<Document> get documents {
     return _documents;
   }
 
-  // DocumentsFilter? get documentsFilter {
-  //   return _documentsFilter;
-  // }
+  DocumentsFilter? get documentsFilter {
+    return _documentsFilter;
+  }
 
   int _downloadIndex = -1;
 
@@ -62,12 +63,11 @@ class DocumentsViewModel with ChangeNotifier {
     }
     await DocumentRepository()
         .getDocuments(
-          pagination: pagination,
-          namespace: namespace ?? 'object',
-          id: id ?? '',
-          search: search,
-          // params: _dealsFilter?.params
-        )
+            pagination: pagination,
+            namespace: namespace ?? 'object',
+            id: id ?? '',
+            search: search,
+            params: _documentsFilter?.params)
         .then((response) => {
               if (response is List<Document>)
                 {
@@ -141,7 +141,7 @@ class DocumentsViewModel with ChangeNotifier {
   }
 
   void resetFilter() {
-    // _documentsFilter = null;
+    _documentsFilter = null;
   }
 
   // MARK: -
@@ -157,13 +157,27 @@ class DocumentsViewModel with ChangeNotifier {
                 namespace: _documents[index].namespace)));
   }
 
-  void showFilesFilterSheet(BuildContext context) {
+  void showDocumentsFilterSheet(BuildContext context, Function() onFilter) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) =>
-            DocumentsFilterWidget(onApplyTap: () => {}, onResetTap: () => {}));
+        builder: (context) => DocumentsFilterPageViewScreenWidget(
+            documentsFilter: _documentsFilter,
+            onPop: (contactsFilter) => {
+                  if (contactsFilter == null)
+                    {
+                      // CLEAR
+                      resetFilter(),
+                      onFilter()
+                    }
+                  else
+                    {
+                      // FILTER
+                      _documentsFilter = contactsFilter,
+                      onFilter()
+                    }
+                }));
   }
 }

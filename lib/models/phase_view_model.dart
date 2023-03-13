@@ -201,7 +201,7 @@ class PhaseViewModel with ChangeNotifier {
     //         builder: (context) => DealScreenWidget(deal: Deal())));
   }
 
-  void showCompleteTaskScreenSheet(BuildContext context, int index) {
+  void showCompleteTaskSheet(BuildContext context, int index) {
     PhaseChecklistInformation? phaseChecklistInformation;
 
     getPhaseChecklistInformationList(_phaseChecklists[index].id)

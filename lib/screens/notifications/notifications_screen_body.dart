@@ -7,6 +7,7 @@ import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
+import 'package:izowork/views/separator_widget.dart';
 import 'package:provider/provider.dart';
 
 class NotificationsScreenBodyWidget extends StatefulWidget {
@@ -72,6 +73,7 @@ class _NotificationsScreenBodyState
                     dateTime: DateTime.now().subtract(Duration(days: index)),
                     isUnread: index < 3);
               }),
+          const SeparatorWidget(),
 
           /// INDICATOR
           _notificationsViewModel.loadingStatus == LoadingStatus.searching

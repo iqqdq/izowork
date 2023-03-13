@@ -364,7 +364,7 @@ class TaskCreateViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showSelectionScreenSheet(BuildContext context) {
+  void showSelectionSheet(BuildContext context) {
     if (_taskState != null) {
       if (_taskState!.states.isNotEmpty) {
         showCupertinoModalBottomSheet(
@@ -419,7 +419,7 @@ class TaskCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  void showSearchUserScreenSheet(BuildContext context, int index) {
+  void showSearchUserSheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -444,7 +444,7 @@ class TaskCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  void showSearchObjectScreenSheet(BuildContext context) {
+  void showSearchObjectSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -458,7 +458,7 @@ class TaskCreateViewModel with ChangeNotifier {
                 {_object = object, notifyListeners(), Navigator.pop(context)}));
   }
 
-  void showSearchCompanyScreenSheet(BuildContext context) {
+  void showSearchCompanySheet(BuildContext context) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),

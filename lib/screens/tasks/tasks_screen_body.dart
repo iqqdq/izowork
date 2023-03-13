@@ -180,7 +180,7 @@ class _TasksScreenBodyState extends State<TasksScreenBodyWidget>
               ? Center(
                   child: Padding(
                       padding: const EdgeInsets.only(
-                          left: 20.0, right: 20.0, bottom: 116.0),
+                          left: 20.0, right: 20.0, bottom: 100.0),
                       child: Text(Titles.noResult,
                           textAlign: TextAlign.center,
                           style: TextStyle(

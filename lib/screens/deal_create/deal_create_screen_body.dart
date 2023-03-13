@@ -146,7 +146,7 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                         .deal?.responsible?.name ??
                                     Titles.notSelected,
                                 onTap: () => _dealCreateViewModel
-                                    .showSearchUserScreenSheet(context)),
+                                    .showSearchUserSheet(context)),
 
                             /// OBJECT SELECTION INPUT
                             Opacity(
@@ -172,8 +172,7 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                                     .selectedObject?.name ??
                                                 Titles.notSelected,
                                         onTap: () => _dealCreateViewModel
-                                            .showSearchObjectScreenSheet(
-                                                context)))),
+                                            .showSearchObjectSheet(context)))),
 
                             /// PHASE SELECTION INPUT
                             Opacity(
@@ -198,7 +197,7 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                                 .selectedPhase?.name ??
                                             Titles.notSelected,
                                         onTap: () => _dealCreateViewModel
-                                            .showSelectionScreenSheet(context)))),
+                                            .showSelectionSheet(context)))),
 
                             /// COMPANY SELECTION INPUT
                             SelectionInputWidget(
@@ -209,7 +208,7 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                     _dealCreateViewModel.deal?.company?.name ??
                                     Titles.notSelected,
                                 onTap: () => _dealCreateViewModel
-                                    .showSearchCompanyScreenSheet(context)),
+                                    .showSearchCompanySheet(context)),
 
                             /// COMMENT INPUT
                             InputWidget(
@@ -240,7 +239,7 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                             .dealProducts[index],
                                         onProductSearchTap: () =>
                                             _dealCreateViewModel
-                                                .showSearchProductScreenSheet(
+                                                .showSearchProductSheet(
                                                     context, index),
                                         onWeightChange: (weight) =>
                                             _dealCreateViewModel

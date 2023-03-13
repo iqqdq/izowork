@@ -3,10 +3,15 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/views/separator_widget.dart';
 
 class MoreListItemWidget extends StatelessWidget {
+  final bool showSeparator;
   final String title;
   final VoidCallback onTap;
 
-  const MoreListItemWidget({Key? key, required this.title, required this.onTap})
+  const MoreListItemWidget(
+      {Key? key,
+      required this.showSeparator,
+      required this.title,
+      required this.onTap})
       : super(key: key);
 
   @override
@@ -18,9 +23,11 @@ class MoreListItemWidget extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             children: [
-              const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: SeparatorWidget()),
+              showSeparator
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: SeparatorWidget())
+                  : Container(),
               Container(
                   padding: const EdgeInsets.symmetric(vertical: 14.0),
                   child: Padding(

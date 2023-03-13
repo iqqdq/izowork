@@ -419,7 +419,7 @@ class ObjectCreateViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showTypeSelectionScreenSheet(BuildContext context) {
+  void showTypeSelectionSheet(BuildContext context) {
     if (_objectTypes.isNotEmpty) {
       List<String> items = [];
       _objectTypes.forEach((element) {
@@ -445,7 +445,7 @@ class ObjectCreateViewModel with ChangeNotifier {
     }
   }
 
-  void showStageSelectionScreenSheet(BuildContext context) {
+  void showStageSelectionSheet(BuildContext context) {
     if (_objectStages.isNotEmpty) {
       List<String> items = [];
       _objectStages.forEach((element) {
@@ -471,7 +471,7 @@ class ObjectCreateViewModel with ChangeNotifier {
     }
   }
 
-  void showSearchCompanyScreenSheet(BuildContext context, int index) {
+  void showSearchCompanySheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),

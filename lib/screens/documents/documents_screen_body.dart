@@ -171,7 +171,7 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
               ? Center(
                   child: Padding(
                       padding: const EdgeInsets.only(
-                          left: 20.0, right: 20.0, bottom: 116.0),
+                          left: 20.0, right: 20.0, bottom: 100.0),
                       child: Text(Titles.noResult,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -185,8 +185,14 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
               child: Align(
                   alignment: Alignment.bottomCenter,
                   child: FilterButtonWidget(
-                      onTap: () =>
-                          _documentsViewModel.showFilesFilterSheet(context)
+                      onTap: () => _documentsViewModel.showDocumentsFilterSheet(
+                          context,
+                          () => {
+                                _pagination = Pagination(offset: 0, size: 50),
+                                _documentsViewModel.getDealList(
+                                    pagination: _pagination,
+                                    search: _textEditingController.text)
+                              })
 
                       // onClearTap: () => {}
                       ))),

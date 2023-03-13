@@ -8,7 +8,7 @@ import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/response/contact.dart';
 import 'package:izowork/repositories/contacts_repository.dart';
 import 'package:izowork/screens/contact/contact_screen.dart';
-import 'package:izowork/screens/contact_edit/contact_edit_screen.dart';
+import 'package:izowork/screens/contact_create/contact_create_screen.dart';
 import 'package:izowork/screens/contacts/contacts_filter_sheet/contacts_filter_page_view_screen.dart';
 import 'package:izowork/screens/contacts/contacts_filter_sheet/contacts_filter_page_view_screen_body.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -48,7 +48,10 @@ class ContactsViewModel with ChangeNotifier {
     }
 
     await ContactRepository()
-        .getContacts(pagination: pagination, search: search)
+        .getContacts(
+            pagination: pagination,
+            search: search,
+            params: _contactsFilter?.params)
         .then((response) => {
               if (response is List<Contact>)
                 {
@@ -89,16 +92,22 @@ class ContactsViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ContactScreenWidget(contact: _contacts[index])));
+            builder: (context) => ContactScreenWidget(
+                contact: _contacts[index],
+                onDelete: (contact) => {
+                      _contacts
+                          .removeWhere((element) => element.id == contact.id),
+                      notifyListeners()
+                    })));
   }
 
   void showContactEditScreen(BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ContactEditScreenWidget(
+            builder: (context) => ContactCreateScreenWidget(
                 contact: null,
+                onDelete: null,
                 onPop: (contact) => {
                       if (contact != null)
                         {_contacts.insert(0, contact), notifyListeners()}

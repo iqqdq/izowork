@@ -6,14 +6,16 @@ import 'package:provider/provider.dart';
 
 class ContactScreenWidget extends StatelessWidget {
   final Contact contact;
+  final Function(Contact) onDelete;
 
-  const ContactScreenWidget({Key? key, required this.contact})
+  const ContactScreenWidget(
+      {Key? key, required this.contact, required this.onDelete})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => ContactViewModel(contact),
+        create: (context) => ContactViewModel(contact, onDelete),
         child: const ContactScreenBodyWidget());
   }
 }

@@ -131,10 +131,10 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                                           index,
                                                           int.tryParse(days)!),
                                               onProductSearchTap: () =>
-                                                  _phaseCreateViewModel
-                                                      .showProductSearchScreenSheet(
-                                                          context, index),
-                                              onDeleteTap: () => _phaseCreateViewModel.deletePhaseProduct(context, index));
+                                                  _phaseCreateViewModel.showProductSearchSheet(
+                                                      context, index),
+                                              onDeleteTap: () =>
+                                                  _phaseCreateViewModel.deletePhaseProduct(context, index));
                                         }),
 
                                     /// ADD PRODUCT BUTTON

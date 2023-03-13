@@ -3,12 +3,11 @@ import 'package:izowork/entities/response/company.dart';
 
 Contact contactFromJson(String str) => Contact.fromJson(json.decode(str));
 
-String contactToJson(Contact data) => json.encode(data.toJson());
-
 class Contact {
   Contact({
     required this.id,
     required this.name,
+    this.post,
     this.phone,
     this.email,
     required this.social,
@@ -19,6 +18,7 @@ class Contact {
 
   String id;
   String name;
+  String? post;
   String? phone;
   String? email;
   List<String> social;
@@ -28,9 +28,10 @@ class Contact {
 
   factory Contact.fromJson(Map<String, dynamic> json) => Contact(
         id: json["id"],
-        name: json["name"],
-        phone: json["phone"],
-        email: json["email"],
+        name: json["name"] == '' ? null : json["name"],
+        post: json["post"] == '' ? null : json["post"],
+        phone: json["phone"] == '' ? null : json["phone"],
+        email: json["email"] == '' ? null : json["email"],
         social: json["social"] == null
             ? []
             : List<String>.from(json["social"].map((x) => x)),
@@ -39,15 +40,4 @@ class Contact {
         company:
             json["company"] == null ? null : Company.fromJson(json["company"]),
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "phone": phone,
-        "email": email,
-        "social": List<dynamic>.from(social.map((x) => x)),
-        "avatar": avatar,
-        "company_id": companyId,
-        "company": company?.toJson(),
-      };
 }

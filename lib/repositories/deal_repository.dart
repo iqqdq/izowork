@@ -1,7 +1,7 @@
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/deal_create_request.dart';
 import 'package:izowork/entities/request/deal_file_request.dart';
-import 'package:izowork/entities/request/deal_process_request.dart';
+import 'package:izowork/entities/request/deal_process_update_request.dart';
 import 'package:izowork/entities/request/deal_product_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/response/deal.dart';
@@ -187,8 +187,10 @@ class DealRepository {
     }
   }
 
-  Future<dynamic> updateProcess(DealProcessRequest dealProcessRequest) async {
-    dynamic json = await WebService().patch(dealProcessUrl, dealProcessRequest);
+  Future<dynamic> updateProcess(
+      DealProcessUpdateRequest dealProcessUpdateRequest) async {
+    dynamic json =
+        await WebService().patch(dealProcessUrl, dealProcessUpdateRequest);
 
     try {
       return DealProcess.fromJson(json["process"]);

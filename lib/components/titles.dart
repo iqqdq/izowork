@@ -71,6 +71,7 @@ abstract class Titles {
   static const processes = 'Процессы';
   static const news = 'Новости';
   static const newNews = 'Новая новость';
+  static const contact = 'Контакт';
   static const contacts = 'Контакты';
   static const newContact = 'Новый контакт';
   static const contactEdit = 'Редактирование контакта';
@@ -185,6 +186,7 @@ abstract class Titles {
   static const sorting = 'Сортировка';
   static const byAlphabet = 'По алфавиту';
   static const byPrice = 'По цене';
+  static const byDate = 'По дате';
   static const byEffectiveness = 'По эффективности';
   static const type = 'Тип';
   static const post = 'Должность';

@@ -50,7 +50,7 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                     child:
                         BackButtonWidget(onTap: () => Navigator.pop(context))),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(Titles.profile,
+                  Text(Titles.contact,
                       style: TextStyle(
                           color: HexColors.black,
                           fontSize: 18.0,
@@ -108,14 +108,12 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                       fontWeight: FontWeight.bold),
                 ),
 
-                /// SPECIALITY
+                /// POST
                 const TitleWidget(
                     text: Titles.speciality,
                     padding: EdgeInsets.only(bottom: 4.0),
                     isSmall: true),
-                Text(
-                    // _contactViewModel.contact.speciality,
-                    '???',
+                Text(_contactViewModel.contact?.post ?? '-',
                     style: TextStyle(
                         color: HexColors.black,
                         fontSize: 14.0,
@@ -235,6 +233,7 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                       title: Titles.edit,
                       onTap: () =>
                           _contactViewModel.showContactEditScreen(context)))),
+          const SeparatorWidget(),
 
           /// INDICATOR
           _contactViewModel.loadingStatus == LoadingStatus.searching

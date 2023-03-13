@@ -3,11 +3,12 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/entities/response/contact.dart';
-import 'package:izowork/screens/contact_edit/contact_edit_screen.dart';
+import 'package:izowork/screens/contact_create/contact_create_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactViewModel with ChangeNotifier {
   final Contact selectedContact;
+  final Function(Contact) onDelete;
 
   Contact? _contact;
 
@@ -17,7 +18,7 @@ class ContactViewModel with ChangeNotifier {
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
-  ContactViewModel(this.selectedContact) {
+  ContactViewModel(this.selectedContact, this.onDelete) {
     _contact = selectedContact;
     notifyListeners();
   }
@@ -29,9 +30,10 @@ class ContactViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ContactEditScreenWidget(
+            builder: (context) => ContactCreateScreenWidget(
                 contact: selectedContact,
-                onPop: (contact) => {_contact = contact, notifyListeners()})));
+                onPop: (contact) => {_contact = contact, notifyListeners()},
+                onDelete: (contact) => onDelete(contact))));
   }
 
   // MARK: -

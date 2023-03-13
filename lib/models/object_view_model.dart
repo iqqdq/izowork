@@ -179,8 +179,7 @@ class ObjectPageViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showObjectCreateScreenSheet(
-      BuildContext context, VoidCallback onUpdate) {
+  void showObjectCreateSheet(BuildContext context, VoidCallback onUpdate) {
     Navigator.push(
         context,
         MaterialPageRoute(

@@ -32,17 +32,16 @@ class ContactListItemWidget extends StatelessWidget {
             border: Border.all(width: 0.5, color: HexColors.grey30)),
         child: Material(
             color: Colors.transparent,
-            child: ListView(
-                padding: const EdgeInsets.all(16.0),
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                children: [
-                  /// CONTACT
-                  InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      borderRadius: BorderRadius.circular(16.0),
-                      child: Row(children: [
+            child: InkWell(
+                highlightColor: HexColors.grey20,
+                splashColor: Colors.transparent,
+                borderRadius: BorderRadius.circular(16.0),
+                child: ListView(
+                    padding: const EdgeInsets.all(16.0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    children: [
+                      Row(children: [
                         /// CONTACT AVATAR
                         Stack(children: [
                           SvgPicture.asset('assets/ic_avatar.svg',
@@ -76,88 +75,89 @@ class ContactListItemWidget extends StatelessWidget {
                               const SizedBox(height: 2.0),
 
                               /// CONTACT SPECIALIZATION
-                              Text('Специальность',
+                              Text(contact.post ?? '-',
                                   style: TextStyle(
                                       color: HexColors.grey50,
                                       fontSize: 12.0,
                                       fontFamily: 'PT Root UI')),
                             ]))
                       ]),
-                      onTap: () => onContactTap()),
-                  const SizedBox(height: 16.0),
-                  Row(children: [
-                    Expanded(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          const TitleWidget(
-                              text: Titles.companyName,
-                              padding: EdgeInsets.zero,
-                              isSmall: true),
-                          const SizedBox(height: 4.0),
+                      const SizedBox(height: 16.0),
+                      Row(children: [
+                        Expanded(
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                              const TitleWidget(
+                                  text: Titles.companyName,
+                                  padding: EdgeInsets.zero,
+                                  isSmall: true),
+                              const SizedBox(height: 4.0),
 
-                          /// COMPANY NAME
-                          SubtitleWidget(
-                              text: contact.company?.name ?? '-',
-                              padding: EdgeInsets.zero,
-                              fontWeight: FontWeight.normal),
-                        ])),
-                    const SizedBox(width: 10.0),
+                              /// COMPANY NAME
+                              SubtitleWidget(
+                                  text: contact.company?.name ?? '-',
+                                  padding: EdgeInsets.zero,
+                                  fontWeight: FontWeight.normal),
+                            ])),
+                        const SizedBox(width: 10.0),
 
-                    /// TAG
-                    contact.company == null
-                        ? Container()
-                        : StatusWidget(
-                            title: contact.company?.type ?? '-', status: 0)
-                  ]),
-                  const SizedBox(height: 10.0),
-                  const TitleWidget(
-                      text: Titles.phone,
-                      padding: EdgeInsets.zero,
-                      isSmall: true),
-                  const SizedBox(height: 4.0),
+                        /// TAG
+                        contact.company == null
+                            ? Container()
+                            : StatusWidget(
+                                title: contact.company?.type ?? '-', status: 0)
+                      ]),
+                      const SizedBox(height: 10.0),
+                      const TitleWidget(
+                          text: Titles.phone,
+                          padding: EdgeInsets.zero,
+                          isSmall: true),
+                      const SizedBox(height: 4.0),
 
-                  /// PHONE
-                  SubtitleWidget(
-                      text: contact.phone ?? '-',
-                      padding: EdgeInsets.zero,
-                      fontWeight: FontWeight.normal),
-                  const SizedBox(height: 10.0),
-                  const TitleWidget(
-                      text: Titles.email,
-                      padding: EdgeInsets.zero,
-                      isSmall: true),
-                  const SizedBox(height: 4.0),
+                      /// PHONE
+                      SubtitleWidget(
+                          text: contact.phone ?? '-',
+                          padding: EdgeInsets.zero,
+                          fontWeight: FontWeight.normal),
+                      const SizedBox(height: 10.0),
+                      const TitleWidget(
+                          text: Titles.email,
+                          padding: EdgeInsets.zero,
+                          isSmall: true),
+                      const SizedBox(height: 4.0),
 
-                  /// EMAIL
-                  SubtitleWidget(
-                      text: contact.email ?? '-',
-                      padding: EdgeInsets.zero,
-                      fontWeight: FontWeight.normal),
-                  const SizedBox(height: 10.0),
+                      /// EMAIL
+                      SubtitleWidget(
+                          text: contact.email ?? '-',
+                          padding: EdgeInsets.zero,
+                          fontWeight: FontWeight.normal),
+                      const SizedBox(height: 10.0),
 
-                  /// LINK LIST VIEW
-                  ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      itemCount: contact.social.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                            padding: const EdgeInsets.only(bottom: 4.0),
-                            child: InkWell(
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                borderRadius: BorderRadius.circular(16.0),
-                                child: Text(contact.social[index],
-                                    style: TextStyle(
-                                        color: HexColors.primaryDark,
-                                        fontSize: 14.0,
-                                        fontFamily: 'PT Root UI',
-                                        fontWeight: FontWeight.w600,
-                                        decoration: TextDecoration.underline)),
-                                onTap: () => onLinkTap()));
-                      })
-                ])));
+                      /// LINK LIST VIEW
+                      ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemCount: contact.social.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                                padding: const EdgeInsets.only(bottom: 4.0),
+                                child: InkWell(
+                                    highlightColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    child: Text(contact.social[index],
+                                        style: TextStyle(
+                                            color: HexColors.primaryDark,
+                                            fontSize: 14.0,
+                                            fontFamily: 'PT Root UI',
+                                            fontWeight: FontWeight.w600,
+                                            decoration:
+                                                TextDecoration.underline)),
+                                    onTap: () => onLinkTap()));
+                          })
+                    ]),
+                onTap: () => onContactTap())));
   }
 }

@@ -22,7 +22,7 @@ class ContactRepository {
 
   Future<dynamic> createContact(ContactRequest contactRequest) async {
     dynamic json =
-        await WebService().patch(contactCreateUrl, jsonEncode(contactRequest));
+        await WebService().post(contactCreateUrl, jsonEncode(contactRequest));
 
     try {
       return Contact.fromJson(json["contact"]);
@@ -44,7 +44,7 @@ class ContactRepository {
 
   Future<dynamic> deleteContact(DeleteRequest deleteRequest) async {
     dynamic json =
-        await WebService().patch(contactDeleteUrl, jsonEncode(deleteRequest));
+        await WebService().delete(contactDeleteUrl, jsonEncode(deleteRequest));
 
     if (json == true) {
       return json;
@@ -64,12 +64,20 @@ class ContactRepository {
   // }
 
   Future<dynamic> getContacts(
-      {required Pagination pagination, String? search}) async {
+      {required Pagination pagination,
+      List<String>? params,
+      String? search}) async {
     var url =
         contactsUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
     if (search != null) {
       url += '&q=$search';
+    }
+
+    if (params != null) {
+      for (var element in params) {
+        url += element;
+      }
     }
 
     dynamic json = await WebService().get(url);

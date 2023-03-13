@@ -197,7 +197,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                             .object?.contractor?.name ??
                                         Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showSearchCompanyScreenSheet(context, 0)),
+                                    .showSearchCompanySheet(context, 0)),
 
                             /// DEVELOPER SELECTION INPUT
                             // SelectionInputWidget(
@@ -209,7 +209,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                             //             Titles.notSelected : _objectCreateViewModel.object?.developer?.name ??
                             //             Titles.notSelected,
                             //     onTap: () => _objectCreateViewModel
-                            //         .showSearchCompanyScreenSheet(context, 1)),
+                            //         .showSearchCompanySheet(context, 1)),
 
                             /// CUSTOMER SELECTION INPUT
                             SelectionInputWidget(
@@ -221,7 +221,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                         .object?.customer?.name ??
                                     Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showSearchCompanyScreenSheet(context, 2)),
+                                    .showSearchCompanySheet(context, 2)),
 
                             /// DESIGNER SELECTION INPUT
                             SelectionInputWidget(
@@ -233,7 +233,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                         .object?.designer?.name ??
                                     Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showSearchCompanyScreenSheet(context, 3)),
+                                    .showSearchCompanySheet(context, 3)),
 
                             /// TYPE SELECTION INPUT
                             SelectionInputWidget(
@@ -244,7 +244,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                     _objectCreateViewModel.objectType?.name ??
                                         Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showTypeSelectionScreenSheet(context)),
+                                    .showTypeSelectionSheet(context)),
 
                             /// FLOOR COUNT INPUT
                             InputWidget(
@@ -291,7 +291,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                     _objectCreateViewModel.objectStage?.name ??
                                         Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showStageSelectionScreenSheet(context)),
+                                    .showStageSelectionSheet(context)),
 
                             /// KISO CHECKBOX
                             GestureDetector(

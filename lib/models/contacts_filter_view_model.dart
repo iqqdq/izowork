@@ -69,7 +69,7 @@ class ContactsFilterViewModel with ChangeNotifier {
     List<String> params = [];
 
     if (tags.isNotEmpty) {
-      sortBy = sortBy.contains('price') ? sortBy + ',name' : sortBy + 'name';
+      sortBy = sortBy + 'name';
 
       if (tags.first == 0) {
         sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
@@ -83,17 +83,7 @@ class ContactsFilterViewModel with ChangeNotifier {
     }
 
     if (tags2.isNotEmpty) {
-      sortBy = sortBy.contains('name') ? sortBy + ',price' : sortBy + 'price';
-
-      if (tags2.first == 0) {
-        sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
-            ? sortOrder + ',desc'
-            : sortOrder = sortOrder + 'desc';
-      } else {
-        sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
-            ? sortOrder + ',asc'
-            : sortOrder = sortOrder + 'asc';
-      }
+      params.add('&type=${options2[tags2.first]}');
     }
 
     if (sortBy != '&sort_by=') {

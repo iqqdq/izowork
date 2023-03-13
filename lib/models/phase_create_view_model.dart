@@ -277,7 +277,7 @@ class PhaseCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  void showProductSearchScreenSheet(BuildContext context, int index) {
+  void showProductSearchSheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),

@@ -465,7 +465,7 @@ class DealCreateViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showSelectionScreenSheet(BuildContext context) {
+  void showSelectionSheet(BuildContext context) {
     if (_phases.isNotEmpty) {
       List<String> items = [];
       _phases.forEach((element) {
@@ -532,7 +532,7 @@ class DealCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  void showSearchUserScreenSheet(BuildContext context) {
+  void showSearchUserSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -549,7 +549,7 @@ class DealCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  void showSearchObjectScreenSheet(BuildContext context) {
+  void showSearchObjectSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -571,7 +571,7 @@ class DealCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  void showSearchCompanyScreenSheet(BuildContext context) {
+  void showSearchCompanySheet(BuildContext context) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -588,7 +588,7 @@ class DealCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  void showSearchProductScreenSheet(BuildContext context, int index) {
+  void showSearchProductSheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),

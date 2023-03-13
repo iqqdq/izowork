@@ -197,8 +197,8 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                                   MediaQuery.of(context).padding.bottom == 0.0
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
-                          onTap: () => _taskViewModel
-                              .showTaskCreateScreenSheet(context))),
+                          onTap: () =>
+                              _taskViewModel.showTaskCreateSheet(context))),
 
                   /// INDICATOR
                   _taskViewModel.loadingStatus == LoadingStatus.searching

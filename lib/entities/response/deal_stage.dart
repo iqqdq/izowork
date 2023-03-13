@@ -1,20 +1,22 @@
 import 'dart:convert';
 
+import 'package:izowork/entities/response/deal_process.dart';
+
 DealStage dealStageFromJson(String str) => DealStage.fromJson(json.decode(str));
 
 String dealStageToJson(DealStage data) => json.encode(data.toJson());
 
 class DealStage {
-  DealStage({
-    required this.id,
-    required this.defaultDealStageId,
-    required this.dealId,
-    required this.position,
-    required this.name,
-    required this.requiredActions,
-    required this.actions,
-    required this.locked,
-  });
+  DealStage(
+      {required this.id,
+      required this.defaultDealStageId,
+      required this.dealId,
+      required this.position,
+      required this.name,
+      required this.requiredActions,
+      required this.actions,
+      required this.locked,
+      this.processes});
 
   String id;
   String defaultDealStageId;
@@ -24,6 +26,7 @@ class DealStage {
   int requiredActions;
   int actions;
   bool locked;
+  List<DealProcess>? processes;
 
   factory DealStage.fromJson(Map<String, dynamic> json) => DealStage(
         id: json["id"],

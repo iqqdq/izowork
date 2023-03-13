@@ -7,6 +7,7 @@ import 'package:izowork/screens/analytics/analytics_objects/analytics_objects_sc
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/segmented_control_widget.dart';
+import 'package:izowork/views/separator_widget.dart';
 
 class AnalyticsPageViewScreenBodyWidget extends StatefulWidget {
   const AnalyticsPageViewScreenBodyWidget({Key? key}) : super(key: key);
@@ -87,7 +88,8 @@ class _AnalyticsPageViewScreenBodyState
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.fastOutSlowIn)
                       }),
-              const SizedBox(height: 16.0)
+              const SizedBox(height: 16.0),
+              const SeparatorWidget()
             ])),
         body: PageView(
           controller: _pageController,

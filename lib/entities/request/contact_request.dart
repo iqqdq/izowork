@@ -8,6 +8,7 @@ class ContactRequest {
     this.email,
     this.id,
     this.name,
+    this.post,
     this.phone,
     this.social,
   });
@@ -16,6 +17,7 @@ class ContactRequest {
   String? email;
   String? id;
   String? name;
+  String? post;
   String? phone;
   List<String>? social;
 
@@ -24,8 +26,9 @@ class ContactRequest {
         "email": email,
         "id": id,
         "name": name,
+        "post": post,
         "phone": phone,
         "social":
-            social == null ? null : List<dynamic>.from(social!.map((x) => x)),
+            social == null ? [] : List<dynamic>.from(social!.map((x) => x)),
       };
 }

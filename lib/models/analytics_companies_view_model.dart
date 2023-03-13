@@ -12,7 +12,7 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showSearchScreenSheet(BuildContext context, SearchType searchType) {
+  void showSearchSheet(BuildContext context, SearchType searchType) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),

@@ -35,15 +35,20 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
   late ContactsViewModel _contactsViewModel;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
+    _scrollController.dispose();
     _textEditingController.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    _pagination = Pagination(offset: 0, size: 50);
+    _contactsViewModel.getContactList(
+        pagination: _pagination, search: _textEditingController.text);
   }
 
   @override
@@ -116,24 +121,28 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
         body: SizedBox.expand(
             child: Stack(children: [
           /// CONTACTS LIST VIEW
-          ListView.builder(
-              controller: _scrollController,
-              shrinkWrap: true,
-              padding: EdgeInsets.only(
-                  left: 16.0,
-                  right: 16.0,
-                  top: 16.0,
-                  bottom: 80.0 + MediaQuery.of(context).padding.bottom),
-              itemCount: _contactsViewModel.contacts.length,
-              itemBuilder: (context, index) {
-                return ContactListItemWidget(
-                    contact: _contactsViewModel.contacts[index],
-                    onContactTap: () =>
-                        _contactsViewModel.showContactScreen(context, index),
-                    onPhoneTap: () => {},
-                    onLinkTap: () =>
-                        _contactsViewModel.openUrl('https://www.google.com/'));
-              }),
+          RefreshIndicator(
+              onRefresh: _onRefresh,
+              color: HexColors.primaryMain,
+              backgroundColor: HexColors.white,
+              child: ListView.builder(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                      top: 16.0,
+                      bottom: 80.0 + MediaQuery.of(context).padding.bottom),
+                  itemCount: _contactsViewModel.contacts.length,
+                  itemBuilder: (context, index) {
+                    return ContactListItemWidget(
+                        contact: _contactsViewModel.contacts[index],
+                        onContactTap: () => _contactsViewModel
+                            .showContactScreen(context, index),
+                        onPhoneTap: () => {},
+                        onLinkTap: () => _contactsViewModel
+                            .openUrl('https://www.google.com/'));
+                  })),
           const SeparatorWidget(),
 
           /// FILTER BUTTON
@@ -159,7 +168,7 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
               ? Center(
                   child: Padding(
                       padding: const EdgeInsets.only(
-                          left: 20.0, right: 20.0, bottom: 116.0),
+                          left: 20.0, right: 20.0, bottom: 100.0),
                       child: Text(Titles.noResult,
                           textAlign: TextAlign.center,
                           style: TextStyle(

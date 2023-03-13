@@ -9,6 +9,7 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/deal_create_request.dart';
 import 'package:izowork/entities/request/deal_file_request.dart';
+import 'package:izowork/entities/request/deal_process_update_request.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/deal_process.dart';
 import 'package:izowork/entities/response/deal_stage.dart';
@@ -17,10 +18,10 @@ import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/repositories/deal_repository.dart';
 import 'package:izowork/repositories/phase_repository.dart';
-import 'package:izowork/screens/deal/close_deal_sheet.dart';
-import 'package:izowork/screens/deal/complete_deal_sheet.dart';
-import 'package:izowork/screens/deal/edit_deal_process_sheet.dart';
-import 'package:izowork/screens/deal/process_action_sheet.dart';
+import 'package:izowork/screens/deal/sheets/deal_close_sheet.dart';
+import 'package:izowork/screens/deal/sheets/deal_process_action_sheet.dart';
+import 'package:izowork/screens/deal/sheets/deal_process_complete_sheet.dart';
+import 'package:izowork/screens/deal/sheets/deal_process_edit_sheet.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -42,8 +43,6 @@ class DealViewModel with ChangeNotifier {
   List<Document> _documents = [];
 
   List<DealStage> _dealStages = [];
-
-  final List<List<DealProcess>> _dealProcessList = [];
 
   List<Phase> _phases = [];
 
@@ -69,10 +68,6 @@ class DealViewModel with ChangeNotifier {
 
   List<DealStage> get dealStages {
     return _dealStages;
-  }
-
-  List<List<DealProcess>> get dealProcessList {
-    return _dealProcessList;
   }
 
   List<Phase> get phases {
@@ -158,10 +153,8 @@ class DealViewModel with ChangeNotifier {
 
   Future getDealProcesses() async {
     if (_dealStages.isNotEmpty) {
-      if (_dealProcessList.isNotEmpty) {
-        loadingStatus = LoadingStatus.searching;
-        notifyListeners();
-      }
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
 
       _dealStages.forEach((element) async {
         await DealRepository()
@@ -169,16 +162,14 @@ class DealViewModel with ChangeNotifier {
             .then((response) => {
                   if (response is List<DealProcess>)
                     {
-                      _dealProcessList.add(response),
+                      element.processes = response,
                       loadingStatus = LoadingStatus.completed,
                     }
                   else
                     {loadingStatus = LoadingStatus.error}
                 })
-            .then((value) => {
-                  //
-                  loadingStatus = LoadingStatus.completed, notifyListeners()
-                });
+            .then((value) =>
+                {loadingStatus = LoadingStatus.completed, notifyListeners()});
       });
     }
   }
@@ -224,6 +215,28 @@ class DealViewModel with ChangeNotifier {
             });
   }
 
+  Future updateDealProcess(
+      BuildContext context, bool hidden, String id, String status) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await DealRepository()
+        .updateProcess(
+            DealProcessUpdateRequest(hidden: hidden, id: id, status: status))
+        .then((response) => {
+              if (response is DealProcess)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                }
+            })
+        .then((value) => notifyListeners());
+  }
+
   // MARK: -
   // MARK: - ACTIONS
 
@@ -264,9 +277,6 @@ class DealViewModel with ChangeNotifier {
     }
   }
 
-  // MARK: -
-  // MARK: - ACTIONS
-
   void expand(int index) {
     _expanded.contains(index) ? _expanded.remove(index) : _expanded.add(index);
 
@@ -276,7 +286,7 @@ class DealViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showDealCreateScreenSheet(BuildContext context) {
+  void showDealCreateSheet(BuildContext context) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -290,65 +300,90 @@ class DealViewModel with ChangeNotifier {
                     })));
   }
 
-  void showSelectionScreenSheet(BuildContext context, int index) {
-    List<String> dealProcessNames = [];
+  void showSelectionSheet(BuildContext context, int index) {
+    List<String> items = [];
 
-    _dealProcessList[index].forEach((element) {
-      if (element.hidden) {
-        dealProcessNames.add(element.name);
-      }
-    });
+    if (_dealStages[index].processes!.isNotEmpty) {
+      _dealStages[index].processes?.forEach((element) {
+        if (element.hidden) {
+          items.add(element.name);
+        }
+      });
 
-    showCupertinoModalBottomSheet(
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (context) => SelectionScreenWidget(
-            title: Titles.addProcess,
-            items: dealProcessNames,
-            onSelectTap: (value) => {
-                  // TODO UPDATE HIDDEN PROCESS
-                }));
+      showCupertinoModalBottomSheet(
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (context) => SelectionScreenWidget(
+              title: Titles.addProcess,
+              items: items,
+              onSelectTap: (value) => {
+                    _dealStages[index].processes?.forEach((element) {
+                      if (element.name == value) {
+                        updateDealProcess(
+                                context, false, element.id, element.status)
+                            .then((value) =>
+                                {element.hidden = false, notifyListeners()});
+                      }
+                    })
+                  }));
+    }
   }
 
-  void showProcessActionScreenSheet(BuildContext context, DealProcess process) {
+  void showDealProcessActionSheet(BuildContext context, DealProcess process) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => ProcessActionSheet(
+        builder: (context) => DealProcessActionSheet(
             title: process.name,
             onTap: (index) => {
-                  if (index == 0)
+                  if (index == 0) // EDIT PROCESS
                     {
-                      Future.delayed(
-                          const Duration(milliseconds: 200),
-                          () =>
-                              showEditDealProcessScreenSheet(context, process))
+                      Future.delayed(const Duration(milliseconds: 200),
+                          () => showDealProcessEditSheet(context, process))
+                    }
+                  else if (index == 1) // STOP PROCESS
+                    {}
+                  else if (index == 2) // DELETE PROCESS
+                    {
+                      updateDealProcess(
+                              context, true, process.id, process.status)
+                          .then((value) =>
+                              {process.hidden = true, notifyListeners()})
                     }
                 }));
   }
 
-  void showEditDealProcessScreenSheet(
-      BuildContext context, DealProcess process) {
+  void showDealProcessEditSheet(BuildContext context, DealProcess process) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) =>
-            CompleteDealSheetWidget(onTap: (text, files) => {}));
+            DealProcessEditSheetWidget(onTap: (text, files) => {}));
   }
 
-  void showCloseDealScreenSheet(BuildContext context) {
+  void showDealProcessCompleteSheet(BuildContext context, DealProcess process) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => CloseDealSheetWidget(
+        builder: (context) => DealProcessCompleteSheetWidget(
+            title: process.name, onTap: (text, files) => {}));
+  }
+
+  void showDealCloseSheet(BuildContext context) {
+    showCupertinoModalBottomSheet(
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (context) => DealCloseSheetWidget(
             onTap: (text, files) => {
                   Navigator.pop(context),
                   closeDeal(context, text).then((value) => {

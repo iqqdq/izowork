@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
@@ -5,12 +7,13 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/deal_process.dart';
 import 'package:izowork/models/deal_view_model.dart';
-import 'package:izowork/screens/deal/views/process_list_item_widget.dart';
+import 'package:izowork/screens/deal/views/deal_process_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
+import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
@@ -320,35 +323,38 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: _dealViewModel.dealStages.length,
                             itemBuilder: (context, index) {
-                              List<DealProcess> dealProcesses = index >
-                                      _dealViewModel.dealProcessList.length - 1
-                                  ? []
-                                  : _dealViewModel.dealProcessList[index];
+                              bool containsHidden = false;
+                              _dealViewModel.dealStages[index].processes
+                                  ?.forEach((element) {
+                                if (element.hidden) {
+                                  containsHidden = true;
+                                  return;
+                                }
+                              });
 
-                              return _dealViewModel.dealProcessList.isEmpty
+                              return _dealViewModel
+                                          .dealStages[index].processes ==
+                                      null
                                   ? Container()
-                                  : ProcessListItemWidget(
+                                  : DealProcessListItemWidget(
                                       dealStage:
                                           _dealViewModel.dealStages[index],
-                                      dealProcesses: dealProcesses,
+                                      dealProcesses: _dealViewModel
+                                              .dealStages[index].processes ??
+                                          [],
                                       isExpanded: _dealViewModel.expanded
                                           .contains(index),
                                       onTap: () => _dealViewModel.expand(index),
                                       onMenuTap: (dealProcess) => _dealViewModel
-                                          .showProcessActionScreenSheet(
+                                          .showDealProcessActionSheet(
                                               context, dealProcess),
-                                      onProcessTap: (dealProcess) => {
-                                        // TODO
-                                      },
-                                      onAddProcessTap: _dealViewModel
-                                                      .dealStages[index]
-                                                      .position ==
-                                                  1 ||
-                                              _dealViewModel.dealStages[index]
-                                                      .position ==
-                                                  4
-                                          ? () => _dealViewModel
-                                              .showSelectionScreenSheet(
+                                      onProcessTap: (dealProcess) =>
+                                          _dealViewModel
+                                              .showDealProcessCompleteSheet(
+                                                  context, dealProcess),
+                                      onAddProcessTap: containsHidden
+                                          ? () =>
+                                              _dealViewModel.showSelectionSheet(
                                                   context, index)
                                           : null,
                                     );
@@ -365,8 +371,8 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                     top: 6.0,
                                     right: 16.0,
                                     bottom: 16.0),
-                                onTap: () => _dealViewModel
-                                    .showCloseDealScreenSheet(context)),
+                                onTap: () =>
+                                    _dealViewModel.showDealCloseSheet(context)),
                       ]),
 
                   /// EDIT DEAL BUTTON
@@ -381,8 +387,9 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                   MediaQuery.of(context).padding.bottom == 0.0
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
-                          onTap: () => _dealViewModel
-                              .showDealCreateScreenSheet(context))),
+                          onTap: () =>
+                              _dealViewModel.showDealCreateSheet(context))),
+                  const SeparatorWidget(),
 
                   /// INDICATOR
                   _dealViewModel.loadingStatus == LoadingStatus.searching

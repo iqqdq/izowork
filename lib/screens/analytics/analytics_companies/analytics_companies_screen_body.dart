@@ -65,8 +65,8 @@ class _AnalyticsCompaniesScreenBodyState
                     title: Titles.product,
                     value: Titles.tonProductPlaceholder,
                     isVertical: true,
-                    onTap: () => _analyticsCompaniesViewModel
-                        .showSearchScreenSheet(context, SearchType.product)),
+                    onTap: () => _analyticsCompaniesViewModel.showSearchSheet(
+                        context, SearchType.product)),
 
                 /// PRODUCT HORIZONTAL CHART
                 HorizontalChartWidget(onMaxScrollExtent: () => {}),
@@ -79,8 +79,8 @@ class _AnalyticsCompaniesScreenBodyState
                     title: Titles.product,
                     value: Titles.literProductPlaceholder,
                     isVertical: true,
-                    onTap: () => _analyticsCompaniesViewModel
-                        .showSearchScreenSheet(context, SearchType.product)),
+                    onTap: () => _analyticsCompaniesViewModel.showSearchSheet(
+                        context, SearchType.product)),
                 HorizontalChartWidget(onMaxScrollExtent: () => {}),
                 const SizedBox(height: 24.0),
 
@@ -121,8 +121,8 @@ class _AnalyticsCompaniesScreenBodyState
                     title: Titles.filial,
                     value: Titles.notSelected,
                     isVertical: true,
-                    onTap: () => _analyticsCompaniesViewModel
-                        .showSearchScreenSheet(context, SearchType.filial)),
+                    onTap: () => _analyticsCompaniesViewModel.showSearchSheet(
+                        context, SearchType.filial)),
                 const SizedBox(height: 26.0),
                 Padding(
                     padding: const EdgeInsets.symmetric(
@@ -150,8 +150,8 @@ class _AnalyticsCompaniesScreenBodyState
                     title: Titles.filial,
                     value: Titles.notSelected,
                     isVertical: true,
-                    onTap: () => _analyticsCompaniesViewModel
-                        .showSearchScreenSheet(context, SearchType.filial)),
+                    onTap: () => _analyticsCompaniesViewModel.showSearchSheet(
+                        context, SearchType.filial)),
                 const SizedBox(height: 20.0),
 
                 ListView.builder(
