@@ -158,7 +158,7 @@ class _ContactCreateScreenBodyState
                                 borderRadius: BorderRadius.circular(40.0),
                                 child: CachedNetworkImage(
                                     cacheKey: _url,
-                                    imageUrl: avatarUrl + _url,
+                                    imageUrl: contactAvatarUrl + _url,
                                     width: 80.0,
                                     height: 80.0,
                                     memCacheWidth: 80 *
@@ -353,7 +353,7 @@ class _ContactCreateScreenBodyState
                                             }
                                         })
                                 : _contactCreateViewModel
-                                    .changeContactInfo(
+                                    .updateContactInfo(
                                         context,
                                         _nameTextEditingController.text,
                                         _postTextEditingConrtoller.text,

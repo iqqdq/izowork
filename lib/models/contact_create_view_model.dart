@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:izowork/components/hex_colors.dart';
@@ -24,12 +28,18 @@ class ContactCreateViewModel with ChangeNotifier {
 
   Company? _company;
 
+  File? _file;
+
   Contact? get contact {
     return _contact;
   }
 
   Company? get company {
     return _company;
+  }
+
+  File? get file {
+    return _file;
   }
 
   ContactCreateViewModel(this.selectedContact, this.onDelete) {
@@ -72,9 +82,21 @@ class ContactCreateViewModel with ChangeNotifier {
               if (response is Contact)
                 {
                   _contact = response,
-                  Toast().showTopToast(
-                      context, '${Titles.contact} ${response.name} добавлен'),
-                  loadingStatus = LoadingStatus.completed
+                  if (_file == null)
+                    {
+                      Toast().showTopToast(context,
+                          '${Titles.contact} ${response.name} добавлен'),
+                      loadingStatus = LoadingStatus.completed
+                    }
+                  else
+                    {
+                      changeAvatar(context, response.id, _file!)
+                          .then((value) => {
+                                Toast().showTopToast(context,
+                                    '${Titles.contact} ${response.name} добавлен'),
+                                loadingStatus = LoadingStatus.completed
+                              })
+                    }
                 }
               else if (response is ErrorResponse)
                 {
@@ -85,28 +107,36 @@ class ContactCreateViewModel with ChangeNotifier {
         .then((value) => notifyListeners());
   }
 
-  Future changeContactInfo(BuildContext context, String name, String post,
+  Future updateContactInfo(BuildContext context, String name, String post,
       String email, String phone, List<SocialInputModel> socials) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
     ContactRequest contactRequest =
-        ContactRequest(id: _company?.id, companyId: company?.id);
+        ContactRequest(id: selectedContact!.id, companyId: company?.id);
 
     if (name.isNotEmpty && name != selectedContact?.name) {
       contactRequest.name = name;
+    } else {
+      contactRequest.name = selectedContact?.name;
     }
 
     if (post.isNotEmpty && post != selectedContact?.post) {
       contactRequest.post = post;
+    } else {
+      contactRequest.post = selectedContact?.post;
     }
 
     if (email.isNotEmpty && email != selectedContact?.email) {
       contactRequest.email = email;
+    } else {
+      contactRequest.email = selectedContact?.email;
     }
 
     if (phone.isNotEmpty && phone != selectedContact?.phone) {
       contactRequest.phone = phone;
+    } else {
+      contactRequest.phone = selectedContact?.phone;
     }
 
     List<String> social = [];
@@ -119,6 +149,8 @@ class ContactCreateViewModel with ChangeNotifier {
 
     if (social.isNotEmpty) {
       contactRequest.social = social;
+    } else {
+      contactRequest.social = selectedContact?.social;
     }
 
     await ContactRepository()
@@ -139,32 +171,32 @@ class ContactCreateViewModel with ChangeNotifier {
         .then((value) => notifyListeners());
   }
 
-  // Future changeAvatar(BuildContext context, File file) async {
-  //   loadingStatus = LoadingStatus.searching;
-  //   notifyListeners();
+  Future changeAvatar(BuildContext context, String id, File file) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
 
-  //   FormData formData = dio.FormData.fromMap({
-  //     "avatar": await MultipartFile.fromFile(file.path,
-  //         filename: file.path.substring(file.path.length - 8, file.path.length))
-  //   });
+    FormData formData = dio.FormData.fromMap({
+      "id": id,
+      "avatar": await MultipartFile.fromFile(file.path,
+          filename: file.path.substring(file.path.length - 8, file.path.length))
+    });
 
-  //   await UserRepository()
-  //       .updateAvatar(formData)
-  //       .then((response) => {
-  //             if (response is String)
-  //               {
-  //                 _contact?.avatar = response,
-  //                 Toast().showTopToast(context, Titles.changesSuccess),
-  //                 loadingStatus = LoadingStatus.completed
-  //               }
-  //             else if (response is ErrorResponse)
-  //               {
-  //                 loadingStatus = LoadingStatus.error,
-  //                 Toast().showTopToast(context, response.message ?? 'Ошибка')
-  //               }
-  //           })
-  //       .then((value) => notifyListeners());
-  // }
+    await ContactRepository()
+        .updateAvatar(formData)
+        .then((response) => {
+              if (response is String)
+                {
+                  _contact?.avatar = response,
+                  loadingStatus = LoadingStatus.completed
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                }
+            })
+        .then((value) => notifyListeners());
+  }
 
   Future delete(BuildContext context) async {
     loadingStatus = LoadingStatus.searching;
@@ -211,7 +243,12 @@ class ContactCreateViewModel with ChangeNotifier {
         .pickImage(source: ImageSource.gallery, imageQuality: 70);
 
     if (xFile != null) {
-      // changeAvatar(context, File(xFile.path));
+      if (selectedContact == null) {
+        _file = File(xFile.path);
+        notifyListeners();
+      } else {
+        changeAvatar(context, selectedContact!.id, File(xFile.path));
+      }
     }
   }
 }

@@ -53,14 +53,16 @@ class _DealCloseSheetState extends State<DealCloseSheetWidget> {
         child: Container(
             color: HexColors.white,
             child: ListView(
+                physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 padding: EdgeInsets.only(
                     top: 8.0,
                     left: 16.0,
                     right: 16.0,
                     bottom: MediaQuery.of(context).padding.bottom == 0.0
-                        ? 20.0
-                        : MediaQuery.of(context).padding.bottom),
+                        ? MediaQuery.of(context).viewInsets.bottom + 20.0
+                        : MediaQuery.of(context).viewInsets.bottom +
+                            MediaQuery.of(context).padding.bottom),
                 children: [
                   /// DISMISS INDICATOR
                   const SizedBox(height: 6.0),
@@ -96,10 +98,18 @@ class _DealCloseSheetState extends State<DealCloseSheetWidget> {
                           onRemoveTap: () => _removeFile(index),
                         );
                       }),
+
+                  /// ADD FILE BUTTON
                   BorderButtonWidget(
                       margin: EdgeInsets.zero,
                       title: Titles.addFile,
                       onTap: () => _addFile()),
+                  // AnimatedContainer(
+                  //   duration: const Duration(milliseconds: 150),
+                  //   height: MediaQuery.of(context).viewInsets.bottom,
+                  // ),
+
+                  /// CLOSE DEAL BUTTON
                   ButtonWidget(
                       margin: const EdgeInsets.only(top: 16.0),
                       title: Titles.closeDeal,

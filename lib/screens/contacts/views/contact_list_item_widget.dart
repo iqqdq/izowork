@@ -52,11 +52,20 @@ class ContactListItemWidget extends StatelessWidget {
                           contact.avatar == null
                               ? Container()
                               : ClipRRect(
-                                  borderRadius: BorderRadius.circular(12.0),
+                                  borderRadius: BorderRadius.circular(20.0),
                                   child: CachedNetworkImage(
-                                      imageUrl: avatarUrl + contact.avatar!,
+                                      imageUrl:
+                                          contactAvatarUrl + contact.avatar!,
                                       width: 40.0,
                                       height: 40.0,
+                                      memCacheWidth: 40 *
+                                          MediaQuery.of(context)
+                                              .devicePixelRatio
+                                              .round(),
+                                      memCacheHeight: 40 *
+                                          MediaQuery.of(context)
+                                              .devicePixelRatio
+                                              .round(),
                                       fit: BoxFit.cover)),
                         ]),
                         const SizedBox(width: 10.0),

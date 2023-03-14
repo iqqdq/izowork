@@ -48,7 +48,8 @@ class DocumentsFilterViewModel with ChangeNotifier {
     List<String> params = [];
 
     if (tags.isNotEmpty) {
-      sortBy = sortBy.contains('date') ? sortBy + ',name' : sortBy + 'name';
+      sortBy =
+          sortBy.contains('created_at') ? sortBy + ',name' : sortBy + 'name';
 
       if (tags.first == 0) {
         sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
@@ -62,9 +63,11 @@ class DocumentsFilterViewModel with ChangeNotifier {
     }
 
     if (tags2.isNotEmpty) {
-      sortBy = sortBy.contains('name') ? sortBy + ',date' : sortBy + 'date';
+      sortBy = sortBy.contains('name')
+          ? sortBy + ',created_at'
+          : sortBy + 'created_at';
 
-      if (tags2.first == 0) {
+      if (tags2.first == 1) {
         sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
             ? sortOrder + ',desc'
             : sortOrder = sortOrder + 'desc';

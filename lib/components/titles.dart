@@ -237,6 +237,8 @@ abstract class Titles {
   static const didCopied = 'Скопировано в буфер обмена';
   static const wrongCoordFormat = 'Неверный формат координат';
   static const contactWasDeleted = 'Контакт был удален';
+  static const infoWasAdded = 'Информация добавлена';
+  static const infoWasUpdated = 'Информация обнавлена';
 
   /// ALERTS
   static const warning = 'Внимание';

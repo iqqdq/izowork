@@ -1,11 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/deal_create_request.dart';
 import 'package:izowork/entities/request/deal_file_request.dart';
+import 'package:izowork/entities/request/deal_process_info_request.dart';
 import 'package:izowork/entities/request/deal_process_update_request.dart';
 import 'package:izowork/entities/request/deal_product_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/deal_process.dart';
+import 'package:izowork/entities/response/deal_process_info.dart';
 import 'package:izowork/entities/response/deal_stage.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -194,6 +197,66 @@ class DealRepository {
 
     try {
       return DealProcess.fromJson(json["process"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> getProcessInformationById(String id) async {
+    dynamic json = await WebService().get(dealProcessInfoOneUrl + '?id=$id');
+
+    try {
+      return DealProcessInfo.fromJson(json["information"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> getProcessInformation(String id) async {
+    dynamic json = await WebService()
+        .get(dealProcessInfoUrl + '?deal_stage_process_id=$id');
+
+    List<DealProcessInfo> informations = [];
+
+    try {
+      json['informations'].forEach((element) {
+        informations.add(DealProcessInfo.fromJson(element));
+      });
+      return informations;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> createProcessInfo(
+      DealProcessInfoRequest dealProcessInfoRequest) async {
+    dynamic json =
+        await WebService().post(dealProcessInfoUrl, dealProcessInfoRequest);
+
+    try {
+      return DealProcessInfo.fromJson(json["information"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> updateProcessInfo(
+      DealProcessInfoRequest dealProcessInfoRequest) async {
+    dynamic json =
+        await WebService().patch(dealProcessInfoUrl, dealProcessInfoRequest);
+
+    try {
+      return DealProcessInfo.fromJson(json["information"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> uploadProcessInfoFile(FormData formData) async {
+    dynamic json = await WebService().post(uploadDealProcessInfoUrl, formData);
+
+    try {
+      return json["file"] as String;
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }

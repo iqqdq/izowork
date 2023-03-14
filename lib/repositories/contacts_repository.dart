@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/contact_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
@@ -32,8 +33,7 @@ class ContactRepository {
   }
 
   Future<dynamic> updateContact(ContactRequest contactRequest) async {
-    dynamic json =
-        await WebService().patch(contactUpdateUrl, jsonEncode(contactRequest));
+    dynamic json = await WebService().patch(contactUpdateUrl, contactRequest);
 
     try {
       return Contact.fromJson(json["contact"]);
@@ -53,15 +53,15 @@ class ContactRepository {
     }
   }
 
-  // Future<dynamic> updateContactAvatar(FormData formData) async {
-  //   dynamic json = await WebService().put('uploadAvatarUrl', formData);
+  Future<dynamic> updateAvatar(FormData formData) async {
+    dynamic json = await WebService().put(uploadContactAvatarUrl, formData);
 
-  //   try {
-  //     return json["avatar"] as String;
-  //   } catch (e) {
-  //     return ErrorResponse.fromJson(json);
-  //   }
-  // }
+    try {
+      return json["avatar"] as String;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
 
   Future<dynamic> getContacts(
       {required Pagination pagination,

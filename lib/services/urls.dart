@@ -1,13 +1,11 @@
 const baseUrl = 'http://185.116.194.234/api/';
 const socketUrl = '';
-const productMedialUrl = baseUrl + 'resourses/product-image/';
-const companyMedialUrl = baseUrl + 'resourses/company-image/';
-const taskMediaUrl = baseUrl + 'resourses/task-file/';
-const dealMediaUrl = baseUrl + 'resourses/deal-file/';
-const avatarUrl = baseUrl + 'resourses/avatar/';
-const uploadAvatarUrl = baseUrl + 'user/avatar';
-const loginUrl = baseUrl + 'auth/login';
 
+const avatarUrl = baseUrl + 'resourses/avatar/';
+const contactAvatarUrl = baseUrl + 'resourses/contact-avatar/';
+const uploadAvatarUrl = baseUrl + 'user/avatar';
+
+const loginUrl = baseUrl + 'auth/login';
 const profileUrl = baseUrl + 'user/me';
 const usersUrl = baseUrl + 'user/all';
 const userUrl = baseUrl + 'user/one';
@@ -18,10 +16,13 @@ const contactsUrl = baseUrl + 'contact/all';
 const contactCreateUrl = baseUrl + 'contact/create';
 const contactUpdateUrl = baseUrl + 'contact/update';
 const contactDeleteUrl = baseUrl + 'contact/delete';
+const companyMedialUrl = baseUrl + 'resourses/company-image/';
+const uploadContactAvatarUrl = baseUrl + 'contact/avatar';
 
 const productUrl = baseUrl + 'product/one?id=';
 const productsUrl = baseUrl + 'product/all';
 const productTypesUrl = baseUrl + 'product-type/all';
+const productMedialUrl = baseUrl + 'resourses/product-image/';
 
 const companyUrl = baseUrl + 'company/one?id=';
 const companiesUrl = baseUrl + 'company/all';
@@ -35,15 +36,21 @@ const taskCreateUrl = baseUrl + 'task/create';
 const taskUpdateUrl = baseUrl + 'task/update';
 const taskFileUrl = baseUrl + 'task/file';
 const taskStatesUrl = baseUrl + 'task/states';
+const taskMediaUrl = baseUrl + 'resourses/task-file/';
 
 const dealUrl = baseUrl + 'deal/one?id=';
 const dealsUrl = baseUrl + 'deal/all';
 const dealStageUrl = baseUrl + 'deal/stage?deal_id=';
 const dealCreateUrl = baseUrl + 'deal/create';
 const dealUpdateUrl = baseUrl + 'deal/update';
+const dealMediaUrl = baseUrl + 'resourses/deal-file/';
 const dealFileUrl = baseUrl + 'deal/file';
 const dealProductUrl = baseUrl + 'deal/product';
 const dealProcessUrl = baseUrl + 'deal/process';
+const dealProcessInfoUrl = baseUrl + 'deal/process/information';
+const dealProcessInfoOneUrl = baseUrl + 'deal/process/information-one';
+const dealProcessInfoMediaUrl = baseUrl + 'resourses/process-information-file/';
+const uploadDealProcessInfoUrl = baseUrl + 'deal/process/information/file';
 
 const objectUrl = baseUrl + 'object/one?id=';
 const objectsUrl = baseUrl + 'object/all';
@@ -51,8 +58,8 @@ const objectTypesUrl = baseUrl + 'object-type/all';
 const objectStatesUrl = baseUrl + 'object-stage/all';
 const objectCreateUrl = baseUrl + 'object/create';
 const objectUpdateUrl = baseUrl + 'object/update';
-const objectFileUrl = baseUrl + 'object/file';
 const objectMediaUrl = baseUrl + 'resourses/object-file/';
+const objectFileUrl = baseUrl + 'object/file';
 
 const phaseUrl = baseUrl + 'phase/all';
 const phaseProductsUrl = baseUrl + 'phase/product/all';

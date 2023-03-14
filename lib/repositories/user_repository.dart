@@ -21,8 +21,7 @@ class UserRepository {
   }
 
   Future<dynamic> updateUser(UserRequest userRequest) async {
-    dynamic json =
-        await WebService().patch(userUpdateUrl, jsonEncode(userRequest));
+    dynamic json = await WebService().patch(userUpdateUrl, userRequest);
 
     try {
       return User.fromJson(json["user"]);

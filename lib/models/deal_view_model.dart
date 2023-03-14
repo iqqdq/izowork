@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
@@ -9,9 +10,11 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/deal_create_request.dart';
 import 'package:izowork/entities/request/deal_file_request.dart';
+import 'package:izowork/entities/request/deal_process_info_request.dart';
 import 'package:izowork/entities/request/deal_process_update_request.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/deal_process.dart';
+import 'package:izowork/entities/response/deal_process_info.dart';
 import 'package:izowork/entities/response/deal_stage.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -44,6 +47,8 @@ class DealViewModel with ChangeNotifier {
 
   List<DealStage> _dealStages = [];
 
+  DealProcessInfo? _dealProcessInfo;
+
   List<Phase> _phases = [];
 
   Phase? _phase;
@@ -68,6 +73,10 @@ class DealViewModel with ChangeNotifier {
 
   List<DealStage> get dealStages {
     return _dealStages;
+  }
+
+  DealProcessInfo? get dealProcessInfo {
+    return _dealProcessInfo;
   }
 
   List<Phase> get phases {
@@ -174,6 +183,20 @@ class DealViewModel with ChangeNotifier {
     }
   }
 
+  Future uploadFile(BuildContext context, String id, File file) async {
+    await DealRepository()
+        .addDealFile(DealFileRequest(id, file))
+        .then((response) => {
+              if (response is Document)
+                {_documents.add(response)}
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                }
+            });
+  }
+
   Future closeDeal(BuildContext context, String? comment) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
@@ -201,19 +224,7 @@ class DealViewModel with ChangeNotifier {
             });
   }
 
-  Future uploadFile(BuildContext context, String id, File file) async {
-    await DealRepository()
-        .addDealFile(DealFileRequest(id, file))
-        .then((response) => {
-              if (response is Document)
-                {_documents.add(response)}
-              else if (response is ErrorResponse)
-                {
-                  loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
-                }
-            });
-  }
+  /// PROCESS
 
   Future updateDealProcess(
       BuildContext context, bool hidden, String id, String status) async {
@@ -235,6 +246,103 @@ class DealViewModel with ChangeNotifier {
                 }
             })
         .then((value) => notifyListeners());
+  }
+
+  /// PROCESS INFO
+
+  Future getDealProcessInformation(String id) async {
+    loadingStatus = LoadingStatus.searching;
+    _dealProcessInfo = null;
+    notifyListeners();
+
+    await DealRepository()
+        .getProcessInformation(id)
+        .then((response) => {
+              if (response is List<DealProcessInfo>)
+                {
+                  if (response.isNotEmpty)
+                    {
+                      _dealProcessInfo = response.last,
+                    },
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else
+                {loadingStatus = LoadingStatus.error}
+            })
+        .then((value) => notifyListeners());
+  }
+
+  Future createDealProcessInformation(BuildContext context,
+      String dealStageProcessId, String description) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await DealRepository()
+        .createProcessInfo(DealProcessInfoRequest(
+            dealStageProcessId: dealStageProcessId, description: description))
+        .then((response) => {
+              if (response is DealProcessInfo)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  Toast().showTopToast(context, Titles.infoWasAdded),
+                  Future.delayed(const Duration(milliseconds: 50),
+                      () => Navigator.pop(context))
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                }
+            })
+        .then((value) => notifyListeners());
+  }
+
+  Future updateDealProcessInformation(
+      BuildContext context, String id, String description) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await DealRepository()
+        .updateProcessInfo(
+            DealProcessInfoRequest(id: id, description: description))
+        .then((response) => {
+              if (response is DealProcessInfo)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  Toast().showTopToast(context, Titles.infoWasUpdated),
+                  Future.delayed(const Duration(milliseconds: 50),
+                      () => Navigator.pop(context))
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                }
+            })
+        .then((value) => notifyListeners());
+  }
+
+  Future uploadDealProccessInfoFile(
+      BuildContext context, String id, File file) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    FormData formData = dio.FormData.fromMap({
+      "deal_stage_process_information_id": id,
+      "file": await MultipartFile.fromFile(file.path,
+          filename: file.path.substring(file.path.length - 8, file.path.length))
+    });
+
+    await DealRepository().uploadProcessInfoFile(formData).then((response) => {
+          if (response is String)
+            {loadingStatus = LoadingStatus.completed}
+          else if (response is ErrorResponse)
+            {
+              loadingStatus = LoadingStatus.error,
+              Toast().showTopToast(context, response.message ?? 'Ошибка')
+            },
+          notifyListeners()
+        });
   }
 
   // MARK: -
@@ -358,23 +466,87 @@ class DealViewModel with ChangeNotifier {
   }
 
   void showDealProcessEditSheet(BuildContext context, DealProcess process) {
-    showCupertinoModalBottomSheet(
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (context) =>
-            DealProcessEditSheetWidget(onTap: (text, files) => {}));
+    // getDealProcessInformation(process.id).then((value) => {
+    //       showCupertinoModalBottomSheet(
+    //           topRadius: const Radius.circular(16.0),
+    //           barrierColor: Colors.black.withOpacity(0.6),
+    //           backgroundColor: HexColors.white,
+    //           context: context,
+    //           builder: (context) => DealProcessCompleteSheetWidget(
+    //               dealProcessInfo: _dealProcessInfo,
+    //               title: process.name,
+    //               onTap: (text, files) => {
+    //                     if (_dealProcessInfo != null)
+    //                       {
+    //                         if (_dealProcessInfo!.description != text)
+    //                           {
+    //                             // UPDATE PROCESS DESCRIPTION
+    //                             updateDealProcessInformation(
+    //                                     context, _dealProcessInfo!.id, text)
+    //                                 .then((value) => {
+    //                                       if (files.isNotEmpty)
+    //                                         {
+    //                                           files.forEach((element) async {
+    //                                             await uploadDealProccessInfoFile(
+    //                                                     context,
+    //                                                     _dealProcessInfo!.id,
+    //                                                     File(element.path!))
+    //                                                 .then((value) => {
+    //                                                       current++,
+    //                                                       if (current ==
+    //                                                           files.length)
+    //                                                         {
+    //                                                           loadingStatus =
+    //                                                               LoadingStatus
+    //                                                                   .completed,
+    //                                                           notifyListeners()
+    //                                                         }
+    //                                                     });
+    //                                           })
+    //                                         }
+    //                                     })
+    //                           }
+    //                       }
+    //                   }))
+    //     });
   }
 
   void showDealProcessCompleteSheet(BuildContext context, DealProcess process) {
-    showCupertinoModalBottomSheet(
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (context) => DealProcessCompleteSheetWidget(
-            title: process.name, onTap: (text, files) => {}));
+    getDealProcessInformation(process.id).then((value) => {
+          showCupertinoModalBottomSheet(
+              topRadius: const Radius.circular(16.0),
+              barrierColor: Colors.black.withOpacity(0.6),
+              backgroundColor: HexColors.white,
+              context: context,
+              builder: (context) => DealProcessCompleteSheetWidget(
+                  title: process.name,
+                  onTap: (text, files) => {
+                        // CREATE PROCESS DESCRIPTION
+                        createDealProcessInformation(context, process.id, text)
+                            .then((value) => {
+                                  if (files.isNotEmpty)
+                                    {
+                                      files.forEach((element) async {
+                                        await uploadDealProccessInfoFile(
+                                                context,
+                                                _dealProcessInfo!.id,
+                                                File(element.path!))
+                                            .then((value) => {
+                                                  current++,
+                                                  if (current == files.length)
+                                                    {
+                                                      loadingStatus =
+                                                          LoadingStatus
+                                                              .completed,
+                                                      notifyListeners()
+                                                    }
+                                                });
+                                      })
+                                    }
+                                })
+                        // }
+                      }))
+        });
   }
 
   void showDealCloseSheet(BuildContext context) {
