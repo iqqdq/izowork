@@ -69,7 +69,7 @@ class CompanyRepository {
   }
 
   Future<dynamic> updateCompanyAvatar(FormData formData) async {
-    dynamic json = await WebService().put(uploadCompanyUrl, formData);
+    dynamic json = await WebService().put(companyAvatarUrl, formData);
 
     if (json == "") {
       return true;

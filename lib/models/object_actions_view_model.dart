@@ -40,7 +40,4 @@ class ObjectActionsViewModel with ChangeNotifier {
     //         builder: (context) =>
     //             ProfileScreenWidget(user: null, onPop: (user) => null)));
   }
-
-  // MARK: -
-  // MARK: - FUNCTIONS
 }

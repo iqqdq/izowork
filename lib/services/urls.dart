@@ -26,9 +26,9 @@ const productMedialUrl = baseUrl + 'resourses/product-image/';
 
 const companyUrl = baseUrl + 'company/one?id=';
 const companiesUrl = baseUrl + 'company/all';
+const companyAvatarUrl = baseUrl + 'company/image';
 const companyTypesUrl = baseUrl + 'company/types';
 const companyCreateUrl = baseUrl + 'company/create';
-const uploadCompanyUrl = baseUrl + 'company/image';
 
 const taskUrl = baseUrl + 'task/one?id=';
 const tasksUrl = baseUrl + 'task/all';
@@ -50,7 +50,7 @@ const dealProcessUrl = baseUrl + 'deal/process';
 const dealProcessInfoUrl = baseUrl + 'deal/process/information';
 const dealProcessInfoOneUrl = baseUrl + 'deal/process/information-one';
 const dealProcessInfoMediaUrl = baseUrl + 'resourses/process-information-file/';
-const uploadDealProcessInfoUrl = baseUrl + 'deal/process/information/file';
+const dealProcessInfoFileUrl = baseUrl + 'deal/process/information/file';
 
 const objectUrl = baseUrl + 'object/one?id=';
 const objectsUrl = baseUrl + 'object/all';
@@ -80,5 +80,11 @@ const phaseContractorDeleteUrl = baseUrl + 'phase/contractor/delete';
 const phaseProductCreateUrl = baseUrl + 'phase/product/create';
 const phaseProductUpdateUrl = baseUrl + 'phase/product/update';
 const phaseProductDeleteUrl = baseUrl + 'phase/product/delete';
+
+const newsUrl = baseUrl + 'news/all';
+const newsCreateUrl = baseUrl + 'news/create';
+const newsCommentUrl = baseUrl + 'news/comment';
+const newsFileUrl = baseUrl + 'news/file';
+const newsMediaUrl = baseUrl + 'resourses/news-file/';
 
 const documentUrl = baseUrl + 'document/list';

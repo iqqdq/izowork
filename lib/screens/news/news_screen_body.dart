@@ -26,11 +26,6 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
   late NewsViewModel _newsViewModel;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
@@ -99,11 +94,11 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
                   right: 16.0,
                   top: 16.0,
                   bottom: 80.0 + MediaQuery.of(context).padding.bottom),
-              itemCount: 10,
+              itemCount: _newsViewModel.news.length,
               itemBuilder: (context, index) {
                 return NewsListItemWidget(
                     tag: index.toString(),
-                    dateTime: DateTime.now().subtract(Duration(days: index)),
+                    news: _newsViewModel.news[index],
                     onTap: () =>
                         _newsViewModel.showNewsPageScreen(context, index),
                     onUserTap: () => {},

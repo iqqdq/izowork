@@ -349,12 +349,11 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                           .showDealProcessActionSheet(
                                               context, dealProcess),
                                       onProcessTap: (dealProcess) =>
-                                          _dealViewModel
-                                              .showDealProcessCompleteSheet(
-                                                  context, dealProcess),
+                                          _dealViewModel.showDealProcessScreen(
+                                              context, dealProcess),
                                       onAddProcessTap: containsHidden
-                                          ? () =>
-                                              _dealViewModel.showSelectionSheet(
+                                          ? () => _dealViewModel
+                                              .showDealProcessSelectionSheet(
                                                   context, index)
                                           : null,
                                     );

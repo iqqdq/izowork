@@ -1,17 +1,19 @@
 import 'dart:convert';
 
+import 'package:izowork/entities/response/user.dart';
+
 DealProcessInfo dealProcessInfoFromJson(String str) =>
     DealProcessInfo.fromJson(json.decode(str));
 
 class DealProcessInfo {
-  DealProcessInfo({
-    required this.createdAt,
-    required this.dealStageProcessId,
-    required this.description,
-    required this.files,
-    required this.id,
-    required this.userId,
-  });
+  DealProcessInfo(
+      {required this.createdAt,
+      required this.dealStageProcessId,
+      required this.description,
+      required this.files,
+      required this.id,
+      required this.userId,
+      this.user});
 
   String createdAt;
   String dealStageProcessId;
@@ -19,6 +21,7 @@ class DealProcessInfo {
   List<DealProcessInfoFile> files;
   String id;
   String userId;
+  User? user;
 
   factory DealProcessInfo.fromJson(Map<String, dynamic> json) =>
       DealProcessInfo(
@@ -29,6 +32,7 @@ class DealProcessInfo {
             json["files"].map((x) => DealProcessInfoFile.fromJson(x))),
         id: json["id"],
         userId: json["user_id"],
+        user: json["user"],
       );
 }
 

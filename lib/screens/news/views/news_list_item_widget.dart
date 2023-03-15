@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/news.dart';
+import 'package:izowork/services/urls.dart';
+import 'package:izowork/views/status_widget.dart';
 import 'package:izowork/views/transparent_button_widget_widget.dart';
 
 class NewsListItemWidget extends StatelessWidget {
   final String tag;
-  final DateTime dateTime;
+  final News news;
   final VoidCallback onTap;
   final VoidCallback onUserTap;
   final VoidCallback onShowCommentsTap;
@@ -15,7 +18,7 @@ class NewsListItemWidget extends StatelessWidget {
   const NewsListItemWidget(
       {Key? key,
       required this.tag,
-      required this.dateTime,
+      required this.news,
       required this.onTap,
       required this.onUserTap,
       required this.onShowCommentsTap})
@@ -23,6 +26,8 @@ class NewsListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime dateTime = news.createdAt;
+
     final _day = dateTime.day.toString().characters.length == 1
         ? '0${dateTime.day}'
         : '${dateTime.day}';
@@ -47,30 +52,44 @@ class NewsListItemWidget extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   /// IMAGE
-                  Hero(
-                      tag: tag,
-                      child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(16.0),
-                              topRight: Radius.circular(16.0)),
-                          child: CachedNetworkImage(
-                              imageUrl:
-                                  'https://images.unsplash.com/photo-1554469384-e58fac16e23a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8YnVpbGRpbmd8ZW58MHx8MHx8&w=1000&q=80',
-                              width: MediaQuery.of(context).size.width - 32.0,
-                              height: 180.0,
-                              memCacheWidth:
-                                  (MediaQuery.of(context).size.width - 32.0)
-                                      .round(),
-                              memCacheHeight: 180 *
-                                  (MediaQuery.of(context).devicePixelRatio)
-                                      .round(),
-                              fit: BoxFit.cover))),
+                  Stack(children: [
+                    Hero(
+                        tag: tag,
+                        child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(16.0),
+                                topRight: Radius.circular(16.0)),
+                            child: CachedNetworkImage(
+                                imageUrl:
+                                    newsMediaUrl + news.files.first.filename,
+                                width: MediaQuery.of(context).size.width - 32.0,
+                                height: 180.0,
+                                memCacheWidth:
+                                    (MediaQuery.of(context).size.width - 32.0)
+                                        .round(),
+                                memCacheHeight: 180 *
+                                    (MediaQuery.of(context).devicePixelRatio)
+                                        .round(),
+                                fit: BoxFit.cover))),
+                    news.important
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: const [
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 10.0, right: 10.0),
+                                  child: StatusWidget(
+                                      title: Titles.important, status: 0))
+                            ],
+                          )
+                        : Container(),
+                  ]),
 
                   /// TITLE
                   Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 10.0),
-                      child: Text('Заголовок новости',
+                      child: Text(news.name,
                           maxLines: 2,
                           style: TextStyle(
                               color: HexColors.black,
@@ -82,8 +101,7 @@ class NewsListItemWidget extends StatelessWidget {
                   Padding(
                       padding: const EdgeInsets.only(
                           left: 16.0, right: 16.0, bottom: 10.0),
-                      child: Text(
-                          'Мы вынуждены отталкиваться от того, что семантический разбор внешних противодействий играет определяющее.',
+                      child: Text(news.description,
                           maxLines: 3,
                           style: TextStyle(
                               color: HexColors.black,
@@ -95,7 +113,7 @@ class NewsListItemWidget extends StatelessWidget {
                       child: Row(children: [
                         /// NAME
                         Expanded(
-                            child: Text('Имя Фамилия',
+                            child: Text(news.user.name,
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: HexColors.grey40,
@@ -138,7 +156,7 @@ class NewsListItemWidget extends StatelessWidget {
                               const SizedBox(width: 10.0),
 
                               /// COMMENT NAME
-                              Text('Имя сотрудника',
+                              Text('???',
                                   style: TextStyle(
                                       color: HexColors.grey50,
                                       fontSize: 14.0,
@@ -149,8 +167,7 @@ class NewsListItemWidget extends StatelessWidget {
                         const SizedBox(height: 12.0),
 
                         /// COMMENT
-                        Text(
-                            'Семантический разбор внешних противодействий играет определяющее...',
+                        Text('???',
                             maxLines: 2,
                             style: TextStyle(
                                 color: HexColors.black,
@@ -160,7 +177,7 @@ class NewsListItemWidget extends StatelessWidget {
 
                   /// SHOW ALL COMMENT's BUTTON
                   TransparentButtonWidget(
-                      title: '${Titles.showAllComments} (15)',
+                      title: '${Titles.showAllComments} (???)',
                       margin: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 3.0),
                       fontSize: 14.0,

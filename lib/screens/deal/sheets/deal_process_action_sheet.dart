@@ -41,15 +41,11 @@ class DealProcessActionSheet extends StatelessWidget {
                           horizontal: 16.0, vertical: 8.0),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: 3,
+                      itemCount: 1,
                       itemBuilder: (context, index) {
                         return BorderButtonWidget(
                             margin: const EdgeInsets.only(top: 16.0),
-                            title: index == 0
-                                ? Titles.edit
-                                : index == 1
-                                    ? Titles.stop
-                                    : Titles.delete,
+                            title: Titles.delete,
                             onTap: () =>
                                 {onTap(index), Navigator.pop(context)});
                       })

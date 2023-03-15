@@ -240,20 +240,20 @@ class DealRepository {
     }
   }
 
-  Future<dynamic> updateProcessInfo(
-      DealProcessInfoRequest dealProcessInfoRequest) async {
-    dynamic json =
-        await WebService().patch(dealProcessInfoUrl, dealProcessInfoRequest);
+  // Future<dynamic> updateProcessInfo(
+  //     DealProcessInfoRequest dealProcessInfoRequest) async {
+  //   dynamic json =
+  //       await WebService().patch(dealProcessInfoUrl, dealProcessInfoRequest);
 
-    try {
-      return DealProcessInfo.fromJson(json["information"]);
-    } catch (e) {
-      return ErrorResponse.fromJson(json);
-    }
-  }
+  //   try {
+  //     return DealProcessInfo.fromJson(json["information"]);
+  //   } catch (e) {
+  //     return ErrorResponse.fromJson(json);
+  //   }
+  // }
 
   Future<dynamic> uploadProcessInfoFile(FormData formData) async {
-    dynamic json = await WebService().post(uploadDealProcessInfoUrl, formData);
+    dynamic json = await WebService().post(dealProcessInfoFileUrl, formData);
 
     try {
       return json["file"] as String;

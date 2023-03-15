@@ -55,6 +55,7 @@ abstract class Titles {
   static const addSocial = 'Добавить соц.сеть';
   static const addComment = 'Добавить комментарий';
   static const addAction = 'Добавить действие';
+  static const sendInfo = 'Отправить информацию';
   static const goChat = 'Перейти в чат';
 
   /// MORE
@@ -112,6 +113,7 @@ abstract class Titles {
   static const complition = 'Выполнение';
   static const noResult = 'Список пуст';
   static const changesSuccess = 'Изменения сохранены';
+  static const important = 'Важно';
 
   /// CHART
   static const generalContractor = 'Ген.подрядчик';

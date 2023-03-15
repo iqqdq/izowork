@@ -87,17 +87,25 @@ class _DealCloseSheetState extends State<DealCloseSheetWidget> {
                   const SizedBox(height: 16.0),
 
                   /// FILE LIST
-                  ListView.builder(
-                      padding: EdgeInsets.zero,
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: _files.length,
-                      itemBuilder: (context, index) {
-                        return FileListItemWidget(
-                          fileName: _files[index].name,
-                          onRemoveTap: () => _removeFile(index),
-                        );
-                      }),
+                  AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      height:
+                          _files.length > 3 ? 3 * 56.0 : _files.length * 56.0,
+                      decoration: BoxDecoration(
+                          color: HexColors.grey20,
+                          borderRadius: BorderRadius.circular(16.0)),
+                      child: Scrollbar(
+                          child: ListView.builder(
+                              padding: const EdgeInsets.all(8.0),
+                              // physics: const NeverScrollableScrollPhysics(),
+                              // shrinkWrap: true,
+                              itemCount: _files.length,
+                              itemBuilder: (context, index) {
+                                return FileListItemWidget(
+                                  fileName: _files[index].name,
+                                  onRemoveTap: () => _removeFile(index),
+                                );
+                              }))),
 
                   /// ADD FILE BUTTON
                   BorderButtonWidget(
