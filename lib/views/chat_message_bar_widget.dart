@@ -258,7 +258,9 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                   opacity: _isRecording ? 0.0 : 1.0,
                   duration: const Duration(milliseconds: 300),
                   child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                      padding: widget.onClipTap == null
+                          ? const EdgeInsets.only(right: 40.0)
+                          : const EdgeInsets.symmetric(horizontal: 40.0),
                       child: _isRecording
                           ? Container(
                               constraints: const BoxConstraints(

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/news_comment_request.dart';
+import 'package:izowork/entities/request/news_file_request.dart';
 import 'package:izowork/entities/request/news_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/news.dart';
@@ -48,6 +49,30 @@ class NewsRepository {
     }
   }
 
+  Future<dynamic> getComments(
+      {required Pagination pagination,
+      required String search,
+      required String id}) async {
+    var url = newsCommentUrl +
+        '?offset=${pagination.offset}&limit=${pagination.size}&news_id=$id';
+
+    if (search.isNotEmpty) {
+      url += '&q=$search';
+    }
+
+    dynamic json = await WebService().get(url);
+    List<NewsComment> comments = [];
+
+    try {
+      json['comments'].forEach((element) {
+        comments.add(NewsComment.fromJson(element));
+      });
+      return comments;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
   Future<dynamic> createNewsComment(
       NewsCommentRequest newsCommentRequest) async {
     dynamic json = await WebService().post(newsCommentUrl, newsCommentRequest);
@@ -59,8 +84,9 @@ class NewsRepository {
     }
   }
 
-  Future<dynamic> addNewsFile(FormData formData) async {
-    dynamic json = await WebService().postFormData(newsFileUrl, formData);
+  Future<dynamic> addNewsFile(NewsFileRequest newsFileRequest) async {
+    dynamic json = await WebService()
+        .postFormData(newsFileUrl, await newsFileRequest.toFormData());
 
     try {
       return NewsFile.fromJson(json["file"]);

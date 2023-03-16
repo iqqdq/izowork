@@ -6,7 +6,6 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/documents_view_model.dart';
-import 'package:izowork/screens/documents/views/documents_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
@@ -143,6 +142,7 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
               backgroundColor: HexColors.white,
               child: ListView.builder(
                   shrinkWrap: true,
+                  controller: _scrollController,
                   padding: EdgeInsets.only(
                       left: 16.0,
                       right: 16.0,

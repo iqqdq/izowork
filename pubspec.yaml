@@ -57,6 +57,7 @@ dependencies:
   file_picker: ^5.2.5
   spreadsheet_table: ^1.0.0
   android_intent_plus: ^3.1.5
+  flutter_image_slideshow: ^0.1.4
   
   geolocator: ^8.1.1
   google_maps_flutter:

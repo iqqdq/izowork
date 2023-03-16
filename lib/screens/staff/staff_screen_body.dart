@@ -177,7 +177,9 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
           /// INDICATOR
           _staffViewModel.loadingStatus == LoadingStatus.searching ||
                   _isSearching
-              ? const LoadingIndicatorWidget()
+              ? const Padding(
+                  padding: EdgeInsets.only(bottom: 90.0),
+                  child: LoadingIndicatorWidget())
               : Container()
         ])));
   }

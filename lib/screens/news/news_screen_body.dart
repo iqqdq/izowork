@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/pagination.dart';
 import 'package:izowork/models/news_view_model.dart';
 import 'package:izowork/screens/news/views/news_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -23,13 +25,44 @@ class NewsScreenBodyWidget extends StatefulWidget {
 class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+
+  final ScrollController _scrollController = ScrollController();
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
+
   late NewsViewModel _newsViewModel;
+
+  Pagination _pagination = Pagination(offset: 0, size: 50);
+  bool _isSearching = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _pagination.offset += 1;
+        _newsViewModel.getNews(
+            pagination: _pagination, search: _textEditingController.text);
+      }
+    });
+  }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _textEditingController.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    _pagination = Pagination(offset: 0, size: 50);
+    _newsViewModel.getNews(
+        pagination: _pagination, search: _textEditingController.text);
   }
 
   @override
@@ -75,10 +108,25 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
                             placeholder: '${Titles.search}...',
                             onTap: () => setState,
                             onChange: (text) => {
-                                  // TODO SEARCH NEWS
+                                  setState(() => _isSearching = true),
+                                  _debouncer.run(() {
+                                    _pagination =
+                                        Pagination(offset: 0, size: 50);
+
+                                    _newsViewModel
+                                        .getNews(
+                                            pagination: _pagination,
+                                            search: _textEditingController.text)
+                                        .then((value) => setState(
+                                            () => _isSearching = false));
+                                  })
                                 },
                             onClearTap: () => {
-                                  // TODO CLEAR NEWS SEARCH
+                                  _newsViewModel.resetFilter(),
+                                  _pagination.offset = 0,
+                                  _newsViewModel.getNews(
+                                      pagination: _pagination,
+                                      search: _textEditingController.text)
                                 }))
               ])
             ])),
@@ -87,24 +135,28 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
         body: SizedBox.expand(
             child: Stack(children: [
           /// NEWS LIST VIEW
-          ListView.builder(
-              shrinkWrap: true,
-              padding: EdgeInsets.only(
-                  left: 16.0,
-                  right: 16.0,
-                  top: 16.0,
-                  bottom: 80.0 + MediaQuery.of(context).padding.bottom),
-              itemCount: _newsViewModel.news.length,
-              itemBuilder: (context, index) {
-                return NewsListItemWidget(
-                    tag: index.toString(),
-                    news: _newsViewModel.news[index],
-                    onTap: () =>
-                        _newsViewModel.showNewsPageScreen(context, index),
-                    onUserTap: () => {},
-                    onShowCommentsTap: () =>
-                        _newsViewModel.showNewsCommentsScreen(context, index));
-              }),
+          RefreshIndicator(
+              onRefresh: _onRefresh,
+              color: HexColors.primaryMain,
+              backgroundColor: HexColors.white,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                      top: 16.0,
+                      bottom: 80.0 + MediaQuery.of(context).padding.bottom),
+                  itemCount: _newsViewModel.news.length,
+                  itemBuilder: (context, index) {
+                    return NewsListItemWidget(
+                        tag: index.toString(),
+                        news: _newsViewModel.news[index],
+                        onTap: () =>
+                            _newsViewModel.showNewsPageScreen(context, index),
+                        onUserTap: () => {},
+                        onShowCommentsTap: () => _newsViewModel
+                            .showNewsCommentsScreen(context, index));
+                  })),
           const SeparatorWidget(),
 
           /// FILTER BUTTON
@@ -112,16 +164,24 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
               child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: FilterButtonWidget(
-                        onTap: () =>
-                            _newsViewModel.showContactsFilterSheet(context),
-                        // onClearTap: () => {}
-                      )))),
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: FilterButtonWidget(
+                        onTap: () => _newsViewModel.showNewsFilterSheet(
+                            context,
+                            () => {
+                                  _pagination = Pagination(offset: 0, size: 50),
+                                  _newsViewModel.getNews(
+                                      pagination: _pagination,
+                                      search: _textEditingController.text)
+                                })),
+                    // onClearTap: () => {}
+                  ))),
 
           /// INDICATOR
           _newsViewModel.loadingStatus == LoadingStatus.searching
-              ? const LoadingIndicatorWidget()
+              ? const Padding(
+                  padding: EdgeInsets.only(bottom: 90.0),
+                  child: LoadingIndicatorWidget())
               : Container()
         ])));
   }

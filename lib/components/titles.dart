@@ -44,7 +44,7 @@ abstract class Titles {
   static const showAllComments = 'Показать все комментарии';
   static const publicate = 'Опуликовать';
   static const clipMedia = 'Прикрепить медиа';
-  static const changeMedia = 'Изменить медиа';
+  static const addMedia = 'Добавить медиа';
   static const edit = 'Редактировать';
   static const stop = 'Остановить';
   static const save = 'Сохранить';
@@ -114,6 +114,7 @@ abstract class Titles {
   static const noResult = 'Список пуст';
   static const changesSuccess = 'Изменения сохранены';
   static const important = 'Важно';
+  static const importantNews = 'Важная новость';
 
   /// CHART
   static const generalContractor = 'Ген.подрядчик';
@@ -241,6 +242,7 @@ abstract class Titles {
   static const contactWasDeleted = 'Контакт был удален';
   static const infoWasAdded = 'Информация добавлена';
   static const infoWasUpdated = 'Информация обнавлена';
+  static const newsWasAdded = 'Новость добавлена';
 
   /// ALERTS
   static const warning = 'Внимание';

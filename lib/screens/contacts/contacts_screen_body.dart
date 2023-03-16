@@ -179,7 +179,9 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
 
           /// INDICATOR
           _contactsViewModel.loadingStatus == LoadingStatus.searching
-              ? const LoadingIndicatorWidget()
+              ? const Padding(
+                  padding: EdgeInsets.only(bottom: 90.0),
+                  child: LoadingIndicatorWidget())
               : Container()
         ])));
   }
