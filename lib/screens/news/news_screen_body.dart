@@ -131,7 +131,8 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
               ])
             ])),
         floatingActionButton: FloatingButtonWidget(
-            onTap: () => _newsViewModel.showNewsCreationScreen(context)),
+            onTap: () => _newsViewModel.showNewsCreationScreen(
+                context, _pagination, _textEditingController.text)),
         body: SizedBox.expand(
             child: Stack(children: [
           /// NEWS LIST VIEW
@@ -158,6 +159,22 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
                             .showNewsCommentsScreen(context, index));
                   })),
           const SeparatorWidget(),
+
+          /// EMPTY LIST TEXT
+          _newsViewModel.loadingStatus == LoadingStatus.completed &&
+                  _newsViewModel.news.isEmpty &&
+                  !_isSearching
+              ? Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, bottom: 100.0),
+                      child: Text(Titles.noResult,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16.0,
+                              color: HexColors.grey50))))
+              : Container(),
 
           /// FILTER BUTTON
           SafeArea(

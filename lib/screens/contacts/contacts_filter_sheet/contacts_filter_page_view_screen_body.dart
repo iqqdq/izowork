@@ -46,7 +46,7 @@ class _ContactsFilterPageViewScreenBodyState
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
                   height: MediaQuery.of(context).padding.bottom == 0.0
-                      ? 300.0
+                      ? 260.0
                       : 280.0,
                   child: PageView(
                     controller: _pageController,

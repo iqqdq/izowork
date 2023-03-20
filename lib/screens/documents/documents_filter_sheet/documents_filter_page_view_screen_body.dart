@@ -27,7 +27,6 @@ class _DocumentsFilterPageViewScreenBodyState
     extends State<DocumentsFilterPageViewScreenBodyWidget> {
   final PageController _pageController = PageController();
   late DocumentsFilterViewModel _documentsFilterViewModel;
-  bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +43,10 @@ class _DocumentsFilterPageViewScreenBodyState
               /// DISMISS INDICATOR
               const SizedBox(height: 6.0),
               const DismissIndicatorWidget(),
-              AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  height: _isSearching
-                      ? MediaQuery.of(context).size.height * 0.9
-                      : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 324.0
-                          : 304.0,
+              SizedBox(
+                  height: MediaQuery.of(context).padding.bottom == 0.0
+                      ? 304.0
+                      : 294.0,
                   child: PageView(
                       controller: _pageController,
                       physics: const NeverScrollableScrollPhysics(),

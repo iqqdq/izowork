@@ -53,8 +53,8 @@ class _ProductsFilterPageViewScreenBodyState
                   height: _isSearching
                       ? MediaQuery.of(context).size.height * 0.9
                       : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 352.0
-                          : 364.0,
+                          ? 324.0
+                          : 354.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),

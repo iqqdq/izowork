@@ -56,25 +56,13 @@ class NewsFilterViewModel with ChangeNotifier {
     }
 
     if (tags.isNotEmpty) {
-      sortBy = sortBy.contains('created_at')
-          ? sortBy + ',important'
-          : sortBy + 'important';
-
-      if (tags.first == 0) {
-        sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
-            ? sortOrder + ',asc'
-            : sortOrder = sortOrder + 'asc';
-      } else {
-        sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')
-            ? sortOrder + ',desc'
-            : sortOrder = sortOrder + 'desc';
+      if (tags.first == 1) {
+        params.add('&important=true');
       }
     }
 
     if (tags2.isNotEmpty) {
-      sortBy = sortBy.contains('important')
-          ? sortBy + ',created_at'
-          : sortBy + 'created_at';
+      sortBy = sortBy + 'created_at';
 
       if (tags2.first == 0) {
         sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')

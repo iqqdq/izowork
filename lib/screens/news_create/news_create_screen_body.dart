@@ -97,94 +97,103 @@ class _NewsCreateScreenBodyState extends State<NewsCreateScreenBodyWidget> {
         body: SizedBox.expand(
             child: Stack(children: [
           /// NEWS LIST VIEW
-          ListView(
-              shrinkWrap: true,
-              padding: EdgeInsets.only(
-                  left: 16.0,
-                  right: 16.0,
-                  top: 16.0,
-                  bottom: 80.0 + MediaQuery.of(context).padding.bottom),
-              children: [
-                /// SLIDESHOW
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(16.0),
-                    child: _images.isEmpty
-                        ? Container()
-                        : ImageSlideshow(
-                            width: MediaQuery.of(context).size.width - 32.0,
-                            height: 180.0,
-                            children: _images,
-                            initialPage: 0,
-                            indicatorColor: HexColors.white,
-                            indicatorBackgroundColor: HexColors.grey40,
-                            indicatorRadius: _images.length == 1 ? 0.0 : 4.0,
-                            autoPlayInterval: 6000,
-                            isLoop: true)),
-                SizedBox(
-                    height: _newsCreateViewModel.files.isEmpty ? 0.0 : 16.0),
+          GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: ListView(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                      top: 16.0,
+                      bottom: MediaQuery.of(context).padding.bottom == 0.0
+                          ? 100.0
+                          : MediaQuery.of(context).padding.bottom + 80.0),
+                  children: [
+                    /// SLIDESHOW
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(16.0),
+                        child: _images.isEmpty
+                            ? Container()
+                            : ImageSlideshow(
+                                width: MediaQuery.of(context).size.width - 32.0,
+                                height: 180.0,
+                                children: _images,
+                                initialPage: 0,
+                                indicatorColor: HexColors.white,
+                                indicatorBackgroundColor: HexColors.grey40,
+                                indicatorRadius:
+                                    _images.length == 1 ? 0.0 : 4.0,
+                                autoPlayInterval: 6000,
+                                isLoop: true)),
+                    SizedBox(
+                        height:
+                            _newsCreateViewModel.files.isEmpty ? 0.0 : 16.0),
 
-                /// NAME INPUT
-                LabelInputWidget(
-                    margin: const EdgeInsets.only(bottom: 16.0),
-                    textEditingController: _titleTextEditingController,
-                    focusNode: _titleFocusNode,
-                    labelText: Titles.title + ' ${Titles.news.toLowerCase()}'),
+                    /// NAME INPUT
+                    LabelInputWidget(
+                        margin: const EdgeInsets.only(bottom: 16.0),
+                        textEditingController: _titleTextEditingController,
+                        focusNode: _titleFocusNode,
+                        labelText:
+                            Titles.title + ' ${Titles.news.toLowerCase()}'),
 
-                /// TEXT INPUT
-                Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 6.0),
-                    height: 260.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border:
-                            Border.all(width: 1.0, color: HexColors.grey20)),
-                    child: TextField(
-                        maxLines: null,
-                        controller: _descriptionTextEditingController,
-                        focusNode: _focusNode,
-                        keyboardAppearance: Brightness.light,
-                        cursorColor: HexColors.primaryDark,
-                        textInputAction: TextInputAction.done,
-                        textCapitalization: TextCapitalization.sentences,
-                        style: _style,
-                        decoration: InputDecoration(
-                          labelText:
-                              Titles.text + ' ${Titles.news.toLowerCase()}',
-                          labelStyle: _style.copyWith(color: HexColors.grey40),
-                          contentPadding: EdgeInsets.only(
-                              top: _focusNode.hasFocus ? 8.0 : 10.0),
-                          focusedBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                        ),
-                        onChanged: (text) => {setState},
-                        onEditingComplete: () =>
-                            FocusScope.of(context).unfocus())),
+                    /// TEXT INPUT
+                    Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 6.0),
+                        height: 260.0,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                                width: 1.0, color: HexColors.grey20)),
+                        child: TextField(
+                            maxLines: null,
+                            controller: _descriptionTextEditingController,
+                            focusNode: _focusNode,
+                            keyboardAppearance: Brightness.light,
+                            cursorColor: HexColors.primaryDark,
+                            textInputAction: TextInputAction.done,
+                            textCapitalization: TextCapitalization.sentences,
+                            style: _style,
+                            decoration: InputDecoration(
+                              labelText:
+                                  Titles.text + ' ${Titles.news.toLowerCase()}',
+                              labelStyle:
+                                  _style.copyWith(color: HexColors.grey40),
+                              contentPadding: EdgeInsets.only(
+                                  top: _focusNode.hasFocus ? 8.0 : 10.0),
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                            ),
+                            onChanged: (text) => {setState},
+                            onEditingComplete: () =>
+                                FocusScope.of(context).unfocus())),
 
-                /// CLIP IMAGE BUTTON
-                BorderButtonWidget(
-                    title: _newsCreateViewModel.files.isEmpty
-                        ? Titles.clipMedia
-                        : Titles.addMedia,
-                    margin: const EdgeInsets.only(top: 16.0),
-                    onTap: () => _newsCreateViewModel.pickImage()),
-                const SizedBox(height: 16.0),
+                    /// CLIP IMAGE BUTTON
+                    BorderButtonWidget(
+                        title: _newsCreateViewModel.files.isEmpty
+                            ? Titles.clipMedia
+                            : Titles.addMedia,
+                        margin: const EdgeInsets.only(top: 16.0),
+                        onTap: () => _newsCreateViewModel.pickImage()),
+                    const SizedBox(height: 16.0),
 
-                /// CHECKBOX
-                GestureDetector(
-                  child: Row(children: [
-                    CheckBoxWidget(isSelected: _newsCreateViewModel.important),
-                    const SizedBox(width: 8.0),
-                    Text(Titles.importantNews,
-                        style: TextStyle(
-                            color: HexColors.black,
-                            fontSize: 16.0,
-                            fontFamily: 'PT Root UI'))
-                  ]),
-                  onTap: () => _newsCreateViewModel
-                      .setInportant(!_newsCreateViewModel.important),
-                )
-              ]),
+                    /// CHECKBOX
+                    GestureDetector(
+                      child: Row(children: [
+                        CheckBoxWidget(
+                            isSelected: _newsCreateViewModel.important),
+                        const SizedBox(width: 8.0),
+                        Text(Titles.importantNews,
+                            style: TextStyle(
+                                color: HexColors.black,
+                                fontSize: 16.0,
+                                fontFamily: 'PT Root UI'))
+                      ]),
+                      onTap: () => _newsCreateViewModel
+                          .setInportant(!_newsCreateViewModel.important),
+                    )
+                  ])),
 
           /// ADD NEWS BUTTON
           Align(

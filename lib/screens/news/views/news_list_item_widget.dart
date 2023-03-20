@@ -178,8 +178,10 @@ class _NewsListItemState extends State<NewsListItemWidget> {
                               fontSize: 14.0,
                               fontFamily: 'PT Root UI'))),
                   Padding(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, right: 16.0, bottom: 10.0),
+                      padding: EdgeInsets.only(
+                          left: 16.0,
+                          right: 16.0,
+                          bottom: widget.news.commentsTotal == 0 ? 0.0 : 10.0),
                       child: Row(children: [
                         /// NAME
                         Expanded(
@@ -199,71 +201,80 @@ class _NewsListItemState extends State<NewsListItemWidget> {
                                 fontSize: 12.0,
                                 fontFamily: 'PT Root UI'))
                       ])),
-                  Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                          color: HexColors.grey,
-                          borderRadius: BorderRadius.circular(16.0)),
-                      child: Column(children: [
-                        InkWell(
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            borderRadius: BorderRadius.circular(16.0),
-                            child: Row(children: [
-                              /// AVATAR
-                              Stack(children: [
-                                SvgPicture.asset('assets/ic_avatar.svg',
-                                    color: HexColors.grey40,
-                                    width: 24.0,
-                                    height: 24.0,
-                                    fit: BoxFit.cover),
-                                widget.news.user.avatar.isEmpty
-                                    ? Container()
-                                    : ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0),
-                                        child: CachedNetworkImage(
-                                            cacheKey: widget.news.user.avatar,
-                                            imageUrl: avatarUrl +
-                                                widget.news.user.avatar,
+                  widget.news.commentsTotal == 0
+                      ? Container()
+                      : Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                          padding: const EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                              color: HexColors.grey,
+                              borderRadius: BorderRadius.circular(16.0)),
+                          child: ListView(
+                              padding: EdgeInsets.zero,
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              children: [
+                                InkWell(
+                                    highlightColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    child: Row(children: [
+                                      /// AVATAR
+                                      Stack(children: [
+                                        SvgPicture.asset('assets/ic_avatar.svg',
+                                            color: HexColors.grey40,
                                             width: 24.0,
                                             height: 24.0,
-                                            memCacheWidth: 24 *
-                                                MediaQuery.of(context)
-                                                    .devicePixelRatio
-                                                    .round(),
-                                            memCacheHeight: 24 *
-                                                MediaQuery.of(context)
-                                                    .devicePixelRatio
-                                                    .round(),
-                                            fit: BoxFit.cover)),
-                              ]),
-                              const SizedBox(width: 10.0),
+                                            fit: BoxFit.cover),
+                                        widget.news.user.avatar.isEmpty
+                                            ? Container()
+                                            : ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                                child: CachedNetworkImage(
+                                                    cacheKey:
+                                                        widget.news.user.avatar,
+                                                    imageUrl: avatarUrl +
+                                                        widget.news.user.avatar,
+                                                    width: 24.0,
+                                                    height: 24.0,
+                                                    memCacheWidth: 24 *
+                                                        MediaQuery.of(context)
+                                                            .devicePixelRatio
+                                                            .round(),
+                                                    memCacheHeight: 24 *
+                                                        MediaQuery.of(context)
+                                                            .devicePixelRatio
+                                                            .round(),
+                                                    fit: BoxFit.cover)),
+                                      ]),
+                                      const SizedBox(width: 10.0),
 
-                              /// COMMENT NAME
-                              Text(widget.news.user.name,
-                                  style: TextStyle(
-                                      color: HexColors.grey50,
-                                      fontSize: 14.0,
-                                      fontFamily: 'PT Root UI',
-                                      fontWeight: FontWeight.bold)),
-                            ]),
-                            onTap: () => widget.onUserTap()),
-                        const SizedBox(height: 12.0),
+                                      /// COMMENT NAME
+                                      Text(widget.news.user.name,
+                                          style: TextStyle(
+                                              color: HexColors.grey50,
+                                              fontSize: 14.0,
+                                              fontFamily: 'PT Root UI',
+                                              fontWeight: FontWeight.bold)),
+                                    ]),
+                                    onTap: () => widget.onUserTap()),
+                                const SizedBox(height: 12.0),
 
-                        /// COMMENT
-                        Text('???',
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: HexColors.black,
-                                fontSize: 14.0,
-                                fontFamily: 'PT Root UI'))
-                      ])),
+                                /// COMMENT
+                                Text('${widget.news.lastComment?.comment}',
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                        color: HexColors.black,
+                                        fontSize: 14.0,
+                                        fontFamily: 'PT Root UI'))
+                              ])),
 
                   /// SHOW ALL COMMENT's BUTTON
                   TransparentButtonWidget(
-                      title: '${Titles.showAllComments} (???)',
+                      title: widget.news.commentsTotal == 0
+                          ? Titles.addComment
+                          : '${Titles.showAllComments} (${widget.news.commentsTotal})',
                       margin: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 3.0),
                       fontSize: 14.0,

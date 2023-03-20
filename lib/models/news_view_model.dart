@@ -87,7 +87,7 @@ class NewsViewModel with ChangeNotifier {
   // MARK: - FUNCTIONS
 
   void resetFilter() {
-    // _newsFilter = null;
+    _newsFilter = null;
   }
 
   // MARK: -
@@ -117,14 +117,15 @@ class NewsViewModel with ChangeNotifier {
                 }));
   }
 
-  void showNewsCreationScreen(BuildContext context) {
+  void showNewsCreationScreen(
+      BuildContext context, Pagination pagination, String search) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => NewsCreateScreenWidget(
                 onPop: (news) => {
-                      _news.insert(0, news),
-                      notifyListeners(),
+                      pagination.size += 1,
+                      getNews(pagination: pagination, search: search),
                       Toast().showTopToast(context, Titles.newsWasAdded)
                     })));
   }

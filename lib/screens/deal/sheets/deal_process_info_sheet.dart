@@ -1,25 +1,15 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/response/deal_process_info.dart';
-import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:io' as io;
-import 'package:path_provider/path_provider.dart';
 
 class DealProcessInfoSheetWidget extends StatefulWidget {
   final Function(String, List<PlatformFile>) onTap;
