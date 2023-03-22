@@ -87,4 +87,8 @@ const newsCommentUrl = baseUrl + 'news/comment';
 const newsFileUrl = baseUrl + 'news/file';
 const newsMediaUrl = baseUrl + 'resourses/news-file/';
 
+const chatsUrl = baseUrl + 'chat/chats';
+const chatDmUrl = baseUrl + 'chat/dm';
+const messageUrl = baseUrl + 'chat/messages';
+
 const documentUrl = baseUrl + 'document/list';

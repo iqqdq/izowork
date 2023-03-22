@@ -4,9 +4,15 @@ import 'package:izowork/components/hex_colors.dart';
 class TitleWidget extends StatelessWidget {
   final String text;
   final bool? isSmall;
+  final TextAlign? textAlign;
   final EdgeInsets? padding;
 
-  const TitleWidget({Key? key, required this.text, this.isSmall, this.padding})
+  const TitleWidget(
+      {Key? key,
+      required this.text,
+      this.isSmall,
+      this.textAlign,
+      this.padding})
       : super(key: key);
 
   @override
@@ -22,6 +28,7 @@ class TitleWidget extends StatelessWidget {
             ? const EdgeInsets.symmetric(horizontal: 16.0)
             : padding!,
         child: Text(text,
+            textAlign: textAlign,
             style: TextStyle(
                 fontSize: small ? 12.0 : 20.0,
                 fontWeight: small ? FontWeight.w400 : FontWeight.w700,

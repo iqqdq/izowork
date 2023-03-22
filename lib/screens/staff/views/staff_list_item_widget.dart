@@ -11,14 +11,14 @@ class StaffListItemWidget extends StatelessWidget {
   final User user;
   final VoidCallback onUserTap;
   final Function(String)? onLinkTap;
-  final VoidCallback onChatTap;
+  final VoidCallback? onChatTap;
 
   const StaffListItemWidget(
       {Key? key,
       required this.user,
       required this.onUserTap,
       this.onLinkTap,
-      required this.onChatTap})
+      this.onChatTap})
       : super(key: key);
 
   @override
@@ -118,12 +118,14 @@ class StaffListItemWidget extends StatelessWidget {
                                                 TextDecoration.underline))),
                                 onTap: () => onLinkTap!(user.social[index]));
                           }),
-                  const SizedBox(height: 16.0),
+                  SizedBox(height: onChatTap == null ? 0.0 : 16.0),
 
-                  ButtonWidget(
-                      title: Titles.goToChat,
-                      margin: EdgeInsets.zero,
-                      onTap: () => onChatTap())
+                  onChatTap == null
+                      ? Container()
+                      : ButtonWidget(
+                          title: Titles.goToChat,
+                          margin: EdgeInsets.zero,
+                          onTap: () => onChatTap!())
                 ])));
   }
 }

@@ -1,4 +1,3 @@
-import 'package:izowork/components/user_params.dart';
 import 'package:izowork/entities/request/authorization_request.dart';
 import 'package:izowork/entities/response/authorization.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -10,9 +9,7 @@ class AuthorizationRepository {
     dynamic json = await WebService().post(loginUrl, authorizationRequest);
 
     if (json["token"] != null) {
-      Authorization authorization = Authorization.fromJson(json);
-      UserParams().setToken(authorization.token);
-      return authorization;
+      return Authorization.fromJson(json);
     } else {
       return ErrorResponse.fromJson(json);
     }

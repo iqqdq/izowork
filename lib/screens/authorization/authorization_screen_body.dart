@@ -28,11 +28,6 @@ class _AuthorizationScreenBodyState
   late AuthorizationViewModel _authorizationViewModel;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _loginTextEditingController.dispose();
     _loginFocusNode.dispose();

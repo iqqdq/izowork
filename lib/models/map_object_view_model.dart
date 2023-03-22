@@ -20,7 +20,7 @@ class MapObjectViewModel with ChangeNotifier {
   }
 
   void showDialogScreen(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const DialogScreenWidget()));
+    // Navigator.push(context,
+    //     MaterialPageRoute(builder: (context) => const DialogScreenWidget()));
   }
 }

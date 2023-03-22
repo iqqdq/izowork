@@ -112,6 +112,7 @@ abstract class Titles {
   static const count = 'Кол-во';
   static const complition = 'Выполнение';
   static const noResult = 'Список пуст';
+  static const noMessages = 'Нет сообщений';
   static const changesSuccess = 'Изменения сохранены';
   static const important = 'Важно';
   static const importantNews = 'Важная новость';

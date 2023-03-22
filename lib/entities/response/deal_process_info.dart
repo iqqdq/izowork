@@ -32,7 +32,7 @@ class DealProcessInfo {
             json["files"].map((x) => DealProcessInfoFile.fromJson(x))),
         id: json["id"],
         userId: json["user_id"],
-        user: json["user"],
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
       );
 }
 

@@ -52,6 +52,12 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _sidePadding =
         MediaQuery.of(context).size.width * (widget.isMine ? 0.25 : 0.1);

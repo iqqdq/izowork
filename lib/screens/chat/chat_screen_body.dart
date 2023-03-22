@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/pagination.dart';
 import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/models/chat_view_model.dart';
 import 'package:izowork/screens/chat/views/chat_list_item_widget.dart';
 import 'package:izowork/views/floating_button_widget.dart';
@@ -24,21 +25,27 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
+
   late ChatViewModel _chatViewModel;
+
+  Pagination _pagination = Pagination(offset: 0, size: 50);
+  bool _isSearching = false;
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  Future _onRefresh() async {
+    _chatViewModel.getChatList(
+        pagination: _pagination, search: _textEditingController.text);
   }
 
   @override
@@ -73,32 +80,51 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                                 placeholder: '${Titles.search}...',
                                 onTap: () => setState,
                                 onChange: (text) => {
-                                      // TODO SEARCH CHATS
+                                      setState(() => _isSearching = true),
+                                      _debouncer.run(() {
+                                        _pagination =
+                                            Pagination(offset: 0, size: 50);
+
+                                        _chatViewModel
+                                            .getChatList(
+                                                pagination: _pagination,
+                                                search:
+                                                    _textEditingController.text)
+                                            .then((value) => setState(
+                                                () => _isSearching = false));
+                                      })
                                     },
                                 onClearTap: () => {
-                                      // TODO CLEAR CHATS SEARCH
+                                      //  _chatViewModel.resetFilter(),
+                                      _pagination.offset = 0,
+                                      _chatViewModel.getChatList(
+                                          pagination: _pagination,
+                                          search: _textEditingController.text)
                                     })),
                   ])),
               const SizedBox(height: 12.0),
               const SeparatorWidget()
             ])),
         floatingActionButton: FloatingButtonWidget(
-            onTap: () => {
-                  // TODO ADD CHAT
-                }),
+            onTap: () => _chatViewModel.showStaffScreen(context)),
         body: SizedBox.expand(
             child: Stack(children: [
           /// CHATS LIST VIEW
-          ListView.builder(
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 16.0, bottom: 16.0 + 64.0),
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return ChatListItemWidget(
-                    chat: Chat(),
-                    isUnread: index < 2,
-                    onTap: () => _chatViewModel.showDialogScreen(context));
-              }),
+          RefreshIndicator(
+              onRefresh: _onRefresh,
+              color: HexColors.primaryMain,
+              backgroundColor: HexColors.white,
+              child: ListView.builder(
+                  padding:
+                      const EdgeInsets.only(top: 16.0, bottom: 16.0 + 64.0),
+                  itemCount: _chatViewModel.chats.length,
+                  itemBuilder: (context, index) {
+                    return ChatListItemWidget(
+                        chat: _chatViewModel.chats[index],
+                        isUnread: false,
+                        onTap: () =>
+                            _chatViewModel.showDialogScreen(context, index));
+                  })),
 
           /// FILTER BUTTON
           SafeArea(
@@ -112,7 +138,8 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                       )))),
 
           /// INDICATOR
-          _chatViewModel.loadingStatus == LoadingStatus.searching
+          _chatViewModel.loadingStatus == LoadingStatus.searching &&
+                  !_isSearching
               ? const LoadingIndicatorWidget()
               : Container()
         ])));

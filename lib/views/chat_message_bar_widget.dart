@@ -111,7 +111,7 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
             duration: const Duration(milliseconds: 100),
             height: _textHeight,
             width: 38.0,
-            constraints: const BoxConstraints(minHeight: 38.0, maxHeight: 90.0),
+            constraints: const BoxConstraints(minHeight: 42.0, maxHeight: 90.0),
             child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
               GestureDetector(
                   onTap: widget.textEditingController.text.isEmpty

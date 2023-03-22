@@ -153,8 +153,11 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
                         onLinkTap: _staffViewModel.users[index].social.isEmpty
                             ? null
                             : (url) => _staffViewModel.openUrl(url),
-                        onChatTap: () =>
-                            _staffViewModel.showDialogScreen(context));
+                        onChatTap: _staffViewModel.users[index].id ==
+                                _staffViewModel.userId
+                            ? null
+                            : () =>
+                                _staffViewModel.createUserChat(context, index));
                   })),
           const SeparatorWidget(),
 

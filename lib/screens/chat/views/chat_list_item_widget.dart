@@ -1,11 +1,14 @@
 // import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/locale.dart';
+import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/chat.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/count_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
@@ -25,19 +28,35 @@ class ChatListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     initializeDateFormatting(locale, null);
 
-    final _day = DateTime.now().day.toString().length == 1
-        ? '0${DateTime.now().day}'
-        : '${DateTime.now().day}';
-    final _month = DateFormat.MMM(locale).format(DateTime.now());
-    final _year = '${DateTime.now().year}';
+    DateTime? dateTime = chat.lastMessage == null
+        ? null
+        : DateTime.parse(chat.lastMessage!.createdAt);
 
-    final _hour = DateTime.now().hour.toString().length == 1
-        ? '0${DateTime.now().hour}'
-        : '${DateTime.now().hour}';
+    bool _isToday = dateTime?.year == DateTime.now().year &&
+        dateTime?.month == DateTime.now().month &&
+        dateTime?.day == DateTime.now().day;
 
-    final _minute = DateTime.now().minute.toString().length == 1
-        ? '0${DateTime.now().minute}'
-        : '${DateTime.now().minute}';
+    bool _isYesterday = dateTime?.year ==
+            DateTime.now().subtract(const Duration(days: 1)).year &&
+        dateTime?.month ==
+            DateTime.now().subtract(const Duration(days: 1)).month &&
+        dateTime?.day == DateTime.now().subtract(const Duration(days: 1)).day;
+
+    String _day = dateTime?.day.toString().length == 1
+        ? '0${dateTime?.day}'
+        : '${dateTime?.day}';
+    String _month =
+        dateTime == null ? '' : DateFormat.MMM(locale).format(dateTime);
+    String _year =
+        dateTime?.year == DateTime.now().year ? '' : '${dateTime?.year}';
+
+    String _hour = dateTime?.hour.toString().length == 1
+        ? '0${dateTime?.hour}'
+        : '${dateTime?.hour}';
+
+    String _minute = dateTime?.minute.toString().length == 1
+        ? '0${dateTime?.minute}'
+        : '${dateTime?.minute}';
 
     return Container(
         decoration: BoxDecoration(
@@ -62,10 +81,25 @@ class ChatListItemWidget extends StatelessWidget {
                             width: 40.0,
                             height: 40.0,
                             fit: BoxFit.cover),
-                        // ClipRRect(
-                        //   borderRadius: BorderRadius.circular(12.0),
-                        //   child:
-                        // CachedNetworkImage(imageUrl: '', width: 24.0, height: 24.0, fit: BoxFit.cover)),
+                        chat.lastMessage?.user?.avatar == null
+                            ? Container()
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: CachedNetworkImage(
+                                    cacheKey: chat.lastMessage!.user!.avatar,
+                                    imageUrl: avatarUrl +
+                                        chat.lastMessage!.user!.avatar,
+                                    width: 40.0,
+                                    height: 40.0,
+                                    memCacheWidth: 40 *
+                                        MediaQuery.of(context)
+                                            .devicePixelRatio
+                                            .round(),
+                                    memCacheHeight: 40 *
+                                        MediaQuery.of(context)
+                                            .devicePixelRatio
+                                            .round(),
+                                    fit: BoxFit.cover)),
                       ]),
                       const SizedBox(width: 10.0),
 
@@ -74,7 +108,7 @@ class ChatListItemWidget extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                             /// USER NAME
-                            Text('Имя собеседника',
+                            Text(chat.name ?? '-',
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: HexColors.grey50,
@@ -84,13 +118,13 @@ class ChatListItemWidget extends StatelessWidget {
                             const SizedBox(height: 4.0),
 
                             /// MESSAGE TEXT
-                            Text(
-                                'Мы вынуждены отталкиваться от того, что семантический разбор внешних противодействий играет определяющее.',
+                            Text(chat.lastMessage?.text ?? '',
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: HexColors.black,
                                     fontSize: 14.0,
                                     fontFamily: 'PT Root UI',
+                                    overflow: TextOverflow.ellipsis,
                                     fontWeight: FontWeight.w400))
                           ])),
 
@@ -99,13 +133,24 @@ class ChatListItemWidget extends StatelessWidget {
                           children: [
                             /// DATE
                             TitleWidget(
-                                text: '$_day $_month $_year, $_hour:$_minute',
+                                text: chat.lastMessage == null
+                                    ? ''
+                                    : _isYesterday
+                                        ? 'Вчера, $_hour:$_minute'
+                                        : _isToday
+                                            ? 'Сегодня, $_hour:$_minute'
+                                            : _year.isEmpty
+                                                ? '$_day $_month, $_hour:$_minute'
+                                                : '$_day $_month $_year, $_hour:$_minute',
                                 padding: EdgeInsets.zero,
+                                textAlign: TextAlign.end,
                                 isSmall: true),
                             const SizedBox(height: 4.0),
 
                             /// MESSAGE COUNT
-                            isUnread ? const CountWidget(count: 1) : Container()
+                            isUnread
+                                ? const CountWidget(count: 1)
+                                : const SizedBox(height: 20.0)
                           ]),
                     ])),
                 onTap: () => onTap())));
