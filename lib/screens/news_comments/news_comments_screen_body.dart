@@ -93,8 +93,6 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
               height: 47.0,
               memCacheWidth:
                   85 * (MediaQuery.of(context).devicePixelRatio).round(),
-              memCacheHeight:
-                  47 * (MediaQuery.of(context).devicePixelRatio).round(),
               fit: BoxFit.cover));
         });
       }

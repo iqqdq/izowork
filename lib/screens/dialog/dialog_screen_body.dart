@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,6 +12,7 @@ import 'package:izowork/entities/request/message_request.dart';
 import 'package:izowork/entities/response/message.dart';
 import 'package:izowork/models/dialog_view_model.dart';
 import 'package:izowork/screens/dialog/views/bubble_widget.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -35,11 +37,11 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
+  final Pagination _pagination = Pagination(offset: 0, size: 50);
+
   final List<Widget> _bubbles = [];
 
   late DialogViewModel _dialogViewModel;
-
-  Pagination _pagination = Pagination(offset: 0, size: 50);
 
   int _count = 0;
 
@@ -99,39 +101,85 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                   .insert(0, Message.fromJson(data["message"])),
 
               // UPDATE NEW MESSAGE COUNT
-              if (_dialogViewModel.userId ==
-                  (Message.fromJson(data["message"])).userId)
+              if (_dialogViewModel.userId !=
+                      (Message.fromJson(data["message"])).userId &&
+                  _scrollController.position.pixels >= 50.0)
                 {
                   setState(() => _count++),
                 },
 
+              /// PLAY MESSAGE RECEIVE SOUND
+              _dialogViewModel.player
+                  .setAsset('assets/sounds/message_receive.mp3'),
+              _dialogViewModel.player.play(),
+
               // UPDATE BUBBLES
-              _updateBubbles(true)
+              _updateBubbles(true),
             });
   }
 
   Future _updateBubbles(bool animate) async {
+    int index = 0;
+
     _bubbles.clear();
 
-    setState(() {
-      if (mounted) {
-        int index = 0;
-        _dialogViewModel.messages.forEach((element) {
-          if (element.id != null) {
+    _dialogViewModel.messages.forEach((element) {
+      bool isMine = false;
+      bool isAudio = false;
+      bool isFile = false;
+
+      isMine = _dialogViewModel.userId == element.userId;
+
+      if (_dialogViewModel.messages[index].files.length == 1) {
+        // SHOW SINGLE FILE
+        isAudio = _dialogViewModel.messages[index].files.first.mimeType
+                .contains('audio') ||
+            _dialogViewModel.messages[index].files.first.name.contains('m4a');
+
+        isFile = !isAudio && element.files.isNotEmpty;
+      } else if (_dialogViewModel.messages[index].files.length > 1) {
+        // SHOW A FEW FILES
+      }
+
+      if (element.id != null) {
+        setState(() {
+          if (mounted) {
             _bubbles.insert(
                 0,
                 BubbleWidget(
-                    isMine: _dialogViewModel.userId == element.userId,
-                    isFile: false,
-                    isAudio: false,
-                    isGroupLastMessage: !_isSameNextAuthor(index),
-                    animate: animate && _bubbles.isEmpty,
-                    text: element.text,
-                    showDate: index == _dialogViewModel.messages.length - 1
-                        ? true
-                        : !_isSamePrevDate(index, _dialogViewModel.messages),
-                    dateTime: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                        .parse(element.createdAt)));
+                  animate: animate && _bubbles.isEmpty,
+                  verticalSpacing: !_isSameNextAuthor(index)
+                      ? isMine
+                          ? 16.0
+                          : 10.0
+                      : 0.0,
+                  isMine: isMine,
+                  isFile: isFile,
+                  isDownloading: _dialogViewModel.downloadIndex == index,
+                  isAudio: isAudio,
+                  showDate: index == _dialogViewModel.messages.length - 1
+                      ? true
+                      : !_isSamePrevDate(index),
+                  showName: false,
+                  // !_isSamePrevAuthor(index) ||
+                  //     !_isSamePrevDate(index) && !_isSameNextAuthor(index) ||
+                  //     !_isSamePrevDate(index) && !_isSamePrevAuthor(index),
+                  isGroupLastMessage: false,
+                  // !_isSameNextAuthor(index),
+                  user: null,
+                  // element.user,
+                  text: isFile
+                      ? element.files.first.name
+                      : isAudio
+                          ? messageMediaUrl + element.files.first.filename
+                          : element.text,
+                  dateTime:
+                      DateFormat("yyyy-MM-dd'T'HH:mm").parse(element.createdAt),
+                  onUserTap: () =>
+                      _dialogViewModel.showProfileScreen(context, element),
+                  onFileTap: () =>
+                      _dialogViewModel.openFile(context, index, element),
+                ));
           }
 
           index++;
@@ -141,16 +189,19 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   }
 
   void _scrollDown() {
+    setState(() => _count = 0);
     _scrollController.animateTo(0,
         duration: const Duration(milliseconds: 300),
         curve: Curves.fastOutSlowIn);
   }
 
-  bool _isSamePrevDate(int index, List<Message> messages) {
-    DateTime date = DateFormat("yyyy-MM-dd").parse(messages[index].createdAt);
-    DateTime? dateTime = index == messages.length - 1
+  bool _isSamePrevDate(int index) {
+    DateTime date = DateFormat("yyyy-MM-dd")
+        .parse(_dialogViewModel.messages[index].createdAt);
+    DateTime? dateTime = index == _dialogViewModel.messages.length - 1
         ? null
-        : DateFormat("yyyy-MM-dd").parse(messages[index + 1].createdAt);
+        : DateFormat("yyyy-MM-dd")
+            .parse(_dialogViewModel.messages[index + 1].createdAt);
 
     return date.year == dateTime?.year &&
         date.month == dateTime?.month &&
@@ -208,32 +259,39 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                             },
                           Navigator.pop(context)
                         })),
-            title: Wrap(direction: Axis.horizontal, children: [
+            title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              /// AVATAR
               Stack(children: [
-                /// AVATAR
                 SvgPicture.asset('assets/ic_avatar.svg',
                     color: HexColors.grey40,
                     width: 24.0,
                     height: 24.0,
                     fit: BoxFit.cover),
-                // ClipRRect(
-                //   borderRadius: BorderRadius.circular(12.0),
-                //   child:
-                // CachedNetworkImage(imageUrl: '', width: 24.0, height: 24.0, fit: BoxFit.cover)),
+                _dialogViewModel.chat.user!.avatar == null
+                    ? Container()
+                    : _dialogViewModel.chat.user!.avatar!.isEmpty
+                        ? Container()
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),
+                            child: CachedNetworkImage(
+                                cacheKey: _dialogViewModel.chat.user!.avatar,
+                                imageUrl: avatarUrl +
+                                    _dialogViewModel.chat.user!.avatar!,
+                                width: 24.0,
+                                height: 24.0,
+                                fit: BoxFit.cover)),
               ]),
               const SizedBox(width: 10.0),
 
               /// USERNAME
-              Container(
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.7),
-                  child: Text('???',
+              Expanded(
+                  child: Text(_dialogViewModel.chat.user?.name ?? '-',
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,
                           color: HexColors.black,
                           fontSize: 18.0,
                           fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold)))
+                          fontWeight: FontWeight.bold))),
             ])),
         body: SizedBox.expand(
             child: Stack(children: [
@@ -265,25 +323,38 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
 
             /// MESSAGE BAR
             ChatMessageBarWidget(
-                isAudio: true,
-                textEditingController: _textEditingController,
-                focusNode: _focusNode,
-                hintText: Titles.typeMessage,
-                onSendTap: () => {
-                      FocusScope.of(context).unfocus(),
-                      _scrollDown(),
-                      if (_dialogViewModel.token != null)
-                        {
-                          _dialogViewModel.socket?.emit(
-                              'message',
-                              MessageRequest(
-                                  chatId: _dialogViewModel.chat.id,
-                                  accessToken: _dialogViewModel.token!,
-                                  message: _textEditingController.text)),
-                          _textEditingController.clear(),
-                        }
-                    },
-                onClipTap: () => {}),
+              isSending: _dialogViewModel.isSending,
+              isAudio: true,
+              textEditingController: _textEditingController,
+              focusNode: _focusNode,
+              hintText: Titles.typeMessage,
+              onSendTap: () => {
+                FocusScope.of(context).unfocus(),
+                _scrollDown(),
+                if (_dialogViewModel.token != null)
+                  {
+                    /// PLAY MESSAGE SENT SOUND
+                    _dialogViewModel.player
+                        .setAsset('assets/sounds/message_sent.mp3'),
+                    _dialogViewModel.player.play(),
+
+                    /// SEND MESSAGE
+                    _dialogViewModel.socket?.emit(
+                        'message',
+                        MessageRequest(
+                            chatId: _dialogViewModel.chat.id,
+                            accessToken: _dialogViewModel.token!,
+                            message: _textEditingController.text)),
+
+                    /// CLEAR INPUT
+                    _textEditingController.clear(),
+                  }
+              },
+              onClipTap: () => _dialogViewModel.addFile(context),
+              onRecordStarted: () => _dialogViewModel.recordAudio(),
+              onRecordCanceled: () => _dialogViewModel.cancelRecordAudio(),
+              onRecord: () => _dialogViewModel.sendAudioMessage(context),
+            ),
             Container(
                 color: HexColors.white,
                 height: MediaQuery.of(context).padding.bottom == 0.0
@@ -305,10 +376,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                           !(_scrollController.position.pixels >= 50.0 &&
                               _dialogViewModel.messages.length > 1),
                       count: _count,
-                      onTap: () => {
-                            setState(() => _count = 0),
-                            _scrollDown(),
-                          }))),
+                      onTap: () => _scrollDown()))),
 
           /// EMPTY LIST TEXT
           _dialogViewModel.loadingStatus == LoadingStatus.completed &&

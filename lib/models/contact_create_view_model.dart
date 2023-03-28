@@ -13,7 +13,7 @@ import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/contact.dart';
 import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/repositories/contacts_repository.dart';
+import 'package:izowork/repositories/contact_repository.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen_body.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';

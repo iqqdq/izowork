@@ -59,8 +59,6 @@ class _NewsListItemState extends State<NewsListItemWidget> {
                   height: 180.0,
                   memCacheWidth:
                       (MediaQuery.of(context).size.width - 32.0).round(),
-                  memCacheHeight:
-                      180 * (MediaQuery.of(context).devicePixelRatio).round(),
                   fit: BoxFit.cover),
 
               /// TOP GRADIENT LAYER
@@ -226,27 +224,28 @@ class _NewsListItemState extends State<NewsListItemWidget> {
                                             width: 24.0,
                                             height: 24.0,
                                             fit: BoxFit.cover),
-                                        widget.news.user.avatar.isEmpty
+                                        widget.news.user.avatar == null
                                             ? Container()
-                                            : ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                                child: CachedNetworkImage(
-                                                    cacheKey:
-                                                        widget.news.user.avatar,
-                                                    imageUrl: avatarUrl +
-                                                        widget.news.user.avatar,
-                                                    width: 24.0,
-                                                    height: 24.0,
-                                                    memCacheWidth: 24 *
-                                                        MediaQuery.of(context)
-                                                            .devicePixelRatio
-                                                            .round(),
-                                                    memCacheHeight: 24 *
-                                                        MediaQuery.of(context)
-                                                            .devicePixelRatio
-                                                            .round(),
-                                                    fit: BoxFit.cover)),
+                                            : widget.news.user.avatar!.isEmpty
+                                                ? Container()
+                                                : ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12.0),
+                                                    child: CachedNetworkImage(
+                                                        cacheKey: widget
+                                                            .news.user.avatar,
+                                                        imageUrl: avatarUrl +
+                                                            widget.news.user
+                                                                .avatar!,
+                                                        width: 24.0,
+                                                        height: 24.0,
+                                                        memCacheWidth: 24 *
+                                                            MediaQuery.of(
+                                                                    context)
+                                                                .devicePixelRatio
+                                                                .round(),
+                                                        fit: BoxFit.cover)),
                                       ]),
                                       const SizedBox(width: 10.0),
 

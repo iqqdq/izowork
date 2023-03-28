@@ -21,6 +21,23 @@
                     }
                 },
                 {
+                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/6ec2c823b2ddfa9d4aff16fd99b56b89/transformed/jetified-exoplayer-core-2.18.1/res/values-et/values-et.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10",
+                        "startColumns": "4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,129,196,263,337,419,490,580,672",
+                        "endColumns": "73,66,66,73,81,70,89,91,76",
+                        "endOffsets": "124,191,258,332,414,485,575,667,744"
+                    },
+                    "to": {
+                        "startLines": "21,22,23,24,25,26,27,28,29",
+                        "startColumns": "4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "2381,2455,2522,2589,2663,2745,2816,2906,2998",
+                        "endColumns": "73,66,66,73,81,70,89,91,76",
+                        "endOffsets": "2450,2517,2584,2658,2740,2811,2901,2993,3070"
+                    }
+                },
+                {
                     "source": "/Users/iqqddq/.gradle/caches/transforms-3/601d4158b382ad9f634d3bbb23a34c83/transformed/jetified-play-services-basement-18.0.0/res/values-et/values.xml",
                     "from": {
                         "startLines": "4",
@@ -47,11 +64,28 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "20",
+                        "startLines": "34",
                         "startColumns": "4",
-                        "startOffsets": "2273",
+                        "startOffsets": "3550",
                         "endColumns": "100",
-                        "endOffsets": "2369"
+                        "endOffsets": "3646"
+                    }
+                },
+                {
+                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/aa7263188b29434019ae8934cbefd4da/transformed/jetified-media2-session-1.2.0/res/values-et/values-et.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "55,163,264,363,499",
+                        "endColumns": "107,100,98,135,138",
+                        "endOffsets": "158,259,358,494,633"
+                    },
+                    "to": {
+                        "startLines": "20,30,31,32,33",
+                        "startColumns": "4,4,4,4,4",
+                        "startOffsets": "2273,3075,3176,3275,3411",
+                        "endColumns": "107,100,98,135,138",
+                        "endOffsets": "2376,3171,3270,3406,3545"
                     }
                 }
             ]

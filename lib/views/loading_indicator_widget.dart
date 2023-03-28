@@ -3,8 +3,9 @@ import 'package:izowork/components/hex_colors.dart';
 
 class LoadingIndicatorWidget extends StatelessWidget {
   final bool? onlyIndicator;
+  final Color? color;
 
-  const LoadingIndicatorWidget({Key? key, this.onlyIndicator})
+  const LoadingIndicatorWidget({Key? key, this.onlyIndicator, this.color})
       : super(key: key);
 
   @override
@@ -14,7 +15,8 @@ class LoadingIndicatorWidget extends StatelessWidget {
         scale: 0.75,
         child: CircularProgressIndicator(
             strokeWidth: 6.0,
-            valueColor: AlwaysStoppedAnimation<Color>(HexColors.primaryMain)));
+            valueColor:
+                AlwaysStoppedAnimation<Color>(color ?? HexColors.primaryMain)));
     final _onlyIndicator = onlyIndicator == null
         ? false
         : onlyIndicator == true

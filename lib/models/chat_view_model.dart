@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
-import 'package:izowork/entities/request/chat_dm_request.dart';
 import 'package:izowork/entities/response/chat.dart';
-import 'package:izowork/repositories/chats_repository.dart';
+import 'package:izowork/repositories/chat_repository.dart';
 import 'package:izowork/screens/chat/chat_filter_sheet/chat_filter_page_view_widget.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
@@ -38,7 +37,7 @@ class ChatViewModel with ChangeNotifier {
         notifyListeners();
       });
     }
-    await ChatsRepository()
+    await ChatRepository()
         .getChats(
           pagination: pagination,
           search: search,

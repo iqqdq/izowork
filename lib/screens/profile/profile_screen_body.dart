@@ -35,12 +35,16 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
     _profileViewModel = Provider.of<ProfileViewModel>(context, listen: true);
 
     String? _url = _profileViewModel.user == null
-        ? _profileViewModel.currentUser.avatar.isEmpty
+        ? _profileViewModel.currentUser.avatar == null
             ? null
-            : _profileViewModel.currentUser.avatar
-        : _profileViewModel.user!.avatar.isEmpty
+            : _profileViewModel.currentUser.avatar!.isEmpty
+                ? null
+                : _profileViewModel.currentUser.avatar
+        : _profileViewModel.user!.avatar == null
             ? null
-            : _profileViewModel.user!.avatar;
+            : _profileViewModel.user!.avatar!.isEmpty
+                ? null
+                : _profileViewModel.user!.avatar;
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -95,10 +99,6 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                                 width: 80.0,
                                 height: 80.0,
                                 memCacheWidth: 80 *
-                                    MediaQuery.of(context)
-                                        .devicePixelRatio
-                                        .round(),
-                                memCacheHeight: 80 *
                                     MediaQuery.of(context)
                                         .devicePixelRatio
                                         .round(),
@@ -212,6 +212,8 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                                                   TextDecoration.underline))));
                             })
               ]),
+
+          const SeparatorWidget(),
 
           widget.isMine
               ? Align(

@@ -98,9 +98,6 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                             memCacheWidth: 80 *
                                 (MediaQuery.of(context).devicePixelRatio)
                                     .round(),
-                            memCacheHeight: 80 *
-                                (MediaQuery.of(context).devicePixelRatio)
-                                    .round(),
                             fit: BoxFit.cover)))
           ])),
           const SizedBox(height: 16.0),

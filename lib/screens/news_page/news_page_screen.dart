@@ -48,8 +48,6 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                 height: MediaQuery.of(context).size.height / 3.5,
                 memCacheWidth:
                     (MediaQuery.of(context).size.width - 32.0).round(),
-                memCacheHeight:
-                    180 * (MediaQuery.of(context).devicePixelRatio).round(),
                 fit: BoxFit.cover),
 
             /// TOP GRADIENT LAYER

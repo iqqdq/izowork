@@ -7,20 +7,28 @@ import 'package:izowork/components/titles.dart';
 
 class ChatMessageBarWidget extends StatefulWidget {
   final bool? isAudio;
+  final bool? isSending;
   final TextEditingController textEditingController;
   final FocusNode focusNode;
   final String hintText;
   final VoidCallback? onClipTap;
   final VoidCallback onSendTap;
+  final VoidCallback? onRecordStarted;
+  final VoidCallback? onRecordCanceled;
+  final VoidCallback? onRecord;
 
   const ChatMessageBarWidget(
       {Key? key,
       this.isAudio,
+      this.isSending,
       required this.textEditingController,
       required this.focusNode,
       required this.hintText,
       this.onClipTap,
-      required this.onSendTap})
+      required this.onSendTap,
+      this.onRecordStarted,
+      this.onRecordCanceled,
+      this.onRecord})
       : super(key: key);
 
   @override
@@ -48,6 +56,10 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
       if (_seconds == 120) {
         timer.cancel();
         setState(() => {_isRecording = false, _seconds = 0, _minutes = 0});
+
+        if (widget.onRecordCanceled != null) {
+          widget.onRecord!();
+        }
       } else {
         setState(() => {
               _seconds++,
@@ -198,9 +210,19 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
               AnimatedOpacity(
                   opacity: _isRecording ? 0.0 : 1.0,
                   duration: const Duration(milliseconds: 300),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [_sendButton])),
+                  child:
+                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    widget.isSending == null
+                        ? _sendButton
+                        : widget.isSending!
+                            ? Transform.scale(
+                                scale: 0.6,
+                                child: CircularProgressIndicator(
+                                    strokeWidth: 4.0,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        HexColors.primaryMain)))
+                            : _sendButton
+                  ])),
 
               /// DRAGGABLE BUTTON
               Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -220,28 +242,27 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                                 if (_scrollController.position.pixels <
                                     _maxScroll)
                                   {
-                                    setState(() {
-                                      _scrollController.jumpTo(
-                                          _scrollController.position.pixels +
-                                              -(details.delta.dx));
-                                    }),
-                                    debugPrint(
-                                        (_scrollController.position.pixels)
-                                            .toString()),
+                                    _scrollController.jumpTo(
+                                        _scrollController.position.pixels +
+                                            -(details.delta.dx))
                                   }
                                 else
                                   {
+                                    /// CANCEL RECORD AUDIO
                                     setState(() {
                                       _isRecording = false;
                                       _seconds = 0;
                                       _minutes = 0;
                                     }),
-                                    _timer?.cancel()
+                                    _timer?.cancel(),
+                                    widget.onRecordCanceled!()
                                   }
                             },
                         onDragStarted: () => {
-                              setState(() => {_isRecording = true}),
-                              startTimer()
+                              /// START RECORD AUDIO
+                              setState(() => _isRecording = true),
+                              startTimer(),
+                              widget.onRecordStarted!()
                             },
                         onDraggableCanceled: (valocity, offset) => {
                               setState(() => {
@@ -250,6 +271,28 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                                     _minutes = 0
                                   }),
                               _timer?.cancel(),
+                              if (_scrollController.position.pixels <
+                                  _maxScroll)
+                                {
+                                  _timer?.cancel(),
+
+                                  /// SEND AUDIO
+                                  if (_seconds > 2)
+                                    {
+                                      widget.onRecord!(),
+                                    },
+
+                                  setState(() => {
+                                        _isRecording = false,
+                                        _seconds = 0,
+                                        _minutes = 0
+                                      }),
+                                }
+                              else
+                                {
+                                  /// CANCEL RECORD AUDIO
+                                  widget.onRecordCanceled!(),
+                                }
                             })
               ]),
 

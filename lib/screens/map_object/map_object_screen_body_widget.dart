@@ -75,11 +75,6 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                                               // cacheKey: ,
                                               width: 84.0,
                                               height: 88.0,
-                                              memCacheHeight: (MediaQuery.of(
-                                                              context)
-                                                          .devicePixelRatio *
-                                                      88)
-                                                  .round(),
                                               fit: BoxFit.cover)));
                                 })),
                         const SizedBox(height: 16.0),

@@ -620,6 +620,42 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "record",
+      "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/record-4.4.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "record_linux",
+      "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/record_linux-0.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "record_macos",
+      "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/record_macos-0.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "record_platform_interface",
+      "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/record_platform_interface-0.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "record_web",
+      "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/record_web-0.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "record_windows",
+      "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/record_windows-0.7.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "rxdart",
       "rootUri": "file:///Users/iqqddq/Development/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.27.7",
       "packageUri": "lib/",
@@ -884,7 +920,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2023-03-21T20:40:23.351494Z",
+  "generated": "2023-03-24T18:02:03.389857Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

@@ -159,10 +159,6 @@ class _CompanyCreateScreenBodyState
                                         MediaQuery.of(context)
                                             .devicePixelRatio
                                             .round(),
-                                    memCacheHeight: 80 *
-                                        MediaQuery.of(context)
-                                            .devicePixelRatio
-                                            .round(),
                                     fit: BoxFit.cover)),
                       ])
                     ]),

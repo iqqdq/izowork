@@ -36,9 +36,11 @@ class DealProcessInfoListItemWidget extends StatelessWidget {
 
     String? _url = information.user == null
         ? null
-        : information.user!.avatar.isEmpty
+        : information.user!.avatar == null
             ? null
-            : information.user!.avatar;
+            : information.user!.avatar!.isEmpty
+                ? null
+                : information.user!.avatar;
 
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0),
@@ -76,10 +78,6 @@ class DealProcessInfoListItemWidget extends StatelessWidget {
                                         width: 24.0,
                                         height: 24.0,
                                         memCacheWidth: 24 *
-                                            MediaQuery.of(context)
-                                                .devicePixelRatio
-                                                .round(),
-                                        memCacheHeight: 24 *
                                             MediaQuery.of(context)
                                                 .devicePixelRatio
                                                 .round(),

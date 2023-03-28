@@ -1,32 +1,49 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
+import 'dart:developer';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/screens/dialog/views/date_header_widget.dart';
+import 'package:izowork/services/urls.dart';
+import 'package:just_audio/just_audio.dart';
 
 class BubbleWidget extends StatefulWidget {
-  final bool isMine;
-  final bool isFile;
-  final bool isAudio;
-  final bool isGroupLastMessage;
   final bool animate;
-  final EdgeInsets? margin;
+  final bool isMine;
+  final bool isAudio;
+  final bool isFile;
+  final bool isDownloading;
+  final double? verticalSpacing;
+  final bool showName;
+  final bool isGroupLastMessage;
+  final User? user;
   final String text;
   final bool showDate;
   final DateTime dateTime;
   final VoidCallback? onLongPress;
+  final VoidCallback? onUserTap;
+  final VoidCallback? onFileTap;
 
   const BubbleWidget(
       {Key? key,
       required this.isMine,
+      required this.showName,
       required this.isFile,
+      required this.isDownloading,
       required this.isAudio,
       required this.isGroupLastMessage,
       required this.animate,
-      this.margin,
+      this.verticalSpacing,
+      this.user,
       required this.text,
       required this.showDate,
       required this.dateTime,
-      this.onLongPress})
+      this.onLongPress,
+      this.onUserTap,
+      this.onFileTap})
       : super(key: key);
 
   @override
@@ -35,25 +52,68 @@ class BubbleWidget extends StatefulWidget {
 
 class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
   late AnimationController _animationController;
-  double _audioTime = 0.0;
+  AudioPlayer? _player;
+  int _position = 0;
 
   @override
   void initState() {
-    super.initState();
-
     _animationController = AnimationController(
         duration: const Duration(milliseconds: 200),
         vsync: this,
         value: widget.animate ? 0.0 : 1.0);
 
+    super.initState();
+
+    // APPEREANCE ANIMATION
     if (_animationController.value == 0.0) {
       _animationController.forward();
+    }
+
+    // INIT AUDIO PLAYER
+    if (widget.isAudio) {
+      _player = AudioPlayer();
+      _player!.setUrl(widget.text, preload: true);
+
+      // LISTEN PLAYER POSITION
+      _player!.positionStream.listen((state) {
+        if (mounted) {
+          setState(() {
+            _position = _player?.position.inSeconds ?? 0;
+          });
+        }
+      });
+
+      // LISTEN PLAYER STATE
+      _player!.playerStateStream.listen((state) {
+        switch (state.processingState) {
+          case ProcessingState.idle:
+            break;
+          case ProcessingState.loading:
+            break;
+          case ProcessingState.buffering:
+            break;
+          case ProcessingState.ready:
+            if (mounted) {
+              setState(() => _position = _player?.position.inSeconds ?? 0);
+            }
+            break;
+          case ProcessingState.completed:
+            // RELOAD PLAYER POSITION
+            if (mounted) {
+              _player?.stop().then((value) => _player
+                  ?.seek(const Duration(seconds: 0))
+                  .then((value) => setState(() => _position = 0)));
+            }
+            break;
+        }
+      });
     }
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _player?.dispose();
     super.dispose();
   }
 
@@ -89,21 +149,33 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                     ? HexColors.white.withOpacity(0.6)
                     : HexColors.black.withOpacity(0.6))));
 
-    final size = Text('16.5 MB',
-        style: TextStyle(
-            fontSize: 12.0,
-            fontFamily: 'PT Root UI',
-            color: widget.isMine
-                ? HexColors.white.withOpacity(0.6)
-                : HexColors.black.withOpacity(0.6)));
+    // final size = Text('16.5 MB',
+    //     style: TextStyle(
+    //         fontSize: 12.0,
+    //         fontFamily: 'PT Root UI',
+    //         color: widget.isMine
+    //             ? HexColors.white.withOpacity(0.6)
+    //             : HexColors.black.withOpacity(0.6)));
 
-    final current = Text('00:00',
+    final current = Text(
+        _player?.duration == null
+            ? ''
+            : _position.toString().length > 1
+                ? '00:${_position.toString()}'
+                : '00:0${_position.toString()}',
         style: TextStyle(
             fontSize: 12.0,
             fontFamily: 'PT Root UI',
             color: widget.isMine ? HexColors.white : HexColors.black));
 
-    final total = Text('00:50',
+    final total = Text(
+        _player == null
+            ? ''
+            : _player?.duration?.inSeconds == null
+                ? ''
+                : _player!.duration!.inSeconds.toString().length > 1
+                    ? '00:${_player!.duration!.inSeconds.toString()}'
+                    : '00:0${_player!.duration!.inSeconds.toString()}',
         style: TextStyle(
             fontSize: 12.0,
             fontFamily: 'PT Root UI',
@@ -114,15 +186,38 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       children: [
+        widget.isMine
+            ? Container()
+            : widget.showName
+                ? GestureDetector(
+                    onTap: widget.onUserTap == null
+                        ? null
+                        : () => widget.onUserTap!(),
+                    child:
+
+                        /// USERNAME
+                        Text(widget.user?.name ?? '',
+                            style: TextStyle(
+                                color: HexColors.grey40,
+                                fontSize: 14.0,
+                                fontFamily: 'PT Root UI',
+                                fontWeight: FontWeight.bold)))
+                : Container(),
+        SizedBox(height: widget.showName ? 4.0 : 0.0),
+
+        /// AUDIO
         widget.isAudio
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [current, total])
             : text,
         SizedBox(height: widget.isAudio ? 0.0 : 2.0),
+
+        /// FILE
         widget.isFile
-            ? size
-            : widget.isAudio
+            // ? size
+            ? Container()
+            : _player != null
                 ? SizedBox(
                     height: 36.0,
                     child: SliderTheme(
@@ -130,7 +225,9 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                           overlayShape: SliderComponentShape.noOverlay,
                         ),
                         child: Slider(
-                            value: _audioTime,
+                            value: _position.toDouble(),
+                            max: _player!.duration?.inSeconds.toDouble() ?? 1.0,
+                            // divisions: _player!.duration?.inSeconds ?? 1,
                             thumbColor: widget.isMine
                                 ? HexColors.white
                                 : HexColors.additionalViolet,
@@ -140,8 +237,12 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                             inactiveColor: widget.isMine
                                 ? HexColors.white.withOpacity(0.3)
                                 : HexColors.additionalViolet.withOpacity(0.3),
-                            onChanged: (value) =>
-                                setState(() => _audioTime = value))))
+                            onChanged: (value) => {
+                                  _player
+                                      ?.seek(Duration(seconds: value.toInt()))
+                                      .then((_) => setState(
+                                          () => _position = value.toInt()))
+                                })))
                 : Container()
       ],
     );
@@ -154,87 +255,164 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
         ),
         axisAlignment: -1,
         child: Container(
-            margin: widget.margin ??
-                EdgeInsets.only(
-                    bottom: widget.isMine ? 6.0 : 10.0,
+            margin: EdgeInsets.only(bottom: widget.verticalSpacing ?? 0.0),
+            child: Container(
+                margin: EdgeInsets.only(
+                    bottom: widget.isMine ? 2.0 : 10.0,
                     left: widget.isMine ? _sidePadding : 0.0,
                     right: widget.isMine ? 0.0 : _sidePadding),
-            padding: widget.isFile || widget.isAudio
-                ? EdgeInsets.only(
-                    left: 16.0,
-                    right: 16.0,
-                    bottom: 8.0,
-                    top: widget.isFile ? 16.0 : 12.0)
-                : const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            decoration: BoxDecoration(
-              color:
-                  widget.isMine ? HexColors.additionalViolet : HexColors.white,
-              boxShadow: widget.isMine
-                  ? null
-                  : [
-                      BoxShadow(
-                          color: HexColors.black.withOpacity(0.05),
-                          blurRadius: 4.0,
-                          offset: const Offset(0.0, 4.0))
-                    ],
-              borderRadius: widget.isMine
-                  ? widget.isGroupLastMessage
-                      ? const BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                          bottomRight: Radius.zero,
-                          bottomLeft: Radius.circular(20.0))
-                      : BorderRadius.circular(20.0)
-                  : widget.isGroupLastMessage
-                      ? const BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0),
-                          bottomRight: Radius.circular(20.0),
-                          bottomLeft: Radius.zero)
-                      : BorderRadius.circular(20.0),
-            ),
-            child: widget.isFile
-                ? Column(children: [
-                    Row(children: [
-                      SvgPicture.asset('assets/ic_dialog_file.svg',
-                          color: widget.isMine
-                              ? HexColors.white
-                              : HexColors.additionalViolet,
-                          width: 40.0,
-                          height: 40.0),
-                      const SizedBox(width: 10.0),
-                      Expanded(child: contentList)
-                    ]),
-                    const SizedBox(height: 4.0),
-                    time
-                  ])
-                : widget.isAudio
+                padding: widget.isFile || widget.isAudio
+                    ? EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        bottom: 8.0,
+                        top: widget.isFile ? 16.0 : 12.0)
+                    : const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0),
+                decoration: BoxDecoration(
+                  color: widget.isMine
+                      ? HexColors.additionalViolet
+                      : HexColors.white,
+                  boxShadow: widget.isMine
+                      ? null
+                      : [
+                          BoxShadow(
+                              color: HexColors.black.withOpacity(0.05),
+                              blurRadius: 4.0,
+                              offset: const Offset(0.0, 4.0))
+                        ],
+                  borderRadius: widget.isMine
+                      ? widget.isGroupLastMessage
+                          ? const BorderRadius.only(
+                              topLeft: Radius.circular(20.0),
+                              topRight: Radius.circular(20.0),
+                              bottomRight: Radius.zero,
+                              bottomLeft: Radius.circular(20.0))
+                          : BorderRadius.circular(20.0)
+                      : widget.isGroupLastMessage
+                          ? const BorderRadius.only(
+                              topLeft: Radius.circular(20.0),
+                              topRight: Radius.circular(20.0),
+                              bottomRight: Radius.circular(20.0),
+                              bottomLeft: Radius.zero)
+                          : BorderRadius.circular(20.0),
+                ),
+                child: widget.isFile
                     ? Column(children: [
-                        Row(
-                          children: [
-                            SvgPicture.asset('assets/ic_dialog_play.svg',
-                                color: widget.isMine
-                                    ? HexColors.white
-                                    : HexColors.additionalViolet,
-                                width: 40.0,
-                                height: 40.0),
-                            const SizedBox(width: 10.0),
-                            Expanded(child: contentList)
-                          ],
-                        ),
+                        Row(children: [
+                          widget.isDownloading
+                              ?
+                              // Show indicator
+                              Transform.scale(
+                                  scale: 0.75,
+                                  child: CircularProgressIndicator(
+                                      strokeWidth: 6.0,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        widget.isMine
+                                            ? HexColors.white
+                                            : HexColors.additionalViolet,
+                                      )))
+                              // Show file icon
+                              : SvgPicture.asset('assets/ic_dialog_file.svg',
+                                  color: widget.isMine
+                                      ? HexColors.white
+                                      : HexColors.additionalViolet,
+                                  width: 40.0,
+                                  height: 40.0),
+                          const SizedBox(width: 10.0),
+                          Expanded(child: contentList)
+                        ]),
                         time
                       ])
-                    : Column(
-                        children: [
-                          contentList,
-                          const SizedBox(height: 4.0),
-                          time
-                        ],
-                      )));
+                    : _player != null
+                        ? Column(children: [
+                            Row(
+                              children: [
+                                GestureDetector(
+                                    onTap: () => {
+                                          if (_player!.playing)
+                                            {_player!.pause()}
+                                          else
+                                            {_player!.play()}
+                                        },
+                                    child: _player == null
+                                        ? Container()
+                                        : SvgPicture.asset(
+                                            _player!.playing
+                                                ? 'assets/ic_dialog_pause.svg'
+                                                : 'assets/ic_dialog_play.svg',
+                                            color: widget.isMine
+                                                ? HexColors.white
+                                                : HexColors.additionalViolet,
+                                            width: 40.0,
+                                            height: 40.0,
+                                            fit: BoxFit.cover)),
+                                const SizedBox(width: 10.0),
+                                Expanded(child: contentList)
+                              ],
+                            ),
+                            time
+                          ])
+                        : Column(children: [
+                            contentList,
+                            const SizedBox(height: 4.0),
+                            time
+                          ]))));
 
     final gestureDetector = GestureDetector(
+      onTap: widget.isFile
+          ? widget.onFileTap == null
+              ? null
+              : () => widget.onFileTap!()
+          : null,
       onLongPress: widget.onLongPress,
-      child: bubble,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          widget.isMine
+              ? Container()
+              : Container(
+                  margin: const EdgeInsets.only(bottom: 20.0, right: 8.0),
+                  child: widget.isGroupLastMessage
+                      ?
+
+                      /// AVATAR
+                      GestureDetector(
+                          onTap: widget.onUserTap == null
+                              ? null
+                              : () => widget.onUserTap!(),
+                          child: Stack(children: [
+                            SvgPicture.asset('assets/ic_avatar.svg',
+                                color: HexColors.grey40,
+                                width: 24.0,
+                                height: 24.0,
+                                fit: BoxFit.cover),
+                            widget.user == null
+                                ? Container()
+                                : widget.user!.avatar == null
+                                    ? Container()
+                                    : widget.user!.avatar!.isEmpty
+                                        ? Container()
+                                        : ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            child: CachedNetworkImage(
+                                                cacheKey: widget.user!.avatar,
+                                                imageUrl: avatarUrl +
+                                                    widget.user!.avatar!,
+                                                width: 24.0,
+                                                height: 24.0,
+                                                memCacheWidth: 24 *
+                                                    MediaQuery.of(context)
+                                                        .devicePixelRatio
+                                                        .round(),
+                                                fit: BoxFit.cover)),
+                          ]))
+                      : SizedBox(width: widget.user == null ? 0.0 : 24.0),
+                ),
+          Expanded(child: bubble)
+        ],
+      ),
     );
 
     return ListView(

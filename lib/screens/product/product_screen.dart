@@ -71,8 +71,6 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                           height: 160.0,
                           memCacheWidth: 160 *
                               (MediaQuery.of(context).devicePixelRatio).round(),
-                          memCacheHeight: 160 *
-                              (MediaQuery.of(context).devicePixelRatio).round(),
                           fit: BoxFit.cover),
                 ])),
                 const SizedBox(height: 16.0),

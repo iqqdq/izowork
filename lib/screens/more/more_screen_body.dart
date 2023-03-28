@@ -80,7 +80,7 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                         _moreViewModel.user?.avatar == null
                                             ? Container()
                                             : _moreViewModel
-                                                    .user!.avatar.isEmpty
+                                                    .user!.avatar!.isEmpty
                                                 ? Container()
                                                 : ClipRRect(
                                                     borderRadius:
@@ -91,15 +91,10 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                                             .user!.avatar,
                                                         imageUrl: avatarUrl +
                                                             _moreViewModel
-                                                                .user!.avatar,
+                                                                .user!.avatar!,
                                                         width: 80.0,
                                                         height: 80.0,
                                                         memCacheWidth: 80 *
-                                                            MediaQuery.of(
-                                                                    context)
-                                                                .devicePixelRatio
-                                                                .round(),
-                                                        memCacheHeight: 80 *
                                                             MediaQuery.of(
                                                                     context)
                                                                 .devicePixelRatio

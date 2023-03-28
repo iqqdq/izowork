@@ -58,6 +58,17 @@ class ChatListItemWidget extends StatelessWidget {
         ? '0${dateTime?.minute}'
         : '${dateTime?.minute}';
 
+    bool isAudio = chat.lastMessage == null
+        ? false
+        : chat.lastMessage!.files.isEmpty
+            ? false
+            : chat.lastMessage!.files.first.mimeType.contains('audio') ||
+                chat.lastMessage!.files.first.name.contains('m4a');
+
+    bool isFile = chat.lastMessage == null
+        ? false
+        : !isAudio && chat.lastMessage!.files.isNotEmpty;
+
     return Container(
         decoration: BoxDecoration(
             border: Border(
@@ -81,21 +92,16 @@ class ChatListItemWidget extends StatelessWidget {
                             width: 40.0,
                             height: 40.0,
                             fit: BoxFit.cover),
-                        chat.lastMessage?.user?.avatar == null
+                        chat.user?.avatar == null
                             ? Container()
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
                                 child: CachedNetworkImage(
-                                    cacheKey: chat.lastMessage!.user!.avatar,
-                                    imageUrl: avatarUrl +
-                                        chat.lastMessage!.user!.avatar,
+                                    cacheKey: chat.user!.avatar,
+                                    imageUrl: avatarUrl + chat.user!.avatar!,
                                     width: 40.0,
                                     height: 40.0,
                                     memCacheWidth: 40 *
-                                        MediaQuery.of(context)
-                                            .devicePixelRatio
-                                            .round(),
-                                    memCacheHeight: 40 *
                                         MediaQuery.of(context)
                                             .devicePixelRatio
                                             .round(),
@@ -108,7 +114,7 @@ class ChatListItemWidget extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                             /// USER NAME
-                            Text(chat.name ?? '-',
+                            Text(chat.user?.name ?? '-',
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: HexColors.grey50,
@@ -118,7 +124,12 @@ class ChatListItemWidget extends StatelessWidget {
                             const SizedBox(height: 4.0),
 
                             /// MESSAGE TEXT
-                            Text(chat.lastMessage?.text ?? '',
+                            Text(
+                                isAudio
+                                    ? Titles.audioMessage
+                                    : isFile
+                                        ? Titles.file
+                                        : chat.lastMessage?.text ?? '',
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: HexColors.black,

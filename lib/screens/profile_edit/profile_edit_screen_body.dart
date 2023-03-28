@@ -94,12 +94,16 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
     }
 
     String? _url = _profileEditViewModel.user == null
-        ? _profileEditViewModel.currentUser.avatar.isEmpty
+        ? _profileEditViewModel.currentUser.avatar == null
             ? null
-            : _profileEditViewModel.currentUser.avatar
-        : _profileEditViewModel.user!.avatar.isEmpty
+            : _profileEditViewModel.currentUser.avatar!.isEmpty
+                ? null
+                : _profileEditViewModel.currentUser.avatar
+        : _profileEditViewModel.user!.avatar == null
             ? null
-            : _profileEditViewModel.user!.avatar;
+            : _profileEditViewModel.user!.avatar!.isEmpty
+                ? null
+                : _profileEditViewModel.user!.avatar;
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -155,14 +159,10 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                                     imageUrl: avatarUrl + _url,
                                     width: 80.0,
                                     height: 80.0,
-                                    memCacheWidth: 80 *
-                                        MediaQuery.of(context)
-                                            .devicePixelRatio
-                                            .round(),
-                                    memCacheHeight: 80 *
-                                        MediaQuery.of(context)
-                                            .devicePixelRatio
-                                            .round(),
+                                    // memCacheWidth: 80 *
+                                    //     MediaQuery.of(context)
+                                    //         .devicePixelRatio
+                                    //         .round(),
                                     fit: BoxFit.cover)),
                       ])
                     ]),

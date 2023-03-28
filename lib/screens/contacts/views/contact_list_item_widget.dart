@@ -62,10 +62,6 @@ class ContactListItemWidget extends StatelessWidget {
                                           MediaQuery.of(context)
                                               .devicePixelRatio
                                               .round(),
-                                      memCacheHeight: 40 *
-                                          MediaQuery.of(context)
-                                              .devicePixelRatio
-                                              .round(),
                                       fit: BoxFit.cover)),
                         ]),
                         const SizedBox(width: 10.0),

@@ -48,24 +48,22 @@ class StaffListItemWidget extends StatelessWidget {
                               width: 40.0,
                               height: 40.0,
                               fit: BoxFit.cover),
-                          user.avatar.isEmpty
+                          user.avatar == null
                               ? Container()
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  child: CachedNetworkImage(
-                                      cacheKey: user.avatar,
-                                      imageUrl: avatarUrl + user.avatar,
-                                      width: 40.0,
-                                      height: 40.0,
-                                      memCacheWidth: 40 *
-                                          MediaQuery.of(context)
-                                              .devicePixelRatio
-                                              .round(),
-                                      memCacheHeight: 40 *
-                                          MediaQuery.of(context)
-                                              .devicePixelRatio
-                                              .round(),
-                                      fit: BoxFit.cover)),
+                              : user.avatar!.isEmpty
+                                  ? Container()
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: CachedNetworkImage(
+                                          cacheKey: user.avatar,
+                                          imageUrl: avatarUrl + user.avatar!,
+                                          width: 40.0,
+                                          height: 40.0,
+                                          memCacheWidth: 40 *
+                                              MediaQuery.of(context)
+                                                  .devicePixelRatio
+                                                  .round(),
+                                          fit: BoxFit.cover)),
                         ]),
                         const SizedBox(width: 10.0),
 

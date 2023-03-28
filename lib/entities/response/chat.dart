@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/message.dart';
 import 'package:izowork/entities/response/user.dart';
 
@@ -8,19 +9,22 @@ Chat chatFromJson(String str) => Chat.fromJson(json.decode(str));
 String chatToJson(Chat data) => json.encode(data.toJson());
 
 class Chat {
-  Chat({
-    this.avatar,
-    required this.chatType,
-    required this.id,
-    this.lastMessage,
-    this.name,
-  });
+  Chat(
+      {this.avatar,
+      required this.chatType,
+      required this.id,
+      this.lastMessage,
+      this.name,
+      this.user,
+      required this.files});
 
   String? avatar;
   String chatType;
   String id;
   Message? lastMessage;
   String? name;
+  User? user;
+  List<Document> files;
 
   factory Chat.fromJson(Map<String, dynamic> json) => Chat(
         avatar: json["avatar"],
@@ -30,6 +34,11 @@ class Chat {
             ? null
             : Message.fromJson(json["last_message"]),
         name: json["name"],
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
+        files: json["files"] == null
+            ? []
+            : List<Document>.from(
+                json["files"].map((x) => Document.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,5 +47,7 @@ class Chat {
         "id": id,
         "last_message": lastMessage?.toJson(),
         "name": name,
+        "user": user,
+        "files": files
       };
 }

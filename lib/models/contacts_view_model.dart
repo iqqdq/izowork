@@ -6,7 +6,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/response/contact.dart';
-import 'package:izowork/repositories/contacts_repository.dart';
+import 'package:izowork/repositories/contact_repository.dart';
 import 'package:izowork/screens/contact/contact_screen.dart';
 import 'package:izowork/screens/contact_create/contact_create_screen.dart';
 import 'package:izowork/screens/contacts/contacts_filter_sheet/contacts_filter_page_view_screen.dart';

@@ -59,6 +59,7 @@ dependencies:
   android_intent_plus: ^3.1.5
   flutter_image_slideshow: ^0.1.4
   socket_io_client: 1.0.1
+  record: ^4.4.4
   just_audio: ^0.9.32
   
   geolocator: ^8.1.1
@@ -99,6 +100,7 @@ flutter:
     - assets/
     - assets/2.0x/
     - assets/3.0x/
+    - assets/sounds/
 
   fonts:
     - family: PT Root UI

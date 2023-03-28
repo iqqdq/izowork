@@ -91,27 +91,25 @@ class _CommentBubbleState extends State<CommentBubbleWidget>
                                     width: 24.0,
                                     height: 24.0,
                                     fit: BoxFit.cover),
-                                widget.comment.user.avatar.isEmpty
+                                widget.comment.user.avatar == null
                                     ? Container()
-                                    : ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0),
-                                        child: CachedNetworkImage(
-                                            cacheKey:
-                                                widget.comment.user.avatar,
-                                            imageUrl: avatarUrl +
-                                                widget.comment.user.avatar,
-                                            width: 24.0,
-                                            height: 24.0,
-                                            memCacheWidth: 24 *
-                                                MediaQuery.of(context)
-                                                    .devicePixelRatio
-                                                    .round(),
-                                            memCacheHeight: 24 *
-                                                MediaQuery.of(context)
-                                                    .devicePixelRatio
-                                                    .round(),
-                                            fit: BoxFit.cover)),
+                                    : widget.comment.user.avatar!.isEmpty
+                                        ? Container()
+                                        : ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            child: CachedNetworkImage(
+                                                cacheKey:
+                                                    widget.comment.user.avatar,
+                                                imageUrl: avatarUrl +
+                                                    widget.comment.user.avatar!,
+                                                width: 24.0,
+                                                height: 24.0,
+                                                memCacheWidth: 24 *
+                                                    MediaQuery.of(context)
+                                                        .devicePixelRatio
+                                                        .round(),
+                                                fit: BoxFit.cover)),
                               ]),
                               const SizedBox(width: 10.0),
 

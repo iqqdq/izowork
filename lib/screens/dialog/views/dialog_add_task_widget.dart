@@ -47,20 +47,21 @@ class DialogAddTaskWidget extends StatelessWidget {
                   /// ADDRESS
                   const TitleWidget(text: Titles.message),
                   const SizedBox(height: 16.0),
-                  Padding(
-                      padding: EdgeInsets.only(
-                          right: isMine ? 16.0 : 0.0,
-                          left: isMine ? 0.0 : 16.0),
-                      child: BubbleWidget(
-                          isMine: isMine,
-                          isFile: isFile,
-                          isAudio: isAudio,
-                          isGroupLastMessage: isGroupLastMessage,
-                          animate: false,
-                          text: text,
-                          showDate: false,
-                          dateTime: dateTime,
-                          onLongPress: null)),
+                  // Padding(
+                  //     padding: EdgeInsets.only(
+                  //         right: isMine ? 16.0 : 0.0,
+                  //         left: isMine ? 0.0 : 16.0),
+                  //     child: BubbleWidget(
+                  //         showName: true,
+                  //         isMine: isMine,
+                  //         isFile: isFile,
+                  //         isAudio: isAudio,
+                  //         isGroupLastMessage: isGroupLastMessage,
+                  //         animate: false,
+                  //         text: text,
+                  //         showDate: false,
+                  //         dateTime: dateTime,
+                  //         onLongPress: null)),
                   const SizedBox(height: 16.0),
 
                   /// BUTTON

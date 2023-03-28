@@ -90,5 +90,7 @@ const newsMediaUrl = baseUrl + 'resourses/news-file/';
 const chatsUrl = baseUrl + 'chat/chats';
 const chatDmUrl = baseUrl + 'chat/dm';
 const messageUrl = baseUrl + 'chat/messages';
+const chatFileUrl = baseUrl + 'chat/file';
+const messageMediaUrl = baseUrl + 'resourses/message-file/';
 
 const documentUrl = baseUrl + 'document/list';

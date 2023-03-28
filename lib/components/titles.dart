@@ -66,6 +66,7 @@ abstract class Titles {
   static const reason = 'Причина';
   static const title = 'Заголовок';
   static const text = 'Текст';
+  static const audioMessage = 'Аудиосообщение';
   static const file = 'Файл';
   static const files = 'Файлы';
   static const process = 'Процесс';

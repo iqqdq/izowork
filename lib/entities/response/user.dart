@@ -12,7 +12,7 @@ class User {
     required this.phone,
     required this.social,
     required this.post,
-    required this.avatar,
+    this.avatar,
   });
 
   String id;
@@ -23,7 +23,7 @@ class User {
   String phone;
   List<String> social;
   String post;
-  String avatar;
+  String? avatar;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -38,7 +38,7 @@ class User {
             ? []
             : List<String>.from(json["social"].map((x) => x)),
         post: json["post"] ?? '-',
-        avatar: json["avatar"] ?? '',
+        avatar: json["avatar"],
       );
 
   Map<String, dynamic> toJson() => {

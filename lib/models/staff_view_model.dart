@@ -8,7 +8,7 @@ import 'package:izowork/components/user_params.dart';
 import 'package:izowork/entities/request/chat_dm_request.dart';
 import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/repositories/chats_repository.dart';
+import 'package:izowork/repositories/chat_repository.dart';
 import 'package:izowork/repositories/user_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
@@ -82,7 +82,7 @@ class StaffViewModel with ChangeNotifier {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
-    await ChatsRepository()
+    await ChatRepository()
         .createDmChat(chatDmRequest: ChatDmRequest(userId: _users[index].id))
         .then((response) => {
               if (response is Chat)
