@@ -216,100 +216,104 @@
 133        <meta-data
 134            android:name="flutterEmbedding"
 135            android:value="2" />
-136        <meta-data
-137            android:name="com.google.android.geo.API_KEY"
-138            android:value="AIzaSyDdWyeJlc4Uf_B76kQYAwv8gsBSvI4RX30" />
-139
-140        <service
-140-->[:geolocator_android] /Users/iqqddq/Documents/izowork/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:9-16:56
-141            android:name="com.baseflow.geolocator.GeolocatorLocationService"
-141-->[:geolocator_android] /Users/iqqddq/Documents/izowork/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-77
-142            android:enabled="true"
-142-->[:geolocator_android] /Users/iqqddq/Documents/izowork/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-35
-143            android:exported="false"
-143-->[:geolocator_android] /Users/iqqddq/Documents/izowork/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-37
-144            android:foregroundServiceType="location" />
-144-->[:geolocator_android] /Users/iqqddq/Documents/izowork/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-53
-145
-146        <provider
-146-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
-147            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
-147-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-82
-148            android:authorities="com.example.izowork.flutter.image_provider"
-148-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-74
-149            android:exported="false"
-149-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
-150            android:grantUriPermissions="true" >
-150-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
-151            <meta-data
-151-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:75
-152                android:name="android.support.FILE_PROVIDER_PATHS"
-152-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
-153                android:resource="@xml/flutter_image_picker_file_paths" />
-153-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-72
-154        </provider>
-155
-156        <activity
-156-->[:url_launcher_android] /Users/iqqddq/Documents/izowork/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-13:74
-157            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-157-->[:url_launcher_android] /Users/iqqddq/Documents/izowork/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-74
-158            android:exported="false"
-158-->[:url_launcher_android] /Users/iqqddq/Documents/izowork/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-37
-159            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-159-->[:url_launcher_android] /Users/iqqddq/Documents/izowork/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-71
-160
-161        <provider
-161-->[:open_filex] /Users/iqqddq/Documents/izowork/build/open_filex/intermediates/merged_manifest/debug/AndroidManifest.xml:18:9-27:20
-162            android:name="com.crazecoder.openfile.FileProvider"
-162-->[:open_filex] /Users/iqqddq/Documents/izowork/build/open_filex/intermediates/merged_manifest/debug/AndroidManifest.xml:19:13-64
-163            android:authorities="com.example.izowork.fileProvider.com.crazecoder.openfile"
-163-->[:open_filex] /Users/iqqddq/Documents/izowork/build/open_filex/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-88
-164            android:exported="false"
-164-->[:open_filex] /Users/iqqddq/Documents/izowork/build/open_filex/intermediates/merged_manifest/debug/AndroidManifest.xml:21:13-37
-165            android:grantUriPermissions="true" >
-165-->[:open_filex] /Users/iqqddq/Documents/izowork/build/open_filex/intermediates/merged_manifest/debug/AndroidManifest.xml:22:13-47
-166            <meta-data
-166-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:75
-167                android:name="android.support.FILE_PROVIDER_PATHS"
-167-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
-168                android:resource="@xml/filepaths" />
-168-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-72
-169        </provider>
-170
-171        <uses-library
-171-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
-172            android:name="androidx.window.extensions"
-172-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
-173            android:required="false" />
-173-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
-174        <uses-library
-174-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
-175            android:name="androidx.window.sidecar"
-175-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
-176            android:required="false" /> <!-- Needs to be explicitly declared on P+ -->
-176-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
-177        <uses-library
-177-->[com.google.android.gms:play-services-maps:18.1.0] /Users/iqqddq/.gradle/caches/transforms-3/e201e9ad108cf5dd9bf454f2a581d29d/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:39:9-41:40
-178            android:name="org.apache.http.legacy"
-178-->[com.google.android.gms:play-services-maps:18.1.0] /Users/iqqddq/.gradle/caches/transforms-3/e201e9ad108cf5dd9bf454f2a581d29d/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:40:13-50
-179            android:required="false" />
-179-->[com.google.android.gms:play-services-maps:18.1.0] /Users/iqqddq/.gradle/caches/transforms-3/e201e9ad108cf5dd9bf454f2a581d29d/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:41:13-37
-180
-181        <activity
-181-->[com.google.android.gms:play-services-base:18.0.1] /Users/iqqddq/.gradle/caches/transforms-3/3ff720be07735976176520d1c05fb799/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
-182            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-182-->[com.google.android.gms:play-services-base:18.0.1] /Users/iqqddq/.gradle/caches/transforms-3/3ff720be07735976176520d1c05fb799/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
-183            android:exported="false"
-183-->[com.google.android.gms:play-services-base:18.0.1] /Users/iqqddq/.gradle/caches/transforms-3/3ff720be07735976176520d1c05fb799/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
-184            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-184-->[com.google.android.gms:play-services-base:18.0.1] /Users/iqqddq/.gradle/caches/transforms-3/3ff720be07735976176520d1c05fb799/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
-185
-186        <meta-data
-186-->[com.google.android.gms:play-services-basement:18.0.0] /Users/iqqddq/.gradle/caches/transforms-3/601d4158b382ad9f634d3bbb23a34c83/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:21:9-23:69
-187            android:name="com.google.android.gms.version"
-187-->[com.google.android.gms:play-services-basement:18.0.0] /Users/iqqddq/.gradle/caches/transforms-3/601d4158b382ad9f634d3bbb23a34c83/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:22:13-58
-188            android:value="@integer/google_play_services_version" />
-188-->[com.google.android.gms:play-services-basement:18.0.0] /Users/iqqddq/.gradle/caches/transforms-3/601d4158b382ad9f634d3bbb23a34c83/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:23:13-66
-189    </application>
-190
-191</manifest>
+136        <!--
+137             <meta-data android:name="com.google.android.geo.API_KEY"
+138            android:value="AIzaSyDdWyeJlc4Uf_B76kQYAwv8gsBSvI4RX30"/>
+139        -->
+140        <meta-data
+141            android:name="com.google.android.geo.API_KEY"
+142            android:value="AIzaSyB8-NiW7qtyEXNy_n0AfyFYeTxto8lVfGc" />
+143
+144        <service
+144-->[:geolocator_android] /Users/iqqddq/Documents/izowork/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:9-16:56
+145            android:name="com.baseflow.geolocator.GeolocatorLocationService"
+145-->[:geolocator_android] /Users/iqqddq/Documents/izowork/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-77
+146            android:enabled="true"
+146-->[:geolocator_android] /Users/iqqddq/Documents/izowork/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-35
+147            android:exported="false"
+147-->[:geolocator_android] /Users/iqqddq/Documents/izowork/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-37
+148            android:foregroundServiceType="location" />
+148-->[:geolocator_android] /Users/iqqddq/Documents/izowork/build/geolocator_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-53
+149
+150        <provider
+150-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+151            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+151-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-82
+152            android:authorities="com.example.izowork.flutter.image_provider"
+152-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-74
+153            android:exported="false"
+153-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+154            android:grantUriPermissions="true" >
+154-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+155            <meta-data
+155-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:75
+156                android:name="android.support.FILE_PROVIDER_PATHS"
+156-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+157                android:resource="@xml/flutter_image_picker_file_paths" />
+157-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-72
+158        </provider>
+159
+160        <activity
+160-->[:url_launcher_android] /Users/iqqddq/Documents/izowork/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-13:74
+161            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+161-->[:url_launcher_android] /Users/iqqddq/Documents/izowork/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-74
+162            android:exported="false"
+162-->[:url_launcher_android] /Users/iqqddq/Documents/izowork/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-37
+163            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+163-->[:url_launcher_android] /Users/iqqddq/Documents/izowork/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-71
+164
+165        <provider
+165-->[:open_filex] /Users/iqqddq/Documents/izowork/build/open_filex/intermediates/merged_manifest/debug/AndroidManifest.xml:18:9-27:20
+166            android:name="com.crazecoder.openfile.FileProvider"
+166-->[:open_filex] /Users/iqqddq/Documents/izowork/build/open_filex/intermediates/merged_manifest/debug/AndroidManifest.xml:19:13-64
+167            android:authorities="com.example.izowork.fileProvider.com.crazecoder.openfile"
+167-->[:open_filex] /Users/iqqddq/Documents/izowork/build/open_filex/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-88
+168            android:exported="false"
+168-->[:open_filex] /Users/iqqddq/Documents/izowork/build/open_filex/intermediates/merged_manifest/debug/AndroidManifest.xml:21:13-37
+169            android:grantUriPermissions="true" >
+169-->[:open_filex] /Users/iqqddq/Documents/izowork/build/open_filex/intermediates/merged_manifest/debug/AndroidManifest.xml:22:13-47
+170            <meta-data
+170-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:75
+171                android:name="android.support.FILE_PROVIDER_PATHS"
+171-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+172                android:resource="@xml/filepaths" />
+172-->[:image_picker_android] /Users/iqqddq/Documents/izowork/build/image_picker_android/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-72
+173        </provider>
+174
+175        <uses-library
+175-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+176            android:name="androidx.window.extensions"
+176-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+177            android:required="false" />
+177-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+178        <uses-library
+178-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+179            android:name="androidx.window.sidecar"
+179-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+180            android:required="false" /> <!-- Needs to be explicitly declared on P+ -->
+180-->[androidx.window:window:1.0.0-beta04] /Users/iqqddq/.gradle/caches/transforms-3/49bc944d29f70d45aa5add8e43e3247e/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+181        <uses-library
+181-->[com.google.android.gms:play-services-maps:18.1.0] /Users/iqqddq/.gradle/caches/transforms-3/e201e9ad108cf5dd9bf454f2a581d29d/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:39:9-41:40
+182            android:name="org.apache.http.legacy"
+182-->[com.google.android.gms:play-services-maps:18.1.0] /Users/iqqddq/.gradle/caches/transforms-3/e201e9ad108cf5dd9bf454f2a581d29d/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:40:13-50
+183            android:required="false" />
+183-->[com.google.android.gms:play-services-maps:18.1.0] /Users/iqqddq/.gradle/caches/transforms-3/e201e9ad108cf5dd9bf454f2a581d29d/transformed/jetified-play-services-maps-18.1.0/AndroidManifest.xml:41:13-37
+184
+185        <activity
+185-->[com.google.android.gms:play-services-base:18.0.1] /Users/iqqddq/.gradle/caches/transforms-3/3ff720be07735976176520d1c05fb799/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
+186            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+186-->[com.google.android.gms:play-services-base:18.0.1] /Users/iqqddq/.gradle/caches/transforms-3/3ff720be07735976176520d1c05fb799/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
+187            android:exported="false"
+187-->[com.google.android.gms:play-services-base:18.0.1] /Users/iqqddq/.gradle/caches/transforms-3/3ff720be07735976176520d1c05fb799/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
+188            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+188-->[com.google.android.gms:play-services-base:18.0.1] /Users/iqqddq/.gradle/caches/transforms-3/3ff720be07735976176520d1c05fb799/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
+189
+190        <meta-data
+190-->[com.google.android.gms:play-services-basement:18.0.0] /Users/iqqddq/.gradle/caches/transforms-3/601d4158b382ad9f634d3bbb23a34c83/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:21:9-23:69
+191            android:name="com.google.android.gms.version"
+191-->[com.google.android.gms:play-services-basement:18.0.0] /Users/iqqddq/.gradle/caches/transforms-3/601d4158b382ad9f634d3bbb23a34c83/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:22:13-58
+192            android:value="@integer/google_play_services_version" />
+192-->[com.google.android.gms:play-services-basement:18.0.0] /Users/iqqddq/.gradle/caches/transforms-3/601d4158b382ad9f634d3bbb23a34c83/transformed/jetified-play-services-basement-18.0.0/AndroidManifest.xml:23:13-66
+193    </application>
+194
+195</manifest>

@@ -29,7 +29,7 @@ class MoreListItemWidget extends StatelessWidget {
                       child: SeparatorWidget())
                   : Container(),
               Container(
-                  padding: const EdgeInsets.symmetric(vertical: 14.0),
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
                   child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child:
@@ -38,7 +38,7 @@ class MoreListItemWidget extends StatelessWidget {
                           Text(title,
                               style: TextStyle(
                                   color: HexColors.black,
-                                  fontSize: 18.0,
+                                  fontSize: 16.0,
                                   fontFamily: 'PT Root UI',
                                   fontWeight: FontWeight.w500))))
             ]),

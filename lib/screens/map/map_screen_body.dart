@@ -157,13 +157,11 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                 _clusterManager?.onCameraMove
               },
           onCameraIdle: () => {
-                _mapViewModel
-                    .updatePlaces()
-                    .then((value) => {
-                          _clusterManager?.onCameraMove,
-                          _clusterManager?.setItems(_mapViewModel.places),
-                        })
-                    .then((value) => _mapViewModel.getAddressName())
+                _mapViewModel.updatePlaces().then((value) => {
+                      _clusterManager?.onCameraMove,
+                      _clusterManager?.setItems(_mapViewModel.places),
+                    })
+                // .then((value) => _mapViewModel.getAddressName())
               },
           onLongPress: (position) =>
               _mapViewModel.showAddMapObjectSheet(context)),

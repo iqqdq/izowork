@@ -1,5 +1,6 @@
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 
 class MapControlWidget extends StatelessWidget {
@@ -42,7 +43,7 @@ class MapControlWidget extends StatelessWidget {
                           splashColor: Colors.transparent,
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(10.0)),
-                          child: Image.asset('assets/ic_plus.png'),
+                          child: SvgPicture.asset('assets/ic_plus.svg'),
                           onTap: onZoomInTap))),
               Expanded(
                   child: Material(
@@ -68,7 +69,8 @@ class MapControlWidget extends StatelessWidget {
                           splashColor: Colors.transparent,
                           borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(10.0)),
-                          child: Image.asset('assets/ic_search.png'),
+                          child: SvgPicture.asset('assets/ic_search.svg',
+                              color: HexColors.grey50),
                           onTap: onSearchTap))),
             ])));
   }

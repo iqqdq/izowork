@@ -80,20 +80,20 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   // MARK: - FUNCTIONS
 
   void _addSocketListener(Socket? socket) {
-    _dialogViewModel.socket?.onConnect((_) {
+    _dialogViewModel.newSocket?.onConnect((_) {
       debugPrint('connect');
 
       if (_dialogViewModel.token != null) {
-        _dialogViewModel.socket?.emit(
+        _dialogViewModel.newSocket?.emit(
             'join', ChatConnectRequest(accessToken: _dialogViewModel.token!));
       }
     });
 
-    _dialogViewModel.socket?.onConnectError((_) {
+    _dialogViewModel.newSocket?.onConnectError((_) {
       debugPrint('connection error');
     });
 
-    _dialogViewModel.socket?.on(
+    _dialogViewModel.newSocket?.on(
         'message',
         (data) => {
               // UPDATE MESSAGES DATA
@@ -119,6 +119,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   }
 
   Future _updateBubbles(bool animate) async {
+    bool isGroupChat = _dialogViewModel.chat.chatType == 'GROUP';
     int index = 0;
 
     _bubbles.clear();
@@ -147,39 +148,44 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
             _bubbles.insert(
                 0,
                 BubbleWidget(
-                  animate: animate && _bubbles.isEmpty,
-                  verticalSpacing: !_isSameNextAuthor(index)
-                      ? isMine
-                          ? 16.0
-                          : 10.0
-                      : 0.0,
-                  isMine: isMine,
-                  isFile: isFile,
-                  isDownloading: _dialogViewModel.downloadIndex == index,
-                  isAudio: isAudio,
-                  showDate: index == _dialogViewModel.messages.length - 1
-                      ? true
-                      : !_isSamePrevDate(index),
-                  showName: false,
-                  // !_isSamePrevAuthor(index) ||
-                  //     !_isSamePrevDate(index) && !_isSameNextAuthor(index) ||
-                  //     !_isSamePrevDate(index) && !_isSamePrevAuthor(index),
-                  isGroupLastMessage: false,
-                  // !_isSameNextAuthor(index),
-                  user: null,
-                  // element.user,
-                  text: isFile
-                      ? element.files.first.name
-                      : isAudio
-                          ? messageMediaUrl + element.files.first.filename
-                          : element.text,
-                  dateTime:
-                      DateFormat("yyyy-MM-dd'T'HH:mm").parse(element.createdAt),
-                  onUserTap: () =>
-                      _dialogViewModel.showProfileScreen(context, element),
-                  onFileTap: () =>
-                      _dialogViewModel.openFile(context, index, element),
-                ));
+                    animate: animate && _bubbles.isEmpty,
+                    verticalSpacing: !_isSameNextAuthor(index)
+                        ? isMine
+                            ? 16.0
+                            : 10.0
+                        : 0.0,
+                    isMine: isMine,
+                    isFile: isFile,
+                    isDownloading: _dialogViewModel.downloadIndex == index,
+                    isAudio: isAudio,
+                    showDate: index == _dialogViewModel.messages.length - 1
+                        ? true
+                        : !_isSamePrevDate(index),
+                    showName: isGroupChat
+                        ? !_isSamePrevAuthor(index) ||
+                            !_isSamePrevDate(index) &&
+                                !_isSameNextAuthor(index) ||
+                            !_isSamePrevDate(index) && !_isSamePrevAuthor(index)
+                        : false,
+                    isGroupLastMessage:
+                        isGroupChat ? !_isSameNextAuthor(index) : false,
+                    user: isGroupChat ? element.user : null,
+                    text: isFile
+                        ? element.files.first.name
+                        : isAudio
+                            ? messageMediaUrl + element.files.first.filename
+                            : element.text,
+                    dateTime: element.createdAt.toLocal(),
+                    onUserTap: () =>
+                        _dialogViewModel.showProfileScreen(context, element),
+                    onTap: isFile
+                        ? () =>
+                            _dialogViewModel.openFile(context, index, element)
+                        : null,
+                    onLongPress: isFile || isAudio
+                        ? null
+                        : () => _dialogViewModel.showAddTaskSheet(
+                            context, element.text)));
           }
 
           index++;
@@ -196,12 +202,10 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   }
 
   bool _isSamePrevDate(int index) {
-    DateTime date = DateFormat("yyyy-MM-dd")
-        .parse(_dialogViewModel.messages[index].createdAt);
+    DateTime date = _dialogViewModel.messages[index].createdAt.toLocal();
     DateTime? dateTime = index == _dialogViewModel.messages.length - 1
         ? null
-        : DateFormat("yyyy-MM-dd")
-            .parse(_dialogViewModel.messages[index + 1].createdAt);
+        : _dialogViewModel.messages[index + 1].createdAt.toLocal();
 
     return date.year == dateTime?.year &&
         date.month == dateTime?.month &&
@@ -230,14 +234,18 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
     _scrollController.dispose();
     _textEditingController.dispose();
     _focusNode.dispose();
-    _dialogViewModel.socket?.disconnect();
-    _dialogViewModel.socket?.dispose();
+    _dialogViewModel.newSocket?.disconnect();
+    _dialogViewModel.newSocket?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     _dialogViewModel = Provider.of<DialogViewModel>(context, listen: true);
+
+    String? _url =
+        _dialogViewModel.chat.avatar ?? _dialogViewModel.chat.user?.avatar;
+    ;
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -267,25 +275,25 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                     width: 24.0,
                     height: 24.0,
                     fit: BoxFit.cover),
-                _dialogViewModel.chat.user!.avatar == null
+                _url == null
                     ? Container()
-                    : _dialogViewModel.chat.user!.avatar!.isEmpty
-                        ? Container()
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(20.0),
-                            child: CachedNetworkImage(
-                                cacheKey: _dialogViewModel.chat.user!.avatar,
-                                imageUrl: avatarUrl +
-                                    _dialogViewModel.chat.user!.avatar!,
-                                width: 24.0,
-                                height: 24.0,
-                                fit: BoxFit.cover)),
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: CachedNetworkImage(
+                            cacheKey: _url,
+                            imageUrl: avatarUrl + _url,
+                            width: 24.0,
+                            height: 24.0,
+                            fit: BoxFit.cover)),
               ]),
               const SizedBox(width: 10.0),
 
-              /// USERNAME
+              /// CHAT/USER NAME
               Expanded(
-                  child: Text(_dialogViewModel.chat.user?.name ?? '-',
+                  child: Text(
+                      _dialogViewModel.chat.name ??
+                          _dialogViewModel.chat.user?.name ??
+                          '-',
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,
                           color: HexColors.black,
@@ -316,7 +324,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                                     primary: false,
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.only(
-                                        left: 10.0, top: 16.0, right: 10.0),
+                                        left: 10.0, right: 10.0),
                                     itemCount: _bubbles.length,
                                     itemBuilder: (context, index) =>
                                         _bubbles[index])))))),
@@ -339,7 +347,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                     _dialogViewModel.player.play(),
 
                     /// SEND MESSAGE
-                    _dialogViewModel.socket?.emit(
+                    _dialogViewModel.newSocket?.emit(
                         'message',
                         MessageRequest(
                             chatId: _dialogViewModel.chat.id,

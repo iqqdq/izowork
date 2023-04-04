@@ -86,6 +86,8 @@ abstract class Titles {
   static const analytics = 'Аналитика';
   static const documents = 'Документы';
   static const notifications = 'Уведомления';
+  static const logout = 'Выйти из аккаунта';
+  static const logoutAreYouSure = 'Вы уверены, что хотите выйти из аккаунта';
   static const requisites = 'Реквизиты';
   static const productType = 'Тип товара';
   static const productSubtype = 'Подтип товара';

@@ -1,5 +1,6 @@
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/message_file_request.dart';
+import 'package:izowork/entities/request/message_read_request.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/message.dart';
@@ -21,6 +22,15 @@ class DialogRepository {
       });
       return messages;
     } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> readChatMessages(
+      MessageReadRequest messageReadRequest) async {
+    dynamic json = await WebService().patch(messageReadUrl, messageReadRequest);
+
+    if (json != '') {
       return ErrorResponse.fromJson(json);
     }
   }

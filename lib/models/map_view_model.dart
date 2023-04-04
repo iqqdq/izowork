@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_geocoding_api/google_geocoding_api.dart';
@@ -109,23 +111,25 @@ class MapViewModel with ChangeNotifier {
   }
 
   void showAddMapObjectSheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (context) => MapAddObjectWidget(
-            address: address,
-            onTap: () => {
-                  // TODO ADD MAP OBJECT
-                  Navigator.pop(context),
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ObjectCreateScreenWidget(
-                              onCreate: (object) =>
-                                  {debugPrint('Object did create')})))
-                }));
+    getAddressName().then((value) => {
+          showCupertinoModalBottomSheet(
+              topRadius: const Radius.circular(16.0),
+              barrierColor: Colors.black.withOpacity(0.6),
+              backgroundColor: HexColors.white,
+              context: context,
+              builder: (context) => MapAddObjectWidget(
+                  address: address,
+                  onTap: () => {
+                        // TODO ADD MAP OBJECT
+                        Navigator.pop(context),
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ObjectCreateScreenWidget(
+                                    onCreate: (object) =>
+                                        {debugPrint('Object did create')})))
+                      }))
+        });
   }
 
   void showMapObjectSheet(BuildContext context) {
@@ -165,28 +169,36 @@ class MapViewModel with ChangeNotifier {
   }
 
   Future getAddressName() async {
-    // GoogleGeocodingApi api = GoogleGeocodingApi(google_geocoding_api_key,
-    //     isLogged: false); // TODO - isLogged: false
-    // GoogleGeocodingResponse reversedSearchResults = await api.reverse(
-    //     '${_position?.latitude}, ${_position?.longitude}',
-    //     language: locale);
+    bool isDebugMode = true;
 
-    // // GET CITY
-    // for (var element in reversedSearchResults.results.first.addressComponents) {
-    //   if (element.types.contains('locality')) {
-    //     _city = element.longName;
-    //   }
+    GoogleGeocodingApi api =
+        GoogleGeocodingApi(google_map_api_key, isLogged: isDebugMode);
 
-    //   // GET FORMATTED ADDRESS
-    //   _address = reversedSearchResults.results.first.formattedAddress;
-    // }
+    GoogleGeocodingResponse reversedSearchResults = await api.reverse(
+        '${_position?.latitude}, ${_position?.longitude}',
+        language: locale);
 
-    // notifyListeners();
+    if (reversedSearchResults.status == 'REQUEST_DENIED') {
+      log('Problem with Geocoding API');
+      return;
+    }
+
+    // GET CITY
+    for (var element in reversedSearchResults.results.first.addressComponents) {
+      if (element.types.contains('locality')) {
+        _city = element.longName;
+      }
+
+      // GET FORMATTED ADDRESS
+      _address = reversedSearchResults.results.first.formattedAddress;
+    }
+
+    notifyListeners();
   }
 
   void getAddressDetails(GoogleMapController controller, String placeId) async {
     DetailsResponse? result =
-        await GooglePlace(google_geocoding_api_key).details.get(placeId);
+        await GooglePlace(google_map_api_key).details.get(placeId);
     if (result != null &&
         result.result != null &&
         result.result?.geometry != null) {

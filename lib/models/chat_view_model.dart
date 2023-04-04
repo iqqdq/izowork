@@ -4,24 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
+import 'package:izowork/components/user_params.dart';
 import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/repositories/chat_repository.dart';
 import 'package:izowork/screens/chat/chat_filter_sheet/chat_filter_page_view_widget.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class ChatViewModel with ChangeNotifier {
-  LoadingStatus loadingStatus = LoadingStatus.searching;
+  LoadingStatus loadingStatus = LoadingStatus.empty;
+
+  String? token;
+
+  Socket? _socket;
 
   final List<Chat> _chats = [];
 
-  List<Chat> get chats {
-    return _chats;
+  Socket? get socket {
+    return _socket;
   }
 
-  ChatViewModel() {
-    getChatList(pagination: Pagination(offset: 50, size: 0), search: '');
+  List<Chat> get chats {
+    return _chats;
   }
 
   // MARK: -
@@ -29,7 +35,7 @@ class ChatViewModel with ChangeNotifier {
 
   Future getChatList(
       {required Pagination pagination, required String search}) async {
-    if (pagination.offset == 0) {
+    if (pagination.offset == 0 && loadingStatus == LoadingStatus.empty) {
       loadingStatus = LoadingStatus.searching;
       _chats.clear();
 
@@ -72,26 +78,65 @@ class ChatViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
+              if (_chats.isNotEmpty)
+                {
+                  _chats.removeWhere((element) => element.lastMessage == null),
+                  if (_chats.isNotEmpty)
+                    {
+                      _chats.sort((a, b) => b.lastMessage!.createdAt
+                          .toLocal()
+                          .compareTo(a.lastMessage!.createdAt.toLocal()))
+                    }
+                },
               notifyListeners()
             });
+  }
+
+  Future connectSocket() async {
+    _socket = io(
+        'http://185.116.194.234/',
+        OptionBuilder()
+            .setTransports(['websocket']) // for Flutter or Dart VM
+            .disableAutoConnect() // disable auto-connection
+            .build());
+
+    _socket?.connect();
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future getUserParams() async {
+    UserParams userParams = UserParams();
+    token = await userParams.getToken();
+  }
+
+  void clearChats() {
+    _chats.clear();
   }
 
   // MARK: -
   // MARK: - PUSH
 
   void showDialogScreen(BuildContext context, int index) {
+    // CLEAR UNREAD MESSAGE COUNT
+    _chats[index].unreadCount = 0;
+    notifyListeners();
+
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => DialogScreenWidget(
+                socket: _socket,
                 chat: _chats[index],
                 onPop: (message) => {
+                      // REPLACE LAST MESSAGE
                       _chats.forEach((element) {
                         if (element.id == message.chatId) {
                           element.lastMessage = message;
                           notifyListeners();
                         }
-                      })
+                      }),
                     })));
   }
 

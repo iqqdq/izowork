@@ -36,6 +36,16 @@ class ChatRepository {
     }
   }
 
+  Future<dynamic> getUnreadMessageCount() async {
+    dynamic json = await WebService().get(unreadMessageUrl);
+
+    try {
+      return json["count"] as int;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
   Future<dynamic> createDmChat({required ChatDmRequest chatDmRequest}) async {
     dynamic json = await WebService().post(chatDmUrl, chatDmRequest);
 

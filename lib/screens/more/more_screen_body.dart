@@ -26,7 +26,8 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
     Titles.products,
     Titles.analytics,
     Titles.documents,
-    Titles.notifications
+    Titles.notifications,
+    Titles.logout
   ];
   late MoreViewModel _moreViewModel;
 
@@ -142,8 +143,13 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                                                 ? _moreViewModel
                                                                     .showNotificationsScreen(
                                                                         context)
-                                                                : debugPrint(index
-                                                                    .toString())
+                                                                : index == 9
+                                                                    ? _moreViewModel
+                                                                        .showLogoutDialog(
+                                                                            context)
+                                                                    : debugPrint(
+                                                                        index
+                                                                            .toString())
                               });
                 })));
   }

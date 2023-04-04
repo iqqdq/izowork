@@ -14,23 +14,17 @@ import 'package:izowork/views/title_widget.dart';
 
 class ChatListItemWidget extends StatelessWidget {
   final Chat chat;
-  final bool isUnread;
   final VoidCallback onTap;
 
-  const ChatListItemWidget(
-      {Key? key,
-      required this.chat,
-      required this.isUnread,
-      required this.onTap})
+  const ChatListItemWidget({Key? key, required this.chat, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting(locale, null);
 
-    DateTime? dateTime = chat.lastMessage == null
-        ? null
-        : DateTime.parse(chat.lastMessage!.createdAt);
+    DateTime? dateTime =
+        chat.lastMessage == null ? null : chat.lastMessage!.createdAt.toLocal();
 
     bool _isToday = dateTime?.year == DateTime.now().year &&
         dateTime?.month == DateTime.now().month &&
@@ -69,13 +63,16 @@ class ChatListItemWidget extends StatelessWidget {
         ? false
         : !isAudio && chat.lastMessage!.files.isNotEmpty;
 
+    String? _url = chat.avatar ?? chat.user?.avatar;
+
     return Container(
         decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(width: 0.5, color: HexColors.grey20),
             ),
-            color:
-                isUnread ? HexColors.additionalVioletLight : HexColors.white),
+            color: chat.unreadCount > 0
+                ? HexColors.additionalVioletLight
+                : HexColors.white),
         child: Material(
             color: Colors.transparent,
             child: InkWell(
@@ -92,13 +89,13 @@ class ChatListItemWidget extends StatelessWidget {
                             width: 40.0,
                             height: 40.0,
                             fit: BoxFit.cover),
-                        chat.user?.avatar == null
+                        _url == null
                             ? Container()
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(20.0),
                                 child: CachedNetworkImage(
-                                    cacheKey: chat.user!.avatar,
-                                    imageUrl: avatarUrl + chat.user!.avatar!,
+                                    cacheKey: _url,
+                                    imageUrl: avatarUrl + _url,
                                     width: 40.0,
                                     height: 40.0,
                                     memCacheWidth: 40 *
@@ -114,7 +111,7 @@ class ChatListItemWidget extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                             /// USER NAME
-                            Text(chat.user?.name ?? '-',
+                            Text(chat.user?.name ?? chat.name ?? '-',
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: HexColors.grey50,
@@ -159,8 +156,8 @@ class ChatListItemWidget extends StatelessWidget {
                             const SizedBox(height: 4.0),
 
                             /// MESSAGE COUNT
-                            isUnread
-                                ? const CountWidget(count: 1)
+                            chat.unreadCount > 0
+                                ? CountWidget(count: chat.unreadCount)
                                 : const SizedBox(height: 20.0)
                           ]),
                     ])),

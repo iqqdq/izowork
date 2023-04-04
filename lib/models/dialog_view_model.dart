@@ -11,12 +11,14 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/components/user_params.dart';
 import 'package:izowork/entities/request/message_file_request.dart';
+import 'package:izowork/entities/request/message_read_request.dart';
 import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/message.dart';
 import 'package:izowork/repositories/dialog_repository.dart';
 import 'package:izowork/screens/dialog/views/dialog_add_task_widget.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
+import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -28,6 +30,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' as dartio;
 
 class DialogViewModel with ChangeNotifier {
+  final Socket? socket;
   final Chat chat;
   final record = Record();
   final player = AudioPlayer();
@@ -48,7 +51,7 @@ class DialogViewModel with ChangeNotifier {
 
   final List<Message> _messages = [];
 
-  Socket? get socket {
+  Socket? get newSocket {
     return _socket;
   }
 
@@ -64,17 +67,20 @@ class DialogViewModel with ChangeNotifier {
     return _downloadIndex;
   }
 
-  DialogViewModel(this.chat);
+  DialogViewModel(this.socket, this.chat);
 
   Future connectSocket() async {
-    _socket = io(
-        'http://185.116.194.234/',
-        OptionBuilder()
-            .setTransports(['websocket']) // for Flutter or Dart VM
-            .disableAutoConnect() // disable auto-connection
-            .build());
+    _socket = socket ??
+        io(
+            'http://185.116.194.234/',
+            OptionBuilder()
+                .setTransports(['websocket']) // for Flutter or Dart VM
+                .disableAutoConnect() // disable auto-connection
+                .build());
 
-    _socket?.connect();
+    if (socket == null) {
+      _socket?.connect();
+    }
   }
 
   // MARK: -
@@ -123,6 +129,12 @@ class DialogViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.error,
                 }
             })
+        .then((value) => readMessages());
+  }
+
+  Future readMessages() async {
+    await DialogRepository()
+        .readChatMessages(MessageReadRequest(chatId: chat.id))
         .then((value) => notifyListeners());
   }
 
@@ -263,24 +275,21 @@ class DialogViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showAddTaskSheet(BuildContext context, bool isMine, bool isFile,
-      bool isAudio, bool isGroupLastMessage, String text, DateTime dateTime) {
+  void showAddTaskSheet(BuildContext context, String text) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) => DialogAddTaskWidget(
-            isMine: isMine,
-            isFile: isFile,
-            isAudio: isAudio,
-            isGroupLastMessage: isGroupLastMessage,
-            dateTime: dateTime,
             text: text,
-            onTap: () => {
-                  // TODO ADD NOTIFY
-                  Navigator.pop(context)
-                }));
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TaskCreateScreenWidget(
+                        message: text,
+                        onCreate: (task) => Toast().showTopToast(context,
+                            '${Titles.task} "${task?.name}" создана'))))));
   }
 
   void showProfileScreen(BuildContext context, Message message) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 
 class FloatingButtonWidget extends StatelessWidget {
@@ -20,9 +21,8 @@ class FloatingButtonWidget extends StatelessWidget {
                 highlightColor: HexColors.primaryDark,
                 splashColor: Colors.transparent,
                 borderRadius: BorderRadius.circular(24.0),
-                child: Center(
-                  child: Image.asset('assets/ic_large_plus.png'),
-                ),
+                child:
+                    Center(child: SvgPicture.asset('assets/ic_large_plus.svg')),
                 onTap: () => onTap())));
   }
 }

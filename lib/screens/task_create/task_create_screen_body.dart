@@ -16,9 +16,11 @@ import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 
 class TaskCreateScreenBodyWidget extends StatefulWidget {
+  final String? message;
   final Function(Task?) onCreate;
 
-  const TaskCreateScreenBodyWidget({Key? key, required this.onCreate})
+  const TaskCreateScreenBodyWidget(
+      {Key? key, this.message, required this.onCreate})
       : super(key: key);
 
   @override
@@ -39,12 +41,18 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      /// STATE
+      /// EDIT TASK
       if (_taskCreateViewModel.task != null) {
         _nameTextEditingController.text = _taskCreateViewModel.task!.name;
 
         _descriptionTextEditingController.text =
             _taskCreateViewModel.task!.description ?? '';
       }
+
+      /// STATE
+      /// CREATE TASK FROM CHAT STATE
+      _descriptionTextEditingController.text = widget.message ?? '';
     });
   }
 

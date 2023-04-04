@@ -79,7 +79,8 @@ class _InputWidgetState extends State<InputWidget> {
           _maxLines > 1
               ? Container()
               : _isSearchInput
-                  ? Image.asset('assets/ic_search.png', color: HexColors.grey30)
+                  ? SvgPicture.asset('assets/ic_search.svg',
+                      color: HexColors.grey30)
                   : Container(),
           Expanded(
               child: TextField(

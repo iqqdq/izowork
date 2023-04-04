@@ -88,9 +88,11 @@ const newsFileUrl = baseUrl + 'news/file';
 const newsMediaUrl = baseUrl + 'resourses/news-file/';
 
 const chatsUrl = baseUrl + 'chat/chats';
+const unreadMessageUrl = baseUrl + 'chat/unread-messages-count';
 const chatDmUrl = baseUrl + 'chat/dm';
 const messageUrl = baseUrl + 'chat/messages';
 const chatFileUrl = baseUrl + 'chat/file';
+const messageReadUrl = baseUrl + 'chat/read';
 const messageMediaUrl = baseUrl + 'resourses/message-file/';
 
 const documentUrl = baseUrl + 'document/list';

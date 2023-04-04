@@ -1,6 +1,4 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
-
-import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,9 +21,9 @@ class BubbleWidget extends StatefulWidget {
   final String text;
   final bool showDate;
   final DateTime dateTime;
-  final VoidCallback? onLongPress;
   final VoidCallback? onUserTap;
-  final VoidCallback? onFileTap;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   const BubbleWidget(
       {Key? key,
@@ -41,9 +39,9 @@ class BubbleWidget extends StatefulWidget {
       required this.text,
       required this.showDate,
       required this.dateTime,
-      this.onLongPress,
       this.onUserTap,
-      this.onFileTap})
+      required this.onTap,
+      required this.onLongPress})
       : super(key: key);
 
   @override
@@ -322,6 +320,9 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                           const SizedBox(width: 10.0),
                           Expanded(child: contentList)
                         ]),
+                        SizedBox(
+                            height:
+                                !widget.isMine && widget.isFile ? 8.0 : 0.0),
                         time
                       ])
                     : _player != null
@@ -329,12 +330,9 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                             Row(
                               children: [
                                 GestureDetector(
-                                    onTap: () => {
-                                          if (_player!.playing)
-                                            {_player!.pause()}
-                                          else
-                                            {_player!.play()}
-                                        },
+                                    onTap: () => _player!.playing
+                                        ? _player!.pause()
+                                        : _player!.play(),
                                     child: _player == null
                                         ? Container()
                                         : SvgPicture.asset(
@@ -356,16 +354,23 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                         : Column(children: [
                             contentList,
                             const SizedBox(height: 4.0),
-                            time
+                            Row(
+                              mainAxisAlignment: widget.isMine
+                                  ? MainAxisAlignment.spaceBetween
+                                  : MainAxisAlignment.start,
+                              children: [
+                                widget.isMine
+                                    ? SvgPicture.asset('assets/ic_unread.svg')
+                                    : Container(),
+                                time
+                              ],
+                            )
                           ]))));
 
     final gestureDetector = GestureDetector(
-      onTap: widget.isFile
-          ? widget.onFileTap == null
-              ? null
-              : () => widget.onFileTap!()
-          : null,
-      onLongPress: widget.onLongPress,
+      onTap: widget.onTap == null ? null : () => widget.onTap!(),
+      onLongPress:
+          widget.onLongPress == null ? null : () => widget.onLongPress!(),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [

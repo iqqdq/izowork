@@ -6,15 +6,18 @@ import 'package:provider/provider.dart';
 
 class TaskCreateScreenWidget extends StatelessWidget {
   final Task? task;
+  final String? message;
   final Function(Task?) onCreate;
 
-  const TaskCreateScreenWidget({Key? key, this.task, required this.onCreate})
+  const TaskCreateScreenWidget(
+      {Key? key, this.task, this.message, required this.onCreate})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => TaskCreateViewModel(task),
-        child: TaskCreateScreenBodyWidget(onCreate: onCreate));
+        child:
+            TaskCreateScreenBodyWidget(message: message, onCreate: onCreate));
   }
 }

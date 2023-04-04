@@ -1,8 +1,13 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/pagination.dart';
+import 'package:izowork/entities/request/chat_connect_request.dart';
+import 'package:izowork/entities/response/chat.dart';
+import 'package:izowork/entities/response/message.dart';
 import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
@@ -12,7 +17,9 @@ import 'package:izowork/screens/chat/views/chat_list_item_widget.dart';
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class ChatScreenBodyWidget extends StatefulWidget {
   const ChatScreenBodyWidget({Key? key}) : super(key: key);
@@ -28,6 +35,8 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
 
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
+  AudioPlayer player = AudioPlayer();
+
   late ChatViewModel _chatViewModel;
 
   Pagination _pagination = Pagination(offset: 0, size: 50);
@@ -37,10 +46,62 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
   bool get wantKeepAlive => true;
 
   @override
+  void initState() {
+    player.setAsset('assets/sounds/message_receive.mp3');
+
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _chatViewModel.getUserParams().then((value) => _chatViewModel
+          .connectSocket()
+          .then((value) => _addSocketListener(_chatViewModel.socket))
+          .then((value) => _chatViewModel.getChatList(
+              pagination: _pagination, search: _textEditingController.text)));
+    });
+  }
+
+  @override
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
+
     super.dispose();
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  void _addSocketListener(Socket? socket) {
+    bool found = false;
+    Message? message;
+
+    socket?.onConnect((_) {
+      debugPrint('SOCKET CONNECTION SUCCESS');
+
+      if (_chatViewModel.token != null) {
+        socket.emit(
+            'join', ChatConnectRequest(accessToken: _chatViewModel.token!));
+      }
+    });
+
+    socket?.onDisconnect((data) => {
+          debugPrint('SOCKET DISCONNECTED'),
+          _chatViewModel
+              .connectSocket()
+              .then((value) => _addSocketListener(_chatViewModel.socket))
+        });
+
+    socket?.on(
+        'message',
+        (data) => {
+              // UPDATE CHAT LAST MESSAGE DATA
+              _chatViewModel.clearChats(),
+              _chatViewModel
+                  .getChatList(
+                      pagination: _pagination,
+                      search: _textEditingController.text)
+                  .then((value) => player.play())
+            });
   }
 
   Future _onRefresh() async {
@@ -121,7 +182,6 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                   itemBuilder: (context, index) {
                     return ChatListItemWidget(
                         chat: _chatViewModel.chats[index],
-                        isUnread: false,
                         onTap: () =>
                             _chatViewModel.showDialogScreen(context, index));
                   })),

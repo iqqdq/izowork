@@ -18,7 +18,7 @@ class Message {
       required this.files});
 
   String? id;
-  String createdAt;
+  DateTime createdAt;
   String text;
   String userId;
   String chatId;
@@ -27,7 +27,7 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
         id: json["id"],
-        createdAt: json["created_at"],
+        createdAt: DateTime.parse(json["created_at"]).toUtc(),
         text: json["text"],
         userId: json["user_id"],
         chatId: json["chat_id"],

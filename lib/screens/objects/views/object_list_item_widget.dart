@@ -64,28 +64,30 @@ class ObjectListItemWidget extends StatelessWidget {
                         Expanded(
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                              TitleWidget(
+                                children: [
+                              const TitleWidget(
                                   text: Titles.realizations,
                                   padding: EdgeInsets.zero,
                                   isSmall: true),
-                              SizedBox(height: 2.0),
+                              const SizedBox(height: 2.0),
                               SubtitleWidget(
-                                  text: '??? %', padding: EdgeInsets.zero)
+                                  text: '${object.readiness} %',
+                                  padding: EdgeInsets.zero)
                             ])),
 
                         /// EFFECTIVENESS
                         Expanded(
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                              TitleWidget(
+                                children: [
+                              const TitleWidget(
                                   text: Titles.effectiveness,
                                   padding: EdgeInsets.zero,
                                   isSmall: true),
-                              SizedBox(height: 2.0),
+                              const SizedBox(height: 2.0),
                               SubtitleWidget(
-                                  text: '??? %', padding: EdgeInsets.zero)
+                                  text: '${object.efficiency} %',
+                                  padding: EdgeInsets.zero)
                             ])),
                       ])
                     ]),

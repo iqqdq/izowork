@@ -192,11 +192,6 @@ class ObjectPageViewModel with ChangeNotifier {
                 })));
   }
 
-  void showDialogScreen(BuildContext context) {
-    // Navigator.push(context,
-    //     MaterialPageRoute(builder: (context) => const DialogScreenWidget()));
-  }
-
   void showObjectAnalyticsPageViewScreen(BuildContext context) {
     Navigator.push(
         context,
@@ -218,5 +213,15 @@ class ObjectPageViewModel with ChangeNotifier {
         MaterialPageRoute(
             builder: (context) =>
                 PhaseScreenWidget(phase: _phases[index], object: object)));
+  }
+
+  void showDialogScreen(BuildContext context) {
+    if (object!.chat != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => DialogScreenWidget(
+                  chat: object!.chat!, onPop: (message) => null)));
+    }
   }
 }

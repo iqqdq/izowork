@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/user.dart';
@@ -29,7 +30,10 @@ class Object {
       this.managerId,
       this.manager,
       this.kiso,
-      required this.hideDir});
+      required this.hideDir,
+      required this.readiness,
+      required this.efficiency,
+      this.chat});
 
   String id;
   String name;
@@ -52,40 +56,41 @@ class Object {
   User? manager;
   String? kiso;
   bool hideDir;
+  int readiness;
+  int efficiency;
+  Chat? chat;
 
   factory Object.fromJson(Map<String, dynamic> json) => Object(
-        id: json["id"],
-        name: json["name"],
-        address: json["address"],
-        long: json["long"]?.toDouble(),
-        lat: json["lat"]?.toDouble(),
-        floors: json["floors"],
-        area: json["area"],
-        constructionPeriod: json["construction_period"],
-        contractor: json["contractor"] == null
-            ? null
-            : Company.fromJson(json["contractor"]),
-        designer: json["designer"] == null
-            ? null
-            : Company.fromJson(json["designer"]),
-        customer: json["customer"] == null
-            ? null
-            : Company.fromJson(json["customer"]),
-        contractorId: json["contractor_id"],
-        designerId: json["designer_id"],
-        customerId: json["customer_id"],
-        objectTypeId: json["object_type_id"],
-        objectStageId: json["object_stage_id"],
-        files: json["files"] == null
-            ? []
-            : List<Document>.from(
-                json["files"].map((x) => Document.fromJson(x))),
-        managerId: json["manager_id"],
-        manager:
-            json["manager"] == null ? null : User.fromJson(json["manager"]),
-        kiso: json["kiso"],
-        hideDir: json["hideDir"] == null ? false : true,
-      );
+      id: json["id"],
+      name: json["name"],
+      address: json["address"],
+      long: json["long"]?.toDouble(),
+      lat: json["lat"]?.toDouble(),
+      floors: json["floors"],
+      area: json["area"],
+      constructionPeriod: json["construction_period"],
+      contractor: json["contractor"] == null
+          ? null
+          : Company.fromJson(json["contractor"]),
+      designer:
+          json["designer"] == null ? null : Company.fromJson(json["designer"]),
+      customer:
+          json["customer"] == null ? null : Company.fromJson(json["customer"]),
+      contractorId: json["contractor_id"],
+      designerId: json["designer_id"],
+      customerId: json["customer_id"],
+      objectTypeId: json["object_type_id"],
+      objectStageId: json["object_stage_id"],
+      files: json["files"] == null
+          ? []
+          : List<Document>.from(json["files"].map((x) => Document.fromJson(x))),
+      managerId: json["manager_id"],
+      manager: json["manager"] == null ? null : User.fromJson(json["manager"]),
+      kiso: json["kiso"],
+      hideDir: json["hideDir"] == null ? false : true,
+      readiness: json["readiness"],
+      efficiency: json["efficiency"],
+      chat: json["chat"] == null ? null : Chat.fromJson(json["chat"]));
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -105,6 +110,9 @@ class Object {
         "manager_id": managerId,
         "manager": manager,
         "kiso": kiso,
-        "hideDir": hideDir
+        "hideDir": hideDir,
+        "readiness": readiness,
+        "efficiency": efficiency,
+        "chat": chat
       };
 }
