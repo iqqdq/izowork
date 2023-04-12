@@ -22,12 +22,8 @@ class _NotificationsScreenBodyState
     extends State<NotificationsScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  late NotificationsViewModel _notificationsViewModel;
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  late NotificationsViewModel _notificationsViewModel;
 
   @override
   void dispose() {
@@ -62,18 +58,37 @@ class _NotificationsScreenBodyState
             ])),
         body: SizedBox.expand(
             child: Stack(children: [
-          /// STAFF LIST VIEW
+          /// NOTIFICATIONS LIST VIEW
           ListView.builder(
               shrinkWrap: true,
               padding: const EdgeInsets.only(
                   left: 16.0, right: 16.0, top: 16.0, bottom: 16.0 + 48.0),
-              itemCount: 10,
+              itemCount: _notificationsViewModel.notifications.length,
               itemBuilder: (context, index) {
                 return NotificationListItemWidget(
-                    dateTime: DateTime.now().subtract(Duration(days: index)),
-                    isUnread: index < 3);
+                    dateTime:
+                        _notificationsViewModel.notifications[index].createdAt,
+                    isUnread:
+                        !_notificationsViewModel.notifications[index].read,
+                    onTap: () => _notificationsViewModel.showNotificationScreen(
+                        context, index));
               }),
           const SeparatorWidget(),
+
+          /// EMPTY LIST TEXT
+          _notificationsViewModel.loadingStatus == LoadingStatus.completed &&
+                  _notificationsViewModel.notifications.isEmpty
+              ? Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, bottom: 100.0),
+                      child: Text(Titles.noResult,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16.0,
+                              color: HexColors.grey50))))
+              : Container(),
 
           /// INDICATOR
           _notificationsViewModel.loadingStatus == LoadingStatus.searching

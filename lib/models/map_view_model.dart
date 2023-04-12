@@ -1,5 +1,6 @@
-import 'dart:developer';
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_geocoding_api/google_geocoding_api.dart';
@@ -10,8 +11,11 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/place_model.dart';
-import 'package:izowork/entities/response/map_object.dart';
+import 'package:izowork/components/titles.dart';
+import 'package:izowork/components/toast.dart';
+import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/models/search_view_model.dart';
+import 'package:izowork/repositories/object_repository.dart';
 import 'package:izowork/screens/map/map_filter_sheet/map_filter_page_view_widget.dart';
 import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
 import 'package:izowork/screens/map_object/views/map_add_object_widget.dart';
@@ -32,14 +36,15 @@ class MapViewModel with ChangeNotifier {
   LatLng? _userPosition;
 
   // PERMISSION
-  bool _hasPermission = false;
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+  bool _hasPermission = false;
 
   // GEOCODER
   String _city = '';
   String _address = '';
 
   // DATA
+  final List<Object> _objects = [];
   String? _error;
 
   bool get hasPermission {
@@ -62,12 +67,36 @@ class MapViewModel with ChangeNotifier {
     return _address;
   }
 
+  List<Object> get objects {
+    return _objects;
+  }
+
   String? get error {
     return _error;
   }
 
   MapViewModel() {
-    getLocationPermission();
+    getLocationPermission().then((value) => getObjectList());
+  }
+
+  // MARK: -
+  // MARK: - API CALL
+
+  Future getObjectList() async {
+    await ObjectRepository()
+        .getMapObjects(params: [])
+        .then((response) => {
+              if (response is List<Object>)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _objects.clear(),
+                  _objects.addAll(response),
+                  updatePlaces()
+                }
+              else
+                loadingStatus = LoadingStatus.error
+            })
+        .then((value) => updatePlaces());
   }
 
   // MARK: -
@@ -110,7 +139,7 @@ class MapViewModel with ChangeNotifier {
             onResetTap: () => {Navigator.pop(context)}));
   }
 
-  void showAddMapObjectSheet(BuildContext context) {
+  void showAddMapObjectSheet(BuildContext context, LatLng position) {
     getAddressName().then((value) => {
           showCupertinoModalBottomSheet(
               topRadius: const Radius.circular(16.0),
@@ -120,25 +149,30 @@ class MapViewModel with ChangeNotifier {
               builder: (context) => MapAddObjectWidget(
                   address: address,
                   onTap: () => {
-                        // TODO ADD MAP OBJECT
-                        Navigator.pop(context),
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ObjectCreateScreenWidget(
-                                    onCreate: (object) =>
-                                        {debugPrint('Object did create')})))
+                                    address: address,
+                                    lat: position.latitude,
+                                    long: position.longitude,
+                                    onCreate: (object) => {
+                                          Toast().showTopToast(context,
+                                              '${Titles.object} ${object.name} добавлен!'),
+                                          getObjectList()
+                                        })))
                       }))
         });
   }
 
-  void showMapObjectSheet(BuildContext context) {
+  void showMapObjectSheet(BuildContext context, String id) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => MapObjectScreenWidget(mapObject: MapObject()));
+        builder: (context) => MapObjectScreenWidget(
+            object: objects.firstWhere((element) => element.id == id)));
   }
 
   void showSearchMapObjectSheet(BuildContext context) {
@@ -159,13 +193,13 @@ class MapViewModel with ChangeNotifier {
   // MARK: - GEOCODING
 
   Future getUserLocation() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.bestForNavigation);
+    if (hasPermission) {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.bestForNavigation);
 
-    _userPosition = LatLng(position.latitude, position.longitude);
-    _position ??= _userPosition;
-
-    updatePlaces();
+      _userPosition = LatLng(position.latitude, position.longitude);
+      _position ??= _userPosition;
+    }
   }
 
   Future getAddressName() async {
@@ -267,30 +301,29 @@ class MapViewModel with ChangeNotifier {
   }
 
   Future updatePlaces() async {
-    if (_position != null) {
-      places = [
-        for (int i = 0; i < 4; i++)
-          Place(
-              name: 'Place $i',
-              latLng: LatLng(_position!.latitude + i * 0.01,
-                  _position!.longitude + i * 0.01)),
-        for (int i = 0; i < 4; i++)
-          Place(
-              name: 'Restaraunt',
-              latLng: LatLng(_position!.latitude - i * 0.01,
-                  _position!.longitude + i * 0.01)),
-        for (int i = 0; i < 4; i++)
-          Place(
-              name: 'Market',
-              latLng: LatLng(_position!.latitude - i * 0.01,
-                  _position!.longitude + i * 0.01)),
-        for (int i = 0; i < 4; i++)
-          Place(
-              name: 'Place $i',
-              latLng: LatLng(_position!.latitude - i * 0.01,
-                  _position!.longitude + i * 0.01)),
-      ];
+    places.clear();
+
+    if (objects.isNotEmpty) {
+      objects.forEach((element) {
+        places.add(
+            Place(name: element.id, latLng: LatLng(element.lat, element.long)));
+      });
     }
+
+    //  places = [
+    //     Place(
+    //         name: 'Place',
+    //         latLng: LatLng(55.828649551928535, 49.13686567701648)),
+    //     Place(
+    //         name: 'Place',
+    //         latLng: LatLng(55.83017411585656, 49.13622194684715)),
+    //     Place(
+    //         name: 'Place',
+    //         latLng: LatLng(55.82811925481553, 49.13495594418079)),
+    //     Place(
+    //         name: 'Place',
+    //         latLng: LatLng(55.82781192022498, 49.13759523787506)),
+    //   ];
   }
 
   // MARK: -
@@ -298,12 +331,6 @@ class MapViewModel with ChangeNotifier {
 
   void onCameraMove(CameraPosition position) {
     _position = position.target;
-    notifyListeners();
-  }
-
-  Future reset() async {
-    loadingStatus = LoadingStatus.empty;
-    _error = '';
-    notifyListeners();
+    getObjectList();
   }
 }

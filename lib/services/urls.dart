@@ -91,8 +91,11 @@ const chatsUrl = baseUrl + 'chat/chats';
 const unreadMessageUrl = baseUrl + 'chat/unread-messages-count';
 const chatDmUrl = baseUrl + 'chat/dm';
 const messageUrl = baseUrl + 'chat/messages';
+const participants = baseUrl + 'chat/participants';
 const chatFileUrl = baseUrl + 'chat/file';
 const messageReadUrl = baseUrl + 'chat/read';
 const messageMediaUrl = baseUrl + 'resourses/message-file/';
 
 const documentUrl = baseUrl + 'document/list';
+
+const notificationUrl = baseUrl + 'notification/';

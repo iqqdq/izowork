@@ -8,10 +8,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/entities/response/object_stage.dart';
-import 'package:izowork/entities/response/object_type.dart';
 import 'package:izowork/entities/response/phase.dart';
-import 'package:izowork/repositories/object_repository.dart';
 import 'package:izowork/repositories/phase_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/documents/documents_screen.dart';
@@ -31,14 +28,6 @@ class ObjectPageViewModel with ChangeNotifier {
 
   Object? _object;
 
-  ObjectStage? _objectStage;
-
-  List<ObjectStage> _objectStages = [];
-
-  ObjectType? _objectType;
-
-  List<ObjectType> _objectTypes = [];
-
   List<Phase> _phases = [];
 
   int _downloadIndex = -1;
@@ -51,72 +40,18 @@ class ObjectPageViewModel with ChangeNotifier {
     return _downloadIndex;
   }
 
-  List<ObjectType> get objectTypes {
-    return _objectTypes;
-  }
-
-  ObjectType? get objectType {
-    return _objectType;
-  }
-
-  ObjectStage? get objectStage {
-    return _objectStage;
-  }
-
-  List<ObjectStage> get objectStages {
-    return _objectStages;
-  }
-
   List<Phase> get phases {
     return _phases;
   }
 
   ObjectPageViewModel(this.selectedObject) {
     _object = selectedObject;
-    notifyListeners();
 
-    getTypeList();
+    getPhaseList();
   }
 
   // MARK: -
   // MARK: - API CALL
-
-  Future getTypeList() async {
-    await ObjectRepository()
-        .getObjectTypes()
-        .then((response) => {
-              if (response is List<ObjectType>)
-                {
-                  _objectTypes = response,
-                  _objectTypes.forEach((element) {
-                    if (_object?.objectTypeId == element.id) {
-                      _objectType = element;
-                      return;
-                    }
-                  })
-                }
-            })
-        .then((value) => getStageList());
-  }
-
-  Future getStageList() async {
-    await ObjectRepository()
-        .getObjectStages()
-        .then((response) => {
-              if (response is List<ObjectStage>)
-                {
-                  loadingStatus = LoadingStatus.completed,
-                  _objectStages = response,
-                  _objectStages.forEach((element) {
-                    if (_object?.objectStageId == element.id) {
-                      _objectStage = element;
-                      return;
-                    }
-                  })
-                }
-            })
-        .then((value) => {notifyListeners(), getPhaseList()});
-  }
 
   Future getPhaseList() async {
     await PhaseRepository()
@@ -216,12 +151,10 @@ class ObjectPageViewModel with ChangeNotifier {
   }
 
   void showDialogScreen(BuildContext context) {
-    if (object!.chat != null) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DialogScreenWidget(
-                  chat: object!.chat!, onPop: (message) => null)));
-    }
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DialogScreenWidget(
+                chat: object!.chat!, onPop: (message) => null)));
   }
 }

@@ -23,16 +23,12 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
   final Completer<GoogleMapController> _completer = Completer();
   late GoogleMapController _googleMapController;
+
   late MapViewModel _mapViewModel;
   ClusterManager? _clusterManager;
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -47,7 +43,9 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     return ClusterManager<Place>(
         _mapViewModel.places, _mapViewModel.updateMarkers,
         markerBuilder: _markerBuilder,
-        levels: [1.0, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 20.0]);
+        levels: [1.0, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 18.0],
+        extraPercent: 0.1,
+        stopClusteringZoom: 18.0);
   }
 
   Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
@@ -57,11 +55,30 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           position: cluster.location,
           onTap: () {
             debugPrint('---- $cluster');
-            for (var p in cluster.items) {
-              debugPrint(p.name);
+            for (var item in cluster.items) {
+              debugPrint(item.name);
             }
 
-            _mapViewModel.showMapObjectSheet(context);
+            _googleMapController
+                .animateCamera(CameraUpdate.newCameraPosition(
+                    CameraPosition(target: cluster.location, zoom: 18.0)))
+                .then((value) => {
+                      if (cluster.isMultiple)
+                        {
+                          if (_mapViewModel.position != null)
+                            {
+                              // _clusterManager?.onCameraMove(CameraPosition(
+                              // target: _mapViewModel.position!)),
+                              _clusterManager?.setItems(_mapViewModel.places),
+                              _clusterManager?.updateMap()
+                            }
+                        }
+                      else
+                        {
+                          _mapViewModel.showMapObjectSheet(
+                              context, cluster.items.first.name)
+                        }
+                    });
           },
           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
               text: cluster.isMultiple ? cluster.count.toString() : null),
@@ -134,37 +151,54 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           myLocationButtonEnabled: false,
           myLocationEnabled: _mapViewModel.hasPermission,
           initialCameraPosition: CameraPosition(
-            target: _mapViewModel.position ??
-                const LatLng(51.1589167131802, 71.4390678226777),
-            zoom: 16.0,
-          ),
+              target: _mapViewModel.position ??
+                  const LatLng(51.15935891650487, 71.46291020823648),
+              zoom: 16.0),
           markers: _mapViewModel.markers,
           onMapCreated: (controller) => {
                 _googleMapController = controller,
+
+                /// SET COMPLETER
                 _completer.complete(controller),
+
+                /// SET CLUSTER
                 _clusterManager?.setMapId(_googleMapController.mapId),
+                _clusterManager?.setItems(_mapViewModel.places),
 
                 /// UPDATE LOCATION
                 if (_mapViewModel.hasPermission)
                   {
                     _mapViewModel.getUserLocation().then((value) =>
-                        _mapViewModel.showUserLocation(_googleMapController))
+                        _mapViewModel.getObjectList().then((value) =>
+                            _mapViewModel.updatePlaces().then((value) => {
+                                  /// UPDATE CLUSTER
+                                  _clusterManager
+                                      ?.setItems(_mapViewModel.places),
+                                  _clusterManager?.updateMap(),
+                                })))
+
+                    // .then((value) =>
+                    // _mapViewModel.showUserLocation(_googleMapController))
                   }
               },
           onCameraMove: (position) => {
-                /// UPDATE CAMERA POSITION
+                /// UPDATE MAP CAMERA POSITION
                 _mapViewModel.onCameraMove(position),
-                _clusterManager?.onCameraMove
+
+                /// UPDATE CLUSTER MANAGER POSITION
+                _clusterManager?.onCameraMove(position)
               },
           onCameraIdle: () => {
-                _mapViewModel.updatePlaces().then((value) => {
-                      _clusterManager?.onCameraMove,
-                      _clusterManager?.setItems(_mapViewModel.places),
-                    })
-                // .then((value) => _mapViewModel.getAddressName())
+                /// GET NEW COORD DATA
+                _mapViewModel.getObjectList().then(
+                    (value) => _mapViewModel.updatePlaces().then((value) => {
+                          /// UPDATE CLUSTER
+                          _clusterManager?.setItems(_mapViewModel.places),
+                          _clusterManager?.updateMap(),
+                        }))
               },
           onLongPress: (position) =>
-              _mapViewModel.showAddMapObjectSheet(context)),
+              _mapViewModel.showAddMapObjectSheet(context, position)),
 
       /// MAP CONTROL
       Align(

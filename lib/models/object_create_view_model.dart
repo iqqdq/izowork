@@ -17,8 +17,10 @@ import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/object_type.dart';
 import 'package:izowork/entities/response/object_stage.dart';
+import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/object_repository.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
+import 'package:izowork/screens/search_user/search_user_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -43,6 +45,8 @@ class ObjectCreateViewModel with ChangeNotifier {
   ObjectStage? _objectStage;
 
   List<ObjectStage> _objectStages = [];
+
+  User? _manager;
 
   Company? _designer;
 
@@ -88,6 +92,10 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   List<ObjectType> get objectTypes {
     return _objectTypes;
+  }
+
+  User? get manager {
+    return _manager;
   }
 
   Company? get designer {
@@ -171,7 +179,7 @@ class ObjectCreateViewModel with ChangeNotifier {
         coord.contains('.') &&
         coord.contains(',')) {
       double? lat = double.tryParse(coord.split(',')[0]);
-      double? long = double.tryParse(coord.split(',')[0]);
+      double? long = double.tryParse(coord.split(',')[1]);
 
       if (lat != null && long != null) {
         loadingStatus = LoadingStatus.searching;
@@ -238,7 +246,7 @@ class ObjectCreateViewModel with ChangeNotifier {
         coord.contains('.') &&
         coord.contains(',')) {
       double? lat = double.tryParse(coord.split(',')[0]);
-      double? long = double.tryParse(coord.split(',')[0]);
+      double? long = double.tryParse(coord.split(',')[1]);
 
       if (lat != null && long != null) {
         loadingStatus = LoadingStatus.searching;
@@ -251,6 +259,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                 area: area ?? object?.area,
                 constructionPeriod:
                     constructionPeriod ?? object?.constructionPeriod,
+                managerId: _manager?.id ?? object?.managerId,
                 contractorId: _contractor?.id ?? object?.contractorId,
                 customerId: _customer?.id ?? object?.customerId,
                 designerId: _designer?.id ?? object?.designerId,
@@ -469,6 +478,23 @@ class ObjectCreateViewModel with ChangeNotifier {
                     })
                   }));
     }
+  }
+
+  void showSearchUserSheet(BuildContext context, int index) {
+    showCupertinoModalBottomSheet(
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (context) => SearchUserScreenWidget(
+            title: Titles.manager,
+            isRoot: true,
+            onFocus: () => {},
+            onPop: (user) => {
+                  _manager = user,
+                  notifyListeners(),
+                  Navigator.pop(context),
+                }));
   }
 
   void showSearchCompanySheet(BuildContext context, int index) {

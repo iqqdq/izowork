@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
+import 'package:izowork/entities/response/object_stage.dart';
+import 'package:izowork/entities/response/object_type.dart';
 import 'package:izowork/entities/response/user.dart';
 
 Object objectFromJson(String str) => Object.fromJson(json.decode(str));
@@ -25,7 +27,9 @@ class Object {
       this.designerId,
       this.customerId,
       this.objectTypeId,
+      this.objectType,
       this.objectStageId,
+      this.objectStage,
       required this.files,
       this.managerId,
       this.manager,
@@ -50,7 +54,9 @@ class Object {
   String? designerId;
   String? customerId;
   String? objectTypeId;
+  ObjectType? objectType;
   String? objectStageId;
+  ObjectStage? objectStage;
   List<Document> files;
   String? managerId;
   User? manager;
@@ -80,7 +86,13 @@ class Object {
       designerId: json["designer_id"],
       customerId: json["customer_id"],
       objectTypeId: json["object_type_id"],
+      objectType: json["object_type_id"] == null
+          ? null
+          : ObjectType.fromJson(json["object_type"]),
       objectStageId: json["object_stage_id"],
+      objectStage: json["object_stage"] == null
+          ? null
+          : ObjectStage.fromJson(json["object_stage"]),
       files: json["files"] == null
           ? []
           : List<Document>.from(json["files"].map((x) => Document.fromJson(x))),

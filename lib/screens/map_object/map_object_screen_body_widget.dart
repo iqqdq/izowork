@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/map_object.dart';
 import 'package:izowork/models/map_object_view_model.dart';
+import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
@@ -11,10 +11,7 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class MapObjectScreenBodyWidget extends StatelessWidget {
-  final MapObject mapObject;
-
-  const MapObjectScreenBodyWidget({Key? key, required this.mapObject})
-      : super(key: key);
+  const MapObjectScreenBodyWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +43,19 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       children: [
                         /// PHOTO LIST VIEW
-                        SizedBox(
-                            height: 88.0,
+                        AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            margin: EdgeInsets.only(
+                                bottom:
+                                    _mapViewModel.urls.isEmpty ? 0.0 : 16.0),
+                            height: _mapViewModel.urls.isEmpty ? 0.0 : 88.0,
                             child: ListView.builder(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0),
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 shrinkWrap: true,
-                                itemCount: 10,
+                                itemCount: _mapViewModel.urls.length,
                                 itemBuilder: (context, index) {
                                   return Container(
                                       width: 84.0,
@@ -65,81 +66,93 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                                             BorderRadius.circular(10.0),
                                       ),
                                       margin: EdgeInsets.only(
-                                          right: index == 10 ? 0.0 : 10.0),
+                                          right: index ==
+                                                  _mapViewModel.urls.length - 1
+                                              ? 0.0
+                                              : 10.0),
                                       child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(10.0),
                                           child: CachedNetworkImage(
-                                              imageUrl:
-                                                  'https://thumbs.dreamstime.com/b/construction-buildings-17322972.jpg',
-                                              // cacheKey: ,
+                                              imageUrl: objectMediaUrl +
+                                                  _mapViewModel.urls[index],
+                                              cacheKey:
+                                                  _mapViewModel.urls[index],
                                               width: 84.0,
                                               height: 88.0,
+                                              memCacheWidth: 84,
                                               fit: BoxFit.cover)));
                                 })),
-                        const SizedBox(height: 16.0),
 
                         /// TITLE
-                        const TitleWidget(text: 'Название объекта'),
+                        TitleWidget(text: _mapViewModel.object.name),
                         const SizedBox(height: 16.0),
 
                         /// RESPONSIBLE
                         const TitleWidget(
                             text: Titles.responsible, isSmall: true),
                         const SizedBox(height: 4.0),
-                        const SubtitleWidget(text: 'Имя Фамилия'),
+                        SubtitleWidget(
+                            text: _mapViewModel.object.manager?.name ?? '-'),
                         const SizedBox(height: 16.0),
 
                         /// TYPE
                         const TitleWidget(
                             text: Titles.objectType, isSmall: true),
                         const SizedBox(height: 4.0),
-                        const SubtitleWidget(text: 'Тип'),
+                        SubtitleWidget(
+                            text: _mapViewModel.object.objectType?.name ?? '-'),
                         const SizedBox(height: 16.0),
 
                         /// ADDRESS
                         const TitleWidget(text: Titles.address, isSmall: true),
                         const SizedBox(height: 4.0),
-                        const SubtitleWidget(text: 'Адрес'),
+                        SubtitleWidget(text: _mapViewModel.object.address),
                         const SizedBox(height: 16.0),
 
                         /// DEVELOPER
                         const TitleWidget(
                             text: Titles.developer, isSmall: true),
                         const SizedBox(height: 4.0),
-                        const SubtitleWidget(text: 'Название'),
+                        SubtitleWidget(
+                            text: _mapViewModel.object.contractor?.name ?? '-'),
                         const SizedBox(height: 16.0),
 
                         /// REALIZATION STAGE
                         const TitleWidget(
                             text: Titles.realizationStage, isSmall: true),
                         const SizedBox(height: 4.0),
-                        const SubtitleWidget(text: 'Стадия'),
+                        SubtitleWidget(
+                            text:
+                                _mapViewModel.object.objectStage?.name ?? '-'),
                         const SizedBox(height: 16.0),
 
                         /// EFFECTIVENESS
                         const TitleWidget(
                             text: Titles.effectiveness, isSmall: true),
                         const SizedBox(height: 4.0),
-                        const SubtitleWidget(text: '30 %'),
+                        SubtitleWidget(
+                            text: '${_mapViewModel.object.efficiency} %'),
                         const SizedBox(height: 16.0)
                       ]),
-                  Row(children: [
-                    Expanded(
-                        child: BorderButtonWidget(
-                            title: Titles.showDetail,
-                            margin:
-                                const EdgeInsets.only(left: 16.0, right: 5.0),
-                            onTap: () =>
-                                _mapViewModel.showObjectScreen(context))),
-                    Expanded(
-                        child: BorderButtonWidget(
-                            title: Titles.chat,
-                            margin:
-                                const EdgeInsets.only(left: 5.0, right: 16.0),
-                            onTap: () =>
-                                _mapViewModel.showDialogScreen(context))),
-                  ])
+                  Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(children: [
+                        Expanded(
+                            child: BorderButtonWidget(
+                                title: Titles.showDetail,
+                                margin: EdgeInsets.zero,
+                                onTap: () =>
+                                    _mapViewModel.showObjectScreen(context))),
+                        _mapViewModel.object.chat == null
+                            ? Container()
+                            : Expanded(
+                                child: BorderButtonWidget(
+                                    title: Titles.chat,
+                                    margin: EdgeInsets.zero,
+                                    onTap: () => _mapViewModel
+                                        .showDialogScreen(context))),
+                      ]))
                 ])));
   }
 }

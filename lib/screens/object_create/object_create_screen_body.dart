@@ -18,9 +18,13 @@ import 'package:izowork/views/separator_widget.dart';
 import 'package:provider/provider.dart';
 
 class ObjectCreateScreenBodyWidget extends StatefulWidget {
+  final String? address;
+  final double? lat;
+  final double? long;
   final Function(Object) onCreate;
 
-  const ObjectCreateScreenBodyWidget({Key? key, required this.onCreate})
+  const ObjectCreateScreenBodyWidget(
+      {Key? key, this.address, this.lat, this.long, required this.onCreate})
       : super(key: key);
 
   @override
@@ -83,6 +87,12 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
 
         _kisoTextEditingController.text =
             _objectCreateViewModel.object!.kiso ?? '';
+      } else {
+        _addressTextEditingController.text = widget.address ?? '';
+        _coordinatesTextEditingController.text =
+            widget.lat == null || widget.long == null
+                ? ''
+                : '${widget.lat}, ${widget.long}';
       }
     });
   }
@@ -186,6 +196,18 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 onTap: () => setState,
                                 onChange: (text) => setState(() {})),
 
+                            /// MANAGER SELECTION INPUT
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                isVertical: true,
+                                title: Titles.manager,
+                                value: _objectCreateViewModel.manager?.name ??
+                                    _objectCreateViewModel
+                                        .object?.manager?.name ??
+                                    Titles.notSelected,
+                                onTap: () => _objectCreateViewModel
+                                    .showSearchUserSheet(context, 0)),
+
                             /// GENERAL CONTRACTOR SELECTION INPUT
                             SelectionInputWidget(
                                 margin: const EdgeInsets.only(bottom: 10.0),
@@ -198,18 +220,6 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                         Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchCompanySheet(context, 0)),
-
-                            /// DEVELOPER SELECTION INPUT
-                            // SelectionInputWidget(
-                            //     margin: const EdgeInsets.only(bottom: 10.0),
-                            //     isVertical: true,
-                            //     title: Titles.developer,
-                            //     value: _objectCreateViewModel.object == null ?
-                            //         _objectCreateViewModel.developer?.name ??
-                            //             Titles.notSelected : _objectCreateViewModel.object?.developer?.name ??
-                            //             Titles.notSelected,
-                            //     onTap: () => _objectCreateViewModel
-                            //         .showSearchCompanySheet(context, 1)),
 
                             /// CUSTOMER SELECTION INPUT
                             SelectionInputWidget(

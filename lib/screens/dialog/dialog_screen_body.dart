@@ -1,10 +1,11 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'package:blur/blur.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/chat_connect_request.dart';
@@ -42,6 +43,8 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   final List<Widget> _bubbles = [];
 
   late DialogViewModel _dialogViewModel;
+
+  bool _isGroupChat = false;
 
   int _count = 0;
 
@@ -119,7 +122,6 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   }
 
   Future _updateBubbles(bool animate) async {
-    bool isGroupChat = _dialogViewModel.chat.chatType == 'GROUP';
     int index = 0;
 
     _bubbles.clear();
@@ -155,21 +157,22 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                             : 10.0
                         : 0.0,
                     isMine: isMine,
+                    isRead: element.readAt != null,
                     isFile: isFile,
                     isDownloading: _dialogViewModel.downloadIndex == index,
                     isAudio: isAudio,
                     showDate: index == _dialogViewModel.messages.length - 1
                         ? true
                         : !_isSamePrevDate(index),
-                    showName: isGroupChat
+                    showName: _isGroupChat
                         ? !_isSamePrevAuthor(index) ||
                             !_isSamePrevDate(index) &&
                                 !_isSameNextAuthor(index) ||
                             !_isSamePrevDate(index) && !_isSamePrevAuthor(index)
                         : false,
                     isGroupLastMessage:
-                        isGroupChat ? !_isSameNextAuthor(index) : false,
-                    user: isGroupChat ? element.user : null,
+                        _isGroupChat ? !_isSameNextAuthor(index) : false,
+                    user: _isGroupChat ? element.user : null,
                     text: isFile
                         ? element.files.first.name
                         : isAudio
@@ -243,9 +246,9 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   Widget build(BuildContext context) {
     _dialogViewModel = Provider.of<DialogViewModel>(context, listen: true);
 
-    String? _url =
-        _dialogViewModel.chat.avatar ?? _dialogViewModel.chat.user?.avatar;
-    ;
+    _isGroupChat = _dialogViewModel.chat.chatType == 'GROUP';
+
+    String? _url = _dialogViewModel.chat.user?.avatar;
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -270,23 +273,36 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
             title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               /// AVATAR
               Stack(children: [
-                SvgPicture.asset('assets/ic_avatar.svg',
-                    color: HexColors.grey40,
-                    width: 24.0,
-                    height: 24.0,
-                    fit: BoxFit.cover),
+                Container(
+                    width: 30.0,
+                    height: 30.0,
+                    padding: EdgeInsets.all(_isGroupChat ? 6.0 : 0.0),
+                    decoration: BoxDecoration(
+                        color: _isGroupChat
+                            ? HexColors.additionalViolet.withOpacity(0.8)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(15.0)),
+                    child: SvgPicture.asset(
+                        _isGroupChat
+                            ? 'assets/ic_group.svg'
+                            : 'assets/ic_avatar.svg',
+                        color:
+                            _isGroupChat ? HexColors.white : HexColors.grey30,
+                        width: 30.0,
+                        height: 30.0,
+                        fit: BoxFit.cover)),
                 _url == null
                     ? Container()
                     : ClipRRect(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(15.0),
                         child: CachedNetworkImage(
                             cacheKey: _url,
                             imageUrl: avatarUrl + _url,
-                            width: 24.0,
-                            height: 24.0,
+                            width: 30.0,
+                            height: 30.0,
                             fit: BoxFit.cover)),
               ]),
-              const SizedBox(width: 10.0),
+              const SizedBox(width: 12.0),
 
               /// CHAT/USER NAME
               Expanded(
@@ -324,7 +340,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                                     primary: false,
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.only(
-                                        left: 10.0, right: 10.0),
+                                        top: 12.0, left: 10.0, right: 10.0),
                                     itemCount: _bubbles.length,
                                     itemBuilder: (context, index) =>
                                         _bubbles[index])))))),
@@ -399,6 +415,57 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                               fontFamily: 'Inter',
                               fontSize: 16.0,
                               color: HexColors.grey50))))
+              : Container(),
+
+          /// SHOW USER LIST
+          _isGroupChat
+              ? AnimatedOpacity(
+                  opacity: _dialogViewModel.loadingStatus ==
+                              LoadingStatus.searching &&
+                          _dialogViewModel.messages.isEmpty
+                      ? 0.0
+                      : _scrollController.positions.isEmpty
+                          ? 0.0
+                          : _scrollController.position.userScrollDirection ==
+                                      ScrollDirection.reverse ||
+                                  _scrollController.position.pixels ==
+                                      _scrollController.position.maxScrollExtent
+                              ? 1.0
+                              : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: Container(
+                      margin: const EdgeInsets.only(top: 12.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                                onTap: () => _dialogViewModel
+                                    .showGroupChatUsersScreen(context),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 0.5,
+                                            color: HexColors.additionalViolet),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0)),
+                                    child: Blur(
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
+                                        overlay: Center(
+                                            child: Text(Titles.showAllUsers,
+                                                style: TextStyle(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    color: HexColors
+                                                        .additionalViolet,
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'PT Root UI'))),
+                                        child: Container(
+                                            width: 272.0,
+                                            height: 40.0,
+                                            decoration: BoxDecoration(color: HexColors.white10, borderRadius: BorderRadius.circular(16.0))))))
+                          ])))
               : Container(),
 
           /// INDICATOR

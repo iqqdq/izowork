@@ -11,6 +11,7 @@ import 'package:just_audio/just_audio.dart';
 class BubbleWidget extends StatefulWidget {
   final bool animate;
   final bool isMine;
+  final bool isRead;
   final bool isAudio;
   final bool isFile;
   final bool isDownloading;
@@ -28,6 +29,7 @@ class BubbleWidget extends StatefulWidget {
   const BubbleWidget(
       {Key? key,
       required this.isMine,
+      required this.isRead,
       required this.showName,
       required this.isFile,
       required this.isDownloading,
@@ -359,9 +361,9 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                                   ? MainAxisAlignment.spaceBetween
                                   : MainAxisAlignment.start,
                               children: [
-                                widget.isMine
-                                    ? SvgPicture.asset('assets/ic_unread.svg')
-                                    : Container(),
+                                widget.isMine && widget.isRead
+                                    ? SvgPicture.asset('assets/ic_read.svg')
+                                    : SvgPicture.asset('assets/ic_unread.svg'),
                                 time
                               ],
                             )

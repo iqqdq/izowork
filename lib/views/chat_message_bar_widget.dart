@@ -214,7 +214,7 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     widget.isSending == null
                         ? _sendButton
-                        : widget.isSending!
+                        : widget.isSending! == true
                             ? Transform.scale(
                                 scale: 0.6,
                                 child: CircularProgressIndicator(
@@ -265,12 +265,6 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                               widget.onRecordStarted!()
                             },
                         onDraggableCanceled: (valocity, offset) => {
-                              setState(() => {
-                                    _isRecording = false,
-                                    _seconds = 0,
-                                    _minutes = 0
-                                  }),
-                              _timer?.cancel(),
                               if (_scrollController.position.pixels <
                                   _maxScroll)
                                 {
@@ -280,19 +274,19 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                                   if (_seconds > 2)
                                     {
                                       widget.onRecord!(),
-                                    },
-
-                                  setState(() => {
-                                        _isRecording = false,
-                                        _seconds = 0,
-                                        _minutes = 0
-                                      }),
+                                    }
                                 }
                               else
                                 {
                                   /// CANCEL RECORD AUDIO
                                   widget.onRecordCanceled!(),
-                                }
+                                },
+                              setState(() => {
+                                    _isRecording = false,
+                                    _seconds = 0,
+                                    _minutes = 0
+                                  }),
+                              _timer?.cancel(),
                             })
               ]),
 

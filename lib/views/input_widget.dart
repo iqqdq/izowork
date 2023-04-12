@@ -109,6 +109,12 @@ class _InputWidgetState extends State<InputWidget> {
                     labelText: _isSearchInput ? null : widget.placeholder,
                     hintText: _isSearchInput ? widget.placeholder : null,
                     labelStyle: _textStyle.copyWith(color: HexColors.grey30),
+                    suffixIconConstraints: BoxConstraints(
+                        maxWidth: widget.focusNode.hasFocus &&
+                                widget.textEditingController.text.isNotEmpty &&
+                                widget.onClearTap != null
+                            ? 44.0
+                            : 16.0),
                     suffixIcon: widget.focusNode.hasFocus &&
                             widget.textEditingController.text.isNotEmpty &&
                             widget.onClearTap != null
@@ -124,6 +130,7 @@ class _InputWidgetState extends State<InputWidget> {
                             },
                           )
                         : IconButton(
+                            iconSize: 0.0,
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
                             icon: SvgPicture.asset('assets/ic_clear.svg',

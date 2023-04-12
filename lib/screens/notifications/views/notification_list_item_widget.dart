@@ -5,9 +5,13 @@ import 'package:izowork/views/title_widget.dart';
 class NotificationListItemWidget extends StatelessWidget {
   final DateTime dateTime;
   final bool isUnread;
+  final VoidCallback onTap;
 
   const NotificationListItemWidget(
-      {Key? key, required this.dateTime, required this.isUnread})
+      {Key? key,
+      required this.dateTime,
+      required this.isUnread,
+      required this.onTap})
       : super(key: key);
 
   @override
@@ -36,39 +40,45 @@ class NotificationListItemWidget extends StatelessWidget {
                 color: isUnread ? HexColors.primaryMain : HexColors.grey30)),
         child: Material(
             color: Colors.transparent,
-            child: ListView(
-                padding: const EdgeInsets.all(16.0),
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        /// DATE
-                        TitleWidget(
-                            text: '$_minute:$_hour, $_day.$_month.$_year',
-                            padding: EdgeInsets.zero,
-                            isSmall: true),
+            child: InkWell(
+                onTap: () => onTap(),
+                highlightColor: HexColors.grey20,
+                splashColor: Colors.transparent,
+                borderRadius: BorderRadius.circular(16.0),
+                child: ListView(
+                    padding: const EdgeInsets.all(16.0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    children: [
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            /// DATE
+                            TitleWidget(
+                                text: '$_minute:$_hour, $_day.$_month.$_year',
+                                padding: EdgeInsets.zero,
+                                isSmall: true),
 
-                        /// INDICATOR
-                        isUnread
-                            ? Container(
-                                width: 9.0,
-                                height: 9.0,
-                                decoration: BoxDecoration(
-                                    color: HexColors.primaryMain,
-                                    borderRadius: BorderRadius.circular(4.5)),
-                              )
-                            : Container()
-                      ]),
-                  const SizedBox(height: 6.0),
+                            /// INDICATOR
+                            isUnread
+                                ? Container(
+                                    width: 9.0,
+                                    height: 9.0,
+                                    decoration: BoxDecoration(
+                                        color: HexColors.primaryMain,
+                                        borderRadius:
+                                            BorderRadius.circular(4.5)),
+                                  )
+                                : Container()
+                          ]),
+                      const SizedBox(height: 6.0),
 
-                  /// TEXT
-                  Text('Подходит дедлайн по задаче “Название задачи”',
-                      style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 16.0,
-                          fontFamily: 'PT Root UI')),
-                ])));
+                      /// TEXT
+                      Text('Подходит дедлайн по задаче “Название задачи”',
+                          style: TextStyle(
+                              color: HexColors.black,
+                              fontSize: 16.0,
+                              fontFamily: 'PT Root UI')),
+                    ]))));
   }
 }

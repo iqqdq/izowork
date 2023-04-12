@@ -157,6 +157,7 @@ abstract class Titles {
   static const dealCalendar = 'Календарь сделок';
   static const taskCalendar = 'Календарь задач';
   static const staff = 'Сотрудники';
+  static const participants = 'Участники чата';
   static const phone = 'Телефон';
   static const email = 'Электронная почта';
   static const login = 'Email';
@@ -247,6 +248,7 @@ abstract class Titles {
   static const infoWasAdded = 'Информация добавлена';
   static const infoWasUpdated = 'Информация обнавлена';
   static const newsWasAdded = 'Новость добавлена';
+  static const showAllUsers = 'Показать всех участников';
 
   /// ALERTS
   static const warning = 'Внимание';

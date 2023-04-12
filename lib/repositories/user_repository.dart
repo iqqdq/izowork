@@ -49,6 +49,32 @@ class UserRepository {
     }
 
     dynamic json = await WebService().get(url);
+
+    List<User> users = [];
+
+    try {
+      json['users'].forEach((element) {
+        users.add(User.fromJson(element));
+      });
+      return users;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> getParticipants(
+      {required Pagination pagination,
+      required String id,
+      String? search}) async {
+    var url = participants +
+        '?offset=${pagination.offset}&limit=${pagination.size}&chat_id=$id';
+
+    if (search != null) {
+      url += '&q=$search';
+    }
+
+    dynamic json = await WebService().get(url);
+
     List<User> users = [];
 
     try {

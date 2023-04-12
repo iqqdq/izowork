@@ -23,6 +23,8 @@ class ChatListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     initializeDateFormatting(locale, null);
 
+    bool _isGroupChat = chat.chatType == "GROUP";
+
     DateTime? dateTime =
         chat.lastMessage == null ? null : chat.lastMessage!.createdAt.toLocal();
 
@@ -63,7 +65,7 @@ class ChatListItemWidget extends StatelessWidget {
         ? false
         : !isAudio && chat.lastMessage!.files.isNotEmpty;
 
-    String? _url = chat.avatar ?? chat.user?.avatar;
+    String? _url = chat.user?.avatar;
 
     return Container(
         decoration: BoxDecoration(
@@ -84,11 +86,26 @@ class ChatListItemWidget extends StatelessWidget {
                     child: Row(children: [
                       /// CREATOR AVATAR
                       Stack(children: [
-                        SvgPicture.asset('assets/ic_avatar.svg',
-                            color: HexColors.grey40,
+                        Container(
                             width: 40.0,
                             height: 40.0,
-                            fit: BoxFit.cover),
+                            padding: EdgeInsets.all(_isGroupChat ? 8.0 : 0.0),
+                            decoration: BoxDecoration(
+                                color: _isGroupChat
+                                    ? HexColors.additionalViolet
+                                        .withOpacity(0.8)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(20.0)),
+                            child: SvgPicture.asset(
+                                _isGroupChat
+                                    ? 'assets/ic_group.svg'
+                                    : 'assets/ic_avatar.svg',
+                                color: _isGroupChat
+                                    ? HexColors.white
+                                    : HexColors.grey30,
+                                width: 40.0,
+                                height: 40.0,
+                                fit: BoxFit.cover)),
                         _url == null
                             ? Container()
                             : ClipRRect(

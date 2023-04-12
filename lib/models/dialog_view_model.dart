@@ -17,6 +17,7 @@ import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/message.dart';
 import 'package:izowork/repositories/dialog_repository.dart';
 import 'package:izowork/screens/dialog/views/dialog_add_task_widget.dart';
+import 'package:izowork/screens/participants/participants_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/services/urls.dart';
@@ -70,15 +71,15 @@ class DialogViewModel with ChangeNotifier {
   DialogViewModel(this.socket, this.chat);
 
   Future connectSocket() async {
-    _socket = socket ??
-        io(
-            'http://185.116.194.234/',
-            OptionBuilder()
-                .setTransports(['websocket']) // for Flutter or Dart VM
-                .disableAutoConnect() // disable auto-connection
-                .build());
+    _socket = socket;
 
     if (socket == null) {
+      _socket = io(
+          'http://185.116.194.234/',
+          OptionBuilder()
+              .setTransports(['websocket']) // for Flutter or Dart VM
+              .disableAutoConnect() // disable auto-connection
+              .build());
       _socket?.connect();
     }
   }
@@ -95,6 +96,7 @@ class DialogViewModel with ChangeNotifier {
         notifyListeners();
       });
     }
+
     await DialogRepository()
         .getMessages(pagination: pagination, id: chat.id)
         .then((response) => {
@@ -142,16 +144,16 @@ class DialogViewModel with ChangeNotifier {
     await DialogRepository()
         .addChatFile(MessageFileRequest(chat.id, file))
         .then((response) => {
+              // SHOW AUDIO BUTTON INSTEAD INDICATOR
+              _isSending = false,
+              notifyListeners(),
+
+              // SHOW ERROR
               if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 }
-            })
-        .then((value) => {
-              // SHOW AUDIO BUTTON INSTEAD INDICATOR
-              _isSending = false,
-              notifyListeners(),
             });
   }
 
@@ -207,7 +209,8 @@ class DialogViewModel with ChangeNotifier {
       _isSending = true;
       notifyListeners();
 
-      uploadFile(context, File(path));
+      Future.delayed(const Duration(milliseconds: 100),
+          () => uploadFile(context, File(path)));
     }
   }
 
@@ -274,6 +277,13 @@ class DialogViewModel with ChangeNotifier {
 
   // MARK: -
   // MARK: - PUSH
+
+  void showGroupChatUsersScreen(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ParticipantsScreenWidget(chat: chat)));
+  }
 
   void showAddTaskSheet(BuildContext context, String text) {
     showCupertinoModalBottomSheet(

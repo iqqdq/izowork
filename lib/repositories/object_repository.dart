@@ -79,6 +79,28 @@ class ObjectRepository {
     }
   }
 
+  Future<dynamic> getMapObjects({required List<String> params}) async {
+    var url = objectsUrl;
+
+    if (params.isNotEmpty) {
+      for (var element in params) {
+        url += element;
+      }
+    }
+
+    dynamic json = await WebService().get(url);
+    List<Object> objects = [];
+
+    try {
+      json['objects'].forEach((element) {
+        objects.add(Object.fromJson(element));
+      });
+      return objects;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
   Future<dynamic> createObject(ObjectRequest objectRequest) async {
     dynamic json = await WebService().post(objectCreateUrl, objectRequest);
 

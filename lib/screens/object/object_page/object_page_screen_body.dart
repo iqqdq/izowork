@@ -86,7 +86,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                         /// COORDINATES
                         const TitleWidget(
                             padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.address,
+                            text: Titles.coordinates,
                             isSmall: true),
                         GestureDetector(
                           onLongPress: () => _objectPageViewModel
@@ -103,6 +103,16 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                   ? '${_objectPageViewModel.selectedObject.lat}, ${_objectPageViewModel.selectedObject.long}'
                                   : '${_objectPageViewModel.object?.lat}, ${_objectPageViewModel.object?.long}'),
                         ),
+
+                        /// MANAGER
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.manager,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _objectPageViewModel.object?.manager?.name ??
+                                '-'),
 
                         /// GENERAL CONTRACTOR
                         const TitleWidget(
@@ -142,7 +152,11 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                             isSmall: true),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _objectPageViewModel.objectType?.name ?? '-'),
+                            text:
+                                _objectPageViewModel.object?.objectType?.name ??
+                                    _objectPageViewModel
+                                        .selectedObject.objectType?.name ??
+                                    '-'),
 
                         /// FLOOR COUNT
                         const TitleWidget(
@@ -183,8 +197,11 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                             isSmall: true),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
-                            text:
-                                _objectPageViewModel.objectStage?.name ?? '-'),
+                            text: _objectPageViewModel
+                                    .object?.objectStage?.name ??
+                                _objectPageViewModel
+                                    .selectedObject.objectStage?.name ??
+                                '-'),
 
                         /// KISO
                         const TitleWidget(
@@ -289,11 +306,13 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                 .showObjectAnalyticsPageViewScreen(context)),
 
                         /// SHOW CHAT BUTTON
-                        BorderButtonWidget(
-                            title: Titles.goChat,
-                            margin: const EdgeInsets.only(bottom: 30.0),
-                            onTap: () =>
-                                _objectPageViewModel.showDialogScreen(context)),
+                        _objectPageViewModel.object?.chat == null
+                            ? Container()
+                            : BorderButtonWidget(
+                                title: Titles.goChat,
+                                margin: const EdgeInsets.only(bottom: 30.0),
+                                onTap: () => _objectPageViewModel
+                                    .showDialogScreen(context)),
                       ]),
 
                   /// EDIT TASK BUTTON

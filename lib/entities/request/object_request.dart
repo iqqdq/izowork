@@ -8,6 +8,7 @@ class ObjectRequest {
     required this.address,
     this.area,
     this.constructionPeriod,
+    this.managerId,
     this.contractorId,
     this.customerId,
     this.designerId,
@@ -25,6 +26,7 @@ class ObjectRequest {
   String address;
   int? area;
   int? constructionPeriod;
+  String? managerId;
   String? contractorId;
   String? customerId;
   String? designerId;
@@ -42,6 +44,7 @@ class ObjectRequest {
         "address": address,
         "area": area,
         "construction_period": constructionPeriod,
+        "manager_id": managerId,
         "contractor_id": contractorId,
         "customer_id": customerId,
         "designer_id": designerId,
