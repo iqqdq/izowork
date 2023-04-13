@@ -83,8 +83,11 @@ class ObjectRepository {
     var url = objectsUrl;
 
     if (params.isNotEmpty) {
+      var index = 0;
       for (var element in params) {
-        url += element;
+        url +=
+            index == 0 ? '?${element.substring(1, element.length)}' : element;
+        index++;
       }
     }
 

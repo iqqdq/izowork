@@ -6,13 +6,29 @@ import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 
-class MapAddObjectWidget extends StatelessWidget {
+class MapAddObjectScreenWidget extends StatefulWidget {
   final String address;
   final VoidCallback onTap;
+  final VoidCallback onPop;
 
-  const MapAddObjectWidget(
-      {Key? key, required this.address, required this.onTap})
+  const MapAddObjectScreenWidget(
+      {Key? key,
+      required this.address,
+      required this.onTap,
+      required this.onPop})
       : super(key: key);
+
+  @override
+  _MapAddObjectScreenWidgetState createState() =>
+      _MapAddObjectScreenWidgetState();
+}
+
+class _MapAddObjectScreenWidgetState extends State<MapAddObjectScreenWidget> {
+  @override
+  void dispose() {
+    widget.onPop();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +51,12 @@ class MapAddObjectWidget extends StatelessWidget {
                   /// ADDRESS
                   const TitleWidget(text: Titles.address),
                   const SizedBox(height: 8.0),
-                  SubtitleWidget(text: address),
+                  SubtitleWidget(text: widget.address),
                   const SizedBox(height: 16.0),
 
                   /// BUTTON
-                  ButtonWidget(title: Titles.addObject, onTap: () => onTap())
+                  ButtonWidget(
+                      title: Titles.addObject, onTap: () => widget.onTap())
                 ])));
   }
 }

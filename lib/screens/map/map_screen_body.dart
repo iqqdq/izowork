@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/place_model.dart';
 import 'package:izowork/screens/map/views/map_control_widget.dart';
@@ -23,6 +25,8 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
   final Completer<GoogleMapController> _completer = Completer();
   late GoogleMapController _googleMapController;
+
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
   late MapViewModel _mapViewModel;
   ClusterManager? _clusterManager;
@@ -44,8 +48,35 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
         _mapViewModel.places, _mapViewModel.updateMarkers,
         markerBuilder: _markerBuilder,
         levels: [1.0, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 18.0],
-        extraPercent: 0.1,
-        stopClusteringZoom: 18.0);
+        extraPercent: 0.2,
+        stopClusteringZoom: 17.0);
+  }
+
+  LatLngBounds getBounds(List<LatLng> markers) {
+    double minLat = markers.first.latitude;
+    double maxLat = markers.first.latitude;
+    double minLng = markers.first.longitude;
+    double maxLng = markers.first.longitude;
+
+    for (LatLng marker in markers) {
+      if (marker.latitude < minLat) {
+        minLat = marker.latitude;
+      }
+      if (marker.latitude > maxLat) {
+        maxLat = marker.latitude;
+      }
+      if (marker.longitude < minLng) {
+        minLng = marker.longitude;
+      }
+      if (marker.longitude > maxLng) {
+        maxLng = marker.longitude;
+      }
+    }
+
+    return LatLngBounds(
+      southwest: LatLng(minLat, minLng),
+      northeast: LatLng(maxLat, maxLng),
+    );
   }
 
   Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
@@ -53,32 +84,31 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
         return Marker(
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
-          onTap: () {
+          onTap: () async {
             debugPrint('---- $cluster');
-            for (var item in cluster.items) {
-              debugPrint(item.name);
-            }
 
-            _googleMapController
-                .animateCamera(CameraUpdate.newCameraPosition(
-                    CameraPosition(target: cluster.location, zoom: 18.0)))
-                .then((value) => {
-                      if (cluster.isMultiple)
-                        {
-                          if (_mapViewModel.position != null)
-                            {
-                              // _clusterManager?.onCameraMove(CameraPosition(
-                              // target: _mapViewModel.position!)),
-                              _clusterManager?.setItems(_mapViewModel.places),
-                              _clusterManager?.updateMap()
-                            }
-                        }
-                      else
-                        {
-                          _mapViewModel.showMapObjectSheet(
-                              context, cluster.items.first.name)
-                        }
-                    });
+            if (cluster.isMultiple) {
+              LatLngBounds? bounds = getBounds(cluster.items
+                  .map(
+                    (marker) => LatLng(
+                        marker.location.latitude, marker.location.longitude),
+                  )
+                  .toList());
+
+              await _googleMapController
+                  .animateCamera(CameraUpdate.newLatLngBounds(bounds, 75.0));
+              // _updateMap();
+            } else {
+              await _googleMapController.animateCamera(
+                  CameraUpdate.newCameraPosition(
+                      CameraPosition(target: cluster.location, zoom: 16.0)));
+              // _updateMap();
+
+              Future.delayed(
+                  const Duration(milliseconds: 300),
+                  () => _mapViewModel.showMapObjectSheet(
+                      context, cluster.items.first.name));
+            }
           },
           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
               text: cluster.isMultiple ? cluster.count.toString() : null),
@@ -108,9 +138,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           Offset(newSize / 2, newSize / 2), newSize / 2.2, paint2);
       canvas.drawCircle(
           Offset(newSize / 2, newSize / 2), newSize / 2.4, paint1);
-    }
 
-    if (text != null) {
       TextPainter painter = TextPainter(textDirection: TextDirection.ltr);
       painter.text = TextSpan(
         text: text,
@@ -119,6 +147,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
             color: HexColors.black,
             fontWeight: FontWeight.w700),
       );
+
       painter.layout();
       painter.paint(
         canvas,
@@ -133,6 +162,20 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
 
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+  }
+
+  void _updateMap() {
+    _debouncer.run(() {
+      _mapViewModel.getVisibleRegion(_googleMapController).then((value) =>
+          _mapViewModel
+              .getObjectList()
+              .then((value) => _mapViewModel.updatePlaces().then((value) => {
+                    /// UPDATE CLUSTER
+                    if (_clusterManager!.items.isEmpty)
+                      {_clusterManager?.setItems(_mapViewModel.places)},
+                    _clusterManager?.updateMap(),
+                  })));
+    });
   }
 
   @override
@@ -166,20 +209,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                 _clusterManager?.setItems(_mapViewModel.places),
 
                 /// UPDATE LOCATION
-                if (_mapViewModel.hasPermission)
-                  {
-                    _mapViewModel.getUserLocation().then((value) =>
-                        _mapViewModel.getObjectList().then((value) =>
-                            _mapViewModel.updatePlaces().then((value) => {
-                                  /// UPDATE CLUSTER
-                                  _clusterManager
-                                      ?.setItems(_mapViewModel.places),
-                                  _clusterManager?.updateMap(),
-                                })))
-
-                    // .then((value) =>
-                    // _mapViewModel.showUserLocation(_googleMapController))
-                  }
+                _updateMap()
               },
           onCameraMove: (position) => {
                 /// UPDATE MAP CAMERA POSITION
@@ -188,15 +218,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                 /// UPDATE CLUSTER MANAGER POSITION
                 _clusterManager?.onCameraMove(position)
               },
-          onCameraIdle: () => {
-                /// GET NEW COORD DATA
-                _mapViewModel.getObjectList().then(
-                    (value) => _mapViewModel.updatePlaces().then((value) => {
-                          /// UPDATE CLUSTER
-                          _clusterManager?.setItems(_mapViewModel.places),
-                          _clusterManager?.updateMap(),
-                        }))
-              },
+          onCameraIdle: () => _updateMap(),
           onLongPress: (position) =>
               _mapViewModel.showAddMapObjectSheet(context, position)),
 
@@ -206,7 +228,8 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           child: MapControlWidget(
               onZoomInTap: () => _mapViewModel.zoomIn(_googleMapController),
               onZoomOutTap: () => _mapViewModel.zoomOut(_googleMapController),
-              onShowLocationTap: () => _mapViewModel.hasPermission
+              onShowLocationTap: () => _mapViewModel.hasPermission &&
+                      _mapViewModel.userPosition != null
                   ? _mapViewModel.showUserLocation(_googleMapController)
                   : _mapViewModel.getLocationPermission(),
               onSearchTap: () =>
@@ -218,7 +241,8 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           child: Padding(
               padding: const EdgeInsets.only(bottom: 6.0),
               child: FilterButtonWidget(
-                  onTap: () => _mapViewModel.showMapFilterSheet(context)
+                  onTap: () => _mapViewModel.showObjectsFilterSheet(context,
+                      () => {_mapViewModel.getObjectList(), _updateMap()})
                   // onClearTap: () => {}
                   )))
     ]));

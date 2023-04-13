@@ -80,7 +80,10 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                                                   _mapViewModel.urls[index],
                                               width: 84.0,
                                               height: 88.0,
-                                              memCacheWidth: 84,
+                                              memCacheWidth: 88 *
+                                                  MediaQuery.of(context)
+                                                      .devicePixelRatio
+                                                      .toInt(),
                                               fit: BoxFit.cover)));
                                 })),
 
