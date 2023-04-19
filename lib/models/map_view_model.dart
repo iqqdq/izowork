@@ -15,14 +15,13 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/object_stage.dart';
-import 'package:izowork/models/search_view_model.dart';
 import 'package:izowork/repositories/object_repository.dart';
 import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
 import 'package:izowork/screens/map_object/views/map_add_object_widget.dart';
 import 'package:izowork/screens/object_create/object_create_screen.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen_body.dart';
-import 'package:izowork/screens/search/search_screen.dart';
+import 'package:izowork/screens/search_object/search_object_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class MapViewModel with ChangeNotifier {
@@ -233,17 +232,27 @@ class MapViewModel with ChangeNotifier {
             object: objects.firstWhere((element) => element.id == id)));
   }
 
-  void showSearchMapObjectSheet(BuildContext context) {
+  void showSearchMapObjectSheet(
+      BuildContext context, GoogleMapController controller) {
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchScreenWidget(
+        builder: (context) => SearchObjectScreenWidget(
             isRoot: true,
-            searchType: SearchType.object,
-            onPop: () => {
-                  // TODO SET PRODUCT
+            title: Titles.object,
+            onFocus: () => {},
+            onPop: (object) => {
+                  Navigator.pop(context),
+                  if (object != null)
+                    {
+                      _objects.add(object),
+                      updatePlaces().then((value) => controller.animateCamera(
+                          CameraUpdate.newCameraPosition(CameraPosition(
+                              target: LatLng(object.lat, object.long),
+                              zoom: 18))))
+                    }
                 }));
   }
 
@@ -369,8 +378,11 @@ class MapViewModel with ChangeNotifier {
 
     if (objects.isNotEmpty) {
       objects.forEach((element) {
-        places.add(
-            Place(name: element.id, latLng: LatLng(element.lat, element.long)));
+        places.add(Place(
+            // id: element.id,
+            // name: element.manager?.name ?? '',
+            name: element.id,
+            latLng: LatLng(element.lat, element.long)));
       });
     }
 

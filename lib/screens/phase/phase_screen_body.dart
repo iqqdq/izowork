@@ -7,7 +7,6 @@ import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/models/phase_view_model.dart';
 import 'package:izowork/screens/phase/views/check_list_item_widget.dart';
 import 'package:izowork/screens/phase/views/contractor_list_item_widget.dart';
-import 'package:izowork/screens/search/views/search_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget_widget.dart';
@@ -16,6 +15,7 @@ import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:spreadsheet_table/spreadsheet_table.dart';
+import 'package:izowork/screens/phase/views/search_list_item_widget.dart';
 
 class PhaseCreateScreenBodyWidget extends StatefulWidget {
   final Phase phase;

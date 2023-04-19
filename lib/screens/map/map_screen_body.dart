@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -110,12 +109,12 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                       context, cluster.items.first.name));
             }
           },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75,
-              text: cluster.isMultiple ? cluster.count.toString() : null),
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, cluster),
         );
       };
 
-  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String? text}) async {
+  Future<BitmapDescriptor> _getMarkerBitmap(
+      int size, Cluster<Place> cluster) async {
     num newSize = Platform.isAndroid ? size / 1.25 : size;
 
     final PictureRecorder pictureRecorder = PictureRecorder();
@@ -124,36 +123,34 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     final Paint paint2 = Paint()..color = HexColors.white;
     final Paint paint3 = Paint()..color = HexColors.black;
 
-    if (text == null) {
-      canvas.drawCircle(
-          Offset(newSize / 2, newSize / 2), newSize / 2.5, paint1);
-      canvas.drawCircle(
-          Offset(newSize / 2, newSize / 2), newSize / 4.0, paint2);
-      canvas.drawCircle(
-          Offset(newSize / 2, newSize / 2), newSize / 7.0, paint3);
-    } else {
+    if (cluster.isMultiple) {
       canvas.drawCircle(
           Offset(newSize / 2, newSize / 2), newSize / 2.0, paint1);
       canvas.drawCircle(
           Offset(newSize / 2, newSize / 2), newSize / 2.2, paint2);
       canvas.drawCircle(
           Offset(newSize / 2, newSize / 2), newSize / 2.4, paint1);
+    } else {
+      canvas.drawCircle(
+          Offset(newSize / 2, newSize / 2), newSize / 2.5, paint1);
+      canvas.drawCircle(
+          Offset(newSize / 2, newSize / 2), newSize / 4.0, paint2);
+      canvas.drawCircle(
+          Offset(newSize / 2, newSize / 2), newSize / 7.0, paint3);
 
       TextPainter painter = TextPainter(textDirection: TextDirection.ltr);
       painter.text = TextSpan(
-        text: text,
-        style: TextStyle(
-            fontSize: newSize / 2.0,
-            color: HexColors.black,
-            fontWeight: FontWeight.w700),
-      );
+          text: cluster.items.length.toString(),
+          style: TextStyle(
+              fontSize: newSize / 2.0,
+              color: HexColors.black,
+              fontWeight: FontWeight.w700));
 
       painter.layout();
       painter.paint(
-        canvas,
-        Offset(
-            newSize / 2 - painter.width / 2, newSize / 2 - painter.height / 2),
-      );
+          canvas,
+          Offset(newSize / 2 - painter.width / 2,
+              newSize / 2 - painter.height / 2));
     }
 
     final img = await pictureRecorder
@@ -232,8 +229,8 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                       _mapViewModel.userPosition != null
                   ? _mapViewModel.showUserLocation(_googleMapController)
                   : _mapViewModel.getLocationPermission(),
-              onSearchTap: () =>
-                  _mapViewModel.showSearchMapObjectSheet(context))),
+              onSearchTap: () => _mapViewModel.showSearchMapObjectSheet(
+                  context, _googleMapController))),
 
       /// FILTER BUTTON
       Align(

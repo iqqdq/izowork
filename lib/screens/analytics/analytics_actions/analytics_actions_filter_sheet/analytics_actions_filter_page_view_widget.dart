@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/models/search_view_model.dart';
+
 import 'package:izowork/screens/analytics/analytics_actions/analytics_actions_filter_sheet/analytics_actions_filter/analytics_actions_filter_screen.dart';
-import 'package:izowork/screens/search/search_screen.dart';
 import 'package:izowork/views/date_time_wheel_picker_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 
@@ -49,44 +48,45 @@ class _AnalyticsActionsFilterPageViewState
     _pages = [
       AnalyticsActionsFilterScreenWidget(
           onFilialTap: () => {
-                setState(() => _isSearching = true),
-                _pages.add(SearchScreenWidget(
-                    isRoot: false,
-                    searchType: SearchType.filial,
-                    onPop: () => {
-                          setState(() => _isSearching = false),
-                          _pageController
-                              .animateToPage(0,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeIn)
-                              .then((value) =>
-                                  {if (mounted) _pages.removeLast()}),
-                          Future.delayed(
-                              const Duration(milliseconds: 100),
-                              () => _pageController.animateToPage(1,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeIn))
-                        })),
+                // setState(() => _isSearching = true),
+                // _pages.add(SearchScreenWidget(
+                //     isRoot: false,
+                //     searchType: SearchType.filial,
+                //     onPop: () => {
+                //           setState(() => _isSearching = false),
+                //           _pageController
+                //               .animateToPage(0,
+                //                   duration: const Duration(milliseconds: 300),
+                //                   curve: Curves.easeIn)
+                //               .then((value) =>
+                //                   {if (mounted) _pages.removeLast()}),
+                //           Future.delayed(
+                //               const Duration(milliseconds: 100),
+                //               () => _pageController.animateToPage(1,
+                //                   duration: const Duration(milliseconds: 300),
+                //                   curve: Curves.easeIn))
+                //         })),
               },
           onManagerTap: () => {
-                setState(() => _isSearching = true),
-                _pages.add(SearchScreenWidget(
-                    isRoot: false,
-                    searchType: SearchType.manager,
-                    onPop: () => {
-                          setState(() => _isSearching = false),
-                          _pageController
-                              .animateToPage(0,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeIn)
-                              .then(
-                                  (value) => {if (mounted) _pages.removeLast()})
-                        })),
-                Future.delayed(
-                    const Duration(milliseconds: 100),
-                    () => _pageController.animateToPage(1,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeIn))
+                // setState(() => _isSearching = true),
+                // _pages.add(SearchScreenWidget(
+                //     isRoot: false,
+                //     searchType: SearchType.manager,
+                //     onPop: () => {
+                //           setState(() => _isSearching = false),
+                //           _pageController
+                //               .animateToPage(0,
+                //                   duration: const Duration(milliseconds: 300),
+                //                   curve: Curves.easeIn)
+                //               .then(
+                //                   (value) => {if (mounted) _pages.removeLast()})
+                // })
+                // ),
+                // Future.delayed(
+                //     const Duration(milliseconds: 100),
+                //     () => _pageController.animateToPage(1,
+                //         duration: const Duration(milliseconds: 300),
+                //         curve: Curves.easeIn))
               },
           onFromDateTap: () => showDateTimeSelectionSheet(),
           onToDateTap: () => showDateTimeSelectionSheet(),

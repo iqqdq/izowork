@@ -1,19 +1,25 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/services/urls.dart';
 
 class AnalitycsManagerListItemWidget extends StatelessWidget {
+  final User? user;
   final double value;
   final VoidCallback onTap;
 
   const AnalitycsManagerListItemWidget(
-      {Key? key, required this.value, required this.onTap})
+      {Key? key, required this.user, required this.value, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const _margin = 16.0;
     final _maxWidth = MediaQuery.of(context).size.width - _margin * 2;
+
+    String? _url = user?.avatar;
 
     return Container(
         margin:
@@ -36,17 +42,30 @@ class AnalitycsManagerListItemWidget extends StatelessWidget {
                         /// AVATAR
                         Stack(children: [
                           SvgPicture.asset('assets/ic_avatar.svg',
-                              width: 24.0, height: 24.0, fit: BoxFit.cover),
-                          //   ClipRRect(
-                          //   borderRadius: BorderRadius.circular(40.0),
-                          //   child:
-                          // CachedNetworkImage(imageUrl: '', width: 80.0, height: 80.0, cacheWidth: 80 * (MediaQuery.of(context).devicePixelRatio).round(), cacheHeight: 80 * (MediaQuery.of(context).devicePixelRatio).round(), fit: BoxFit.cover)),
+                              color: HexColors.grey40,
+                              width: 24.0,
+                              height: 24.0,
+                              fit: BoxFit.cover),
+                          _url == null
+                              ? Container()
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(40.0),
+                                  child: CachedNetworkImage(
+                                      cacheKey: _url,
+                                      imageUrl: avatarUrl + _url,
+                                      width: 24.0,
+                                      height: 24.0,
+                                      memCacheWidth: 24 *
+                                          MediaQuery.of(context)
+                                              .devicePixelRatio
+                                              .round(),
+                                      fit: BoxFit.cover)),
                         ]),
                         const SizedBox(width: 10.0),
 
                         /// USERNAME
                         Expanded(
-                            child: Text('Имя Фамилия',
+                            child: Text(user?.name ?? '-',
                                 style: TextStyle(
                                     color: HexColors.grey90,
                                     fontSize: 14.0,

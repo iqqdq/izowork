@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/entities/response/object.dart';
 
 class AnalitycsObjectListItemWidget extends StatelessWidget {
-  final double value;
+  final Object object;
   final VoidCallback onTap;
 
   const AnalitycsObjectListItemWidget(
-      {Key? key, required this.value, required this.onTap})
+      {Key? key, required this.object, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _color = value <= 25.0
+    final _color = object.efficiency <= 25.0
         ? HexColors.additionalRed
-        : value <= 50.0
+        : object.efficiency <= 50.0
             ? HexColors.additionalOrange
-            : value <= 75.0
+            : object.efficiency <= 75.0
                 ? HexColors.additionalDeepBlue
                 : HexColors.additionalGreen;
 
@@ -34,7 +35,7 @@ class AnalitycsObjectListItemWidget extends StatelessWidget {
                 child: Row(children: [
                   /// TITLE
                   Expanded(
-                      child: Text('ЖК Жемчужина',
+                      child: Text(object.name,
                           style: TextStyle(
                               color: HexColors.grey90,
                               fontSize: 18.0,
@@ -43,7 +44,7 @@ class AnalitycsObjectListItemWidget extends StatelessWidget {
                   const SizedBox(width: 10.0),
 
                   /// PERCENT
-                  Text('${value.toInt()}%',
+                  Text('${object.efficiency}%',
                       style: TextStyle(
                           color: _color,
                           fontSize: 20.0,

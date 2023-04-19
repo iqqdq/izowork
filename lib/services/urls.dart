@@ -99,3 +99,10 @@ const messageMediaUrl = baseUrl + 'resourses/message-file/';
 const documentUrl = baseUrl + 'document/list';
 
 const notificationUrl = baseUrl + 'notification/';
+
+const officeUrl = baseUrl + 'office/all';
+
+const companyAnalyticsUrl = baseUrl + 'analytics/company';
+const managerAnalyticsUrl = baseUrl + 'analytics/manager';
+const objectAnalyticsUrl = baseUrl + 'analytics/object';
+const productAnalyticsUrl = baseUrl + 'analytics/product';

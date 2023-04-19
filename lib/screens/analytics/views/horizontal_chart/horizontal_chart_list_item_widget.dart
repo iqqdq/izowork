@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/locale.dart';
 
@@ -8,8 +7,8 @@ class HorizontalChartListItemWidget extends StatelessWidget {
   final int index;
   final double maxHeight;
   final double height;
-  final double value;
-  final DateTime dateTime;
+  final int value;
+  final String month;
 
   const HorizontalChartListItemWidget({
     Key? key,
@@ -17,17 +16,12 @@ class HorizontalChartListItemWidget extends StatelessWidget {
     required this.maxHeight,
     required this.height,
     required this.value,
-    required this.dateTime,
+    required this.month,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     initializeDateFormatting(locale, null);
-
-    final _day = DateTime.now().day.toString().length == 1
-        ? '0${DateTime.now().day}'
-        : '${DateTime.now().day}';
-    final _month = DateFormat.MMM(locale).format(DateTime.now());
 
     return SizedBox(
         width: 60.0,
@@ -37,7 +31,7 @@ class HorizontalChartListItemWidget extends StatelessWidget {
                 width: 48.0, height: height, color: HexColors.primaryMain),
             Container(
                 padding: const EdgeInsets.only(top: 6.0, left: 2.0, right: 2.0),
-                child: Text('$_month $_day',
+                child: Text(month,
                     maxLines: 1,
                     textAlign: TextAlign.center,
                     style: TextStyle(

@@ -1,8 +1,12 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/random_hex_color.dart';
 import 'package:izowork/models/analytics_companies_view_model.dart';
-import 'package:izowork/models/search_view_model.dart';
+
 import 'package:izowork/screens/analytics/views/horizontal_chart/horizontal_chart_widget.dart';
 import 'package:izowork/screens/analytics/views/analitics_manager_list_item_widget.dart';
 import 'package:izowork/screens/analytics/views/pie_chart/pie_chart_widget.dart';
@@ -39,6 +43,53 @@ class _AnalyticsCompaniesScreenBodyState
                 fontWeight: FontWeight.w500)));
   }
 
+  Widget _companyPieChart() {
+    List<PieChartModel> items = [];
+
+    if (_analyticsCompaniesViewModel.companyAnalytics != null) {
+      if (_analyticsCompaniesViewModel.companyAnalytics!.labels.isNotEmpty &&
+          _analyticsCompaniesViewModel.companyAnalytics!.labels.length ==
+              _analyticsCompaniesViewModel.companyAnalytics!.data.length) {
+        int index = 0;
+
+        _analyticsCompaniesViewModel.companyAnalytics?.labels
+            .forEach((element) {
+          items.add(PieChartModel(
+              element,
+              HexColor(generateRandomHexColor()),
+              _analyticsCompaniesViewModel.companyAnalytics!.data[index]
+                  .toDouble()));
+          index++;
+        });
+      }
+    }
+
+    return items.isEmpty ? Container() : PieChartWidget(items: items);
+  }
+
+  Widget _objectPieChart() {
+    List<PieChartModel> items = [];
+
+    if (_analyticsCompaniesViewModel.objectAnalytics != null) {
+      if (_analyticsCompaniesViewModel.objectAnalytics!.labels.isNotEmpty &&
+          _analyticsCompaniesViewModel.objectAnalytics!.labels.length ==
+              _analyticsCompaniesViewModel.objectAnalytics!.data.length) {
+        int index = 0;
+
+        _analyticsCompaniesViewModel.objectAnalytics?.labels.forEach((element) {
+          items.add(PieChartModel(
+              element,
+              HexColor(generateRandomHexColor()),
+              _analyticsCompaniesViewModel.objectAnalytics!.data[index]
+                  .toDouble()));
+          index++;
+        });
+      }
+    }
+
+    return items.isEmpty ? Container() : PieChartWidget(items: items);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -56,91 +107,120 @@ class _AnalyticsCompaniesScreenBodyState
             child: Stack(children: [
           ListView(
               shrinkWrap: true,
-              padding: EdgeInsets.only(top: 12.0, bottom: _bottomPadding),
+              padding: EdgeInsets.only(top: 24.0, bottom: _bottomPadding),
               children: [
-                _title(Titles.pledgetProductValue),
+                /// PRODUCT SELECTION
+                SelectionInputWidget(
+                    title: Titles.product,
+                    value: _analyticsCompaniesViewModel.product?.name ??
+                        Titles.notSelected,
+                    isVertical: true,
+                    onTap: () => _analyticsCompaniesViewModel
+                        .showSearchProductSheet(context)),
+
+                _analyticsCompaniesViewModel.product == null
+                    ? Container()
+                    : _title(Titles.pledgetProductValue),
 
                 /// PRODUCT SELECTION, TON'S
-                SelectionInputWidget(
-                    title: Titles.product,
-                    value: Titles.tonProductPlaceholder,
-                    isVertical: true,
-                    onTap: () => _analyticsCompaniesViewModel.showSearchSheet(
-                        context, SearchType.product)),
+                // SelectionInputWidget(
+                //     title: Titles.product,
+                //     value: Titles.tonProductPlaceholder,
+                //     isVertical: true,
+                //     onTap: () => {}),
 
                 /// PRODUCT HORIZONTAL CHART
-                HorizontalChartWidget(onMaxScrollExtent: () => {}),
-                const SizedBox(height: 24.0),
+                _analyticsCompaniesViewModel.productAnalytics == null
+                    ? Container()
+                    : HorizontalChartWidget(
+                        labels: _analyticsCompaniesViewModel
+                            .productAnalytics!.labels,
+                        values: _analyticsCompaniesViewModel
+                            .productAnalytics!.pledged,
+                        onMaxScrollExtent: () => {}),
+                SizedBox(
+                    height: _analyticsCompaniesViewModel.product == null
+                        ? 0.0
+                        : 24.0),
 
-                _title(Titles.realizedProductValue),
+                _analyticsCompaniesViewModel.productAnalytics == null
+                    ? Container()
+                    : _title(Titles.realizedProductValue),
 
                 /// PRODUCT SELECTION, LITERS
-                SelectionInputWidget(
-                    title: Titles.product,
-                    value: Titles.literProductPlaceholder,
-                    isVertical: true,
-                    onTap: () => _analyticsCompaniesViewModel.showSearchSheet(
-                        context, SearchType.product)),
-                HorizontalChartWidget(onMaxScrollExtent: () => {}),
-                const SizedBox(height: 24.0),
+                // SelectionInputWidget(
+                //     title: Titles.product,
+                //     value: Titles.literProductPlaceholder,
+                //     isVertical: true,
+                //     onTap: () => {}),
+                _analyticsCompaniesViewModel.productAnalytics == null
+                    ? Container()
+                    : HorizontalChartWidget(
+                        labels: _analyticsCompaniesViewModel
+                            .productAnalytics!.labels,
+                        values:
+                            _analyticsCompaniesViewModel.productAnalytics!.sold,
+                        onMaxScrollExtent: () => {}),
+                SizedBox(
+                    height: _analyticsCompaniesViewModel.product == null
+                        ? 0.0
+                        : 24.0),
 
                 /// COMPANY PIE CHART
-                _title(Titles.companyTotal),
-                PieChartWidget(items: [
-                  PieChartModel(
-                      Titles.generalContractor, HexColors.primaryMain, 25),
-                  PieChartModel(Titles.designer, HexColors.grey20, 15),
-                  PieChartModel(Titles.customer, HexColors.additionalViolet, 60)
-                ]),
+                _analyticsCompaniesViewModel.companyAnalytics == null
+                    ? Container()
+                    : _title(Titles.companyTotal),
+                _companyPieChart(),
                 const SizedBox(height: 24.0),
 
                 /// OBJECT PIE CHART
-                _title(Titles.objectTotal),
+                _analyticsCompaniesViewModel.objectAnalytics == null
+                    ? Container()
+                    : _title(Titles.objectTotal),
 
-                PieChartWidget(items: [
-                  PieChartModel(
-                      Titles.administrationBuilding, HexColors.primaryMain, 5),
-                  PieChartModel(
-                      Titles.appartmentComplex, HexColors.turquoiseColor, 10),
-                  PieChartModel(Titles.schools, HexColors.blueColor, 25),
-                  PieChartModel(Titles.hospitals, HexColors.pinkColor, 8),
-                  PieChartModel(
-                      Titles.industrialObject, HexColors.darkBlueColor, 13),
-                  PieChartModel(
-                      Titles.logicalCenters, HexColors.lightPinkColor, 17),
-                  PieChartModel(
-                      Titles.reconstructableObjects, HexColors.grey20, 22)
-                ]),
+                _objectPieChart(),
                 const SizedBox(height: 24.0),
 
                 /// OBJECT TOTAL COUNT
-                _title(Titles.dealTotal),
+                _analyticsCompaniesViewModel.objectAnalytics == null
+                    ? Container()
+                    : _title(Titles.dealTotal),
 
                 /// FILIAL SELECTION
                 SelectionInputWidget(
                     title: Titles.filial,
-                    value: Titles.notSelected,
+                    value: _analyticsCompaniesViewModel.office?.name ??
+                        Titles.notSelected,
                     isVertical: true,
-                    onTap: () => _analyticsCompaniesViewModel.showSearchSheet(
-                        context, SearchType.filial)),
-                const SizedBox(height: 26.0),
-                Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 6.0),
-                    child: Text('1 350 340',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: HexColors.additionalViolet,
-                            fontSize: 32.0,
-                            fontFamily: 'PT Root UI',
-                            fontWeight: FontWeight.bold))),
-                Text(Titles.dealTotalCount,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: HexColors.grey50,
-                        fontSize: 14.0,
-                        fontFamily: 'PT Root UI')),
-                const SizedBox(height: 40.0),
+                    onTap: () => _analyticsCompaniesViewModel
+                        .showSearchOfficeSheet(context, false)),
+                SizedBox(
+                    height: _analyticsCompaniesViewModel.office == null
+                        ? 0.0
+                        : 16.0),
+                _analyticsCompaniesViewModel.office == null
+                    ? Container()
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 16.0),
+                        child: Text('0',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: HexColors.additionalViolet,
+                                fontSize: 32.0,
+                                fontFamily: 'PT Root UI',
+                                overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.bold))),
+                _analyticsCompaniesViewModel.office == null
+                    ? Container()
+                    : Container(
+                        margin: const EdgeInsets.only(bottom: 26.0),
+                        child: Text(Titles.dealTotalCount,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: HexColors.grey50,
+                                fontSize: 14.0,
+                                fontFamily: 'PT Root UI'))),
 
                 /// MANAGER TOTAL LIST
                 _title(Titles.managerTotal),
@@ -148,23 +228,48 @@ class _AnalyticsCompaniesScreenBodyState
                 /// FILIAL SELECTION
                 SelectionInputWidget(
                     title: Titles.filial,
-                    value: Titles.notSelected,
+                    value: _analyticsCompaniesViewModel.managerOffice?.name ??
+                        Titles.notSelected,
                     isVertical: true,
-                    onTap: () => _analyticsCompaniesViewModel.showSearchSheet(
-                        context, SearchType.filial)),
+                    onTap: () => _analyticsCompaniesViewModel
+                        .showSearchOfficeSheet(context, true)),
                 const SizedBox(height: 20.0),
 
-                ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return AnalitycsManagerListItemWidget(
-                        value: Random().nextInt(99).toDouble(),
-                        onTap: () => {},
-                      );
-                    })
+                /// EMPTY MANAGER LIST TEXT
+                _analyticsCompaniesViewModel.managerAnalytics == null
+                    ? Container()
+                    : _analyticsCompaniesViewModel
+                            .managerAnalytics!.users.isEmpty
+                        ? Container(
+                            padding: const EdgeInsets.only(bottom: 20.0),
+                            height: 120.0,
+                            child: Center(
+                                child: Text(Titles.noResult,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontSize: 16.0,
+                                        color: HexColors.grey50))))
+                        :
+
+                        /// MANAGER LIST
+                        ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            itemCount: _analyticsCompaniesViewModel
+                                .managerAnalytics?.users.length,
+                            itemBuilder: (context, index) {
+                              return AnalitycsManagerListItemWidget(
+                                  user: _analyticsCompaniesViewModel
+                                      .managerAnalytics?.users[index],
+                                  value: _analyticsCompaniesViewModel
+                                          .managerAnalytics?.efficiency[index]
+                                          .toDouble() ??
+                                      0.0,
+                                  onTap: () => _analyticsCompaniesViewModel
+                                      .showProfileScreen(context, index));
+                            })
               ]),
 
           /// INDICATOR

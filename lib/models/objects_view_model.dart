@@ -130,6 +130,28 @@ class ObjectsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
+  Future sortByName() async {
+    if (_objectsFilter == null) {
+      _objectsFilter =
+          ObjectsFilter(null, null, null, [], [], ['&sortBy=name']);
+    } else {
+      if (!_objectsFilter!.params.contains('&sortBy=name')) {
+        _objectsFilter!.params.add('&sortBy=name');
+      }
+    }
+  }
+
+  Future sortByEfficiency() async {
+    if (_objectsFilter == null) {
+      _objectsFilter =
+          ObjectsFilter(null, null, null, [], [], ['&sortBy=efficiency']);
+    } else {
+      if (!_objectsFilter!.params.contains('&sortBy=efficiency')) {
+        _objectsFilter!.params.add('&sortBy=efficiency');
+      }
+    }
+  }
+
   void resetFilter() {
     _objectsFilter = null;
   }

@@ -86,7 +86,7 @@ class Object {
       designerId: json["designer_id"],
       customerId: json["customer_id"],
       objectTypeId: json["object_type_id"],
-      objectType: json["object_type_id"] == null
+      objectType: json["object_type"] == null
           ? null
           : ObjectType.fromJson(json["object_type"]),
       objectStageId: json["object_stage_id"],

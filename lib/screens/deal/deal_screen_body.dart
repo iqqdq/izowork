@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/deal_process.dart';
 import 'package:izowork/models/deal_view_model.dart';
 import 'package:izowork/screens/deal/views/deal_process_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -208,6 +207,8 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                                                   ?.price
                                                                   .toString() ??
                                                               '0',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                       fontSize: 14.0,
                                                       color: HexColors.black,
@@ -222,12 +223,15 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                               width: 0.65,
                                               color: HexColors.grey20)),
                                       child: Row(children: [
-                                        Text(Titles.product,
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: HexColors.black,
-                                                fontFamily: 'PT Root UI'))
+                                        Expanded(
+                                            child: Text(Titles.product,
+                                                style: TextStyle(
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: HexColors.black,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontFamily: 'PT Root UI')))
                                       ])),
                                   rowHeaderBuilder: (_, index) => Container(
                                       height: 36.0,
@@ -238,14 +242,19 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                               width: 0.65,
                                               color: HexColors.grey20)),
                                       child: Row(children: [
-                                        Text(
-                                            _dealViewModel.dealProducts[index]
-                                                    .product?.name ??
-                                                '-',
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                color: HexColors.black,
-                                                fontFamily: 'PT Root UI'))
+                                        Expanded(
+                                            child: Text(
+                                                _dealViewModel
+                                                        .dealProducts[index]
+                                                        .product
+                                                        ?.name ??
+                                                    '-',
+                                                style: TextStyle(
+                                                    fontSize: 14.0,
+                                                    color: HexColors.black,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontFamily: 'PT Root UI')))
                                       ])),
                                   colHeaderBuilder: (_, index) => Container(
                                       height: 36.0,

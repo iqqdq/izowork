@@ -114,8 +114,8 @@ class _ObjectsFilterPageViewScreenBodyState
                           title: _index == 0
                               ? Titles.designer
                               : _index == 1
-                                  ? Titles.customer
-                                  : Titles.contractor,
+                                  ? Titles.contractor
+                                  : Titles.customer,
                           isRoot: false,
                           onFocus: () => setState,
                           onPop: (company) => {

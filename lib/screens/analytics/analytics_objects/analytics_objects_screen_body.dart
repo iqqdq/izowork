@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/models/analytics_objects_view_model.dart';
+import 'package:izowork/components/pagination.dart';
+import 'package:izowork/models/objects_view_model.dart';
 import 'package:izowork/screens/analytics/views/analitics_object_list_item_widget.dart';
 import 'package:izowork/screens/analytics/views/sort_orbject_button_widget.dart';
 import 'package:izowork/components/loading_status.dart';
@@ -21,7 +22,9 @@ class AnalyticsObjectsScreenBodyWidget extends StatefulWidget {
 class _AnalyticsObjectsScreenBodyState
     extends State<AnalyticsObjectsScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
-  late AnalyticsObjectsViewModel _analyticsObjectsViewModel;
+  Pagination _pagination = Pagination(offset: 0, size: 50);
+
+  late ObjectsViewModel _objectsViewModel;
 
   @override
   bool get wantKeepAlive => true;
@@ -34,49 +37,48 @@ class _AnalyticsObjectsScreenBodyState
         ? 12.0
         : MediaQuery.of(context).padding.bottom;
 
-    _analyticsObjectsViewModel =
-        Provider.of<AnalyticsObjectsViewModel>(context, listen: true);
+    _objectsViewModel = Provider.of<ObjectsViewModel>(context, listen: true);
 
     return Scaffold(
         backgroundColor: HexColors.white,
         body: SizedBox.expand(
             child: Stack(children: [
           /// OBJECT LIST
-          Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(
-                    left: 16.0, bottom: 16.0, right: 16.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SortObjectButtonWidget(
-                          title: Titles.object,
-                          imagePath: 'assets/ic_sort_object.svg',
-                          onTap: () => {
-                                // TODO SORT OBJECT
-                              }),
-                      SortObjectButtonWidget(
-                          title: Titles.effectiveness,
-                          imagePath: 'assets/ic_sort_effectiveness.svg',
-                          onTap: () => {
-                                // TODO SORT OBJECT BY EFFECTIVENESS
-                              })
-                    ]),
-              ),
-              Expanded(
-                  child: ListView.builder(
-                      padding: EdgeInsets.only(bottom: _bottomPadding),
-                      shrinkWrap: true,
-                      itemCount: 20,
-                      itemBuilder: (context, index) {
-                        return AnalitycsObjectListItemWidget(
-                          value: Random().nextInt(99).toDouble(),
-                          onTap: () => {},
-                        );
-                      }))
-            ],
-          ),
+          // Column(children: [
+          // Container(
+          //   padding:
+          //       const EdgeInsets.only(left: 16.0, bottom: 16.0, right: 16.0),
+          //   child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         SortObjectButtonWidget(
+          //             title: Titles.object,
+          //             imagePath: 'assets/ic_sort_object.svg',
+          //             onTap: () => _objectsViewModel.sortByName().then(
+          //                 (value) => _objectsViewModel.getObjectList(
+          //                     pagination: _pagination, search: ''))),
+          //         SortObjectButtonWidget(
+          //             title: Titles.effectiveness,
+          //             imagePath: 'assets/ic_sort_effectiveness.svg',
+          //             onTap: () => _objectsViewModel.sortByEfficiency().then(
+          //                 (value) => _objectsViewModel.getObjectList(
+          //                     pagination: _pagination, search: ''))),
+          //       ]),
+          // ),
+          // Expanded(
+          // child:
+          ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.only(top: 16.0, bottom: _bottomPadding),
+              shrinkWrap: true,
+              itemCount: _objectsViewModel.objects.length,
+              itemBuilder: (context, index) {
+                return AnalitycsObjectListItemWidget(
+                  object: _objectsViewModel.objects[index],
+                  onTap: () => _objectsViewModel,
+                );
+              }),
+          // )]),
 
           /// FILTER BUTTON
           SafeArea(
@@ -85,13 +87,33 @@ class _AnalyticsObjectsScreenBodyState
                   child: Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: FilterButtonWidget(
-                          onTap: () => _analyticsObjectsViewModel
-                              .showAnalyticsObjectsFilterSheet(context)
-                          // onClearTap: () => {}
-                          )))),
+                        onTap: () => _objectsViewModel.showObjectsFilterSheet(
+                            context,
+                            () => {
+                                  _pagination = Pagination(offset: 0, size: 50),
+                                  _objectsViewModel.getObjectList(
+                                      pagination: _pagination, search: '')
+                                }),
+                        // onClearTap: () => {}
+                      )))),
+
+          /// EMPTY LIST TEXT
+          _objectsViewModel.loadingStatus == LoadingStatus.completed &&
+                  _objectsViewModel.objects.isEmpty
+              ? Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, bottom: 100.0),
+                      child: Text(Titles.noResult,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16.0,
+                              color: HexColors.grey50))))
+              : Container(),
 
           /// INDICATOR
-          _analyticsObjectsViewModel.loadingStatus == LoadingStatus.searching
+          _objectsViewModel.loadingStatus == LoadingStatus.searching
               ? const LoadingIndicatorWidget()
               : Container()
         ])));

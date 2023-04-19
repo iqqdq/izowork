@@ -42,7 +42,7 @@ dependencies:
   provider:
   dio: any
   badges: ^1.1.6
-  modal_bottom_sheet: ^2.0.0
+  modal_bottom_sheet: 3.0.0-pre
   scrollable_clean_calendar: 1.4.0
   wheel_chooser: ^1.0.0
   blur: ^3.1.0

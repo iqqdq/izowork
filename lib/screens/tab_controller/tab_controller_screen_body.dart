@@ -1,5 +1,4 @@
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
@@ -97,19 +96,24 @@ class _TabControllerScreenBodyState
                       ? 'assets/ic_actions_selected.png'
                       : 'assets/ic_actions.png'),
                   label: Titles.myDoing),
-              BottomNavigationBarItem(
-                  icon: Badge(
-                      showBadge: _tabControllerViewModel.messageCount != 0,
-                      alignment: Alignment.topRight,
-                      badgeColor: HexColors.additionalViolet,
-                      badgeContent: Text(
-                          _tabControllerViewModel.messageCount.toString(),
-                          style:
-                              TextStyle(fontSize: 8.0, color: HexColors.white)),
-                      child: Image.asset(_index == 3
+              _tabControllerViewModel.messageCount == 3
+                  ? BottomNavigationBarItem(
+                      icon: Badge(
+                          alignment: AlignmentDirectional.topEnd,
+                          backgroundColor: HexColors.additionalViolet,
+                          label: Text(
+                              _tabControllerViewModel.messageCount.toString(),
+                              style: TextStyle(
+                                  fontSize: 8.0, color: HexColors.white)),
+                          child: Image.asset(_index == 3
+                              ? 'assets/ic_chat_selected.png'
+                              : 'assets/ic_chat.png')),
+                      label: Titles.chat)
+                  : BottomNavigationBarItem(
+                      icon: Image.asset(_index == 3
                           ? 'assets/ic_chat_selected.png'
-                          : 'assets/ic_chat.png')),
-                  label: Titles.chat),
+                          : 'assets/ic_chat.png'),
+                      label: Titles.chat),
               BottomNavigationBarItem(
                   icon: Image.asset(_index == 4
                       ? 'assets/ic_more_selected.png'

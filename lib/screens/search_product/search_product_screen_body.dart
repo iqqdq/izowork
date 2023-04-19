@@ -15,12 +15,14 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class SearchProductScreenBodyWidget extends StatefulWidget {
+  final String? title;
   final bool isRoot;
   final VoidCallback onFocus;
   final Function(Product?) onPop;
 
   const SearchProductScreenBodyWidget(
       {Key? key,
+      this.title,
       required this.isRoot,
       required this.onFocus,
       required this.onPop})
@@ -94,7 +96,9 @@ class _SearchProductScreenBodyState
                                   title: Titles.back,
                                   onTap: () => widget.onPop(null),
                                 ),
-                          const Center(child: TitleWidget(text: Titles.manager))
+                          Center(
+                              child: TitleWidget(
+                                  text: widget.title ?? Titles.manager))
                         ])),
                     const SizedBox(height: 16.0),
 

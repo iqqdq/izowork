@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:badges/badges.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 
@@ -51,8 +50,8 @@ class ScrollToEndButtonWidget extends StatelessWidget {
                   : Align(
                       alignment: Alignment.topRight,
                       child: Badge(
-                        badgeColor: Colors.red,
-                        badgeContent: Text(count.toString(),
+                        backgroundColor: Colors.red,
+                        child: Text(count.toString(),
                             style: const TextStyle(color: Colors.white)),
                       ))
             ])));
