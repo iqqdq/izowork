@@ -49,9 +49,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
         markerBuilder: _markerBuilder,
         levels: [
           1.0,
-          2.0,
-          3.5,
-          4.5,
+          4.25,
           6.75,
           8.25,
           11.5,
