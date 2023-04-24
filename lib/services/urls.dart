@@ -40,6 +40,7 @@ const taskMediaUrl = baseUrl + 'resourses/task-file/';
 
 const dealUrl = baseUrl + 'deal/one?id=';
 const dealsUrl = baseUrl + 'deal/all';
+const dealCountUrl = baseUrl + 'deal/count';
 const dealStageUrl = baseUrl + 'deal/stage?deal_id=';
 const dealCreateUrl = baseUrl + 'deal/create';
 const dealUpdateUrl = baseUrl + 'deal/update';
@@ -95,6 +96,8 @@ const participants = baseUrl + 'chat/participants';
 const chatFileUrl = baseUrl + 'chat/file';
 const messageReadUrl = baseUrl + 'chat/read';
 const messageMediaUrl = baseUrl + 'resourses/message-file/';
+
+const tracesUrl = baseUrl + 'trace/list';
 
 const documentUrl = baseUrl + 'document/list';
 

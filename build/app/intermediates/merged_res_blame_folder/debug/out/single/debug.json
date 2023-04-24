@@ -4,8 +4,32 @@
         "source": "/Users/iqqddq/Documents/izowork/android/app/src/main/res/mipmap-mdpi/ic_launcher.png"
     },
     {
+        "merged": "/Users/iqqddq/Documents/izowork/build/app/intermediates/merged_res/debug/mipmap-hdpi_launcher_icon.png.flat",
+        "source": "/Users/iqqddq/Documents/izowork/android/app/src/main/res/mipmap-hdpi/launcher_icon.png"
+    },
+    {
+        "merged": "/Users/iqqddq/Documents/izowork/build/app/intermediates/merged_res/debug/mipmap-xhdpi_launcher_icon.png.flat",
+        "source": "/Users/iqqddq/Documents/izowork/android/app/src/main/res/mipmap-xhdpi/launcher_icon.png"
+    },
+    {
+        "merged": "/Users/iqqddq/Documents/izowork/build/app/intermediates/merged_res/debug/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "/Users/iqqddq/Documents/izowork/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
         "merged": "/Users/iqqddq/Documents/izowork/build/app/intermediates/merged_res/debug/mipmap-xhdpi_ic_launcher.png.flat",
         "source": "/Users/iqqddq/Documents/izowork/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/iqqddq/Documents/izowork/build/app/intermediates/merged_res/debug/mipmap-xxxhdpi_launcher_icon.png.flat",
+        "source": "/Users/iqqddq/Documents/izowork/android/app/src/main/res/mipmap-xxxhdpi/launcher_icon.png"
+    },
+    {
+        "merged": "/Users/iqqddq/Documents/izowork/build/app/intermediates/merged_res/debug/mipmap-xxhdpi_launcher_icon.png.flat",
+        "source": "/Users/iqqddq/Documents/izowork/android/app/src/main/res/mipmap-xxhdpi/launcher_icon.png"
+    },
+    {
+        "merged": "/Users/iqqddq/Documents/izowork/build/app/intermediates/merged_res/debug/mipmap-mdpi_launcher_icon.png.flat",
+        "source": "/Users/iqqddq/Documents/izowork/android/app/src/main/res/mipmap-mdpi/launcher_icon.png"
     },
     {
         "merged": "/Users/iqqddq/Documents/izowork/build/app/intermediates/merged_res/debug/drawable-v21_launch_background.xml.flat",
@@ -22,9 +46,5 @@
     {
         "merged": "/Users/iqqddq/Documents/izowork/build/app/intermediates/merged_res/debug/mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "/Users/iqqddq/Documents/izowork/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
-    },
-    {
-        "merged": "/Users/iqqddq/Documents/izowork/build/app/intermediates/merged_res/debug/mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "/Users/iqqddq/Documents/izowork/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"
     }
 ]

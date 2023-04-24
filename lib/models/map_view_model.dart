@@ -43,9 +43,6 @@ class MapViewModel with ChangeNotifier {
   String _city = '';
   String _address = '';
 
-  // MAP
-  LatLngBounds? _visibleRegion;
-
   // DATA
   final List<Object> _objects = [];
   List<ObjectStage>? _objectStages;
@@ -76,10 +73,6 @@ class MapViewModel with ChangeNotifier {
 
   List<Object> get objects {
     return _objects;
-  }
-
-  LatLngBounds? get visibleRegion {
-    return _visibleRegion;
   }
 
   ObjectsFilter? get objectsFilter {
@@ -114,15 +107,12 @@ class MapViewModel with ChangeNotifier {
         .then((value) => getObjectList());
   }
 
-  Future getObjectList() async {
-    // _visibleRegion.northeast.latitude
-    // _visibleRegion.northeast.longitude
-
-    //  _visibleRegion.southwest.latitude
-    //  _visibleRegion.southwest.longitude
+  Future getObjectList({GoogleMapController? controller}) async {
+    LatLngBounds? visibleRegion = await controller?.getVisibleRegion();
 
     await ObjectRepository()
-        .getMapObjects(params: _objectsFilter?.params ?? [])
+        .getMapObjects(
+            params: _objectsFilter?.params ?? [], visibleRegion: visibleRegion)
         .then((response) => {
               if (response is List<Object>)
                 {
@@ -362,10 +352,6 @@ class MapViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - LOCATIONS
 
-  Future getVisibleRegion(GoogleMapController googleMapController) async {
-    _visibleRegion = await googleMapController.getVisibleRegion();
-  }
-
   void updateMarkers(Set<Marker> markers) {
     debugPrint('Updated ${markers.length} markers');
     this.markers = markers;
@@ -376,15 +362,12 @@ class MapViewModel with ChangeNotifier {
   Future updatePlaces() async {
     places.clear();
 
-    if (objects.isNotEmpty) {
-      objects.forEach((element) {
-        places.add(Place(
-            // id: element.id,
-            // name: element.manager?.name ?? '',
-            name: element.id,
-            latLng: LatLng(element.lat, element.long)));
-      });
-    }
+    _objects.forEach((element) {
+      places.add(Place(
+          id: element.id,
+          name: element.name,
+          latLng: LatLng(element.lat, element.long)));
+    });
 
     notifyListeners();
   }
@@ -394,7 +377,6 @@ class MapViewModel with ChangeNotifier {
 
   void onCameraMove(CameraPosition position) {
     _position = position.target;
-    getObjectList();
   }
 
   void resetFilter() {

@@ -258,7 +258,10 @@ int id time 0x7f050069
 int id title 0x7f05006a
 int id top 0x7f05006b
 int id view_tree_lifecycle_owner 0x7f05006c
-int id wide 0x7f05006d
+int id view_tree_on_back_pressed_dispatcher_owner 0x7f05006d
+int id view_tree_saved_state_registry_owner 0x7f05006e
+int id view_tree_view_model_store_owner 0x7f05006f
+int id wide 0x7f050070
 int integer cancel_button_image_alpha 0x7f060000
 int integer google_play_services_version 0x7f060001
 int integer status_bar_notification_info_maxnum 0x7f060002
@@ -279,6 +282,7 @@ int layout notification_template_media_custom 0x7f07000d
 int layout notification_template_part_chronometer 0x7f07000e
 int layout notification_template_part_time 0x7f07000f
 int mipmap ic_launcher 0x7f080000
+int mipmap launcher_icon 0x7f080001
 int string common_google_play_services_enable_button 0x7f090000
 int string common_google_play_services_enable_text 0x7f090001
 int string common_google_play_services_enable_title 0x7f090002

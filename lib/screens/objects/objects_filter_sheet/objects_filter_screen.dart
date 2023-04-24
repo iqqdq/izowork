@@ -129,10 +129,10 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
 
                         const SizedBox(height: 17.0),
                         const TitleWidget(
-                            text: Titles.byEffectiveness, isSmall: true),
+                            text: Titles.effectiveness, isSmall: true),
                         const SizedBox(height: 10.0),
 
-                        /// PRICE GRID VIEW
+                        /// EFFECTIVENES GRID VIEW
                         ChipsChoice<String>.multiple(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),

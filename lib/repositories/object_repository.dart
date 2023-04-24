@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/request/object_file_request.dart';
@@ -79,19 +82,24 @@ class ObjectRepository {
     }
   }
 
-  Future<dynamic> getMapObjects({required List<String> params}) async {
+  Future<dynamic> getMapObjects(
+      {required List<String> params,
+      required LatLngBounds? visibleRegion}) async {
     var url = objectsUrl;
 
+    if (visibleRegion != null) {
+      url +=
+          '?lat=gte:${visibleRegion.southwest.latitude}&lat=lte:${visibleRegion.northeast.latitude}&long=gte:${visibleRegion.southwest.longitude}&long=lte:${visibleRegion.northeast.longitude}';
+    }
+
     if (params.isNotEmpty) {
-      var index = 0;
       for (var element in params) {
-        url +=
-            index == 0 ? '?${element.substring(1, element.length)}' : element;
-        index++;
+        url += element;
       }
     }
 
     dynamic json = await WebService().get(url);
+    print(url);
     List<Object> objects = [];
 
     try {

@@ -1,4 +1,4 @@
-package com.example.izowork
+package com.guscom.izwrk
 
 import io.flutter.embedding.android.FlutterActivity
 

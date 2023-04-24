@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/entities/response/trace.dart';
 
 class AnalitycsActionListItemWidget extends StatelessWidget {
-  final DateTime dateTime;
+  final Trace trace;
   final VoidCallback onTap;
 
   const AnalitycsActionListItemWidget(
-      {Key? key, required this.dateTime, required this.onTap})
+      {Key? key, required this.trace, required this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _day = DateTime.now().day.toString().length == 1
-        ? '0${DateTime.now().day}'
-        : '${DateTime.now().day}';
-    final _month = DateTime.now().month.toString().length == 1
-        ? '0${DateTime.now().month}'
-        : '${DateTime.now().month}';
-    final _year = '${DateTime.now().year}';
+    final _day = trace.createdAt.day.toString().length == 1
+        ? '0${trace.createdAt.day}'
+        : '${trace.createdAt.day}';
+    final _month = trace.createdAt.month.toString().length == 1
+        ? '0${trace.createdAt.month}'
+        : '${trace.createdAt.month}';
+    final _year = '${trace.createdAt.year}';
 
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0, left: 16.0, right: 16.0),
-        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
             border: Border.all(width: 1.0, color: HexColors.grey20),
             borderRadius: BorderRadius.circular(16.0)),
@@ -35,7 +35,7 @@ class AnalitycsActionListItemWidget extends StatelessWidget {
                 child: ListView(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    padding: EdgeInsets.zero,
+                    padding: const EdgeInsets.all(16.0),
                     children: [
                       /// USERNAME
                       Text('Имя Фамилия',
@@ -47,12 +47,12 @@ class AnalitycsActionListItemWidget extends StatelessWidget {
                       const SizedBox(height: 2.0),
 
                       /// TITLE
-                      Text('Название действия, которое может быть в две строки',
+                      Text(trace.description ?? '-',
                           style: TextStyle(
                               color: HexColors.grey90,
                               fontSize: 18.0,
                               fontFamily: 'PT Root UI',
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.w500)),
                       const SizedBox(height: 10.0),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

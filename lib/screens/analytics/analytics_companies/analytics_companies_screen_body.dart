@@ -1,12 +1,10 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/random_hex_color.dart';
 import 'package:izowork/models/analytics_companies_view_model.dart';
-
 import 'package:izowork/screens/analytics/views/horizontal_chart/horizontal_chart_widget.dart';
 import 'package:izowork/screens/analytics/views/analitics_manager_list_item_widget.dart';
 import 'package:izowork/screens/analytics/views/pie_chart/pie_chart_widget.dart';
@@ -203,7 +201,8 @@ class _AnalyticsCompaniesScreenBodyState
                     : Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 16.0),
-                        child: Text('0',
+                        child: Text(
+                            _analyticsCompaniesViewModel.dealCount.toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: HexColors.additionalViolet,

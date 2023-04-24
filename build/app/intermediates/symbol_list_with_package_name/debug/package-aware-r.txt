@@ -1,4 +1,4 @@
-com.example.izowork
+com.guscom.izwrk
 attr activityAction
 attr activityName
 attr alpha
@@ -259,6 +259,9 @@ id time
 id title
 id top
 id view_tree_lifecycle_owner
+id view_tree_on_back_pressed_dispatcher_owner
+id view_tree_saved_state_registry_owner
+id view_tree_view_model_store_owner
 id wide
 integer cancel_button_image_alpha
 integer google_play_services_version
@@ -280,6 +283,7 @@ layout notification_template_media_custom
 layout notification_template_part_chronometer
 layout notification_template_part_time
 mipmap ic_launcher
+mipmap launcher_icon
 string common_google_play_services_enable_button
 string common_google_play_services_enable_text
 string common_google_play_services_enable_title

@@ -131,7 +131,8 @@ class ObjectPageViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const ObjectAnalyticsScreenWidget()));
+            builder: (context) => ObjectAnalyticsScreenWidget(
+                object: _object ?? selectedObject)));
   }
 
   void showDocumentsScreen(BuildContext context) {

@@ -56,6 +56,16 @@ class DealRepository {
     }
   }
 
+  Future<dynamic> getDealCount(String id) async {
+    dynamic json = await WebService().get(dealCountUrl + '?office_id=$id');
+
+    try {
+      return json['count'] as int;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
   Future<dynamic> getStage(String id) async {
     dynamic json = await WebService().get(dealStageUrl + id);
     List<DealStage> dealStages = [];

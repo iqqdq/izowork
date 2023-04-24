@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -22,8 +24,32 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>sms</string>
+		<string>tel</string>
+		<string>whatsapp</string>
+		<string>instagram</string>
+		<string>tg</string>
+		<string>vk</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Разрешите Izowork доступ к камере для снимка фото Вашего профиля</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Разрешите Izowork доступ к геолокации, чтобы отображать Ваше текущее местоположение на карте</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Разрешите Izowork доступ к геолокации, чтобы отображать Ваше текущее местоположение на карте</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Разрешите Izowork доступ к микрофону для записи аудиосообщений</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Разрешите Izowork доступ к галерее для выбора фото Вашего профиля</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -31,8 +57,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -43,31 +67,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Разрешите Izowork доступ к геолокации, чтобы отображать Ваше текущее местоположение на карте</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Разрешите Izowork доступ к геолокации, чтобы отображать Ваше текущее местоположение на карте</string>
-    <key>NSCameraUsageDescription</key>
-        <string>Разрешите Izowork доступ к камере для снимка фото Вашего профиля</string>
-    <key>NSMicrophoneUsageDescription</key>
-        <string>Разрешите Izowork доступ к микрофону для записи аудиосообщений</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-        <string>Разрешите Izowork доступ к галерее для выбора фото Вашего профиля</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-  		<string>sms</string>
-  		<string>tel</string>
-		<string>whatsapp</string>
-		<string>instagram</string>
-		<string>tg</string>
-		<string>vk</string>
-	</array>
 </dict>
 </plist>

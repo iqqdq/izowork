@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.izowork"
+    package="com.guscom.izwrk"
     android:versionCode="1"
     android:versionName="1.0.0" >
 
@@ -93,16 +93,22 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
 
+    <permission
+        android:name="com.guscom.izwrk.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.guscom.izwrk.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+
     <application
         android:name="android.app.Application"
         android:allowBackup="false"
         android:appComponentFactory="androidx.core.app.CoreComponentFactory"
         android:debuggable="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher_icon"
         android:label="Izowork"
         android:usesCleartextTraffic="true" >
         <activity
-            android:name="com.example.izowork.MainActivity"
+            android:name="com.guscom.izwrk.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"
@@ -149,7 +155,7 @@
 
         <provider
             android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
-            android:authorities="com.example.izowork.flutter.image_provider"
+            android:authorities="com.guscom.izwrk.flutter.image_provider"
             android:exported="false"
             android:grantUriPermissions="true" >
             <meta-data
@@ -164,20 +170,13 @@
 
         <provider
             android:name="com.crazecoder.openfile.FileProvider"
-            android:authorities="com.example.izowork.fileProvider.com.crazecoder.openfile"
+            android:authorities="com.guscom.izwrk.fileProvider.com.crazecoder.openfile"
             android:exported="false"
             android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
-        </provider>
-
-        <uses-library
-            android:name="androidx.window.extensions"
-            android:required="false" />
-        <uses-library
-            android:name="androidx.window.sidecar"
-            android:required="false" /> <!-- Needs to be explicitly declared on P+ -->
+        </provider> <!-- Needs to be explicitly declared on P+ -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -190,6 +189,13 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <uses-library
+            android:name="androidx.window.extensions"
+            android:required="false" />
+        <uses-library
+            android:name="androidx.window.sidecar"
+            android:required="false" />
     </application>
 
 </manifest>

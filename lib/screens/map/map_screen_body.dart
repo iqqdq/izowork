@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
@@ -46,9 +47,23 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     return ClusterManager<Place>(
         _mapViewModel.places, _mapViewModel.updateMarkers,
         markerBuilder: _markerBuilder,
-        levels: [1.0, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 18.0],
-        extraPercent: 0.2,
-        stopClusteringZoom: 17.0);
+        levels: [
+          1.0,
+          2.0,
+          3.5,
+          4.5,
+          6.75,
+          8.25,
+          11.5,
+          12.5,
+          13.0,
+          14.5,
+          16.0,
+          16.5,
+          20.0
+        ],
+        extraPercent: 0.5,
+        stopClusteringZoom: 20.0);
   }
 
   LatLngBounds getBounds(List<LatLng> markers) {
@@ -95,18 +110,16 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                   .toList());
 
               await _googleMapController
-                  .animateCamera(CameraUpdate.newLatLngBounds(bounds, 75.0));
-              // _updateMap();
+                  .animateCamera(CameraUpdate.newLatLngBounds(bounds, 40.0));
             } else {
               await _googleMapController.animateCamera(
                   CameraUpdate.newCameraPosition(
                       CameraPosition(target: cluster.location, zoom: 16.0)));
-              // _updateMap();
 
               Future.delayed(
                   const Duration(milliseconds: 300),
                   () => _mapViewModel.showMapObjectSheet(
-                      context, cluster.items.first.name));
+                      context, cluster.items.first.id));
             }
           },
           icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, cluster),
@@ -121,37 +134,32 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     final Canvas canvas = Canvas(pictureRecorder);
     final Paint paint1 = Paint()..color = HexColors.primaryMain;
     final Paint paint2 = Paint()..color = HexColors.white;
-    final Paint paint3 = Paint()..color = HexColors.black;
 
-    if (cluster.isMultiple) {
-      canvas.drawCircle(
-          Offset(newSize / 2, newSize / 2), newSize / 2.0, paint1);
-      canvas.drawCircle(
-          Offset(newSize / 2, newSize / 2), newSize / 2.2, paint2);
-      canvas.drawCircle(
-          Offset(newSize / 2, newSize / 2), newSize / 2.4, paint1);
-    } else {
-      canvas.drawCircle(
-          Offset(newSize / 2, newSize / 2), newSize / 2.5, paint1);
-      canvas.drawCircle(
-          Offset(newSize / 2, newSize / 2), newSize / 4.0, paint2);
-      canvas.drawCircle(
-          Offset(newSize / 2, newSize / 2), newSize / 7.0, paint3);
+    canvas.drawCircle(
+        Offset(newSize / 2.0, newSize / 2.0), newSize / 2.0, paint1);
+    canvas.drawCircle(
+        Offset(newSize / 2.0, newSize / 2.0), newSize / 2.2, paint2);
+    canvas.drawCircle(
+        Offset(newSize / 2.0, newSize / 2.0), newSize / 2.6, paint1);
 
-      TextPainter painter = TextPainter(textDirection: TextDirection.ltr);
-      painter.text = TextSpan(
-          text: cluster.items.length.toString(),
-          style: TextStyle(
-              fontSize: newSize / 2.0,
-              color: HexColors.black,
-              fontWeight: FontWeight.w700));
+    TextPainter painter = TextPainter(
+        textDirection: TextDirection.ltr, textAlign: TextAlign.center);
 
-      painter.layout();
-      painter.paint(
-          canvas,
-          Offset(newSize / 2 - painter.width / 2,
-              newSize / 2 - painter.height / 2));
-    }
+    painter.text = TextSpan(
+        text: cluster.isMultiple
+            ? cluster.count.toString()
+            : cluster.items.first.name.substring(0, 1),
+        style: TextStyle(
+            fontSize: newSize / 2.0,
+            color: HexColors.black,
+            fontWeight: FontWeight.w700));
+
+    painter.layout();
+
+    painter.paint(
+        canvas,
+        Offset(newSize / 2.0 - painter.width / 2.0,
+            newSize / 2.0 - painter.height / 2.0));
 
     final img = await pictureRecorder
         .endRecording()
@@ -161,18 +169,18 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }
 
-  void _updateMap() {
-    _debouncer.run(() {
-      _mapViewModel.getVisibleRegion(_googleMapController).then((value) =>
-          _mapViewModel
-              .getObjectList()
-              .then((value) => _mapViewModel.updatePlaces().then((value) => {
-                    /// UPDATE CLUSTER
-                    if (_clusterManager!.items.isEmpty)
-                      {_clusterManager?.setItems(_mapViewModel.places)},
-                    _clusterManager?.updateMap(),
-                  })));
-    });
+  void _updateMap() async {
+    _debouncer.run(() => _mapViewModel
+        .getObjectList(controller: _googleMapController)
+        .then((value) => _mapViewModel.updatePlaces().then((value) => {
+              /// UPDATE CLUSTER
+              _clusterManager?.setItems(_mapViewModel.places),
+              _clusterManager?.updateMap(),
+            })));
+
+    double zoom = await _googleMapController.getZoomLevel();
+
+    debugPrint(zoom.toString());
   }
 
   @override
@@ -201,9 +209,8 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                 /// SET COMPLETER
                 _completer.complete(controller),
 
-                /// SET CLUSTER
+                /// SET CLUSTER ID
                 _clusterManager?.setMapId(_googleMapController.mapId),
-                _clusterManager?.setItems(_mapViewModel.places),
 
                 /// UPDATE LOCATION
                 _updateMap()
@@ -238,10 +245,13 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           child: Padding(
               padding: const EdgeInsets.only(bottom: 6.0),
               child: FilterButtonWidget(
-                  onTap: () => _mapViewModel.showObjectsFilterSheet(context,
-                      () => {_mapViewModel.getObjectList(), _updateMap()})
-                  // onClearTap: () => {}
-                  )))
+                onTap: () => _mapViewModel.showObjectsFilterSheet(
+                    context,
+                    () => _mapViewModel
+                        .getObjectList(controller: _googleMapController)
+                        .then((value) => _updateMap())),
+                // onClearTap: () => {}
+              )))
     ]));
   }
 }

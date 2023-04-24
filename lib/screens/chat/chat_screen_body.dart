@@ -72,8 +72,8 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
   // MARK: - FUNCTIONS
 
   void _addSocketListener(Socket? socket) {
-    bool found = false;
-    Message? message;
+    // bool found = false;
+    // Message? message;
 
     socket?.onConnect((_) {
       debugPrint('SOCKET CONNECTION SUCCESS');

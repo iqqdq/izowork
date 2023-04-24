@@ -270,7 +270,8 @@ class _ObjectAnalyticsScreenBodyState
                             const SizedBox(height: 10.0),
 
                             /// REALIZATION
-                            Text('25%',
+                            Text(
+                                '${_objectAnalyticsViewModel.object.readiness}%',
                                 style: TextStyle(
                                     color: HexColors.black,
                                     fontSize: 20.0,
@@ -294,7 +295,8 @@ class _ObjectAnalyticsScreenBodyState
                             const SizedBox(height: 10.0),
 
                             /// EFFECTIVENESS
-                            Text('50%',
+                            Text(
+                                '${_objectAnalyticsViewModel.object.efficiency}%',
                                 textAlign: TextAlign.end,
                                 style: TextStyle(
                                     color: HexColors.black,
@@ -309,7 +311,7 @@ class _ObjectAnalyticsScreenBodyState
                 const TitleWidget(
                     padding:
                         EdgeInsets.only(left: 16.0, right: 16.0, bottom: 4.0),
-                    text: Titles.photo,
+                    text: Titles.files,
                     isSmall: true),
                 const SizedBox(height: 10.0),
 
@@ -318,9 +320,13 @@ class _ObjectAnalyticsScreenBodyState
                     shrinkWrap: true,
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 3,
+                    itemCount: _objectAnalyticsViewModel.object.files.length,
                     itemBuilder: (context, index) {
-                      return const FileListItemWidget(fileName: 'image.png');
+                      return FileListItemWidget(
+                          fileName: _objectAnalyticsViewModel
+                              .object.files[index].name,
+                          onTap: () => _objectAnalyticsViewModel.openFile(
+                              context, index));
                     })
               ]),
 

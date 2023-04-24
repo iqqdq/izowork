@@ -9,6 +9,7 @@ import 'package:izowork/entities/response/office.dart';
 import 'package:izowork/entities/response/product.dart';
 import 'package:izowork/entities/response/product_analytics.dart';
 import 'package:izowork/repositories/analytics_repository.dart';
+import 'package:izowork/repositories/deal_repository.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/screens/search_office/search_office_screen.dart';
 import 'package:izowork/screens/search_product/search_product_screen.dart';
@@ -30,6 +31,8 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
   Office? _managerOffice;
 
   Product? _product;
+
+  int _dealCount = 0;
 
   ProductAnalytics? get productAnalytics {
     return _productAnalytics;
@@ -57,6 +60,10 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
 
   Product? get product {
     return _product;
+  }
+
+  int get dealCount {
+    return _dealCount;
   }
 
   AnalyticsCompaniesViewModel() {
@@ -101,7 +108,20 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
                   _objectAnalytics = response
                 }
             })
-        .then((value) => {notifyListeners()});
+        .then((value) => notifyListeners());
+  }
+
+  Future getDealCount(String id) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await DealRepository()
+        .getDealCount(id)
+        .then((response) => {
+              if (response is int)
+                {loadingStatus = LoadingStatus.completed, _dealCount = response}
+            })
+        .then((value) => notifyListeners());
   }
 
   Future getManagerList(String id) async {
@@ -117,7 +137,7 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
                   _managerAnalytics = response
                 }
             })
-        .then((value) => {notifyListeners()});
+        .then((value) => notifyListeners());
   }
 
   // MARK: -
@@ -140,8 +160,7 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
                       if (isManagerOffice)
                         {_managerOffice = office, getManagerList(office.id)}
                       else
-                        {_office = office},
-                      notifyListeners()
+                        {_office = office, getDealCount(office.id)}
                     }
                 }));
   }

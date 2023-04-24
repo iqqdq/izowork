@@ -9,10 +9,10 @@ class ObjectsFilterViewModel with ChangeNotifier {
   final ObjectsFilter? objectsFilter;
   List<ObjectStage> objectStages;
 
-  List<String> _options = [];
+  final List<String> _options = [];
   List<int> tags = [];
 
-  List<String> options2 = ['Больше 50%', 'Меньше 50%'];
+  List<String> options2 = ['По возврастанию', 'По убыванию'];
   List<int> tags2 = [];
 
   Company? _designer;
@@ -125,7 +125,7 @@ class ObjectsFilterViewModel with ChangeNotifier {
     }
 
     if (tags2.isNotEmpty) {
-      sortBy = sortBy + 'effectiveness';
+      sortBy = sortBy + 'efficiency';
 
       if (tags2.first == 0) {
         sortOrder = sortOrder.contains('asc') || sortOrder.contains('desc')

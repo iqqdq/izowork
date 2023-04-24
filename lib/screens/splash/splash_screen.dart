@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/user_params.dart';
 import 'package:izowork/screens/authorization/authorization_screen.dart';
 import 'package:izowork/screens/tab_controller/tab_controller_screen.dart';
@@ -53,7 +54,7 @@ class _SplashScreenState extends State<SplashScreenWidget> {
         body: SafeArea(
             child: SizedBox.expand(
                 child: Stack(children: [
-          Center(child: Image.asset('assets/logo.png')),
+          Center(child: SvgPicture.asset('assets/ic_logo.svg')),
           Align(
               alignment: Alignment.bottomCenter,
               child: Padding(

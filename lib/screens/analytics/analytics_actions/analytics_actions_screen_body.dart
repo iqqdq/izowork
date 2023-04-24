@@ -42,10 +42,10 @@ class _AnalyticsActionsScreenBodyState
           ListView.builder(
               padding: EdgeInsets.only(bottom: _bottomPadding + 64.0),
               shrinkWrap: true,
-              itemCount: 20,
+              itemCount: _analyticsActionsViewModel.traces.length,
               itemBuilder: (context, index) {
                 return AnalitycsActionListItemWidget(
-                  dateTime: DateTime.now().add(Duration(days: index)),
+                  trace: _analyticsActionsViewModel.traces[index],
                   onTap: () => {},
                 );
               }),
