@@ -11,7 +11,10 @@ import 'package:izowork/views/separator_widget.dart';
 import 'package:provider/provider.dart';
 
 class NotificationsScreenBodyWidget extends StatefulWidget {
-  const NotificationsScreenBodyWidget({Key? key}) : super(key: key);
+  final Function(int) onPop;
+
+  const NotificationsScreenBodyWidget({Key? key, required this.onPop})
+      : super(key: key);
 
   @override
   _NotificationsScreenBodyState createState() =>
@@ -46,7 +49,11 @@ class _NotificationsScreenBodyState
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             title: Stack(children: [
-              BackButtonWidget(onTap: () => Navigator.pop(context)),
+              BackButtonWidget(
+                  onTap: () => {
+                        widget.onPop(_notificationsViewModel.getUnreadCount()),
+                        Navigator.pop(context)
+                      }),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text(Titles.notifications,
                     style: TextStyle(
@@ -70,7 +77,7 @@ class _NotificationsScreenBodyState
                         _notificationsViewModel.notifications[index].createdAt,
                     isUnread:
                         !_notificationsViewModel.notifications[index].read,
-                    onTap: () => _notificationsViewModel.showNotificationScreen(
+                    onTap: () => _notificationsViewModel.readNotification(
                         context, index));
               }),
           const SeparatorWidget(),

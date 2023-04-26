@@ -224,6 +224,8 @@ class MapViewModel with ChangeNotifier {
 
   void showSearchMapObjectSheet(
       BuildContext context, GoogleMapController controller) {
+    bool found = false;
+
     showCupertinoModalBottomSheet(
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -237,6 +239,16 @@ class MapViewModel with ChangeNotifier {
                   Navigator.pop(context),
                   if (object != null)
                     {
+                      _objects.forEach((element) {
+                        if (object.id == element.id) {
+                          found = true;
+                        }
+                      }),
+                      if (found)
+                        {
+                          _objects.removeWhere(
+                              (element) => element.id == object.id),
+                        },
                       _objects.add(object),
                       updatePlaces().then((value) => controller.animateCamera(
                           CameraUpdate.newCameraPosition(CameraPosition(
@@ -365,7 +377,7 @@ class MapViewModel with ChangeNotifier {
     _objects.forEach((element) {
       places.add(Place(
           id: element.id,
-          name: element.name,
+          name: element.manager?.name ?? '-',
           latLng: LatLng(element.lat, element.long)));
     });
 

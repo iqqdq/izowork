@@ -45,9 +45,7 @@ class _AnalyticsActionsScreenBodyState
               itemCount: _analyticsActionsViewModel.traces.length,
               itemBuilder: (context, index) {
                 return AnalitycsActionListItemWidget(
-                  trace: _analyticsActionsViewModel.traces[index],
-                  onTap: () => {},
-                );
+                    trace: _analyticsActionsViewModel.traces[index]);
               }),
 
           /// FILTER BUTTON

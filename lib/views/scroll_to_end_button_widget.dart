@@ -50,7 +50,7 @@ class ScrollToEndButtonWidget extends StatelessWidget {
                   : Align(
                       alignment: Alignment.topRight,
                       child: Badge(
-                        backgroundColor: Colors.red,
+                        backgroundColor: HexColors.primaryMain,
                         child: Text(count.toString(),
                             style: const TextStyle(color: Colors.white)),
                       ))

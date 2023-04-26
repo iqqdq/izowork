@@ -45,7 +45,7 @@ class _DocumentsFilterPageViewScreenBodyState
               const DismissIndicatorWidget(),
               SizedBox(
                   height: MediaQuery.of(context).padding.bottom == 0.0
-                      ? 304.0
+                      ? 264.0
                       : 294.0,
                   child: PageView(
                       controller: _pageController,

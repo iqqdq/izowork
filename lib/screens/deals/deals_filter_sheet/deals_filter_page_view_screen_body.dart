@@ -61,7 +61,7 @@ class _DealsFilterPageViewScreenBodyState
                   height: _isSearching
                       ? MediaQuery.of(context).size.height * 0.9
                       : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 400.0
+                          ? 410.0
                           : 420.0,
                   child: PageView(
                     controller: _pageController,

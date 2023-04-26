@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class AssetImageButton extends StatelessWidget {
   final String imagePath;
@@ -13,7 +14,7 @@ class AssetImageButton extends StatelessWidget {
     return InkWell(
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
-        child: Image.asset(imagePath, height: 24.0, fit: BoxFit.fill),
+        child: SvgPicture.asset(imagePath, height: 24.0, fit: BoxFit.fill),
         onTap: () => onTap());
   }
 }

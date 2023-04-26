@@ -132,7 +132,7 @@ class ObjectPageViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => ObjectAnalyticsScreenWidget(
-                object: _object ?? selectedObject)));
+                object: _object ?? selectedObject, phases: _phases)));
   }
 
   void showDocumentsScreen(BuildContext context) {

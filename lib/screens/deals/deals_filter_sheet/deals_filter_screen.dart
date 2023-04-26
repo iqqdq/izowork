@@ -53,8 +53,9 @@ class DealsFilterScreenWidget extends StatelessWidget {
                   const TitleWidget(text: Titles.filter),
                   const SizedBox(height: 17.0),
 
-                  /// SCROLLABLE LIST
+                  /// CONTENT LIST
                   ListView(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).padding.bottom == 0.0
@@ -85,43 +86,42 @@ class DealsFilterScreenWidget extends StatelessWidget {
                         const TitleWidget(text: Titles.stages, isSmall: true),
                         const SizedBox(height: 10.0),
 
-                        /// STAGES GRID VIEW
-                        ChipsChoice<String>.multiple(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            wrapped: true,
-                            spacing: 6.0,
-                            runSpacing: 6.0,
-                            value: options,
-                            choiceBuilder: (item, index) => InkWell(
-                                  onTap: () => onTagTap(index),
-                                  child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0, vertical: 4.0),
-                                      decoration: BoxDecoration(
-                                          color: tags.contains(index)
-                                              ? HexColors.additionalViolet
-                                              : HexColors.grey10,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(18.0),
-                                          )),
-                                      child: Text(options[index],
-                                          style: TextStyle(
-                                              fontSize: 14.0,
-                                              fontWeight: tags.contains(index)
-                                                  ? FontWeight.w500
-                                                  : FontWeight.w400,
-                                              color: tags.contains(index)
-                                                  ? HexColors.white
-                                                  : HexColors.black,
-                                              fontFamily: 'PT Root UI'))),
-                                ),
-                            onChanged: (val) => {},
-                            choiceItems: C2Choice.listFrom<String, String>(
-                              source: options,
-                              value: (i, v) => v,
-                              label: (i, v) => v,
-                            )),
+                        /// STAGE HORIZONTAL LIST
+                        SizedBox(
+                            height: 28.0,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                itemCount: options.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    child: Container(
+                                        margin:
+                                            const EdgeInsets.only(right: 10.0),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0, vertical: 4.0),
+                                        decoration: BoxDecoration(
+                                            color: tags.contains(index)
+                                                ? HexColors.additionalViolet
+                                                : HexColors.grey10,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(18.0),
+                                            )),
+                                        child: Text(options[index],
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: tags.contains(index)
+                                                    ? FontWeight.w500
+                                                    : FontWeight.w400,
+                                                color: tags.contains(index)
+                                                    ? HexColors.white
+                                                    : HexColors.black,
+                                                fontFamily: 'PT Root UI'))),
+                                    onTap: () => onTagTap(index),
+                                  );
+                                })),
                         const SizedBox(height: 20.0),
 
                         /// BUTTON's

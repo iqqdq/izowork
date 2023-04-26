@@ -62,8 +62,8 @@ class WebService {
 
   Future<dynamic> postFormData(String url, FormData formData) async {
     try {
-      Response response =
-          await _dio.post(url, data: formData, options: await _options());
+      Response response = await _dio.post(url,
+          data: formData, options: await _multipartOptions());
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response.data;
@@ -93,10 +93,10 @@ class WebService {
   Future<dynamic> put(String url, Object object) async {
     try {
       Response response =
-          await _dio.put(url, data: object, options: await _multipartOptions());
+          await _dio.put(url, data: object, options: await _options());
 
       if (response.statusCode == 200) {
-        return response.data;
+        return response.data ?? true;
       }
     } catch (e) {
       if (e is DioError) {
@@ -122,8 +122,8 @@ class WebService {
 
   Future<dynamic> upload(String url, FormData formData) async {
     try {
-      Response response =
-          await _dio.post(url, data: formData, options: await _options());
+      Response response = await _dio.post(url,
+          data: formData, options: await _multipartOptions());
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         return response.data;

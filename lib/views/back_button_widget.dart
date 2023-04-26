@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 
 class BackButtonWidget extends StatefulWidget {
@@ -24,7 +25,7 @@ class _BackButtonState extends State<BackButtonWidget> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         child: Row(children: [
-          Image.asset('assets/ic_back_arrow.png',
+          SvgPicture.asset('assets/ic_back_arrow.svg',
               color: _isHighlight
                   ? HexColors.secondaryDark
                   : HexColors.primaryDark,

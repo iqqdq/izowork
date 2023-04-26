@@ -4,12 +4,14 @@ import 'package:izowork/screens/more/more_screen_body.dart';
 import 'package:provider/provider.dart';
 
 class MoreScreenWidget extends StatelessWidget {
-  const MoreScreenWidget({Key? key}) : super(key: key);
+  final int count;
+
+  const MoreScreenWidget({Key? key, required this.count}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => MoreViewModel(),
+        create: (context) => MoreViewModel(count),
         child: const MoreScreenBodyWidget());
   }
 }

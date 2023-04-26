@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 
 class CheckBoxWidget extends StatelessWidget {
@@ -19,7 +20,7 @@ class CheckBoxWidget extends StatelessWidget {
                 color:
                     isSelected ? Colors.transparent : HexColors.primaryMain)),
         child: isSelected
-            ? Center(child: Image.asset('assets/ic_checkmark.png'))
+            ? Center(child: SvgPicture.asset('assets/ic_checkmark.svg'))
             : Container());
   }
 }

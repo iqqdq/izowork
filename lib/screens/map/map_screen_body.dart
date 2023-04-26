@@ -199,7 +199,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           initialCameraPosition: CameraPosition(
               target: _mapViewModel.position ??
                   const LatLng(51.15935891650487, 71.46291020823648),
-              zoom: 16.0),
+              zoom: 11.0),
           markers: _mapViewModel.markers,
           onMapCreated: (controller) => {
                 _googleMapController = controller,

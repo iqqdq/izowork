@@ -159,10 +159,10 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                                     imageUrl: avatarUrl + _url,
                                     width: 80.0,
                                     height: 80.0,
-                                    // memCacheWidth: 80 *
-                                    //     MediaQuery.of(context)
-                                    //         .devicePixelRatio
-                                    //         .round(),
+                                    memCacheWidth: 80 *
+                                        MediaQuery.of(context)
+                                            .devicePixelRatio
+                                            .round(),
                                     fit: BoxFit.cover)),
                       ])
                     ]),
@@ -285,7 +285,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                             index == _socials.length - 1
                                 ? BorderButtonWidget(
                                     title: Titles.addSocial,
-                                    margin: EdgeInsets.zero,
+                                    margin: const EdgeInsets.only(top: 10.0),
                                     onTap: () => setState(() => {
                                           _socials[_index].focusNode.unfocus(),
                                           _socials.add(SocialInputModel(
@@ -294,9 +294,18 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                                         }))
                                 : Container()
                           ]);
-                        })
+                        }),
+
+                    /// DELETE ACCOUNT BUTTON
+                    BorderButtonWidget(
+                        title: Titles.deleteAccount,
+                        margin: const EdgeInsets.symmetric(vertical: 16.0),
+                        isDestructive: true,
+                        onTap: () => _profileEditViewModel
+                            .showDeleteAccountDialog(context))
                   ])),
 
+          /// SAVE CHANGES BUTTON
           Align(
               alignment: Alignment.bottomCenter,
               child: Padding(

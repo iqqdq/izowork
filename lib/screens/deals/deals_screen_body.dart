@@ -126,7 +126,7 @@ class _DealsScreenBodyState extends State<DealsScreenBodyWidget>
 
                     /// CALENDAR BUTTON
                     AssetImageButton(
-                        imagePath: 'assets/ic_calendar.png',
+                        imagePath: 'assets/ic_calendar.svg',
                         onTap: () =>
                             _dealsViewModel.showCalendarScreen(context))
                   ])),

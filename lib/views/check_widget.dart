@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 
 class CheckWidget extends StatelessWidget {
@@ -17,6 +18,6 @@ class CheckWidget extends StatelessWidget {
             border: Border.all(
                 width: isReady ? 2.0 : 0.0,
                 color: isReady ? HexColors.grey40 : Colors.transparent)),
-        child: Center(child: Image.asset('assets/ic_checkmark.png')));
+        child: Center(child: SvgPicture.asset('assets/ic_checkmark.svg')));
   }
 }

@@ -35,16 +35,6 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
   bool get wantKeepAlive => true;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     super.build(context);
 
@@ -114,6 +104,9 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                       : MoreListItemWidget(
                           showSeparator: index > 1,
                           title: _titles[index - 1],
+                          count: index == _titles.length - 1
+                              ? _moreViewModel.notificationCount
+                              : null,
                           onTap: () => {
                                 index == 1
                                     ? _moreViewModel.showNewsScreen(context)

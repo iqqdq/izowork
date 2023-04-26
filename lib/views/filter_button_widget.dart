@@ -35,7 +35,7 @@ class FilterButtonWidget extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(children: [
-                                Image.asset('assets/ic_filter.png',
+                                SvgPicture.asset('assets/ic_filter.svg',
                                     color: HexColors.grey50,
                                     width: 16.0,
                                     height: 16.0,

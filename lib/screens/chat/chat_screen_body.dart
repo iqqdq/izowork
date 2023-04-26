@@ -187,15 +187,15 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                   })),
 
           /// FILTER BUTTON
-          SafeArea(
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                      padding: const EdgeInsets.only(bottom: 6.0),
-                      child: FilterButtonWidget(
-                        onTap: () => _chatViewModel.showMapFilterSheet(context),
-                        // onClearTap: () => {}
-                      )))),
+          // SafeArea(
+          //     child: Align(
+          //         alignment: Alignment.bottomCenter,
+          //         child: Padding(
+          //             padding: const EdgeInsets.only(bottom: 6.0),
+          //             child: FilterButtonWidget(
+          //               onTap: () => _chatViewModel.showMapFilterSheet(context),
+          //               // onClearTap: () => {}
+          //             )))),
 
           /// INDICATOR
           _chatViewModel.loadingStatus == LoadingStatus.searching &&

@@ -51,7 +51,7 @@ class MapControlWidget extends StatelessWidget {
                       child: InkWell(
                           highlightColor: HexColors.grey20,
                           splashColor: Colors.transparent,
-                          child: Image.asset('assets/ic_minus.png'),
+                          child: SvgPicture.asset('assets/ic_minus.svg'),
                           onTap: onZoomOutTap))),
               Expanded(
                   child: Material(
@@ -59,7 +59,7 @@ class MapControlWidget extends StatelessWidget {
                       child: InkWell(
                           highlightColor: HexColors.grey20,
                           splashColor: Colors.transparent,
-                          child: Image.asset('assets/ic_location.png'),
+                          child: SvgPicture.asset('assets/ic_location.svg'),
                           onTap: onShowLocationTap))),
               Expanded(
                   child: Material(

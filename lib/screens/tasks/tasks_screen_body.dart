@@ -126,7 +126,7 @@ class _TasksScreenBodyState extends State<TasksScreenBodyWidget>
 
                     /// CALENDAR BUTTON
                     AssetImageButton(
-                        imagePath: 'assets/ic_calendar.png',
+                        imagePath: 'assets/ic_calendar.svg',
                         onTap: () =>
                             _tasksViewModel.showCalendarScreen(context))
                   ])),

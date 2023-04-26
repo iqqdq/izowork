@@ -1,4 +1,3 @@
-import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
@@ -18,14 +17,25 @@ import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
 
 class MoreViewModel with ChangeNotifier {
+  final int count;
+
   LoadingStatus loadingStatus = LoadingStatus.searching;
+
   User? _user;
+
+  int _notificationCount = 0;
+
+  int get notificationCount {
+    return _notificationCount;
+  }
 
   User? get user {
     return _user;
   }
 
-  MoreViewModel() {
+  MoreViewModel(this.count) {
+    _notificationCount = count;
+
     getProfile();
   }
 
@@ -103,7 +113,9 @@ class MoreViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => const NotificationsScreenWidget()));
+            builder: (context) => NotificationsScreenWidget(
+                onPop: (count) =>
+                    {_notificationCount = count, notifyListeners()})));
   }
 
   Future showLogoutDialog(BuildContext context) async {

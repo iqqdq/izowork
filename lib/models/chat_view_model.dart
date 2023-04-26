@@ -7,7 +7,6 @@ import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/user_params.dart';
 import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/repositories/chat_repository.dart';
-import 'package:izowork/screens/chat/chat_filter_sheet/chat_filter_page_view_widget.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -145,14 +144,14 @@ class ChatViewModel with ChangeNotifier {
         MaterialPageRoute(builder: (context) => const StaffScreenWidget()));
   }
 
-  void showMapFilterSheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (context) => ChatFilterPageViewWidget(
-            onApplyTap: () => {Navigator.pop(context)},
-            onResetTap: () => {Navigator.pop(context)}));
-  }
+  // void showMapFilterSheet(BuildContext context) {
+  // showCupertinoModalBottomSheet(
+  //     topRadius: const Radius.circular(16.0),
+  //     barrierColor: Colors.black.withOpacity(0.6),
+  //     backgroundColor: HexColors.white,
+  //     context: context,
+  //     builder: (context) => ChatFilterPageViewWidget(
+  //         onApplyTap: () => {Navigator.pop(context)},
+  //         onResetTap: () => {Navigator.pop(context)}));
+  // }
 }

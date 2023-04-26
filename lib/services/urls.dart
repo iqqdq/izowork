@@ -4,6 +4,7 @@ const socketUrl = '';
 const avatarUrl = baseUrl + 'resourses/avatar/';
 const contactAvatarUrl = baseUrl + 'resourses/contact-avatar/';
 const uploadAvatarUrl = baseUrl + 'user/avatar';
+const deleteAccountUrl = baseUrl + 'user/delete-account';
 
 const loginUrl = baseUrl + 'auth/login';
 const profileUrl = baseUrl + 'user/me';
@@ -102,6 +103,8 @@ const tracesUrl = baseUrl + 'trace/list';
 const documentUrl = baseUrl + 'document/list';
 
 const notificationUrl = baseUrl + 'notification/';
+const notificationUnreadCountUrl = baseUrl + 'notification/unread-count';
+const readNotificationUrl = baseUrl + 'notification/read';
 
 const officeUrl = baseUrl + 'office/all';
 

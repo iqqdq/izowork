@@ -42,7 +42,6 @@ class NewsFilterScreenWidget extends StatelessWidget {
             color: HexColors.white,
             child: ListView(
                 physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
                 padding: const EdgeInsets.only(top: 8.0),
                 children: [
                   /// TITLE
@@ -51,6 +50,7 @@ class NewsFilterScreenWidget extends StatelessWidget {
 
                   /// SCROLLABLE LIST
                   ListView(
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).padding.bottom == 0.0
@@ -67,85 +67,84 @@ class NewsFilterScreenWidget extends StatelessWidget {
                         const TitleWidget(text: Titles.status, isSmall: true),
                         const SizedBox(height: 10.0),
 
-                        /// STATUS GRID VIEW
-                        ChipsChoice<String>.multiple(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            wrapped: true,
-                            spacing: 6.0,
-                            runSpacing: 6.0,
-                            value: options,
-                            choiceBuilder: (item, index) => InkWell(
-                                  onTap: () => onTagTap(index),
-                                  child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0, vertical: 4.0),
-                                      decoration: BoxDecoration(
-                                          color: tags.contains(index)
-                                              ? HexColors.additionalViolet
-                                              : HexColors.grey10,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(18.0),
-                                          )),
-                                      child: Text(options[index],
-                                          style: TextStyle(
-                                              fontSize: 14.0,
-                                              fontWeight: tags.contains(index)
-                                                  ? FontWeight.w500
-                                                  : FontWeight.w400,
-                                              color: tags.contains(index)
-                                                  ? HexColors.white
-                                                  : HexColors.black,
-                                              fontFamily: 'PT Root UI'))),
-                                ),
-                            onChanged: (val) => {},
-                            choiceItems: C2Choice.listFrom<String, String>(
-                              source: options,
-                              value: (i, v) => v,
-                              label: (i, v) => v,
-                            )),
+                        /// STATUS HORIZONTAL LIST
+                        SizedBox(
+                            height: 28.0,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                itemCount: options.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    child: Container(
+                                        margin:
+                                            const EdgeInsets.only(right: 10.0),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0, vertical: 4.0),
+                                        decoration: BoxDecoration(
+                                            color: tags.contains(index)
+                                                ? HexColors.additionalViolet
+                                                : HexColors.grey10,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(18.0),
+                                            )),
+                                        child: Text(options[index],
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: tags.contains(index)
+                                                    ? FontWeight.w500
+                                                    : FontWeight.w400,
+                                                color: tags.contains(index)
+                                                    ? HexColors.white
+                                                    : HexColors.black,
+                                                fontFamily: 'PT Root UI'))),
+                                    onTap: () => onTagTap(index),
+                                  );
+                                })),
 
                         const SizedBox(height: 17.0),
                         const TitleWidget(text: Titles.sorting, isSmall: true),
                         const SizedBox(height: 10.0),
 
-                        /// CREATED AT GRID VIEW
-                        ChipsChoice<String>.multiple(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            wrapped: true,
-                            spacing: 6.0,
-                            runSpacing: 6.0,
-                            value: options2,
-                            choiceBuilder: (item, index) => InkWell(
-                                  onTap: () => onTag2Tap(index),
-                                  child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10.0, vertical: 4.0),
-                                      decoration: BoxDecoration(
-                                          color: tags2.contains(index)
-                                              ? HexColors.additionalViolet
-                                              : HexColors.grey10,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(18.0),
-                                          )),
-                                      child: Text(options2[index],
-                                          style: TextStyle(
-                                              fontSize: 14.0,
-                                              fontWeight: tags2.contains(index)
-                                                  ? FontWeight.w500
-                                                  : FontWeight.w400,
-                                              color: tags2.contains(index)
-                                                  ? HexColors.white
-                                                  : HexColors.black,
-                                              fontFamily: 'PT Root UI'))),
-                                ),
-                            onChanged: (val) => {},
-                            choiceItems: C2Choice.listFrom<String, String>(
-                              source: options2,
-                              value: (i, v) => v,
-                              label: (i, v) => v,
-                            ))
+                        /// NOVELTY HORIZONTAL LIST
+                        SizedBox(
+                            height: 28.0,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                itemCount: options2.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    child: Container(
+                                        margin:
+                                            const EdgeInsets.only(right: 10.0),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10.0, vertical: 4.0),
+                                        decoration: BoxDecoration(
+                                            color: tags2.contains(index)
+                                                ? HexColors.additionalViolet
+                                                : HexColors.grey10,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(18.0),
+                                            )),
+                                        child: Text(options2[index],
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight:
+                                                    tags2.contains(index)
+                                                        ? FontWeight.w500
+                                                        : FontWeight.w400,
+                                                color: tags2.contains(index)
+                                                    ? HexColors.white
+                                                    : HexColors.black,
+                                                fontFamily: 'PT Root UI'))),
+                                    onTap: () => onTag2Tap(index),
+                                  );
+                                }))
                       ]),
 
                   /// BUTTON's

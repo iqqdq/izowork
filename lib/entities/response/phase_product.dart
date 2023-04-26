@@ -6,14 +6,16 @@ PhaseProduct phaseProductFromJson(String str) =>
 
 class PhaseProduct {
   PhaseProduct(
-      {this.count,
+      {required this.bought,
+      required this.count,
       required this.id,
       required this.phaseId,
       this.productId,
       this.termInDays,
       this.product});
 
-  int? count;
+  int bought;
+  int count;
   String id;
   String phaseId;
   String? productId;
@@ -21,7 +23,8 @@ class PhaseProduct {
   Product? product;
 
   factory PhaseProduct.fromJson(Map<String, dynamic> json) => PhaseProduct(
-      count: json["count"],
+      bought: json["bought"] ?? 0,
+      count: json["count"] ?? 0,
       id: json["id"],
       phaseId: json["phase_id"],
       productId: json["product_id"],

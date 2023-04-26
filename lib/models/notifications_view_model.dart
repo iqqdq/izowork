@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/toast.dart';
+import 'package:izowork/entities/request/read_notification_request.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/notification.dart';
@@ -76,6 +77,31 @@ class NotificationsViewModel with ChangeNotifier {
                 loadingStatus = LoadingStatus.error
             })
         .then((value) => notifyListeners());
+  }
+
+  Future readNotification(BuildContext context, int index) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await NotificationRepository()
+        .read(
+            readNotificationRequest:
+                ReadNotificationRequest(id: _notifications[index].id))
+        .then((response) => {
+              if (response == true)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _notifications[index].read = true,
+                  notifyListeners(),
+
+                  /// SHOW OBJECT/DEAL/TASK SCREEN
+
+                  Future.delayed(Duration.zero,
+                      () => showNotificationScreen(context, index))
+                }
+              else
+                {loadingStatus = LoadingStatus.error, notifyListeners()}
+            });
   }
 
   Future getObjectById(BuildContext context, String id) async {
@@ -155,5 +181,16 @@ class NotificationsViewModel with ChangeNotifier {
     } else if (_notifications[index].metadata.taskId != null) {
       getTaskById(context, _notifications[index].metadata.taskId!);
     }
+  }
+
+  int getUnreadCount() {
+    int count = 0;
+    _notifications.forEach((element) {
+      if (!element.read) {
+        count++;
+      }
+    });
+
+    return count;
   }
 }

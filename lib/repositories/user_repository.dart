@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:izowork/components/pagination.dart';
+import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/request/user_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/user.dart';
@@ -83,6 +84,17 @@ class UserRepository {
       });
       return users;
     } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future deleteUser({required String id}) async {
+    dynamic json =
+        await WebService().delete(deleteAccountUrl, DeleteRequest(id: id));
+
+    if (json == null) {
+      return true;
+    } else {
       return ErrorResponse.fromJson(json);
     }
   }

@@ -3,13 +3,16 @@ import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
+import 'package:izowork/components/user_params.dart';
 import 'package:izowork/entities/request/user_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/user_repository.dart';
+import 'package:izowork/screens/authorization/authorization_screen.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen_body.dart';
 
 class ProfileEditViewModel with ChangeNotifier {
@@ -106,6 +109,39 @@ class ProfileEditViewModel with ChangeNotifier {
         });
   }
 
+  Future deleteAccount(BuildContext context) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await UserRepository()
+        .deleteUser(id: _user?.id ?? currentUser.id)
+        .then((response) => {
+              if (response == true)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  notifyListeners(),
+                  Future.delayed(
+                      Duration.zero,
+                      () => {
+                            /// LOGOUT
+                            UserParams().clear(),
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AuthorizationScreenWidget()),
+                                (route) => false)
+                          })
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  notifyListeners(),
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                }
+            });
+  }
+
   // MARK: -
   // MARK: - FUNCTIONS
 
@@ -118,7 +154,33 @@ class ProfileEditViewModel with ChangeNotifier {
     }
   }
 
-  // MARK: -
-  // MARK: - PUSH
-
+  Future showDeleteAccountDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text(Titles.deleteAccountAreYouSure,
+                  style: TextStyle(
+                      color: HexColors.black,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w400)),
+              actions: <Widget>[
+                TextButton(
+                    child: Text(Titles.deleteAccount,
+                        style: TextStyle(
+                            color: HexColors.additionalRed,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w400)),
+                    onPressed: () => deleteAccount(context)),
+                TextButton(
+                    child: Text(Titles.cancel,
+                        style: TextStyle(
+                            color: HexColors.black,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w400)),
+                    onPressed: () => Navigator.of(context).pop())
+              ]);
+        });
+  }
 }

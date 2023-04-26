@@ -37,12 +37,12 @@ class _ProductTypeSelectionScreenBodyState
     return Material(
         type: MaterialType.transparency,
         child: ListView(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).padding.bottom == 0.0
                     ? 20.0
                     : MediaQuery.of(context).padding.bottom),
-            physics: const NeverScrollableScrollPhysics(),
             children: [
               SizedBox(height: widget.isRoot ? 8.0 : 0.0),
               widget.isRoot ? const DismissIndicatorWidget() : Container(),

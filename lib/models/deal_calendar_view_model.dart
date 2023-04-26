@@ -68,49 +68,51 @@ class DealCalendarViewModel with ChangeNotifier {
       notifyListeners();
     });
 
-    await DealRepository().getYearDeals(params: [
-      "deadline=gte:${_pickedDateTime.year}-01-01T00:00:00Z&deadline=lte:${_pickedDateTime.year}-12-31T00:00:00Z"
-    ]).then((response) => {
-          if (response is List<Deal>)
-            {
-              if (_deals.isEmpty)
+    await DealRepository()
+        .getYearDeals(params: [
+          "deadline=gte:${_pickedDateTime.year}-01-01T00:00:00Z&deadline=lte:${_pickedDateTime.year}-12-31T00:00:00Z"
+        ])
+        .then((response) => {
+              if (response is List<Deal>)
                 {
-                  response.forEach((deal) {
-                    _deals.add(deal);
-                  })
+                  if (_deals.isEmpty)
+                    {
+                      response.forEach((deal) {
+                        _deals.add(deal);
+                      })
+                    }
+                  else
+                    {
+                      response.forEach((newDeal) {
+                        bool found = false;
+
+                        _deals.forEach((deal) {
+                          if (newDeal.id == deal.id) {
+                            found = true;
+                          }
+                        });
+
+                        if (!found) {
+                          _deals.add(newDeal);
+                        }
+                      })
+                    },
+                  loadingStatus = LoadingStatus.completed,
                 }
               else
-                {
-                  response.forEach((newDeal) {
-                    bool found = false;
-
-                    _deals.forEach((deal) {
-                      if (newDeal.id == deal.id) {
-                        found = true;
-                      }
-                    });
-
-                    if (!found) {
-                      _deals.add(newDeal);
-                    }
-                  })
-                },
-
+                loadingStatus = LoadingStatus.error
+            })
+        .then((value) => {
               // UPDATE CALENDART EVENT DAYS
-              _deals.forEach((element) {
-                _eventDateTimes.add(DateTime(
-                    DateTime.parse(element.finishAt).year,
-                    DateTime.parse(element.finishAt).month,
-                    DateTime.parse(element.finishAt).day));
-              }),
-
-              loadingStatus = LoadingStatus.completed,
+              if (_deals.isNotEmpty)
+                _deals.forEach((element) {
+                  _eventDateTimes.add(DateTime(
+                      DateTime.parse(element.finishAt).year,
+                      DateTime.parse(element.finishAt).month,
+                      DateTime.parse(element.finishAt).day));
+                }),
               notifyListeners()
-            }
-          else
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
-        });
+            });
   }
 
   // MARK: -

@@ -88,6 +88,9 @@ abstract class Titles {
   static const notifications = 'Уведомления';
   static const logout = 'Выйти из аккаунта';
   static const logoutAreYouSure = 'Вы уверены, что хотите выйти из аккаунта';
+  static const deleteAccount = 'Удалить аккаунт';
+  static const deleteAccountAreYouSure =
+      'Вы уверены, что хотите удалить аккаунт без возможности его восстановления?';
   static const requisites = 'Реквизиты';
   static const productType = 'Тип товара';
   static const productSubtype = 'Подтип товара';
@@ -113,7 +116,9 @@ abstract class Titles {
   static const deliveryTime = 'Срок поставки';
   static const deliveryTimeInMonth = 'Срок поставки, мес';
   static const count = 'Кол-во';
-  static const complition = 'Выполнение';
+  static const remain = 'Остаток';
+  static const complitionPercent = 'Процент выполнения';
+  static const complitionSum = 'Сумма выполнения';
   static const noResult = 'Список пуст';
   static const noMessages = 'Нет сообщений';
   static const changesSuccess = 'Изменения сохранены';
