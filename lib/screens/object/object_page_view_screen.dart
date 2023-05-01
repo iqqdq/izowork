@@ -32,7 +32,7 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
           object: widget.object,
           onCoordCopy: () => Toast().showTopToast(context, Titles.didCopied),
           onUpdate: (object) => setState(() => _title = object.name)),
-      const ObjectActionsScreenWidget()
+      ObjectActionsScreenWidget(object: widget.object)
     ];
 
     super.initState();

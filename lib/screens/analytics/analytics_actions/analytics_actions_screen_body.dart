@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/pagination.dart';
+import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/analytics_actions_view_model.dart';
 import 'package:izowork/screens/analytics/views/analitics_action_list_item_widget.dart';
 import 'package:izowork/components/loading_status.dart';
@@ -18,10 +20,41 @@ class AnalyticsActionsScreenBodyWidget extends StatefulWidget {
 class _AnalyticsActionsScreenBodyState
     extends State<AnalyticsActionsScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
+  final ScrollController _scrollController = ScrollController();
+
   late AnalyticsActionsViewModel _analyticsActionsViewModel;
+
+  Pagination _pagination = Pagination(offset: 0, size: 50);
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _pagination.offset += 1;
+        _analyticsActionsViewModel.getTraceList(pagination: _pagination);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    _pagination = Pagination(offset: 0, size: 50);
+    _analyticsActionsViewModel.getTraceList(pagination: _pagination);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,14 +72,18 @@ class _AnalyticsActionsScreenBodyState
         body: SizedBox.expand(
             child: Stack(children: [
           /// ACTION LIST
-          ListView.builder(
-              padding: EdgeInsets.only(bottom: _bottomPadding + 64.0),
-              shrinkWrap: true,
-              itemCount: _analyticsActionsViewModel.traces.length,
-              itemBuilder: (context, index) {
-                return AnalitycsActionListItemWidget(
-                    trace: _analyticsActionsViewModel.traces[index]);
-              }),
+          RefreshIndicator(
+              onRefresh: _onRefresh,
+              color: HexColors.primaryMain,
+              backgroundColor: HexColors.white,
+              child: ListView.builder(
+                  padding: EdgeInsets.only(bottom: _bottomPadding + 64.0),
+                  shrinkWrap: true,
+                  itemCount: _analyticsActionsViewModel.traces.length,
+                  itemBuilder: (context, index) {
+                    return AnalitycsActionListItemWidget(
+                        trace: _analyticsActionsViewModel.traces[index]);
+                  })),
 
           /// FILTER BUTTON
           SafeArea(
@@ -54,10 +91,32 @@ class _AnalyticsActionsScreenBodyState
                   alignment: Alignment.bottomCenter,
                   child: FilterButtonWidget(
                       onTap: () => _analyticsActionsViewModel
-                          .showAnalyticsActionFilterSheet(context)
+                          .showAnalyticsActionFilterSheet(
+                              context,
+                              () => {
+                                    _pagination =
+                                        Pagination(offset: 0, size: 50),
+                                    _analyticsActionsViewModel.getTraceList(
+                                        pagination: _pagination)
+                                  })
 
                       // onClearTap: () => {}
                       ))),
+
+          /// EMPTY LIST TEXT
+          _analyticsActionsViewModel.loadingStatus == LoadingStatus.completed &&
+                  _analyticsActionsViewModel.traces.isEmpty
+              ? Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, bottom: 100.0),
+                      child: Text(Titles.noResult,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16.0,
+                              color: HexColors.grey50))))
+              : Container(),
 
           /// INDICATOR
           _analyticsActionsViewModel.loadingStatus == LoadingStatus.searching

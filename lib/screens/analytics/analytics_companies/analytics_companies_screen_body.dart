@@ -234,7 +234,7 @@ class _AnalyticsCompaniesScreenBodyState
                         .showSearchOfficeSheet(context, true)),
                 const SizedBox(height: 20.0),
 
-                /// EMPTY MANAGER LIST TEXT
+                /// EMPTY LIST TEXT
                 _analyticsCompaniesViewModel.managerAnalytics == null
                     ? Container()
                     : _analyticsCompaniesViewModel

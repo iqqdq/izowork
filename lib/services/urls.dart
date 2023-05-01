@@ -99,6 +99,7 @@ const messageReadUrl = baseUrl + 'chat/read';
 const messageMediaUrl = baseUrl + 'resourses/message-file/';
 
 const tracesUrl = baseUrl + 'trace/list';
+const traceDoActionUrl = baseUrl + 'trace/do-action';
 
 const documentUrl = baseUrl + 'document/list';
 

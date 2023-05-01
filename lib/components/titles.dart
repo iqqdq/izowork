@@ -124,6 +124,7 @@ abstract class Titles {
   static const changesSuccess = 'Изменения сохранены';
   static const important = 'Важно';
   static const importantNews = 'Важная новость';
+  static const actionAdded = 'Действие добавлено';
 
   /// CHART
   static const generalContractor = 'Ген.подрядчик';

@@ -1,4 +1,5 @@
 import 'package:izowork/components/pagination.dart';
+import 'package:izowork/entities/request/trace_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/trace.dart';
 import 'package:izowork/services/urls.dart';
@@ -46,6 +47,16 @@ class TraceRepository {
       });
       return traces;
     } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> doAction(TraceRequest traceRequest) async {
+    dynamic json = await WebService().post(traceDoActionUrl, traceRequest);
+
+    if (json == null) {
+      return true;
+    } else {
       return ErrorResponse.fromJson(json);
     }
   }

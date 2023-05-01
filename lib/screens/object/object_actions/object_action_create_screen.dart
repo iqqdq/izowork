@@ -63,10 +63,8 @@ class _ObjectActionCreateSheetState
                     maxLines: 10,
                     margin: EdgeInsets.zero,
                     placeholder: '${Titles.action}...',
-                    onTap: () => setState,
-                    onChange: (text) => {
-                      // TODO DESCRTIPTION
-                    },
+                    onTap: () => setState(() {}),
+                    onChange: (text) => setState(() {}),
                   ),
 
                   /// ADD BUTTON
