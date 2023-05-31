@@ -4,7 +4,6 @@ import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/models/participants_view_model.dart';
-import 'package:izowork/models/staff_view_model.dart';
 import 'package:izowork/screens/staff/views/staff_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';

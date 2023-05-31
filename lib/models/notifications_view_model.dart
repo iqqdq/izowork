@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
-import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/read_notification_request.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/error_response.dart';

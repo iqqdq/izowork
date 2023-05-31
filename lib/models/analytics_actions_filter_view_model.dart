@@ -82,7 +82,6 @@ class AnalyticsActionsFilterViewModel with ChangeNotifier {
 
   Future apply(Function(List<String>) didReturnParams) async {
     List<String> params = [];
-    String createdAt = '&created_at=';
 
     if (_office != null) {
       params.add('&office_id=${_office!.id}');
@@ -93,27 +92,13 @@ class AnalyticsActionsFilterViewModel with ChangeNotifier {
     }
 
     if (_fromDateTime != null) {
-      if (createdAt == '&created_at=') {
-        createdAt +=
-            'gte:' + (_fromDateTime!.toUtc().toLocal().toIso8601String() + 'Z');
-      } else {
-        createdAt += ',gte:' +
-            (_fromDateTime!.toUtc().toLocal().toIso8601String() + 'Z');
-      }
+      params.add('&created_at=gte:' +
+          (_fromDateTime!.toUtc().toLocal().toIso8601String() + 'Z'));
     }
 
     if (_toDateTime != null) {
-      if (createdAt == '&created_at=') {
-        createdAt +=
-            'lte:' + (_toDateTime!.toUtc().toLocal().toIso8601String() + 'Z');
-      } else {
-        createdAt +=
-            ',lte:' + (_toDateTime!.toUtc().toLocal().toIso8601String() + 'Z');
-      }
-    }
-
-    if (createdAt != '&created_at=') {
-      params.add(createdAt);
+      params.add('&created_at=lte:' +
+          (_toDateTime!.toUtc().toLocal().toIso8601String() + 'Z'));
     }
 
     didReturnParams(params);

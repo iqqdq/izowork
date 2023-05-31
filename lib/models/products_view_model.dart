@@ -125,6 +125,7 @@ class ProductsViewModel with ChangeNotifier {
 
   void showProductFilterSheet(BuildContext context, Function() onFilter) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,

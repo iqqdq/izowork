@@ -6,16 +6,16 @@ import 'package:provider/provider.dart';
 
 class MapObjectScreenWidget extends StatelessWidget {
   final Object object;
+  final bool? hideInfoButton;
 
-  const MapObjectScreenWidget({
-    Key? key,
-    required this.object,
-  }) : super(key: key);
+  const MapObjectScreenWidget(
+      {Key? key, required this.object, this.hideInfoButton})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => MapObjectViewModel(object),
-        child: const MapObjectScreenBodyWidget());
+        child: MapObjectScreenBodyWidget(hideInfoButton: hideInfoButton));
   }
 }

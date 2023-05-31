@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
-import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/company.dart';
-import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/repositories/company_repository.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen_body.dart';
@@ -39,24 +37,6 @@ class CompaniesViewModel with ChangeNotifier {
 
   // MARK: -
   // MARK: - API CALL
-
-  Future getCompanyById(BuildContext context, String id) async {
-    loadingStatus = LoadingStatus.searching;
-
-    await CompanyRepository().getCompany(id).then((response) => {
-          if (response is Company)
-            {
-              _company = response,
-              loadingStatus = LoadingStatus.completed,
-            }
-          else if (response is ErrorResponse)
-            {
-              loadingStatus = LoadingStatus.error,
-              Toast().showTopToast(context, response.message ?? 'Ошибка')
-            },
-          notifyListeners()
-        });
-  }
 
   Future getCompanyList(
       {required Pagination pagination, required String search}) async {
@@ -120,12 +100,22 @@ class CompaniesViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                CompanyScreenWidget(company: _companies[index])));
+            builder: (context) => CompanyScreenWidget(
+                company: _companies[index],
+                onPop: (company) => {
+                      if (company != null)
+                        {
+                          _companies.removeWhere(
+                              (element) => element.id == company.id),
+                          _companies.insert(index, company),
+                          notifyListeners()
+                        }
+                    })));
   }
 
   void showCompaniesFilterSheet(BuildContext context, Function() onFilter) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,

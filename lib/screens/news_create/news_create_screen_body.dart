@@ -1,18 +1,15 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/entities/response/news.dart';
 import 'package:izowork/models/news_create_view_model.dart';
-import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/checkbox_widget.dart';

@@ -78,6 +78,6 @@ class SearchCompanyViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => CompanyCreateScreenWidget(
-                onPop: (company) => onCreate(company))));
+                onPop: (company) => {if (company != null) onCreate(company)})));
   }
 }

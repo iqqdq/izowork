@@ -111,7 +111,12 @@ class ContactListItemWidget extends StatelessWidget {
                         contact.company == null
                             ? Container()
                             : StatusWidget(
-                                title: contact.company?.type ?? '-', status: 0)
+                                title: contact.company?.type ?? '-',
+                                status: contact.company?.type == 'Поставщик'
+                                    ? 0
+                                    : contact.company?.type == 'Проектировщик'
+                                        ? 1
+                                        : 2)
                       ]),
                       const SizedBox(height: 10.0),
                       const TitleWidget(

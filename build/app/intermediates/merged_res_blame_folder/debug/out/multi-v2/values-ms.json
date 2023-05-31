@@ -21,23 +21,6 @@
                     }
                 },
                 {
-                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/6ec2c823b2ddfa9d4aff16fd99b56b89/transformed/jetified-exoplayer-core-2.18.1/res/values-ms/values-ms.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,125,189,255,320,398,464,554,637",
-                        "endColumns": "69,63,65,64,77,65,89,82,76",
-                        "endOffsets": "120,184,250,315,393,459,549,632,709"
-                    },
-                    "to": {
-                        "startLines": "21,22,23,24,25,26,27,28,29",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "2520,2590,2654,2720,2785,2863,2929,3019,3102",
-                        "endColumns": "69,63,65,64,77,65,89,82,76",
-                        "endOffsets": "2585,2649,2715,2780,2858,2924,3014,3097,3174"
-                    }
-                },
-                {
                     "source": "/Users/iqqddq/.gradle/caches/transforms-3/3ff720be07735976176520d1c05fb799/transformed/jetified-play-services-base-18.0.1/res/values-ms/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
@@ -64,28 +47,11 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "34",
+                        "startLines": "20",
                         "startColumns": "4",
-                        "startOffsets": "3633",
+                        "startOffsets": "2411",
                         "endColumns": "100",
-                        "endOffsets": "3729"
-                    }
-                },
-                {
-                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/aa7263188b29434019ae8934cbefd4da/transformed/jetified-media2-session-1.2.0/res/values-ms/values-ms.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "55,164,260,354,484",
-                        "endColumns": "108,95,93,129,133",
-                        "endOffsets": "159,255,349,479,613"
-                    },
-                    "to": {
-                        "startLines": "20,30,31,32,33",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "2411,3179,3275,3369,3499",
-                        "endColumns": "108,95,93,129,133",
-                        "endOffsets": "2515,3270,3364,3494,3628"
+                        "endOffsets": "2507"
                     }
                 }
             ]

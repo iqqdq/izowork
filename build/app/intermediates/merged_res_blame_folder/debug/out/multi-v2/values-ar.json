@@ -21,23 +21,6 @@
                     }
                 },
                 {
-                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/6ec2c823b2ddfa9d4aff16fd99b56b89/transformed/jetified-exoplayer-core-2.18.1/res/values-ar/values-ar.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,120,179,246,308,390,471,572,667",
-                        "endColumns": "64,58,66,61,81,80,100,94,83",
-                        "endOffsets": "115,174,241,303,385,466,567,662,746"
-                    },
-                    "to": {
-                        "startLines": "21,22,23,24,25,26,27,28,29",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "2271,2336,2395,2462,2524,2606,2687,2788,2883",
-                        "endColumns": "64,58,66,61,81,80,100,94,83",
-                        "endOffsets": "2331,2390,2457,2519,2601,2682,2783,2878,2962"
-                    }
-                },
-                {
                     "source": "/Users/iqqddq/.gradle/caches/transforms-3/601d4158b382ad9f634d3bbb23a34c83/transformed/jetified-play-services-basement-18.0.0/res/values-ar/values.xml",
                     "from": {
                         "startLines": "4",
@@ -64,28 +47,11 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "34",
+                        "startLines": "20",
                         "startColumns": "4",
-                        "startOffsets": "3424",
+                        "startOffsets": "2151",
                         "endColumns": "100",
-                        "endOffsets": "3520"
-                    }
-                },
-                {
-                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/aa7263188b29434019ae8934cbefd4da/transformed/jetified-media2-session-1.2.0/res/values-ar/values-ar.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "55,175,277,372,500",
-                        "endColumns": "119,101,94,127,131",
-                        "endOffsets": "170,272,367,495,627"
-                    },
-                    "to": {
-                        "startLines": "20,30,31,32,33",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "2151,2967,3069,3164,3292",
-                        "endColumns": "119,101,94,127,131",
-                        "endOffsets": "2266,3064,3159,3287,3419"
+                        "endOffsets": "2247"
                     }
                 }
             ]

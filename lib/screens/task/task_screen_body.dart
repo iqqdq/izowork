@@ -5,7 +5,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/task_view_model.dart';
 import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';

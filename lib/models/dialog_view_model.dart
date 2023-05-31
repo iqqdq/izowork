@@ -21,7 +21,6 @@ import 'package:izowork/screens/participants/participants_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/services/urls.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:record/record.dart';
@@ -34,7 +33,6 @@ class DialogViewModel with ChangeNotifier {
   final Socket? socket;
   final Chat chat;
   final record = Record();
-  final player = AudioPlayer();
 
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
@@ -75,12 +73,12 @@ class DialogViewModel with ChangeNotifier {
 
     if (socket == null) {
       _socket = io(
-          'http://185.116.194.234/',
-          OptionBuilder()
-              .setTransports(['websocket']) // for Flutter or Dart VM
-              .disableAutoConnect() // disable auto-connection
-              .build());
-      _socket?.connect();
+              'http://185.116.194.234/',
+              OptionBuilder()
+                  .setTransports(['websocket']) // for Flutter or Dart VM
+                  .disableAutoConnect() // disable auto-connection
+                  .build())
+          .connect();
     }
   }
 
@@ -287,6 +285,7 @@ class DialogViewModel with ChangeNotifier {
 
   void showAddTaskSheet(BuildContext context, String text) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,

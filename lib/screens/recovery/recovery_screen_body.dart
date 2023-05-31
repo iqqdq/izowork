@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/models/recovery_view_model.dart';
 import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -80,10 +80,13 @@ class _RecoveryScreenBodyState extends State<RecoveryScreenBodyWidget> {
                   const SizedBox(height: 16.0),
 
                   ButtonWidget(
-                      isDisabled: _loginTextEditingController.text.isEmpty,
+                      isDisabled: _loginTextEditingController.text.isEmpty ||
+                          !_loginTextEditingController.text.contains('@') ||
+                          !_loginTextEditingController.text.contains('.'),
                       title: Titles.send,
                       margin: EdgeInsets.zero,
-                      onTap: () => {}),
+                      onTap: () => _recoveryViewModel.sendUserEmail(
+                          context, _loginTextEditingController.text)),
                 ]),
 
             /// INDICATOR

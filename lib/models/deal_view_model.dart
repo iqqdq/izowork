@@ -279,6 +279,7 @@ class DealViewModel with ChangeNotifier {
 
   void showDealCloseSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -333,12 +334,14 @@ class DealViewModel with ChangeNotifier {
       });
 
       showCupertinoModalBottomSheet(
+          enableDrag: false,
           topRadius: const Radius.circular(16.0),
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
           builder: (context) => SelectionScreenWidget(
               title: Titles.addProcess,
+              value: '',
               items: items,
               onSelectTap: (value) => {
                     _dealStages[index].processes?.forEach((element) {
@@ -355,6 +358,7 @@ class DealViewModel with ChangeNotifier {
 
   void showDealProcessActionSheet(BuildContext context, DealProcess process) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,

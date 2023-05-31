@@ -120,7 +120,7 @@ class PhaseRepository {
         phaseChecklistInformationFileUrl,
         await phaseChecklistInformationFileRequest.toFormData());
 
-    if (json == '') {
+    if (json == null || json == '') {
       return true;
     } else {
       return ErrorResponse.fromJson(json);

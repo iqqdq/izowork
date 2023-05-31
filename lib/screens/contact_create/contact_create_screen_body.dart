@@ -11,7 +11,7 @@ import 'package:izowork/screens/profile_edit/profile_edit_screen_body.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';

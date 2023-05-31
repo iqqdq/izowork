@@ -4,23 +4,6 @@
             "outputFile": "/Users/iqqddq/Documents/izowork/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-zu/values-zu.xml",
             "map": [
                 {
-                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/6ec2c823b2ddfa9d4aff16fd99b56b89/transformed/jetified-exoplayer-core-2.18.1/res/values-zu/values-zu.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,124,183,245,314,391,471,560,641",
-                        "endColumns": "68,58,61,68,76,79,88,80,68",
-                        "endOffsets": "119,178,240,309,386,466,555,636,705"
-                    },
-                    "to": {
-                        "startLines": "21,22,23,24,25,26,27,28,29",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "2447,2516,2575,2637,2706,2783,2863,2952,3033",
-                        "endColumns": "68,58,61,68,76,79,88,80,68",
-                        "endOffsets": "2511,2570,2632,2701,2778,2858,2947,3028,3097"
-                    }
-                },
-                {
                     "source": "/Users/iqqddq/.gradle/caches/transforms-3/601d4158b382ad9f634d3bbb23a34c83/transformed/jetified-play-services-basement-18.0.0/res/values-zu/values.xml",
                     "from": {
                         "startLines": "4",
@@ -55,23 +38,6 @@
                     }
                 },
                 {
-                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/aa7263188b29434019ae8934cbefd4da/transformed/jetified-media2-session-1.2.0/res/values-zu/values-zu.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "55,162,261,356,485",
-                        "endColumns": "106,98,94,128,137",
-                        "endOffsets": "157,256,351,480,618"
-                    },
-                    "to": {
-                        "startLines": "20,30,31,32,33",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "2340,3102,3201,3296,3425",
-                        "endColumns": "106,98,94,128,137",
-                        "endOffsets": "2442,3196,3291,3420,3558"
-                    }
-                },
-                {
                     "source": "/Users/iqqddq/.gradle/caches/transforms-3/6710ee2e3546b398da00e75003abfc33/transformed/core-1.9.0/res/values-zu/values-zu.xml",
                     "from": {
                         "startLines": "2",
@@ -81,11 +47,11 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "34",
+                        "startLines": "20",
                         "startColumns": "4",
-                        "startOffsets": "3563",
+                        "startOffsets": "2340",
                         "endColumns": "100",
-                        "endOffsets": "3659"
+                        "endOffsets": "2436"
                     }
                 }
             ]

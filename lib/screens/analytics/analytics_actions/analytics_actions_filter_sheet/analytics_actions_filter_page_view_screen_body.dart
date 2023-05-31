@@ -81,13 +81,13 @@ class _AnalyticsActionsFilterPageViewScreenBodyState
                           toDateTime:
                               _analyticsActionsFilterViewModel.toDateTime,
                           onOfficeTap: () => {
-                                setState(() => {_isSearching = true}),
+                                setState(() => _isSearching = true),
                                 _pageController.animateToPage(1,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn),
                               },
                           onManagerTap: () => {
-                                setState(() => {_isSearching = true}),
+                                setState(() => _isSearching = true),
                                 _pageController.animateToPage(2,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn),

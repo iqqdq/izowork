@@ -44,8 +44,8 @@
       "languageVersion": "2.18"
     },
     {
-      "name": "audio_session",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/audio_session-0.1.13",
+      "name": "audiofileplayer",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/audiofileplayer-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -426,24 +426,6 @@
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/json_annotation-4.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
-    },
-    {
-      "name": "just_audio",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/just_audio-0.9.32",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "just_audio_platform_interface",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/just_audio_platform_interface-4.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
-      "name": "just_audio_web",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/just_audio_web-0.4.7",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
     },
     {
       "name": "linked_scroll_controller",
@@ -914,7 +896,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2023-04-26T13:58:24.986463Z",
+  "generated": "2023-05-30T10:35:10.120505Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

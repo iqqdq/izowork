@@ -7,14 +7,14 @@ class MapControlWidget extends StatelessWidget {
   final VoidCallback onZoomInTap;
   final VoidCallback onZoomOutTap;
   final VoidCallback onShowLocationTap;
-  final VoidCallback onSearchTap;
+  final VoidCallback? onSearchTap;
 
   const MapControlWidget(
       {Key? key,
       required this.onZoomInTap,
       required this.onZoomOutTap,
       required this.onShowLocationTap,
-      required this.onSearchTap})
+      this.onSearchTap})
       : super(key: key);
 
   @override
@@ -23,6 +23,7 @@ class MapControlWidget extends StatelessWidget {
         topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0));
 
     return Container(
+        width: 44.0,
         decoration: BoxDecoration(
             border: Border.all(width: 1.0, color: HexColors.grey20),
             borderRadius: borderRadius),
@@ -30,7 +31,6 @@ class MapControlWidget extends StatelessWidget {
             blur: 15.0,
             borderRadius: borderRadius,
             child: Container(
-                width: 44.0,
                 height: 176.0,
                 decoration: BoxDecoration(
                     color: HexColors.white80, borderRadius: borderRadius)),
@@ -43,7 +43,11 @@ class MapControlWidget extends StatelessWidget {
                           splashColor: Colors.transparent,
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(10.0)),
-                          child: SvgPicture.asset('assets/ic_plus.svg'),
+                          child: SvgPicture.asset(
+                            'assets/ic_plus.svg',
+                            width: 44.0,
+                            fit: BoxFit.none,
+                          ),
                           onTap: onZoomInTap))),
               Expanded(
                   child: Material(
@@ -51,7 +55,11 @@ class MapControlWidget extends StatelessWidget {
                       child: InkWell(
                           highlightColor: HexColors.grey20,
                           splashColor: Colors.transparent,
-                          child: SvgPicture.asset('assets/ic_minus.svg'),
+                          child: SvgPicture.asset(
+                            'assets/ic_minus.svg',
+                            width: 44.0,
+                            fit: BoxFit.none,
+                          ),
                           onTap: onZoomOutTap))),
               Expanded(
                   child: Material(
@@ -59,19 +67,27 @@ class MapControlWidget extends StatelessWidget {
                       child: InkWell(
                           highlightColor: HexColors.grey20,
                           splashColor: Colors.transparent,
-                          child: SvgPicture.asset('assets/ic_location.svg'),
+                          child: SvgPicture.asset(
+                            'assets/ic_location.svg',
+                            width: 44.0,
+                            fit: BoxFit.none,
+                          ),
                           onTap: onShowLocationTap))),
-              Expanded(
-                  child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                          highlightColor: HexColors.grey20,
-                          splashColor: Colors.transparent,
-                          borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(10.0)),
-                          child: SvgPicture.asset('assets/ic_search.svg',
-                              color: HexColors.grey50),
-                          onTap: onSearchTap))),
+              onSearchTap == null
+                  ? Container()
+                  : Expanded(
+                      child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                              highlightColor: HexColors.grey20,
+                              splashColor: Colors.transparent,
+                              borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(10.0)),
+                              child: SvgPicture.asset('assets/ic_search.svg',
+                                  width: 44.0,
+                                  fit: BoxFit.none,
+                                  color: HexColors.grey50),
+                              onTap: onSearchTap))),
             ])));
   }
 }

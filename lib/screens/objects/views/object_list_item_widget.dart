@@ -59,6 +59,21 @@ class ObjectListItemWidget extends StatelessWidget {
                       const SeparatorWidget(),
                       const SizedBox(height: 10.0),
 
+                      /// GENERAL CONTRACTOR
+                      const TitleWidget(
+                          text: Titles.generalContractor,
+                          padding: EdgeInsets.zero,
+                          isSmall: true),
+                      const SizedBox(height: 2.0),
+
+                      SubtitleWidget(
+                          text: object.contractor?.name ?? '-',
+                          padding: EdgeInsets.zero),
+
+                      const SizedBox(height: 10.0),
+                      const SeparatorWidget(),
+                      const SizedBox(height: 10.0),
+
                       Row(children: [
                         /// REALIZATIONS
                         Expanded(

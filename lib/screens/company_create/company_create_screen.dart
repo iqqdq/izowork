@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class CompanyCreateScreenWidget extends StatelessWidget {
   final Company? company;
-  final Function(Company)? onPop;
+  final Function(Company?)? onPop;
 
   const CompanyCreateScreenWidget({Key? key, this.company, required this.onPop})
       : super(key: key);

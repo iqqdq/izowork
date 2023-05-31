@@ -473,12 +473,14 @@ class DealCreateViewModel with ChangeNotifier {
       });
 
       showCupertinoModalBottomSheet(
+          enableDrag: false,
           topRadius: const Radius.circular(16.0),
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
           builder: (context) => SelectionScreenWidget(
               title: Titles.phase,
+              value: _phase?.name ?? selectedPhase?.name ?? '',
               items: items,
               onSelectTap: (stage) => {
                     _phases.forEach((element) {
@@ -496,10 +498,10 @@ class DealCreateViewModel with ChangeNotifier {
         overflow: TextOverflow.ellipsis, fontFamily: 'PT Root UI');
 
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
-        enableDrag: false,
         context: context,
         builder: (context) => DateTimeWheelPickerWidget(
             minDateTime: _minDateTime,
@@ -534,6 +536,7 @@ class DealCreateViewModel with ChangeNotifier {
 
   void showSearchUserSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -551,6 +554,7 @@ class DealCreateViewModel with ChangeNotifier {
 
   void showSearchObjectSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -573,6 +577,7 @@ class DealCreateViewModel with ChangeNotifier {
 
   void showSearchCompanySheet(BuildContext context) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -590,6 +595,7 @@ class DealCreateViewModel with ChangeNotifier {
 
   void showSearchProductSheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,

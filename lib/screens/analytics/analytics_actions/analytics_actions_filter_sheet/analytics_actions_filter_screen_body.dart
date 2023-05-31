@@ -3,7 +3,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/office.dart';
 import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/date_selection_input_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/title_widget.dart';

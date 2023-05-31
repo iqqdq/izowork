@@ -147,6 +147,7 @@ class TasksViewModel with ChangeNotifier {
     if (_taskState != null) {
       if (_taskState!.states.isNotEmpty) {
         showCupertinoModalBottomSheet(
+            enableDrag: false,
             topRadius: const Radius.circular(16.0),
             barrierColor: Colors.black.withOpacity(0.6),
             backgroundColor: HexColors.white,

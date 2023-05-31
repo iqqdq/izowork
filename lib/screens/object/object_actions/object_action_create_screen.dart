@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
@@ -23,6 +23,15 @@ class _ObjectActionCreateSheetState
   final FocusNode _focusNode = FocusNode();
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.requestFocus();
+    });
+  }
+
+  @override
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
@@ -37,7 +46,7 @@ class _ObjectActionCreateSheetState
             color: HexColors.white,
             child: ListView(
                 physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
+                shrinkWrap: false,
                 padding: EdgeInsets.only(
                     top: 8.0,
                     left: 16.0,

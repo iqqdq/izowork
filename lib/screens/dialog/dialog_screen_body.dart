@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:blur/blur.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -112,9 +113,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                 },
 
               /// PLAY MESSAGE RECEIVE SOUND
-              _dialogViewModel.player
-                  .setAsset('assets/sounds/message_receive.mp3'),
-              _dialogViewModel.player.play(),
+              // Audio.load('assets/sounds/message_receive.mp3').play(),
 
               // UPDATE BUBBLES
               _updateBubbles(true),
@@ -358,9 +357,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                 if (_dialogViewModel.token != null)
                   {
                     /// PLAY MESSAGE SENT SOUND
-                    _dialogViewModel.player
-                        .setAsset('assets/sounds/message_sent.mp3'),
-                    _dialogViewModel.player.play(),
+                    Audio.load('assets/sounds/message_sent.mp3').play(),
 
                     /// SEND MESSAGE
                     _dialogViewModel.newSocket?.emit(

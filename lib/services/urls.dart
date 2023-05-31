@@ -5,6 +5,7 @@ const avatarUrl = baseUrl + 'resourses/avatar/';
 const contactAvatarUrl = baseUrl + 'resourses/contact-avatar/';
 const uploadAvatarUrl = baseUrl + 'user/avatar';
 const deleteAccountUrl = baseUrl + 'user/delete-account';
+const resetPasswordUrl = baseUrl + 'user/reset-password';
 
 const loginUrl = baseUrl + 'auth/login';
 const profileUrl = baseUrl + 'user/me';
@@ -25,11 +26,12 @@ const productsUrl = baseUrl + 'product/all';
 const productTypesUrl = baseUrl + 'product-type/all';
 const productMedialUrl = baseUrl + 'resourses/product-image/';
 
-const companyUrl = baseUrl + 'company/one?id=';
+const companyUrl = baseUrl + 'company/one';
 const companiesUrl = baseUrl + 'company/all';
 const companyAvatarUrl = baseUrl + 'company/image';
 const companyTypesUrl = baseUrl + 'company/types';
 const companyCreateUrl = baseUrl + 'company/create';
+const companyUpdateUrl = baseUrl + 'company/update';
 
 const taskUrl = baseUrl + 'task/one?id=';
 const tasksUrl = baseUrl + 'task/all';

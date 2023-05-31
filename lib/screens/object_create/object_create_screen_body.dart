@@ -8,7 +8,7 @@ import 'package:izowork/models/object_create_view_model.dart';
 import 'package:izowork/screens/object/object_page_view_screen.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/checkbox_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/input_widget.dart';
@@ -168,8 +168,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 height: 56.0,
                                 placeholder: Titles.objectName,
-                                onTap: () => setState,
-                                onChange: (text) => setState(() {})),
+                                onTap: () => setState(() {}),
+                                onChange: (text) => setState(() {}),
+                                onEditingComplete: () => setState(() {})),
 
                             /// ADDRESS INPUT
                             InputWidget(
@@ -179,8 +180,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 height: 56.0,
                                 placeholder: Titles.address,
-                                onTap: () => setState,
-                                onChange: (text) => setState(() {})),
+                                onTap: () => setState(() {}),
+                                onChange: (text) => setState(() {}),
+                                onEditingComplete: () => setState(() {})),
 
                             /// COORDINATES INPUT
                             InputWidget(
@@ -193,8 +195,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 height: 56.0,
                                 placeholder: Titles.coordinates,
-                                onTap: () => setState,
-                                onChange: (text) => setState(() {})),
+                                onTap: () => setState(() {}),
+                                onChange: (text) => setState(() {}),
+                                onEditingComplete: () => setState(() {})),
 
                             /// MANAGER SELECTION INPUT
                             SelectionInputWidget(
@@ -265,8 +268,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 height: 56.0,
                                 placeholder: Titles.floorCount,
-                                onTap: () => setState,
-                                onChange: (text) => setState(() {})),
+                                onTap: () => setState(() {}),
+                                onChange: (text) => setState(() {}),
+                                onEditingComplete: () => setState(() {})),
 
                             /// AREA INPUT
                             InputWidget(
@@ -277,8 +281,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 height: 56.0,
                                 placeholder: Titles.area,
-                                onTap: () => setState,
-                                onChange: (text) => setState(() {})),
+                                onTap: () => setState(() {}),
+                                onChange: (text) => setState(() {}),
+                                onEditingComplete: () => setState(() {})),
 
                             /// BUILDING TIME INPUT
                             InputWidget(
@@ -289,8 +294,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 height: 56.0,
                                 placeholder: Titles.buildingTime,
-                                onTap: () => setState,
-                                onChange: (text) => setState(() {})),
+                                onTap: () => setState(() {}),
+                                onChange: (text) => setState(() {}),
+                                onEditingComplete: () => setState(() {})),
 
                             /// STAGES BUTTON
                             SelectionInputWidget(
@@ -330,16 +336,17 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                         top: 20.0, bottom: 20.0),
                                     height: 56.0,
                                     placeholder: Titles.kisoDocumentNumber,
-                                    onTap: () => setState,
-                                    onChange: (text) => setState(() {}))
+                                    onTap: () => setState(() {}),
+                                    onChange: (text) => setState(() {}),
+                                    onEditingComplete: () => setState(() {}))
                                 : const SizedBox(height: 30.0),
 
                             /// CREATE FOLDER CHECKBOX
                             GestureDetector(
                                 child: Row(children: [
                                   CheckBoxWidget(
-                                      isSelected: _objectCreateViewModel
-                                          .isCreateFolder),
+                                      isSelected:
+                                          !_objectCreateViewModel.hideDir),
                                   const SizedBox(width: 8.0),
                                   Text(Titles.createObjectFolder,
                                       style: TextStyle(

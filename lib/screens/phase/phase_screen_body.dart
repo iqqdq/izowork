@@ -9,7 +9,7 @@ import 'package:izowork/screens/phase/views/check_list_item_widget.dart';
 import 'package:izowork/screens/phase/views/contractor_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/title_widget.dart';
@@ -92,29 +92,30 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                 child: SpreadsheetTable(
                                   cellBuilder: (_, int row, int col) =>
                                       Container(
-                                          height: 36.0,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 2.0),
+                                          padding: const EdgeInsets.all(6.0),
                                           decoration: BoxDecoration(
                                               border: Border.all(
                                                   width: 0.65,
                                                   color: HexColors.grey20)),
-                                          child: Center(
-                                              child: Text(
-                                                  col == 0
-                                                      ? _phaseViewModel
-                                                          .phaseProducts[row]
-                                                          .termInDays
-                                                          .toString()
-                                                      : _phaseViewModel
-                                                          .phaseProducts[row]
-                                                          .count
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 14.0,
-                                                      color: HexColors.black,
-                                                      fontFamily:
-                                                          'PT Root UI')))),
+                                          child: Row(children: [
+                                            Expanded(
+                                                child: Text(
+                                                    col == 0
+                                                        ? _phaseViewModel
+                                                            .phaseProducts[row]
+                                                            .termInDays
+                                                            .toString()
+                                                        : _phaseViewModel
+                                                            .phaseProducts[row]
+                                                            .count
+                                                            .toString(),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: HexColors.black,
+                                                        fontFamily:
+                                                            'PT Root UI')))
+                                          ])),
                                   legendBuilder: (_) => Container(
                                       height: 36.0,
                                       padding: const EdgeInsets.symmetric(
@@ -125,9 +126,11 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                               color: HexColors.grey20)),
                                       child: Row(children: [
                                         Text(Titles.product,
+                                            maxLines: 2,
                                             style: TextStyle(
                                                 fontSize: 14.0,
                                                 fontWeight: FontWeight.w500,
+                                                overflow: TextOverflow.ellipsis,
                                                 color: HexColors.black,
                                                 fontFamily: 'PT Root UI'))
                                       ])),
@@ -140,14 +143,17 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                               width: 0.65,
                                               color: HexColors.grey20)),
                                       child: Row(children: [
-                                        Text(
-                                            _phaseViewModel.phaseProducts[index]
-                                                    .product?.name ??
-                                                '-',
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                color: HexColors.black,
-                                                fontFamily: 'PT Root UI'))
+                                        Expanded(
+                                            child: Text(
+                                                _phaseViewModel
+                                                        .phaseProducts[index]
+                                                        .product
+                                                        ?.name ??
+                                                    '-',
+                                                style: TextStyle(
+                                                    fontSize: 14.0,
+                                                    color: HexColors.black,
+                                                    fontFamily: 'PT Root UI')))
                                       ])),
                                   colHeaderBuilder: (_, index) => Container(
                                       height: 36.0,

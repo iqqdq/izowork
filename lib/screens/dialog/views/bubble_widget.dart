@@ -1,4 +1,5 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
+import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,7 +7,6 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/screens/dialog/views/date_header_widget.dart';
 import 'package:izowork/services/urls.dart';
-import 'package:just_audio/just_audio.dart';
 
 class BubbleWidget extends StatefulWidget {
   final bool animate;
@@ -52,8 +52,10 @@ class BubbleWidget extends StatefulWidget {
 
 class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
   late AnimationController _animationController;
-  AudioPlayer? _player;
-  int _position = 0;
+  Audio? _audio;
+  double? _position = 0.0;
+  double? _duration;
+  bool _isPlaying = false;
 
   @override
   void initState() {
@@ -70,51 +72,48 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
     }
 
     // INIT AUDIO PLAYER
-    if (widget.isAudio) {
-      _player = AudioPlayer();
-      _player!.setUrl(widget.text, preload: true);
-
-      // LISTEN PLAYER POSITION
-      _player!.positionStream.listen((state) {
-        if (mounted) {
-          setState(() {
-            _position = _player?.position.inSeconds ?? 0;
-          });
-        }
-      });
-
-      // LISTEN PLAYER STATE
-      _player!.playerStateStream.listen((state) {
-        switch (state.processingState) {
-          case ProcessingState.idle:
-            break;
-          case ProcessingState.loading:
-            break;
-          case ProcessingState.buffering:
-            break;
-          case ProcessingState.ready:
-            if (mounted) {
-              setState(() => _position = _player?.position.inSeconds ?? 0);
-            }
-            break;
-          case ProcessingState.completed:
-            // RELOAD PLAYER POSITION
-            if (mounted) {
-              _player?.stop().then((value) => _player
-                  ?.seek(const Duration(seconds: 0))
-                  .then((value) => setState(() => _position = 0)));
-            }
-            break;
-        }
-      });
+    if (widget.isAudio && widget.text.isNotEmpty) {
+      _initAudioPlayer();
     }
   }
 
   @override
   void dispose() {
     _animationController.dispose();
-    _player?.dispose();
+    _audio?.dispose();
     super.dispose();
+  }
+
+  Future _initAudioPlayer() async {
+    _audio = Audio.loadFromRemoteUrl(widget.text,
+        playInBackground: false,
+        onComplete: () => _handleOnComplete(),
+        onDuration: (double durationSeconds) =>
+            _handleDuration(durationSeconds),
+        onPosition: (double positionSeconds) =>
+            _handlePosition(positionSeconds),
+        onError: (e) => debugPrint(e));
+  }
+
+  void _handleDuration(double positionSeconds) async {
+    if (mounted) {
+      setState(() => _duration = positionSeconds);
+    }
+  }
+
+  void _handlePosition(double positionSeconds) async {
+    if (mounted) {
+      setState(() => {
+            if (positionSeconds > 0) _isPlaying = true,
+            _position = positionSeconds,
+          });
+    }
+  }
+
+  void _handleOnComplete() {
+    if (mounted) {
+      setState(() => {_isPlaying = false, _position = 0});
+    }
   }
 
   @override
@@ -158,24 +157,26 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
     //             : HexColors.black.withOpacity(0.6)));
 
     final current = Text(
-        _player?.duration == null
+        _audio == null
             ? ''
-            : _position.toString().length > 1
-                ? '00:${_position.toString()}'
-                : '00:0${_position.toString()}',
+            : _position == null
+                ? ''
+                : _position!.toInt().toString().length > 1
+                    ? '00:${_position!.toInt().toString()}'
+                    : '00:0${_position!.toInt().toString()}',
         style: TextStyle(
             fontSize: 12.0,
             fontFamily: 'PT Root UI',
             color: widget.isMine ? HexColors.white : HexColors.black));
 
     final total = Text(
-        _player == null
+        _audio == null
             ? ''
-            : _player?.duration?.inSeconds == null
+            : _duration == null
                 ? ''
-                : _player!.duration!.inSeconds.toString().length > 1
-                    ? '00:${_player!.duration!.inSeconds.toString()}'
-                    : '00:0${_player!.duration!.inSeconds.toString()}',
+                : _duration!.toInt().toString().length > 1
+                    ? '00:${_duration!.toInt().toString()}'
+                    : '00:0${_duration!.toInt().toString()}',
         style: TextStyle(
             fontSize: 12.0,
             fontFamily: 'PT Root UI',
@@ -186,6 +187,7 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       children: [
+        /// USERNAME
         widget.isMine
             ? Container()
             : widget.showName
@@ -193,15 +195,12 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                     onTap: widget.onUserTap == null
                         ? null
                         : () => widget.onUserTap!(),
-                    child:
-
-                        /// USERNAME
-                        Text(widget.user?.name ?? '',
-                            style: TextStyle(
-                                color: HexColors.grey40,
-                                fontSize: 14.0,
-                                fontFamily: 'PT Root UI',
-                                fontWeight: FontWeight.bold)))
+                    child: Text(widget.user?.name ?? '',
+                        style: TextStyle(
+                            color: HexColors.grey40,
+                            fontSize: 14.0,
+                            fontFamily: 'PT Root UI',
+                            fontWeight: FontWeight.bold)))
                 : Container(),
         SizedBox(height: widget.showName ? 4.0 : 0.0),
 
@@ -217,7 +216,7 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
         widget.isFile
             // ? size
             ? Container()
-            : _player != null
+            : _audio != null
                 ? SizedBox(
                     height: 36.0,
                     child: SliderTheme(
@@ -225,9 +224,8 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                           overlayShape: SliderComponentShape.noOverlay,
                         ),
                         child: Slider(
-                            value: _position.toDouble(),
-                            max: _player!.duration?.inSeconds.toDouble() ?? 1.0,
-                            // divisions: _player!.duration?.inSeconds ?? 1,
+                            value: _position?.toDouble() ?? 0.0,
+                            max: _duration?.toDouble() ?? 1.0,
                             thumbColor: widget.isMine
                                 ? HexColors.white
                                 : HexColors.additionalViolet,
@@ -238,10 +236,8 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                                 ? HexColors.white.withOpacity(0.3)
                                 : HexColors.additionalViolet.withOpacity(0.3),
                             onChanged: (value) => {
-                                  _player
-                                      ?.seek(Duration(seconds: value.toInt()))
-                                      .then((_) => setState(
-                                          () => _position = value.toInt()))
+                                  _audio?.seek(value).then(
+                                      (_) => setState(() => _position = value))
                                 })))
                 : Container()
       ],
@@ -298,61 +294,67 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                           : BorderRadius.circular(20.0),
                 ),
                 child: widget.isFile
-                    ? Column(children: [
-                        Row(children: [
-                          widget.isDownloading
-                              ?
-                              // Show indicator
-                              Transform.scale(
-                                  scale: 0.75,
-                                  child: CircularProgressIndicator(
-                                      strokeWidth: 6.0,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        widget.isMine
-                                            ? HexColors.white
-                                            : HexColors.additionalViolet,
-                                      )))
-                              // Show file icon
-                              : SvgPicture.asset('assets/ic_dialog_file.svg',
-                                  color: widget.isMine
-                                      ? HexColors.white
-                                      : HexColors.additionalViolet,
-                                  width: 40.0,
-                                  height: 40.0),
-                          const SizedBox(width: 10.0),
-                          Expanded(child: contentList)
-                        ]),
-                        SizedBox(
-                            height:
-                                !widget.isMine && widget.isFile ? 8.0 : 0.0),
-                        time
-                      ])
-                    : _player != null
-                        ? Column(children: [
-                            Row(
-                              children: [
-                                GestureDetector(
-                                    onTap: () => _player!.playing
-                                        ? _player!.pause()
-                                        : _player!.play(),
-                                    child: _player == null
-                                        ? Container()
-                                        : SvgPicture.asset(
-                                            _player!.playing
-                                                ? 'assets/ic_dialog_pause.svg'
-                                                : 'assets/ic_dialog_play.svg',
-                                            color: widget.isMine
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                            Row(children: [
+                              widget.isDownloading
+                                  ?
+                                  // Show indicator
+                                  Transform.scale(
+                                      scale: 0.75,
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 6.0,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            widget.isMine
                                                 ? HexColors.white
                                                 : HexColors.additionalViolet,
-                                            width: 40.0,
-                                            height: 40.0,
-                                            fit: BoxFit.cover)),
-                                const SizedBox(width: 10.0),
-                                Expanded(child: contentList)
-                              ],
-                            ),
+                                          )))
+                                  // Show file icon
+                                  : SvgPicture.asset(
+                                      'assets/ic_dialog_file.svg',
+                                      color: widget.isMine
+                                          ? HexColors.white
+                                          : HexColors.additionalViolet,
+                                      width: 40.0,
+                                      height: 40.0),
+                              const SizedBox(width: 10.0),
+                              Expanded(child: contentList)
+                            ]),
+                            SizedBox(
+                                height: !widget.isMine && widget.isFile
+                                    ? 8.0
+                                    : 0.0),
                             time
                           ])
+                    : _audio != null
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                        onTap: () => _audio?.resume(),
+                                        child: _audio == null
+                                            ? Container()
+                                            : SvgPicture.asset(
+                                                _isPlaying
+                                                    ? 'assets/ic_dialog_pause.svg'
+                                                    : 'assets/ic_dialog_play.svg',
+                                                color: widget.isMine
+                                                    ? HexColors.white
+                                                    : HexColors
+                                                        .additionalViolet,
+                                                width: 40.0,
+                                                height: 40.0,
+                                                fit: BoxFit.cover)),
+                                    const SizedBox(width: 10.0),
+                                    Expanded(child: contentList)
+                                  ],
+                                ),
+                                time
+                              ])
                         : Column(children: [
                             contentList,
                             const SizedBox(height: 4.0),
@@ -361,9 +363,12 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                                   ? MainAxisAlignment.spaceBetween
                                   : MainAxisAlignment.start,
                               children: [
-                                widget.isMine && widget.isRead
-                                    ? SvgPicture.asset('assets/ic_read.svg')
-                                    : SvgPicture.asset('assets/ic_unread.svg'),
+                                widget.isMine
+                                    ? widget.isRead
+                                        ? SvgPicture.asset('assets/ic_read.svg')
+                                        : SvgPicture.asset(
+                                            'assets/ic_unread.svg')
+                                    : Container(),
                                 time
                               ],
                             )

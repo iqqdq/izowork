@@ -82,7 +82,6 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                     style: TextStyle(
                         color: HexColors.primaryDark,
                         fontSize: 20.0,
-                        fontFamily: 'PT Root UI',
                         fontWeight: FontWeight.bold)),
                 const SizedBox(height: 16.0),
 

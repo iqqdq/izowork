@@ -145,6 +145,7 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
 
   void showSearchOfficeSheet(BuildContext context, bool isManagerOffice) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -167,6 +168,7 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
 
   void showSearchProductSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,

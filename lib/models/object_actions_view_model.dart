@@ -86,9 +86,10 @@ class ObjectActionsViewModel with ChangeNotifier {
     await TraceRepository()
         .doAction(TraceRequest(action: text, objectId: object.id))
         .then((response) => {
-              if (response == true)
+              if (response is Trace)
                 {
                   loadingStatus = LoadingStatus.completed,
+                  _traces.insert(0, response),
                   Toast().showTopToast(context, Titles.actionAdded)
                 }
               else if (response is ErrorResponse)
@@ -97,7 +98,7 @@ class ObjectActionsViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 }
             })
-        .then((value) => getTraceList(pagination: pagination));
+        .then((value) => notifyListeners());
   }
 
   // MARK: -
@@ -105,6 +106,7 @@ class ObjectActionsViewModel with ChangeNotifier {
 
   void showActionCreateScreen(BuildContext context, Pagination pagination) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,

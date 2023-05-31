@@ -46,6 +46,7 @@ abstract class Titles {
   static const clipMedia = 'Прикрепить медиа';
   static const addMedia = 'Добавить медиа';
   static const edit = 'Редактировать';
+  static const showOnMap = 'Смотреть на карте';
   static const stop = 'Остановить';
   static const save = 'Сохранить';
   static const delete = 'Удалить';
@@ -87,7 +88,7 @@ abstract class Titles {
   static const documents = 'Документы';
   static const notifications = 'Уведомления';
   static const logout = 'Выйти из аккаунта';
-  static const logoutAreYouSure = 'Вы уверены, что хотите выйти из аккаунта';
+  static const logoutAreYouSure = 'Вы уверены, что хотите выйти из аккаунта?';
   static const deleteAccount = 'Удалить аккаунт';
   static const deleteAccountAreYouSure =
       'Вы уверены, что хотите удалить аккаунт без возможности его восстановления?';
@@ -122,6 +123,8 @@ abstract class Titles {
   static const noResult = 'Список пуст';
   static const noMessages = 'Нет сообщений';
   static const changesSuccess = 'Изменения сохранены';
+  static const passwordRecoverySuccess =
+      'Новый пароль был выслан на указанный электронный адрес';
   static const important = 'Важно';
   static const importantNews = 'Важная новость';
   static const actionAdded = 'Действие добавлено';

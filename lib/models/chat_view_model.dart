@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/user_params.dart';
@@ -9,7 +8,6 @@ import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/repositories/chat_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class ChatViewModel with ChangeNotifier {
@@ -145,7 +143,8 @@ class ChatViewModel with ChangeNotifier {
   }
 
   // void showMapFilterSheet(BuildContext context) {
-  // showCupertinoModalBottomSheet(
+  //  showCupertinoModalBottomSheet(
+  // enableDrag: false,
   //     topRadius: const Radius.circular(16.0),
   //     barrierColor: Colors.black.withOpacity(0.6),
   //     backgroundColor: HexColors.white,

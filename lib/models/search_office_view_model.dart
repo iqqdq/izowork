@@ -5,7 +5,6 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/response/office.dart';
 import 'package:izowork/repositories/office_repository.dart';
-import 'package:izowork/repositories/user_repository.dart';
 
 class SearchOfficeViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;

@@ -3,6 +3,7 @@ import 'package:izowork/components/hex_colors.dart';
 
 class BorderButtonWidget extends StatefulWidget {
   final String title;
+  final double? height;
   final bool? isDestructive;
   final bool? isDisabled;
   final EdgeInsets? margin;
@@ -11,6 +12,7 @@ class BorderButtonWidget extends StatefulWidget {
   const BorderButtonWidget(
       {Key? key,
       required this.title,
+      this.height,
       this.isDestructive,
       this.isDisabled,
       this.margin,
@@ -49,7 +51,7 @@ class _BorderButtonState extends State<BorderButtonWidget> {
         margin: widget.margin == null
             ? const EdgeInsets.symmetric(horizontal: 16.0)
             : widget.margin!,
-        height: 40.0,
+        height: widget.height ?? 40.0,
         decoration: BoxDecoration(
             border: Border.all(
                 width: 1.0,

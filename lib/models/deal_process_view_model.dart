@@ -189,6 +189,7 @@ class DealProcessViewModel with ChangeNotifier {
 
   void showDealProcessInfoSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -250,7 +251,8 @@ class DealProcessViewModel with ChangeNotifier {
 
   // void showDealProcessEditSheet(BuildContext context, DealProcess process) {
   // getDealProcessInformation(process.id).then((value) => {
-  //       showCupertinoModalBottomSheet(
+  //        showCupertinoModalBottomSheet(
+  // enableDrag: false,
   //           topRadius: const Radius.circular(16.0),
   //           barrierColor: Colors.black.withOpacity(0.6),
   //           backgroundColor: HexColors.white,

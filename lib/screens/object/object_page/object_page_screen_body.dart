@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -7,7 +8,7 @@ import 'package:izowork/models/object_view_model.dart';
 import 'package:izowork/screens/object/object_page/views/object_stage_header_widget.dart';
 import 'package:izowork/screens/object/object_page/views/object_stage_list_item_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
@@ -83,26 +84,42 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                             text: _objectPageViewModel.object?.address ??
                                 _objectPageViewModel.selectedObject.address),
 
-                        /// COORDINATES
-                        const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.coordinates,
-                            isSmall: true),
-                        GestureDetector(
-                          onLongPress: () => _objectPageViewModel
-                              .copyCoordinates(
-                                  context,
-                                  _objectPageViewModel.object?.lat ??
-                                      _objectPageViewModel.selectedObject.lat,
-                                  _objectPageViewModel.object?.long ??
-                                      _objectPageViewModel.selectedObject.long)
-                              .then((value) => widget.onCoordCopy()),
-                          child: SubtitleWidget(
-                              padding: const EdgeInsets.only(bottom: 16.0),
-                              text: _objectPageViewModel.object == null
-                                  ? '${_objectPageViewModel.selectedObject.lat}, ${_objectPageViewModel.selectedObject.long}'
-                                  : '${_objectPageViewModel.object?.lat}, ${_objectPageViewModel.object?.long}'),
-                        ),
+                        Row(children: [
+                          Expanded(
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                /// COORDINATES
+                                const TitleWidget(
+                                    padding: EdgeInsets.only(bottom: 4.0),
+                                    text: Titles.coordinates,
+                                    isSmall: true),
+
+                                GestureDetector(
+                                    onLongPress: () => _objectPageViewModel
+                                        .copyCoordinates(
+                                            context,
+                                            _objectPageViewModel.object?.lat ??
+                                                _objectPageViewModel
+                                                    .selectedObject.lat,
+                                            _objectPageViewModel.object?.long ??
+                                                _objectPageViewModel
+                                                    .selectedObject.long)
+                                        .then((value) => widget.onCoordCopy()),
+                                    child: SubtitleWidget(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 16.0),
+                                        text: _objectPageViewModel.object ==
+                                                null
+                                            ? '${_objectPageViewModel.selectedObject.lat}, ${_objectPageViewModel.selectedObject.long}'
+                                            : '${_objectPageViewModel.object?.lat}, ${_objectPageViewModel.object?.long}'))
+                              ])),
+                          GestureDetector(
+                              onTap: () => _objectPageViewModel
+                                  .showSingleObjectMap(context),
+                              child: SvgPicture.asset('assets/ic_map.svg',
+                                  color: HexColors.primaryMain))
+                        ]),
 
                         /// MANAGER
                         const TitleWidget(
@@ -315,23 +332,28 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                     .showDialogScreen(context)),
                       ]),
 
-                  /// EDIT TASK BUTTON
                   Align(
                       alignment: Alignment.bottomCenter,
-                      child: ButtonWidget(
-                          title: Titles.edit,
-                          margin: EdgeInsets.only(
-                              left: 16.0,
-                              right: 16.0,
-                              bottom:
-                                  MediaQuery.of(context).padding.bottom == 0.0
+                      child:
+
+                          /// EDIT TASK BUTTON
+                          ButtonWidget(
+                              title: Titles.edit,
+                              margin: EdgeInsets.only(
+                                  right: 16.0,
+                                  left: 16.0,
+                                  // left: 4.0,
+                                  bottom: MediaQuery.of(context)
+                                              .padding
+                                              .bottom ==
+                                          0.0
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
-                          onTap: () =>
-                              _objectPageViewModel.showObjectCreateSheet(
-                                  context,
-                                  () => widget.onUpdate(
-                                      _objectPageViewModel.object!)))),
+                              onTap: () =>
+                                  _objectPageViewModel.showObjectCreateSheet(
+                                      context,
+                                      () => widget.onUpdate(
+                                          _objectPageViewModel.object!)))),
                   const SeparatorWidget(),
 
                   /// INDICATOR

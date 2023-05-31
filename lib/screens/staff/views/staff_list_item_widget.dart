@@ -5,7 +5,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/services/urls.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 
 class StaffListItemWidget extends StatelessWidget {
   final User user;

@@ -67,7 +67,6 @@ class _NotificationsScreenBodyState
             child: Stack(children: [
           /// NOTIFICATIONS LIST VIEW
           ListView.builder(
-              shrinkWrap: true,
               padding: const EdgeInsets.only(
                   left: 16.0, right: 16.0, top: 16.0, bottom: 16.0 + 48.0),
               itemCount: _notificationsViewModel.notifications.length,
@@ -77,6 +76,7 @@ class _NotificationsScreenBodyState
                         _notificationsViewModel.notifications[index].createdAt,
                     isUnread:
                         !_notificationsViewModel.notifications[index].read,
+                    text: _notificationsViewModel.notifications[index].text,
                     onTap: () => _notificationsViewModel.readNotification(
                         context, index));
               }),

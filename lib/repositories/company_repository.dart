@@ -19,7 +19,7 @@ class CompanyRepository {
   }
 
   Future<dynamic> getCompany(String id) async {
-    dynamic json = await WebService().get(companiesUrl + '?id=$id');
+    dynamic json = await WebService().get(companyUrl + '?id=$id');
 
     try {
       return Company.fromJson(json["company"]);
@@ -68,10 +68,20 @@ class CompanyRepository {
     }
   }
 
+  Future<dynamic> updateCompany(CompanyRequest companyRequest) async {
+    dynamic json = await WebService().patch(companyUpdateUrl, companyRequest);
+
+    try {
+      return Company.fromJson(json["company"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
   Future<dynamic> updateCompanyAvatar(FormData formData) async {
     dynamic json = await WebService().put(companyAvatarUrl, formData);
 
-    if (json == "") {
+    if (json == "" || json == true) {
       return true;
     } else {
       return ErrorResponse.fromJson(json);

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/delete_request.dart';
@@ -99,7 +97,6 @@ class ObjectRepository {
     }
 
     dynamic json = await WebService().get(url);
-    print(url);
     List<Object> objects = [];
 
     try {

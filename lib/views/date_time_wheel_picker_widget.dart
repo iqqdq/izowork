@@ -192,7 +192,7 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
       }
     }
 
-    _year ??= years[index];
+    _year ??= years[index < years.length ? index : years.length - 1];
 
     List<int> days = _getDays(_year ?? 0, _month ?? 0);
     List<String> months = _getMonthNames(locale, _year ?? 0);

@@ -83,7 +83,6 @@ class ProductsListItemWidget extends StatelessWidget {
                                     style: TextStyle(
                                         color: HexColors.primaryDark,
                                         fontSize: 14.0,
-                                        fontFamily: 'PT Root UI',
                                         fontWeight: FontWeight.bold))),
                           ]))
                     ])),

@@ -1,14 +1,10 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
-
+import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/chat_connect_request.dart';
-import 'package:izowork/entities/response/chat.dart';
-import 'package:izowork/entities/response/message.dart';
-import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -17,7 +13,6 @@ import 'package:izowork/screens/chat/views/chat_list_item_widget.dart';
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -35,8 +30,6 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
 
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
-  AudioPlayer player = AudioPlayer();
-
   late ChatViewModel _chatViewModel;
 
   Pagination _pagination = Pagination(offset: 0, size: 50);
@@ -47,8 +40,6 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
 
   @override
   void initState() {
-    player.setAsset('assets/sounds/message_receive.mp3');
-
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -100,7 +91,8 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                   .getChatList(
                       pagination: _pagination,
                       search: _textEditingController.text)
-                  .then((value) => player.play())
+                  .then((value) =>
+                      Audio.load('assets/sounds/message_receive.mp3').play())
             });
   }
 
@@ -166,8 +158,10 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
               const SizedBox(height: 12.0),
               const SeparatorWidget()
             ])),
-        floatingActionButton: FloatingButtonWidget(
-            onTap: () => _chatViewModel.showStaffScreen(context)),
+        floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0.0
+            ? FloatingButtonWidget(
+                onTap: () => _chatViewModel.showStaffScreen(context))
+            : Container(),
         body: SizedBox.expand(
             child: Stack(children: [
           /// CHATS LIST VIEW

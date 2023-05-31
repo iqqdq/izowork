@@ -95,72 +95,67 @@ class _DealProcessListItemState extends State<DealProcessListItemWidget> {
                                       highlightColor: Colors.transparent,
                                       splashColor: Colors.transparent,
                                       borderRadius: BorderRadius.circular(16.0),
-                                      child: ListView(
-                                          padding: EdgeInsets.zero,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          shrinkWrap: true,
-                                          children: [
-                                            widget.dealProcesses[index].hidden
-                                                ? Container()
-                                                : Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            top: 10.0),
-                                                    child:
-                                                        const SeparatorWidget()),
-                                            Row(children: [
-                                              Expanded(
-                                                  child: ListView(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 12.0),
-                                                      physics:
-                                                          const NeverScrollableScrollPhysics(),
-                                                      shrinkWrap: true,
-                                                      children: [
-                                                    /// POSITION
-                                                    Text(
-                                                        widget
-                                                            .dealProcesses[
-                                                                index]
-                                                            .name,
-                                                        style: TextStyle(
-                                                            fontSize: 14.0,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color:
-                                                                HexColors.black,
-                                                            fontFamily:
-                                                                'PT Root UI')),
-                                                    const SizedBox(height: 6.0),
+                                      child: Column(children: [
+                                        widget.dealProcesses[index].hidden
+                                            ? Container()
+                                            : Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 10.0),
+                                                child: const SeparatorWidget()),
+                                        Row(children: [
+                                          Expanded(
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                /// POSITION
+                                                Text(
+                                                    widget.dealProcesses[index]
+                                                        .name,
+                                                    style: TextStyle(
+                                                        fontSize: 14.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: HexColors.black,
+                                                        fontFamily:
+                                                            'PT Root UI')),
+                                                const SizedBox(height: 6.0),
 
-                                                    /// POSITION STATUS
-                                                    Row(children: [
-                                                      StatusWidget(
-                                                          title: widget
-                                                              .dealProcesses[
-                                                                  index]
-                                                              .status,
-                                                          status: 0)
-                                                    ])
-                                                  ])),
-                                              const SizedBox(width: 10.0),
+                                                /// POSITION STATUS
+                                                StatusWidget(
+                                                    title: widget
+                                                        .dealProcesses[index]
+                                                        .status,
+                                                    textAlign: TextAlign.start,
+                                                    status: widget
+                                                                .dealProcesses[
+                                                                    index]
+                                                                .status ==
+                                                            'Поставщик'
+                                                        ? 0
+                                                        : widget
+                                                                    .dealProcesses[
+                                                                        index]
+                                                                    .status ==
+                                                                'Проектировщик'
+                                                            ? 1
+                                                            : 2)
+                                              ])),
+                                          const SizedBox(width: 16.0),
 
-                                              /// MORE BUTTON
-                                              IgnorePointer(
-                                                  ignoring:
-                                                      widget.dealStage.locked,
-                                                  child: SortObjectButtonWidget(
-                                                      title: '',
-                                                      imagePath:
-                                                          'assets/ic_more_vertical.svg',
-                                                      onTap: () => widget
-                                                          .onMenuTap(widget
-                                                                  .dealProcesses[
-                                                              index])))
-                                            ])
-                                          ]),
+                                          /// MORE BUTTON
+                                          IgnorePointer(
+                                              ignoring: widget.dealStage.locked,
+                                              child: SortObjectButtonWidget(
+                                                  title: '',
+                                                  imagePath:
+                                                      'assets/ic_more_vertical.svg',
+                                                  onTap: () => widget.onMenuTap(
+                                                      widget.dealProcesses[
+                                                          index])))
+                                        ])
+                                      ]),
                                       onTap: () => widget.onProcessTap(
                                           widget.dealProcesses[index]),
                                     ));

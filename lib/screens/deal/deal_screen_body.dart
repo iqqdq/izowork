@@ -9,7 +9,7 @@ import 'package:izowork/models/deal_view_model.dart';
 import 'package:izowork/screens/deal/views/deal_process_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
@@ -166,8 +166,12 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             text: Titles.comment,
                             isSmall: true),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 16.0),
+                            padding: EdgeInsets.only(
+                                left: 16.0,
+                                right: 16.0,
+                                bottom: _dealViewModel.dealProducts.isEmpty
+                                    ? 0.0
+                                    : 16.0),
                             text: _comment),
 
                         /// PRODUCT TABLE
@@ -187,33 +191,36 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                               border: Border.all(
                                                   width: 0.65,
                                                   color: HexColors.grey20)),
-                                          child: Center(
-                                              child: Text(
-                                                  col == 0
-                                                      ? _dealViewModel
-                                                              .dealProducts[row]
-                                                              .product
-                                                              ?.unit ??
-                                                          '-'
-                                                      : col == 1
-                                                          ? _dealViewModel
-                                                              .dealProducts[row]
-                                                              .count
-                                                              .toString()
-                                                          : _dealViewModel
-                                                                  .dealProducts[
-                                                                      row]
-                                                                  .product
-                                                                  ?.price
-                                                                  .toString() ??
-                                                              '0',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontSize: 14.0,
-                                                      color: HexColors.black,
-                                                      fontFamily:
-                                                          'PT Root UI')))),
+                                          child: Row(children: [
+                                            Expanded(
+                                                child: Text(
+                                                    col == 0
+                                                        ? _dealViewModel
+                                                                .dealProducts[
+                                                                    row]
+                                                                .product
+                                                                ?.unit ??
+                                                            '-'
+                                                        : col == 1
+                                                            ? _dealViewModel
+                                                                .dealProducts[
+                                                                    row]
+                                                                .count
+                                                                .toString()
+                                                            : _dealViewModel
+                                                                    .dealProducts[
+                                                                        row]
+                                                                    .product
+                                                                    ?.price
+                                                                    .toString() ??
+                                                                '0',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: HexColors.black,
+                                                        fontFamily:
+                                                            'PT Root UI')))
+                                          ])),
                                   legendBuilder: (_) => Container(
                                       height: 36.0,
                                       padding: const EdgeInsets.symmetric(
@@ -249,6 +256,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                                         .product
                                                         ?.name ??
                                                     '-',
+                                                maxLines: 2,
                                                 style: TextStyle(
                                                     fontSize: 14.0,
                                                     color: HexColors.black,
@@ -274,8 +282,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                               style: TextStyle(
                                                   fontSize: 14.0,
                                                   fontWeight: FontWeight.w500,
-                                                  color: HexColors.black,
-                                                  fontFamily: 'PT Root UI')))),
+                                                  color: HexColors.black)))),
                                   rowHeaderWidth:
                                       MediaQuery.of(context).size.width * 0.4,
                                   colsHeaderHeight: 36.0,
@@ -286,6 +293,19 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                   colCount: 3,
                                 )),
 
+                        _dealViewModel.deal == null
+                            ? Container()
+                            : _dealViewModel.deal!.files.isEmpty
+                                ? Container()
+                                : const TitleWidget(
+                                    text: Titles.files,
+                                    isSmall: true,
+                                    padding: EdgeInsets.only(
+                                        left: 16.0,
+                                        right: 16.0,
+                                        top: 16.0,
+                                        bottom: 10.0)),
+
                         /// FILE LIST
                         _dealViewModel.deal == null
                             ? const SizedBox(height: 16.0)
@@ -294,10 +314,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                 : ListView.builder(
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.only(
-                                        top: 20.0,
-                                        bottom: 16.0,
-                                        left: 16.0,
-                                        right: 16.0),
+                                        bottom: 10.0, left: 16.0, right: 16.0),
                                     physics:
                                         const NeverScrollableScrollPhysics(),
                                     itemCount:
@@ -319,7 +336,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
 
                         /// PROCESS LIST
                         _dealViewModel.dealStages.isEmpty
-                            ? Container()
+                            ? const SizedBox(height: 16.0)
                             : const TitleWidget(
                                 padding: EdgeInsets.only(
                                     left: 16.0, right: 16.0, bottom: 10.0),

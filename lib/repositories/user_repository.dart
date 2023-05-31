@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/delete_request.dart';
+import 'package:izowork/entities/request/reset_password_request.dart';
 import 'package:izowork/entities/request/user_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/user.dart';
@@ -93,6 +94,17 @@ class UserRepository {
         await WebService().delete(deleteAccountUrl, DeleteRequest(id: id));
 
     if (json == null) {
+      return true;
+    } else {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future resetPassword({required String email}) async {
+    dynamic json =
+        await WebService().put(resetPasswordUrl, ResetPasswordRequest(email));
+
+    if (json == null || json == '') {
       return true;
     } else {
       return ErrorResponse.fromJson(json);

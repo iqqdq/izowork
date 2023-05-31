@@ -19,7 +19,6 @@ import 'package:izowork/entities/response/phase_contractor.dart';
 import 'package:izowork/entities/response/phase_product.dart';
 import 'package:izowork/repositories/phase_repository.dart';
 import 'package:izowork/screens/product_selection/product_selection_screen.dart';
-import 'package:izowork/screens/product_type_selection/product_type_selection_screen.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
@@ -207,6 +206,7 @@ class PhaseCreateViewModel with ChangeNotifier {
 
   void changeContractor(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -225,6 +225,7 @@ class PhaseCreateViewModel with ChangeNotifier {
 
   void changeContractorResponsible(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -243,6 +244,7 @@ class PhaseCreateViewModel with ChangeNotifier {
 
   void changeContractorCoExecutor(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -261,6 +263,7 @@ class PhaseCreateViewModel with ChangeNotifier {
 
   void changeContractorObserver(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -279,6 +282,7 @@ class PhaseCreateViewModel with ChangeNotifier {
 
   void showProductSearchSheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,

@@ -3,7 +3,7 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/product_type.dart';
 import 'package:izowork/models/product_type_selection_view_model.dart';
 import 'package:izowork/screens/selection/views/selection_list_item_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';

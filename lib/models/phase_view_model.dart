@@ -175,7 +175,7 @@ class PhaseViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка'),
                 }
             })
-        .then((value) => {Navigator.pop(context), notifyListeners()});
+        .then((value) => notifyListeners());
   }
 
   Future uploadFile(BuildContext context, String id, File file) async {
@@ -209,6 +209,7 @@ class PhaseViewModel with ChangeNotifier {
               if (_phaseChecklistInformations.isNotEmpty)
                 {phaseChecklistInformation = _phaseChecklistInformations.first},
               showCupertinoModalBottomSheet(
+                  enableDrag: false,
                   topRadius: const Radius.circular(16.0),
                   barrierColor: Colors.black.withOpacity(0.6),
                   backgroundColor: HexColors.white,
@@ -217,11 +218,17 @@ class PhaseViewModel with ChangeNotifier {
                       title: _phaseChecklists[index].name,
                       phaseChecklistInformation: phaseChecklistInformation,
                       onTap: (text, files) => {
+                            // HIDE BOTTOM SHEET
+                            Navigator.pop(context),
+
+                            // SET SELECTED FILES
                             files.forEach((element) {
                               if (element.path != null) {
                                 _files.add(File(element.path!));
                               }
                             }),
+
+                            // CREATE NEW PHASE CHECKLIST
                             createPhaseChecklistInfo(context, index, text)
                           }))
             });

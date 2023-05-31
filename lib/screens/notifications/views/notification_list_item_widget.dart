@@ -3,12 +3,14 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/views/title_widget.dart';
 
 class NotificationListItemWidget extends StatelessWidget {
+  final String text;
   final DateTime dateTime;
   final bool isUnread;
   final VoidCallback onTap;
 
   const NotificationListItemWidget(
       {Key? key,
+      required this.text,
       required this.dateTime,
       required this.isUnread,
       required this.onTap})
@@ -74,7 +76,7 @@ class NotificationListItemWidget extends StatelessWidget {
                       const SizedBox(height: 6.0),
 
                       /// TEXT
-                      Text('Подходит дедлайн по задаче “Название задачи”',
+                      Text(text,
                           style: TextStyle(
                               color: HexColors.black,
                               fontSize: 16.0,

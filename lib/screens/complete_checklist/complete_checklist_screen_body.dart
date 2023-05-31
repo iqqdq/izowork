@@ -4,7 +4,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/complete_checklist_view_model.dart';
 import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/input_widget.dart';
@@ -57,7 +57,7 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
         child: Container(
             color: HexColors.white,
             child: ListView(
-                physics: const NeverScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 shrinkWrap: true,
                 padding: EdgeInsets.only(
                     top: 8.0,
@@ -98,7 +98,7 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
 
                   /// FILE LIST
                   ListView.builder(
-                      padding: const EdgeInsets.only(top: 16.0),
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: _completeChecklistViewModel

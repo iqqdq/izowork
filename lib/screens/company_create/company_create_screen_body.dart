@@ -11,14 +11,14 @@ import 'package:izowork/screens/company/company_screen.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 
 class CompanyCreateScreenBodyWidget extends StatefulWidget {
-  final Function(Company)? onPop;
+  final Function(Company?)? onPop;
 
   const CompanyCreateScreenBodyWidget({Key? key, required this.onPop})
       : super(key: key);
@@ -52,6 +52,29 @@ class _CompanyCreateScreenBodyState
   late CompanyCreateViewModel _companyCreateViewModel;
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_companyCreateViewModel.company != null) {
+        _nameTextEditingController.text = _companyCreateViewModel.company!.name;
+
+        _nameTextEditingController.text = _companyCreateViewModel.company!.name;
+        _addressTextEditingConrtoller.text =
+            _companyCreateViewModel.company!.address;
+        _phoneTextEditingConrtoller.text =
+            _companyCreateViewModel.company!.phone;
+        _emailTextEditingConrtoller.text =
+            _companyCreateViewModel.company!.email ?? '';
+        _descriptionTextEditingController.text =
+            _companyCreateViewModel.company!.description ?? '';
+        _requisitesTextEditingController.text =
+            _companyCreateViewModel.company!.details ?? '';
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _nameTextEditingController.dispose();
     _nameFocusNode.dispose();
@@ -74,22 +97,17 @@ class _CompanyCreateScreenBodyState
     _companyCreateViewModel =
         Provider.of<CompanyCreateViewModel>(context, listen: true);
 
-    if (_companyCreateViewModel.company != null) {
-      _nameTextEditingController.text = _companyCreateViewModel.company!.name;
-      _addressTextEditingConrtoller.text =
-          _companyCreateViewModel.company!.address;
-      _phoneTextEditingConrtoller.text = _companyCreateViewModel.company!.phone;
-      _emailTextEditingConrtoller.text =
-          _companyCreateViewModel.company!.email ?? '';
-      _descriptionTextEditingController.text =
-          _companyCreateViewModel.company!.description ?? '';
-      _requisitesTextEditingController.text =
-          _companyCreateViewModel.company!.details ?? '';
-// _dealsTextEditingController.text = _companyCreateViewModel.company!.;
-
-    }
-
-    String? _url = _companyCreateViewModel.company?.image;
+    String? _url = _companyCreateViewModel.selectedCompany == null
+        ? _companyCreateViewModel.selectedCompany?.image == null
+            ? null
+            : _companyCreateViewModel.selectedCompany!.image!.isEmpty
+                ? null
+                : _companyCreateViewModel.selectedCompany?.image
+        : _companyCreateViewModel.company!.image == null
+            ? null
+            : _companyCreateViewModel.company!.image!.isEmpty
+                ? null
+                : _companyCreateViewModel.company!.image;
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -103,8 +121,11 @@ class _CompanyCreateScreenBodyState
               Stack(children: [
                 Padding(
                     padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
+                    child: BackButtonWidget(
+                        onTap: () => {
+                              widget.onPop!(_companyCreateViewModel.company),
+                              Navigator.pop(context)
+                            })),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
                       _companyCreateViewModel.company == null
@@ -133,19 +154,13 @@ class _CompanyCreateScreenBodyState
                     /// AVATAR
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       Stack(children: [
-                        _companyCreateViewModel.selectedCompany == null &&
-                                _companyCreateViewModel.file != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(40.0),
-                                child: Image.file(_companyCreateViewModel.file!,
-                                    width: 80.0,
-                                    height: 80.0,
-                                    fit: BoxFit.cover))
-                            : SvgPicture.asset('assets/ic_avatar.svg',
-                                color: HexColors.grey40,
-                                width: 80.0,
-                                height: 80.0,
-                                fit: BoxFit.cover),
+                        SvgPicture.asset('assets/ic_avatar.svg',
+                            color: HexColors.grey40,
+                            width: 80.0,
+                            height: 80.0,
+                            fit: BoxFit.cover),
+
+                        /// URL AVATAR
                         _url == null
                             ? Container()
                             : ClipRRect(
@@ -160,6 +175,16 @@ class _CompanyCreateScreenBodyState
                                             .devicePixelRatio
                                             .round(),
                                     fit: BoxFit.cover)),
+
+                        /// FILE AVATAR
+                        _companyCreateViewModel.file != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(40.0),
+                                child: Image.file(_companyCreateViewModel.file!,
+                                    width: 80.0,
+                                    height: 80.0,
+                                    fit: BoxFit.cover))
+                            : Container(),
                       ])
                     ]),
                     const SizedBox(height: 24.0),
@@ -286,16 +311,16 @@ class _CompanyCreateScreenBodyState
                     SelectionInputWidget(
                         margin: const EdgeInsets.only(bottom: 10.0),
                         title: Titles.productsType,
-                        value:
-                            // _companyCreateViewModel.company.productType ??
-                            _companyCreateViewModel.productType?.name ??
-                                Titles.notSelected,
+                        value: _companyCreateViewModel.productType?.name ??
+                            _companyCreateViewModel
+                                .company?.productType?.name ??
+                            Titles.notSelected,
                         isVertical: true,
                         onTap: () => _companyCreateViewModel
                             .showProductTypeSelectionSheet(context))
                   ])),
 
-          /// CREATE BUTTON
+          /// CREATE/EDIT BUTTON
           AnimatedOpacity(
               opacity: _descriptionFocusNode.hasFocus ||
                       _addressFocusNode.hasFocus ||
@@ -313,37 +338,57 @@ class _CompanyCreateScreenBodyState
                               ? 12.0
                               : MediaQuery.of(context).padding.bottom),
                       child: ButtonWidget(
-                          title: Titles.createCompany,
+                          title: _companyCreateViewModel.company == null
+                              ? Titles.createCompany
+                              : Titles.editCompany,
                           isDisabled:
                               _addressTextEditingConrtoller.text.isEmpty ||
                                   _nameTextEditingController.text.isEmpty ||
-                                  _phoneTextEditingConrtoller.text.isEmpty ||
-                                  _companyCreateViewModel.type == null ||
-                                  _companyCreateViewModel.productType == null,
-                          onTap: () => _companyCreateViewModel.createNewCompany(
-                              context,
-                              _addressTextEditingConrtoller.text,
-                              _nameTextEditingController.text,
-                              _phoneTextEditingConrtoller.text,
-                              _descriptionTextEditingController.text,
-                              _requisitesTextEditingController.text,
-                              _emailTextEditingConrtoller.text,
-                              (company) => {
-                                    if (widget.onPop == null)
-                                      {
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CompanyScreenWidget(
-                                                        company: company)))
-                                      }
-                                    else
-                                      {
-                                        widget.onPop!(company),
-                                        Navigator.pop(context)
-                                      }
-                                  }))))),
+                                  _phoneTextEditingConrtoller.text.isEmpty,
+                          onTap: () =>
+
+                              /// CREATE
+                              _companyCreateViewModel.company == null
+                                  ? _companyCreateViewModel.createNewCompany(
+                                      context,
+                                      _addressTextEditingConrtoller.text,
+                                      _nameTextEditingController.text,
+                                      _phoneTextEditingConrtoller.text,
+                                      _descriptionTextEditingController.text,
+                                      _requisitesTextEditingController.text,
+                                      _emailTextEditingConrtoller.text,
+                                      (company) => {
+                                            if (widget.onPop == null)
+                                              {
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            CompanyScreenWidget(
+                                                                company:
+                                                                    company,
+                                                                onPop: null)))
+                                              }
+                                            else
+                                              {
+                                                widget.onPop!(company),
+                                                Navigator.pop(context)
+                                              }
+                                          })
+
+                                  /// UPDATE
+                                  : _companyCreateViewModel.editCompany(
+                                      context,
+                                      _addressTextEditingConrtoller.text,
+                                      _nameTextEditingController.text,
+                                      _phoneTextEditingConrtoller.text,
+                                      _descriptionTextEditingController.text,
+                                      _requisitesTextEditingController.text,
+                                      _emailTextEditingConrtoller.text,
+                                      (company) => {
+                                            widget.onPop!(company),
+                                            Navigator.pop(context)
+                                          }))))),
 
           /// INDICATOR
           _companyCreateViewModel.loadingStatus == LoadingStatus.searching

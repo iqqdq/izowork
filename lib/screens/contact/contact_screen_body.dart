@@ -8,7 +8,7 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/contact_view_model.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/status_widget.dart';
@@ -140,7 +140,13 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                         : StatusWidget(
                             title:
                                 _contactViewModel.contact?.company?.type ?? '-',
-                            status: 0)
+                            status: _contactViewModel.contact?.company?.type ==
+                                    'Поставщик'
+                                ? 0
+                                : _contactViewModel.contact?.company?.type ==
+                                        'Проектировщик'
+                                    ? 1
+                                    : 2)
                   ],
                 ),
                 const SizedBox(height: 16.0),

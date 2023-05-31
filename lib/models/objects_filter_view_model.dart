@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/object_stage.dart';
+import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen_body.dart';
 
 class ObjectsFilterViewModel with ChangeNotifier {
@@ -12,12 +13,17 @@ class ObjectsFilterViewModel with ChangeNotifier {
   final List<String> _options = [];
   List<int> tags = [];
 
-  List<String> options2 = ['По возврастанию', 'По убыванию'];
+  List<String> options2 = ['По возрастанию', 'По убыванию'];
   List<int> tags2 = [];
 
+  User? _manager;
   Company? _designer;
   Company? _contractor;
   Company? _customer;
+
+  User? get manager {
+    return _manager;
+  }
 
   Company? get designer {
     return _designer;
@@ -41,6 +47,7 @@ class ObjectsFilterViewModel with ChangeNotifier {
     });
 
     if (objectsFilter != null) {
+      _manager = objectsFilter?.manager;
       _designer = objectsFilter?.designer;
       _contractor = objectsFilter?.contractor;
       _customer = objectsFilter?.customer;
@@ -53,6 +60,11 @@ class ObjectsFilterViewModel with ChangeNotifier {
 
   // MARK: -
   // MARK: - FUNCTIONS
+
+  Future setManager(User? user) async {
+    _manager = user;
+    notifyListeners();
+  }
 
   Future setCompany(Company? company, int index) async {
     switch (index) {
@@ -93,6 +105,10 @@ class ObjectsFilterViewModel with ChangeNotifier {
     String sortBy = '&sort_by=';
     String sortOrder = '&sort_order=';
     List<String> params = [];
+
+    if (_manager != null) {
+      params.add('&manager_id=${_manager!.id}');
+    }
 
     if (_designer != null) {
       params.add('&designer_id=${_designer!.id}');
@@ -150,6 +166,7 @@ class ObjectsFilterViewModel with ChangeNotifier {
   }
 
   void reset(VoidCallback onResetTap) {
+    _manager = null;
     _designer = null;
     _contractor = null;
     _customer = null;

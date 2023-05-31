@@ -11,7 +11,10 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class MapObjectScreenBodyWidget extends StatelessWidget {
-  const MapObjectScreenBodyWidget({Key? key}) : super(key: key);
+  final bool? hideInfoButton;
+
+  const MapObjectScreenBodyWidget({Key? key, this.hideInfoButton})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -138,24 +141,26 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                             text: '${_mapViewModel.object.efficiency} %'),
                         const SizedBox(height: 16.0)
                       ]),
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(children: [
-                        Expanded(
-                            child: BorderButtonWidget(
-                                title: Titles.showDetail,
-                                margin: EdgeInsets.zero,
-                                onTap: () =>
-                                    _mapViewModel.showObjectScreen(context))),
-                        _mapViewModel.object.chat == null
-                            ? Container()
-                            : Expanded(
+                  hideInfoButton != null
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(children: [
+                            Expanded(
                                 child: BorderButtonWidget(
-                                    title: Titles.chat,
+                                    title: Titles.showDetail,
                                     margin: EdgeInsets.zero,
                                     onTap: () => _mapViewModel
-                                        .showDialogScreen(context))),
-                      ]))
+                                        .showObjectScreen(context))),
+                            _mapViewModel.object.chat == null
+                                ? Container()
+                                : Expanded(
+                                    child: BorderButtonWidget(
+                                        title: Titles.chat,
+                                        margin: EdgeInsets.zero,
+                                        onTap: () => _mapViewModel
+                                            .showDialogScreen(context))),
+                          ]))
                 ])));
   }
 }

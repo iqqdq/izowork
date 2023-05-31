@@ -5,12 +5,14 @@ import 'package:provider/provider.dart';
 
 class SelectionScreenWidget extends StatelessWidget {
   final String title;
+  final String value;
   final List<String> items;
   final Function(String) onSelectTap;
 
   const SelectionScreenWidget(
       {Key? key,
       required this.title,
+      required this.value,
       required this.items,
       required this.onSelectTap})
       : super(key: key);
@@ -19,7 +21,7 @@ class SelectionScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => SelectionViewModel(items),
-        child:
-            SelectionScreenBodyWidget(title: title, onSelectTap: onSelectTap));
+        child: SelectionScreenBodyWidget(
+            title: title, value: value, onSelectTap: onSelectTap));
   }
 }

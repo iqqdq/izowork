@@ -6,7 +6,6 @@ import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/helpers/same_date_time_checker.dart';
 import 'package:izowork/models/deal_calendar_view_model.dart';
-import 'package:izowork/models/task_calendar_view_model.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/month_year_selection_widget.dart';

@@ -9,7 +9,7 @@ import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_create/views/deal_product_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
@@ -176,15 +176,12 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
 
                             /// PHASE SELECTION INPUT
                             Opacity(
-                                opacity: _dealCreateViewModel.selectedPhase !=
-                                            null ||
-                                        _dealCreateViewModel.object == null
+                                opacity: _dealCreateViewModel.object == null
                                     ? 0.5
                                     : 1.0,
                                 child: IgnorePointer(
                                     ignoring:
-                                        _dealCreateViewModel.selectedPhase !=
-                                                null ||
+                                        
                                             _dealCreateViewModel.object == null,
                                     child: SelectionInputWidget(
                                         margin:
@@ -310,10 +307,13 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                           alignment: Alignment.bottomCenter,
                           child: ButtonWidget(
                               isDisabled: _dealCreateViewModel.loadingStatus ==
-                                          LoadingStatus.searching ||
-                                      _dealCreateViewModel.deal == null
-                                  ? _textEditingController.text.isEmpty
-                                  : _textEditingController.text.isEmpty,
+                                      LoadingStatus.searching
+                                  ? false
+                                  : _dealCreateViewModel.deal == null
+                                      ? _dealCreateViewModel.responsible ==
+                                              null ||
+                                          _dealCreateViewModel.object == null
+                                      : false,
                               title: _dealCreateViewModel.deal == null
                                   ? Titles.createDeal
                                   : Titles.save,

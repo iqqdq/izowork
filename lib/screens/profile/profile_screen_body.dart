@@ -9,7 +9,7 @@ import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/models/profile_view_model.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/title_widget.dart';

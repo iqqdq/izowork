@@ -40,10 +40,6 @@ class CompanyCreateViewModel with ChangeNotifier {
     return _companyType;
   }
 
-  String? get type {
-    return _type;
-  }
-
   List<ProductType> get productTypes {
     return _productTypes;
   }
@@ -54,6 +50,10 @@ class CompanyCreateViewModel with ChangeNotifier {
 
   Company? get company {
     return _company;
+  }
+
+  String? get type {
+    return _type;
   }
 
   File? get file {
@@ -108,38 +108,83 @@ class CompanyCreateViewModel with ChangeNotifier {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
-    if (_type != null) {
-      await CompanyRepository()
-          .createCompany(CompanyRequest(
-              address: address,
-              name: name,
-              phone: phone,
-              type: _type!,
-              description: description,
-              details: details,
-              email: email))
-          .then((response) => {
-                if (response is Company)
-                  {
-                    _company = response,
+    await CompanyRepository()
+        .createCompany(CompanyRequest(
+            address: address,
+            name: name,
+            phone: phone,
+            type: _type,
+            description: description,
+            details: details,
+            email: email,
+            productTypeId: _productType?.id))
+        .then((response) => {
+              if (response is Company)
+                {
+                  _company = response,
 
-                    // CHECK IF FILE SELECTED
-                    if (_file == null)
-                      onCreate(response)
-                    else
-                      changeCompanyAvatar(context, _file!, response.id)
-                          .then((value) => {
-                                onCreate(response),
-                              })
-                  }
-                else if (response is ErrorResponse)
-                  {
-                    loadingStatus = LoadingStatus.error,
-                    Toast().showTopToast(context, response.message ?? 'Ошибка')
-                  },
-              })
-          .then((value) => notifyListeners());
-    }
+                  // CHECK IF FILE SELECTED
+                  if (_file == null)
+                    onCreate(response)
+                  else
+                    changeCompanyAvatar(context, _file!, response.id)
+                        .then((value) => {
+                              onCreate(response),
+                            })
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                },
+            })
+        .then((value) => notifyListeners());
+  }
+
+  Future editCompany(
+      BuildContext context,
+      String address,
+      String name,
+      String phone,
+      String? description,
+      String? details,
+      String? email,
+      Function(Company) onCreate) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await CompanyRepository()
+        .updateCompany(CompanyRequest(
+            id: _company?.id,
+            address: address,
+            name: name,
+            phone: phone,
+            type: _type ?? _company?.type,
+            description: description,
+            details: details,
+            email: email,
+            productTypeId: _productType?.id ?? _company?.productType?.id))
+        .then((response) => {
+              if (response is Company)
+                {
+                  _company = response,
+
+                  // CHECK IF FILE SELECTED
+                  if (_file == null)
+                    onCreate(response)
+                  else
+                    changeCompanyAvatar(context, _file!, response.id)
+                        .then((value) => {
+                              onCreate(response),
+                            })
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                },
+            })
+        .then((value) => notifyListeners());
   }
 
   Future changeCompanyAvatar(BuildContext context, File file, String id) async {
@@ -153,16 +198,18 @@ class CompanyCreateViewModel with ChangeNotifier {
       "id": id
     });
 
-    await CompanyRepository().updateCompanyAvatar(formData).then((response) => {
-          if (response)
-            {loadingStatus = LoadingStatus.completed}
-          else if (response is ErrorResponse)
-            {
-              loadingStatus = LoadingStatus.error,
-              Toast().showTopToast(context, response.message ?? 'Ошибка')
-            },
-          notifyListeners()
-        });
+    await CompanyRepository()
+        .updateCompanyAvatar(formData)
+        .then((response) => {
+              if (response)
+                loadingStatus = LoadingStatus.completed
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                }
+            })
+        .then((value) => notifyListeners());
   }
 
   // MARK: -
@@ -177,12 +224,14 @@ class CompanyCreateViewModel with ChangeNotifier {
         });
 
         showCupertinoModalBottomSheet(
+            enableDrag: false,
             topRadius: const Radius.circular(16.0),
             barrierColor: Colors.black.withOpacity(0.6),
             backgroundColor: HexColors.white,
             context: context,
             builder: (context) => SelectionScreenWidget(
                 title: Titles.productType,
+                value: _type ?? selectedCompany?.type ?? '',
                 items: items,
                 onSelectTap: (type) => {
                       _companyType!.states.forEach((element) {
@@ -204,12 +253,16 @@ class CompanyCreateViewModel with ChangeNotifier {
       });
 
       showCupertinoModalBottomSheet(
+          enableDrag: false,
           topRadius: const Radius.circular(16.0),
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
           builder: (context) => SelectionScreenWidget(
               title: Titles.productType,
+              value: _productType?.name ??
+                  selectedCompany?.productType?.name ??
+                  '',
               items: items,
               onSelectTap: (type) => {
                     _productTypes.forEach((element) {

@@ -54,9 +54,9 @@ class TraceRepository {
   Future<dynamic> doAction(TraceRequest traceRequest) async {
     dynamic json = await WebService().post(traceDoActionUrl, traceRequest);
 
-    if (json == null) {
-      return true;
-    } else {
+    try {
+      return Trace.fromJson(json["do_action"]);
+    } catch (e) {
       return ErrorResponse.fromJson(json);
     }
   }

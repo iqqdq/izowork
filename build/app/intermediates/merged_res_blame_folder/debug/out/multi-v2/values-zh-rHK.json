@@ -4,23 +4,6 @@
             "outputFile": "/Users/iqqddq/Documents/izowork/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-zh-rHK/values-zh-rHK.xml",
             "map": [
                 {
-                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/6ec2c823b2ddfa9d4aff16fd99b56b89/transformed/jetified-exoplayer-core-2.18.1/res/values-zh-rHK/values-zh-rHK.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,111,167,225,278,350,404,478,554",
-                        "endColumns": "55,55,57,52,71,53,73,75,58",
-                        "endOffsets": "106,162,220,273,345,399,473,549,608"
-                    },
-                    "to": {
-                        "startLines": "21,22,23,24,25,26,27,28,29",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "1978,2034,2090,2148,2201,2273,2327,2401,2477",
-                        "endColumns": "55,55,57,52,71,53,73,75,58",
-                        "endOffsets": "2029,2085,2143,2196,2268,2322,2396,2472,2531"
-                    }
-                },
-                {
                     "source": "/Users/iqqddq/.gradle/caches/transforms-3/6710ee2e3546b398da00e75003abfc33/transformed/core-1.9.0/res/values-zh-rHK/values-zh-rHK.xml",
                     "from": {
                         "startLines": "2",
@@ -30,11 +13,11 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "34",
+                        "startLines": "20",
                         "startColumns": "4",
-                        "startOffsets": "2948",
+                        "startOffsets": "1881",
                         "endColumns": "100",
-                        "endOffsets": "3044"
+                        "endOffsets": "1977"
                     }
                 },
                 {
@@ -52,23 +35,6 @@
                         "startOffsets": "55,156,284,399,501,608,724,826,1027,1137,1238,1367,1482,1589,1697,1752,1809",
                         "endColumns": "100,127,114,101,106,115,101,92,109,100,128,114,106,107,54,56,71",
                         "endOffsets": "151,279,394,496,603,719,821,914,1132,1233,1362,1477,1584,1692,1747,1804,1876"
-                    }
-                },
-                {
-                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/aa7263188b29434019ae8934cbefd4da/transformed/jetified-media2-session-1.2.0/res/values-zh-rHK/values-zh-rHK.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "55,152,246,338,449",
-                        "endColumns": "96,93,91,110,114",
-                        "endOffsets": "147,241,333,444,559"
-                    },
-                    "to": {
-                        "startLines": "20,30,31,32,33",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "1881,2536,2630,2722,2833",
-                        "endColumns": "96,93,91,110,114",
-                        "endOffsets": "1973,2625,2717,2828,2943"
                     }
                 },
                 {

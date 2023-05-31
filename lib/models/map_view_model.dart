@@ -40,7 +40,6 @@ class MapViewModel with ChangeNotifier {
   bool _hasPermission = false;
 
   // GEOCODER
-  String _city = '';
   String _address = '';
 
   // DATA
@@ -61,10 +60,6 @@ class MapViewModel with ChangeNotifier {
 
   LatLng? get position {
     return _position;
-  }
-
-  String get city {
-    return _city;
   }
 
   String get address {
@@ -157,6 +152,7 @@ class MapViewModel with ChangeNotifier {
   void showObjectsFilterSheet(BuildContext context, Function() onFilter) {
     if (_objectStages != null) {
       showCupertinoModalBottomSheet(
+          enableDrag: false,
           topRadius: const Radius.circular(16.0),
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
@@ -182,10 +178,13 @@ class MapViewModel with ChangeNotifier {
   }
 
   void showAddMapObjectSheet(BuildContext context, LatLng position) {
+    _position = position;
+
     if (isHidden) {
       getAddressName().then((value) => {
             isHidden = false,
             showCupertinoModalBottomSheet(
+                enableDrag: false,
                 topRadius: const Radius.circular(16.0),
                 barrierColor: Colors.black.withOpacity(0.6),
                 backgroundColor: HexColors.white,
@@ -214,6 +213,7 @@ class MapViewModel with ChangeNotifier {
 
   void showMapObjectSheet(BuildContext context, String id) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -227,6 +227,7 @@ class MapViewModel with ChangeNotifier {
     bool found = false;
 
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -286,15 +287,8 @@ class MapViewModel with ChangeNotifier {
       return;
     }
 
-    // GET CITY
-    for (var element in reversedSearchResults.results.first.addressComponents) {
-      if (element.types.contains('locality')) {
-        _city = element.longName;
-      }
-
-      // GET FORMATTED ADDRESS
-      _address = reversedSearchResults.results.first.formattedAddress;
-    }
+    // SET FORMATTED ADDRESS
+    _address = reversedSearchResults.results.first.formattedAddress;
 
     notifyListeners();
   }

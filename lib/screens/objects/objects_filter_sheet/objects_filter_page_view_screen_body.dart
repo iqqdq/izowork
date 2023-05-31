@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/company.dart';
+import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/models/objects_filter_view_model.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_screen.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
+import 'package:izowork/screens/search_user/search_user_screen.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:provider/provider.dart';
 
 class ObjectsFilter {
+  final User? manager;
   final Company? designer;
   final Company? contractor;
   final Company? customer;
@@ -15,8 +18,8 @@ class ObjectsFilter {
   final List<int> tags2;
   final List<String> params;
 
-  ObjectsFilter(this.designer, this.contractor, this.customer, this.tags,
-      this.tags2, this.params);
+  ObjectsFilter(this.manager, this.designer, this.contractor, this.customer,
+      this.tags, this.tags2, this.params);
 }
 
 class ObjectsFilterPageViewScreenBodyWidget extends StatefulWidget {
@@ -57,13 +60,14 @@ class _ObjectsFilterPageViewScreenBodyState
                   height: _isSearching
                       ? MediaQuery.of(context).size.height * 0.9
                       : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 470.0
-                          : 500.0,
+                          ? 550.0
+                          : 570.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
                       ObjectsFilterScreenWidget(
+                          manager: _objectsFilterViewModel.manager,
                           designer: _objectsFilterViewModel.designer,
                           contractor: _objectsFilterViewModel.contractor,
                           customer: _objectsFilterViewModel.customer,
@@ -71,6 +75,12 @@ class _ObjectsFilterPageViewScreenBodyState
                           tags: _objectsFilterViewModel.tags,
                           options2: _objectsFilterViewModel.options2,
                           tags2: _objectsFilterViewModel.tags2,
+                          onManagerTap: () => {
+                                setState(() => _isSearching = true),
+                                _pageController.animateToPage(2,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeIn),
+                              },
                           onDesignerTap: () => {
                                 setState(
                                     () => {_isSearching = true, _index = 0}),
@@ -99,6 +109,7 @@ class _ObjectsFilterPageViewScreenBodyState
                           onApplyTap: () => {
                                 _objectsFilterViewModel.apply((params) => {
                                       widget.onPop(ObjectsFilter(
+                                          _objectsFilterViewModel.manager,
                                           _objectsFilterViewModel.designer,
                                           _objectsFilterViewModel.contractor,
                                           _objectsFilterViewModel.customer,
@@ -121,6 +132,21 @@ class _ObjectsFilterPageViewScreenBodyState
                           onPop: (company) => {
                                 _objectsFilterViewModel
                                     .setCompany(company, _index)
+                                    .then((value) => {
+                                          _pageController.animateToPage(0,
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              curve: Curves.easeIn),
+                                          setState(() => _isSearching = false),
+                                        })
+                              }),
+                      SearchUserScreenWidget(
+                          title: Titles.manager,
+                          isRoot: false,
+                          onFocus: () => setState,
+                          onPop: (company) => {
+                                _objectsFilterViewModel
+                                    .setManager(company)
                                     .then((value) => {
                                           _pageController.animateToPage(0,
                                               duration: const Duration(

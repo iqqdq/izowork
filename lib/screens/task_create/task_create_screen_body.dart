@@ -8,7 +8,7 @@ import 'package:izowork/models/task_create_view_model.dart';
 import 'package:izowork/screens/task/task_screen.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/file_list_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
@@ -41,7 +41,6 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      /// STATE
       /// EDIT TASK
       if (_taskCreateViewModel.task != null) {
         _nameTextEditingController.text = _taskCreateViewModel.task!.name;
@@ -50,7 +49,6 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
             _taskCreateViewModel.task!.description ?? '';
       }
 
-      /// STATE
       /// CREATE TASK FROM CHAT STATE
       _descriptionTextEditingController.text = widget.message ?? '';
     });

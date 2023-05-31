@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/company.dart';
-import 'package:izowork/views/button_widget_widget.dart';
+import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:izowork/views/transparent_button_widget_widget.dart';
 
 class ObjectsFilterScreenWidget extends StatelessWidget {
+  final User? manager;
   final Company? designer;
   final Company? contractor;
   final Company? customer;
@@ -15,6 +17,7 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
   final List<int> tags;
   final List<String> options2;
   final List<int> tags2;
+  final VoidCallback onManagerTap;
   final VoidCallback onDesignerTap;
   final VoidCallback onContractorTap;
   final VoidCallback onCustomerTap;
@@ -25,6 +28,7 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
 
   const ObjectsFilterScreenWidget(
       {Key? key,
+      this.manager,
       this.designer,
       this.contractor,
       this.customer,
@@ -32,6 +36,7 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
       required this.tags,
       required this.options2,
       required this.tags2,
+      required this.onManagerTap,
       required this.onDesignerTap,
       required this.onContractorTap,
       required this.onCustomerTap,
@@ -65,11 +70,18 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
                               ? 12.0
                               : MediaQuery.of(context).padding.bottom),
                       children: [
-                        /// DESGINER SELECTION INPUT
+                        /// MANAGER SELECTION INPUT
                         SelectionInputWidget(
-                            title: Titles.designer,
-                            value: designer?.name ?? Titles.notSelected,
-                            onTap: () => onDesignerTap()),
+                            title: Titles.manager,
+                            value: manager?.name ?? Titles.notSelected,
+                            onTap: () => onManagerTap()),
+                        const SizedBox(height: 10.0),
+
+                        /// CONTRACTOR SELECTION INPUT
+                        SelectionInputWidget(
+                            title: Titles.contractor,
+                            value: contractor?.name ?? Titles.notSelected,
+                            onTap: () => onContractorTap()),
                         const SizedBox(height: 10.0),
 
                         /// CUSTOMER SELECTION INPUT
@@ -79,11 +91,11 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
                             onTap: () => onCustomerTap()),
                         const SizedBox(height: 10.0),
 
-                        /// CONTRACTOR SELECTION INPUT
+                        /// DESGINER SELECTION INPUT
                         SelectionInputWidget(
-                            title: Titles.contractor,
-                            value: contractor?.name ?? Titles.notSelected,
-                            onTap: () => onContractorTap()),
+                            title: Titles.designer,
+                            value: designer?.name ?? Titles.notSelected,
+                            onTap: () => onDesignerTap()),
 
                         const SizedBox(height: 16.0),
                         const TitleWidget(text: Titles.stages, isSmall: true),
@@ -137,7 +149,7 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
                             child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
+                                    horizontal: 16.0, vertical: 0.0),
                                 itemCount: options2.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
@@ -169,6 +181,10 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
                                   );
                                 }))
                       ]),
+                  SizedBox(
+                      height: MediaQuery.of(context).padding.bottom == 0.0
+                          ? 10.0
+                          : 0.0),
 
                   /// BUTTON's
                   Row(children: [

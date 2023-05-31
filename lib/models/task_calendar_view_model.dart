@@ -119,10 +119,10 @@ class TaskCalendarViewModel with ChangeNotifier {
   void showDateTimeSelectionSheet(BuildContext context, TextStyle textStyle,
       Function(bool) didUpdateDateTime) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
-        enableDrag: false,
         context: context,
         builder: (context) => DateTimeWheelPickerWidget(
             minDateTime: _minDateTime,
@@ -206,6 +206,7 @@ class TaskCalendarViewModel with ChangeNotifier {
 
     if (tasks.isNotEmpty) {
       showCupertinoModalBottomSheet(
+          enableDrag: false,
           topRadius: const Radius.circular(16.0),
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,

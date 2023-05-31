@@ -4,7 +4,6 @@ class FadePageRoute<T> extends PageRoute<T> {
   FadePageRoute(this.child);
 
   @override
-  // TODO: implement barrierColor
   Color get barrierColor => Colors.black;
 
   @override

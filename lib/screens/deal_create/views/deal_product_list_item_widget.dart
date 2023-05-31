@@ -159,9 +159,7 @@ class _DealProductListItemState extends State<DealProductListItemWidget> {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text('${Titles.totalPrice}, ${Titles.currency}',
                           style: TextStyle(
-                              color: HexColors.grey50,
-                              fontSize: 12.0,
-                              fontFamily: 'PT Root UI'))),
+                              color: HexColors.grey50, fontSize: 12.0))),
                   const SizedBox(height: 4.0),
 
                   /// TOTAL PRICE

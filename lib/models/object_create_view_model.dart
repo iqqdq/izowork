@@ -36,7 +36,7 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   bool _isKiso = true;
 
-  bool _isCreateFolder = false;
+  bool _hideDir = true;
 
   ObjectType? _objectType;
 
@@ -66,8 +66,8 @@ class ObjectCreateViewModel with ChangeNotifier {
     return _isKiso;
   }
 
-  bool get isCreateFolder {
-    return _isCreateFolder;
+  bool get hideDir {
+    return _hideDir;
   }
 
   List<Document> get documents {
@@ -122,7 +122,7 @@ class ObjectCreateViewModel with ChangeNotifier {
               ? false
               : true;
 
-      _isCreateFolder = object!.hideDir;
+      _hideDir = object!.hideDir;
     }
 
     getTypeList().then((value) => getStageList());
@@ -199,7 +199,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                 name: name,
                 objectStageId: _objectStage!.id,
                 objectTypeId: _objectType!.id,
-                hideDir: _isCreateFolder,
+                hideDir: _hideDir,
                 kiso: kiso))
             .then((response) => {
                   if (response is Object)
@@ -269,7 +269,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                 name: name,
                 objectStageId: _objectStage?.id ?? object!.objectStageId!,
                 objectTypeId: _objectType?.id ?? object!.objectTypeId!,
-                hideDir: _isCreateFolder,
+                hideDir: _hideDir,
                 kiso: kiso))
             .then((response) => {
                   if (response is Object)
@@ -376,7 +376,7 @@ class ObjectCreateViewModel with ChangeNotifier {
   }
 
   void checkCreateFolder() {
-    _isCreateFolder = !_isCreateFolder;
+    _hideDir = !_hideDir;
     notifyListeners();
   }
 
@@ -436,12 +436,14 @@ class ObjectCreateViewModel with ChangeNotifier {
       });
 
       showCupertinoModalBottomSheet(
+          enableDrag: false,
           topRadius: const Radius.circular(16.0),
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
           builder: (context) => SelectionScreenWidget(
-              title: Titles.status,
+              title: Titles.objectType,
+              value: _objectType?.name ?? object?.objectType?.name ?? '',
               items: items,
               onSelectTap: (type) => {
                     _objectTypes.forEach((element) {
@@ -462,12 +464,14 @@ class ObjectCreateViewModel with ChangeNotifier {
       });
 
       showCupertinoModalBottomSheet(
+          enableDrag: false,
           topRadius: const Radius.circular(16.0),
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
           builder: (context) => SelectionScreenWidget(
               title: Titles.stage,
+              value: _objectStage?.name ?? object?.objectStage?.name ?? '',
               items: items,
               onSelectTap: (stage) => {
                     _objectStages.forEach((element) {
@@ -482,6 +486,7 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   void showSearchUserSheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -499,6 +504,7 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   void showSearchCompanySheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,

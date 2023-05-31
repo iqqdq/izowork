@@ -4,23 +4,6 @@
             "outputFile": "/Users/iqqddq/Documents/izowork/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-iw/values-iw.xml",
             "map": [
                 {
-                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/6ec2c823b2ddfa9d4aff16fd99b56b89/transformed/jetified-exoplayer-core-2.18.1/res/values-iw/values-iw.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,120,179,246,311,385,447,527,607",
-                        "endColumns": "64,58,66,64,73,61,79,79,61",
-                        "endOffsets": "115,174,241,306,380,442,522,602,664"
-                    },
-                    "to": {
-                        "startLines": "21,22,23,24,25,26,27,28,29",
-                        "startColumns": "4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "2229,2294,2353,2420,2485,2559,2621,2701,2781",
-                        "endColumns": "64,58,66,64,73,61,79,79,61",
-                        "endOffsets": "2289,2348,2415,2480,2554,2616,2696,2776,2838"
-                    }
-                },
-                {
                     "source": "/Users/iqqddq/.gradle/caches/transforms-3/6710ee2e3546b398da00e75003abfc33/transformed/core-1.9.0/res/values-iw/values-iw.xml",
                     "from": {
                         "startLines": "2",
@@ -30,28 +13,11 @@
                         "endOffsets": "151"
                     },
                     "to": {
-                        "startLines": "34",
+                        "startLines": "20",
                         "startColumns": "4",
-                        "startOffsets": "3279",
+                        "startOffsets": "2126",
                         "endColumns": "100",
-                        "endOffsets": "3375"
-                    }
-                },
-                {
-                    "source": "/Users/iqqddq/.gradle/caches/transforms-3/aa7263188b29434019ae8934cbefd4da/transformed/jetified-media2-session-1.2.0/res/values-iw/values-iw.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "55,158,255,350,469",
-                        "endColumns": "102,96,94,118,124",
-                        "endOffsets": "153,250,345,464,589"
-                    },
-                    "to": {
-                        "startLines": "20,30,31,32,33",
-                        "startColumns": "4,4,4,4,4",
-                        "startOffsets": "2126,2843,2940,3035,3154",
-                        "endColumns": "102,96,94,118,124",
-                        "endOffsets": "2224,2935,3030,3149,3274"
+                        "endOffsets": "2222"
                     }
                 },
                 {

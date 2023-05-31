@@ -7,10 +7,12 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/models/company_view_model.dart';
 import 'package:izowork/screens/products/views/product_list_item_widget.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
+import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/segmented_control_widget.dart';
@@ -20,7 +22,10 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class CompanyScreenBodyWidget extends StatefulWidget {
-  const CompanyScreenBodyWidget({Key? key}) : super(key: key);
+  final Function(Company?)? onPop;
+
+  const CompanyScreenBodyWidget({Key? key, required this.onPop})
+      : super(key: key);
 
   @override
   _CompanyScreenBodyState createState() => _CompanyScreenBodyState();
@@ -81,18 +86,18 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               child: Stack(children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
-                child: _companyViewModel.company.image == null
+                child: _companyViewModel.company?.image == null
                     ? SvgPicture.asset('assets/ic_avatar.svg',
                         color: HexColors.grey40,
                         width: 80.0,
                         height: 80.0,
                         fit: BoxFit.cover)
                     : ClipRRect(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(40.0),
                         child: CachedNetworkImage(
-                            cacheKey: _companyViewModel.company.image!,
+                            cacheKey: _companyViewModel.company!.image!,
                             imageUrl: companyMedialUrl +
-                                _companyViewModel.company.image!,
+                                _companyViewModel.company!.image!,
                             width: 80.0,
                             height: 80.0,
                             memCacheWidth: 80 *
@@ -105,10 +110,10 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           /// TAG
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             StatusWidget(
-                title: _companyViewModel.company.type,
-                status: _companyViewModel.company.type == 'Поставщик'
+                title: _companyViewModel.company?.type ?? '-',
+                status: _companyViewModel.company?.type == 'Поставщик'
                     ? 0
-                    : _companyViewModel.company.type == 'Покупатель'
+                    : _companyViewModel.company?.type == 'Проектировщик'
                         ? 1
                         : 2)
           ]),
@@ -121,11 +126,11 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               isSmall: true),
           const SizedBox(height: 4.0),
           Text(
-              _companyViewModel.company.description == null
+              _companyViewModel.company?.description == null
                   ? '-'
-                  : _companyViewModel.company.description!.isEmpty
+                  : _companyViewModel.company!.description!.isEmpty
                       ? '-'
-                      : _companyViewModel.company.description!,
+                      : _companyViewModel.company!.description!,
               style: TextStyle(
                   height: 1.4,
                   color: HexColors.black,
@@ -137,7 +142,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const TitleWidget(
               text: Titles.address, padding: EdgeInsets.zero, isSmall: true),
           const SizedBox(height: 4.0),
-          Text(_companyViewModel.company.address,
+          Text(_companyViewModel.company?.address ?? '-',
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -148,7 +153,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const TitleWidget(
               text: Titles.phone, padding: EdgeInsets.zero, isSmall: true),
           const SizedBox(height: 4.0),
-          Text(_companyViewModel.company.phone,
+          Text(_companyViewModel.company?.phone ?? '-',
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -160,11 +165,11 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               text: Titles.email, padding: EdgeInsets.zero, isSmall: true),
           const SizedBox(height: 4.0),
           Text(
-              _companyViewModel.company.email == null
+              _companyViewModel.company?.email == null
                   ? '-'
-                  : _companyViewModel.company.email!.isEmpty
+                  : _companyViewModel.company!.email!.isEmpty
                       ? '-'
-                      : _companyViewModel.company.email!,
+                      : _companyViewModel.company!.email!,
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -176,11 +181,11 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               text: Titles.requisites, padding: EdgeInsets.zero, isSmall: true),
           const SizedBox(height: 4.0),
           Text(
-              _companyViewModel.company.details == null
+              _companyViewModel.company?.details == null
                   ? '-'
-                  : _companyViewModel.company.details!.isEmpty
+                  : _companyViewModel.company!.details!.isEmpty
                       ? '-'
-                      : _companyViewModel.company.details!,
+                      : _companyViewModel.company!.details!,
               style: TextStyle(
                   height: 1.4,
                   color: HexColors.black,
@@ -194,7 +199,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               padding: EdgeInsets.zero,
               isSmall: true),
           const SizedBox(height: 4.0),
-          Text('???',
+          Text(_companyViewModel.company?.productType?.name ?? '-',
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -207,7 +212,9 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               padding: EdgeInsets.zero,
               isSmall: true),
           const SizedBox(height: 4.0),
-          Text('???',
+          Text(
+              _companyViewModel.company?.successfulDeals.toString() ??
+                  _companyViewModel.selectedCompany.successfulDeals.toString(),
               style: TextStyle(
                   color: HexColors.black,
                   fontSize: 14.0,
@@ -259,24 +266,22 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
               onRefresh: _onRefresh,
               color: HexColors.primaryMain,
               backgroundColor: HexColors.white,
-              child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
-                  child: ListView.builder(
-                      controller: _scrollController,
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(
-                          left: 16.0,
-                          right: 16.0,
-                          top: 16.0,
-                          bottom: MediaQuery.of(context).padding.bottom + 70.0),
-                      itemCount: _companyViewModel.products.length,
-                      itemBuilder: (context, index) {
-                        return ProductsListItemWidget(
-                            tag: index.toString(),
-                            product: _companyViewModel.products[index],
-                            onTap: () => _companyViewModel
-                                .showProductPageScreen(context, index));
-                      }))))
+              child: ListView.builder(
+                  controller: _scrollController,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                      top: 16.0,
+                      bottom: MediaQuery.of(context).padding.bottom + 70.0),
+                  itemCount: _companyViewModel.products.length,
+                  itemBuilder: (context, index) {
+                    return ProductsListItemWidget(
+                        tag: index.toString(),
+                        product: _companyViewModel.products[index],
+                        onTap: () => _companyViewModel.showProductPageScreen(
+                            context, index));
+                  })))
     ]);
   }
 
@@ -297,9 +302,14 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                 Column(mainAxisAlignment: MainAxisAlignment.start, children: [
               Row(children: [
                 const SizedBox(width: 16.0),
-                BackButtonWidget(onTap: () => Navigator.pop(context)),
+                BackButtonWidget(
+                    onTap: () => {
+                          if (widget.onPop != null)
+                            widget.onPop!(_companyViewModel.company),
+                          Navigator.pop(context)
+                        }),
                 Expanded(
-                    child: Text(_companyViewModel.company.name,
+                    child: Text(_companyViewModel.company?.name ?? '-',
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         style: TextStyle(
@@ -357,10 +367,25 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                               color: HexColors.grey50))))
               : Container(),
 
-          /// FILTER BUTTON
           _index == 0
-              ? Container()
-              : SafeArea(
+              ?
+
+              /// EDIT BUTTON
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 12.0
+                              : MediaQuery.of(context).padding.bottom),
+                      child: ButtonWidget(
+                          title: Titles.edit,
+                          onTap: () => _companyViewModel
+                              .showCompanyEditScreen(context))))
+              :
+
+              /// FILTER BUTTON
+              SafeArea(
                   child: Align(
                       alignment: Alignment.bottomCenter,
                       child: Padding(

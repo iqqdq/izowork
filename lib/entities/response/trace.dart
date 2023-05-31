@@ -1,21 +1,23 @@
 import 'dart:convert';
 
+import 'package:izowork/entities/response/office.dart';
+
 Trace traceFromJson(String str) => Trace.fromJson(json.decode(str));
 
 String traceToJson(Trace data) => json.encode(data.toJson());
 
 class Trace {
-  Trace({
-    required this.id,
-    this.subjectId,
-    this.objectId,
-    this.traceTypeId,
-    this.traceGroupId,
-    this.description,
-    required this.createdAt,
-    required this.traceType,
-    required this.traceGroup,
-  });
+  Trace(
+      {required this.id,
+      this.subjectId,
+      this.objectId,
+      this.traceTypeId,
+      this.traceGroupId,
+      this.description,
+      required this.createdAt,
+      required this.traceType,
+      required this.traceGroup,
+      this.office});
 
   String id;
   String? subjectId;
@@ -26,6 +28,7 @@ class Trace {
   DateTime createdAt;
   TraceType traceType;
   TraceGroup traceGroup;
+  Office? office;
 
   factory Trace.fromJson(Map<String, dynamic> json) => Trace(
         id: json["id"],
@@ -37,6 +40,7 @@ class Trace {
         createdAt: DateTime.parse(json["created_at"]),
         traceType: TraceType.fromJson(json["trace_type"]),
         traceGroup: TraceGroup.fromJson(json["trace_group"]),
+        office: json["office"] == null ? null : Office.fromJson(json["office"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,6 +53,7 @@ class Trace {
         "created_at": createdAt.toIso8601String(),
         "trace_type": traceType.toJson(),
         "trace_group": traceGroup.toJson(),
+        "office": office?.toJson()
       };
 }
 

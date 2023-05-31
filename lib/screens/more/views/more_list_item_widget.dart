@@ -47,16 +47,18 @@ class MoreListItemWidget extends StatelessWidget {
                     /// BADGE
                     count == null
                         ? Container()
-                        : CircleAvatar(
-                            backgroundColor: HexColors.additionalViolet,
-                            radius: 12.0,
-                            child: Center(
-                                child: Text(count.toString(),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: HexColors.white))))
+                        : count == 0
+                            ? Container()
+                            : CircleAvatar(
+                                backgroundColor: HexColors.additionalViolet,
+                                radius: 12.0,
+                                child: Center(
+                                    child: Text(count.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: HexColors.white))))
                   ]))
             ]),
         onTap: () => onTap());

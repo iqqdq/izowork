@@ -368,12 +368,14 @@ class TaskCreateViewModel with ChangeNotifier {
     if (_taskState != null) {
       if (_taskState!.states.isNotEmpty) {
         showCupertinoModalBottomSheet(
+            enableDrag: false,
             topRadius: const Radius.circular(16.0),
             barrierColor: Colors.black.withOpacity(0.6),
             backgroundColor: HexColors.white,
             context: context,
             builder: (context) => SelectionScreenWidget(
                 title: Titles.status,
+                value: _state ?? task?.state ?? '',
                 items: _taskState!.states,
                 onSelectTap: (state) => {_state = state, notifyListeners()}));
       }
@@ -385,10 +387,10 @@ class TaskCreateViewModel with ChangeNotifier {
         overflow: TextOverflow.ellipsis, fontFamily: 'PT Root UI');
 
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
-        enableDrag: false,
         context: context,
         builder: (context) => DateTimeWheelPickerWidget(
             minDateTime: _minDateTime,
@@ -421,6 +423,7 @@ class TaskCreateViewModel with ChangeNotifier {
 
   void showSearchUserSheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -446,6 +449,7 @@ class TaskCreateViewModel with ChangeNotifier {
 
   void showSearchObjectSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
@@ -460,6 +464,7 @@ class TaskCreateViewModel with ChangeNotifier {
 
   void showSearchCompanySheet(BuildContext context) {
     showCupertinoModalBottomSheet(
+        enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,

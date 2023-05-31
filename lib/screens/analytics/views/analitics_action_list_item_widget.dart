@@ -54,7 +54,7 @@ class AnalitycsActionListItemWidget extends StatelessWidget {
                 Row(children: [
                   SvgPicture.asset('assets/ic_pin.svg'),
                   const SizedBox(width: 2.0),
-                  Text('???',
+                  Text(trace.office?.name ?? '-',
                       textAlign: TextAlign.end,
                       style: TextStyle(
                           color: HexColors.additionalViolet,

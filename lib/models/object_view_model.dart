@@ -15,6 +15,7 @@ import 'package:izowork/screens/documents/documents_screen.dart';
 import 'package:izowork/screens/object_analytics/object_analytics_screen.dart';
 import 'package:izowork/screens/object_create/object_create_screen.dart';
 import 'package:izowork/screens/phase/phase_screen.dart';
+import 'package:izowork/screens/single_object_map/single_object_map_screen.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -125,6 +126,16 @@ class ObjectPageViewModel with ChangeNotifier {
                   onUpdate();
                   notifyListeners();
                 })));
+  }
+
+  void showSingleObjectMap(BuildContext context) {
+    if (_object != null) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  SingleObjectMapScreenWidget(object: _object!)));
+    }
   }
 
   void showObjectAnalyticsPageViewScreen(BuildContext context) {

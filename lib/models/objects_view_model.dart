@@ -162,6 +162,7 @@ class ObjectsViewModel with ChangeNotifier {
   void showObjectsFilterSheet(BuildContext context, Function() onFilter) {
     if (_objectStages != null) {
       showCupertinoModalBottomSheet(
+          enableDrag: false,
           topRadius: const Radius.circular(16.0),
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
