@@ -12,6 +12,7 @@ import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 
 class DocumentsScreenBodyWidget extends StatefulWidget {
@@ -136,10 +137,11 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
         body: SizedBox.expand(
             child: Stack(children: [
           /// DOCUMENTS LIST VIEW
-          RefreshIndicator(
-              onRefresh: _onRefresh,
+          LiquidPullToRefresh(
               color: HexColors.primaryMain,
               backgroundColor: HexColors.white,
+              springAnimationDurationInMilliseconds: 300,
+              onRefresh: _onRefresh,
               child: ListView.builder(
                   shrinkWrap: true,
                   controller: _scrollController,

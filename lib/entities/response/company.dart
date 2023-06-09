@@ -1,10 +1,8 @@
 import 'dart:convert';
-
+import 'package:izowork/entities/response/contact.dart';
 import 'package:izowork/entities/response/product_type.dart';
 
 Company companyJson(String str) => Company.fromJson(json.decode(str));
-
-String companyToJson(Company data) => json.encode(data.toJson());
 
 class Company {
   Company(
@@ -18,7 +16,8 @@ class Company {
       this.image,
       required this.type,
       required this.successfulDeals,
-      this.productType});
+      this.productType,
+      required this.contacts});
 
   String id;
   String name;
@@ -31,6 +30,7 @@ class Company {
   String type;
   int? successfulDeals;
   ProductType? productType;
+  List<Contact> contacts;
 
   factory Company.fromJson(Map<String, dynamic> json) => Company(
       id: json["id"],
@@ -45,7 +45,11 @@ class Company {
       successfulDeals: json["successful_deals"] ?? 0,
       productType: json["product_type"] == null
           ? null
-          : ProductType.fromJson(json["product_type"]));
+          : ProductType.fromJson(json["product_type"]),
+      contacts: json["contacts"] == null
+          ? []
+          : List<Contact>.from(
+              json["contacts"].map((x) => Contact.fromJson(x))));
 
   Map<String, dynamic> toJson() => {
         "id": id,

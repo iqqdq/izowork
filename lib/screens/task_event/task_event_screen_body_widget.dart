@@ -18,7 +18,14 @@ class TaskEventScreenBodyWidget extends StatefulWidget {
 }
 
 class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
+  final ScrollController _scrollController = ScrollController();
   late TaskEventViewModel _taskEventViewModel;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,46 +39,69 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
         DateFormat.MMMM(locale).format(widget.dateTime).toLowerCase();
     final _year = '${DateTime.now().year}';
 
-    return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.8,
-        child: Stack(children: [
-          /// TASK LIST VIEW
-          SizedBox.expand(
-              child: Scrollbar(
-                  child: ListView.builder(
-                      padding: const EdgeInsets.only(
-                          left: 16.0, right: 16.0, top: 70.0, bottom: 16.0),
-                      itemCount: _taskEventViewModel.tasks.length,
-                      itemBuilder: (context, index) {
-                        return TaskListItemWidget(
-                            task: _taskEventViewModel.tasks[index],
-                            onTap: () => _taskEventViewModel
-                                .showTaskScreenWidget(context, index));
-                      }))),
-
-          Container(
-            width: double.infinity,
-            height: 70.0,
+    return Material(
+        type: MaterialType.transparency,
+        child: Container(
+            height: MediaQuery.of(context).size.height,
             color: HexColors.white,
-            child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 24.0, bottom: 16.0, left: 16.0, right: 16.0),
-                child: Material(
-                    type: MaterialType.transparency,
-                    child: Text(
-                        'Сделки на $_day ${_month.substring(0, 3)} $_year',
-                        style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            color: HexColors.black,
-                            fontFamily: 'PT Root UI')))),
-          ),
+            child: Scrollbar(
+                child: NotificationListener<ScrollEndNotification>(
+                    onNotification: (notification) {
+                      if (_scrollController.position.pixels == 0.0 &&
+                          MediaQuery.of(context).viewInsets.bottom == 0.0) {
+                        Navigator.pop(context);
+                      }
 
-          Column(children: const [
-            /// DISMISS INDICATOR
-            SizedBox(height: 6.0),
-            DismissIndicatorWidget(),
-          ])
-        ]));
+                      // Return true to cancel the notification bubbling. Return false (or null) to
+                      // allow the notification to continue to be dispatched to further ancestors.
+                      return true;
+                    },
+                    child: ListView(
+                        controller: _scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(
+                            top: 8.0,
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: (MediaQuery.of(context).padding.bottom ==
+                                        0.0
+                                    ? 20.0
+                                    : MediaQuery.of(context).padding.bottom) +
+                                MediaQuery.of(context).viewInsets.bottom),
+                        children: [
+                          /// DISMISS INDICATOR
+                          const SizedBox(height: 6.0),
+                          const DismissIndicatorWidget(),
+
+                          /// TITLE
+                          Row(
+                            children: [
+                              Expanded(
+                                  child: Material(
+                                      type: MaterialType.transparency,
+                                      child: Text(
+                                          'Сделки на $_day ${_month.substring(0, 3)} $_year',
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: HexColors.black,
+                                              fontFamily: 'PT Root UI'))))
+                            ],
+                          ),
+
+                          /// TASK LIST VIEW
+                          ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.only(top: 16.0),
+                              itemCount: _taskEventViewModel.tasks.length,
+                              itemBuilder: (context, index) {
+                                return TaskListItemWidget(
+                                    task: _taskEventViewModel.tasks[index],
+                                    onTap: () => _taskEventViewModel
+                                        .showTaskScreenWidget(context, index));
+                              }),
+                        ])))));
   }
 }

@@ -201,7 +201,7 @@ class CompanyCreateViewModel with ChangeNotifier {
     await CompanyRepository()
         .updateCompanyAvatar(formData)
         .then((response) => {
-              if (response)
+              if (response == true)
                 loadingStatus = LoadingStatus.completed
               else if (response is ErrorResponse)
                 {

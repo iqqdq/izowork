@@ -12,6 +12,7 @@ import 'package:izowork/models/objects_view_model.dart';
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 
 class ObjectsScreenBodyWidget extends StatefulWidget {
@@ -129,10 +130,11 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
         body: SizedBox.expand(
             child: Stack(children: [
           /// OBJECTS LIST VIEW
-          RefreshIndicator(
-              onRefresh: _onRefresh,
+          LiquidPullToRefresh(
               color: HexColors.primaryMain,
               backgroundColor: HexColors.white,
+              springAnimationDurationInMilliseconds: 300,
+              onRefresh: _onRefresh,
               child: GestureDetector(
                   onTap: () => FocusScope.of(context).unfocus(),
                   child: ListView.builder(

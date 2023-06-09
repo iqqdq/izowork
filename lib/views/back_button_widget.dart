@@ -39,7 +39,7 @@ class _BackButtonState extends State<BackButtonWidget> {
                       color: _isHighlight
                           ? HexColors.secondaryDark
                           : HexColors.primaryDark,
-                      fontSize: 18.0,
+                      fontSize: 16.0,
                       fontFamily: 'PT Root UI',
                       fontWeight: FontWeight.bold))
         ]),

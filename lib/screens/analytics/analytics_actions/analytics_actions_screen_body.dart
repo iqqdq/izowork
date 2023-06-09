@@ -7,6 +7,7 @@ import 'package:izowork/screens/analytics/views/analitics_action_list_item_widge
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/views/filter_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 
 class AnalyticsActionsScreenBodyWidget extends StatefulWidget {
@@ -72,10 +73,11 @@ class _AnalyticsActionsScreenBodyState
         body: SizedBox.expand(
             child: Stack(children: [
           /// ACTION LIST
-          RefreshIndicator(
-              onRefresh: _onRefresh,
+          LiquidPullToRefresh(
               color: HexColors.primaryMain,
               backgroundColor: HexColors.white,
+              springAnimationDurationInMilliseconds: 300,
+              onRefresh: _onRefresh,
               child: ListView.builder(
                   padding: EdgeInsets.only(bottom: _bottomPadding + 64.0),
                   shrinkWrap: true,

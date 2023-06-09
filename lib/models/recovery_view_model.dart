@@ -18,7 +18,7 @@ class RecoveryViewModel with ChangeNotifier {
     await UserRepository()
         .resetPassword(email: email)
         .then((response) => {
-              if (response)
+              if (response == true)
                 {
                   loadingStatus = LoadingStatus.completed,
                   Navigator.pop(context),

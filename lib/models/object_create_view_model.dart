@@ -46,6 +46,8 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   List<ObjectStage> _objectStages = [];
 
+  User? _techManager;
+
   User? _manager;
 
   Company? _designer;
@@ -92,6 +94,10 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   List<ObjectType> get objectTypes {
     return _objectTypes;
+  }
+
+  User? get techManager {
+    return _techManager;
   }
 
   User? get manager {
@@ -193,6 +199,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                 contractorId: _contractor?.id,
                 customerId: _customer?.id,
                 designerId: _designer?.id,
+                techManagerId: _techManager?.id,
                 floors: floors,
                 lat: lat,
                 long: long,
@@ -263,6 +270,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                 contractorId: _contractor?.id ?? object?.contractorId,
                 customerId: _customer?.id ?? object?.customerId,
                 designerId: _designer?.id ?? object?.designerId,
+                techManagerId: _techManager?.id,
                 floors: floors ?? object?.floors,
                 lat: lat,
                 long: long,
@@ -492,11 +500,11 @@ class ObjectCreateViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (context) => SearchUserScreenWidget(
-            title: Titles.manager,
+            title: index == 0 ? Titles.techManager : Titles.manager,
             isRoot: true,
             onFocus: () => {},
             onPop: (user) => {
-                  _manager = user,
+                  index == 0 ? _techManager = user : _manager = user,
                   notifyListeners(),
                   Navigator.pop(context),
                 }));

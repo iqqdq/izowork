@@ -9,6 +9,7 @@ import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/models/company_view_model.dart';
+import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
 import 'package:izowork/screens/products/views/product_list_item_widget.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -19,6 +20,7 @@ import 'package:izowork/views/segmented_control_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
 import 'package:izowork/views/status_widget.dart';
 import 'package:izowork/views/title_widget.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 
 class CompanyScreenBodyWidget extends StatefulWidget {
@@ -78,8 +80,8 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
 
   Widget _page() {
     return ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-        shrinkWrap: true,
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 90.0),
+        physics: const AlwaysScrollableScrollPhysics(),
         children: [
           /// IMAGE
           Center(
@@ -219,7 +221,33 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                   color: HexColors.black,
                   fontSize: 14.0,
                   fontFamily: 'PT Root UI')),
-          const SizedBox(height: 16.0)
+          const SizedBox(height: 16.0),
+
+          /// CONTACTS LIST
+          _companyViewModel.company == null
+              ? Container()
+              : _companyViewModel.company!.contacts.isEmpty
+                  ? Container()
+                  : const TitleWidget(
+                      text: Titles.contacts,
+                      padding: EdgeInsets.zero,
+                      isSmall: true),
+          ListView.builder(
+              padding: const EdgeInsets.only(top: 10.0),
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: _companyViewModel.company?.contacts.length,
+              itemBuilder: (context, index) {
+                return _companyViewModel.company == null
+                    ? Container()
+                    : ContactListItemWidget(
+                        contact: _companyViewModel.company?.contacts[index] ??
+                            _companyViewModel.selectedCompany.contacts[index],
+                        onContactTap: () =>
+                            _companyViewModel.showContactScreen(context, index),
+                        onPhoneTap: () => {},
+                        onLinkTap: (url) => _companyViewModel.openUrl(url));
+              })
         ]);
   }
 
@@ -262,10 +290,11 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
 
       /// PRODUCTS LIST VIEW
       Expanded(
-          child: RefreshIndicator(
-              onRefresh: _onRefresh,
+          child: LiquidPullToRefresh(
               color: HexColors.primaryMain,
               backgroundColor: HexColors.white,
+              springAnimationDurationInMilliseconds: 300,
+              onRefresh: _onRefresh,
               child: ListView.builder(
                   controller: _scrollController,
                   shrinkWrap: true,
@@ -292,7 +321,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
     return Scaffold(
         extendBodyBehindAppBar: false,
         appBar: AppBar(
-            toolbarHeight: _index == 0 ? 114.0 : 102.0,
+            toolbarHeight: _index == 0 ? 129.0 : 116.0,
             titleSpacing: 0.0,
             elevation: 0.0,
             backgroundColor: HexColors.white90,

@@ -64,9 +64,7 @@ class _InputWidgetState extends State<InputWidget> {
     return Container(
         height: widget.height ?? 44.0,
         margin: widget.margin ?? const EdgeInsets.symmetric(horizontal: 16.0),
-        padding: EdgeInsets.only(
-            left: 12.0,
-            top: widget.textEditingController.text.isEmpty ? 0.0 : 0.0),
+        padding: const EdgeInsets.only(left: 12.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
             color: HexColors.white,

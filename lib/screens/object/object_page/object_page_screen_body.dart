@@ -121,6 +121,17 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                   color: HexColors.primaryMain))
                         ]),
 
+                        /// TECHNICAL MANAGER
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.techManager,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _objectPageViewModel
+                                    .object?.techManager?.name ??
+                                '-'),
+
                         /// MANAGER
                         const TitleWidget(
                             padding: EdgeInsets.only(bottom: 4.0),

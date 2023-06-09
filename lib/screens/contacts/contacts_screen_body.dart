@@ -13,6 +13,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 
 class ContactsScreenBodyWidget extends StatefulWidget {
@@ -121,10 +122,11 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
         body: SizedBox.expand(
             child: Stack(children: [
           /// CONTACTS LIST VIEW
-          RefreshIndicator(
-              onRefresh: _onRefresh,
+          LiquidPullToRefresh(
               color: HexColors.primaryMain,
               backgroundColor: HexColors.white,
+              springAnimationDurationInMilliseconds: 300,
+              onRefresh: _onRefresh,
               child: ListView.builder(
                   controller: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -140,8 +142,7 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
                         onContactTap: () => _contactsViewModel
                             .showContactScreen(context, index),
                         onPhoneTap: () => {},
-                        onLinkTap: () => _contactsViewModel
-                            .openUrl('https://www.google.com/'));
+                        onLinkTap: (url) => _contactsViewModel.openUrl(url));
                   })),
           const SeparatorWidget(),
 

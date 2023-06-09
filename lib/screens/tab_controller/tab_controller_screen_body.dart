@@ -75,7 +75,10 @@ class _TabControllerScreenBodyState
             backgroundColor: Colors.transparent,
             systemOverlayStyle: SystemUiOverlayStyle.dark),
         body: _pages?.length == 4
-            ? const Center(child: LoadingIndicatorWidget())
+            ? const Center(
+                child: Padding(
+                    padding: EdgeInsets.only(top: 60.0),
+                    child: LoadingIndicatorWidget()))
             : PageView(
                 controller: _pageController,
                 physics: _index == 0

@@ -13,6 +13,7 @@ import 'package:izowork/screens/chat/views/chat_list_item_widget.dart';
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -165,10 +166,11 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
         body: SizedBox.expand(
             child: Stack(children: [
           /// CHATS LIST VIEW
-          RefreshIndicator(
-              onRefresh: _onRefresh,
+          LiquidPullToRefresh(
               color: HexColors.primaryMain,
               backgroundColor: HexColors.white,
+              springAnimationDurationInMilliseconds: 300,
+              onRefresh: _onRefresh,
               child: ListView.builder(
                   padding:
                       const EdgeInsets.only(top: 16.0, bottom: 16.0 + 64.0),

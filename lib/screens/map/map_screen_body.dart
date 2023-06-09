@@ -44,23 +44,11 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
 
   ClusterManager _initClusterManager() {
     return ClusterManager<Place>(
-        _mapViewModel.places, _mapViewModel.updateMarkers,
-        markerBuilder: _markerBuilder,
-        levels: [
-          1.0,
-          4.25,
-          6.75,
-          8.25,
-          11.5,
-          12.5,
-          13.0,
-          14.5,
-          16.0,
-          16.5,
-          20.0
-        ],
-        extraPercent: 0.5,
-        stopClusteringZoom: 20.0);
+      _mapViewModel.places,
+      _mapViewModel.updateMarkers,
+      markerBuilder: _markerBuilder,
+      levels: [1.0, 4.25, 6.75, 8.25, 11.5, 12.5, 13.0, 14.5, 16.0, 16.5, 20.0],
+    );
   }
 
   LatLngBounds getBounds(List<LatLng> markers) {
@@ -107,7 +95,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                   .toList());
 
               await _googleMapController
-                  .animateCamera(CameraUpdate.newLatLngBounds(bounds, 40.0));
+                  .animateCamera(CameraUpdate.newLatLngBounds(bounds, 20.0));
             } else {
               await _googleMapController.animateCamera(
                   CameraUpdate.newCameraPosition(
@@ -119,7 +107,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                       context, cluster.items.first.id));
             }
           },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, cluster),
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 85, cluster),
         );
       };
 
@@ -129,7 +117,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
 
     final PictureRecorder pictureRecorder = PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
-    final Paint paint1 = Paint()..color = HexColors.primaryMain;
+    final Paint paint1 = Paint()..color = cluster.items.first.color;
     final Paint paint2 = Paint()..color = HexColors.white;
 
     canvas.drawCircle(

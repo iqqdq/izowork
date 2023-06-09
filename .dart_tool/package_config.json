@@ -140,6 +140,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "csslib",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/csslib-0.17.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "cupertino_icons",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.5",
       "packageUri": "lib/",
@@ -356,6 +362,12 @@
       "languageVersion": "2.15"
     },
     {
+      "name": "html",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/html-0.15.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "http",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/http-0.13.5",
       "packageUri": "lib/",
@@ -442,6 +454,12 @@
     {
       "name": "lints",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/lints-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "liquid_pull_to_refresh",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/liquid_pull_to_refresh-3.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -854,6 +872,36 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "video_player",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/video_player-2.6.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "video_player_android",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/video_player_android-2.4.9",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "video_player_avfoundation",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/video_player_avfoundation-2.4.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "video_player_platform_interface",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/video_player_platform_interface-6.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "video_player_web",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/video_player_web-2.0.16",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "wheel_chooser",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/wheel_chooser-1.1.2",
       "packageUri": "lib/",
@@ -896,7 +944,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2023-05-30T10:35:10.120505Z",
+  "generated": "2023-06-07T00:12:46.404212Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'dart:io';
+
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
@@ -11,10 +14,12 @@ import 'package:izowork/entities/response/product.dart';
 import 'package:izowork/repositories/company_repository.dart';
 import 'package:izowork/repositories/product_repository.dart';
 import 'package:izowork/screens/company_create/company_create_screen.dart';
+import 'package:izowork/screens/contact/contact_screen.dart';
 import 'package:izowork/screens/product/product_screen.dart';
 import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen.dart';
 import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen_body.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CompanyViewModel with ChangeNotifier {
   final Company selectedCompany;
@@ -41,13 +46,14 @@ class CompanyViewModel with ChangeNotifier {
 
   CompanyViewModel(this.selectedCompany) {
     _company = selectedCompany;
-    getProductList(pagination: Pagination(offset: 0, size: 50), search: '');
+    getCompanyById(null, selectedCompany.id).then((value) => getProductList(
+        pagination: Pagination(offset: 0, size: 50), search: ''));
   }
 
   // MARK: -
   // MARK: - API CALL
 
-  Future getCompanyById(BuildContext context, String id) async {
+  Future getCompanyById(BuildContext? context, String id) async {
     loadingStatus = LoadingStatus.searching;
 
     await CompanyRepository().getCompany(id).then((response) => {
@@ -58,10 +64,10 @@ class CompanyViewModel with ChangeNotifier {
             }
           else if (response is ErrorResponse)
             {
-              loadingStatus = LoadingStatus.error,
-              Toast().showTopToast(context, response.message ?? 'Ошибка')
-            },
-          notifyListeners()
+              if (context != null)
+                Toast().showTopToast(context, response.message ?? 'Ошибка'),
+              loadingStatus = LoadingStatus.error
+            }
         });
   }
 
@@ -121,6 +127,46 @@ class CompanyViewModel with ChangeNotifier {
     _productsFilter = null;
   }
 
+  void openUrl(String url) async {
+    if (url.isNotEmpty) {
+      String? nativeUrl;
+
+      if (url.contains('t.me')) {
+        nativeUrl = 'tg:resolve?domain=${url.replaceAll('t.me/', '')}';
+      } else if (url.characters.first == '@') {
+        nativeUrl = 'instagram://user?username=${url.replaceAll('@', '')}';
+      }
+
+      if (Platform.isAndroid) {
+        if (nativeUrl != null) {
+          AndroidIntent intent = AndroidIntent(
+              action: 'android.intent.action.VIEW', data: nativeUrl);
+
+          if ((await intent.canResolveActivity()) == true) {
+            await intent.launch();
+          }
+        } else {
+          openBrowser(url);
+        }
+      } else {
+        if (nativeUrl != null) {
+          openBrowser(nativeUrl);
+        } else {
+          openBrowser(url);
+        }
+      }
+    }
+  }
+
+  void openBrowser(String url) async {
+    if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
+      launchUrl(Uri.parse(url.replaceAll(' ', '')));
+    } else if (await canLaunchUrl(
+        Uri.parse('https://' + url.replaceAll(' ', '')))) {
+      launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
+    }
+  }
+
   // MARK: -
   // MARK: - PUSH
 
@@ -165,5 +211,23 @@ class CompanyViewModel with ChangeNotifier {
                       onFilter()
                     }
                 }));
+  }
+
+  void showContactScreen(BuildContext context, int index) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ContactScreenWidget(
+                contact: selectedCompany.contacts[index],
+                onDelete: (contact) => {
+                      if (company == null)
+                        {
+                          company?.contacts.removeWhere(
+                              (element) => element.id == contact.id),
+                        },
+                      selectedCompany.contacts
+                          .removeWhere((element) => element.id == contact.id),
+                      notifyListeners()
+                    })));
   }
 }

@@ -7,6 +7,7 @@ import 'package:izowork/screens/analytics/views/analitics_action_list_item_widge
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 
 class ObjectActionsScreenBodyWidget extends StatefulWidget {
@@ -67,10 +68,11 @@ class _ObjectActionsScreenBodyState
           const SeparatorWidget(),
 
           /// ACTION LIST
-          RefreshIndicator(
-              onRefresh: _onRefresh,
+          LiquidPullToRefresh(
               color: HexColors.primaryMain,
               backgroundColor: HexColors.white,
+              springAnimationDurationInMilliseconds: 300,
+              onRefresh: _onRefresh,
               child: ListView.builder(
                   padding: EdgeInsets.only(
                       top: 16.0,

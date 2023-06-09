@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/place_model.dart';
@@ -43,6 +44,9 @@ class SingleObjectMapViewModel with ChangeNotifier {
     places.add(Place(
         id: object.id,
         name: object.manager?.name ?? '-',
+        color: object.objectStage?.color == null
+            ? HexColors.primaryMain
+            : HexColor(object.objectStage!.color!),
         latLng: LatLng(object.lat, object.long)));
 
     getLocationPermission().then((value) => notifyListeners());

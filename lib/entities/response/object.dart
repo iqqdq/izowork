@@ -31,6 +31,7 @@ class Object {
       this.objectStageId,
       this.objectStage,
       required this.files,
+      this.techManager,
       this.managerId,
       this.manager,
       this.kiso,
@@ -59,6 +60,7 @@ class Object {
   ObjectStage? objectStage;
   List<Document> files;
   String? managerId;
+  User? techManager;
   User? manager;
   String? kiso;
   bool hideDir;
@@ -96,6 +98,9 @@ class Object {
       files: json["files"] == null
           ? []
           : List<Document>.from(json["files"].map((x) => Document.fromJson(x))),
+      techManager: json["techmanager"] == null
+          ? null
+          : User.fromJson(json["techmanager"]),
       managerId: json["manager_id"],
       manager: json["manager"] == null ? null : User.fromJson(json["manager"]),
       kiso: json["kiso"],
@@ -119,6 +124,7 @@ class Object {
         "object_type_id": objectTypeId,
         "object_stage_id": objectStageId,
         "files": List<Document>.from(files.map((x) => x)),
+        "techmanager_id": techManager,
         "manager_id": managerId,
         "manager": manager,
         "kiso": kiso,

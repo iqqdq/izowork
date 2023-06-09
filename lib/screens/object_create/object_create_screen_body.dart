@@ -199,6 +199,19 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 onChange: (text) => setState(() {}),
                                 onEditingComplete: () => setState(() {})),
 
+                            /// TECHNICAL MANAGER SELECTION INPUT
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                isVertical: true,
+                                title: Titles.techManager,
+                                value:
+                                    _objectCreateViewModel.techManager?.name ??
+                                        _objectCreateViewModel
+                                            .object?.techManager?.name ??
+                                        Titles.notSelected,
+                                onTap: () => _objectCreateViewModel
+                                    .showSearchUserSheet(context, 0)),
+
                             /// MANAGER SELECTION INPUT
                             SelectionInputWidget(
                                 margin: const EdgeInsets.only(bottom: 10.0),
@@ -209,7 +222,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                         .object?.manager?.name ??
                                     Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
-                                    .showSearchUserSheet(context, 0)),
+                                    .showSearchUserSheet(context, 1)),
 
                             /// GENERAL CONTRACTOR SELECTION INPUT
                             SelectionInputWidget(

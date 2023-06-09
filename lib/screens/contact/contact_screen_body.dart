@@ -107,7 +107,7 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                 /// POST
                 const TitleWidget(
                     text: Titles.speciality,
-                    padding: EdgeInsets.only(bottom: 4.0),
+                    padding: EdgeInsets.only(top: 16.0, bottom: 4.0),
                     isSmall: true),
                 Text(_contactViewModel.contact?.post ?? '-',
                     style: TextStyle(

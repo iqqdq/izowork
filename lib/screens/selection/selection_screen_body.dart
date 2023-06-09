@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/selection_view_model.dart';
 import 'package:izowork/screens/selection/views/selection_list_item_widget.dart';
@@ -24,7 +25,14 @@ class SelectionScreenBodyWidget extends StatefulWidget {
 }
 
 class _SelectionScreenBodyState extends State<SelectionScreenBodyWidget> {
+  final ScrollController _scrollController = ScrollController();
   late SelectionViewModel _selectionViewModel;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,48 +41,70 @@ class _SelectionScreenBodyState extends State<SelectionScreenBodyWidget> {
 
     return Material(
         type: MaterialType.transparency,
-        child: Padding(
-            padding: EdgeInsets.only(
-                top: 8.0,
-                bottom: MediaQuery.of(context).padding.bottom == 0.0
-                    ? 20.0
-                    : MediaQuery.of(context).padding.bottom),
-            child: Column(children: [
-              /// DISMISS INDICATOR
-              const SizedBox(height: 6.0),
-              const DismissIndicatorWidget(),
+        child: Container(
+            color: HexColors.white,
+            child: NotificationListener<ScrollEndNotification>(
+                onNotification: (notification) {
+                  if (_scrollController.position.pixels == 0.0 &&
+                      MediaQuery.of(context).viewInsets.bottom == 0.0) {
+                    Navigator.pop(context);
+                  }
 
-              /// TITLE
-              TitleWidget(text: widget.title),
-              const SizedBox(height: 16.0),
-
-              /// SCROLLABLE LIST
-              Expanded(
-                child: ListView.builder(
+                  // Return true to cancel the notification bubbling. Return false (or null) to
+                  // allow the notification to continue to be dispatched to further ancestors.
+                  return true;
+                },
+                child: ListView(
+                    controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    itemCount: _selectionViewModel.items.length,
-                    itemBuilder: (context, index) {
-                      return SelectionListItemWidget(
-                          isSelected: widget.value.isEmpty
-                              ? false
-                              : widget.value ==
-                                  _selectionViewModel.items[index],
-                          name: _selectionViewModel.items[index],
-                          onTap: () => _selectionViewModel.select(index));
-                    }),
-              ),
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(
+                        top: 8.0,
+                        left: 16.0,
+                        right: 16.0,
+                        bottom: (MediaQuery.of(context).padding.bottom == 0.0
+                                ? 20.0
+                                : MediaQuery.of(context).padding.bottom) +
+                            MediaQuery.of(context).viewInsets.bottom),
+                    children: [
+                      /// DISMISS INDICATOR
+                      const SizedBox(height: 6.0),
+                      const DismissIndicatorWidget(),
 
-              const SizedBox(height: 16.0),
+                      /// TITLE
+                      TitleWidget(text: widget.title),
+                      const SizedBox(height: 16.0),
 
-              ButtonWidget(
-                  title: Titles.apply,
-                  margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                  onTap: () => {
-                        widget.onSelectTap(_selectionViewModel
-                            .items[_selectionViewModel.index]),
-                        Navigator.pop(context)
-                      }),
-            ])));
+                      /// SCROLLABLE LIST
+                      SizedBox(
+                        height: 64.0 * _selectionViewModel.items.length,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            itemCount: _selectionViewModel.items.length,
+                            itemBuilder: (context, index) {
+                              return SelectionListItemWidget(
+                                  isSelected: widget.value.isEmpty
+                                      ? _selectionViewModel.index == index
+                                      : widget.value ==
+                                          _selectionViewModel.items[index],
+                                  name: _selectionViewModel.items[index],
+                                  onTap: () =>
+                                      _selectionViewModel.select(index));
+                            }),
+                      ),
+
+                      const SizedBox(height: 16.0),
+
+                      ButtonWidget(
+                          title: Titles.apply,
+                          margin: EdgeInsets.zero,
+                          onTap: () => {
+                                widget.onSelectTap(_selectionViewModel
+                                    .items[_selectionViewModel.index]),
+                                Navigator.pop(context)
+                              }),
+                    ]))));
   }
 }

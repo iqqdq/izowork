@@ -174,6 +174,7 @@ abstract class Titles {
   static const address = 'Адрес';
   static const photo = 'Фото';
   static const employee = 'Сотрудник';
+  static const techManager = 'Технический специалист';
   static const manager = 'Менеджер';
   static const developer = 'Застройщик';
   static const stages = 'Стадии';

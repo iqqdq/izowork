@@ -13,7 +13,7 @@ class ContactListItemWidget extends StatelessWidget {
   final Contact contact;
   final VoidCallback onContactTap;
   final VoidCallback onPhoneTap;
-  final VoidCallback onLinkTap;
+  final Function(String) onLinkTap;
 
   const ContactListItemWidget(
       {Key? key,
@@ -165,7 +165,8 @@ class ContactListItemWidget extends StatelessWidget {
                                             fontWeight: FontWeight.w600,
                                             decoration:
                                                 TextDecoration.underline)),
-                                    onTap: () => onLinkTap()));
+                                    onTap: () =>
+                                        onLinkTap(contact.social[index])));
                           })
                     ]),
                 onTap: () => onContactTap())));

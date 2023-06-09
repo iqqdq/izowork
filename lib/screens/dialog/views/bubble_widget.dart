@@ -86,7 +86,6 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
 
   Future _initAudioPlayer() async {
     _audio = Audio.loadFromRemoteUrl(widget.text,
-        playInBackground: false,
         onComplete: () => _handleOnComplete(),
         onDuration: (double durationSeconds) =>
             _handleDuration(durationSeconds),

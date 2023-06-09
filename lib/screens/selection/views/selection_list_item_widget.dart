@@ -17,6 +17,7 @@ class SelectionListItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        height: 54.0,
         margin: const EdgeInsets.only(bottom: 10.0),
         child: Material(
             color: Colors.transparent,
@@ -34,8 +35,11 @@ class SelectionListItemWidget extends StatelessWidget {
                     child: Row(children: [
                       Expanded(
                           child: Text(name,
+                              maxLines: 1,
                               style: const TextStyle(
-                                  fontSize: 16.0, fontFamily: 'PT Root UI'))),
+                                  fontSize: 16.0,
+                                  overflow: TextOverflow.ellipsis,
+                                  fontFamily: 'PT Root UI'))),
                       SizedBox(width: isSelected ? 10.0 : 0.0),
                       isSelected
                           ? SvgPicture.asset('assets/ic_done.svg')

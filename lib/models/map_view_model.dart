@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_geocoding_api/google_geocoding_api.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:izowork/api/keys.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
@@ -372,6 +373,9 @@ class MapViewModel with ChangeNotifier {
       places.add(Place(
           id: element.id,
           name: element.manager?.name ?? '-',
+          color: element.objectStage?.color == null
+              ? HexColors.primaryMain
+              : HexColor(element.objectStage!.color!),
           latLng: LatLng(element.lat, element.long)));
     });
 
