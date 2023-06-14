@@ -41,7 +41,7 @@ class ObjectRepository {
   }
 
   Future<dynamic> getObject(String id) async {
-    dynamic json = await WebService().get(objectUrl + '?id=$id');
+    dynamic json = await WebService().get(objectUrl + id);
 
     try {
       return Object.fromJson(json["object"]);

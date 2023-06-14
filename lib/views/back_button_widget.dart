@@ -4,11 +4,13 @@ import 'package:izowork/components/hex_colors.dart';
 
 class BackButtonWidget extends StatefulWidget {
   final String? title;
+  final String? asset;
   final VoidCallback onTap;
 
   const BackButtonWidget({
     Key? key,
     this.title,
+    this.asset,
     required this.onTap,
   }) : super(key: key);
 
@@ -25,10 +27,12 @@ class _BackButtonState extends State<BackButtonWidget> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         child: Row(children: [
-          SvgPicture.asset('assets/ic_back_arrow.svg',
-              color: _isHighlight
-                  ? HexColors.secondaryDark
-                  : HexColors.primaryDark,
+          SvgPicture.asset(widget.asset ?? 'assets/ic_back_arrow.svg',
+              color: widget.asset == null
+                  ? _isHighlight
+                      ? HexColors.secondaryDark
+                      : HexColors.primaryDark
+                  : null,
               width: 24.0,
               height: 24.0),
           SizedBox(width: widget.title == null ? 0.0 : 4.0),

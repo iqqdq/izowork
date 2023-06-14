@@ -218,11 +218,11 @@ class CompanyViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => ContactScreenWidget(
-                contact: selectedCompany.contacts[index],
+                contact: _company!.contacts[index],
                 onDelete: (contact) => {
-                      if (company == null)
+                      if (_company == null)
                         {
-                          company?.contacts.removeWhere(
+                          _company?.contacts.removeWhere(
                               (element) => element.id == contact.id),
                         },
                       selectedCompany.contacts

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SelectionViewModel with ChangeNotifier {
   final List<String> items;
-  int _index = 0;
+  int _index = -1;
 
   int get index {
     return _index;

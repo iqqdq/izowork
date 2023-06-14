@@ -274,7 +274,7 @@ class MapViewModel with ChangeNotifier {
   }
 
   Future getAddressName() async {
-    bool isDebugMode = true;
+    bool isDebugMode = false;
 
     GoogleGeocodingApi api =
         GoogleGeocodingApi(google_map_api_key, isLogged: isDebugMode);

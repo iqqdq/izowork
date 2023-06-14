@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
@@ -39,7 +40,19 @@ class TasksFilterScreenWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0),
                 children: [
                   /// TITLE
-                  const TitleWidget(text: Titles.filter),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const TitleWidget(text: Titles.filter),
+                        BackButtonWidget(
+                          asset: 'assets/ic_close.svg',
+                          onTap: () => Navigator.pop(context),
+                        )
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 17.0),
 
                   /// SCROLLABLE LIST
@@ -62,8 +75,8 @@ class TasksFilterScreenWidget extends StatelessWidget {
                             height: 28.0,
                             child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
+                                padding: const EdgeInsets.only(
+                                    left: 16.0, right: 16.0),
                                 itemCount: options.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
@@ -94,6 +107,7 @@ class TasksFilterScreenWidget extends StatelessWidget {
                                   );
                                 }))
                       ]),
+                  const SizedBox(height: 20.0),
 
                   /// BUTTON's
                   Row(children: [

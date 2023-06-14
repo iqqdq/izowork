@@ -53,7 +53,7 @@ class _NewsFilterPageViewScreenBodyState
                   height: _isSearching
                       ? MediaQuery.of(context).size.height * 0.9
                       : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 328.0
+                          ? 334.0
                           : 364.0,
                   child: PageView(
                     controller: _pageController,

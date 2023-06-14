@@ -72,7 +72,7 @@ class _SelectionScreenBodyState extends State<SelectionScreenBodyWidget> {
                       const DismissIndicatorWidget(),
 
                       /// TITLE
-                      TitleWidget(text: widget.title),
+                      TitleWidget(padding: EdgeInsets.zero, text: widget.title),
                       const SizedBox(height: 16.0),
 
                       /// SCROLLABLE LIST
@@ -85,10 +85,12 @@ class _SelectionScreenBodyState extends State<SelectionScreenBodyWidget> {
                             itemCount: _selectionViewModel.items.length,
                             itemBuilder: (context, index) {
                               return SelectionListItemWidget(
-                                  isSelected: widget.value.isEmpty
-                                      ? _selectionViewModel.index == index
-                                      : widget.value ==
-                                          _selectionViewModel.items[index],
+                                  isSelected: widget.value ==
+                                              _selectionViewModel
+                                                  .items[index] &&
+                                          _selectionViewModel.index == -1
+                                      ? true
+                                      : _selectionViewModel.index == index,
                                   name: _selectionViewModel.items[index],
                                   onTap: () =>
                                       _selectionViewModel.select(index));

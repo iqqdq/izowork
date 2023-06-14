@@ -4,6 +4,7 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
 import 'package:izowork/views/title_widget.dart';
@@ -49,7 +50,19 @@ class DealsFilterScreenWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0),
                 children: [
                   /// TITLE
-                  const TitleWidget(text: Titles.filter),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const TitleWidget(text: Titles.filter),
+                        BackButtonWidget(
+                          asset: 'assets/ic_close.svg',
+                          onTap: () => Navigator.pop(context),
+                        )
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 17.0),
 
                   /// CONTENT LIST

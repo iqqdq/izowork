@@ -89,6 +89,7 @@ class _AnalyticsActionsFilterScreenBodyState
                             dateTime: widget.toDateTime,
                             onTap: () => widget.onToDateTimeTap()),
                       ]),
+                  const SizedBox(height: 10.0),
 
                   /// BUTTON's
                   Row(children: [

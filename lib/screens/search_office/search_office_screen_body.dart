@@ -89,7 +89,10 @@ class _SearchOfficeScreenBodyState extends State<SearchOfficeScreenBodyWidget> {
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Stack(children: [
                           widget.isRoot
-                              ? Container()
+                              ? BackButtonWidget(
+                                  asset: 'assets/ic_close.svg',
+                                  onTap: () => widget.onPop(null),
+                                )
                               : BackButtonWidget(
                                   title: Titles.back,
                                   onTap: () => widget.onPop(null),
