@@ -291,7 +291,7 @@ class PhaseCreateViewModel with ChangeNotifier {
             title: Titles.product,
             onPop: (product) => {
                   Navigator.pop(context),
-                  phaseProducts[index].productId = product.id,
+                  phaseProducts[index].productId = product?.id,
                   phaseProducts[index].product = product,
                   updateProduct(context, index)
                 }));

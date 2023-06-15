@@ -68,6 +68,10 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
       }
     }
 
+    if (_profileEditViewModel.user != null) {
+      widget.onPop(_profileEditViewModel.user!);
+    }
+
     super.dispose();
   }
 
@@ -118,10 +122,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                 Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: BackButtonWidget(
-                        onTap: () => {
-                              widget.onPop(_profileEditViewModel.user!),
-                              Navigator.pop(context)
-                            })),
+                        onTap: () => {Navigator.pop(context)})),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(Titles.profileEdit,
                       style: TextStyle(

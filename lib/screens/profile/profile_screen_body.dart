@@ -31,6 +31,15 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
   late ProfileViewModel _profileViewModel;
 
   @override
+  void dispose() {
+    if (_profileViewModel.user != null) {
+      widget.onPop(_profileViewModel.user!);
+    }
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _profileViewModel = Provider.of<ProfileViewModel>(context, listen: true);
 
@@ -59,10 +68,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                 Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: BackButtonWidget(
-                        onTap: () => {
-                              widget.onPop(_profileViewModel.user!),
-                              Navigator.pop(context)
-                            })),
+                        onTap: () => {Navigator.pop(context)})),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(Titles.profile,
                       style: TextStyle(

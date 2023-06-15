@@ -80,6 +80,21 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
     });
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _textEditingController.dispose();
+    _focusNode.dispose();
+    _dialogViewModel.newSocket?.disconnect();
+    _dialogViewModel.newSocket?.dispose();
+
+    if (widget.onPop != null && _dialogViewModel.messages.isNotEmpty) {
+      widget.onPop!(_dialogViewModel.messages.first);
+    }
+
+    super.dispose();
+  }
+
   // MARK: -
   // MARK: - FUNCTIONS
 
@@ -232,16 +247,6 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   }
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    _textEditingController.dispose();
-    _focusNode.dispose();
-    _dialogViewModel.newSocket?.disconnect();
-    _dialogViewModel.newSocket?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     _dialogViewModel = Provider.of<DialogViewModel>(context, listen: true);
 
@@ -260,15 +265,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
             automaticallyImplyLeading: false,
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
-                child: BackButtonWidget(
-                    onTap: () => {
-                          if (widget.onPop != null &&
-                              _dialogViewModel.messages.isNotEmpty)
-                            {
-                              widget.onPop!(_dialogViewModel.messages.first),
-                            },
-                          Navigator.pop(context)
-                        })),
+                child: BackButtonWidget(onTap: () => {Navigator.pop(context)})),
             title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               /// AVATAR
               Stack(children: [

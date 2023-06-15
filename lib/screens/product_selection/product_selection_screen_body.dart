@@ -6,6 +6,7 @@ import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/response/product.dart';
 import 'package:izowork/models/product_selection_model.dart';
 import 'package:izowork/screens/search_user/views/search_user_list_item_widget.dart';
+import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
@@ -15,7 +16,7 @@ import 'package:provider/provider.dart';
 
 class ProductSelectionScreenBodyWidget extends StatefulWidget {
   final String title;
-  final Function(Product) onPop;
+  final Function(Product?) onPop;
 
   const ProductSelectionScreenBodyWidget(
       {Key? key, required this.title, required this.onPop})
@@ -80,9 +81,16 @@ class _ProductSelectionScreenBodyState
                   padding: EdgeInsets.zero,
                   children: [
                     const SizedBox(height: 8.0),
+
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Center(child: TitleWidget(text: widget.title))),
+                        child: Stack(children: [
+                          BackButtonWidget(
+                            title: Titles.back,
+                            onTap: () => widget.onPop(null),
+                          ),
+                          Center(child: TitleWidget(text: widget.title))
+                        ])),
                     const SizedBox(height: 16.0),
 
                     /// SEARCH INPUT

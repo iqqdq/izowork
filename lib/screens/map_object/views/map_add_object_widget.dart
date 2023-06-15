@@ -27,6 +27,7 @@ class _MapAddObjectScreenWidgetState extends State<MapAddObjectScreenWidget> {
   @override
   void dispose() {
     widget.onPop();
+
     super.dispose();
   }
 

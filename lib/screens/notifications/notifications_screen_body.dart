@@ -32,6 +32,9 @@ class _NotificationsScreenBodyState
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
+
+    widget.onPop(_notificationsViewModel.getUnreadCount());
+
     super.dispose();
   }
 
@@ -49,11 +52,7 @@ class _NotificationsScreenBodyState
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
             title: Stack(children: [
-              BackButtonWidget(
-                  onTap: () => {
-                        widget.onPop(_notificationsViewModel.getUnreadCount()),
-                        Navigator.pop(context)
-                      }),
+              BackButtonWidget(onTap: () => {Navigator.pop(context)}),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text(Titles.notifications,
                     style: TextStyle(

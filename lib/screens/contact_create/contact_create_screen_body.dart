@@ -66,6 +66,8 @@ class _ContactCreateScreenBodyState
       }
     }
 
+    widget.onPop(_contactCreateViewModel.contact);
+
     super.dispose();
   }
 
@@ -117,10 +119,7 @@ class _ContactCreateScreenBodyState
                 Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: BackButtonWidget(
-                        onTap: () => {
-                              widget.onPop(_contactCreateViewModel.contact),
-                              Navigator.pop(context)
-                            })),
+                        onTap: () => {Navigator.pop(context)})),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
                       _contactCreateViewModel.contact == null

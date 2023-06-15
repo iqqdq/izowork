@@ -89,6 +89,10 @@ class _CompanyCreateScreenBodyState
     _requisitesTextEditingController.dispose();
     _requisitesFocusNode.dispose();
 
+    if (widget.onPop != null) {
+      widget.onPop!(_companyCreateViewModel.company);
+    }
+
     super.dispose();
   }
 
@@ -122,10 +126,7 @@ class _CompanyCreateScreenBodyState
                 Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: BackButtonWidget(
-                        onTap: () => {
-                              widget.onPop!(_companyCreateViewModel.company),
-                              Navigator.pop(context)
-                            })),
+                        onTap: () => {Navigator.pop(context)})),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
                       _companyCreateViewModel.company == null

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class ProductSelectionScreenWidget extends StatelessWidget {
   final String title;
-  final Function(Product) onPop;
+  final Function(Product?) onPop;
 
   const ProductSelectionScreenWidget(
       {Key? key, required this.title, required this.onPop})
