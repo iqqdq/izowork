@@ -104,7 +104,7 @@ class UserRepository {
     dynamic json =
         await WebService().put(resetPasswordUrl, ResetPasswordRequest(email));
 
-    if (json == null || json == '') {
+    if (json == null || json == '' || json == true) {
       return true;
     } else {
       return ErrorResponse.fromJson(json);

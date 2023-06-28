@@ -71,10 +71,15 @@ class _SearchCompanyScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    final _height = MediaQuery.of(context).size.height * 0.9;
-
     _searchCompanyViewModel =
         Provider.of<SearchCompanyViewModel>(context, listen: true);
+
+    final _height = MediaQuery.of(context).size.height * 0.9;
+    final _addCompanyButton = BorderButtonWidget(
+        margin: const EdgeInsets.symmetric(horizontal: 44.0),
+        title: Titles.addCompany,
+        onTap: () => _searchCompanyViewModel.showCreateCompanyScreen(
+            context, (company) => widget.onPop(company)));
 
     return Material(
         type: MaterialType.transparency,
@@ -165,14 +170,37 @@ class _SearchCompanyScreenBodyState
                                 itemCount:
                                     _searchCompanyViewModel.companies.length,
                                 itemBuilder: (context, index) {
-                                  return SearchUserListItemWidget(
-                                      name: _searchCompanyViewModel
-                                          .companies[index].name,
-                                      onTap: () => {
-                                            FocusScope.of(context).unfocus(),
-                                            widget.onPop(_searchCompanyViewModel
-                                                .companies[index])
-                                          });
+                                  return ListView(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    children: [
+                                      SearchUserListItemWidget(
+                                          name: _searchCompanyViewModel
+                                              .companies[index].name,
+                                          onTap: () => {
+                                                FocusScope.of(context)
+                                                    .unfocus(),
+                                                widget.onPop(
+                                                    _searchCompanyViewModel
+                                                        .companies[index])
+                                              }),
+                                      SizedBox(
+                                          height: index ==
+                                                  _searchCompanyViewModel
+                                                          .companies.length -
+                                                      1
+                                              ? 20.0
+                                              : 0.0),
+                                      index ==
+                                              _searchCompanyViewModel
+                                                      .companies.length -
+                                                  1
+                                          ? _addCompanyButton
+                                          : Container()
+                                    ],
+                                  );
                                 })))
                   ]),
 
@@ -191,14 +219,7 @@ class _SearchCompanyScreenBodyState
                                 fontSize: 16.0,
                                 color: HexColors.grey50)),
                         const SizedBox(height: 20.0),
-                        BorderButtonWidget(
-                            margin:
-                                const EdgeInsets.symmetric(horizontal: 44.0),
-                            title: Titles.addCompany,
-                            onTap: () =>
-                                _searchCompanyViewModel.showCreateCompanyScreen(
-                                    context,
-                                    (company) => widget.onPop(company)))
+                        _addCompanyButton
                       ],
                     )
                   : Container(),
