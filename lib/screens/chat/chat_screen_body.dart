@@ -31,6 +31,8 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
 
   final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
+  final Audio _audio = Audio.load('assets/sounds/message_receive.mp3');
+
   late ChatViewModel _chatViewModel;
 
   Pagination _pagination = Pagination(offset: 0, size: 50);
@@ -56,6 +58,8 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
+
+    _audio.dispose();
 
     super.dispose();
   }
@@ -92,8 +96,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                   .getChatList(
                       pagination: _pagination,
                       search: _textEditingController.text)
-                  .then((value) =>
-                      Audio.load('assets/sounds/message_receive.mp3').play())
+                  .then((value) => _audio.play()),
             });
   }
 

@@ -373,7 +373,7 @@ class MapViewModel with ChangeNotifier {
       places.add(Place(
           id: element.id,
           name: element.manager?.name ?? '-',
-          color: element.objectStage?.color == null
+          color: element.hasOverdueTask == true ? HexColors.additionalRed.withOpacity(0.75) : element.objectStage?.color == null
               ? HexColors.primaryMain
               : HexColor(element.objectStage!.color!),
           latLng: LatLng(element.lat, element.long)));

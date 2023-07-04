@@ -1,5 +1,4 @@
-// ignore_for_file: curly_braces_in_flow_control_structures
-import 'package:audiofileplayer/audiofileplayer.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -52,10 +51,10 @@ class BubbleWidget extends StatefulWidget {
 
 class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
   late AnimationController _animationController;
-  Audio? _audio;
-  double? _position = 0.0;
-  double? _duration;
   bool _isPlaying = false;
+  AudioPlayer? _audioPlayer;
+  int? _position = 0;
+  int? _duration = 0;
 
   @override
   void initState() {
@@ -80,39 +79,58 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
   @override
   void dispose() {
     _animationController.dispose();
-    _audio?.dispose();
+    _audioPlayer?.dispose();
     super.dispose();
   }
 
   Future _initAudioPlayer() async {
-    _audio = Audio.loadFromRemoteUrl(widget.text,
-        onComplete: () => _handleOnComplete(),
-        onDuration: (double durationSeconds) =>
-            _handleDuration(durationSeconds),
-        onPosition: (double positionSeconds) =>
-            _handlePosition(positionSeconds),
-        onError: (e) => debugPrint(e));
-  }
+    const AudioContext audioContext = AudioContext(
+      iOS: AudioContextIOS(
+        category: AVAudioSessionCategory.ambient,
+        options: [
+          AVAudioSessionOptions.defaultToSpeaker,
+          AVAudioSessionOptions.mixWithOthers,
+        ],
+      ),
+      android: AudioContextAndroid(
+        isSpeakerphoneOn: true,
+        stayAwake: true,
+        contentType: AndroidContentType.sonification,
+        usageType: AndroidUsageType.assistanceSonification,
+        audioFocus: AndroidAudioFocus.none,
+      ),
+    );
 
-  void _handleDuration(double positionSeconds) async {
-    if (mounted) {
-      setState(() => _duration = positionSeconds);
-    }
-  }
+    AudioPlayer.global.setGlobalAudioContext(audioContext);
 
-  void _handlePosition(double positionSeconds) async {
-    if (mounted) {
-      setState(() => {
-            if (positionSeconds > 0) _isPlaying = true,
-            _position = positionSeconds,
-          });
-    }
-  }
+    _audioPlayer = AudioPlayer();
+    _audioPlayer?.setSourceUrl(widget.text);
 
-  void _handleOnComplete() {
-    if (mounted) {
-      setState(() => {_isPlaying = false, _position = 0});
-    }
+    _audioPlayer?.onDurationChanged.listen((event) {
+      setState(() => _duration = event.inSeconds);
+    });
+
+    _audioPlayer?.onPositionChanged.listen((event) {
+      setState(() => _position = event.inSeconds);
+    });
+
+    _audioPlayer?.onPlayerStateChanged.listen(
+      (it) {
+        switch (it) {
+          case PlayerState.completed:
+            setState(() => _isPlaying = false);
+            break;
+          case PlayerState.playing:
+            setState(() => _isPlaying = true);
+            break;
+          case PlayerState.paused:
+            setState(() => _isPlaying = true);
+            break;
+          default:
+            break;
+        }
+      },
+    );
   }
 
   @override
@@ -156,26 +174,22 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
     //             : HexColors.black.withOpacity(0.6)));
 
     final current = Text(
-        _audio == null
-            ? ''
-            : _position == null
-                ? ''
-                : _position!.toInt().toString().length > 1
-                    ? '00:${_position!.toInt().toString()}'
-                    : '00:0${_position!.toInt().toString()}',
+        _position == null
+            ? '00:00'
+            : _position.toString().length > 1
+                ? '00:${_position.toString()}'
+                : '00:0${_position.toString()}',
         style: TextStyle(
             fontSize: 12.0,
             fontFamily: 'PT Root UI',
             color: widget.isMine ? HexColors.white : HexColors.black));
 
     final total = Text(
-        _audio == null
-            ? ''
-            : _duration == null
-                ? ''
-                : _duration!.toInt().toString().length > 1
-                    ? '00:${_duration!.toInt().toString()}'
-                    : '00:0${_duration!.toInt().toString()}',
+        _duration == null
+            ? '00:00'
+            : _duration.toString().length > 1
+                ? '00:${_duration.toString()}'
+                : '00:0${_duration.toString()}',
         style: TextStyle(
             fontSize: 12.0,
             fontFamily: 'PT Root UI',
@@ -205,9 +219,13 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
 
         /// AUDIO
         widget.isAudio
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [current, total])
+            ? _duration == 0
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [current])
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [current, total])
             : text,
         SizedBox(height: widget.isAudio ? 0.0 : 2.0),
 
@@ -215,7 +233,7 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
         widget.isFile
             // ? size
             ? Container()
-            : _audio != null
+            : _audioPlayer != null
                 ? SizedBox(
                     height: 36.0,
                     child: SliderTheme(
@@ -224,7 +242,10 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                         ),
                         child: Slider(
                             value: _position?.toDouble() ?? 0.0,
-                            max: _duration?.toDouble() ?? 1.0,
+                            min: 0.0,
+                            max: _duration == 0
+                                ? (_position ?? 1.0) + 1.0
+                                : _duration?.toDouble() ?? 0.0,
                             thumbColor: widget.isMine
                                 ? HexColors.white
                                 : HexColors.additionalViolet,
@@ -234,10 +255,8 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                             inactiveColor: widget.isMine
                                 ? HexColors.white.withOpacity(0.3)
                                 : HexColors.additionalViolet.withOpacity(0.3),
-                            onChanged: (value) => {
-                                  _audio?.seek(value).then(
-                                      (_) => setState(() => _position = value))
-                                })))
+                            onChanged: (value) => _audioPlayer
+                                ?.seek(Duration(seconds: value.toInt())))))
                 : Container()
       ],
     );
@@ -327,15 +346,20 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                                     : 0.0),
                             time
                           ])
-                    : _audio != null
+                    : _audioPlayer != null
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                                 Row(
                                   children: [
                                     GestureDetector(
-                                        onTap: () => _audio?.resume(),
-                                        child: _audio == null
+                                        onTap: () => setState(() {
+                                              _isPlaying
+                                                  ? _audioPlayer?.pause()
+                                                  : _audioPlayer?.resume();
+                                              _isPlaying = !_isPlaying;
+                                            }),
+                                        child: _audioPlayer == null
                                             ? Container()
                                             : SvgPicture.asset(
                                                 _isPlaying

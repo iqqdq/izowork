@@ -38,7 +38,7 @@ class Object {
       required this.hideDir,
       required this.readiness,
       required this.efficiency,
-      this.chat});
+      this.chat,   this.hasOverdueTask});
 
   String id;
   String name;
@@ -67,6 +67,7 @@ class Object {
   int readiness;
   int efficiency;
   Chat? chat;
+  bool? hasOverdueTask;
 
   factory Object.fromJson(Map<String, dynamic> json) => Object(
       id: json["id"],
@@ -107,7 +108,8 @@ class Object {
       hideDir: json["hideDir"] == null ? false : true,
       readiness: json["readiness"],
       efficiency: json["efficiency"],
-      chat: json["chat"] == null ? null : Chat.fromJson(json["chat"]));
+      chat: json["chat"] == null ? null : Chat.fromJson(json["chat"]),
+      hasOverdueTask: json["has_overdue_task"] ?? false);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -131,6 +133,7 @@ class Object {
         "hideDir": hideDir,
         "readiness": readiness,
         "efficiency": efficiency,
-        "chat": chat
+        "chat": chat,
+        "has_overdue_task": hasOverdueTask
       };
 }

@@ -68,9 +68,9 @@ class ActionListItemWidget extends StatelessWidget {
                       const SizedBox(height: 10.0),
 
                       /// RESPONSIBLE
-                      Row(
+                      const Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             SubtitleWidget(
                                 text: '${Titles.responsible}:',
                                 padding: EdgeInsets.zero),
@@ -86,9 +86,9 @@ class ActionListItemWidget extends StatelessWidget {
                       const SizedBox(height: 10.0),
 
                       /// STATUS
-                      Row(
+                      const Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             SubtitleWidget(
                                 text: '${Titles.status}:',
                                 padding: EdgeInsets.zero),

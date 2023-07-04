@@ -136,10 +136,10 @@ class _NewsListItemState extends State<NewsListItemWidget> {
 
                                 /// TAG
                                 widget.news.important
-                                    ? Row(
+                                    ? const Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
-                                        children: const [
+                                        children: [
                                           Padding(
                                               padding: EdgeInsets.only(
                                                   top: 10.0, right: 10.0),

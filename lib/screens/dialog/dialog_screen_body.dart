@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
-
 import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:blur/blur.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -38,6 +36,8 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
 
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+
+  final Audio _audio = Audio.load('assets/sounds/message_sent.mp3');
 
   final Pagination _pagination = Pagination(offset: 0, size: 50);
 
@@ -92,6 +92,8 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
       widget.onPop!(_dialogViewModel.messages.first);
     }
 
+    _audio.dispose();
+
     super.dispose();
   }
 
@@ -140,7 +142,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
 
     _bubbles.clear();
 
-    _dialogViewModel.messages.forEach((element) {
+    for (var element in _dialogViewModel.messages) {
       bool isMine = false;
       bool isAudio = false;
       bool isFile = false;
@@ -208,7 +210,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
           index++;
         });
       }
-    });
+    }
   }
 
   void _scrollDown() {
@@ -354,7 +356,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                 if (_dialogViewModel.token != null)
                   {
                     /// PLAY MESSAGE SENT SOUND
-                    Audio.load('assets/sounds/message_sent.mp3').play(),
+                    _audio.play(),
 
                     /// SEND MESSAGE
                     _dialogViewModel.newSocket?.emit(

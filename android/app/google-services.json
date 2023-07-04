@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "283082995287",
+    "project_id": "fishernote",
+    "storage_bucket": "fishernote.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283082995287:android:29acdfe42e7224b7825512",
+        "android_client_info": {
+          "package_name": "com.guscom.fishernote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "283082995287-33m005ijjnf14komvlokcv6tsioob07b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsMD0t25hJ8eomomlo38bpumLr7ePvCVU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "283082995287-33m005ijjnf14komvlokcv6tsioob07b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

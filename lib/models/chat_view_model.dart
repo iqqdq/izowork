@@ -131,9 +131,9 @@ class ChatViewModel with ChangeNotifier {
                       _chats.forEach((element) {
                         if (element.id == message.chatId) {
                           element.lastMessage = message;
-                          notifyListeners();
                         }
                       }),
+                       Future.delayed(Duration.zero, () => notifyListeners())
                     })));
   }
 

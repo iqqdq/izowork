@@ -14,6 +14,7 @@ class MessageFileRequest {
   Future<FormData> toFormData() async {
     return dio.FormData.fromMap({
       "chat_id": chatId,
+      "is_voice": true,
       "file": await MultipartFile.fromFile(file.path,
           filename: file.path.substring(
               file.path.length > 12

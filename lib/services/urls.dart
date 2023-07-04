@@ -1,5 +1,5 @@
-const baseUrl = 'http://185.116.194.234/api/';
-// const baseUrl = 'https://izowork.kz/';
+// const baseUrl = 'http://185.116.194.234/api/';
+const baseUrl = 'https://izowork.kz/api/';
 
 const avatarUrl = baseUrl + 'resourses/avatar/';
 const contactAvatarUrl = baseUrl + 'resourses/contact-avatar/';

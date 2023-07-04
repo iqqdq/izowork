@@ -34,7 +34,7 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                         ? 12.0
                         : MediaQuery.of(context).padding.bottom),
                 children: [
-                  Column(children: const [
+                  const Column(children: [
                     /// DISMISS INDICATOR
                     SizedBox(height: 6.0),
                     DismissIndicatorWidget(),
