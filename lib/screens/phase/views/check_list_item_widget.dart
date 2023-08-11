@@ -8,14 +8,14 @@ class CheckListItemWidget extends StatelessWidget {
   final bool isSelected;
   final String title;
   final String? state;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const CheckListItemWidget(
       {Key? key,
       required this.isSelected,
       required this.title,
       this.state,
-      required this.onTap})
+      this.onTap})
       : super(key: key);
 
   @override
@@ -50,7 +50,7 @@ class CheckListItemWidget extends StatelessWidget {
                                     ? 2
                                     : 3))
           ]),
-          onTap: () => onTap()),
+          onTap: onTap == null ? null : () => onTap!()),
     );
   }
 }

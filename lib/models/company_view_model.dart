@@ -8,6 +8,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/toast.dart';
+import 'package:izowork/components/user_params.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/product.dart';
@@ -18,6 +19,7 @@ import 'package:izowork/screens/contact/contact_screen.dart';
 import 'package:izowork/screens/product/product_screen.dart';
 import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen.dart';
 import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen_body.dart';
+import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -169,6 +171,23 @@ class CompanyViewModel with ChangeNotifier {
 
   // MARK: -
   // MARK: - PUSH
+
+  Future showUserScreen(BuildContext context) async {
+    if (_company?.manager != null) {
+      String? userId = await UserParams().getUserId();
+
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProfileScreenWidget(
+                  isMine: _company?.manager?.id == userId,
+                  user: _company!.manager!,
+                  onPop: (user) => {
+                        if (context.mounted)
+                          {_company?.manager = user, notifyListeners()}
+                      })));
+    }
+  }
 
   void showProductPageScreen(BuildContext context, int index) {
     Navigator.push(

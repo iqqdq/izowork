@@ -13,6 +13,7 @@ class ObjectRequest {
     this.customerId,
     this.designerId,
     this.techManagerId,
+    this.officeId,
     this.floors,
     required this.lat,
     required this.long,
@@ -32,6 +33,7 @@ class ObjectRequest {
   String? customerId;
   String? designerId;
   String? techManagerId;
+  String? officeId;
   int? floors;
   double lat;
   double long;
@@ -51,6 +53,7 @@ class ObjectRequest {
         "customer_id": customerId,
         "designer_id": designerId,
         "techmanager_id": techManagerId,
+        "office_id": officeId,
         "floors": floors,
         "lat": lat,
         "long": long,

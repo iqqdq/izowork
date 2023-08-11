@@ -178,38 +178,38 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     return SizedBox.expand(
         child: Stack(children: [
       /// GOOGLE MAP
-      GoogleMap(
-          mapToolbarEnabled: false,
-          zoomControlsEnabled: false,
-          myLocationButtonEnabled: false,
-          myLocationEnabled: _mapViewModel.hasPermission,
-          initialCameraPosition: CameraPosition(
-              target: _mapViewModel.position ??
-                  const LatLng(51.15935891650487, 71.46291020823648),
-              zoom: 11.0),
-          markers: _mapViewModel.markers,
-          onMapCreated: (controller) => {
-                _googleMapController = controller,
+      _mapViewModel.userPosition == null
+          ? Container()
+          : GoogleMap(
+              mapToolbarEnabled: false,
+              zoomControlsEnabled: false,
+              myLocationButtonEnabled: false,
+              myLocationEnabled: _mapViewModel.hasPermission,
+              initialCameraPosition: CameraPosition(
+                  target: _mapViewModel.userPosition!, zoom: 11.0),
+              markers: _mapViewModel.markers,
+              onMapCreated: (controller) => {
+                    _googleMapController = controller,
 
-                /// SET COMPLETER
-                _completer.complete(controller),
+                    /// SET COMPLETER
+                    _completer.complete(controller),
 
-                /// SET CLUSTER ID
-                _clusterManager?.setMapId(_googleMapController.mapId),
+                    /// SET CLUSTER ID
+                    _clusterManager?.setMapId(_googleMapController.mapId),
 
-                /// UPDATE LOCATION
-                _updateMap()
-              },
-          onCameraMove: (position) => {
-                /// UPDATE MAP CAMERA POSITION
-                _mapViewModel.onCameraMove(position),
+                    /// UPDATE LOCATION
+                    _updateMap()
+                  },
+              onCameraMove: (position) => {
+                    /// UPDATE MAP CAMERA POSITION
+                    _mapViewModel.onCameraMove(position),
 
-                /// UPDATE CLUSTER MANAGER POSITION
-                _clusterManager?.onCameraMove(position)
-              },
-          onCameraIdle: () => _updateMap(),
-          onLongPress: (position) =>
-              _mapViewModel.showAddMapObjectSheet(context, position)),
+                    /// UPDATE CLUSTER MANAGER POSITION
+                    _clusterManager?.onCameraMove(position)
+                  },
+              onCameraIdle: () => _updateMap(),
+              onLongPress: (position) =>
+                  _mapViewModel.showAddMapObjectSheet(context, position)),
 
       /// MAP CONTROL
       Align(

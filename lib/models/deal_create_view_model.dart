@@ -420,7 +420,7 @@ class DealCreateViewModel with ChangeNotifier {
         Toast().showTopToast(context, Titles.unsupportedFileFormat);
       }
     } else {
-      String url = dealMediaUrl + deal!.files[index].filename;
+      String url = dealMediaUrl + (deal!.files[index].filename ?? '');
 
       if (Platform.isAndroid) {
         Directory appDocumentsDirectory =

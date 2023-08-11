@@ -152,6 +152,8 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                                     margin: EdgeInsets.zero,
                                     onTap: () => _mapViewModel
                                         .showObjectScreen(context))),
+                            SizedBox(
+                                width: hideInfoButton != null ? 0.0 : 12.0),
                             _mapViewModel.object.chat == null
                                 ? Container()
                                 : Expanded(

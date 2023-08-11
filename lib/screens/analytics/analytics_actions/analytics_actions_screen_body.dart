@@ -84,7 +84,9 @@ class _AnalyticsActionsScreenBodyState
                   itemCount: _analyticsActionsViewModel.traces.length,
                   itemBuilder: (context, index) {
                     return AnalitycsActionListItemWidget(
-                        trace: _analyticsActionsViewModel.traces[index]);
+                        trace: _analyticsActionsViewModel.traces[index],
+                        onTap: () => _analyticsActionsViewModel.showTraceScreen(
+                            context, index));
                   })),
 
           /// FILTER BUTTON

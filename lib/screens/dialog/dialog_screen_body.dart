@@ -151,9 +151,12 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
 
       if (_dialogViewModel.messages[index].files.length == 1) {
         // SHOW SINGLE FILE
-        isAudio = _dialogViewModel.messages[index].files.first.mimeType
-                .contains('audio') ||
-            _dialogViewModel.messages[index].files.first.name.contains('m4a');
+        isAudio = _dialogViewModel.messages[index].files.first.mimeType == null
+            ? false
+            : _dialogViewModel.messages[index].files.first.mimeType!
+                    .contains('audio') ||
+                _dialogViewModel.messages[index].files.first.name
+                    .contains('m4a');
 
         isFile = !isAudio && element.files.isNotEmpty;
       } else if (_dialogViewModel.messages[index].files.length > 1) {
@@ -192,7 +195,8 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                     text: isFile
                         ? element.files.first.name
                         : isAudio
-                            ? messageMediaUrl + element.files.first.filename
+                            ? messageMediaUrl +
+                                (element.files.first.filename ?? '')
                             : element.text,
                     dateTime: element.createdAt.toLocal(),
                     onUserTap: () =>

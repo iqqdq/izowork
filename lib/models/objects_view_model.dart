@@ -6,7 +6,6 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/object_stage.dart';
 import 'package:izowork/repositories/object_repository.dart';
@@ -59,24 +58,6 @@ class ObjectsViewModel with ChangeNotifier {
             })
         .then((value) => getObjectList(
             pagination: Pagination(offset: 0, size: 50), search: ''));
-  }
-
-  Future getObjectById(BuildContext context, String id) async {
-    loadingStatus = LoadingStatus.searching;
-
-    await ObjectRepository().getObject(id).then((response) => {
-          if (response is Object)
-            {
-              _object = response,
-              loadingStatus = LoadingStatus.completed,
-            }
-          else if (response is ErrorResponse)
-            {
-              loadingStatus = LoadingStatus.error,
-              Toast().showTopToast(context, response.message ?? 'Ошибка')
-            },
-          notifyListeners()
-        });
   }
 
   Future getObjectList(

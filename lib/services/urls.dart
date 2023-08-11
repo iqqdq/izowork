@@ -65,7 +65,8 @@ const objectUpdateUrl = baseUrl + 'object/update';
 const objectMediaUrl = baseUrl + 'resourses/object-file/';
 const objectFileUrl = baseUrl + 'object/file';
 
-const phaseUrl = baseUrl + 'phase/all';
+const phasesUrl = baseUrl + 'phase/all';
+const phaseUrl = baseUrl + 'phase/one';
 const phaseProductsUrl = baseUrl + 'phase/product/all';
 const phaseContractorsUrl = baseUrl + 'phase/contractor/all';
 const phaseChecklistUrl = baseUrl + 'phase/checklist/all';
@@ -86,6 +87,7 @@ const phaseProductUpdateUrl = baseUrl + 'phase/product/update';
 const phaseProductDeleteUrl = baseUrl + 'phase/product/delete';
 
 const newsUrl = baseUrl + 'news/all';
+const newsOneUrl = baseUrl + 'news/one';
 const newsCreateUrl = baseUrl + 'news/create';
 const newsCommentUrl = baseUrl + 'news/comment';
 const newsFileUrl = baseUrl + 'news/file';

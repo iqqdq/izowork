@@ -5,13 +5,15 @@ class SubtitleWidget extends StatelessWidget {
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
   final EdgeInsets? padding;
+  final Color? titleColor;
 
   const SubtitleWidget(
       {Key? key,
       required this.text,
       this.fontWeight,
       this.textAlign,
-      this.padding})
+      this.padding,
+      this.titleColor})
       : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class SubtitleWidget extends StatelessWidget {
             style: TextStyle(
                 fontSize: 14.0,
                 fontWeight: fontWeight ?? FontWeight.w400,
-                fontFamily: 'PT Root UI')));
+                fontFamily: 'PT Root UI',
+                color: titleColor)));
   }
 }

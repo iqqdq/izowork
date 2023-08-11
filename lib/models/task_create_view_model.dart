@@ -325,7 +325,7 @@ class TaskCreateViewModel with ChangeNotifier {
         Toast().showTopToast(context, Titles.unsupportedFileFormat);
       }
     } else {
-      String url = taskMediaUrl + task!.files[index].filename;
+      String url = taskMediaUrl + (task!.files[index].filename ?? '');
 
       if (Platform.isAndroid) {
         Directory appDocumentsDirectory =

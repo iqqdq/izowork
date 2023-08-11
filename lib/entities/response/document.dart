@@ -15,9 +15,9 @@ class Document {
       this.dealId,
       this.messageId});
 
-  String filename;
+  String? filename;
   String id;
-  String mimeType;
+  String? mimeType;
   String name;
   String? namespace;
   String? type;
@@ -25,11 +25,11 @@ class Document {
   String? messageId;
 
   factory Document.fromJson(Map<String, dynamic> json) => Document(
-      filename: json["filename"],
+      filename: json["filename"] ?? '',
       id: json["id"],
-      mimeType: json["mime_type"] ?? json["mimetype"],
+      mimeType: json["mime_type"] ?? '',
       name: json["name"],
-      namespace: json["namespace"],
+      namespace: json["namespace"] ?? '',
       type: json["type"],
       dealId: json["deal_id"],
       messageId: json["message_id"]);

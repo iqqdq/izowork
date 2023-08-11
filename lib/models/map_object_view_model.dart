@@ -24,8 +24,10 @@ class MapObjectViewModel with ChangeNotifier {
   Future getObjectImages() async {
     if (object.files.isNotEmpty) {
       object.files.forEach((element) {
-        if (element.mimeType.contains('image')) {
-          _urls.add(element.filename);
+        if (element.mimeType != null) {
+          if (element.mimeType!.contains('image')) {
+            _urls.add(element.filename ?? '');
+          }
         }
       });
     }

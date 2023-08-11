@@ -16,6 +16,7 @@ import 'package:izowork/views/title_widget.dart';
 class NewsPageScreenWidget extends StatefulWidget {
   final News news;
   final String tag;
+
   const NewsPageScreenWidget({Key? key, required this.news, required this.tag})
       : super(key: key);
 

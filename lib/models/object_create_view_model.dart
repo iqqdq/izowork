@@ -1,9 +1,7 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
-
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -17,9 +15,11 @@ import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/object_type.dart';
 import 'package:izowork/entities/response/object_stage.dart';
+import 'package:izowork/entities/response/office.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/object_repository.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
+import 'package:izowork/screens/search_office/search_office_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/services/urls.dart';
@@ -31,6 +31,8 @@ import 'dart:io' as io;
 
 class ObjectCreateViewModel with ChangeNotifier {
   final Object? object;
+
+  final List<File> _files = [];
 
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
@@ -48,6 +50,8 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   User? _techManager;
 
+  Office? _office;
+
   User? _manager;
 
   Company? _designer;
@@ -56,9 +60,7 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   Company? _contractor;
 
-  final List<Document> _documents = [];
-
-  final List<File> _files = [];
+  List<Document> _documents = [];
 
   int _downloadIndex = -1;
 
@@ -100,6 +102,10 @@ class ObjectCreateViewModel with ChangeNotifier {
     return _techManager;
   }
 
+  Office? get office {
+    return _office;
+  }
+
   User? get manager {
     return _manager;
   }
@@ -129,6 +135,8 @@ class ObjectCreateViewModel with ChangeNotifier {
               : true;
 
       _hideDir = object!.hideDir;
+
+      _documents = object?.files ?? [];
     }
 
     getTypeList().then((value) => getStageList());
@@ -199,7 +207,9 @@ class ObjectCreateViewModel with ChangeNotifier {
                 contractorId: _contractor?.id,
                 customerId: _customer?.id,
                 designerId: _designer?.id,
+                managerId: _manager?.id,
                 techManagerId: _techManager?.id,
+                officeId: _office?.id,
                 floors: floors,
                 lat: lat,
                 long: long,
@@ -218,12 +228,12 @@ class ObjectCreateViewModel with ChangeNotifier {
                                 .then((value) => {
                                       current++,
                                       if (current == _files.length)
-                                        {onCreate(response)}
+                                        onCreate(response)
                                     });
                           })
                         }
                       else
-                        {onCreate(response)}
+                        onCreate(response)
                     }
                   else if (response is ErrorResponse)
                     {
@@ -271,6 +281,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                 customerId: _customer?.id ?? object?.customerId,
                 designerId: _designer?.id ?? object?.designerId,
                 techManagerId: _techManager?.id,
+                officeId: _office?.id,
                 floors: floors ?? object?.floors,
                 lat: lat,
                 long: long,
@@ -281,7 +292,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                 kiso: kiso))
             .then((response) => {
                   if (response is Object)
-                    {onCreate(response)}
+                    onCreate(response)
                   else if (response is ErrorResponse)
                     {
                       loadingStatus = LoadingStatus.error,
@@ -341,40 +352,36 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   // MARK: -
   // MARK: - ACTIONS
+
   Future addFile(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowMultiple: true,
-        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc']);
+    final List<XFile>? selectedImages = await ImagePicker().pickMultiImage();
 
-    if (result != null) {
-      if (result.files.isNotEmpty) {
-        if (object == null) {
-          result.files.forEach((element) {
-            if (element.path != null) {
-              _files.add(File(element.path!));
-              notifyListeners();
-            }
-          });
-        } else {
-          loadingStatus = LoadingStatus.searching;
-          notifyListeners();
-
-          result.files.forEach((element) async {
-            if (element.path != null) {
-              await uploadFile(context, object!.id, File(element.path!))
-                  .then((value) => {
-                        current++,
-                        if (current == result.files.length)
-                          {
-                            loadingStatus = LoadingStatus.completed,
-                            notifyListeners()
-                          }
-                      });
-            }
-          });
+    if (selectedImages != null) {
+      if (selectedImages.isNotEmpty) {
+        for (var element in selectedImages) {
+          _files.add(File(element.path));
         }
       }
+    }
+
+    if (object == null) {
+      if (_files.isNotEmpty) {
+        notifyListeners();
+      }
+    } else {
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
+
+      _files.forEach((element) async {
+        await uploadFile(context, object!.id, element).then((value) => {
+              current++,
+              if (current == _files.length)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  notifyListeners(),
+                }
+            });
+      });
     }
   }
 
@@ -396,7 +403,7 @@ class ObjectCreateViewModel with ChangeNotifier {
         Toast().showTopToast(context, Titles.unsupportedFileFormat);
       }
     } else {
-      String url = objectMediaUrl + object!.files[index].filename;
+      String url = objectMediaUrl + (_documents[index].filename ?? '');
 
       if (Platform.isAndroid) {
         Directory appDocumentsDirectory =
@@ -538,5 +545,20 @@ class ObjectCreateViewModel with ChangeNotifier {
                   notifyListeners(),
                   Navigator.pop(context),
                 }));
+  }
+
+  void showSearchOfficeSheet(BuildContext context) {
+    showCupertinoModalBottomSheet(
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (context) => SearchOfficeScreenWidget(
+            title: Titles.filial,
+            isRoot: true,
+            onFocus: () => {},
+            onPop: (office) =>
+                {_office = office, notifyListeners(), Navigator.pop(context)}));
   }
 }

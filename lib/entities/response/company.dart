@@ -1,23 +1,26 @@
 import 'dart:convert';
 import 'package:izowork/entities/response/contact.dart';
 import 'package:izowork/entities/response/product_type.dart';
+import 'package:izowork/entities/response/user.dart';
 
 Company companyJson(String str) => Company.fromJson(json.decode(str));
 
 class Company {
-  Company(
-      {required this.id,
-      required this.name,
-      required this.address,
-      required this.phone,
-      this.email,
-      this.details,
-      this.description,
-      this.image,
-      required this.type,
-      required this.successfulDeals,
-      this.productType,
-      required this.contacts});
+  Company({
+    required this.id,
+    required this.name,
+    required this.address,
+    required this.phone,
+    this.email,
+    this.details,
+    this.description,
+    this.manager,
+    this.image,
+    required this.type,
+    required this.successfulDeals,
+    this.productType,
+    required this.contacts,
+  });
 
   String id;
   String name;
@@ -26,6 +29,7 @@ class Company {
   String? email;
   String? details;
   String? description;
+  User? manager;
   String? image;
   String type;
   int? successfulDeals;
@@ -40,6 +44,7 @@ class Company {
       email: json["email"] ?? '-',
       details: json["details"] ?? '-',
       description: json["description"] ?? '-',
+      manager: json["manager"] == null ? null : User.fromJson(json["manager"]),
       image: json["image"],
       type: json["type"],
       successfulDeals: json["successful_deals"] ?? 0,
@@ -59,6 +64,7 @@ class Company {
         "email": email,
         "details": details,
         "description": description,
+        "manager": manager,
         "image": image,
         "type": type,
         "successful_deals": successfulDeals,

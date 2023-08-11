@@ -7,10 +7,21 @@ import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/trace_request.dart';
+import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/error_response.dart';
+import 'package:izowork/entities/response/news.dart';
+import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/entities/response/trace.dart';
+import 'package:izowork/repositories/deal_repository.dart';
+import 'package:izowork/repositories/news_repository.dart';
+import 'package:izowork/repositories/object_repository.dart';
+import 'package:izowork/repositories/task_repository.dart';
 import 'package:izowork/repositories/trace_repository.dart';
+import 'package:izowork/screens/deal/deal_screen.dart';
+import 'package:izowork/screens/news_page/news_page_screen.dart';
 import 'package:izowork/screens/object/object_actions/object_action_create_screen.dart';
+import 'package:izowork/screens/object/object_page_view_screen.dart';
+import 'package:izowork/screens/task/task_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:izowork/entities/response/object.dart';
 
@@ -101,6 +112,100 @@ class ObjectActionsViewModel with ChangeNotifier {
         .then((value) => notifyListeners());
   }
 
+  Future getObjectById(BuildContext context, String id) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await ObjectRepository().getObject(id).then((response) => {
+          if (response is Object)
+            {
+              loadingStatus = LoadingStatus.completed,
+              notifyListeners(),
+              if (context.mounted)
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ObjectPageViewScreenWidget(object: response)))
+                }
+            }
+          else if (response is ErrorResponse)
+            {loadingStatus = LoadingStatus.error, notifyListeners()}
+        });
+  }
+
+  Future getDealById(BuildContext context, String id) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await DealRepository().getDeal(id).then((response) => {
+          if (response is Deal)
+            {
+              loadingStatus = LoadingStatus.completed,
+              notifyListeners(),
+              if (context.mounted)
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              DealScreenWidget(deal: response)))
+                }
+            }
+          else
+            {loadingStatus = LoadingStatus.error, notifyListeners()}
+        });
+  }
+
+  Future getTaskById(BuildContext context, String id) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await TaskRepository().getTask(id).then((response) => {
+          if (response is Task)
+            {
+              loadingStatus = LoadingStatus.completed,
+              notifyListeners(),
+              if (context.mounted)
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              TaskScreenWidget(task: response)))
+                }
+            }
+          else
+            loadingStatus = LoadingStatus.error,
+          notifyListeners()
+        });
+  }
+
+  Future getNewsById(BuildContext context, String id) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await NewsRepository().getNewsOne(id).then((response) => {
+          if (response is News)
+            {
+              loadingStatus = LoadingStatus.completed,
+              notifyListeners(),
+              if (context.mounted)
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              NewsPageScreenWidget(news: response, tag: '')))
+                }
+            }
+          else
+            loadingStatus = LoadingStatus.error,
+          notifyListeners()
+        });
+  }
+
   // MARK: -
   // MARK: - PUSH
 
@@ -116,5 +221,17 @@ class ObjectActionsViewModel with ChangeNotifier {
                   Navigator.pop(context),
                   addObjectTrace(context, pagination, text)
                 }));
+  }
+
+  void showTraceScreen(BuildContext context, int index) {
+    if (_traces[index].objectId != null) {
+      getObjectById(context, _traces[index].objectId!);
+    } else if (_traces[index].dealId != null) {
+      getDealById(context, _traces[index].dealId!);
+    } else if (_traces[index].taskId != null) {
+      getTaskById(context, _traces[index].taskId!);
+    } else if (_traces[index].newsId != null) {
+      getNewsById(context, _traces[index].newsId!);
+    }
   }
 }

@@ -121,6 +121,25 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           ]),
           const SizedBox(height: 16.0),
 
+          /// MANAGER
+          GestureDetector(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const TitleWidget(
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  text: Titles.manager,
+                  isSmall: true),
+              Text(_companyViewModel.company?.manager?.name ?? '-',
+                  style: const TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'PT Root UI',
+                      decoration: TextDecoration.underline)),
+            ]),
+            onTap: () => _companyViewModel.showUserScreen(context),
+          ),
+          const SizedBox(height: 16.0),
+
           /// DESCRIPTION
           const TitleWidget(
               text: Titles.description,

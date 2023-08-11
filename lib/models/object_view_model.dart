@@ -7,8 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
+import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/phase.dart';
+import 'package:izowork/repositories/object_repository.dart';
 import 'package:izowork/repositories/phase_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/documents/documents_screen.dart';
@@ -54,6 +56,24 @@ class ObjectPageViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
+  Future getObjectById(BuildContext context) async {
+    loadingStatus = LoadingStatus.searching;
+
+    await ObjectRepository().getObject(selectedObject.id).then((response) => {
+          if (response is Object)
+            {
+              _object = response,
+              loadingStatus = LoadingStatus.completed,
+            }
+          else if (response is ErrorResponse)
+            {
+              loadingStatus = LoadingStatus.error,
+              Toast().showTopToast(context, response.message ?? 'Ошибка')
+            },
+          notifyListeners()
+        });
+  }
+
   Future getPhaseList() async {
     await PhaseRepository()
         .getPhases(selectedObject.id)
@@ -73,7 +93,8 @@ class ObjectPageViewModel with ChangeNotifier {
   Future openFile(BuildContext context, int index) async {
     String url = objectMediaUrl +
         (_object?.files[index].filename ??
-            selectedObject.files[index].filename);
+            selectedObject.files[index].filename ??
+            '');
 
     if (Platform.isAndroid) {
       Directory appDocumentsDirectory =

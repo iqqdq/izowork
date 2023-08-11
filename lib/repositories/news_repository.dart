@@ -38,6 +38,16 @@ class NewsRepository {
     }
   }
 
+  Future<dynamic> getNewsOne(String id) async {
+    dynamic json = await WebService().get(newsOneUrl + '?id=$id');
+
+    try {
+      return News.fromJson(json["news"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
   Future<dynamic> createNews(NewsRequest newsRequest) async {
     dynamic json = await WebService().post(newsCreateUrl, newsRequest);
 

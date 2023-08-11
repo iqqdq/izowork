@@ -167,7 +167,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 focusNode: _nameFocusNode,
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 height: 56.0,
-                                placeholder: Titles.objectName,
+                                placeholder: '${Titles.objectName}*',
                                 onTap: () => setState(() {}),
                                 onChange: (text) => setState(() {}),
                                 onEditingComplete: () => setState(() {})),
@@ -179,7 +179,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 focusNode: _addressFocusNode,
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 height: 56.0,
-                                placeholder: Titles.address,
+                                placeholder: '${Titles.address}*',
                                 onTap: () => setState(() {}),
                                 onChange: (text) => setState(() {}),
                                 onEditingComplete: () => setState(() {})),
@@ -194,7 +194,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                         signed: true),
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 height: 56.0,
-                                placeholder: Titles.coordinates,
+                                placeholder: '${Titles.coordinates}*',
                                 onTap: () => setState(() {}),
                                 onChange: (text) => setState(() {}),
                                 onEditingComplete: () => setState(() {})),
@@ -211,6 +211,18 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                         Titles.notSelected,
                                 onTap: () => _objectCreateViewModel
                                     .showSearchUserSheet(context, 0)),
+
+                            /// OFFICE SELECTION INPUT
+                            SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                isVertical: true,
+                                title: Titles.filial,
+                                value: _objectCreateViewModel.office?.name ??
+                                    // _objectCreateViewModel
+                                    //     .object?.office?.name ??
+                                    Titles.notSelected,
+                                onTap: () => _objectCreateViewModel
+                                    .showSearchOfficeSheet(context)),
 
                             /// MANAGER SELECTION INPUT
                             SelectionInputWidget(
@@ -265,7 +277,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                             SelectionInputWidget(
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 isVertical: true,
-                                title: Titles.objectType,
+                                title: '${Titles.objectType}*',
                                 value:
                                     _objectCreateViewModel.objectType?.name ??
                                         Titles.notSelected,
@@ -315,7 +327,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                             SelectionInputWidget(
                                 margin: const EdgeInsets.only(bottom: 20.0),
                                 isVertical: true,
-                                title: Titles.stage,
+                                title: '${Titles.stage}*',
                                 value:
                                     _objectCreateViewModel.objectStage?.name ??
                                         Titles.notSelected,
@@ -378,24 +390,26 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: _objectCreateViewModel.object == null
                                     ? _objectCreateViewModel.files.length
-                                    : _objectCreateViewModel
-                                        .object!.files.length,
+                                    : _objectCreateViewModel.documents.length,
                                 itemBuilder: (context, index) {
                                   return IgnorePointer(
                                       ignoring: _objectCreateViewModel.downloadIndex !=
                                           -1,
                                       child: FileListItemWidget(
                                           fileName: _objectCreateViewModel.object == null
-                                              ? _objectCreateViewModel.files[index].path.substring(
-                                                  _objectCreateViewModel
+                                              ? _objectCreateViewModel.files[index].path
+                                                  .substring(
+                                                      _objectCreateViewModel
+                                                              .files[index]
+                                                              .path
+                                                              .length -
+                                                          10,
+                                                      _objectCreateViewModel
                                                           .files[index]
                                                           .path
-                                                          .length -
-                                                      10,
-                                                  _objectCreateViewModel
-                                                      .files[index].path.length)
+                                                          .length)
                                               : _objectCreateViewModel
-                                                  .object!.files[index].name,
+                                                  .documents[index].name,
                                           isDownloading:
                                               _objectCreateViewModel.downloadIndex ==
                                                   index,
@@ -421,6 +435,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                               _addressTextEditingController.text.isEmpty ||
                               !_coordinatesTextEditingController.text
                                   .contains(',') ||
+                              _objectCreateViewModel.objectType == null ||
                               _objectCreateViewModel.objectStage == null,
                           title: _objectCreateViewModel.object == null
                               ? Titles.createObject

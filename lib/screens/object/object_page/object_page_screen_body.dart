@@ -132,6 +132,16 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                     .object?.techManager?.name ??
                                 '-'),
 
+                        /// OFFICE
+                        const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.filial,
+                            isSmall: true),
+                        SubtitleWidget(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            text: _objectPageViewModel.object?.office?.name ??
+                                '-'),
+
                         /// MANAGER
                         const TitleWidget(
                             padding: EdgeInsets.only(bottom: 4.0),

@@ -78,17 +78,27 @@ class CompaniesListItemWidget extends StatelessWidget {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                          /// MANAGER
+                          const TitleWidget(
+                              padding: EdgeInsets.only(bottom: 4.0),
+                              text: Titles.manager,
+                              isSmall: true),
+                          SubtitleWidget(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              text: company.manager?.name ?? '-'),
+
+                          /// ADDRESS
                           const TitleWidget(
                               text: Titles.address,
                               padding: EdgeInsets.zero,
                               isSmall: true),
                           const SizedBox(height: 4.0),
 
-                          /// ADDRESS
                           SubtitleWidget(
                               text: company.address,
                               padding: EdgeInsets.zero,
                               fontWeight: FontWeight.normal),
+                          const SizedBox(height: 12.0),
                         ]))
                   ]),
                   const SizedBox(height: 10.0),

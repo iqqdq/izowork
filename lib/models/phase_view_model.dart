@@ -40,7 +40,7 @@ class PhaseViewModel with ChangeNotifier {
 
   List<PhaseContractor> _phaseContractors = [];
 
-  List<PhaseChecklist> _phaseChecklists = [];
+  PhaseChecklistResponse? _phaseChecklistResponse;
 
   List<PhaseChecklistInformation> _phaseChecklistInformations = [];
 
@@ -60,8 +60,8 @@ class PhaseViewModel with ChangeNotifier {
     return _phaseContractors;
   }
 
-  List<PhaseChecklist> get phaseChecklists {
-    return _phaseChecklists;
+  PhaseChecklistResponse? get phaseChecklistResponse {
+    return _phaseChecklistResponse;
   }
 
   List<PhaseChecklistInformation> get phaseChecklistInformations {
@@ -98,9 +98,9 @@ class PhaseViewModel with ChangeNotifier {
     await PhaseRepository()
         .getPhaseChecklists(phase.id)
         .then((response) => {
-              if (response is List<PhaseChecklist>)
+              if (response is PhaseChecklistResponse)
                 {
-                  _phaseChecklists = response,
+                  _phaseChecklistResponse = response,
                   loadingStatus = LoadingStatus.completed
                 }
             })
@@ -130,7 +130,8 @@ class PhaseViewModel with ChangeNotifier {
 
     await PhaseRepository()
         .createPhaseChecklistInformation(PhaseChecklistInformationRequest(
-            phaseChecklistId: _phaseChecklists[index].id,
+            phaseChecklistId:
+                _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
             description: description))
         .then((response) => {
               if (response is PhaseChecklistInformation)
@@ -161,13 +162,13 @@ class PhaseViewModel with ChangeNotifier {
   Future updateChecklistState(BuildContext context, int index) async {
     await PhaseRepository()
         .updatePhaseChecklistState(PhaseChecklistStateRequest(
-            id: _phaseChecklists[index].id,
+            id: _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
             state: PhaseChecklistState.underReview))
         .then((response) => {
               if (response is PhaseChecklist)
                 {
                   loadingStatus = LoadingStatus.completed,
-                  _phaseChecklists[index] = response
+                  _phaseChecklistResponse?.phaseChecklists[index] = response
                 }
               else if (response is ErrorResponse)
                 {
@@ -204,7 +205,8 @@ class PhaseViewModel with ChangeNotifier {
   void showCompleteTaskSheet(BuildContext context, int index) {
     PhaseChecklistInformation? phaseChecklistInformation;
 
-    getPhaseChecklistInformationList(_phaseChecklists[index].id)
+    getPhaseChecklistInformationList(
+            _phaseChecklistResponse?.phaseChecklists[index].id ?? '')
         .then((value) => {
               if (_phaseChecklistInformations.isNotEmpty)
                 {phaseChecklistInformation = _phaseChecklistInformations.first},
@@ -215,7 +217,9 @@ class PhaseViewModel with ChangeNotifier {
                   backgroundColor: HexColors.white,
                   context: context,
                   builder: (context) => CompleteChecklistScreenWidget(
-                      title: _phaseChecklists[index].name,
+                      title: _phaseChecklistResponse
+                              ?.phaseChecklists[index].name ??
+                          '',
                       phaseChecklistInformation: phaseChecklistInformation,
                       onTap: (text, files) => {
                             // HIDE BOTTOM SHEET
@@ -263,21 +267,28 @@ class PhaseViewModel with ChangeNotifier {
   }
 
   void showPhaseCreateScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PhaseCreateScreenWidget(
-                  phase: phase,
-                  phaseProducts: _phaseProducts,
-                  phaseContractors: _phaseContractors,
-                  phaseChecklists: _phaseChecklists,
-                  onPop: ((phaseProducts, phaseContractors, phaseChecklists) =>
-                      {
-                        _phaseProducts = phaseProducts,
-                        _phaseContractors = phaseContractors,
-                        _phaseChecklists = phaseChecklists,
-                        notifyListeners()
-                      }),
-                )));
+    if (_phaseChecklistResponse?.phaseChecklists == null) {
+      if (_phaseChecklistResponse!.phaseChecklists.isNotEmpty) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PhaseCreateScreenWidget(
+                      phase: phase,
+                      phaseProducts: _phaseProducts,
+                      phaseContractors: _phaseContractors,
+                      phaseChecklists:
+                          _phaseChecklistResponse?.phaseChecklists ?? [],
+                      onPop:
+                          ((phaseProducts, phaseContractors, phaseChecklists) =>
+                              {
+                                _phaseProducts = phaseProducts,
+                                _phaseContractors = phaseContractors,
+                                _phaseChecklistResponse?.phaseChecklists =
+                                    phaseChecklists,
+                                notifyListeners()
+                              }),
+                    )));
+      }
+    }
   }
 }

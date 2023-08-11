@@ -106,13 +106,14 @@ class DocumentsViewModel with ChangeNotifier {
 
   Future openFile(BuildContext context, int index) async {
     String type = namespace ?? 'object';
-    String url = baseUrl + 'resourses/$type-file/' + _documents[index].filename;
+    String url =
+        baseUrl + 'resourses/$type-file/' + (_documents[index].filename ?? '');
 
     if (Platform.isAndroid) {
       Directory appDocumentsDirectory =
           await getApplicationDocumentsDirectory();
       String appDocumentsPath = appDocumentsDirectory.path;
-      String fileName = _documents[index].filename;
+      String fileName = _documents[index].filename ?? '';
       String filePath = '$appDocumentsPath/$fileName';
       bool isFileExists = await io.File(filePath).exists();
 

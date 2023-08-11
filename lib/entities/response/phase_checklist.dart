@@ -1,9 +1,33 @@
 import 'dart:convert';
 
-PhaseChecklist phaseChecklistFromJson(String str) =>
-    PhaseChecklist.fromJson(json.decode(str));
+PhaseChecklistResponse phaseChecklistResponseFromJson(String str) =>
+    PhaseChecklistResponse.fromJson(json.decode(str));
 
-String phaseChecklistToJson(PhaseChecklist data) => json.encode(data.toJson());
+String phaseChecklistResponseToJson(PhaseChecklistResponse data) =>
+    json.encode(data.toJson());
+
+class PhaseChecklistResponse {
+  final bool canEdit;
+  List<PhaseChecklist> phaseChecklists;
+
+  PhaseChecklistResponse({
+    required this.canEdit,
+    required this.phaseChecklists,
+  });
+
+  factory PhaseChecklistResponse.fromJson(Map<String, dynamic> json) =>
+      PhaseChecklistResponse(
+        canEdit: json["can_edit"],
+        phaseChecklists: List<PhaseChecklist>.from(
+            json["phase_checklists"].map((x) => PhaseChecklist.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "can_edit": canEdit,
+        "phase_checklists":
+            List<dynamic>.from(phaseChecklists.map((x) => x.toJson())),
+      };
+}
 
 abstract class PhaseChecklistState {
   static const created = 'NEW';
@@ -13,33 +37,37 @@ abstract class PhaseChecklistState {
 }
 
 class PhaseChecklist {
+  final String id;
+  final bool isCompleted;
+  final String name;
+  final String phaseId;
+  final String state;
+  final String type;
+
   PhaseChecklist({
     required this.id,
-    required this.phaseId,
-    required this.state,
     required this.isCompleted,
     required this.name,
+    required this.phaseId,
+    required this.state,
+    required this.type,
   });
-
-  String id;
-  String phaseId;
-  String state;
-  bool isCompleted;
-  String name;
 
   factory PhaseChecklist.fromJson(Map<String, dynamic> json) => PhaseChecklist(
         id: json["id"],
-        phaseId: json["phase_id"],
-        state: json["state"],
         isCompleted: json["is_completed"],
         name: json["name"],
+        phaseId: json["phase_id"],
+        state: json["state"],
+        type: json["type"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "phase_id": phaseId,
-        "state": state,
         "is_completed": isCompleted,
         "name": name,
+        "phase_id": phaseId,
+        "state": state,
+        "type": type,
       };
 }

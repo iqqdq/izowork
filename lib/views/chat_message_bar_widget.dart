@@ -53,7 +53,7 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
 
   void startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
-      if (_seconds == 120) {
+      if (_seconds == 60) {
         timer.cancel();
         setState(() => {_isRecording = false, _seconds = 0, _minutes = 0});
 

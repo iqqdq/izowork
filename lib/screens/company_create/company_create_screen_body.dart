@@ -42,9 +42,6 @@ class _CompanyCreateScreenBodyState
   final TextEditingController _emailTextEditingConrtoller =
       TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
-  final TextEditingController _phoneTextEditingConrtoller =
-      TextEditingController();
-  final FocusNode _phoneFocusNode = FocusNode();
   final TextEditingController _requisitesTextEditingController =
       TextEditingController();
   final FocusNode _requisitesFocusNode = FocusNode();
@@ -62,8 +59,6 @@ class _CompanyCreateScreenBodyState
         _nameTextEditingController.text = _companyCreateViewModel.company!.name;
         _addressTextEditingConrtoller.text =
             _companyCreateViewModel.company!.address;
-        _phoneTextEditingConrtoller.text =
-            _companyCreateViewModel.company!.phone;
         _emailTextEditingConrtoller.text =
             _companyCreateViewModel.company!.email ?? '';
         _descriptionTextEditingController.text =
@@ -84,8 +79,6 @@ class _CompanyCreateScreenBodyState
     _addressFocusNode.dispose();
     _emailTextEditingConrtoller.dispose();
     _emailFocusNode.dispose();
-    _phoneTextEditingConrtoller.dispose();
-    _phoneFocusNode.dispose();
     _requisitesTextEditingController.dispose();
     _requisitesFocusNode.dispose();
 
@@ -126,7 +119,8 @@ class _CompanyCreateScreenBodyState
                 Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: BackButtonWidget(
-                        onTap: () => {Navigator.pop(context)})),
+                      onTap: () => Navigator.pop(context),
+                    )),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(
                       _companyCreateViewModel.company == null
@@ -260,21 +254,16 @@ class _CompanyCreateScreenBodyState
                         onClearTap: () =>
                             _addressTextEditingConrtoller.clear()),
 
-                    /// PHONE
-                    InputWidget(
+                    /// CONTACT SELECTION
+                    SelectionInputWidget(
                         margin: const EdgeInsets.only(bottom: 10.0),
-                        height: 56.0,
-                        textEditingController: _phoneTextEditingConrtoller,
-                        focusNode: _phoneFocusNode,
-                        textInputType: TextInputType.phone,
-                        placeholder: Titles.phone,
-                        onTap: () => setState(() => {
-                              FocusScope.of(context).unfocus(),
-                              _phoneFocusNode.requestFocus()
-                            }),
-                        onEditingComplete: () =>
-                            FocusScope.of(context).unfocus(),
-                        onClearTap: () => _phoneTextEditingConrtoller.clear()),
+                        title: Titles.contact,
+                        value: _companyCreateViewModel.phone ??
+                            _companyCreateViewModel.company?.phone ??
+                            Titles.notSelected,
+                        isVertical: true,
+                        onTap: () => _companyCreateViewModel
+                            .showContactSelectionSheet(context)),
 
                     /// EMAIL INPUT
                     InputWidget(
@@ -325,7 +314,6 @@ class _CompanyCreateScreenBodyState
           AnimatedOpacity(
               opacity: _descriptionFocusNode.hasFocus ||
                       _addressFocusNode.hasFocus ||
-                      _phoneFocusNode.hasFocus ||
                       _emailFocusNode.hasFocus ||
                       _requisitesFocusNode.hasFocus
                   ? 0.0
@@ -345,7 +333,7 @@ class _CompanyCreateScreenBodyState
                           isDisabled:
                               _addressTextEditingConrtoller.text.isEmpty ||
                                   _nameTextEditingController.text.isEmpty ||
-                                  _phoneTextEditingConrtoller.text.isEmpty,
+                                  _companyCreateViewModel.phone == null,
                           onTap: () =>
 
                               /// CREATE
@@ -354,7 +342,10 @@ class _CompanyCreateScreenBodyState
                                       context,
                                       _addressTextEditingConrtoller.text,
                                       _nameTextEditingController.text,
-                                      _phoneTextEditingConrtoller.text,
+                                      _companyCreateViewModel.phone ??
+                                          _companyCreateViewModel
+                                              .selectedCompany?.phone ??
+                                          '',
                                       _descriptionTextEditingController.text,
                                       _requisitesTextEditingController.text,
                                       _emailTextEditingConrtoller.text,
@@ -382,7 +373,10 @@ class _CompanyCreateScreenBodyState
                                       context,
                                       _addressTextEditingConrtoller.text,
                                       _nameTextEditingController.text,
-                                      _phoneTextEditingConrtoller.text,
+                                      _companyCreateViewModel.phone ??
+                                          _companyCreateViewModel
+                                              .selectedCompany?.phone ??
+                                          '',
                                       _descriptionTextEditingController.text,
                                       _requisitesTextEditingController.text,
                                       _emailTextEditingConrtoller.text,

@@ -39,8 +39,8 @@ class NotificationRepository {
     dynamic json =
         await WebService().put(readNotificationUrl, readNotificationRequest);
 
-    if (json == true) {
-      return json;
+    if (json == true || json == '') {
+      return true;
     } else {
       return ErrorResponse.fromJson(json).message ?? 'Ошибка';
     }

@@ -215,7 +215,7 @@ class DialogViewModel with ChangeNotifier {
   /// FILE
 
   Future openFile(BuildContext context, int index, Message message) async {
-    String url = messageMediaUrl + message.files.first.filename;
+    String url = messageMediaUrl + (message.files.first.filename ?? '');
 
     if (Platform.isAndroid) {
       Directory appDocumentsDirectory =

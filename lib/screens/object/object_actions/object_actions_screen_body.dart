@@ -82,7 +82,9 @@ class _ObjectActionsScreenBodyState
                   itemCount: _objectActionsViewModel.traces.length,
                   itemBuilder: (context, index) {
                     return AnalitycsActionListItemWidget(
-                        trace: _objectActionsViewModel.traces[index]);
+                        trace: _objectActionsViewModel.traces[index],
+                        onTap: () => _objectActionsViewModel.showTraceScreen(
+                            context, index));
                   })),
 
           /// INDICATOR

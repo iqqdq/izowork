@@ -252,31 +252,52 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                 }),
 
                         /// CHECK
-                        _phaseViewModel.phaseChecklists.isEmpty
+                        _phaseViewModel.phaseChecklistResponse == null
                             ? Container()
-                            : const TitleWidget(
-                                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                text: Titles.checkList,
-                                isSmall: true),
+                            : _phaseViewModel.phaseChecklistResponse!
+                                    .phaseChecklists.isEmpty
+                                ? Container()
+                                : const TitleWidget(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 16.0),
+                                    text: Titles.checkList,
+                                    isSmall: true),
 
                         /// CHECKBOX LIST
-                        ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.only(
-                                bottom: 20.0, left: 16.0, right: 16.0),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _phaseViewModel.phaseChecklists.length,
-                            itemBuilder: (context, index) {
-                              return CheckListItemWidget(
-                                  isSelected: _phaseViewModel
-                                      .phaseChecklists[index].isCompleted,
-                                  title: _phaseViewModel
-                                      .phaseChecklists[index].name,
-                                  state: _phaseViewModel
-                                      .phaseChecklists[index].state,
-                                  onTap: () => _phaseViewModel
-                                      .showCompleteTaskSheet(context, index));
-                            }),
+                        _phaseViewModel.phaseChecklistResponse == null
+                            ? Container()
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                padding: const EdgeInsets.only(
+                                    bottom: 20.0, left: 16.0, right: 16.0),
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: _phaseViewModel
+                                    .phaseChecklistResponse!
+                                    .phaseChecklists
+                                    .length,
+                                itemBuilder: (context, index) {
+                                  return CheckListItemWidget(
+                                      isSelected: _phaseViewModel
+                                          .phaseChecklistResponse!
+                                          .phaseChecklists[index]
+                                          .isCompleted,
+                                      title: _phaseViewModel
+                                          .phaseChecklistResponse!
+                                          .phaseChecklists[index]
+                                          .name,
+                                      state: _phaseViewModel
+                                          .phaseChecklistResponse!
+                                          .phaseChecklists[index]
+                                          .state,
+                                      onTap: _phaseViewModel
+                                                  .phaseChecklistResponse!
+                                                  .canEdit ==
+                                              true
+                                          ? () => _phaseViewModel
+                                              .showCompleteTaskSheet(
+                                                  context, index)
+                                          : null);
+                                }),
 
                         /// SET TASK BUTTON
                         _phaseViewModel.loadingStatus == LoadingStatus.searching

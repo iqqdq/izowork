@@ -141,7 +141,7 @@ class ObjectRepository {
   }
 
   Future<dynamic> deleteObjectFile(DeleteRequest deleteRequest) async {
-    dynamic json = await WebService().delete(objectMediaUrl, deleteRequest);
+    dynamic json = await WebService().delete(objectFileUrl, deleteRequest);
 
     if (json == true) {
       return json;

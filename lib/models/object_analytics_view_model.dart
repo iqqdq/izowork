@@ -63,7 +63,7 @@ class ObjectAnalyticsViewModel with ChangeNotifier {
   // MARK: - ACTIONS
 
   Future openFile(BuildContext context, int index) async {
-    String url = objectMediaUrl + object.files[index].filename;
+    String url = objectMediaUrl + (object.files[index].filename ?? '');
 
     if (Platform.isAndroid) {
       Directory appDocumentsDirectory =

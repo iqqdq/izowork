@@ -47,7 +47,7 @@ PODS:
     - Flutter
   - google_maps_flutter_ios (0.0.1):
     - Flutter
-    - GoogleMaps
+    - GoogleMaps (< 8.0)
   - GoogleMaps (5.2.0):
     - GoogleMaps/Maps (= 5.2.0)
   - GoogleMaps/Base (5.2.0)
@@ -70,7 +70,7 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - sqflite (0.0.2):
+  - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.3)
@@ -145,16 +145,16 @@ SPEC CHECKSUMS:
   flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
-  google_maps_flutter_ios: 3e0b99383a8003b8169d06e7e324170bd0424105
+  google_maps_flutter_ios: abdac20d6ce8931f6ebc5f46616df241bfaa2cfd
   GoogleMaps: 025272d5876d3b32604e5c080dc25eaf68764693
   hexcolor: fdfb9c4258ad96e949c2dbcdf790a62194b8aa89
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
   open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
-  path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
+  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   record: cae05d8dd3cdb1dea3511b20e5a5811a1ae00d0d
   SDWebImage: 9c36e66c8ce4620b41a7407698dda44211a96764
-  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
-  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
 

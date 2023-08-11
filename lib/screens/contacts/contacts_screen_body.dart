@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/pagination.dart';
+import 'package:izowork/entities/response/contact.dart';
 import 'package:izowork/models/contacts_view_model.dart';
 import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -17,7 +18,9 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 
 class ContactsScreenBodyWidget extends StatefulWidget {
-  const ContactsScreenBodyWidget({Key? key}) : super(key: key);
+  final Function(Contact)? onPop;
+
+  const ContactsScreenBodyWidget({Key? key, this.onPop}) : super(key: key);
 
   @override
   _ContactsScreenBodyState createState() => _ContactsScreenBodyState();
@@ -71,8 +74,12 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
               Stack(children: [
                 Padding(
                     padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
+                    child: widget.onPop == null
+                        ? BackButtonWidget(onTap: () => Navigator.pop(context))
+                        : BackButtonWidget(
+                            asset: 'assets/ic_close.svg',
+                            onTap: () => Navigator.pop(context),
+                          )),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(Titles.contacts,
                       style: TextStyle(
@@ -139,8 +146,14 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
                   itemBuilder: (context, index) {
                     return ContactListItemWidget(
                         contact: _contactsViewModel.contacts[index],
-                        onContactTap: () => _contactsViewModel
-                            .showContactScreen(context, index),
+                        onContactTap: () => widget.onPop == null
+                            ? _contactsViewModel.showContactScreen(
+                                context, index)
+                            : {
+                                widget
+                                    .onPop!(_contactsViewModel.contacts[index]),
+                                Navigator.pop(context)
+                              },
                         onPhoneTap: () => {},
                         onLinkTap: (url) => _contactsViewModel.openUrl(url));
                   })),

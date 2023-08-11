@@ -73,7 +73,8 @@ class _AnalyticsObjectsScreenBodyState
               itemBuilder: (context, index) {
                 return AnalitycsObjectListItemWidget(
                   object: _objectsViewModel.objects[index],
-                  onTap: () => _objectsViewModel,
+                  onTap: () => _objectsViewModel.showObjectPageViewScreen(
+                      context, index),
                 );
               }),
           // )]),

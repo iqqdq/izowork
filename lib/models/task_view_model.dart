@@ -53,7 +53,9 @@ class TaskViewModel with ChangeNotifier {
 
   Future openFile(BuildContext context, int index) async {
     String url = taskMediaUrl +
-        (_task?.files[index].filename ?? selectedTask.files[index].filename);
+        ((_task?.files[index].filename ??
+            selectedTask.files[index].filename ??
+            ''));
 
     if (Platform.isAndroid) {
       Directory appDocumentsDirectory =

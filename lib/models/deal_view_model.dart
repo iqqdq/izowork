@@ -219,7 +219,9 @@ class DealViewModel with ChangeNotifier {
 
   Future openFile(BuildContext context, int index) async {
     String url = dealMediaUrl +
-        (_deal?.files[index].filename ?? selectedDeal.files[index].filename);
+        (_deal?.files[index].filename ??
+            selectedDeal.files[index].filename ??
+            '');
 
     if (Platform.isAndroid) {
       Directory appDocumentsDirectory =

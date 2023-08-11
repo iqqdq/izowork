@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -53,8 +55,8 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
   late AnimationController _animationController;
   bool _isPlaying = false;
   AudioPlayer? _audioPlayer;
-  int? _position = 0;
-  int? _duration = 0;
+  int _position = 0;
+  int? _duration;
 
   @override
   void initState() {
@@ -84,24 +86,18 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
   }
 
   Future _initAudioPlayer() async {
-    const AudioContext audioContext = AudioContext(
-      iOS: AudioContextIOS(
+    if (Platform.isIOS) {
+      const AudioContext audioContext = AudioContext(
+          iOS: AudioContextIOS(
         category: AVAudioSessionCategory.ambient,
         options: [
           AVAudioSessionOptions.defaultToSpeaker,
           AVAudioSessionOptions.mixWithOthers,
         ],
-      ),
-      android: AudioContextAndroid(
-        isSpeakerphoneOn: true,
-        stayAwake: true,
-        contentType: AndroidContentType.sonification,
-        usageType: AndroidUsageType.assistanceSonification,
-        audioFocus: AndroidAudioFocus.none,
-      ),
-    );
+      ));
 
-    AudioPlayer.global.setGlobalAudioContext(audioContext);
+      AudioPlayer.global.setGlobalAudioContext(audioContext);
+    }
 
     _audioPlayer = AudioPlayer();
     _audioPlayer?.setSourceUrl(widget.text);
@@ -135,6 +131,9 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var curr = 1.0 - (1.0 / _position);
+    curr = curr > 0 ? curr : 0.25;
+
     final _sidePadding =
         MediaQuery.of(context).size.width * (widget.isMine ? 0.25 : 0.1);
 
@@ -174,22 +173,18 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
     //             : HexColors.black.withOpacity(0.6)));
 
     final current = Text(
-        _position == null
-            ? '00:00'
-            : _position.toString().length > 1
-                ? '00:${_position.toString()}'
-                : '00:0${_position.toString()}',
+        _position.toString().length > 1
+            ? '00:${_position.toString()}'
+            : '00:0${_position.toString()}',
         style: TextStyle(
             fontSize: 12.0,
             fontFamily: 'PT Root UI',
             color: widget.isMine ? HexColors.white : HexColors.black));
 
     final total = Text(
-        _duration == null
-            ? '00:00'
-            : _duration.toString().length > 1
-                ? '00:${_duration.toString()}'
-                : '00:0${_duration.toString()}',
+        _duration.toString().length > 1
+            ? '00:${_duration.toString()}'
+            : '00:0${_duration.toString()}',
         style: TextStyle(
             fontSize: 12.0,
             fontFamily: 'PT Root UI',
@@ -219,7 +214,7 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
 
         /// AUDIO
         widget.isAudio
-            ? _duration == 0
+            ? _duration == null && _duration == 0
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [current])
@@ -234,29 +229,39 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
             // ? size
             ? Container()
             : _audioPlayer != null
-                ? SizedBox(
-                    height: 36.0,
-                    child: SliderTheme(
-                        data: SliderTheme.of(context).copyWith(
-                          overlayShape: SliderComponentShape.noOverlay,
-                        ),
-                        child: Slider(
-                            value: _position?.toDouble() ?? 0.0,
-                            min: 0.0,
-                            max: _duration == 0
-                                ? (_position ?? 1.0) + 1.0
-                                : _duration?.toDouble() ?? 0.0,
-                            thumbColor: widget.isMine
-                                ? HexColors.white
-                                : HexColors.additionalViolet,
-                            activeColor: widget.isMine
-                                ? HexColors.white.withOpacity(0.75)
-                                : HexColors.additionalViolet.withOpacity(0.75),
-                            inactiveColor: widget.isMine
-                                ? HexColors.white.withOpacity(0.3)
-                                : HexColors.additionalViolet.withOpacity(0.3),
-                            onChanged: (value) => _audioPlayer
-                                ?.seek(Duration(seconds: value.toInt())))))
+                ? IgnorePointer(
+                    ignoring: Platform.isIOS,
+                    child: SizedBox(
+                        height: 36.0,
+                        child: SliderTheme(
+                            data: SliderTheme.of(context).copyWith(
+                              overlayShape: SliderComponentShape.noOverlay,
+                            ),
+                            child: Slider(
+                                value: Platform.isIOS
+                                    ? _position == 0
+                                        ? 0.0
+                                        : curr
+                                    : _position.toDouble(),
+                                min: 0.0,
+                                max: Platform.isIOS
+                                    ? 1.0
+                                    : _duration?.toDouble() ?? 1.0,
+                                thumbColor: widget.isMine
+                                    ? HexColors.white
+                                    : HexColors.additionalViolet,
+                                activeColor: widget.isMine
+                                    ? HexColors.white.withOpacity(0.75)
+                                    : HexColors.additionalViolet
+                                        .withOpacity(0.75),
+                                inactiveColor: widget.isMine
+                                    ? HexColors.white.withOpacity(0.3)
+                                    : HexColors.additionalViolet
+                                        .withOpacity(0.3),
+                                onChanged: (value) => {
+                                      _audioPlayer?.seek(
+                                          Duration(seconds: value.toInt()))
+                                    }))))
                 : Container()
       ],
     );

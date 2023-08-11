@@ -17,7 +17,7 @@ import 'package:izowork/services/web_service.dart';
 
 class PhaseRepository {
   Future<dynamic> getPhases(String id) async {
-    dynamic json = await WebService().get(phaseUrl + '?object_id=$id');
+    dynamic json = await WebService().get(phasesUrl + '?object_id=$id');
     List<Phase> phases = [];
 
     try {
@@ -25,6 +25,16 @@ class PhaseRepository {
         phases.add(Phase.fromJson(element));
       });
       return phases;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> getPhase(String id) async {
+    dynamic json = await WebService().get('$phaseUrl?id=$id');
+
+    try {
+      return Phase.fromJson(json['phase']);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }
@@ -61,13 +71,9 @@ class PhaseRepository {
 
   Future<dynamic> getPhaseChecklists(String id) async {
     dynamic json = await WebService().get(phaseChecklistUrl + '?phase_id=$id');
-    List<PhaseChecklist> phaseChecklists = [];
 
     try {
-      json['phase_checklists'].forEach((element) {
-        phaseChecklists.add(PhaseChecklist.fromJson(element));
-      });
-      return phaseChecklists;
+      return PhaseChecklistResponse.fromJson(json);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }

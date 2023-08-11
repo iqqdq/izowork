@@ -3,16 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/object.dart';
+import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/screens/object/object_page/object_page_screen.dart';
 import 'package:izowork/screens/object/object_actions/object_actions_screen.dart';
+import 'package:izowork/screens/phase/phase_screen.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/segmented_control_widget.dart';
 
 class ObjectPageViewScreenWidget extends StatefulWidget {
   final Object object;
+  final Phase? phase;
 
-  const ObjectPageViewScreenWidget({Key? key, required this.object})
+  const ObjectPageViewScreenWidget({Key? key, required this.object, this.phase})
       : super(key: key);
 
   @override
@@ -36,6 +39,19 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
     ];
 
     super.initState();
+
+    // PUSH FROM NOTIFICATION's SCREEN
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.phase != null) {
+        if (mounted) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      PhaseScreenWidget(phase: widget.phase!)));
+        }
+      }
+    });
   }
 
   @override

@@ -16,6 +16,7 @@ import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/product_type.dart';
 import 'package:izowork/repositories/company_repository.dart';
 import 'package:izowork/repositories/product_repository.dart';
+import 'package:izowork/screens/contacts/contacts_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -27,6 +28,8 @@ class CompanyCreateViewModel with ChangeNotifier {
   Company? _company;
 
   CompanyType? _companyType;
+
+  String? _phone;
 
   String? _type;
 
@@ -52,6 +55,10 @@ class CompanyCreateViewModel with ChangeNotifier {
     return _company;
   }
 
+  String? get phone {
+    return _phone;
+  }
+
   String? get type {
     return _type;
   }
@@ -63,6 +70,7 @@ class CompanyCreateViewModel with ChangeNotifier {
   CompanyCreateViewModel(this.selectedCompany) {
     if (selectedCompany != null) {
       _company = selectedCompany;
+      _phone = selectedCompany?.phone;
       notifyListeners();
     }
 
@@ -243,6 +251,20 @@ class CompanyCreateViewModel with ChangeNotifier {
                     }));
       }
     }
+  }
+
+  void showContactSelectionSheet(BuildContext context) {
+    showCupertinoModalBottomSheet(
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (context) => ContactsScreenWidget(
+            onPop: (contact) => {
+                  _phone = contact.phone,
+                  if (context.mounted) notifyListeners(),
+                }));
   }
 
   void showProductTypeSelectionSheet(BuildContext context) {

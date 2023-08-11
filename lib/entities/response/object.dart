@@ -4,6 +4,7 @@ import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/object_stage.dart';
 import 'package:izowork/entities/response/object_type.dart';
+import 'package:izowork/entities/response/office.dart';
 import 'package:izowork/entities/response/user.dart';
 
 Object objectFromJson(String str) => Object.fromJson(json.decode(str));
@@ -20,6 +21,7 @@ class Object {
       this.floors,
       this.area,
       this.constructionPeriod,
+      this.office,
       this.contractor,
       this.designer,
       this.customer,
@@ -38,7 +40,8 @@ class Object {
       required this.hideDir,
       required this.readiness,
       required this.efficiency,
-      this.chat,   this.hasOverdueTask});
+      this.chat,
+      this.hasOverdueTask});
 
   String id;
   String name;
@@ -48,6 +51,7 @@ class Object {
   int? floors;
   int? area;
   int? constructionPeriod;
+  Office? office;
   Company? contractor;
   Company? designer;
   Company? customer;
@@ -78,6 +82,7 @@ class Object {
       floors: json["floors"],
       area: json["area"],
       constructionPeriod: json["construction_period"],
+      office: json["office"] == null ? null : Office.fromJson(json["office"]),
       contractor: json["contractor"] == null
           ? null
           : Company.fromJson(json["contractor"]),

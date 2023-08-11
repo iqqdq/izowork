@@ -269,8 +269,13 @@ class MapViewModel with ChangeNotifier {
           desiredAccuracy: LocationAccuracy.bestForNavigation);
 
       _userPosition = LatLng(position.latitude, position.longitude);
-      _position ??= _userPosition;
+    } else {
+      _userPosition = const LatLng(51.15935891650487, 71.46291020823648);
     }
+
+    _position ??= _userPosition;
+
+    notifyListeners();
   }
 
   Future getAddressName() async {
@@ -373,9 +378,11 @@ class MapViewModel with ChangeNotifier {
       places.add(Place(
           id: element.id,
           name: element.manager?.name ?? '-',
-          color: element.hasOverdueTask == true ? HexColors.additionalRed.withOpacity(0.75) : element.objectStage?.color == null
-              ? HexColors.primaryMain
-              : HexColor(element.objectStage!.color!),
+          color: element.hasOverdueTask == true
+              ? HexColors.additionalRed.withOpacity(0.75)
+              : element.objectStage?.color == null
+                  ? HexColors.primaryMain
+                  : HexColor(element.objectStage!.color!),
           latLng: LatLng(element.lat, element.long)));
     });
 

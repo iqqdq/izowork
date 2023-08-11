@@ -6,14 +6,19 @@ import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/read_notification_request.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/error_response.dart';
+import 'package:izowork/entities/response/news.dart';
 import 'package:izowork/entities/response/notification.dart';
 import 'package:izowork/entities/response/object.dart';
+import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/repositories/deal_repository.dart';
+import 'package:izowork/repositories/news_repository.dart';
 import 'package:izowork/repositories/notification_repository.dart';
 import 'package:izowork/repositories/object_repository.dart';
+import 'package:izowork/repositories/phase_repository.dart';
 import 'package:izowork/repositories/task_repository.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
+import 'package:izowork/screens/news_page/news_page_screen.dart';
 import 'package:izowork/screens/object/object_page_view_screen.dart';
 import 'package:izowork/screens/task/task_screen.dart';
 
@@ -112,13 +117,14 @@ class NotificationsViewModel with ChangeNotifier {
             {
               loadingStatus = LoadingStatus.completed,
               notifyListeners(),
-              Future.delayed(
-                  const Duration(milliseconds: 50),
-                  () => Navigator.push(
+              if (context.mounted)
+                {
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ObjectPageViewScreenWidget(object: response))))
+                              ObjectPageViewScreenWidget(object: response)))
+                }
             }
           else if (response is ErrorResponse)
             {loadingStatus = LoadingStatus.error, notifyListeners()}
@@ -134,13 +140,14 @@ class NotificationsViewModel with ChangeNotifier {
             {
               loadingStatus = LoadingStatus.completed,
               notifyListeners(),
-              Future.delayed(
-                  const Duration(milliseconds: 50),
-                  () => Navigator.push(
+              if (context.mounted)
+                {
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              DealScreenWidget(deal: response))))
+                              DealScreenWidget(deal: response)))
+                }
             }
           else
             {loadingStatus = LoadingStatus.error, notifyListeners()}
@@ -156,16 +163,73 @@ class NotificationsViewModel with ChangeNotifier {
             {
               loadingStatus = LoadingStatus.completed,
               notifyListeners(),
-              Future.delayed(
-                  const Duration(milliseconds: 50),
-                  () => Navigator.push(
+              if (context.mounted)
+                {
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              TaskScreenWidget(task: response))))
+                              TaskScreenWidget(task: response)))
+                }
             }
           else
-            {loadingStatus = LoadingStatus.error, notifyListeners()}
+            loadingStatus = LoadingStatus.error,
+          notifyListeners()
+        });
+  }
+
+  Future getNewsById(BuildContext context, String id) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await NewsRepository().getNewsOne(id).then((response) => {
+          if (response is News)
+            {
+              loadingStatus = LoadingStatus.completed,
+              notifyListeners(),
+              if (context.mounted)
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              NewsPageScreenWidget(news: response, tag: '')))
+                }
+            }
+          else
+            loadingStatus = LoadingStatus.error,
+          notifyListeners()
+        });
+  }
+
+  Future getPhaseById(
+      BuildContext context, String objectId, String phaseId) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await PhaseRepository().getPhase(phaseId).then((phase) async => {
+          if (phase is Phase)
+            await ObjectRepository().getObject(objectId).then((object) => {
+                  if (object is Object)
+                    {
+                      loadingStatus = LoadingStatus.completed,
+                      notifyListeners(),
+                      if (context.mounted)
+                        {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ObjectPageViewScreenWidget(
+                                        object: object,
+                                        phase: phase,
+                                      )))
+                        }
+                    }
+                })
+          else
+            loadingStatus = LoadingStatus.error,
+          notifyListeners()
         });
   }
 
@@ -174,11 +238,18 @@ class NotificationsViewModel with ChangeNotifier {
 
   void showNotificationScreen(BuildContext context, int index) {
     if (_notifications[index].metadata.objectId != null) {
-      getObjectById(context, _notifications[index].metadata.objectId!);
+      if (_notifications[index].metadata.phaseId != null) {
+        getPhaseById(context, _notifications[index].metadata.objectId!,
+            _notifications[index].metadata.phaseId!);
+      } else {
+        getObjectById(context, _notifications[index].metadata.objectId!);
+      }
     } else if (_notifications[index].metadata.dealId != null) {
       getDealById(context, _notifications[index].metadata.dealId!);
     } else if (_notifications[index].metadata.taskId != null) {
       getTaskById(context, _notifications[index].metadata.taskId!);
+    } else if (_notifications[index].metadata.newsId != null) {
+      getNewsById(context, _notifications[index].metadata.newsId!);
     }
   }
 
