@@ -8,11 +8,13 @@ import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/news.dart';
+import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/entities/response/trace.dart';
 import 'package:izowork/repositories/deal_repository.dart';
 import 'package:izowork/repositories/news_repository.dart';
 import 'package:izowork/repositories/object_repository.dart';
+import 'package:izowork/repositories/phase_repository.dart';
 import 'package:izowork/repositories/task_repository.dart';
 import 'package:izowork/repositories/trace_repository.dart';
 import 'package:izowork/screens/analytics/analytics_actions/analytics_actions_filter_sheet/analytics_actions_filter_page_view_screen.dart';
@@ -195,6 +197,37 @@ class AnalyticsActionsViewModel with ChangeNotifier {
         });
   }
 
+  Future getPhaseById(
+      BuildContext context, String objectId, String phaseId) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await PhaseRepository().getPhase(phaseId).then((phase) async => {
+          if (phase is Phase)
+            await ObjectRepository().getObject(objectId).then((object) => {
+                  if (object is Object)
+                    {
+                      loadingStatus = LoadingStatus.completed,
+                      notifyListeners(),
+                      if (context.mounted)
+                        {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ObjectPageViewScreenWidget(
+                                        object: object,
+                                        phase: phase,
+                                      )))
+                        }
+                    }
+                })
+          else
+            loadingStatus = LoadingStatus.error,
+          notifyListeners()
+        });
+  }
+
   // MARK: -
   // MARK: - PUSH
 
@@ -226,7 +259,12 @@ class AnalyticsActionsViewModel with ChangeNotifier {
 
   void showTraceScreen(BuildContext context, int index) {
     if (_traces[index].objectId != null) {
-      getObjectById(context, _traces[index].objectId!);
+      if (_traces[index].phaseId != null) {
+        getPhaseById(
+            context, _traces[index].objectId!, _traces[index].phaseId!);
+      } else {
+        getObjectById(context, _traces[index].objectId!);
+      }
     } else if (_traces[index].dealId != null) {
       getDealById(context, _traces[index].dealId!);
     } else if (_traces[index].taskId != null) {

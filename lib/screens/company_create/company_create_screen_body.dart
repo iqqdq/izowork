@@ -258,9 +258,12 @@ class _CompanyCreateScreenBodyState
                     SelectionInputWidget(
                         margin: const EdgeInsets.only(bottom: 10.0),
                         title: Titles.contact,
-                        value: _companyCreateViewModel.phone ??
-                            _companyCreateViewModel.company?.phone ??
-                            Titles.notSelected,
+                        value: _companyCreateViewModel.company == null
+                            ? Titles.notSelected
+                            : _companyCreateViewModel.company!.contacts.isEmpty
+                                ? Titles.notSelected
+                                : _companyCreateViewModel
+                                    .company!.contacts.first.name,
                         isVertical: true,
                         onTap: () => _companyCreateViewModel
                             .showContactSelectionSheet(context)),
@@ -329,7 +332,7 @@ class _CompanyCreateScreenBodyState
                       child: ButtonWidget(
                           title: _companyCreateViewModel.company == null
                               ? Titles.createCompany
-                              : Titles.editCompany,
+                              : Titles.save,
                           isDisabled:
                               _addressTextEditingConrtoller.text.isEmpty ||
                                   _nameTextEditingController.text.isEmpty ||

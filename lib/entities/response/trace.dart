@@ -12,6 +12,7 @@ class Trace {
       this.dealId,
       this.taskId,
       this.newsId,
+      this.phaseId,
       this.traceTypeId,
       this.traceGroupId,
       this.description,
@@ -26,6 +27,7 @@ class Trace {
   String? dealId;
   String? taskId;
   String? newsId;
+  String? phaseId;
   String? traceTypeId;
   String? traceGroupId;
   String? description;
@@ -41,6 +43,7 @@ class Trace {
         dealId: json["dealt_id"],
         taskId: json["task_id"],
         newsId: json["news_id"],
+        phaseId: json["phaseId"],
         traceTypeId: json["trace_type_id"],
         traceGroupId: json["trace_group_id"],
         description: json["description"],

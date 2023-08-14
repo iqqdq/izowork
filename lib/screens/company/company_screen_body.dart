@@ -80,7 +80,7 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
 
   Widget _page() {
     return ListView(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 90.0),
+        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 120.0),
         physics: const AlwaysScrollableScrollPhysics(),
         children: [
           /// IMAGE
@@ -171,15 +171,15 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const SizedBox(height: 16.0),
 
           /// PHONE
-          const TitleWidget(
-              text: Titles.phone, padding: EdgeInsets.zero, isSmall: true),
-          const SizedBox(height: 4.0),
-          Text(_companyViewModel.company?.phone ?? '-',
-              style: TextStyle(
-                  color: HexColors.black,
-                  fontSize: 14.0,
-                  fontFamily: 'PT Root UI')),
-          const SizedBox(height: 16.0),
+          // const TitleWidget(
+          //     text: Titles.phone, padding: EdgeInsets.zero, isSmall: true),
+          // const SizedBox(height: 4.0),
+          // Text(_companyViewModel.company?.phone ?? '-',
+          //     style: TextStyle(
+          //         color: HexColors.black,
+          //         fontSize: 14.0,
+          //         fontFamily: 'PT Root UI')),
+          // const SizedBox(height: 16.0),
 
           /// EMAIL
           const TitleWidget(
@@ -243,30 +243,35 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const SizedBox(height: 16.0),
 
           /// CONTACTS LIST
+          const TitleWidget(
+              text: Titles.contact, padding: EdgeInsets.zero, isSmall: true),
           _companyViewModel.company == null
               ? Container()
               : _companyViewModel.company!.contacts.isEmpty
-                  ? Container()
-                  : const TitleWidget(
-                      text: Titles.contacts,
-                      padding: EdgeInsets.zero,
-                      isSmall: true),
-          ListView.builder(
-              padding: const EdgeInsets.only(top: 10.0),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: _companyViewModel.company?.contacts.length,
-              itemBuilder: (context, index) {
-                return _companyViewModel.company == null
-                    ? Container()
-                    : ContactListItemWidget(
-                        contact: _companyViewModel.company?.contacts[index] ??
-                            _companyViewModel.selectedCompany.contacts[index],
-                        onContactTap: () =>
-                            _companyViewModel.showContactScreen(context, index),
-                        onPhoneTap: () => {},
-                        onLinkTap: (url) => _companyViewModel.openUrl(url));
-              })
+                  ? Text('-',
+                      style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 14.0,
+                          fontFamily: 'PT Root UI'))
+                  : ListView.builder(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: _companyViewModel.company?.contacts.length,
+                      itemBuilder: (context, index) {
+                        return _companyViewModel.company == null
+                            ? Container()
+                            : ContactListItemWidget(
+                                contact: _companyViewModel
+                                        .company?.contacts[index] ??
+                                    _companyViewModel
+                                        .selectedCompany.contacts[index],
+                                onContactTap: () => _companyViewModel
+                                    .showContactScreen(context, index),
+                                onPhoneTap: () => {},
+                                onLinkTap: (url) =>
+                                    _companyViewModel.openUrl(url));
+                      })
         ]);
   }
 

@@ -32,7 +32,10 @@ class ContactViewModel with ChangeNotifier {
         MaterialPageRoute(
             builder: (context) => ContactCreateScreenWidget(
                 contact: selectedContact,
-                onPop: (contact) => {_contact = contact, notifyListeners()},
+                onPop: (contact) => {
+                      _contact = contact,
+                      if (context.mounted) notifyListeners()
+                    },
                 onDelete: (contact) => onDelete(contact))));
   }
 

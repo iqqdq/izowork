@@ -63,12 +63,14 @@ class CompanyViewModel with ChangeNotifier {
             {
               _company = response,
               loadingStatus = LoadingStatus.completed,
+              notifyListeners()
             }
           else if (response is ErrorResponse)
             {
               if (context != null)
                 Toast().showTopToast(context, response.message ?? 'Ошибка'),
-              loadingStatus = LoadingStatus.error
+              loadingStatus = LoadingStatus.error,
+              notifyListeners()
             }
         });
   }
@@ -204,7 +206,7 @@ class CompanyViewModel with ChangeNotifier {
             builder: (context) => CompanyCreateScreenWidget(
                 company: company,
                 onPop: (company) =>
-                    getCompanyById(context, selectedCompany.id))));
+                    {getCompanyById(context, selectedCompany.id)})));
   }
 
   void showProductFilterSheet(BuildContext context, Function() onFilter) {

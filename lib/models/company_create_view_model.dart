@@ -10,11 +10,14 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/company_request.dart';
+import 'package:izowork/entities/request/contact_request.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/company_type.dart';
+import 'package:izowork/entities/response/contact.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/product_type.dart';
 import 'package:izowork/repositories/company_repository.dart';
+import 'package:izowork/repositories/contact_repository.dart';
 import 'package:izowork/repositories/product_repository.dart';
 import 'package:izowork/screens/contacts/contacts_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
@@ -179,7 +182,7 @@ class CompanyCreateViewModel with ChangeNotifier {
 
                   // CHECK IF FILE SELECTED
                   if (_file == null)
-                    onCreate(response)
+                    onCreate(_company!)
                   else
                     changeCompanyAvatar(context, _file!, response.id)
                         .then((value) => {
@@ -220,6 +223,42 @@ class CompanyCreateViewModel with ChangeNotifier {
         .then((value) => notifyListeners());
   }
 
+  Future updateContactInfo(BuildContext context, Contact contact) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    ContactRequest contactRequest = ContactRequest(
+      companyId: company?.id,
+      id: contact.id,
+      name: contact.name,
+      post: contact.post,
+      email: contact.email,
+      phone: contact.phone,
+      social: contact.social,
+    );
+
+    await ContactRepository()
+        .updateContact(contactRequest)
+        .then((response) => {
+              if (response is Contact)
+                {
+                  _company?.contacts.clear(),
+                  _company?.contacts.add(response),
+                  if (context.mounted)
+                    {
+                      loadingStatus = LoadingStatus.completed,
+                      notifyListeners(),
+                    }
+                }
+              else if (response is ErrorResponse)
+                {
+                  Toast().showTopToast(context, response.message ?? 'Ошибка'),
+                  loadingStatus = LoadingStatus.error
+                }
+            })
+        .then((value) => notifyListeners());
+  }
+
   // MARK: -
   // MARK: ACTIONS
 
@@ -255,16 +294,14 @@ class CompanyCreateViewModel with ChangeNotifier {
 
   void showContactSelectionSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (context) => ContactsScreenWidget(
-            onPop: (contact) => {
-                  _phone = contact.phone,
-                  if (context.mounted) notifyListeners(),
-                }));
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (context) => ContactsScreenWidget(
+          onPop: (contact) => updateContactInfo(context, contact)),
+    );
   }
 
   void showProductTypeSelectionSheet(BuildContext context) {
