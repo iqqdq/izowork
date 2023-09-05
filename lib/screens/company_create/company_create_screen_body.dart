@@ -8,6 +8,7 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/models/company_create_view_model.dart';
 import 'package:izowork/screens/company/company_screen.dart';
+import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
@@ -33,6 +34,9 @@ class _CompanyCreateScreenBodyState
   final TextEditingController _nameTextEditingController =
       TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
+  final TextEditingController _phoneTextEditingController =
+      TextEditingController();
+  final FocusNode _phoneFocusNode = FocusNode();
   final TextEditingController _descriptionTextEditingController =
       TextEditingController();
   final FocusNode _descriptionFocusNode = FocusNode();
@@ -54,9 +58,10 @@ class _CompanyCreateScreenBodyState
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_companyCreateViewModel.company != null) {
-        _nameTextEditingController.text = _companyCreateViewModel.company!.name;
-
-        _nameTextEditingController.text = _companyCreateViewModel.company!.name;
+        _nameTextEditingController.text =
+            _companyCreateViewModel.company?.name ?? '';
+        _phoneTextEditingController.text =
+            _companyCreateViewModel.company?.phone ?? '';
         _addressTextEditingConrtoller.text =
             _companyCreateViewModel.company!.address;
         _emailTextEditingConrtoller.text =
@@ -73,6 +78,8 @@ class _CompanyCreateScreenBodyState
   void dispose() {
     _nameTextEditingController.dispose();
     _nameFocusNode.dispose();
+    _phoneTextEditingController.dispose();
+    _phoneFocusNode.dispose();
     _descriptionTextEditingController.dispose();
     _descriptionFocusNode.dispose();
     _addressTextEditingConrtoller.dispose();
@@ -222,6 +229,23 @@ class _CompanyCreateScreenBodyState
                             FocusScope.of(context).unfocus(),
                         onClearTap: () => _nameTextEditingController.clear()),
 
+                    /// PHONE INPUT
+                    InputWidget(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        height: 56.0,
+                        textEditingController: _phoneTextEditingController,
+                        focusNode: _phoneFocusNode,
+                        textCapitalization: TextCapitalization.sentences,
+                        textInputType: TextInputType.phone,
+                        placeholder: Titles.phone,
+                        onTap: () => setState(() => {
+                              FocusScope.of(context).unfocus(),
+                              _phoneFocusNode.requestFocus()
+                            }),
+                        onEditingComplete: () =>
+                            FocusScope.of(context).unfocus(),
+                        onClearTap: () => _phoneTextEditingController.clear()),
+
                     /// DESCRTIPTION INPUT
                     InputWidget(
                       margin: const EdgeInsets.only(bottom: 10.0),
@@ -253,20 +277,6 @@ class _CompanyCreateScreenBodyState
                             FocusScope.of(context).unfocus(),
                         onClearTap: () =>
                             _addressTextEditingConrtoller.clear()),
-
-                    /// CONTACT SELECTION
-                    SelectionInputWidget(
-                        margin: const EdgeInsets.only(bottom: 10.0),
-                        title: Titles.contact,
-                        value: _companyCreateViewModel.company == null
-                            ? Titles.notSelected
-                            : _companyCreateViewModel.company!.contacts.isEmpty
-                                ? Titles.notSelected
-                                : _companyCreateViewModel
-                                    .company!.contacts.first.name,
-                        isVertical: true,
-                        onTap: () => _companyCreateViewModel
-                            .showContactSelectionSheet(context)),
 
                     /// EMAIL INPUT
                     InputWidget(
@@ -310,7 +320,50 @@ class _CompanyCreateScreenBodyState
                             Titles.notSelected,
                         isVertical: true,
                         onTap: () => _companyCreateViewModel
-                            .showProductTypeSelectionSheet(context))
+                            .showProductTypeSelectionSheet(context)),
+
+                    _companyCreateViewModel.company == null
+                        ? const Padding(
+                            padding:   EdgeInsets.only(top: 10.0),
+                            child: Text('* ${Titles.addContactWillAllow}',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 14.0,
+                                    fontFamily: 'PT Root UI',
+                                    fontWeight: FontWeight.w500)))
+                        : ListView.builder(
+                            padding: const EdgeInsets.only(top: 10.0),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: _companyCreateViewModel
+                                .company?.contacts.length,
+                            itemBuilder: (context, index) {
+                              return ContactListItemWidget(
+                                  contact: _companyCreateViewModel
+                                          .company?.contacts[index] ??
+                                      _companyCreateViewModel
+                                          .company!.contacts[index],
+                                  onContactTap: () => _companyCreateViewModel
+                                      .showContactSelectionSheet(context),
+                                  onPhoneTap: () => {},
+                                  onLinkTap: (url) =>
+                                      _companyCreateViewModel.openUrl(url));
+                            }),
+
+                    /// ADD CONTACT BUTTON
+                    _companyCreateViewModel.company == null
+                        ? Container()
+                        : BorderButtonWidget(
+                            title: Titles.addContact,
+                            margin: EdgeInsets.only(
+                                top: _companyCreateViewModel
+                                        .company!.contacts.isEmpty
+                                    ? 10.0
+                                    : 0.0,
+                                bottom: 20.0),
+                            onTap: () => _companyCreateViewModel
+                                .showContactSelectionSheet(context)),
                   ])),
 
           /// CREATE/EDIT BUTTON
@@ -336,7 +389,7 @@ class _CompanyCreateScreenBodyState
                           isDisabled:
                               _addressTextEditingConrtoller.text.isEmpty ||
                                   _nameTextEditingController.text.isEmpty ||
-                                  _companyCreateViewModel.phone == null,
+                                  _companyCreateViewModel.productType == null,
                           onTap: () =>
 
                               /// CREATE

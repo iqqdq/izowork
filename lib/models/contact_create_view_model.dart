@@ -19,6 +19,7 @@ import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ContactCreateViewModel with ChangeNotifier {
+  final Company? selectedCompany;
   final Contact? selectedContact;
   final Function(Contact)? onDelete;
 
@@ -42,17 +43,27 @@ class ContactCreateViewModel with ChangeNotifier {
     return _file;
   }
 
-  ContactCreateViewModel(this.selectedContact, this.onDelete) {
+  ContactCreateViewModel(
+    this.selectedCompany,
+    this.selectedContact,
+    this.onDelete,
+  ) {
     _contact = selectedContact;
-    _company = selectedContact?.company;
+    _company = selectedCompany ?? selectedContact?.company;
     notifyListeners();
   }
 
   // MARK: -
   // MARK: - API CALL
 
-  Future createNewContact(BuildContext context, String name, String post,
-      String email, String phone, List<SocialInputModel> socials) async {
+  Future createNewContact(
+    BuildContext context,
+    String name,
+    String post,
+    String email,
+    String phone,
+    List<SocialInputModel> socials,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 

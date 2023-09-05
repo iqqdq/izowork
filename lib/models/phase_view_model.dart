@@ -267,28 +267,23 @@ class PhaseViewModel with ChangeNotifier {
   }
 
   void showPhaseCreateScreen(BuildContext context) {
-    if (_phaseChecklistResponse?.phaseChecklists == null) {
-      if (_phaseChecklistResponse!.phaseChecklists.isNotEmpty) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PhaseCreateScreenWidget(
-                      phase: phase,
-                      phaseProducts: _phaseProducts,
-                      phaseContractors: _phaseContractors,
-                      phaseChecklists:
-                          _phaseChecklistResponse?.phaseChecklists ?? [],
-                      onPop:
-                          ((phaseProducts, phaseContractors, phaseChecklists) =>
-                              {
-                                _phaseProducts = phaseProducts,
-                                _phaseContractors = phaseContractors,
-                                _phaseChecklistResponse?.phaseChecklists =
-                                    phaseChecklists,
-                                notifyListeners()
-                              }),
-                    )));
-      }
-    }
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PhaseCreateScreenWidget(
+                  phase: phase,
+                  phaseProducts: _phaseProducts,
+                  phaseContractors: _phaseContractors,
+                  phaseChecklists:
+                      _phaseChecklistResponse?.phaseChecklists ?? [],
+                  onPop: ((phaseProducts, phaseContractors, phaseChecklists) =>
+                      {
+                        _phaseProducts = phaseProducts,
+                        _phaseContractors = phaseContractors,
+                        _phaseChecklistResponse?.phaseChecklists =
+                            phaseChecklists,
+                        notifyListeners()
+                      }),
+                )));
   }
 }

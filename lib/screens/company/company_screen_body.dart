@@ -171,15 +171,15 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
           const SizedBox(height: 16.0),
 
           /// PHONE
-          // const TitleWidget(
-          //     text: Titles.phone, padding: EdgeInsets.zero, isSmall: true),
-          // const SizedBox(height: 4.0),
-          // Text(_companyViewModel.company?.phone ?? '-',
-          //     style: TextStyle(
-          //         color: HexColors.black,
-          //         fontSize: 14.0,
-          //         fontFamily: 'PT Root UI')),
-          // const SizedBox(height: 16.0),
+          const TitleWidget(
+              text: Titles.phone, padding: EdgeInsets.zero, isSmall: true),
+          const SizedBox(height: 4.0),
+          Text(_companyViewModel.company?.phone ?? '-',
+              style: TextStyle(
+                  color: HexColors.black,
+                  fontSize: 14.0,
+                  fontFamily: 'PT Root UI')),
+          const SizedBox(height: 16.0),
 
           /// EMAIL
           const TitleWidget(

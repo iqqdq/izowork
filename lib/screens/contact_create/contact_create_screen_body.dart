@@ -216,14 +216,22 @@ class _ContactCreateScreenBodyState
                         onClearTap: () => _postTextEditingConrtoller.clear()),
 
                     /// COMPANY SELECTION
-                    SelectionInputWidget(
-                        margin: const EdgeInsets.only(bottom: 10.0),
-                        title: Titles.company,
-                        value: _contactCreateViewModel.company?.name ??
-                            Titles.notSelected,
-                        isVertical: true,
-                        onTap: () => _contactCreateViewModel
-                            .showSearchCompanySheet(context)),
+                    IgnorePointer(
+                        ignoring:
+                            _contactCreateViewModel.selectedCompany != null,
+                        child: Opacity(
+                            opacity:
+                                _contactCreateViewModel.selectedCompany == null
+                                    ? 1.0
+                                    : 0.5,
+                            child: SelectionInputWidget(
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                title: Titles.company,
+                                value: _contactCreateViewModel.company?.name ??
+                                    Titles.notSelected,
+                                isVertical: true,
+                                onTap: () => _contactCreateViewModel
+                                    .showSearchCompanySheet(context)))),
 
                     /// EMAIL INPUT
                     InputWidget(

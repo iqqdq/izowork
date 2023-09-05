@@ -55,6 +55,7 @@ abstract class Titles {
   static const cancel = 'Отменить';
   static const addSocial = 'Добавить соц.сеть';
   static const addComment = 'Добавить комментарий';
+  static const addContact = 'Добавить контакт';
   static const addAction = 'Добавить действие';
   static const sendInfo = 'Отправить информацию';
   static const goChat = 'Перейти в чат';
@@ -265,4 +266,6 @@ abstract class Titles {
   static const unsupportedFileFormat = 'Неизвестный формат файла';
   static const locationPermissionDenied =
       'Разрешите определение местоположения для IZOWORK в настройках телефона';
+  static const addContactWillAllow =
+      'Добавление контактов станет доступно\n после создания компании';
 }

@@ -31,6 +31,7 @@ class ContactViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => ContactCreateScreenWidget(
+                company: selectedContact.company,
                 contact: selectedContact,
                 onPop: (contact) => {
                       _contact = contact,

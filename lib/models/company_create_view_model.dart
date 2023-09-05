@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'dart:io';
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ import 'package:izowork/repositories/product_repository.dart';
 import 'package:izowork/screens/contacts/contacts_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CompanyCreateViewModel with ChangeNotifier {
   final Company? selectedCompany;
@@ -74,6 +76,7 @@ class CompanyCreateViewModel with ChangeNotifier {
     if (selectedCompany != null) {
       _company = selectedCompany;
       _phone = selectedCompany?.phone;
+      _productType = selectedCompany?.productType;
       notifyListeners();
     }
 
@@ -129,19 +132,19 @@ class CompanyCreateViewModel with ChangeNotifier {
             details: details,
             email: email,
             productTypeId: _productType?.id))
-        .then((response) => {
+        .then((response) async => {
               if (response is Company)
                 {
                   _company = response,
 
                   // CHECK IF FILE SELECTED
-                  if (_file == null)
-                    onCreate(response)
-                  else
-                    changeCompanyAvatar(context, _file!, response.id)
+                  if (_file != null)
+                    await changeCompanyAvatar(context, _file!, response.id)
                         .then((value) => {
                               onCreate(response),
                             })
+                  else
+                    onCreate(response),
                 }
               else if (response is ErrorResponse)
                 {
@@ -223,40 +226,53 @@ class CompanyCreateViewModel with ChangeNotifier {
         .then((value) => notifyListeners());
   }
 
-  Future updateContactInfo(BuildContext context, Contact contact) async {
-    loadingStatus = LoadingStatus.searching;
-    notifyListeners();
+  Future updateContactInfo(
+    BuildContext context,
+    Contact contact,
+  ) async {
+    bool found = false;
 
-    ContactRequest contactRequest = ContactRequest(
-      companyId: company?.id,
-      id: contact.id,
-      name: contact.name,
-      post: contact.post,
-      email: contact.email,
-      phone: contact.phone,
-      social: contact.social,
-    );
+    _company?.contacts.forEach((element) {
+      if (element.id == contact.id) {
+        found = true;
+      }
+    });
 
-    await ContactRepository()
-        .updateContact(contactRequest)
-        .then((response) => {
-              if (response is Contact)
-                {
-                  _company?.contacts.clear(),
-                  _company?.contacts.add(response),
-                  if (context.mounted)
-                    {
-                      loadingStatus = LoadingStatus.completed,
-                      notifyListeners(),
-                    }
-                }
-              else if (response is ErrorResponse)
-                {
-                  Toast().showTopToast(context, response.message ?? 'Ошибка'),
-                  loadingStatus = LoadingStatus.error
-                }
-            })
-        .then((value) => notifyListeners());
+    if (!found) {
+      ContactRequest contactRequest = ContactRequest(
+        companyId: _company?.id,
+        id: contact.id,
+        name: contact.name,
+        post: contact.post,
+        email: contact.email,
+        phone: contact.phone,
+        social: contact.social,
+      );
+
+      Future.delayed(
+          const Duration(seconds: 1),
+          () async => {
+                loadingStatus = LoadingStatus.searching,
+                notifyListeners(),
+                await ContactRepository()
+                    .updateContact(contactRequest)
+                    .then((response) => {
+                          if (response is Contact)
+                            {
+                              _company?.contacts.add(response),
+                              loadingStatus = LoadingStatus.completed,
+                              notifyListeners(),
+                            }
+                          else if (response is ErrorResponse)
+                            {
+                              Toast().showTopToast(
+                                  context, response.message ?? 'Ошибка'),
+                              loadingStatus = LoadingStatus.error
+                            }
+                        })
+                    .then((value) => notifyListeners())
+              });
+    }
   }
 
   // MARK: -
@@ -294,14 +310,16 @@ class CompanyCreateViewModel with ChangeNotifier {
 
   void showContactSelectionSheet(BuildContext context) {
     showCupertinoModalBottomSheet(
-      enableDrag: false,
-      topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
-      backgroundColor: HexColors.white,
-      context: context,
-      builder: (context) => ContactsScreenWidget(
-          onPop: (contact) => updateContactInfo(context, contact)),
-    );
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (context) => ContactsScreenWidget(
+            company: _company,
+            onPop: (contact) => {
+                  updateContactInfo(context, contact),
+                }));
   }
 
   void showProductTypeSelectionSheet(BuildContext context) {
@@ -345,6 +363,46 @@ class CompanyCreateViewModel with ChangeNotifier {
       if (selectedCompany != null && _file != null) {
         changeCompanyAvatar(context, _file!, selectedCompany!.id);
       }
+    }
+  }
+
+  void openUrl(String url) async {
+    if (url.isNotEmpty) {
+      String? nativeUrl;
+
+      if (url.contains('t.me')) {
+        nativeUrl = 'tg:resolve?domain=${url.replaceAll('t.me/', '')}';
+      } else if (url.characters.first == '@') {
+        nativeUrl = 'instagram://user?username=${url.replaceAll('@', '')}';
+      }
+
+      if (Platform.isAndroid) {
+        if (nativeUrl != null) {
+          AndroidIntent intent = AndroidIntent(
+              action: 'android.intent.action.VIEW', data: nativeUrl);
+
+          if ((await intent.canResolveActivity()) == true) {
+            await intent.launch();
+          }
+        } else {
+          openBrowser(url);
+        }
+      } else {
+        if (nativeUrl != null) {
+          openBrowser(nativeUrl);
+        } else {
+          openBrowser(url);
+        }
+      }
+    }
+  }
+
+  void openBrowser(String url) async {
+    if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
+      launchUrl(Uri.parse(url.replaceAll(' ', '')));
+    } else if (await canLaunchUrl(
+        Uri.parse('https://' + url.replaceAll(' ', '')))) {
+      launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
     }
   }
 }

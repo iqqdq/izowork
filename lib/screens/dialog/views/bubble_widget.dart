@@ -214,13 +214,16 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
 
         /// AUDIO
         widget.isAudio
-            ? _duration == null && _duration == 0
+            ? _duration == null && _duration == 0 || Platform.isIOS
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [current])
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [current, total])
+                    children: [
+                        current,
+                        _duration == null ? Container() : total
+                      ])
             : text,
         SizedBox(height: widget.isAudio ? 0.0 : 2.0),
 

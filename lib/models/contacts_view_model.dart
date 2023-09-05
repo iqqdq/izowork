@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
+import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/contact.dart';
 import 'package:izowork/repositories/contact_repository.dart';
 import 'package:izowork/screens/contact/contact_screen.dart';
@@ -101,16 +102,32 @@ class ContactsViewModel with ChangeNotifier {
                     })));
   }
 
-  void showContactEditScreen(BuildContext context) {
+  void showContactEditScreen(
+    BuildContext context,
+    Company? company,
+    Function(Contact?) onContact,
+  ) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ContactCreateScreenWidget(
+                company: company,
                 contact: null,
                 onDelete: null,
                 onPop: (contact) => {
-                      if (contact != null)
-                        {_contacts.insert(0, contact), notifyListeners()}
+                      if (company == null)
+                        {
+                          if (contact != null)
+                            {
+                              _contacts.insert(0, contact),
+                              Future.delayed(
+                                  const Duration(milliseconds: 100),
+                                  () =>
+                                      {if (context.mounted) notifyListeners()})
+                            }
+                        }
+                      else
+                        onContact(contact)
                     })));
   }
 

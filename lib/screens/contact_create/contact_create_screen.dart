@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/contact.dart';
 import 'package:izowork/models/contact_create_view_model.dart';
 import 'package:izowork/screens/contact_create/contact_create_screen_body.dart';
 import 'package:provider/provider.dart';
 
 class ContactCreateScreenWidget extends StatelessWidget {
+  final Company? company;
   final Contact? contact;
   final Function(Contact?) onPop;
   final Function(Contact)? onDelete;
 
   const ContactCreateScreenWidget(
       {Key? key,
+      required this.company,
       required this.contact,
       required this.onPop,
       required this.onDelete})
@@ -19,7 +22,7 @@ class ContactCreateScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => ContactCreateViewModel(contact, onDelete),
+        create: (context) => ContactCreateViewModel(company, contact, onDelete),
         child: ContactCreateScreenBodyWidget(onPop: onPop));
   }
 }

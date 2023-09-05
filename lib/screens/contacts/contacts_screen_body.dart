@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/pagination.dart';
+import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/contact.dart';
 import 'package:izowork/models/contacts_view_model.dart';
 import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
@@ -18,9 +19,11 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 
 class ContactsScreenBodyWidget extends StatefulWidget {
+  final Company? company;
   final Function(Contact)? onPop;
 
-  const ContactsScreenBodyWidget({Key? key, this.onPop}) : super(key: key);
+  const ContactsScreenBodyWidget({Key? key, this.company, this.onPop})
+      : super(key: key);
 
   @override
   _ContactsScreenBodyState createState() => _ContactsScreenBodyState();
@@ -62,7 +65,22 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
     return Scaffold(
         backgroundColor: HexColors.white,
         floatingActionButton: FloatingButtonWidget(
-            onTap: () => _contactsViewModel.showContactEditScreen(context)),
+            onTap: () => _contactsViewModel.showContactEditScreen(
+                context,
+                widget.company,
+                (contact) => {
+                      if (contact != null)
+                        if (widget.onPop != null)
+                          {
+                            widget.onPop!(contact),
+                            Future.delayed(
+                                const Duration(seconds: 1),
+                                () => {
+                                      if (context.mounted)
+                                        Navigator.pop(context),
+                                    })
+                          }
+                    })),
         appBar: AppBar(
             toolbarHeight: 116.0,
             titleSpacing: 0.0,
