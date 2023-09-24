@@ -150,7 +150,7 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                             left: 16.0, right: 16.0, top: 18.0, bottom: 10.0),
                         child: Row(children: [
                           /// NAME
-                          Text(widget.news.user.name,
+                          Text(widget.news.user?.name ?? '-',
                               maxLines: 1,
                               style: TextStyle(
                                   color: HexColors.grey40,

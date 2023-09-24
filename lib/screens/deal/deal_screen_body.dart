@@ -56,7 +56,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
 
     final _comment = _dealViewModel.deal?.comment ??
         _dealViewModel.selectedDeal.comment ??
-        '';
+        '-';
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -172,19 +172,19 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                 bottom: _dealViewModel.dealProducts.isEmpty
                                     ? 0.0
                                     : 16.0),
-                            text: _comment),
+                            text: _comment.isEmpty ? '-' : _comment),
 
                         /// PRODUCT TABLE
                         _dealViewModel.dealProducts.isEmpty
                             ? Container()
                             : SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                height: 36.0 *
+                                height: 42.0 *
                                     (_dealViewModel.dealProducts.length + 1),
                                 child: SpreadsheetTable(
                                   cellBuilder: (_, int row, int col) =>
                                       Container(
-                                          height: 36.0,
+                                          height: 42.0,
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 2.0),
                                           decoration: BoxDecoration(
@@ -222,7 +222,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                                             'PT Root UI')))
                                           ])),
                                   legendBuilder: (_) => Container(
-                                      height: 36.0,
+                                      height: 42.0,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16.0),
                                       decoration: BoxDecoration(
@@ -241,9 +241,9 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                                     fontFamily: 'PT Root UI')))
                                       ])),
                                   rowHeaderBuilder: (_, index) => Container(
-                                      height: 36.0,
+                                      height: 42.0,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
+                                          horizontal: 16.0, vertical: 4.0),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                               width: 0.65,
@@ -258,14 +258,13 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                                     '-',
                                                 maxLines: 2,
                                                 style: TextStyle(
-                                                    fontSize: 14.0,
+                                                    fontSize: 12.0,
                                                     color: HexColors.black,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     fontFamily: 'PT Root UI')))
                                       ])),
                                   colHeaderBuilder: (_, index) => Container(
-                                      height: 36.0,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 2.0),
                                       decoration: BoxDecoration(
@@ -285,8 +284,8 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                                   color: HexColors.black)))),
                                   rowHeaderWidth:
                                       MediaQuery.of(context).size.width * 0.4,
-                                  colsHeaderHeight: 36.0,
-                                  cellHeight: 36.0,
+                                  colsHeaderHeight: 42.0,
+                                  cellHeight: 42.0,
                                   cellWidth:
                                       MediaQuery.of(context).size.width * 0.3,
                                   rowsCount: _dealViewModel.dealProducts.length,

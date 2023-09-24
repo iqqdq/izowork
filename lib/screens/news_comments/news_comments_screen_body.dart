@@ -161,7 +161,7 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                     TitleWidget(
-                        text: _newsCommentsViewModel.news.user.name,
+                        text: _newsCommentsViewModel.news.user?.name ?? '-',
                         isSmall: true),
                     TitleWidget(text: _newsCommentsViewModel.news.name),
                     TitleWidget(text: '$_day.$_month.$_year', isSmall: true)

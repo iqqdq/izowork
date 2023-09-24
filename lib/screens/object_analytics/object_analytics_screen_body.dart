@@ -46,10 +46,10 @@ class _ObjectAnalyticsScreenBodyState
                 /// TABLE
                 SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: 36.0 * (phaseProducts.length + 1),
+                    height: 42.0 * (phaseProducts.length + 1),
                     child: SpreadsheetTable(
                         cellBuilder: (_, int row, int col) => Container(
-                            height: 36.0,
+                            height: 42.0,
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 2.0),
                             decoration: BoxDecoration(
@@ -95,7 +95,7 @@ class _ObjectAnalyticsScreenBodyState
                                       )))
                             ])),
                         legendBuilder: (_) => Container(
-                            height: 36.0,
+                            height: 42.0,
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
                             decoration: BoxDecoration(
@@ -110,7 +110,7 @@ class _ObjectAnalyticsScreenBodyState
                                       fontFamily: 'PT Root UI'))
                             ])),
                         rowHeaderBuilder: (_, index) => Container(
-                            height: 36.0,
+                            height: 42.0,
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
                             decoration: BoxDecoration(
@@ -128,7 +128,7 @@ class _ObjectAnalyticsScreenBodyState
                                           fontFamily: 'PT Root UI')))
                             ])),
                         colHeaderBuilder: (_, index) => Container(
-                            height: 36.0,
+                            height: 42.0,
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 2.0),
                             decoration: BoxDecoration(
@@ -152,8 +152,8 @@ class _ObjectAnalyticsScreenBodyState
                                         color: HexColors.black,
                                         fontFamily: 'PT Root UI')))),
                         rowHeaderWidth: 144.0,
-                        colsHeaderHeight: 36.0,
-                        cellHeight: 36.0,
+                        colsHeaderHeight: 42.0,
+                        cellHeight: 42.0,
                         cellWidth: 100.0,
                         rowsCount: phaseProducts.length,
                         colCount: 5))
@@ -176,10 +176,10 @@ class _ObjectAnalyticsScreenBodyState
           /// TABLE
           SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: 36.0 * (_objectAnalyticsViewModel.phases.length + 1),
+              height: 42.0 * (_objectAnalyticsViewModel.phases.length + 1),
               child: SpreadsheetTable(
                 cellBuilder: (_, int row, int col) => Container(
-                    height: 36.0,
+                    height: 42.0,
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     decoration: BoxDecoration(
                         border:
@@ -195,7 +195,7 @@ class _ObjectAnalyticsScreenBodyState
                                   fontFamily: 'PT Root UI')))
                     ])),
                 legendBuilder: (_) => Container(
-                    height: 36.0,
+                    height: 42.0,
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     decoration: BoxDecoration(
                         border:
@@ -209,7 +209,7 @@ class _ObjectAnalyticsScreenBodyState
                               fontFamily: 'PT Root UI'))
                     ])),
                 rowHeaderBuilder: (_, index) => Container(
-                    height: 36.0,
+                    height: 42.0,
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     decoration: BoxDecoration(
                         border:
@@ -220,13 +220,13 @@ class _ObjectAnalyticsScreenBodyState
                               _objectAnalyticsViewModel.phases[index].name,
                               maxLines: 2,
                               style: TextStyle(
-                                  fontSize: 14.0,
+                                  fontSize: 12.0,
                                   color: HexColors.black,
                                   overflow: TextOverflow.ellipsis,
                                   fontFamily: 'PT Root UI')))
                     ])),
                 colHeaderBuilder: (_, index) => Container(
-                    height: 36.0,
+                    height: 42.0,
                     padding: const EdgeInsets.symmetric(horizontal: 2.0),
                     decoration: BoxDecoration(
                         border:
@@ -245,8 +245,8 @@ class _ObjectAnalyticsScreenBodyState
                                   fontFamily: 'PT Root UI')))
                     ])),
                 rowHeaderWidth: 144.0,
-                colsHeaderHeight: 36.0,
-                cellHeight: 36.0,
+                colsHeaderHeight: 42.0,
+                cellHeight: 42.0,
                 cellWidth: 110.0,
                 rowsCount: _objectAnalyticsViewModel.phases.length,
                 colCount: 2,

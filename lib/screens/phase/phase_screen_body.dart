@@ -87,7 +87,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                             ? Container()
                             : SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                height: 36.0 *
+                                height: 42.0 *
                                     (_phaseViewModel.phaseProducts.length + 1),
                                 child: SpreadsheetTable(
                                   cellBuilder: (_, int row, int col) =>
@@ -117,9 +117,9 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                                             'PT Root UI')))
                                           ])),
                                   legendBuilder: (_) => Container(
-                                      height: 36.0,
+                                      height: 42.0,
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0),
+                                          horizontal: 16.0, vertical: 2.0),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                               width: 0.65,
@@ -128,14 +128,14 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                         Text(Titles.product,
                                             maxLines: 2,
                                             style: TextStyle(
-                                                fontSize: 14.0,
+                                                fontSize: 12.0,
                                                 fontWeight: FontWeight.w500,
                                                 overflow: TextOverflow.ellipsis,
                                                 color: HexColors.black,
                                                 fontFamily: 'PT Root UI'))
                                       ])),
                                   rowHeaderBuilder: (_, index) => Container(
-                                      height: 36.0,
+                                      height: 42.0,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16.0),
                                       decoration: BoxDecoration(
@@ -156,7 +156,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                                     fontFamily: 'PT Root UI')))
                                       ])),
                                   colHeaderBuilder: (_, index) => Container(
-                                      height: 36.0,
+                                      height: 42.0,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 2.0),
                                       decoration: BoxDecoration(
@@ -175,8 +175,8 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                                   fontFamily: 'PT Root UI')))),
                                   rowHeaderWidth:
                                       MediaQuery.of(context).size.width * 0.4,
-                                  colsHeaderHeight: 36.0,
-                                  cellHeight: 36.0,
+                                  colsHeaderHeight: 42.0,
+                                  cellHeight: 42.0,
                                   cellWidth:
                                       MediaQuery.of(context).size.width * 0.3,
                                   rowsCount:

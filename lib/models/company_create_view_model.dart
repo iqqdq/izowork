@@ -89,7 +89,10 @@ class CompanyCreateViewModel with ChangeNotifier {
   Future getCompanyTypeList() async {
     await CompanyRepository().getCompanyTypes().then((response) => {
           if (response is CompanyType)
-            {_companyType = response, getProductTypeList()}
+            {
+              _companyType = response,
+              getProductTypeList(),
+            }
           else
             loadingStatus = LoadingStatus.error,
         });
@@ -111,14 +114,15 @@ class CompanyCreateViewModel with ChangeNotifier {
   }
 
   Future createNewCompany(
-      BuildContext context,
-      String address,
-      String name,
-      String phone,
-      String? description,
-      String? details,
-      String? email,
-      Function(Company) onCreate) async {
+    BuildContext context,
+    String address,
+    String name,
+    String phone,
+    String? description,
+    String? details,
+    String? email,
+    Function(Company) onCreate,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 

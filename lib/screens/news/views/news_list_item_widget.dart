@@ -183,7 +183,7 @@ class _NewsListItemState extends State<NewsListItemWidget> {
                       child: Row(children: [
                         /// NAME
                         Expanded(
-                            child: Text(widget.news.user.name,
+                            child: Text(widget.news.user?.name ?? '-',
                                 maxLines: 1,
                                 style: TextStyle(
                                     color: HexColors.grey40,
@@ -224,33 +224,40 @@ class _NewsListItemState extends State<NewsListItemWidget> {
                                             width: 24.0,
                                             height: 24.0,
                                             fit: BoxFit.cover),
-                                        widget.news.user.avatar == null
+                                        widget.news.user == null
                                             ? Container()
-                                            : widget.news.user.avatar!.isEmpty
+                                            : widget.news.user!.avatar == null
                                                 ? Container()
-                                                : ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12.0),
-                                                    child: CachedNetworkImage(
-                                                        cacheKey: widget
-                                                            .news.user.avatar,
-                                                        imageUrl: avatarUrl +
-                                                            widget.news.user
-                                                                .avatar!,
-                                                        width: 24.0,
-                                                        height: 24.0,
-                                                        memCacheWidth: 24 *
-                                                            MediaQuery.of(
-                                                                    context)
-                                                                .devicePixelRatio
-                                                                .round(),
-                                                        fit: BoxFit.cover)),
+                                                : widget.news.user!.avatar!
+                                                        .isEmpty
+                                                    ? Container()
+                                                    : ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                12.0),
+                                                        child: CachedNetworkImage(
+                                                            cacheKey: widget
+                                                                .news
+                                                                .user!
+                                                                .avatar,
+                                                            imageUrl: avatarUrl +
+                                                                widget
+                                                                    .news
+                                                                    .user!
+                                                                    .avatar!,
+                                                            width: 24.0,
+                                                            height: 24.0,
+                                                            memCacheWidth: 24 *
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .devicePixelRatio
+                                                                    .round(),
+                                                            fit: BoxFit.cover)),
                                       ]),
                                       const SizedBox(width: 10.0),
 
                                       /// COMMENT NAME
-                                      Text(widget.news.user.name,
+                                      Text(widget.news.user?.name ?? '-',
                                           style: TextStyle(
                                               color: HexColors.grey50,
                                               fontSize: 14.0,

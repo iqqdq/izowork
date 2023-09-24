@@ -243,9 +243,14 @@ class DealCreateViewModel with ChangeNotifier {
 
     await DealRepository().getProduts(deal!.id).then((response) => {
           if (response is List<DealProduct>)
-            {loadingStatus = LoadingStatus.completed, _dealProducts = response}
+            {
+              loadingStatus = LoadingStatus.completed,
+              _dealProducts = response,
+            }
           else if (response is ErrorResponse)
-            {loadingStatus = LoadingStatus.error},
+            {
+              loadingStatus = LoadingStatus.error,
+            },
           notifyListeners()
         });
   }
@@ -268,6 +273,9 @@ class DealCreateViewModel with ChangeNotifier {
 
   Future addDealProduct(BuildContext context) async {
     if (deal != null) {
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
+
       await DealRepository()
           .addProduct(DealProductRequest(count: 0, dealId: deal!.id))
           .then((response) => {
@@ -275,19 +283,27 @@ class DealCreateViewModel with ChangeNotifier {
                   {
                     loadingStatus = LoadingStatus.completed,
                     _dealProducts.add(response),
-                    notifyListeners()
                   }
                 else if (response is ErrorResponse)
                   {
                     loadingStatus = LoadingStatus.error,
                     Toast().showTopToast(context, response.message ?? 'Ошибка')
                   }
-              });
+              })
+          .then((value) => notifyListeners());
     }
   }
 
-  Future updateDealProduct(BuildContext context, int index, String id,
-      String productId, int count) async {
+  Future updateDealProduct(
+    BuildContext context,
+    int index,
+    String id,
+    String productId,
+    int count,
+  ) async {
+    // loadingStatus = LoadingStatus.searching;
+    // notifyListeners();
+
     await DealRepository()
         .updateProduct(DealProductRequest(
             count: count, id: id, dealId: deal!.id, productId: productId))

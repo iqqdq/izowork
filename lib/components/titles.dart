@@ -169,6 +169,7 @@ abstract class Titles {
   static const staff = 'Сотрудники';
   static const participants = 'Участники чата';
   static const phone = 'Телефон';
+  static const companyBIM = 'BIM компании';
   static const email = 'Электронная почта';
   static const login = 'Email';
   static const password = 'Пароль';

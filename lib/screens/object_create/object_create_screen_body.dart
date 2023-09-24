@@ -83,7 +83,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
             _objectCreateViewModel.object!.area.toString();
 
         _buildingTimeTextEditingController.text =
-            _objectCreateViewModel.object!.constructionPeriod.toString();
+            _buildingTimeTextEditingController.text.isEmpty
+                ? _objectCreateViewModel.object!.constructionPeriod.toString()
+                : _buildingTimeTextEditingController.text;
 
         _kisoTextEditingController.text =
             _objectCreateViewModel.object!.kiso ?? '';
@@ -421,7 +423,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
 
                             /// ADD FILE BUTTON
                             BorderButtonWidget(
-                                title: Titles.addFile,
+                                title: Titles.addPhoto,
                                 margin: const EdgeInsets.only(bottom: 30.0),
                                 onTap: () =>
                                     _objectCreateViewModel.addFile(context)),

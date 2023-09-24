@@ -38,7 +38,7 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_dealCreateViewModel.deal != null) {
-        _textEditingController.text = _dealCreateViewModel.deal!.comment ?? '';
+        _textEditingController.text = _dealCreateViewModel.deal?.comment ?? '';
       }
     });
   }
@@ -181,18 +181,17 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                     : 1.0,
                                 child: IgnorePointer(
                                     ignoring:
-                                        
-                                            _dealCreateViewModel.object == null,
+                                        _dealCreateViewModel.object == null,
                                     child: SelectionInputWidget(
                                         margin:
                                             const EdgeInsets.only(bottom: 10.0),
                                         isVertical: true,
                                         title: Titles.phase,
-                                        value: _dealCreateViewModel
-                                                .phase?.name ??
-                                            _dealCreateViewModel
-                                                .selectedPhase?.name ??
-                                            Titles.notSelected,
+                                        value:
+                                            _dealCreateViewModel.phase?.name ??
+                                                _dealCreateViewModel
+                                                    .selectedPhase?.name ??
+                                                Titles.notSelected,
                                         onTap: () => _dealCreateViewModel
                                             .showSelectionSheet(context)))),
 

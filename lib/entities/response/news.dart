@@ -13,8 +13,8 @@ class News {
       required this.description,
       required this.important,
       required this.commentsTotal,
-      required this.userId,
-      required this.user,
+      this.userId,
+      this.user,
       required this.files,
       this.lastComment});
 
@@ -24,8 +24,8 @@ class News {
   String description;
   bool important;
   int commentsTotal;
-  String userId;
-  User user;
+  String? userId;
+  User? user;
   List<NewsFile> files;
   NewsComment? lastComment;
 
@@ -37,7 +37,7 @@ class News {
         important: json["important"],
         commentsTotal: json["comments_total"],
         userId: json["user_id"],
-        user: User.fromJson(json["user"]),
+        user: json["user"] == null ? null : User.fromJson(json["user"]),
         files: json["files"] == null
             ? []
             : List<NewsFile>.from(

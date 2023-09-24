@@ -237,7 +237,7 @@ class _CompanyCreateScreenBodyState
                         focusNode: _phoneFocusNode,
                         textCapitalization: TextCapitalization.sentences,
                         textInputType: TextInputType.phone,
-                        placeholder: Titles.phone,
+                        placeholder: Titles.companyBIM,
                         onTap: () => setState(() => {
                               FocusScope.of(context).unfocus(),
                               _phoneFocusNode.requestFocus()
@@ -324,7 +324,7 @@ class _CompanyCreateScreenBodyState
 
                     _companyCreateViewModel.company == null
                         ? const Padding(
-                            padding:   EdgeInsets.only(top: 10.0),
+                            padding: EdgeInsets.only(top: 10.0),
                             child: Text('* ${Titles.addContactWillAllow}',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -388,8 +388,7 @@ class _CompanyCreateScreenBodyState
                               : Titles.save,
                           isDisabled:
                               _addressTextEditingConrtoller.text.isEmpty ||
-                                  _nameTextEditingController.text.isEmpty ||
-                                  _companyCreateViewModel.productType == null,
+                                  _nameTextEditingController.text.isEmpty,
                           onTap: () =>
 
                               /// CREATE
