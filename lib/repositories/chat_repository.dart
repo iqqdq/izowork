@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/chat_dm_request.dart';
 import 'package:izowork/entities/response/chat.dart';
@@ -32,6 +33,8 @@ class ChatRepository {
       });
       return chats;
     } catch (e) {
+      var err = ErrorResponse.fromJson(json);
+      debugPrint(err.message);
       return ErrorResponse.fromJson(json);
     }
   }

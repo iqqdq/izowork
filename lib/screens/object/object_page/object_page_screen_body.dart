@@ -225,8 +225,12 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                             padding: EdgeInsets.only(bottom: 4.0),
                             text: Titles.buildingTime,
                             isSmall: true),
-                        const SubtitleWidget(
-                            padding: EdgeInsets.only(bottom: 16.0), text: '15'),
+                        SubtitleWidget(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _objectPageViewModel.object?.constructionPeriod
+                                  ?.toString() ??
+                              '-',
+                        ),
 
                         /// STAGE
                         const TitleWidget(

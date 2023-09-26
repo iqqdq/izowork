@@ -24,7 +24,7 @@ abstract class Titles {
   static const close = 'Закрыть';
   static const addContractor = 'Добавить подрядчика';
   static const addFile = 'Добавить файл';
-  static const addPhoto = 'Добавить фото';
+  static const addImage = 'Добавить изображение';
   static const addProduct = 'Добавить товар';
   static const addObject = 'Добавить объект';
   static const addProcess = 'Добавить процесс';

@@ -74,7 +74,9 @@ class ChatViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.completed
                 }
               else
-                loadingStatus = LoadingStatus.error,
+                {
+                  loadingStatus = LoadingStatus.error,
+                },
               if (_chats.isNotEmpty)
                 {
                   _chats.removeWhere((element) => element.lastMessage == null),
@@ -133,7 +135,7 @@ class ChatViewModel with ChangeNotifier {
                           element.lastMessage = message;
                         }
                       }),
-                       Future.delayed(Duration.zero, () => notifyListeners())
+                      Future.delayed(Duration.zero, () => notifyListeners())
                     })));
   }
 

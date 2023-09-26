@@ -421,9 +421,9 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                               .deleteObjectFile(context, index)));
                                 }),
 
-                            /// ADD FILE BUTTON
+                            /// ADD IMAGE BUTTON
                             BorderButtonWidget(
-                                title: Titles.addPhoto,
+                                title: Titles.addImage,
                                 margin: const EdgeInsets.only(bottom: 30.0),
                                 onTap: () =>
                                     _objectCreateViewModel.addFile(context)),
