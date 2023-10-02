@@ -138,9 +138,17 @@ class DialogViewModel with ChangeNotifier {
         .then((value) => notifyListeners());
   }
 
-  Future uploadFile(BuildContext context, File file) async {
+  Future uploadFile(
+    BuildContext context,
+    File file,
+    bool isVoice,
+  ) async {
     await DialogRepository()
-        .addChatFile(MessageFileRequest(chat.id, file))
+        .addChatFile(MessageFileRequest(
+          chat.id,
+          file,
+          isVoice,
+        ))
         .then((response) => {
               // SHOW AUDIO BUTTON INSTEAD INDICATOR
               _isSending = false,
@@ -207,8 +215,13 @@ class DialogViewModel with ChangeNotifier {
       _isSending = true;
       notifyListeners();
 
-      Future.delayed(const Duration(milliseconds: 100),
-          () => uploadFile(context, File(path)));
+      Future.delayed(
+          const Duration(milliseconds: 100),
+          () => uploadFile(
+                context,
+                File(path),
+                true,
+              ));
     }
   }
 
@@ -262,10 +275,17 @@ class DialogViewModel with ChangeNotifier {
 
         result.files.forEach((element) async {
           if (element.path != null) {
-            await uploadFile(context, File(element.path!)).then((value) => {
+            await uploadFile(
+              context,
+              File(element.path!),
+              false,
+            ).then((value) => {
                   current++,
                   if (current == result.files.length)
-                    {loadingStatus = LoadingStatus.completed, notifyListeners()}
+                    {
+                      loadingStatus = LoadingStatus.completed,
+                      notifyListeners(),
+                    }
                 });
           }
         });

@@ -86,13 +86,12 @@ class _SearchCompanyScreenBodyState
         child: Container(
             height: _height,
             color: HexColors.white,
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.only(top: widget.isRoot ? 20.0 : 0.0),
             child: Stack(children: [
               ListView(
                   physics: const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.zero,
                   children: [
-                    SizedBox(height: widget.isRoot ? 8.0 : 0.0),
                     Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Stack(children: [

@@ -40,11 +40,11 @@ class _ProductTypeSelectionScreenBodyState
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             padding: EdgeInsets.only(
+                top: widget.isRoot ? 20.0 : 0.0,
                 bottom: MediaQuery.of(context).padding.bottom == 0.0
                     ? 20.0
                     : MediaQuery.of(context).padding.bottom),
             children: [
-              SizedBox(height: widget.isRoot ? 8.0 : 0.0),
               widget.isRoot ? const DismissIndicatorWidget() : Container(),
 
               /// TITLE

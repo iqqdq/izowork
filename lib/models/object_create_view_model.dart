@@ -128,6 +128,8 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   ObjectCreateViewModel(this.object) {
     if (object != null) {
+      _office = object?.office;
+
       _isKiso = object!.kiso == null
           ? false
           : object!.kiso!.isEmpty
@@ -269,6 +271,8 @@ class ObjectCreateViewModel with ChangeNotifier {
         loadingStatus = LoadingStatus.searching;
         notifyListeners();
 
+        late Object newObject;
+
         await ObjectRepository()
             .updateObject(ObjectRequest(
                 id: object!.id,
@@ -292,7 +296,11 @@ class ObjectCreateViewModel with ChangeNotifier {
                 kiso: kiso))
             .then((response) => {
                   if (response is Object)
-                    onCreate(response)
+                    {
+                      newObject = response,
+                      newObject.office = _office ?? object?.office,
+                      onCreate(newObject),
+                    }
                   else if (response is ErrorResponse)
                     {
                       loadingStatus = LoadingStatus.error,
@@ -558,7 +566,10 @@ class ObjectCreateViewModel with ChangeNotifier {
             title: Titles.filial,
             isRoot: true,
             onFocus: () => {},
-            onPop: (office) =>
-                {_office = office, notifyListeners(), Navigator.pop(context)}));
+            onPop: (office) => {
+                  _office = office,
+                  notifyListeners(),
+                  Navigator.pop(context),
+                }));
   }
 }

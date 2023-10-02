@@ -1,8 +1,12 @@
+import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:izowork/components/user_params.dart';
 
 class WebService {
   final _dio = Dio();
+  WebService() {
+    _dio.interceptors.add(CurlLoggerDioInterceptor());
+  }
 
   Future<Options> _options() async {
     String token = await UserParams().getToken() ?? '';

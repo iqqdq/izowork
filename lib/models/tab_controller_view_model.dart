@@ -19,23 +19,28 @@ class TabControllerViewModel with ChangeNotifier {
   }
 
   TabControllerViewModel() {
-    getUnreadMessageCount().then((value) => getUnreadNotificationCount().then(
-        (value) =>
-            {loadingStatus = LoadingStatus.completed, notifyListeners()}));
+    getUnreadMessageCount()
+        .then((value) => getUnreadNotificationCount().then((value) => {
+              loadingStatus = LoadingStatus.completed,
+              notifyListeners(),
+            }));
   }
 
   // MARK: -
   // MARK: - API CALLS
 
   Future getUnreadMessageCount() async {
-    await ChatRepository()
-        .getUnreadMessageCount()
-        .then((response) => {if (response is int) _messageCount = response});
+    await ChatRepository().getUnreadMessageCount().then((response) => {
+          if (response is int) _messageCount = response,
+        });
   }
 
   Future getUnreadNotificationCount() async {
-    await NotificationRepository().getNotificationUnreadCount().then(
-        (response) => {if (response is int) _notificationCount = response});
+    await NotificationRepository()
+        .getNotificationUnreadCount()
+        .then((response) => {
+              if (response is int) _notificationCount = response,
+            });
   }
 
   // MARK: -

@@ -62,8 +62,9 @@ dependencies:
   socket_io_client: 1.0.1
   record: ^4.4.4
   audioplayers: ^3.0.1
-  audiofileplayer: ^2.1.1
+  audiofileplayer: any
   liquid_pull_to_refresh: ^3.0.1
+  curl_logger_dio_interceptor: ^1.0.0
 
   geolocator: ^8.1.1
   google_maps_flutter:

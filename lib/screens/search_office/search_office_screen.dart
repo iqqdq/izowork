@@ -23,6 +23,10 @@ class SearchOfficeScreenWidget extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => SearchOfficeViewModel(),
         child: SearchOfficeScreenBodyWidget(
-            title: title, isRoot: isRoot, onFocus: onFocus, onPop: onPop));
+          title: title,
+          isRoot: isRoot,
+          onFocus: onFocus,
+          onPop: onPop,
+        ));
   }
 }
