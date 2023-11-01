@@ -167,8 +167,10 @@ class DealViewModel with ChangeNotifier {
                   else
                     {loadingStatus = LoadingStatus.error}
                 })
-            .then((value) =>
-                {loadingStatus = LoadingStatus.completed, notifyListeners()});
+            .then((value) => {
+                  loadingStatus = LoadingStatus.completed,
+                  notifyListeners(),
+                });
       });
     }
   }

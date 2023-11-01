@@ -10,17 +10,18 @@ String phaseContractorToJson(PhaseContractor data) =>
     json.encode(data.toJson());
 
 class PhaseContractor {
-  PhaseContractor(
-      {this.coExecutorId,
-      this.contractorId,
-      required this.id,
-      this.observerId,
-      this.phaseId,
-      this.responsibleId,
-      this.contractor,
-      this.coExecutor,
-      this.responsible,
-      this.observer});
+  PhaseContractor({
+    this.coExecutorId,
+    this.contractorId,
+    required this.id,
+    this.observerId,
+    this.phaseId,
+    this.responsibleId,
+    this.contractor,
+    this.coExecutor,
+    this.responsible,
+    this.observer,
+  });
 
   String? coExecutorId;
   String? contractorId;

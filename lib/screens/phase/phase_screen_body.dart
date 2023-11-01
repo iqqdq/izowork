@@ -251,7 +251,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                           onTap: () => {}));
                                 }),
 
-                        /// CHECK
+                        /// CHECKLIST TITLE
                         _phaseViewModel.phaseChecklistResponse == null
                             ? Container()
                             : _phaseViewModel.phaseChecklistResponse!
@@ -269,7 +269,10 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                             : ListView.builder(
                                 shrinkWrap: true,
                                 padding: const EdgeInsets.only(
-                                    bottom: 20.0, left: 16.0, right: 16.0),
+                                  bottom: 20.0,
+                                  left: 16.0,
+                                  right: 16.0,
+                                ),
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: _phaseViewModel
                                     .phaseChecklistResponse!
@@ -289,19 +292,21 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                           .phaseChecklistResponse!
                                           .phaseChecklists[index]
                                           .state,
-                                      onTap: _phaseViewModel
-                                                  .phaseChecklistResponse!
-                                                  .canEdit ==
-                                              true
-                                          ? () => _phaseViewModel
-                                              .showCompleteTaskSheet(
-                                                  context, index)
-                                          : null);
+                                      onTap: () =>
+                                          _phaseViewModel.showCompleteTaskSheet(
+                                            context,
+                                            index,
+                                            _phaseViewModel
+                                                .phaseChecklistResponse!
+                                                .canEdit,
+                                          ));
                                 }),
 
                         /// SET TASK BUTTON
                         _phaseViewModel.loadingStatus == LoadingStatus.searching
-                            ? Container()
+                            ? Container(
+                                height: 56.0,
+                              )
                             : BorderButtonWidget(
                                 title: Titles.setTask,
                                 margin: const EdgeInsets.only(
@@ -311,7 +316,9 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
 
                         /// OPEN DEAL BUTTON
                         _phaseViewModel.loadingStatus == LoadingStatus.searching
-                            ? Container()
+                            ? Container(
+                                height: 56.0,
+                              )
                             : BorderButtonWidget(
                                 title: Titles.openDeal,
                                 margin: const EdgeInsets.only(

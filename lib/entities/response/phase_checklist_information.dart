@@ -13,7 +13,7 @@ class PhaseChecklistInformation {
     required this.files,
     required this.id,
     required this.phaseChecklistId,
-    required this.userId,
+    this.userId,
   });
 
   String? createdAt;
@@ -21,7 +21,7 @@ class PhaseChecklistInformation {
   List<FileElement> files;
   String id;
   String phaseChecklistId;
-  String userId;
+  String? userId;
 
   factory PhaseChecklistInformation.fromJson(Map<String, dynamic> json) =>
       PhaseChecklistInformation(

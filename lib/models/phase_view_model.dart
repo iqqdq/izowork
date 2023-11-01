@@ -80,7 +80,7 @@ class PhaseViewModel with ChangeNotifier {
         .getPhaseContractors(phase.id)
         .then((response) => {
               if (response is List<PhaseContractor>)
-                {_phaseContractors = response}
+                _phaseContractors = response
             })
         .then((value) => getPhaseProductList());
   }
@@ -195,21 +195,31 @@ class PhaseViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showDealScreenWidget(BuildContext context) {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => DealScreenWidget(deal: Deal())));
-  }
+  // void showDealScreenWidget(BuildContext context) {
+  // Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //         builder: (context) => DealScreenWidget(deal: Deal())));
+  // }
 
-  void showCompleteTaskSheet(BuildContext context, int index) {
+  void showCompleteTaskSheet(
+    BuildContext context,
+    int index,
+    bool canEdit,
+  ) {
     PhaseChecklistInformation? phaseChecklistInformation;
 
     getPhaseChecklistInformationList(
-            _phaseChecklistResponse?.phaseChecklists[index].id ?? '')
-        .then((value) => {
-              if (_phaseChecklistInformations.isNotEmpty)
-                {phaseChecklistInformation = _phaseChecklistInformations.first},
+      _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
+    ).then((value) => {
+          if (_phaseChecklistInformations.isNotEmpty)
+            {
+              phaseChecklistInformation = _phaseChecklistInformations.first,
+            },
+          if (phaseChecklistInformation == null && !canEdit)
+            {}
+          else
+            {
               showCupertinoModalBottomSheet(
                   enableDrag: false,
                   topRadius: const Radius.circular(16.0),
@@ -233,9 +243,14 @@ class PhaseViewModel with ChangeNotifier {
                             }),
 
                             // CREATE NEW PHASE CHECKLIST
-                            createPhaseChecklistInfo(context, index, text)
+                            createPhaseChecklistInfo(
+                              context,
+                              index,
+                              text,
+                            )
                           }))
-            });
+            }
+        });
   }
 
   void showDealCreateScreen(BuildContext context) {

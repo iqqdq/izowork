@@ -372,14 +372,20 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                       onTap: () => _dealViewModel.expand(index),
                                       onMenuTap: (dealProcess) => _dealViewModel
                                           .showDealProcessActionSheet(
-                                              context, dealProcess),
+                                        context,
+                                        dealProcess,
+                                      ),
                                       onProcessTap: (dealProcess) =>
                                           _dealViewModel.showDealProcessScreen(
-                                              context, dealProcess),
+                                        context,
+                                        dealProcess,
+                                      ),
                                       onAddProcessTap: containsHidden
                                           ? () => _dealViewModel
-                                              .showDealProcessSelectionSheet(
-                                                  context, index)
+                                                  .showDealProcessSelectionSheet(
+                                                context,
+                                                index,
+                                              )
                                           : null,
                                     );
                             }),
