@@ -148,38 +148,44 @@ class DealProcessViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - ACTIONS
 
-  Future openFile(BuildContext context, int index) async {
-    String url =
-        dealProcessInfoMediaUrl + _informations[index].files[index].filename;
+  Future openFile(BuildContext context, int index, int fileIndex) async {
+    if (_informations[index].files.isNotEmpty) {
+      String url = dealProcessInfoMediaUrl +
+          _informations[index].files[fileIndex].filename;
 
-    if (Platform.isAndroid) {
-      Directory appDocumentsDirectory =
-          await getApplicationDocumentsDirectory();
-      String appDocumentsPath = appDocumentsDirectory.path;
-      String fileName = _informations[index].files[index].name;
-      String filePath = '$appDocumentsPath/$fileName';
-      bool isFileExists = await io.File(filePath).exists();
+      if (Platform.isAndroid) {
+        Directory appDocumentsDirectory =
+            await getApplicationDocumentsDirectory();
+        String appDocumentsPath = appDocumentsDirectory.path;
+        String fileName = _informations[index].files[fileIndex].name;
+        String filePath = '$appDocumentsPath/$fileName';
+        bool isFileExists = await io.File(filePath).exists();
 
-      if (!isFileExists) {
-        _downloadIndex = index;
-        notifyListeners();
+        if (!isFileExists) {
+          _downloadIndex = index;
+          notifyListeners();
 
-        await Dio().download(url, filePath, onReceiveProgress: (count, total) {
-          debugPrint('---Download----Rec: $count, Total: $total');
-        }).then((value) => {_downloadIndex = -1, notifyListeners()});
-      }
+          await Dio().download(url, filePath,
+              onReceiveProgress: (count, total) {
+            debugPrint('---Download----Rec: $count, Total: $total');
+          }).then((value) => {
+                _downloadIndex = -1,
+                notifyListeners(),
+              });
+        }
 
-      OpenResult openResult = await OpenFilex.open(filePath);
+        OpenResult openResult = await OpenFilex.open(filePath);
 
-      if (openResult.type == ResultType.noAppToOpen) {
-        Toast().showTopToast(context, Titles.unsupportedFileFormat);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-        launchUrl(Uri.parse(url.replaceAll(' ', '')));
-      } else if (await canLaunchUrl(
-          Uri.parse('https://' + url.replaceAll(' ', '')))) {
-        launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
+        if (openResult.type == ResultType.noAppToOpen) {
+          Toast().showTopToast(context, Titles.unsupportedFileFormat);
+        }
+      } else {
+        if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
+          launchUrl(Uri.parse(url.replaceAll(' ', '')));
+        } else if (await canLaunchUrl(
+            Uri.parse('https://' + url.replaceAll(' ', '')))) {
+          launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
+        }
       }
     }
   }

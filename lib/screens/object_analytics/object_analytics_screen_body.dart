@@ -46,7 +46,7 @@ class _ObjectAnalyticsScreenBodyState
                 /// TABLE
                 SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: 42.0 * (phaseProducts.length + 1),
+                    height: 50.0 * (phaseProducts.length + 1),
                     child: SpreadsheetTable(
                         cellBuilder: (_, int row, int col) => Container(
                             height: 42.0,
@@ -153,7 +153,7 @@ class _ObjectAnalyticsScreenBodyState
                                         fontFamily: 'PT Root UI')))),
                         rowHeaderWidth: 144.0,
                         colsHeaderHeight: 42.0,
-                        cellHeight: 42.0,
+                        cellHeight: 50.0,
                         cellWidth: 100.0,
                         rowsCount: phaseProducts.length,
                         colCount: 5))
@@ -176,7 +176,7 @@ class _ObjectAnalyticsScreenBodyState
           /// TABLE
           SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: 42.0 * (_objectAnalyticsViewModel.phases.length + 1),
+              height: 50.0 * (_objectAnalyticsViewModel.phases.length + 1),
               child: SpreadsheetTable(
                 cellBuilder: (_, int row, int col) => Container(
                     height: 42.0,
@@ -246,7 +246,7 @@ class _ObjectAnalyticsScreenBodyState
                     ])),
                 rowHeaderWidth: 144.0,
                 colsHeaderHeight: 42.0,
-                cellHeight: 42.0,
+                cellHeight: 50.0,
                 cellWidth: 110.0,
                 rowsCount: _objectAnalyticsViewModel.phases.length,
                 colCount: 2,

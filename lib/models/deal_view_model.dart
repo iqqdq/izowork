@@ -90,8 +90,10 @@ class DealViewModel with ChangeNotifier {
     _documents = selectedDeal.files;
     notifyListeners();
 
-    getDealProducts().then((value) => getPhaseList().then(
-        (value) => getDealStageList().then((value) => getDealProcesses())));
+    getDealProducts()
+        .then((value) => getPhaseList().then((value) => getDealStageList().then(
+              (value) => getDealProcesses(),
+            )));
   }
 
   // MARK: -
@@ -105,7 +107,9 @@ class DealViewModel with ChangeNotifier {
               loadingStatus = LoadingStatus.completed,
             }
           else
-            {loadingStatus = LoadingStatus.error}
+            {
+              loadingStatus = LoadingStatus.error,
+            }
         });
   }
 
@@ -120,7 +124,9 @@ class DealViewModel with ChangeNotifier {
               loadingStatus = LoadingStatus.completed,
             }
           else
-            {loadingStatus = LoadingStatus.error}
+            {
+              loadingStatus = LoadingStatus.error,
+            }
         });
   }
 
@@ -144,9 +150,14 @@ class DealViewModel with ChangeNotifier {
   Future getDealStageList() async {
     await DealRepository().getStage(deal!.id).then((response) => {
           if (response is List<DealStage>)
-            {loadingStatus = LoadingStatus.completed, _dealStages = response}
+            {
+              loadingStatus = LoadingStatus.completed,
+              _dealStages = response,
+            }
           else if (response is ErrorResponse)
-            {loadingStatus = LoadingStatus.error}
+            {
+              loadingStatus = LoadingStatus.error,
+            }
         });
   }
 
@@ -165,7 +176,9 @@ class DealViewModel with ChangeNotifier {
                       loadingStatus = LoadingStatus.completed,
                     }
                   else
-                    {loadingStatus = LoadingStatus.error}
+                    {
+                      loadingStatus = LoadingStatus.error,
+                    }
                 })
             .then((value) => {
                   loadingStatus = LoadingStatus.completed,
@@ -352,8 +365,10 @@ class DealViewModel with ChangeNotifier {
                       if (element.name == value) {
                         updateDealProcess(
                                 context, false, element.id, element.status)
-                            .then((value) =>
-                                {element.hidden = false, notifyListeners()});
+                            .then((value) => {
+                                  element.hidden = false,
+                                  notifyListeners(),
+                                });
                       }
                     })
                   }));
@@ -373,8 +388,10 @@ class DealViewModel with ChangeNotifier {
                   if (index == 0) // EDIT PROCESS
 
                     updateDealProcess(context, true, process.id, process.status)
-                        .then((value) =>
-                            {process.hidden = true, notifyListeners()})
+                        .then((value) => {
+                              process.hidden = true,
+                              notifyListeners(),
+                            })
                 }));
   }
 

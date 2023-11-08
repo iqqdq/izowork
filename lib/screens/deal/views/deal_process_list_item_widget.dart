@@ -87,6 +87,22 @@ class _DealProcessListItemState extends State<DealProcessListItemWidget> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: widget.dealProcesses.length,
                           itemBuilder: (context, index) {
+                            //   List<String> needConfirmations = widget
+                            //           .dealProcesses[index].needConfirmations;
+
+                            //  Confirmations? confirmations = widget
+                            //           .dealProcesses[index].confirmations;
+
+                            //           needConfirmations.contains(confirmations.accountant);
+
+                            //           needConfirmations.contains(confirmations.)
+
+                            bool? isCompleted = widget
+                                .dealProcesses[index].needConfirmations
+                                .map((c) => widget
+                                    .dealProcesses[index].confirmations?[c])
+                                .reduce((a, c) => a == true && c == true);
+
                             return
                                 // widget.dealProcesses[index].hidden
                                 // ? Container()
@@ -126,15 +142,11 @@ class _DealProcessListItemState extends State<DealProcessListItemWidget> {
                                             title: widget
                                                 .dealProcesses[index].status,
                                             textAlign: TextAlign.start,
-                                            status: widget.dealProcesses[index]
-                                                        .status ==
-                                                    'Поставщик'
-                                                ? 0
-                                                : widget.dealProcesses[index]
-                                                            .status ==
-                                                        'Проектировщик'
-                                                    ? 1
-                                                    : 2)
+                                            status: isCompleted == null
+                                                ? 1
+                                                : isCompleted
+                                                    ? 2
+                                                    : 1)
                                       ])),
                                   const SizedBox(width: 16.0),
 

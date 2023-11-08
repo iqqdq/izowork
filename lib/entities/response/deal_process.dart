@@ -19,7 +19,7 @@ class DealProcess {
     required this.weight,
   });
 
-  Confirmations? confirmations;
+  Map<String, bool>? confirmations;
   String dealStageId;
   bool hidden;
   String id;
@@ -33,7 +33,7 @@ class DealProcess {
   factory DealProcess.fromJson(Map<String, dynamic> json) => DealProcess(
         confirmations: json["confirmations"] == null
             ? null
-            : Confirmations.fromJson(json["confirmations"]),
+            : Map.from(json["confirmations"]),
         dealStageId: json["deal_stage_id"],
         hidden: json["hidden"],
         id: json["id"],
@@ -47,7 +47,7 @@ class DealProcess {
       );
 
   Map<String, dynamic> toJson() => {
-        "confirmations": confirmations?.toJson(),
+        "confirmations": confirmations,
         "deal_stage_id": dealStageId,
         "hidden": hidden,
         "id": id,
@@ -62,28 +62,37 @@ class DealProcess {
 }
 
 class Confirmations {
+  bool? accountant;
+  bool? director;
+  bool? logistician;
+  bool? lawyer;
+  bool? administrator;
+  bool? manager;
+
   Confirmations({
-    required this.additionalProp1,
+    this.accountant,
+    this.director,
+    this.logistician,
+    this.lawyer,
+    this.administrator,
+    this.manager,
   });
 
-  AdditionalProp1? additionalProp1;
-
   factory Confirmations.fromJson(Map<String, dynamic> json) => Confirmations(
-        additionalProp1: json.isEmpty
-            ? null
-            : AdditionalProp1.fromJson(json["additionalProp1"]),
+        accountant: json["ACCOUNTANT"],
+        director: json["DIRECTOR"],
+        logistician: json["LOGISTICIAN"],
+        lawyer: json["LAWYER"],
+        administrator: json["ADMINISTRATOR"],
+        manager: json["MANAGER"],
       );
 
   Map<String, dynamic> toJson() => {
-        "additionalProp1": additionalProp1?.toJson(),
+        "ACCOUNTANT": accountant,
+        "DIRECTOR": director,
+        "LOGISTICIAN": logistician,
+        "LAWYER": lawyer,
+        "ADMINISTRATOR": administrator,
+        "MANAGER": manager,
       };
-}
-
-class AdditionalProp1 {
-  AdditionalProp1();
-
-  factory AdditionalProp1.fromJson(Map<String, dynamic> json) =>
-      AdditionalProp1();
-
-  Map<String, dynamic> toJson() => {};
 }

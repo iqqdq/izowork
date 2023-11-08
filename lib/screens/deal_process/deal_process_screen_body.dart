@@ -99,8 +99,8 @@ class _DealProcessScreenBodyState extends State<DealProcessScreenBodyWidget> {
                         information: _dealProcessViewModel.informations[index],
                         onUserTap: () => _dealProcessViewModel
                             .showProfileScreen(context, index),
-                        onFileTap: () =>
-                            _dealProcessViewModel.openFile(context, index));
+                        onFileTap: (fileIndex) => _dealProcessViewModel
+                            .openFile(context, index, fileIndex));
                   })),
           const SeparatorWidget(),
 

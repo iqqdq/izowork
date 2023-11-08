@@ -13,7 +13,7 @@ import 'package:izowork/views/title_widget.dart';
 class DealProcessInfoListItemWidget extends StatelessWidget {
   final DealProcessInfo information;
   final VoidCallback onUserTap;
-  final VoidCallback onFileTap;
+  final Function(int) onFileTap;
 
   const DealProcessInfoListItemWidget(
       {Key? key,
@@ -132,7 +132,7 @@ class DealProcessInfoListItemWidget extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return FileListItemWidget(
                       fileName: information.files[index].name,
-                      onTap: () => onFileTap(),
+                      onTap: () => onFileTap(index),
                     );
                   })
             ]));

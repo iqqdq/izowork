@@ -179,7 +179,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             ? Container()
                             : SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                height: 42.0 *
+                                height: 50.0 *
                                     (_dealViewModel.dealProducts.length + 1),
                                 child: SpreadsheetTable(
                                   cellBuilder: (_, int row, int col) =>
@@ -213,7 +213,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                                                     .product
                                                                     ?.price
                                                                     .toString() ??
-                                                                '0',
+                                                                '-',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontSize: 14.0,
@@ -285,7 +285,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                   rowHeaderWidth:
                                       MediaQuery.of(context).size.width * 0.4,
                                   colsHeaderHeight: 42.0,
-                                  cellHeight: 42.0,
+                                  cellHeight: 50.0,
                                   cellWidth:
                                       MediaQuery.of(context).size.width * 0.3,
                                   rowsCount: _dealViewModel.dealProducts.length,

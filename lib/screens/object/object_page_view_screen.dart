@@ -79,12 +79,15 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
                     child:
                         BackButtonWidget(onTap: () => Navigator.pop(context))),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(_title ?? widget.object.name,
-                      style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 18.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: Text(_title ?? widget.object.name,
+                        style: TextStyle(
+                            color: HexColors.black,
+                            fontSize: 18.0,
+                            fontFamily: 'PT Root UI',
+                            fontWeight: FontWeight.bold)),
+                  ),
                 ])
               ]),
               const SizedBox(height: 20.0),

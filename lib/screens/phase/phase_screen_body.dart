@@ -87,7 +87,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                             ? Container()
                             : SizedBox(
                                 width: MediaQuery.of(context).size.width,
-                                height: 42.0 *
+                                height: 50.0 *
                                     (_phaseViewModel.phaseProducts.length + 1),
                                 child: SpreadsheetTable(
                                   cellBuilder: (_, int row, int col) =>
@@ -176,7 +176,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                   rowHeaderWidth:
                                       MediaQuery.of(context).size.width * 0.4,
                                   colsHeaderHeight: 42.0,
-                                  cellHeight: 42.0,
+                                  cellHeight: 50.0,
                                   cellWidth:
                                       MediaQuery.of(context).size.width * 0.3,
                                   rowsCount:
