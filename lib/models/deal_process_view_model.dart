@@ -69,7 +69,9 @@ class DealProcessViewModel with ChangeNotifier {
               else
                 {loadingStatus = LoadingStatus.error}
             })
-        .then((value) => notifyListeners());
+        .then(
+          (value) => notifyListeners(),
+        );
   }
 
   Future createDealProcessInformation(BuildContext context,

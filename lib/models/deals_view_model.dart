@@ -45,8 +45,10 @@ class DealsViewModel with ChangeNotifier {
         });
   }
 
-  Future getDealList(
-      {required Pagination pagination, required String search}) async {
+  Future getDealList({
+    required Pagination pagination,
+    required String search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _deals.clear();

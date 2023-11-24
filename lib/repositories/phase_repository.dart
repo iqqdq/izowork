@@ -6,6 +6,7 @@ import 'package:izowork/entities/request/phase_contractor_request.dart';
 import 'package:izowork/entities/request/phase_contractor_update_request.dart';
 import 'package:izowork/entities/request/phase_product_request.dart';
 import 'package:izowork/entities/request/phase_product_update_request.dart';
+import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/entities/response/phase_checklist.dart';
@@ -49,6 +50,20 @@ class PhaseRepository {
         phaseProducts.add(PhaseProduct.fromJson(element));
       });
       return phaseProducts;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> getPhaseDeals(String id) async {
+    dynamic json = await WebService().get(dealsUrl + '?phase_id=$id');
+    List<Deal> deals = [];
+
+    try {
+      json['deals'].forEach((element) {
+        deals.add(Deal.fromJson(element));
+      });
+      return deals;
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }

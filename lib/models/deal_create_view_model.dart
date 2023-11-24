@@ -167,7 +167,10 @@ class DealCreateViewModel with ChangeNotifier {
   // MARK: - API CALL
 
   Future createNewDeal(
-      BuildContext context, String? comment, Function(Deal) onCreate) async {
+    BuildContext context,
+    String? comment,
+    Function(Deal) onCreate,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -188,16 +191,16 @@ class DealCreateViewModel with ChangeNotifier {
                   if (_files.isNotEmpty)
                     {
                       _files.forEach((element) async {
-                        await uploadFile(context, response.id, element)
-                            .then((value) => {
+                        await uploadFile(context, response.id, element).then(
+                            (value) => {
                                   current++,
                                   if (current == _files.length)
-                                    {onCreate(response)}
+                                    onCreate(response)
                                 });
                       })
                     }
                   else
-                    {onCreate(response)}
+                    onCreate(response)
                 }
               else if (response is ErrorResponse)
                 {

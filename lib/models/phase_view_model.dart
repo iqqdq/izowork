@@ -19,6 +19,7 @@ import 'package:izowork/entities/response/phase_contractor.dart';
 import 'package:izowork/entities/response/phase_product.dart';
 import 'package:izowork/repositories/phase_repository.dart';
 import 'package:izowork/screens/complete_checklist/complete_checklist_screen.dart';
+import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen.dart';
 import 'package:izowork/screens/phase_create/phase_create_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
@@ -82,7 +83,9 @@ class PhaseViewModel with ChangeNotifier {
               if (response is List<PhaseContractor>)
                 _phaseContractors = response
             })
-        .then((value) => getPhaseProductList());
+        .then(
+          (value) => getPhaseProductList(),
+        );
   }
 
   Future getPhaseProductList() async {
@@ -91,7 +94,26 @@ class PhaseViewModel with ChangeNotifier {
         .then((response) => {
               if (response is List<PhaseProduct>) {_phaseProducts = response}
             })
-        .then((value) => getPhaseChecklistList());
+        .then(
+          (value) => getPhaseDealList(),
+        );
+  }
+
+  Future getPhaseDealList() async {
+    await PhaseRepository()
+        .getPhaseDeals(phase.id)
+        .then((response) => {
+              if (response is List<Deal>)
+                {
+                  for (var element in response)
+                    {
+                      _deals.add(element),
+                    },
+                },
+            })
+        .then(
+          (value) => getPhaseChecklistList(),
+        );
   }
 
   Future getPhaseChecklistList() async {
@@ -104,7 +126,9 @@ class PhaseViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.completed
                 }
             })
-        .then((value) => notifyListeners());
+        .then(
+          (value) => notifyListeners(),
+        );
   }
 
   Future getPhaseChecklistInformationList(String id) async {
@@ -300,5 +324,12 @@ class PhaseViewModel with ChangeNotifier {
                         notifyListeners()
                       }),
                 )));
+  }
+
+  void showDealScreenWidget(BuildContext context, int index) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DealScreenWidget(deal: deals[index])));
   }
 }

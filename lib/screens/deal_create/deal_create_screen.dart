@@ -12,9 +12,13 @@ class DealCreateScreenWidget extends StatelessWidget {
   final Phase? phase;
   final Function(Deal?, List<DealProduct>) onCreate;
 
-  const DealCreateScreenWidget(
-      {Key? key, this.deal, required this.onCreate, this.object, this.phase})
-      : super(key: key);
+  const DealCreateScreenWidget({
+    Key? key,
+    this.deal,
+    required this.onCreate,
+    this.object,
+    this.phase,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

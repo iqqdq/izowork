@@ -100,7 +100,9 @@ class _ObjectAnalyticsScreenBodyState
                                 const EdgeInsets.symmetric(horizontal: 16.0),
                             decoration: BoxDecoration(
                                 border: Border.all(
-                                    width: 0.65, color: HexColors.grey20)),
+                              width: 0.65,
+                              color: HexColors.grey20,
+                            )),
                             child: Row(children: [
                               Text(Titles.product,
                                   style: TextStyle(

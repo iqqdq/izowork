@@ -153,6 +153,8 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                                 style: TextStyle(
                                                     fontSize: 14.0,
                                                     color: HexColors.black,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     fontFamily: 'PT Root UI')))
                                       ])),
                                   colHeaderBuilder: (_, index) => Container(
@@ -209,8 +211,8 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                         /// CONTRACTOR LIST
                         ListView.builder(
                             shrinkWrap: true,
-                            padding: const EdgeInsets.only(
-                                bottom: 10.0, left: 16.0, right: 16.0),
+                            padding:
+                                const EdgeInsets.only(left: 16.0, right: 16.0),
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: _phaseViewModel.phaseContractors.length,
                             itemBuilder: (context, index) {
@@ -243,13 +245,28 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: _phaseViewModel.deals.length,
                                 itemBuilder: (context, index) {
-                                  return IgnorePointer(
-                                      ignoring: true,
-                                      child: SearchListItemWidget(
-                                          name:
-                                              '${Titles.deal} №${_phaseViewModel.deals[index].number}',
-                                          onTap: () => {}));
+                                  return SearchListItemWidget(
+                                    name:
+                                        '${Titles.deal} №${_phaseViewModel.deals[index].number}',
+                                    onTap: () =>
+                                        _phaseViewModel.showDealScreenWidget(
+                                      context,
+                                      index,
+                                    ),
+                                  );
                                 }),
+
+                        /// OPEN DEAL BUTTON
+                        _phaseViewModel.loadingStatus == LoadingStatus.searching
+                            ? Container(
+                                height: 56.0,
+                              )
+                            : BorderButtonWidget(
+                                title: Titles.openDeal,
+                                margin: const EdgeInsets.only(
+                                    bottom: 30.0, left: 16.0, right: 16.0),
+                                onTap: () => _phaseViewModel
+                                    .showDealCreateScreen(context)),
 
                         /// CHECKLIST TITLE
                         _phaseViewModel.phaseChecklistResponse == null
@@ -313,18 +330,6 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                     bottom: 20.0, left: 16.0, right: 16.0),
                                 onTap: () => _phaseViewModel
                                     .showTaskCreateScreen(context)),
-
-                        /// OPEN DEAL BUTTON
-                        _phaseViewModel.loadingStatus == LoadingStatus.searching
-                            ? Container(
-                                height: 56.0,
-                              )
-                            : BorderButtonWidget(
-                                title: Titles.openDeal,
-                                margin: const EdgeInsets.only(
-                                    bottom: 16.0, left: 16.0, right: 16.0),
-                                onTap: () => _phaseViewModel
-                                    .showDealCreateScreen(context)),
                       ]),
 
                   /// EDIT PHASE BUTTON
