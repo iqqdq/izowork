@@ -200,7 +200,9 @@ class PhaseViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка'),
                 }
             })
-        .then((value) => notifyListeners());
+        .then(
+          (value) => notifyListeners(),
+        );
   }
 
   Future uploadFile(BuildContext context, String id, File file) async {
@@ -237,12 +239,10 @@ class PhaseViewModel with ChangeNotifier {
       _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
     ).then((value) => {
           if (_phaseChecklistInformations.isNotEmpty)
-            {
-              phaseChecklistInformation = _phaseChecklistInformations.first,
-            },
-          if (phaseChecklistInformation == null && !canEdit)
-            {}
-          else
+            phaseChecklistInformation = _phaseChecklistInformations.first,
+
+          // SHOW CHECKLIST SHEET
+          if (phaseChecklistInformation != null && canEdit)
             {
               showCupertinoModalBottomSheet(
                   enableDrag: false,
@@ -255,7 +255,11 @@ class PhaseViewModel with ChangeNotifier {
                               ?.phaseChecklists[index].name ??
                           '',
                       phaseChecklistInformation: phaseChecklistInformation,
-                      onTap: (text, files) => {
+                      onTap: (
+                        text,
+                        files,
+                      ) =>
+                          {
                             // HIDE BOTTOM SHEET
                             Navigator.pop(context),
 
@@ -315,7 +319,11 @@ class PhaseViewModel with ChangeNotifier {
                   phaseContractors: _phaseContractors,
                   phaseChecklists:
                       _phaseChecklistResponse?.phaseChecklists ?? [],
-                  onPop: ((phaseProducts, phaseContractors, phaseChecklists) =>
+                  onPop: ((
+                    phaseProducts,
+                    phaseContractors,
+                    phaseChecklists,
+                  ) =>
                       {
                         _phaseProducts = phaseProducts,
                         _phaseContractors = phaseContractors,

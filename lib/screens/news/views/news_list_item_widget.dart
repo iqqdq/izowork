@@ -36,7 +36,7 @@ class _NewsListItemState extends State<NewsListItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime dateTime = widget.news.createdAt;
+    DateTime dateTime = widget.news.createdAt.toUtc().toLocal();
 
     final _day = dateTime.day.toString().characters.length == 1
         ? '0${dateTime.day}'

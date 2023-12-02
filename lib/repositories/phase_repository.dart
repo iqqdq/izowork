@@ -162,8 +162,10 @@ class PhaseRepository {
 
   Future<dynamic> updatePhaseContractor(
       PhaseContractorUpdateRequest phaseContractorUpdateRequest) async {
-    dynamic json = await WebService()
-        .patch(phaseContractorUpdateUrl, phaseContractorUpdateRequest);
+    dynamic json = await WebService().patch(
+      phaseContractorUpdateUrl,
+      phaseContractorUpdateRequest,
+    );
 
     try {
       return PhaseContractor.fromJson(json['phase_contractor']);

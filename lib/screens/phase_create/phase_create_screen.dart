@@ -15,20 +15,24 @@ class PhaseCreateScreenWidget extends StatelessWidget {
   final Function(
       List<PhaseProduct>, List<PhaseContractor>, List<PhaseChecklist>) onPop;
 
-  const PhaseCreateScreenWidget(
-      {Key? key,
-      required this.phase,
-      required this.phaseProducts,
-      required this.phaseContractors,
-      required this.phaseChecklists,
-      required this.onPop})
-      : super(key: key);
+  const PhaseCreateScreenWidget({
+    Key? key,
+    required this.phase,
+    required this.phaseProducts,
+    required this.phaseContractors,
+    required this.phaseChecklists,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => PhaseCreateViewModel(
-            phase, phaseProducts, phaseContractors, phaseChecklists),
+              phase,
+              phaseProducts,
+              phaseContractors,
+              phaseChecklists,
+            ),
         child: PhaseCreateScreenBodyWidget(onPop: onPop));
   }
 }

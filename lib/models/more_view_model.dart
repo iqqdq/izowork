@@ -114,8 +114,11 @@ class MoreViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => NotificationsScreenWidget(
-                onPop: (count) =>
-                    {_notificationCount = count, Future.delayed(Duration.zero), () => notifyListeners()})));
+                onPop: (count) => {
+                      _notificationCount = count,
+                      Future.delayed(Duration.zero),
+                      () => notifyListeners(),
+                    })));
   }
 
   Future showLogoutDialog(BuildContext context) async {

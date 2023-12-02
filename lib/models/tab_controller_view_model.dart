@@ -31,7 +31,11 @@ class TabControllerViewModel with ChangeNotifier {
 
   Future getUnreadMessageCount() async {
     await ChatRepository().getUnreadMessageCount().then((response) => {
-          if (response is int) _messageCount = response,
+          if (response is int)
+            {
+              _messageCount = response,
+              notifyListeners(),
+            }
         });
   }
 
@@ -39,7 +43,11 @@ class TabControllerViewModel with ChangeNotifier {
     await NotificationRepository()
         .getNotificationUnreadCount()
         .then((response) => {
-              if (response is int) _notificationCount = response,
+              if (response is int)
+                {
+                  _notificationCount = response,
+                  notifyListeners(),
+                }
             });
   }
 

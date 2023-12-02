@@ -71,8 +71,10 @@ class _NotificationsScreenBodyState
               itemCount: _notificationsViewModel.notifications.length,
               itemBuilder: (context, index) {
                 return NotificationListItemWidget(
-                    dateTime:
-                        _notificationsViewModel.notifications[index].createdAt,
+                    dateTime: _notificationsViewModel
+                        .notifications[index].createdAt
+                        .toUtc()
+                        .toLocal(),
                     isUnread:
                         !_notificationsViewModel.notifications[index].read,
                     text: _notificationsViewModel.notifications[index].text,

@@ -142,7 +142,8 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                                                             context)
                                                                     : debugPrint(
                                                                         index
-                                                                            .toString())
+                                                                            .toString(),
+                                                                      )
                               });
                 })));
   }

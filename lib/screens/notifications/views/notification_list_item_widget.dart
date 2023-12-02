@@ -8,13 +8,13 @@ class NotificationListItemWidget extends StatelessWidget {
   final bool isUnread;
   final VoidCallback onTap;
 
-  const NotificationListItemWidget(
-      {Key? key,
-      required this.text,
-      required this.dateTime,
-      required this.isUnread,
-      required this.onTap})
-      : super(key: key);
+  const NotificationListItemWidget({
+    Key? key,
+    required this.text,
+    required this.dateTime,
+    required this.isUnread,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +32,16 @@ class NotificationListItemWidget extends StatelessWidget {
         ? '0${dateTime.month}'
         : '${dateTime.month}';
     final _year = '${dateTime.year}';
+
+    bool _isToday = dateTime.year == DateTime.now().year &&
+        dateTime.month == DateTime.now().month &&
+        dateTime.day == DateTime.now().day;
+
+    bool _isYesterday = dateTime.year ==
+            DateTime.now().subtract(const Duration(days: 1)).year &&
+        dateTime.month ==
+            DateTime.now().subtract(const Duration(days: 1)).month &&
+        dateTime.day == DateTime.now().subtract(const Duration(days: 1)).day;
 
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0),
@@ -57,7 +67,13 @@ class NotificationListItemWidget extends StatelessWidget {
                           children: [
                             /// DATE
                             TitleWidget(
-                                text: '$_minute:$_hour, $_day.$_month.$_year',
+                                text: _isYesterday
+                                    ? 'Вчера, $_hour:$_minute'
+                                    : _isToday
+                                        ? 'Сегодня, $_hour:$_minute'
+                                        : _year.isEmpty
+                                            ? '$_day $_month, $_hour:$_minute'
+                                            : '$_day $_month $_year, $_hour:$_minute',
                                 padding: EdgeInsets.zero,
                                 isSmall: true),
 

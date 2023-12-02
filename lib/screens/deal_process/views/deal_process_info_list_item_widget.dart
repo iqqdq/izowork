@@ -24,7 +24,7 @@ class DealProcessInfoListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateTime = DateTime.parse(information.createdAt);
+    final dateTime = DateTime.parse(information.createdAt).toUtc().toLocal();
 
     final _day = dateTime.day.toString().length == 1
         ? '0${dateTime.day}'

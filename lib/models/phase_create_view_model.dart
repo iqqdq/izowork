@@ -40,13 +40,20 @@ class PhaseCreateViewModel with ChangeNotifier {
     return _files;
   }
 
-  PhaseCreateViewModel(this.phase, this.phaseProducts, this.phaseContractors,
-      this.phaseChecklists);
+  PhaseCreateViewModel(
+    this.phase,
+    this.phaseProducts,
+    this.phaseContractors,
+    this.phaseChecklists,
+  );
 
   // MARK: -
   // MARK: - API CALL
 
-  Future createContractor(BuildContext context, int? index) async {
+  Future createContractor(
+    BuildContext context,
+    int? index,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 

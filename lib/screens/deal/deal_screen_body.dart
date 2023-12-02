@@ -33,7 +33,9 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
     _dealViewModel = Provider.of<DealViewModel>(context, listen: true);
 
     final startDateTime = DateTime.parse(_dealViewModel.deal?.createdAt ??
-        _dealViewModel.selectedDeal.createdAt);
+            _dealViewModel.selectedDeal.createdAt)
+        .toUtc()
+        .toLocal();
 
     final _startDay = startDateTime.day.toString().length == 1
         ? '0${startDateTime.day}'
@@ -43,8 +45,10 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
         : '${startDateTime.month}';
     final _startYear = '${startDateTime.year}';
 
-    final endDateTime = DateTime.parse(
-        _dealViewModel.deal?.finishAt ?? _dealViewModel.selectedDeal.finishAt);
+    final endDateTime = DateTime.parse(_dealViewModel.deal?.finishAt ??
+            _dealViewModel.selectedDeal.finishAt)
+        .toUtc()
+        .toLocal();
 
     final _endDay = endDateTime.day.toString().length == 1
         ? '0${endDateTime.day}'

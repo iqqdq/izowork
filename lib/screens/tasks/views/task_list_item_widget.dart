@@ -18,7 +18,7 @@ class TaskListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateTime = DateTime.parse(task.deadline);
+    final dateTime = DateTime.parse(task.deadline).toUtc().toLocal();
 
     final _day = dateTime.day.toString().length == 1
         ? '0${dateTime.day}'

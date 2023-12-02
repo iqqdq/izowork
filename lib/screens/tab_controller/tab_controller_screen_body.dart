@@ -1,4 +1,3 @@
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,7 +10,6 @@ import 'package:izowork/screens/chat/chat_screen.dart';
 import 'package:izowork/screens/map/map_screen.dart';
 import 'package:izowork/screens/more/more_screen.dart';
 import 'package:izowork/screens/objects/objects_screen.dart';
-import 'package:izowork/views/badge_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -97,56 +95,80 @@ class _TabControllerScreenBodyState
             items: <BottomNavigationBarItem>[
               /// MAP
               BottomNavigationBarItem(
-                  icon: SvgPicture.asset(_index == 0
-                      ? 'assets/ic_map_selected.svg'
-                      : 'assets/ic_map.svg'),
-                  label: Titles.map),
+                icon: SvgPicture.asset(_index == 0
+                    ? 'assets/ic_map_selected.svg'
+                    : 'assets/ic_map.svg'),
+                label: Titles.map,
+              ),
 
               /// OBJECTS
               BottomNavigationBarItem(
-                  icon: SvgPicture.asset(_index == 1
-                      ? 'assets/ic_objects_selected.svg'
-                      : 'assets/ic_objects.svg'),
-                  label: Titles.objects),
+                icon: SvgPicture.asset(_index == 1
+                    ? 'assets/ic_objects_selected.svg'
+                    : 'assets/ic_objects.svg'),
+                label: Titles.objects,
+              ),
 
               /// ACTIONS
               BottomNavigationBarItem(
-                  icon: SvgPicture.asset(_index == 2
-                      ? 'assets/ic_actions_selected.svg'
-                      : 'assets/ic_actions.svg'),
-                  label: Titles.myDoing),
+                icon: SvgPicture.asset(_index == 2
+                    ? 'assets/ic_actions_selected.svg'
+                    : 'assets/ic_actions.svg'),
+                label: Titles.myDoing,
+              ),
 
               /// CHAT
               BottomNavigationBarItem(
-                  icon: Stack(
-                      alignment: _tabControllerViewModel.messageCount > 0
-                          ? AlignmentDirectional.topEnd
-                          : AlignmentDirectional.center,
-                      children: [
-                        SvgPicture.asset(_index == 3
-                            ? 'assets/ic_chat_selected.svg'
-                            : 'assets/ic_chat.svg'),
-                        BadgeWidget(
-                            radius: 8.0,
-                            value: _tabControllerViewModel.messageCount)
-                      ]),
-                  label: Titles.chat),
+                icon: Badge(
+                  backgroundColor: HexColors.additionalViolet,
+                  label: Text(
+                      _tabControllerViewModel.messageCount.toString().length > 4
+                          ? _tabControllerViewModel.messageCount
+                              .toString()
+                              .substring(0, 3)
+                          : _tabControllerViewModel.messageCount.toString(),
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w600,
+                        color: HexColors.white,
+                      )),
+                  isLabelVisible: _tabControllerViewModel.messageCount > 0,
+                  child: SvgPicture.asset(_index == 3
+                      ? 'assets/ic_chat_selected.svg'
+                      : 'assets/ic_chat.svg'),
+                ),
+                label: Titles.chat,
+              ),
 
               /// MORE
+
               BottomNavigationBarItem(
-                  icon: Stack(
-                      alignment: _tabControllerViewModel.notificationCount > 0
-                          ? AlignmentDirectional.topEnd
-                          : AlignmentDirectional.center,
-                      children: [
-                        SvgPicture.asset(_index == 4
-                            ? 'assets/ic_more_selected.svg'
-                            : 'assets/ic_more.svg'),
-                        BadgeWidget(
-                            radius: 8.0,
-                            value: _tabControllerViewModel.notificationCount)
-                      ]),
-                  label: Titles.more)
+                icon: Badge(
+                  backgroundColor: HexColors.additionalViolet,
+                  label: Text(
+                      _tabControllerViewModel.notificationCount
+                                  .toString()
+                                  .length >
+                              4
+                          ? _tabControllerViewModel.notificationCount
+                              .toString()
+                              .substring(0, 3)
+                          : _tabControllerViewModel.notificationCount
+                              .toString(),
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w600,
+                        color: HexColors.white,
+                      )),
+                  isLabelVisible: _tabControllerViewModel.notificationCount > 0,
+                  child: SvgPicture.asset(
+                    _index == 4
+                        ? 'assets/ic_more_selected.svg'
+                        : 'assets/ic_more.svg',
+                  ),
+                ),
+                label: Titles.more,
+              ),
             ],
             currentIndex: _index,
             onTap: (index) => setState(() {

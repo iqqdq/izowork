@@ -68,14 +68,14 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _dialogViewModel.getUserParams().then((value) => {
             // ADD SOCKET LISTENER
-            _dialogViewModel
-                .connectSocket()
-                .then((value) => _addSocketListener(_dialogViewModel.socket)),
+            _dialogViewModel.connectSocket().then(
+                  (value) => _addSocketListener(_dialogViewModel.socket),
+                ),
 
             // GET MESSAGE DATA
-            _dialogViewModel
-                .getMessageList(pagination: _pagination)
-                .then((value) => _updateBubbles(false))
+            _dialogViewModel.getMessageList(pagination: _pagination).then(
+                  (value) => _updateBubbles(false),
+                )
           });
     });
   }
@@ -102,11 +102,13 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
 
   void _addSocketListener(Socket? socket) {
     _dialogViewModel.newSocket?.onConnect((_) {
-      debugPrint('connect');
+      debugPrint('connection success');
 
       if (_dialogViewModel.token != null) {
         _dialogViewModel.newSocket?.emit(
-            'join', ChatConnectRequest(accessToken: _dialogViewModel.token!));
+          'join',
+          ChatConnectRequest(accessToken: _dialogViewModel.token!),
+        );
       }
     });
 
@@ -225,10 +227,11 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   }
 
   bool _isSamePrevDate(int index) {
-    DateTime date = _dialogViewModel.messages[index].createdAt.toLocal();
+    DateTime date =
+        _dialogViewModel.messages[index].createdAt.toUtc().toLocal();
     DateTime? dateTime = index == _dialogViewModel.messages.length - 1
         ? null
-        : _dialogViewModel.messages[index + 1].createdAt.toLocal();
+        : _dialogViewModel.messages[index + 1].createdAt.toUtc().toLocal();
 
     return date.year == dateTime?.year &&
         date.month == dateTime?.month &&

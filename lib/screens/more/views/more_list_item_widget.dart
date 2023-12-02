@@ -45,20 +45,20 @@ class MoreListItemWidget extends StatelessWidget {
                     ),
 
                     /// BADGE
-                    count == null
-                        ? Container()
-                        : count == 0
-                            ? Container()
-                            : CircleAvatar(
-                                backgroundColor: HexColors.additionalViolet,
-                                radius: 12.0,
-                                child: Center(
-                                    child: Text(count.toString(),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w600,
-                                            color: HexColors.white))))
+                    Badge(
+                      largeSize: 24,
+                      backgroundColor: HexColors.additionalViolet,
+                      label: Text(
+                          count.toString().length > 4
+                              ? count.toString().substring(0, 3)
+                              : count.toString(),
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w600,
+                            color: HexColors.white,
+                          )),
+                      isLabelVisible: count == null ? false : count! > 0,
+                    )
                   ]))
             ]),
         onTap: () => onTap());

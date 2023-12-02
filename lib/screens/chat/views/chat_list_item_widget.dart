@@ -25,8 +25,9 @@ class ChatListItemWidget extends StatelessWidget {
 
     bool _isGroupChat = chat.chatType == "GROUP";
 
-    DateTime? dateTime =
-        chat.lastMessage == null ? null : chat.lastMessage!.createdAt.toLocal();
+    DateTime? dateTime = chat.lastMessage == null
+        ? null
+        : chat.lastMessage!.createdAt.toUtc().toLocal();
 
     bool _isToday = dateTime?.year == DateTime.now().year &&
         dateTime?.month == DateTime.now().month &&

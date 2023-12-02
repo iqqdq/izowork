@@ -260,13 +260,16 @@ abstract class Titles {
   static const infoWasAdded = 'Информация добавлена';
   static const infoWasUpdated = 'Информация обнавлена';
   static const newsWasAdded = 'Новость добавлена';
+
   static const showAllUsers = 'Показать всех участников';
 
   /// ALERTS
   static const warning = 'Внимание';
   static const unsupportedFileFormat = 'Неизвестный формат файла';
   static const locationPermissionDenied =
-      'Разрешите определение местоположения для IZOWORK в настройках телефона';
+      'Разрешите определение местоположения\nв настройках телефона';
+  static const galleryPermissionDenied =
+      'Разрешите доступ к галерее\nв настройках телефона';
   static const addContactWillAllow =
       'Добавление контактов станет доступно\n после создания компании';
 }
