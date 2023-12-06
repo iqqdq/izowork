@@ -148,15 +148,19 @@ class PhaseViewModel with ChangeNotifier {
   }
 
   Future createPhaseChecklistInfo(
-      BuildContext context, int index, String description) async {
+    BuildContext context,
+    int index,
+    String description,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
     await PhaseRepository()
         .createPhaseChecklistInformation(PhaseChecklistInformationRequest(
-            phaseChecklistId:
-                _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
-            description: description))
+          phaseChecklistId:
+              _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
+          description: description,
+        ))
         .then((response) => {
               if (response is PhaseChecklistInformation)
                 {
@@ -232,17 +236,17 @@ class PhaseViewModel with ChangeNotifier {
     BuildContext context,
     int index,
     bool canEdit,
-  ) {
+  ) async {
     PhaseChecklistInformation? phaseChecklistInformation;
 
-    getPhaseChecklistInformationList(
+    await getPhaseChecklistInformationList(
       _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
     ).then((value) => {
           if (_phaseChecklistInformations.isNotEmpty)
             phaseChecklistInformation = _phaseChecklistInformations.first,
 
           // SHOW CHECKLIST SHEET
-          if (phaseChecklistInformation != null && canEdit)
+          if (canEdit)
             {
               showCupertinoModalBottomSheet(
                   enableDrag: false,

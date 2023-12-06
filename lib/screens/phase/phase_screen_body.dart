@@ -20,8 +20,10 @@ import 'package:izowork/screens/phase/views/search_list_item_widget.dart';
 class PhaseCreateScreenBodyWidget extends StatefulWidget {
   final Phase phase;
 
-  const PhaseCreateScreenBodyWidget({Key? key, required this.phase})
-      : super(key: key);
+  const PhaseCreateScreenBodyWidget({
+    Key? key,
+    required this.phase,
+  }) : super(key: key);
 
   @override
   _PhaseScreenBodyState createState() => _PhaseScreenBodyState();
@@ -32,7 +34,10 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _phaseViewModel = Provider.of<PhaseViewModel>(context, listen: true);
+    _phaseViewModel = Provider.of<PhaseViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

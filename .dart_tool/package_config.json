@@ -902,6 +902,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "tab_container",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/tab_container-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "term_glyph",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/term_glyph-1.2.1",
       "packageUri": "lib/",
@@ -1034,7 +1040,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2023-09-29T18:59:36.531263Z",
+  "generated": "2023-12-02T20:51:55.664162Z",
   "generator": "pub",
   "generatorVersion": "3.2.0-22.0.dev"
 }
