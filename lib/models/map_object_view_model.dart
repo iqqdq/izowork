@@ -46,11 +46,9 @@ class MapObjectViewModel with ChangeNotifier {
   }
 
   void showDialogScreen(BuildContext context) {
-    if (object.chat != null) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DialogScreenWidget(chat: object.chat!)));
-    }
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DialogScreenWidget(chat: object.chat!)));
   }
 }

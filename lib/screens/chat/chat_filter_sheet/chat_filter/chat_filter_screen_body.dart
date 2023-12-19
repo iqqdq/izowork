@@ -49,7 +49,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     _chatFilterViewModel =
-//         Provider.of<ChatFilterViewModel>(context, listen: true);
+//         Provider.of<ChatFilterViewModel>(context, listen: true,);
 
 //     return Material(
 //         type: MaterialType.transparency,

@@ -69,7 +69,10 @@ class PhaseViewModel with ChangeNotifier {
     return _phaseChecklistInformations;
   }
 
-  PhaseViewModel(this.phase, this.object) {
+  PhaseViewModel(
+    this.phase,
+    this.object,
+  ) {
     getPhaseContractorList();
   }
 
@@ -92,7 +95,7 @@ class PhaseViewModel with ChangeNotifier {
     await PhaseRepository()
         .getPhaseProducts(phase.id)
         .then((response) => {
-              if (response is List<PhaseProduct>) {_phaseProducts = response}
+              if (response is List<PhaseProduct>) _phaseProducts = response,
             })
         .then(
           (value) => getPhaseDealList(),
@@ -171,12 +174,20 @@ class PhaseViewModel with ChangeNotifier {
                             .then((value) => {
                                   current++,
                                   if (current == _files.length)
-                                    {updateChecklistState(context, index)}
+                                    updateChecklistState(
+                                      context,
+                                      index,
+                                    ),
                                 });
                       })
                     }
                   else
-                    {updateChecklistState(context, index)}
+                    {
+                      updateChecklistState(
+                        context,
+                        index,
+                      ),
+                    }
                 }
               else if (response is ErrorResponse)
                 {
@@ -187,11 +198,15 @@ class PhaseViewModel with ChangeNotifier {
             });
   }
 
-  Future updateChecklistState(BuildContext context, int index) async {
+  Future updateChecklistState(
+    BuildContext context,
+    int index,
+  ) async {
     await PhaseRepository()
         .updatePhaseChecklistState(PhaseChecklistStateRequest(
-            id: _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
-            state: PhaseChecklistState.underReview))
+          id: _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
+          state: PhaseChecklistState.underReview,
+        ))
         .then((response) => {
               if (response is PhaseChecklist)
                 {
@@ -209,10 +224,16 @@ class PhaseViewModel with ChangeNotifier {
         );
   }
 
-  Future uploadFile(BuildContext context, String id, File file) async {
+  Future uploadFile(
+    BuildContext context,
+    String id,
+    File file,
+  ) async {
     await PhaseRepository()
-        .addPhaseChecklistInformationFile(
-            PhaseChecklistInformationFileRequest(id, file))
+        .addPhaseChecklistInformationFile(PhaseChecklistInformationFileRequest(
+          id,
+          file,
+        ))
         .then((response) => {
               if (response is ErrorResponse)
                 {
@@ -254,7 +275,7 @@ class PhaseViewModel with ChangeNotifier {
                   barrierColor: Colors.black.withOpacity(0.6),
                   backgroundColor: HexColors.white,
                   context: context,
-                  builder: (context) => CompleteChecklistScreenWidget(
+                  builder: (sheetContext) => CompleteChecklistScreenWidget(
                       title: _phaseChecklistResponse
                               ?.phaseChecklists[index].name ??
                           '',
@@ -313,7 +334,10 @@ class PhaseViewModel with ChangeNotifier {
                     })));
   }
 
-  void showPhaseCreateScreen(BuildContext context) {
+  void showPhaseCreateScreen(
+    BuildContext context,
+    VoidCallback onUpdate,
+  ) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -324,21 +348,26 @@ class PhaseViewModel with ChangeNotifier {
                   phaseChecklists:
                       _phaseChecklistResponse?.phaseChecklists ?? [],
                   onPop: ((
-                    phaseProducts,
-                    phaseContractors,
-                    phaseChecklists,
+                    newPhaseProducts,
+                    newPhaseContractors,
+                    newPhaseChecklists,
                   ) =>
                       {
-                        _phaseProducts = phaseProducts,
-                        _phaseContractors = phaseContractors,
+                        _phaseProducts = newPhaseProducts,
+                        _phaseContractors = newPhaseContractors,
                         _phaseChecklistResponse?.phaseChecklists =
-                            phaseChecklists,
-                        notifyListeners()
+                            newPhaseChecklists,
+
+                        /// UPDATE UI
+                        onUpdate(),
                       }),
                 )));
   }
 
-  void showDealScreenWidget(BuildContext context, int index) {
+  void showDealScreenWidget(
+    BuildContext context,
+    int index,
+  ) {
     Navigator.push(
         context,
         MaterialPageRoute(

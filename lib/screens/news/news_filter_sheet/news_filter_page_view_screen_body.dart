@@ -35,8 +35,10 @@ class _NewsFilterPageViewScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _newsFilterViewModel =
-        Provider.of<NewsFilterViewModel>(context, listen: true);
+    _newsFilterViewModel = Provider.of<NewsFilterViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

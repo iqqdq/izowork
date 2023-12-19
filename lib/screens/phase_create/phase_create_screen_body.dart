@@ -17,10 +17,15 @@ import 'package:provider/provider.dart';
 
 class PhaseCreateScreenBodyWidget extends StatefulWidget {
   final Function(
-      List<PhaseProduct>, List<PhaseContractor>, List<PhaseChecklist>) onPop;
+    List<PhaseProduct>,
+    List<PhaseContractor>,
+    List<PhaseChecklist>,
+  ) onPop;
 
-  const PhaseCreateScreenBodyWidget({Key? key, required this.onPop})
-      : super(key: key);
+  const PhaseCreateScreenBodyWidget({
+    Key? key,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   _PhaseCreateScreenBodyState createState() => _PhaseCreateScreenBodyState();
@@ -35,13 +40,22 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
   void dispose() {
     _textEditingController.dispose();
     _focusNode.dispose();
+
+    widget.onPop(
+      _phaseCreateViewModel.phaseProducts,
+      _phaseCreateViewModel.phaseContractors,
+      _phaseCreateViewModel.phaseChecklists,
+    );
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _phaseCreateViewModel =
-        Provider.of<PhaseCreateViewModel>(context, listen: true);
+    _phaseCreateViewModel = Provider.of<PhaseCreateViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -52,14 +66,7 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
             backgroundColor: Colors.transparent,
             leading: Padding(
                 padding: const EdgeInsets.only(left: 16.0),
-                child: BackButtonWidget(
-                    onTap: () => {
-                          widget.onPop(
-                              _phaseCreateViewModel.phaseProducts,
-                              _phaseCreateViewModel.phaseContractors,
-                              _phaseCreateViewModel.phaseChecklists),
-                          Navigator.pop(context)
-                        })),
+                child: BackButtonWidget(onTap: () => {Navigator.pop(context)})),
             title: Text(_phaseCreateViewModel.phase.name,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
@@ -117,24 +124,41 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                         itemBuilder: (context, index) {
                                           return PhaseProductListItemWidget(
                                               index: index + 1,
-                                              phaseProduct: _phaseCreateViewModel
-                                                  .phaseProducts[index],
+                                              phaseProduct:
+                                                  _phaseCreateViewModel
+                                                      .phaseProducts[index],
                                               onCountChange: (count) =>
-                                                  _phaseCreateViewModel.changeProductCount(
-                                                      context,
-                                                      index,
-                                                      int.tryParse(count)!),
+                                                  _phaseCreateViewModel
+                                                      .changeProductCount(
+                                                          context,
+                                                          index,
+                                                          int.parse(
+                                                            count.isEmpty
+                                                                ? '0'
+                                                                : count,
+                                                          )),
                                               onTimeChange: (days) =>
                                                   _phaseCreateViewModel
                                                       .changeProductTermInDays(
                                                           context,
                                                           index,
-                                                          int.tryParse(days)!),
+                                                          int.parse(
+                                                            days.isEmpty
+                                                                ? '0'
+                                                                : days,
+                                                          )),
                                               onProductSearchTap: () =>
-                                                  _phaseCreateViewModel.showProductSearchSheet(
-                                                      context, index),
+                                                  _phaseCreateViewModel
+                                                      .showProductSearchSheet(
+                                                    context,
+                                                    index,
+                                                  ),
                                               onDeleteTap: () =>
-                                                  _phaseCreateViewModel.deletePhaseProduct(context, index));
+                                                  _phaseCreateViewModel
+                                                      .deletePhaseProduct(
+                                                    context,
+                                                    index,
+                                                  ));
                                         }),
 
                                     /// ADD PRODUCT BUTTON

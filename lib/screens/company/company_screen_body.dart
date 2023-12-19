@@ -340,7 +340,10 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _companyViewModel = Provider.of<CompanyViewModel>(context, listen: true);
+    _companyViewModel = Provider.of<CompanyViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         extendBodyBehindAppBar: false,

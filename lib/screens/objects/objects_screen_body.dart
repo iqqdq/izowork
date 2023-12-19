@@ -73,7 +73,10 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
   Widget build(BuildContext context) {
     super.build(context);
 
-    _objectsViewModel = Provider.of<ObjectsViewModel>(context, listen: true);
+    _objectsViewModel = Provider.of<ObjectsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

@@ -218,7 +218,7 @@ class PhaseCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchCompanyScreenWidget(
+        builder: (sheetContext) => SearchCompanyScreenWidget(
             title: Titles.contractor,
             isRoot: true,
             onFocus: () => {},
@@ -237,7 +237,7 @@ class PhaseCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchUserScreenWidget(
+        builder: (sheetContext) => SearchUserScreenWidget(
             title: Titles.responsible,
             isRoot: true,
             onFocus: () => {},
@@ -256,7 +256,7 @@ class PhaseCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchUserScreenWidget(
+        builder: (sheetContext) => SearchUserScreenWidget(
             title: Titles.coExecutor,
             isRoot: true,
             onFocus: () => {},
@@ -275,7 +275,7 @@ class PhaseCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchUserScreenWidget(
+        builder: (sheetContext) => SearchUserScreenWidget(
             title: Titles.observer,
             isRoot: true,
             onFocus: () => {},
@@ -294,7 +294,7 @@ class PhaseCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => ProductSelectionScreenWidget(
+        builder: (sheetContext) => ProductSelectionScreenWidget(
             title: Titles.product,
             onPop: (product) => {
                   Navigator.pop(context),

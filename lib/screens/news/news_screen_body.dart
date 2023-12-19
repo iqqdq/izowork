@@ -68,7 +68,10 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _newsViewModel = Provider.of<NewsViewModel>(context, listen: true);
+    _newsViewModel = Provider.of<NewsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

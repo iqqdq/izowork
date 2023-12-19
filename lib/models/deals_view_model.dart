@@ -118,7 +118,7 @@ class DealsViewModel with ChangeNotifier {
         MaterialPageRoute(
             builder: (context) => DealCreateScreenWidget(
                 onCreate: (deal, dealProducts) => {
-                      if (deal != null) {getDealById(deal.id)}
+                      if (deal != null) getDealById(deal.id),
                     })));
   }
 
@@ -129,7 +129,7 @@ class DealsViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => DealsFilterPageViewScreenWidget(
+        builder: (sheetContext) => DealsFilterPageViewScreenWidget(
             dealsFilter: _dealsFilter,
             onPop: (objectsFilter) => {
                   if (objectsFilter == null)

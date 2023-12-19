@@ -86,8 +86,10 @@ class SingleObjectMapViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) =>
-            MapObjectScreenWidget(object: object, hideInfoButton: true));
+        builder: (sheetContext) => MapObjectScreenWidget(
+              object: object,
+              hideInfoButton: true,
+            ));
   }
 
   // MARK: -

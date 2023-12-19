@@ -76,15 +76,17 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
 
       if (_chatViewModel.token != null) {
         socket.emit(
-            'join', ChatConnectRequest(accessToken: _chatViewModel.token!));
+          'join',
+          ChatConnectRequest(accessToken: _chatViewModel.token!),
+        );
       }
     });
 
     socket?.onDisconnect((data) => {
           debugPrint('SOCKET DISCONNECTED'),
-          _chatViewModel
-              .connectSocket()
-              .then((value) => _addSocketListener(_chatViewModel.socket))
+          _chatViewModel.connectSocket().then(
+                (value) => _addSocketListener(socket),
+              )
         });
 
     socket?.on(
@@ -102,14 +104,19 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
 
   Future _onRefresh() async {
     _chatViewModel.getChatList(
-        pagination: _pagination, search: _textEditingController.text);
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    _chatViewModel = Provider.of<ChatViewModel>(context, listen: true);
+    _chatViewModel = Provider.of<ChatViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

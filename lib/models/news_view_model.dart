@@ -100,7 +100,7 @@ class NewsViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => NewsFilterPageViewScreenWidget(
+        builder: (sheetContext) => NewsFilterPageViewScreenWidget(
             newsFilter: _newsFilter,
             onPop: (newsFilter) => {
                   if (newsFilter == null)
@@ -119,7 +119,10 @@ class NewsViewModel with ChangeNotifier {
   }
 
   void showNewsCreationScreen(
-      BuildContext context, Pagination pagination, String search) {
+    BuildContext context,
+    Pagination pagination,
+    String search,
+  ) {
     Navigator.push(
         context,
         MaterialPageRoute(

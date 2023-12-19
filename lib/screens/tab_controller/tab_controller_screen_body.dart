@@ -49,8 +49,10 @@ class _TabControllerScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _tabControllerViewModel =
-        Provider.of<TabControllerViewModel>(context, listen: true);
+    _tabControllerViewModel = Provider.of<TabControllerViewModel>(
+      context,
+      listen: true,
+    );
 
     if (_tabControllerViewModel.loadingStatus == LoadingStatus.completed &&
         _pages?.length == 4) {

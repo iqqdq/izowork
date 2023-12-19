@@ -68,7 +68,10 @@ class MoreViewModel with ChangeNotifier {
               builder: (context) => ProfileScreenWidget(
                   isMine: true,
                   user: _user!,
-                  onPop: (user) => {_user = user, notifyListeners()})));
+                  onPop: (user) => {
+                        _user = user,
+                        notifyListeners(),
+                      })));
     }
   }
 

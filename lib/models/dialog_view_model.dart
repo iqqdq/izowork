@@ -30,7 +30,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' as dartio;
 
 class DialogViewModel with ChangeNotifier {
-  final Socket? socket;
+  final Socket? chatSocket;
   final Chat chat;
   final record = Record();
 
@@ -50,7 +50,7 @@ class DialogViewModel with ChangeNotifier {
 
   final List<Message> _messages = [];
 
-  Socket? get newSocket {
+  Socket? get socket {
     return _socket;
   }
 
@@ -66,20 +66,21 @@ class DialogViewModel with ChangeNotifier {
     return _downloadIndex;
   }
 
-  DialogViewModel(this.socket, this.chat);
+  DialogViewModel(
+    this.chatSocket,
+    this.chat,
+  );
 
   Future connectSocket() async {
-    _socket = socket;
+    _socket = chatSocket ??
+        io(
+            'http://185.116.194.234/',
+            OptionBuilder()
+                .setTransports(['websocket']) // for Flutter or Dart VM
+                .disableAutoConnect() // disable auto-connection
+                .build());
 
-    if (socket == null) {
-      _socket = io(
-              'http://185.116.194.234/',
-              OptionBuilder()
-                  .setTransports(['websocket']) // for Flutter or Dart VM
-                  .disableAutoConnect() // disable auto-connection
-                  .build())
-          .connect();
-    }
+    _socket?.connect();
   }
 
   // MARK: -
@@ -96,7 +97,10 @@ class DialogViewModel with ChangeNotifier {
     }
 
     await DialogRepository()
-        .getMessages(pagination: pagination, id: chat.id)
+        .getMessages(
+          pagination: pagination,
+          id: chat.id,
+        )
         .then((response) => {
               if (response is List<Message>)
                 {
@@ -310,15 +314,16 @@ class DialogViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => DialogAddTaskWidget(
+        builder: (sheetContext) => DialogAddTaskWidget(
             text: text,
             onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => TaskCreateScreenWidget(
-                        message: text,
-                        onCreate: (task) => Toast().showTopToast(context,
-                            '${Titles.task} "${task?.name}" создана'))))));
+                          message: text,
+                          onCreate: (task) => Toast().showTopToast(context,
+                              '${Titles.task} "${task?.name}" создана'),
+                        )))));
   }
 
   void showProfileScreen(BuildContext context, Message message) {
@@ -326,6 +331,9 @@ class DialogViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => ProfileScreenWidget(
-                isMine: false, user: message.user!, onPop: (user) => null)));
+                  isMine: false,
+                  user: message.user!,
+                  onPop: (user) => null,
+                )));
   }
 }

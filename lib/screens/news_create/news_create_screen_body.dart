@@ -51,8 +51,10 @@ class _NewsCreateScreenBodyState extends State<NewsCreateScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _newsCreateViewModel =
-        Provider.of<NewsCreateViewModel>(context, listen: true);
+    _newsCreateViewModel = Provider.of<NewsCreateViewModel>(
+      context,
+      listen: true,
+    );
 
     final TextStyle _style = TextStyle(
         color: HexColors.black, fontFamily: 'PT Root UI', fontSize: 16.0);

@@ -68,8 +68,10 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _companiesViewModel =
-        Provider.of<CompaniesViewModel>(context, listen: true);
+    _companiesViewModel = Provider.of<CompaniesViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

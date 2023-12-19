@@ -36,8 +36,10 @@ class _SelectionScreenBodyState extends State<SelectionScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _selectionViewModel =
-        Provider.of<SelectionViewModel>(context, listen: true);
+    _selectionViewModel = Provider.of<SelectionViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

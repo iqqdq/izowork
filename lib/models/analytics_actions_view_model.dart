@@ -187,8 +187,10 @@ class AnalyticsActionsViewModel with ChangeNotifier {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              NewsPageScreenWidget(news: response, tag: '')))
+                          builder: (context) => NewsPageScreenWidget(
+                                news: response,
+                                tag: '',
+                              )))
                 }
             }
           else
@@ -198,7 +200,10 @@ class AnalyticsActionsViewModel with ChangeNotifier {
   }
 
   Future getPhaseById(
-      BuildContext context, String objectId, String phaseId) async {
+    BuildContext context,
+    String objectId,
+    String phaseId,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -232,14 +237,16 @@ class AnalyticsActionsViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   void showAnalyticsActionFilterSheet(
-      BuildContext context, Function() onFilter) {
+    BuildContext context,
+    Function() onFilter,
+  ) {
     showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => AnalyticsActionsFilterPageViewScreenWidget(
+        builder: (sheetContext) => AnalyticsActionsFilterPageViewScreenWidget(
             analyticsActionsFilter: _analyticsActionsFilter,
             onPop: (analyticsActionsFilter) => {
                   if (analyticsActionsFilter == null)

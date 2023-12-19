@@ -36,7 +36,10 @@ class _RecoveryScreenBodyState extends State<RecoveryScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _recoveryViewModel = Provider.of<RecoveryViewModel>(context, listen: true);
+    _recoveryViewModel = Provider.of<RecoveryViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

@@ -202,7 +202,7 @@ class DealProcessViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (builderContext) => DealProcessInfoSheetWidget(
+        builder: (sheetContext) => DealProcessInfoSheetWidget(
             onTap: (text, files) => {
                   // CREATE PROCESS DESCRIPTION
                   createDealProcessInformation(context, dealProcess.id, text)
@@ -251,9 +251,10 @@ class DealProcessViewModel with ChangeNotifier {
           context,
           MaterialPageRoute(
               builder: (context) => ProfileScreenWidget(
-                  isMine: false,
-                  user: _informations[index].user!,
-                  onPop: (user) => null)));
+                    isMine: false,
+                    user: _informations[index].user!,
+                    onPop: (user) => null,
+                  )));
     }
   }
 

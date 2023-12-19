@@ -354,8 +354,14 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                           0.0
                                       ? 20.0
                                       : MediaQuery.of(context).padding.bottom),
-                              onTap: () => _phaseViewModel
-                                  .showPhaseCreateScreen(context))),
+                              onTap: () =>
+                                  _phaseViewModel.showPhaseCreateScreen(
+                                      context,
+                                      () =>
+                                          // UPDATE UI
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback(
+                                                  (_) => setState(() {}))))),
                   const SeparatorWidget(),
 
                   /// INDICATOR

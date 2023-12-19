@@ -96,7 +96,10 @@ class CompaniesViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showCompanyPageViewScreen(BuildContext context, int index) {
+  void showCompanyPageViewScreen(
+    BuildContext context,
+    int index,
+  ) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -106,7 +109,8 @@ class CompaniesViewModel with ChangeNotifier {
                       if (company != null)
                         {
                           _companies.removeWhere(
-                              (element) => element.id == company.id),
+                            (element) => element.id == company.id,
+                          ),
                           _companies.insert(index, company),
                           notifyListeners()
                         }
@@ -120,7 +124,7 @@ class CompaniesViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => CompaniesFilterPageViewScreenWidget(
+        builder: (sheetContext) => CompaniesFilterPageViewScreenWidget(
             companiesFilter: _companiesFilter,
             onPop: (companiesFilter) => {
                   if (companiesFilter == null)
@@ -142,7 +146,7 @@ class CompaniesViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                const CompanyCreateScreenWidget(onPop: null)));
+          builder: (context) => const CompanyCreateScreenWidget(onPop: null),
+        ));
   }
 }

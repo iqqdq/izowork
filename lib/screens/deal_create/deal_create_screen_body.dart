@@ -52,8 +52,10 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _dealCreateViewModel =
-        Provider.of<DealCreateViewModel>(context, listen: true);
+    _dealCreateViewModel = Provider.of<DealCreateViewModel>(
+      context,
+      listen: true,
+    );
 
     final _startDay =
         _dealCreateViewModel.startDateTime.day.toString().length == 1

@@ -98,8 +98,10 @@ class _CompanyCreateScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _companyCreateViewModel =
-        Provider.of<CompanyCreateViewModel>(context, listen: true);
+    _companyCreateViewModel = Provider.of<CompanyCreateViewModel>(
+      context,
+      listen: true,
+    );
 
     String? _url = _companyCreateViewModel.selectedCompany == null
         ? _companyCreateViewModel.selectedCompany?.image == null

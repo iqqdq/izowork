@@ -72,8 +72,10 @@ class _SearchProductScreenBodyState
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height * 0.9;
 
-    _searchProductViewModel =
-        Provider.of<SearchProductViewModel>(context, listen: true);
+    _searchProductViewModel = Provider.of<SearchProductViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

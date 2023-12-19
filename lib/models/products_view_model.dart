@@ -130,7 +130,7 @@ class ProductsViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => ProductsFilterPageViewScreenWidget(
+        builder: (sheetContext) => ProductsFilterPageViewScreenWidget(
             productsFilter: _productsFilter,
             onPop: (productsFilter) => {
                   if (productsFilter == null)

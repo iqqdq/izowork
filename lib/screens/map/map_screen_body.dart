@@ -184,7 +184,10 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
   Widget build(BuildContext context) {
     super.build(context);
 
-    _mapViewModel = Provider.of<MapViewModel>(context, listen: true);
+    _mapViewModel = Provider.of<MapViewModel>(
+      context,
+      listen: true,
+    );
     _clusterManager ??= _initClusterManager();
 
     return SizedBox.expand(

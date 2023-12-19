@@ -70,8 +70,10 @@ class _SearchOfficeScreenBodyState extends State<SearchOfficeScreenBodyWidget> {
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height * 0.9;
 
-    _searchOfficeViewModel =
-        Provider.of<SearchOfficeViewModel>(context, listen: true);
+    _searchOfficeViewModel = Provider.of<SearchOfficeViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

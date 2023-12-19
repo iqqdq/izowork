@@ -34,8 +34,10 @@ class _TasksFilterPageViewScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _tasksFilterViewModel =
-        Provider.of<TasksFilterViewModel>(context, listen: true);
+    _tasksFilterViewModel = Provider.of<TasksFilterViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

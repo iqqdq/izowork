@@ -236,7 +236,7 @@ class ContactCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchCompanyScreenWidget(
+        builder: (sheetContext) => SearchCompanyScreenWidget(
             title: Titles.company,
             isRoot: true,
             onFocus: () => {},

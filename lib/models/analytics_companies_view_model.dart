@@ -143,14 +143,17 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showSearchOfficeSheet(BuildContext context, bool isManagerOffice) {
+  void showSearchOfficeSheet(
+    BuildContext context,
+    bool isManagerOffice,
+  ) {
     showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchOfficeScreenWidget(
+        builder: (sheetContext) => SearchOfficeScreenWidget(
             isRoot: true,
             title: Titles.filial,
             onFocus: () => {},
@@ -159,9 +162,15 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
                   if (office != null)
                     {
                       if (isManagerOffice)
-                        {_managerOffice = office, getManagerList(office.id)}
+                        {
+                          _managerOffice = office,
+                          getManagerList(office.id),
+                        }
                       else
-                        {_office = office, getDealCount(office.id)}
+                        {
+                          _office = office,
+                          getDealCount(office.id),
+                        }
                     }
                 }));
   }
@@ -173,7 +182,7 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchProductScreenWidget(
+        builder: (sheetContext) => SearchProductScreenWidget(
             isRoot: true,
             title: Titles.product,
             onFocus: () => {},
@@ -188,13 +197,17 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
                 }));
   }
 
-  void showProfileScreen(BuildContext context, int index) {
+  void showProfileScreen(
+    BuildContext context,
+    int index,
+  ) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => ProfileScreenWidget(
-                isMine: false,
-                user: _managerAnalytics!.users[index],
-                onPop: (user) => null)));
+                  isMine: false,
+                  user: _managerAnalytics!.users[index],
+                  onPop: (user) => null,
+                )));
   }
 }

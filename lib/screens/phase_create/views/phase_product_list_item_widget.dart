@@ -15,15 +15,15 @@ class PhaseProductListItemWidget extends StatefulWidget {
   final VoidCallback onDeleteTap;
   final VoidCallback onProductSearchTap;
 
-  const PhaseProductListItemWidget(
-      {Key? key,
-      required this.index,
-      this.phaseProduct,
-      required this.onDeleteTap,
-      required this.onProductSearchTap,
-      required this.onTimeChange,
-      required this.onCountChange})
-      : super(key: key);
+  const PhaseProductListItemWidget({
+    Key? key,
+    required this.index,
+    this.phaseProduct,
+    required this.onDeleteTap,
+    required this.onProductSearchTap,
+    required this.onTimeChange,
+    required this.onCountChange,
+  }) : super(key: key);
 
   @override
   _PhaseProductListItemState createState() => _PhaseProductListItemState();

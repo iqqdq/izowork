@@ -143,7 +143,7 @@ class DealCalendarViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => DateTimeWheelPickerWidget(
+        builder: (sheetContext) => DateTimeWheelPickerWidget(
             minDateTime: _minDateTime,
             maxDateTime: _maxDateTime,
             initialDateTime: _pickedDateTime,
@@ -210,7 +210,7 @@ class DealCalendarViewModel with ChangeNotifier {
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
-          builder: (context) =>
+          builder: (sheetContext) =>
               DealEventScreenWidget(dateTime: dateTime, deals: deals));
     }
   }

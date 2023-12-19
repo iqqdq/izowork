@@ -36,8 +36,10 @@ class _TaskCalendarScreenBodyState extends State<TaskCalendarScreenBodyWidget> {
   Widget build(BuildContext context) {
     const TextStyle _textStyle =
         TextStyle(overflow: TextOverflow.ellipsis, fontFamily: 'PT Root UI');
-    _taskCalendarViewModel =
-        Provider.of<TaskCalendarViewModel>(context, listen: true);
+    _taskCalendarViewModel = Provider.of<TaskCalendarViewModel>(
+      context,
+      listen: true,
+    );
 
     _cleanCalendarController = CleanCalendarController(
         minDate: DateTime(_taskCalendarViewModel.pickedDateTime.year, 1),

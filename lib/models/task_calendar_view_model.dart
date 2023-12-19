@@ -124,7 +124,7 @@ class TaskCalendarViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => DateTimeWheelPickerWidget(
+        builder: (sheetContext) => DateTimeWheelPickerWidget(
             minDateTime: _minDateTime,
             maxDateTime: _maxDateTime,
             initialDateTime: _pickedDateTime,
@@ -156,10 +156,12 @@ class TaskCalendarViewModel with ChangeNotifier {
                           () => {
                                 _pickedDateTime = dateTime,
                                 notifyListeners(),
-                              }).then((value) =>
-                          // CALL CALENDAR SCROLL TO PICKED DATE TIME
-                          Future.delayed(const Duration(milliseconds: 100),
-                              () => didUpdateDateTime(true)))
+                              }).then(
+                        (value) =>
+                            // CALL CALENDAR SCROLL TO PICKED DATE TIME
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () => didUpdateDateTime(true)),
+                      )
                     }
                   else
                     {
@@ -211,8 +213,10 @@ class TaskCalendarViewModel with ChangeNotifier {
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
-          builder: (context) =>
-              TaskEventScreenWidget(dateTime: dateTime, tasks: tasks));
+          builder: (sheetContext) => TaskEventScreenWidget(
+                dateTime: dateTime,
+                tasks: tasks,
+              ));
     }
   }
 }

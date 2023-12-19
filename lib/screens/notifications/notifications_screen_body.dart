@@ -40,8 +40,10 @@ class _NotificationsScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _notificationsViewModel =
-        Provider.of<NotificationsViewModel>(context, listen: true);
+    _notificationsViewModel = Provider.of<NotificationsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

@@ -35,8 +35,10 @@ class _ProductsFilterPageViewScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _productsFilterViewModel =
-        Provider.of<ProductsFilterViewModel>(context, listen: true);
+    _productsFilterViewModel = Provider.of<ProductsFilterViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

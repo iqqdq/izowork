@@ -30,14 +30,15 @@ class ContactViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ContactCreateScreenWidget(
-                company: selectedContact.company,
-                contact: selectedContact,
-                onPop: (contact) => {
-                      _contact = contact,
-                      if (context.mounted) notifyListeners()
-                    },
-                onDelete: (contact) => onDelete(contact))));
+            builder: (sheetContext) => ContactCreateScreenWidget(
+                  company: selectedContact.company,
+                  contact: selectedContact,
+                  onPop: (contact) => {
+                    _contact = contact,
+                    if (context.mounted) notifyListeners()
+                  },
+                  onDelete: (contact) => onDelete(contact),
+                )));
   }
 
   // MARK: -

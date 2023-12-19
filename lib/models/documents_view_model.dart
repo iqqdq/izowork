@@ -153,9 +153,10 @@ class DocumentsViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => DocumentsScreenWidget(
-                id: _documents[index].id,
-                title: _documents[index].name,
-                namespace: _documents[index].namespace)));
+                  id: _documents[index].id,
+                  title: _documents[index].name,
+                  namespace: _documents[index].namespace,
+                )));
   }
 
   void showDocumentsFilterSheet(BuildContext context, Function() onFilter) {
@@ -165,7 +166,7 @@ class DocumentsViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => DocumentsFilterPageViewScreenWidget(
+        builder: (sheetContext) => DocumentsFilterPageViewScreenWidget(
             documentsFilter: _documentsFilter,
             onPop: (contactsFilter) => {
                   if (contactsFilter == null)

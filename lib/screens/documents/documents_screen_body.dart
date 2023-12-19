@@ -69,8 +69,10 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _documentsViewModel =
-        Provider.of<DocumentsViewModel>(context, listen: true);
+    _documentsViewModel = Provider.of<DocumentsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         extendBodyBehindAppBar: false,

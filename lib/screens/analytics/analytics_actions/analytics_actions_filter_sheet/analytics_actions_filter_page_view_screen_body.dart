@@ -46,7 +46,10 @@ class _AnalyticsActionsFilterPageViewScreenBodyState
   @override
   Widget build(BuildContext context) {
     _analyticsActionsFilterViewModel =
-        Provider.of<AnalyticsActionsFilterViewModel>(context, listen: true);
+        Provider.of<AnalyticsActionsFilterViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

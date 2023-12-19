@@ -74,7 +74,10 @@ class _TasksScreenBodyState extends State<TasksScreenBodyWidget>
   Widget build(BuildContext context) {
     super.build(context);
 
-    _tasksViewModel = Provider.of<TasksViewModel>(context, listen: true);
+    _tasksViewModel = Provider.of<TasksViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

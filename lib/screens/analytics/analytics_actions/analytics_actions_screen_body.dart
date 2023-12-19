@@ -65,8 +65,10 @@ class _AnalyticsActionsScreenBodyState
         ? 12.0
         : MediaQuery.of(context).padding.bottom;
 
-    _analyticsActionsViewModel =
-        Provider.of<AnalyticsActionsViewModel>(context, listen: true);
+    _analyticsActionsViewModel = Provider.of<AnalyticsActionsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

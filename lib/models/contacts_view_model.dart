@@ -110,7 +110,7 @@ class ContactsViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ContactCreateScreenWidget(
+            builder: (newContext) => ContactCreateScreenWidget(
                 company: company,
                 contact: null,
                 onDelete: null,
@@ -120,10 +120,7 @@ class ContactsViewModel with ChangeNotifier {
                           if (contact != null)
                             {
                               _contacts.insert(0, contact),
-                              Future.delayed(
-                                  const Duration(milliseconds: 100),
-                                  () =>
-                                      {if (context.mounted) notifyListeners()})
+                              if (context.mounted) notifyListeners(),
                             }
                         }
                       else
@@ -138,7 +135,7 @@ class ContactsViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => ContactsFilterPageViewScreenWidget(
+        builder: (sheetContext) => ContactsFilterPageViewScreenWidget(
             contactsFilter: _contactsFilter,
             onPop: (contactsFilter) => {
                   if (contactsFilter == null)

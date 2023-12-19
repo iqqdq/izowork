@@ -40,8 +40,10 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
   Widget build(BuildContext context) {
     super.build(context);
 
-    _objectPageViewModel =
-        Provider.of<ObjectPageViewModel>(context, listen: true);
+    _objectPageViewModel = Provider.of<ObjectPageViewModel>(
+      context,
+      listen: true,
+    );
 
     String _kiso = _objectPageViewModel.object?.kiso ??
         _objectPageViewModel.selectedObject.kiso ??

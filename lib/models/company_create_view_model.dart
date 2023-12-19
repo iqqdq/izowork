@@ -296,7 +296,7 @@ class CompanyCreateViewModel with ChangeNotifier {
             barrierColor: Colors.black.withOpacity(0.6),
             backgroundColor: HexColors.white,
             context: context,
-            builder: (context) => SelectionScreenWidget(
+            builder: (sheetContext) => SelectionScreenWidget(
                 title: Titles.productType,
                 value: _type ?? selectedCompany?.type ?? '',
                 items: items,
@@ -319,7 +319,7 @@ class CompanyCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => ContactsScreenWidget(
+        builder: (sheetContext) => ContactsScreenWidget(
             company: _company,
             onPop: (contact) => {
                   updateContactInfo(context, contact),
@@ -339,7 +339,7 @@ class CompanyCreateViewModel with ChangeNotifier {
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
-          builder: (context) => SelectionScreenWidget(
+          builder: (sheetContext) => SelectionScreenWidget(
               title: Titles.productType,
               value: _productType?.name ??
                   selectedCompany?.productType?.name ??

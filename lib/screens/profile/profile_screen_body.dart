@@ -41,7 +41,10 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _profileViewModel = Provider.of<ProfileViewModel>(context, listen: true);
+    _profileViewModel = Provider.of<ProfileViewModel>(
+      context,
+      listen: true,
+    );
 
     String? _url = _profileViewModel.user == null
         ? _profileViewModel.currentUser.avatar == null

@@ -36,8 +36,10 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
   Widget build(BuildContext context) {
     const TextStyle _textStyle =
         TextStyle(overflow: TextOverflow.ellipsis, fontFamily: 'PT Root UI');
-    _dealCalendarViewModel =
-        Provider.of<DealCalendarViewModel>(context, listen: true);
+    _dealCalendarViewModel = Provider.of<DealCalendarViewModel>(
+      context,
+      listen: true,
+    );
 
     _cleanCalendarController = CleanCalendarController(
         minDate: DateTime(_dealCalendarViewModel.pickedDateTime.year, 1),

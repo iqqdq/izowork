@@ -73,8 +73,10 @@ class _ContactCreateScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _contactCreateViewModel =
-        Provider.of<ContactCreateViewModel>(context, listen: true);
+    _contactCreateViewModel = Provider.of<ContactCreateViewModel>(
+      context,
+      listen: true,
+    );
 
     if (_isRequesting && _contactCreateViewModel.contact != null) {
       _isRequesting = false;

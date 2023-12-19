@@ -110,9 +110,10 @@ class NewsCommentsViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => ProfileScreenWidget(
-                isMine: false,
-                user: _comments[index].user,
-                onPop: (user) => null)));
+                  isMine: false,
+                  user: _comments[index].user,
+                  onPop: (user) => null,
+                )));
   }
 
   // MARK: -

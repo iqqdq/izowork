@@ -152,7 +152,7 @@ class TasksViewModel with ChangeNotifier {
             barrierColor: Colors.black.withOpacity(0.6),
             backgroundColor: HexColors.white,
             context: context,
-            builder: (context) => TasksFilterPageViewScreenWidget(
+            builder: (sheetContext) => TasksFilterPageViewScreenWidget(
                 options: _taskState!.states,
                 tasksFilter: _tasksFilter,
                 onPop: (tasksFilter) => {

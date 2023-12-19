@@ -55,8 +55,10 @@ class _ObjectActionsScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _objectActionsViewModel =
-        Provider.of<ObjectActionsViewModel>(context, listen: true);
+    _objectActionsViewModel = Provider.of<ObjectActionsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

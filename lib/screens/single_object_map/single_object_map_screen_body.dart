@@ -114,8 +114,10 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _singleObjectMapViewModel =
-        Provider.of<SingleObjectMapViewModel>(context, listen: true);
+    _singleObjectMapViewModel = Provider.of<SingleObjectMapViewModel>(
+      context,
+      listen: true,
+    );
     _clusterManager ??= _initClusterManager();
 
     return Scaffold(

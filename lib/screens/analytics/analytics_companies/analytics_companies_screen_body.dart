@@ -96,8 +96,10 @@ class _AnalyticsCompaniesScreenBodyState
         ? 12.0
         : MediaQuery.of(context).padding.bottom;
 
-    _analyticsCompaniesViewModel =
-        Provider.of<AnalyticsCompaniesViewModel>(context, listen: true);
+    _analyticsCompaniesViewModel = Provider.of<AnalyticsCompaniesViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

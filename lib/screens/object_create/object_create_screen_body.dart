@@ -120,8 +120,10 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _objectCreateViewModel =
-        Provider.of<ObjectCreateViewModel>(context, listen: true);
+    _objectCreateViewModel = Provider.of<ObjectCreateViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

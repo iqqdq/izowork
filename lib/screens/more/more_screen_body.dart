@@ -38,7 +38,10 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
   Widget build(BuildContext context) {
     super.build(context);
 
-    _moreViewModel = Provider.of<MoreViewModel>(context, listen: true);
+    _moreViewModel = Provider.of<MoreViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

@@ -29,8 +29,10 @@ class _DealEventScreenBodyState extends State<DealEventScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _dealEventViewModel =
-        Provider.of<DealEventViewModel>(context, listen: true);
+    _dealEventViewModel = Provider.of<DealEventViewModel>(
+      context,
+      listen: true,
+    );
 
     final _day = DateTime.now().day.toString().length == 1
         ? '0${DateTime.now().day}'

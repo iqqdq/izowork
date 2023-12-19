@@ -71,8 +71,10 @@ class _SearchCompanyScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _searchCompanyViewModel =
-        Provider.of<SearchCompanyViewModel>(context, listen: true);
+    _searchCompanyViewModel = Provider.of<SearchCompanyViewModel>(
+      context,
+      listen: true,
+    );
 
     final _height = MediaQuery.of(context).size.height * 0.9;
     final _addCompanyButton = BorderButtonWidget(

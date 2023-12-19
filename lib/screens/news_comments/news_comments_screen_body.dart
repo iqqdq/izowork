@@ -79,8 +79,10 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _newsCommentsViewModel =
-        Provider.of<NewsCommentsViewModel>(context, listen: true);
+    _newsCommentsViewModel = Provider.of<NewsCommentsViewModel>(
+      context,
+      listen: true,
+    );
 
     if (_newsCommentsViewModel.news.files.isNotEmpty &&
         _images.length != _newsCommentsViewModel.news.files.length) {

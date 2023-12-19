@@ -66,17 +66,14 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _dialogViewModel.getUserParams().then((value) => {
-            // ADD SOCKET LISTENER
-            _dialogViewModel.connectSocket().then(
-                  (value) => _addSocketListener(_dialogViewModel.socket),
-                ),
-
-            // GET MESSAGE DATA
-            _dialogViewModel.getMessageList(pagination: _pagination).then(
-                  (value) => _updateBubbles(false),
-                )
-          });
+      _dialogViewModel.getUserParams().then((value) => _dialogViewModel
+          .connectSocket()
+          .then((value) => _addSocketListener(_dialogViewModel.socket))
+          .then(
+            (value) => _dialogViewModel
+                .getMessageList(pagination: _pagination)
+                .then((value) => _updateBubbles(false)),
+          ));
     });
   }
 
@@ -85,8 +82,8 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
     _scrollController.dispose();
     _textEditingController.dispose();
     _focusNode.dispose();
-    _dialogViewModel.newSocket?.disconnect();
-    _dialogViewModel.newSocket?.dispose();
+    _dialogViewModel.socket?.disconnect();
+    _dialogViewModel.socket?.dispose();
 
     if (widget.onPop != null && _dialogViewModel.messages.isNotEmpty) {
       widget.onPop!(_dialogViewModel.messages.first);
@@ -101,27 +98,32 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   // MARK: - FUNCTIONS
 
   void _addSocketListener(Socket? socket) {
-    _dialogViewModel.newSocket?.onConnect((_) {
-      debugPrint('connection success');
+    socket?.onConnect((_) {
+      debugPrint('SOCKET CONNECTION SUCCESS');
 
       if (_dialogViewModel.token != null) {
-        _dialogViewModel.newSocket?.emit(
+        socket.emit(
           'join',
           ChatConnectRequest(accessToken: _dialogViewModel.token!),
         );
       }
     });
 
-    _dialogViewModel.newSocket?.onConnectError((_) {
-      debugPrint('connection error');
-    });
+    socket?.onDisconnect((data) => {
+          debugPrint('SOCKET DISCONNECTED'),
+          _dialogViewModel.connectSocket().then(
+                (value) => _addSocketListener(_dialogViewModel.socket),
+              )
+        });
 
-    _dialogViewModel.newSocket?.on(
+    socket?.on(
         'message',
         (data) => {
               // UPDATE MESSAGES DATA
-              _dialogViewModel.messages
-                  .insert(0, Message.fromJson(data["message"])),
+              _dialogViewModel.messages.insert(
+                0,
+                Message.fromJson(data["message"]),
+              ),
 
               // UPDATE NEW MESSAGE COUNT
               if (_dialogViewModel.userId !=
@@ -257,7 +259,10 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _dialogViewModel = Provider.of<DialogViewModel>(context, listen: true);
+    _dialogViewModel = Provider.of<DialogViewModel>(
+      context,
+      listen: true,
+    );
 
     _isGroupChat = _dialogViewModel.chat.chatType == 'GROUP';
 
@@ -366,12 +371,25 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                     _audio.play(),
 
                     /// SEND MESSAGE
-                    _dialogViewModel.newSocket?.emit(
+                    _dialogViewModel.socket?.emit(
                         'message',
                         MessageRequest(
-                            chatId: _dialogViewModel.chat.id,
-                            accessToken: _dialogViewModel.token!,
-                            message: _textEditingController.text)),
+                          chatId: _dialogViewModel.chat.id,
+                          accessToken: _dialogViewModel.token!,
+                          message: _textEditingController.text,
+                        )),
+
+                    /// REPEAT SOCKET CONNECT IF GROUP CHAT WAS EMPTY BEFORE OUR MESSAGE
+                    if (_isGroupChat && _dialogViewModel.messages.isEmpty)
+                      {
+                        _dialogViewModel
+                            .getMessageList(pagination: _pagination)
+                            .then((value) => _updateBubbles(true))
+                            .then((value) => _dialogViewModel
+                                .connectSocket()
+                                .then((value) => _addSocketListener(
+                                    _dialogViewModel.socket)))
+                      },
 
                     /// CLEAR INPUT
                     _textEditingController.clear(),

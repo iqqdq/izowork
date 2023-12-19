@@ -30,8 +30,10 @@ class _ContactsFilterPageViewScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _contactsFilterViewModel =
-        Provider.of<ContactsFilterViewModel>(context, listen: true);
+    _contactsFilterViewModel = Provider.of<ContactsFilterViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

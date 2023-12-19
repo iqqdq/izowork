@@ -11,14 +11,20 @@ class DialogScreenWidget extends StatelessWidget {
   final Chat chat;
   final Function(Message)? onPop;
 
-  const DialogScreenWidget(
-      {Key? key, this.socket, required this.chat, this.onPop})
-      : super(key: key);
+  const DialogScreenWidget({
+    Key? key,
+    this.socket,
+    required this.chat,
+    this.onPop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => DialogViewModel(socket, chat),
+        create: (context) => DialogViewModel(
+              socket,
+              chat,
+            ),
         child: DialogScreenBodyWidget(onPop: onPop));
   }
 }

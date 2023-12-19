@@ -29,8 +29,10 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _taskEventViewModel =
-        Provider.of<TaskEventViewModel>(context, listen: true);
+    _taskEventViewModel = Provider.of<TaskEventViewModel>(
+      context,
+      listen: true,
+    );
 
     final _day = DateTime.now().day.toString().length == 1
         ? '0${DateTime.now().day}'

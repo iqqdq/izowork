@@ -24,7 +24,10 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _taskViewModel = Provider.of<TaskViewModel>(context, listen: true);
+    _taskViewModel = Provider.of<TaskViewModel>(
+      context,
+      listen: true,
+    );
 
     final dateTime = DateTime.parse(_taskViewModel.task?.deadline ??
             _taskViewModel.selectedTask.deadline)

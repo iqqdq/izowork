@@ -148,7 +148,7 @@ class ObjectsViewModel with ChangeNotifier {
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
-          builder: (context) => ObjectsFilterPageViewScreenWidget(
+          builder: (sheetContext) => ObjectsFilterPageViewScreenWidget(
               objectStages: _objectStages!,
               objectsFilter: _objectsFilter,
               onPop: (objectsFilter) => {

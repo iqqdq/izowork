@@ -77,8 +77,10 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _profileEditViewModel =
-        Provider.of<ProfileEditViewModel>(context, listen: true);
+    _profileEditViewModel = Provider.of<ProfileEditViewModel>(
+      context,
+      listen: true,
+    );
 
     if (_isRequesting && _profileEditViewModel.user != null) {
       _isRequesting = false;

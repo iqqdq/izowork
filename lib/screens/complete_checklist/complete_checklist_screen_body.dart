@@ -51,8 +51,10 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _completeChecklistViewModel =
-        Provider.of<CompleteChecklistViewModel>(context, listen: true);
+    _completeChecklistViewModel = Provider.of<CompleteChecklistViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

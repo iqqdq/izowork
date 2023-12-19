@@ -7,8 +7,10 @@ import 'package:izowork/services/urls.dart';
 import 'package:izowork/services/web_service.dart';
 
 class DialogRepository {
-  Future<dynamic> getMessages(
-      {required Pagination pagination, required String id}) async {
+  Future<dynamic> getMessages({
+    required Pagination pagination,
+    required String id,
+  }) async {
     var url = messageUrl +
         '?&offset=${pagination.offset}&limit=${pagination.size}&chat_id=$id';
 

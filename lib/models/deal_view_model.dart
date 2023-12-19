@@ -287,7 +287,11 @@ class DealViewModel with ChangeNotifier {
             builder: (context) => DealCreateScreenWidget(
                 deal: selectedDeal,
                 phase: _phase,
-                onCreate: (deal, dealProducts) => {
+                onCreate: (
+                  deal,
+                  dealProducts,
+                ) =>
+                    {
                       _deal = deal,
                       _dealProducts = dealProducts,
                       notifyListeners()
@@ -301,7 +305,7 @@ class DealViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => DealCloseSheetWidget(
+        builder: (sheetContext) => DealCloseSheetWidget(
             onTap: (text, files) => {
                   Navigator.pop(context),
                   closeDeal(context, text).then((value) => {
@@ -332,7 +336,10 @@ class DealViewModel with ChangeNotifier {
                 }));
   }
 
-  void showDealProcessScreen(BuildContext context, DealProcess dealProcess) {
+  void showDealProcessScreen(
+    BuildContext context,
+    DealProcess dealProcess,
+  ) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -356,7 +363,7 @@ class DealViewModel with ChangeNotifier {
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
-          builder: (context) => SelectionScreenWidget(
+          builder: (sheetContext) => SelectionScreenWidget(
               title: Titles.addProcess,
               value: '',
               items: items,
@@ -382,7 +389,7 @@ class DealViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => DealProcessActionSheet(
+        builder: (sheetContext) => DealProcessActionSheet(
             title: process.name,
             onTap: (index) => {
                   if (index == 0) // EDIT PROCESS

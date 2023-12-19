@@ -66,8 +66,10 @@ class _ParticipantsScreenBodyState extends State<ParticipantsScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _participantsViewModel =
-        Provider.of<ParticipantsViewModel>(context, listen: true);
+    _participantsViewModel = Provider.of<ParticipantsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

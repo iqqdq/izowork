@@ -31,8 +31,10 @@ class _ProductTypeSelectionScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _productTypeSelectionViewModel =
-        Provider.of<ProductTypeSelectionViewModel>(context, listen: true);
+    _productTypeSelectionViewModel = Provider.of<ProductTypeSelectionViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

@@ -186,7 +186,10 @@ class CompanyViewModel with ChangeNotifier {
                   user: _company!.manager!,
                   onPop: (user) => {
                         if (context.mounted)
-                          {_company?.manager = user, notifyListeners()}
+                          {
+                            _company?.manager = user,
+                            notifyListeners(),
+                          }
                       })));
     }
   }
@@ -205,8 +208,12 @@ class CompanyViewModel with ChangeNotifier {
         MaterialPageRoute(
             builder: (context) => CompanyCreateScreenWidget(
                 company: company,
-                onPop: (company) =>
-                    {getCompanyById(context, selectedCompany.id)})));
+                onPop: (company) => {
+                      getCompanyById(
+                        context,
+                        selectedCompany.id,
+                      )
+                    })));
   }
 
   void showProductFilterSheet(BuildContext context, Function() onFilter) {
@@ -216,7 +223,7 @@ class CompanyViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => ProductsFilterPageViewScreenWidget(
+        builder: (sheetContext) => ProductsFilterPageViewScreenWidget(
             productsFilter: _productsFilter,
             onPop: (productsFilter) => {
                   if (productsFilter == null)
@@ -244,10 +251,12 @@ class CompanyViewModel with ChangeNotifier {
                       if (_company == null)
                         {
                           _company?.contacts.removeWhere(
-                              (element) => element.id == contact.id),
+                            (element) => element.id == contact.id,
+                          ),
                         },
-                      selectedCompany.contacts
-                          .removeWhere((element) => element.id == contact.id),
+                      selectedCompany.contacts.removeWhere(
+                        (element) => element.id == contact.id,
+                      ),
                       notifyListeners()
                     })));
   }

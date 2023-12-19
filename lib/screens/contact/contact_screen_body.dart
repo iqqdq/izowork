@@ -27,7 +27,10 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _contactViewModel = Provider.of<ContactViewModel>(context, listen: true);
+    _contactViewModel = Provider.of<ContactViewModel>(
+      context,
+      listen: true,
+    );
 
     String? _url = _contactViewModel.contact == null
         ? null

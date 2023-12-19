@@ -30,8 +30,21 @@ class ChatViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future getChatList(
-      {required Pagination pagination, required String search}) async {
+  Future connectSocket() async {
+    _socket = io(
+        'http://185.116.194.234/',
+        OptionBuilder()
+            .setTransports(['websocket']) // for Flutter or Dart VM
+            .disableAutoConnect() // disable auto-connection
+            .build());
+
+    _socket?.connect();
+  }
+
+  Future getChatList({
+    required Pagination pagination,
+    required String search,
+  }) async {
     if (pagination.offset == 0 && loadingStatus == LoadingStatus.empty) {
       loadingStatus = LoadingStatus.searching;
       _chats.clear();
@@ -91,17 +104,6 @@ class ChatViewModel with ChangeNotifier {
             });
   }
 
-  Future connectSocket() async {
-    _socket = io(
-        'http://185.116.194.234/',
-        OptionBuilder()
-            .setTransports(['websocket']) // for Flutter or Dart VM
-            .disableAutoConnect() // disable auto-connection
-            .build());
-
-    _socket?.connect();
-  }
-
   // MARK: -
   // MARK: - FUNCTIONS
 
@@ -117,7 +119,10 @@ class ChatViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showDialogScreen(BuildContext context, int index) {
+  void showDialogScreen(
+    BuildContext context,
+    int index,
+  ) {
     // CLEAR UNREAD MESSAGE COUNT
     _chats[index].unreadCount = 0;
     notifyListeners();
@@ -135,13 +140,19 @@ class ChatViewModel with ChangeNotifier {
                           element.lastMessage = message;
                         }
                       }),
-                      Future.delayed(Duration.zero, () => notifyListeners())
+                      Future.delayed(
+                        Duration.zero,
+                        () => notifyListeners(),
+                      )
                     })));
   }
 
   void showStaffScreen(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const StaffScreenWidget()));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const StaffScreenWidget(),
+        ));
   }
 
   // void showMapFilterSheet(BuildContext context) {

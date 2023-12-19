@@ -30,8 +30,10 @@ class _DocumentsFilterPageViewScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _documentsFilterViewModel =
-        Provider.of<DocumentsFilterViewModel>(context, listen: true);
+    _documentsFilterViewModel = Provider.of<DocumentsFilterViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

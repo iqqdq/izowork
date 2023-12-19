@@ -249,10 +249,14 @@ class ObjectActionsViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => ObjectActionCreateSheetWidget(
+        builder: (sheetContext) => ObjectActionCreateSheetWidget(
             onTap: (text) => {
                   Navigator.pop(context),
-                  addObjectTrace(context, pagination, text)
+                  addObjectTrace(
+                    context,
+                    pagination,
+                    text,
+                  )
                 }));
   }
 

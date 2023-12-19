@@ -30,7 +30,10 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _dealViewModel = Provider.of<DealViewModel>(context, listen: true);
+    _dealViewModel = Provider.of<DealViewModel>(
+      context,
+      listen: true,
+    );
 
     final startDateTime = DateTime.parse(_dealViewModel.deal?.createdAt ??
             _dealViewModel.selectedDeal.createdAt)

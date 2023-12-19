@@ -66,8 +66,10 @@ class _ProductSelectionScreenBodyState
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height * 0.9;
 
-    _productSelectionViewModel =
-        Provider.of<ProductSelectionViewModel>(context, listen: true);
+    _productSelectionViewModel = Provider.of<ProductSelectionViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

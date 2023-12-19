@@ -18,12 +18,19 @@ class AuthorizationViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALLS
 
-  Future authorize(BuildContext context, String email, String password) async {
+  Future authorize(
+    BuildContext context,
+    String email,
+    String password,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
     await AuthorizationRepository()
-        .login(AuthorizationRequest(email: email, password: password))
+        .login(AuthorizationRequest(
+          email: email,
+          password: password,
+        ))
         .then((response) => {
               if (response is Authorization)
                 {
@@ -51,11 +58,12 @@ class AuthorizationViewModel with ChangeNotifier {
               UserParams().setUserId(response.id).then((value) =>
                   // SHOW MAIN SREEN
                   Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const TabControllerScreenWidget()),
-                      (route) => false))
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const TabControllerScreenWidget()),
+                    (route) => false,
+                  ))
             }
           else
             {loadingStatus = LoadingStatus.error, notifyListeners()}

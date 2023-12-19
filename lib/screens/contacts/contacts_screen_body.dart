@@ -60,7 +60,10 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _contactsViewModel = Provider.of<ContactsViewModel>(context, listen: true);
+    _contactsViewModel = Provider.of<ContactsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

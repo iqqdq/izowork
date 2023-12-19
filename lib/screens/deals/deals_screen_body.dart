@@ -74,7 +74,10 @@ class _DealsScreenBodyState extends State<DealsScreenBodyWidget>
   Widget build(BuildContext context) {
     super.build(context);
 
-    _dealsViewModel = Provider.of<DealsViewModel>(context, listen: true);
+    _dealsViewModel = Provider.of<DealsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

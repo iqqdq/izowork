@@ -373,11 +373,14 @@ class TaskCreateViewModel with ChangeNotifier {
             barrierColor: Colors.black.withOpacity(0.6),
             backgroundColor: HexColors.white,
             context: context,
-            builder: (context) => SelectionScreenWidget(
+            builder: (sheetContext) => SelectionScreenWidget(
                 title: Titles.status,
                 value: _state ?? task?.state ?? '',
                 items: _taskState!.states,
-                onSelectTap: (state) => {_state = state, notifyListeners()}));
+                onSelectTap: (state) => {
+                      _state = state,
+                      notifyListeners(),
+                    }));
       }
     }
   }
@@ -392,7 +395,7 @@ class TaskCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => DateTimeWheelPickerWidget(
+        builder: (sheetContext) => DateTimeWheelPickerWidget(
             minDateTime: _minDateTime,
             maxDateTime: _maxDateTime,
             initialDateTime: _pickedDateTime,
@@ -428,7 +431,7 @@ class TaskCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchUserScreenWidget(
+        builder: (sheetContext) => SearchUserScreenWidget(
             title: index == 1
                 ? Titles.manager
                 : index == 2
@@ -454,7 +457,7 @@ class TaskCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchObjectScreenWidget(
+        builder: (sheetContext) => SearchObjectScreenWidget(
             title: Titles.manager,
             isRoot: true,
             onFocus: () => {},
@@ -469,7 +472,7 @@ class TaskCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchCompanyScreenWidget(
+        builder: (sheetContext) => SearchCompanyScreenWidget(
             title: Titles.company,
             isRoot: true,
             onFocus: () => {},

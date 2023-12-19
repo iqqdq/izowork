@@ -25,6 +25,7 @@ class _AuthorizationScreenBodyState
   final TextEditingController _passwordTextEditingController =
       TextEditingController();
   final FocusNode _passwordFocusNode = FocusNode();
+
   late AuthorizationViewModel _authorizationViewModel;
 
   @override
@@ -38,8 +39,10 @@ class _AuthorizationScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    _authorizationViewModel =
-        Provider.of<AuthorizationViewModel>(context, listen: true);
+    _authorizationViewModel = Provider.of<AuthorizationViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -61,32 +64,34 @@ class _AuthorizationScreenBodyState
 
                   /// LOGIN INPUT
                   InputWidget(
-                      height: 56.0,
-                      textEditingController: _loginTextEditingController,
-                      focusNode: _loginFocusNode,
-                      textInputType: TextInputType.emailAddress,
-                      textCapitalization: TextCapitalization.none,
-                      margin: EdgeInsets.zero,
-                      placeholder: Titles.login,
-                      onTap: () => setState(() {}),
-                      onChange: (text) => setState(() {}),
-                      onClearTap: () => setState(() {}),
-                      onEditingComplete: (() =>
-                          _passwordFocusNode.requestFocus())),
+                    height: 56.0,
+                    textEditingController: _loginTextEditingController,
+                    focusNode: _loginFocusNode,
+                    textInputType: TextInputType.emailAddress,
+                    textCapitalization: TextCapitalization.none,
+                    margin: EdgeInsets.zero,
+                    placeholder: Titles.login,
+                    onTap: () => setState(() {}),
+                    onChange: (text) => setState(() {}),
+                    onClearTap: () => setState(() {}),
+                    onEditingComplete: (() =>
+                        setState(() => _passwordFocusNode.requestFocus())),
+                  ),
                   const SizedBox(height: 16.0),
 
                   /// PASSWORD INPUT
                   InputWidget(
-                      height: 56.0,
-                      textEditingController: _passwordTextEditingController,
-                      focusNode: _passwordFocusNode,
-                      obscureText: true,
-                      textCapitalization: TextCapitalization.none,
-                      margin: EdgeInsets.zero,
-                      placeholder: Titles.password,
-                      onTap: () => setState(() {}),
-                      onChange: (text) => setState(() {}),
-                      onClearTap: () => setState(() {})),
+                    height: 56.0,
+                    textEditingController: _passwordTextEditingController,
+                    focusNode: _passwordFocusNode,
+                    obscureText: true,
+                    textCapitalization: TextCapitalization.none,
+                    margin: EdgeInsets.zero,
+                    placeholder: Titles.password,
+                    onTap: () => setState(() {}),
+                    onChange: (text) => setState(() {}),
+                    onClearTap: () => setState(() {}),
+                  ),
                   const SizedBox(height: 24.0),
                   ButtonWidget(
                       isDisabled: _loginTextEditingController.text.isEmpty ||
@@ -94,15 +99,17 @@ class _AuthorizationScreenBodyState
                       title: Titles.enter,
                       margin: EdgeInsets.zero,
                       onTap: () => _authorizationViewModel.authorize(
-                          context,
-                          _loginTextEditingController.text,
-                          _passwordTextEditingController.text)),
+                            context,
+                            _loginTextEditingController.text,
+                            _passwordTextEditingController.text,
+                          )),
                   const SizedBox(height: 24.0),
                   TransparentButtonWidget(
-                      title: Titles.forgotPassword,
-                      margin: EdgeInsets.zero,
-                      onTap: () =>
-                          _authorizationViewModel.showRecoveryScreen(context))
+                    title: Titles.forgotPassword,
+                    margin: EdgeInsets.zero,
+                    onTap: () =>
+                        _authorizationViewModel.showRecoveryScreen(context),
+                  )
                 ])
           ]),
 

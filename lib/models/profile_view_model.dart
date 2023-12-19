@@ -96,7 +96,10 @@ class ProfileViewModel with ChangeNotifier {
           MaterialPageRoute(
               builder: (context) => ProfileEditScreenWidget(
                   user: _user!,
-                  onPop: (user) => {_user = user, notifyListeners()})));
+                  onPop: (user) => {
+                        _user = user,
+                        notifyListeners(),
+                      })));
     }
   }
 }

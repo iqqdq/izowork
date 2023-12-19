@@ -464,7 +464,7 @@ class ObjectCreateViewModel with ChangeNotifier {
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
-          builder: (context) => SelectionScreenWidget(
+          builder: (sheetContext) => SelectionScreenWidget(
               title: Titles.objectType,
               value: _objectType?.name ?? object?.objectType?.name ?? '',
               items: items,
@@ -492,7 +492,7 @@ class ObjectCreateViewModel with ChangeNotifier {
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
-          builder: (context) => SelectionScreenWidget(
+          builder: (sheetContext) => SelectionScreenWidget(
               title: Titles.stage,
               value: _objectStage?.name ?? object?.objectStage?.name ?? '',
               items: items,
@@ -514,7 +514,7 @@ class ObjectCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchUserScreenWidget(
+        builder: (sheetContext) => SearchUserScreenWidget(
             title: index == 0 ? Titles.techManager : Titles.manager,
             isRoot: true,
             onFocus: () => {},
@@ -532,7 +532,7 @@ class ObjectCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchCompanyScreenWidget(
+        builder: (sheetContext) => SearchCompanyScreenWidget(
             title: index == 0
                 ? Titles.generalContractor
                 : index == 1
@@ -562,7 +562,7 @@ class ObjectCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchOfficeScreenWidget(
+        builder: (sheetContext) => SearchOfficeScreenWidget(
             title: Titles.filial,
             isRoot: true,
             onFocus: () => {},

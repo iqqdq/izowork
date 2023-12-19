@@ -35,7 +35,10 @@ class _AnalyticsObjectsScreenBodyState
         ? 12.0
         : MediaQuery.of(context).padding.bottom;
 
-    _objectsViewModel = Provider.of<ObjectsViewModel>(context, listen: true);
+    _objectsViewModel = Provider.of<ObjectsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

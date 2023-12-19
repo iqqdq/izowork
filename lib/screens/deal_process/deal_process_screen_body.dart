@@ -53,8 +53,10 @@ class _DealProcessScreenBodyState extends State<DealProcessScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _dealProcessViewModel =
-        Provider.of<DealProcessViewModel>(context, listen: true);
+    _dealProcessViewModel = Provider.of<DealProcessViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

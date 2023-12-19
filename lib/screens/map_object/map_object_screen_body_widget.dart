@@ -18,8 +18,10 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _mapViewModel =
-        Provider.of<MapObjectViewModel>(context, listen: true);
+    final _mapViewModel = Provider.of<MapObjectViewModel>(
+      context,
+      listen: true,
+    );
 
     return Material(
         type: MaterialType.transparency,

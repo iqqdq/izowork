@@ -158,7 +158,7 @@ class MapViewModel with ChangeNotifier {
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
-          builder: (context) => ObjectsFilterPageViewScreenWidget(
+          builder: (sheetContext) => ObjectsFilterPageViewScreenWidget(
               objectStages: _objectStages!,
               objectsFilter: _objectsFilter,
               onPop: (objectsFilter) => {
@@ -178,7 +178,10 @@ class MapViewModel with ChangeNotifier {
     }
   }
 
-  void showAddMapObjectSheet(BuildContext context, LatLng position) {
+  void showAddMapObjectSheet(
+    BuildContext context,
+    LatLng position,
+  ) {
     _position = position;
 
     if (isHidden) {
@@ -190,7 +193,7 @@ class MapViewModel with ChangeNotifier {
                 barrierColor: Colors.black.withOpacity(0.6),
                 backgroundColor: HexColors.white,
                 context: context,
-                builder: (context) => MapAddObjectScreenWidget(
+                builder: (sheetContext) => MapAddObjectScreenWidget(
                     address: address,
                     onPop: () => isHidden = true,
                     onTap: () => {
@@ -212,15 +215,20 @@ class MapViewModel with ChangeNotifier {
     }
   }
 
-  void showMapObjectSheet(BuildContext context, String id) {
+  void showMapObjectSheet(
+    BuildContext context,
+    String id,
+  ) {
     showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => MapObjectScreenWidget(
-            object: objects.firstWhere((element) => element.id == id)));
+        builder: (sheetContext) => MapObjectScreenWidget(
+                object: objects.firstWhere(
+              (element) => element.id == id,
+            )));
   }
 
   void showSearchMapObjectSheet(
@@ -233,7 +241,7 @@ class MapViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchObjectScreenWidget(
+        builder: (sheetContext) => SearchObjectScreenWidget(
             isRoot: true,
             title: Titles.object,
             onFocus: () => {},

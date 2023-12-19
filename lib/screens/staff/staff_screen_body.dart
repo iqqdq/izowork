@@ -66,7 +66,10 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _staffViewModel = Provider.of<StaffViewModel>(context, listen: true);
+    _staffViewModel = Provider.of<StaffViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         backgroundColor: HexColors.white,

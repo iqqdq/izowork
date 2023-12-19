@@ -67,7 +67,10 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _productsViewModel = Provider.of<ProductsViewModel>(context, listen: true);
+    _productsViewModel = Provider.of<ProductsViewModel>(
+      context,
+      listen: true,
+    );
 
     return Scaffold(
         extendBodyBehindAppBar: false,

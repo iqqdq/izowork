@@ -65,8 +65,10 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _taskCreateViewModel =
-        Provider.of<TaskCreateViewModel>(context, listen: true);
+    _taskCreateViewModel = Provider.of<TaskCreateViewModel>(
+      context,
+      listen: true,
+    );
 
     final _day = _taskCreateViewModel.pickedDateTime.day.toString().length == 1
         ? '0${_taskCreateViewModel.pickedDateTime.day}'

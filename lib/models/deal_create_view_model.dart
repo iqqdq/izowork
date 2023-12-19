@@ -497,7 +497,7 @@ class DealCreateViewModel with ChangeNotifier {
           barrierColor: Colors.black.withOpacity(0.6),
           backgroundColor: HexColors.white,
           context: context,
-          builder: (context) => SelectionScreenWidget(
+          builder: (sheetContext) => SelectionScreenWidget(
               title: Titles.phase,
               value: _phase?.name ?? selectedPhase?.name ?? '',
               items: items,
@@ -522,7 +522,7 @@ class DealCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => DateTimeWheelPickerWidget(
+        builder: (sheetContext) => DateTimeWheelPickerWidget(
             minDateTime: _minDateTime,
             maxDateTime: _maxDateTime,
             initialDateTime: index == 0 ? _startDateTime : _endDateTime,
@@ -560,7 +560,7 @@ class DealCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchUserScreenWidget(
+        builder: (sheetContext) => SearchUserScreenWidget(
             title: Titles.responsible,
             isRoot: true,
             onFocus: () => {},
@@ -578,7 +578,7 @@ class DealCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchObjectScreenWidget(
+        builder: (sheetContext) => SearchObjectScreenWidget(
             title: Titles.object,
             isRoot: true,
             onFocus: () => {},
@@ -601,7 +601,7 @@ class DealCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchCompanyScreenWidget(
+        builder: (sheetContext) => SearchCompanyScreenWidget(
             title: Titles.company,
             isRoot: true,
             onFocus: () => {},
@@ -619,7 +619,7 @@ class DealCreateViewModel with ChangeNotifier {
         barrierColor: Colors.black.withOpacity(0.6),
         backgroundColor: HexColors.white,
         context: context,
-        builder: (context) => SearchProductScreenWidget(
+        builder: (sheetContext) => SearchProductScreenWidget(
             isRoot: true,
             onFocus: () => {},
             onPop: (product) => {
