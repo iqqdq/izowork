@@ -15,8 +15,11 @@ class ObjectPageViewScreenWidget extends StatefulWidget {
   final Object object;
   final Phase? phase;
 
-  const ObjectPageViewScreenWidget({Key? key, required this.object, this.phase})
-      : super(key: key);
+  const ObjectPageViewScreenWidget({
+    Key? key,
+    required this.object,
+    this.phase,
+  }) : super(key: key);
 
   @override
   _ObjectPageViewScreenState createState() => _ObjectPageViewScreenState();
@@ -32,9 +35,13 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
   void initState() {
     _pages = [
       ObjectPageScreenWidget(
-          object: widget.object,
-          onCoordCopy: () => Toast().showTopToast(context, Titles.didCopied),
-          onUpdate: (object) => setState(() => _title = object.name)),
+        object: widget.object,
+        onCoordCopy: () => Toast().showTopToast(
+          context,
+          Titles.didCopied,
+        ),
+        onUpdate: (object) => setState(() => _title = object.name),
+      ),
       ObjectActionsScreenWidget(object: widget.object)
     ];
 

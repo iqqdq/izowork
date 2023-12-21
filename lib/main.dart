@@ -16,16 +16,21 @@ class IzoworkApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OKToast(
-        child: MaterialApp(
-            scrollBehavior: MyCustomScrollBehavior(),
-            home: const SplashScreenWidget()));
+      child: MaterialApp(
+        scrollBehavior: MyCustomScrollBehavior(),
+        home: const SplashScreenWidget(),
+      ),
+    );
   }
 }
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   @override
   Widget buildOverscrollIndicator(
-      BuildContext context, Widget child, ScrollableDetails details) {
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
     return child;
   }
 }

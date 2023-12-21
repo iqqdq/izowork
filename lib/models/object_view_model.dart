@@ -68,7 +68,10 @@ class ObjectPageViewModel with ChangeNotifier {
           else if (response is ErrorResponse)
             {
               loadingStatus = LoadingStatus.error,
-              Toast().showTopToast(context, response.message ?? 'Ошибка')
+              Toast().showTopToast(
+                context,
+                response.message ?? 'Ошибка',
+              )
             },
           notifyListeners()
         });
@@ -111,7 +114,10 @@ class ObjectPageViewModel with ChangeNotifier {
 
         await Dio().download(url, filePath, onReceiveProgress: (count, total) {
           debugPrint('---Download----Rec: $count, Total: $total');
-        }).then((value) => {_downloadIndex = -1, notifyListeners()});
+        }).then((value) => {
+              _downloadIndex = -1,
+              notifyListeners(),
+            });
       }
 
       OpenResult openResult = await OpenFilex.open(filePath);
@@ -129,14 +135,21 @@ class ObjectPageViewModel with ChangeNotifier {
     }
   }
 
-  Future copyCoordinates(BuildContext context, double lat, double long) async {
+  Future copyCoordinates(
+    BuildContext context,
+    double lat,
+    double long,
+  ) async {
     Clipboard.setData(ClipboardData(text: '$lat, $long'));
   }
 
   // MARK: -
   // MARK: - PUSH
 
-  void showObjectCreateSheet(BuildContext context, VoidCallback onUpdate) {
+  void showObjectCreateSheet(
+    BuildContext context,
+    VoidCallback onUpdate,
+  ) {
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -179,8 +192,10 @@ class ObjectPageViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                PhaseScreenWidget(phase: _phases[index], object: object)));
+            builder: (context) => PhaseScreenWidget(
+                  phase: _phases[index],
+                  object: object,
+                )));
   }
 
   void showDialogScreen(BuildContext context) {
@@ -188,6 +203,8 @@ class ObjectPageViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => DialogScreenWidget(
-                chat: object!.chat!, onPop: (message) => null)));
+                  chat: object!.chat!,
+                  onPop: (message) => null,
+                )));
   }
 }

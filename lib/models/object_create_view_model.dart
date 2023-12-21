@@ -182,15 +182,16 @@ class ObjectCreateViewModel with ChangeNotifier {
   }
 
   Future createNewObject(
-      BuildContext context,
-      String address,
-      int? area,
-      int? constructionPeriod,
-      int? floors,
-      String coord,
-      String name,
-      String kiso,
-      Function(Object) onCreate) async {
+    BuildContext context,
+    String address,
+    int? area,
+    int? constructionPeriod,
+    int? floors,
+    String coord,
+    String name,
+    String kiso,
+    Function(Object) onCreate,
+  ) async {
     if (coord.characters.length > 8 &&
         coord.contains('.') &&
         coord.contains(',')) {
@@ -275,25 +276,26 @@ class ObjectCreateViewModel with ChangeNotifier {
 
         await ObjectRepository()
             .updateObject(ObjectRequest(
-                id: object!.id,
-                address: address,
-                area: area ?? object?.area,
-                constructionPeriod:
-                    constructionPeriod ?? object?.constructionPeriod,
-                managerId: _manager?.id ?? object?.managerId,
-                contractorId: _contractor?.id ?? object?.contractorId,
-                customerId: _customer?.id ?? object?.customerId,
-                designerId: _designer?.id ?? object?.designerId,
-                techManagerId: _techManager?.id,
-                officeId: _office?.id,
-                floors: floors ?? object?.floors,
-                lat: lat,
-                long: long,
-                name: name,
-                objectStageId: _objectStage?.id ?? object!.objectStageId!,
-                objectTypeId: _objectType?.id ?? object!.objectTypeId!,
-                hideDir: _hideDir,
-                kiso: kiso))
+              id: object!.id,
+              address: address,
+              area: area ?? object?.area,
+              constructionPeriod:
+                  constructionPeriod ?? object?.constructionPeriod,
+              managerId: _manager?.id ?? object?.managerId,
+              contractorId: _contractor?.id ?? object?.contractorId,
+              customerId: _customer?.id ?? object?.customerId,
+              designerId: _designer?.id ?? object?.designerId,
+              techManagerId: _techManager?.id,
+              officeId: _office?.id,
+              floors: floors ?? object?.floors,
+              lat: lat,
+              long: long,
+              name: name,
+              objectStageId: _objectStage?.id ?? object!.objectStageId!,
+              objectTypeId: _objectType?.id ?? object!.objectTypeId!,
+              hideDir: _hideDir,
+              kiso: kiso,
+            ))
             .then((response) => {
                   if (response is Object)
                     {

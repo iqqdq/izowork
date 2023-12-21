@@ -9,18 +9,20 @@ class ObjectPageScreenWidget extends StatelessWidget {
   final VoidCallback onCoordCopy;
   final Function(Object) onUpdate;
 
-  const ObjectPageScreenWidget(
-      {Key? key,
-      required this.object,
-      required this.onCoordCopy,
-      required this.onUpdate})
-      : super(key: key);
+  const ObjectPageScreenWidget({
+    Key? key,
+    required this.object,
+    required this.onCoordCopy,
+    required this.onUpdate,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => ObjectPageViewModel(object),
         child: ObjectPageScreenBodyWidget(
-            onUpdate: onUpdate, onCoordCopy: onCoordCopy));
+          onUpdate: onUpdate,
+          onCoordCopy: onCoordCopy,
+        ));
   }
 }

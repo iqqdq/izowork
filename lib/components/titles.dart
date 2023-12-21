@@ -272,4 +272,6 @@ abstract class Titles {
       'Разрешите доступ к галерее\nв настройках телефона';
   static const addContactWillAllow =
       'Добавление контактов станет доступно\n после создания компании';
+  static const uHaveNotChecklistPermission =
+      'У вас нет прав на редактирование\nчек-листа';
 }

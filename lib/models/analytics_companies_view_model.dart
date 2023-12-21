@@ -119,7 +119,10 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
         .getDealCount(id)
         .then((response) => {
               if (response is int)
-                {loadingStatus = LoadingStatus.completed, _dealCount = response}
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _dealCount = response,
+                }
             })
         .then((value) => notifyListeners());
   }
@@ -131,13 +134,14 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
     await AnalyticsRepository()
         .getManagerAnalytics(id)
         .then((response) => {
-              if (response is ManagerAnalytics)
-                {
-                  loadingStatus = LoadingStatus.completed,
-                  _managerAnalytics = response
-                }
+              if (response is ManagerAnalytics) {_managerAnalytics = response}
             })
-        .then((value) => notifyListeners());
+        .then(
+          (value) => {
+            loadingStatus = LoadingStatus.completed,
+            notifyListeners(),
+          },
+        );
   }
 
   // MARK: -

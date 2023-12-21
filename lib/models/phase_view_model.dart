@@ -193,7 +193,10 @@ class PhaseViewModel with ChangeNotifier {
                 {
                   loadingStatus = LoadingStatus.error,
                   notifyListeners(),
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(
+                    context,
+                    response.message ?? 'Ошибка',
+                  )
                 }
             });
   }
@@ -216,7 +219,10 @@ class PhaseViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка'),
+                  Toast().showTopToast(
+                    context,
+                    response.message ?? 'Ошибка',
+                  ),
                 }
             })
         .then(
@@ -238,7 +244,10 @@ class PhaseViewModel with ChangeNotifier {
               if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(
+                    context,
+                    response.message ?? 'Ошибка',
+                  )
                 }
             });
   }
@@ -256,7 +265,6 @@ class PhaseViewModel with ChangeNotifier {
   void showCompleteTaskSheet(
     BuildContext context,
     int index,
-    bool canEdit,
   ) async {
     PhaseChecklistInformation? phaseChecklistInformation;
 
@@ -267,41 +275,58 @@ class PhaseViewModel with ChangeNotifier {
             phaseChecklistInformation = _phaseChecklistInformations.first,
 
           // SHOW CHECKLIST SHEET
-          if (canEdit)
+          if (_phaseChecklistResponse == null)
             {
-              showCupertinoModalBottomSheet(
-                  enableDrag: false,
-                  topRadius: const Radius.circular(16.0),
-                  barrierColor: Colors.black.withOpacity(0.6),
-                  backgroundColor: HexColors.white,
-                  context: context,
-                  builder: (sheetContext) => CompleteChecklistScreenWidget(
-                      title: _phaseChecklistResponse
-                              ?.phaseChecklists[index].name ??
-                          '',
-                      phaseChecklistInformation: phaseChecklistInformation,
-                      onTap: (
-                        text,
-                        files,
-                      ) =>
-                          {
-                            // HIDE BOTTOM SHEET
-                            Navigator.pop(context),
+              Toast().showTopToast(
+                context,
+                Titles.uHaveNotChecklistPermission,
+              )
+            }
+          else
+            {
+              if (_phaseChecklistResponse!.canEdit)
+                {
+                  showCupertinoModalBottomSheet(
+                      enableDrag: false,
+                      topRadius: const Radius.circular(16.0),
+                      barrierColor: Colors.black.withOpacity(0.6),
+                      backgroundColor: HexColors.white,
+                      context: context,
+                      builder: (sheetContext) => CompleteChecklistScreenWidget(
+                          title: _phaseChecklistResponse
+                                  ?.phaseChecklists[index].name ??
+                              '',
+                          phaseChecklistInformation: phaseChecklistInformation,
+                          onTap: (
+                            text,
+                            files,
+                          ) =>
+                              {
+                                // HIDE BOTTOM SHEET
+                                Navigator.pop(context),
 
-                            // SET SELECTED FILES
-                            files.forEach((element) {
-                              if (element.path != null) {
-                                _files.add(File(element.path!));
-                              }
-                            }),
+                                // SET SELECTED FILES
+                                files.forEach((element) {
+                                  if (element.path != null) {
+                                    _files.add(File(element.path!));
+                                  }
+                                }),
 
-                            // CREATE NEW PHASE CHECKLIST
-                            createPhaseChecklistInfo(
-                              context,
-                              index,
-                              text,
-                            )
-                          }))
+                                // CREATE NEW PHASE CHECKLIST
+                                createPhaseChecklistInfo(
+                                  context,
+                                  index,
+                                  text,
+                                )
+                              }))
+                }
+              else
+                {
+                  Toast().showTopToast(
+                    context,
+                    Titles.uHaveNotChecklistPermission,
+                  )
+                }
             }
         });
   }

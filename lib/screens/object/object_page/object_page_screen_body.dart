@@ -21,9 +21,11 @@ class ObjectPageScreenBodyWidget extends StatefulWidget {
   final VoidCallback onCoordCopy;
   final Function(Object) onUpdate;
 
-  const ObjectPageScreenBodyWidget(
-      {Key? key, required this.onCoordCopy, required this.onUpdate})
-      : super(key: key);
+  const ObjectPageScreenBodyWidget({
+    Key? key,
+    required this.onCoordCopy,
+    required this.onUpdate,
+  }) : super(key: key);
 
   @override
   _ObjectPageScreenBodyState createState() => _ObjectPageScreenBodyState();
@@ -68,9 +70,10 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                       children: [
                         ///  NAME
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.objectName,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.objectName,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
                             text: _objectPageViewModel.object?.name ??
@@ -78,9 +81,10 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
 
                         /// ADDRESS
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.address,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.address,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
                             text: _objectPageViewModel.object?.address ??
@@ -93,9 +97,10 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                   children: [
                                 /// COORDINATES
                                 const TitleWidget(
-                                    padding: EdgeInsets.only(bottom: 4.0),
-                                    text: Titles.coordinates,
-                                    isSmall: true),
+                                  padding: EdgeInsets.only(bottom: 4.0),
+                                  text: Titles.coordinates,
+                                  isSmall: true,
+                                ),
 
                                 GestureDetector(
                                     onLongPress: () => _objectPageViewModel
@@ -125,84 +130,99 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
 
                         /// TECHNICAL MANAGER
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.techManager,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.techManager,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _objectPageViewModel
-                                    .object?.techManager?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text:
+                              _objectPageViewModel.object?.techManager?.name ??
+                                  '-',
+                        ),
 
                         /// OFFICE
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.filial,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.filial,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _objectPageViewModel.object?.office?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _objectPageViewModel.object?.office?.name ??
+                              _objectPageViewModel
+                                  .selectedObject.office?.name ??
+                              '-',
+                        ),
 
                         /// MANAGER
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.manager,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.manager,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _objectPageViewModel.object?.manager?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text:
+                              _objectPageViewModel.object?.manager?.name ?? '-',
+                        ),
 
                         /// GENERAL CONTRACTOR
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.generalContractor,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.generalContractor,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text:
-                                _objectPageViewModel.object?.contractor?.name ??
-                                    '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _objectPageViewModel.object?.contractor?.name ??
+                              '-',
+                        ),
 
                         /// CUSTOMER
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.customer,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.customer,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _objectPageViewModel.object?.customer?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _objectPageViewModel.object?.customer?.name ??
+                              '-',
+                        ),
 
                         /// DEGISNER
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.designer,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.designer,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _objectPageViewModel.object?.designer?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _objectPageViewModel.object?.designer?.name ??
+                              '-',
+                        ),
 
                         /// TYPE
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.objectType,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.objectType,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text:
-                                _objectPageViewModel.object?.objectType?.name ??
-                                    _objectPageViewModel
-                                        .selectedObject.objectType?.name ??
-                                    '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _objectPageViewModel.object?.objectType?.name ??
+                              _objectPageViewModel
+                                  .selectedObject.objectType?.name ??
+                              '-',
+                        ),
 
                         /// FLOOR COUNT
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.floorCount,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.floorCount,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
                             text: _objectPageViewModel.object?.floors
@@ -212,9 +232,10 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
 
                         /// AREA
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.area,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.area,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
                             text:
@@ -224,9 +245,10 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
 
                         /// BUILDING TIME
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.buildingTime,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.buildingTime,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
                           padding: const EdgeInsets.only(bottom: 16.0),
                           text: _objectPageViewModel.object?.constructionPeriod
@@ -236,25 +258,29 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
 
                         /// STAGE
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.stages,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.stages,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _objectPageViewModel
-                                    .object?.objectStage?.name ??
-                                _objectPageViewModel
-                                    .selectedObject.objectStage?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text:
+                              _objectPageViewModel.object?.objectStage?.name ??
+                                  _objectPageViewModel
+                                      .selectedObject.objectStage?.name ??
+                                  '-',
+                        ),
 
                         /// KISO
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.kiso,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.kiso,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _kiso.isEmpty ? '-' : _kiso),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _kiso.isEmpty ? '-' : _kiso,
+                        ),
 
                         /// FILE LIST
                         _objectPageViewModel.selectedObject.files.isEmpty
@@ -262,7 +288,8 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                             : const TitleWidget(
                                 padding: EdgeInsets.only(bottom: 10.0),
                                 text: Titles.files,
-                                isSmall: true),
+                                isSmall: true,
+                              ),
 
                         ListView.builder(
                             shrinkWrap: true,

@@ -52,11 +52,12 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                 child: BackButtonWidget(onTap: () => Navigator.pop(context))),
             title: Text(_phaseViewModel.phase.name,
                 style: TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    fontFamily: 'PT Root UI',
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w700,
-                    color: HexColors.black))),
+                  overflow: TextOverflow.ellipsis,
+                  fontFamily: 'PT Root UI',
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w700,
+                  color: HexColors.black,
+                ))),
         body: Material(
             type: MaterialType.transparency,
             child: Container(
@@ -64,10 +65,11 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                 child: Stack(children: [
                   ListView(
                       padding: EdgeInsets.only(
-                          top: 14.0,
-                          bottom: MediaQuery.of(context).padding.bottom == 0.0
-                              ? 20.0 + 54.0
-                              : MediaQuery.of(context).padding.bottom + 54.0),
+                        top: 14.0,
+                        bottom: MediaQuery.of(context).padding.bottom == 0.0
+                            ? 20.0 + 54.0
+                            : MediaQuery.of(context).padding.bottom + 54.0,
+                      ),
                       children: [
                         /// PRODUCT TITLE
                         _phaseViewModel.phaseProducts.isEmpty
@@ -262,16 +264,21 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                 }),
 
                         /// OPEN DEAL BUTTON
-                        _phaseViewModel.loadingStatus == LoadingStatus.searching
-                            ? Container(
-                                height: 56.0,
-                              )
-                            : BorderButtonWidget(
-                                title: Titles.openDeal,
-                                margin: const EdgeInsets.only(
-                                    bottom: 30.0, left: 16.0, right: 16.0),
-                                onTap: () => _phaseViewModel
-                                    .showDealCreateScreen(context)),
+                        _phaseViewModel.phaseChecklistResponse == null
+                            ? Container()
+                            : _phaseViewModel.phaseChecklistResponse!
+                                    .phaseChecklists.isEmpty
+                                ? Container()
+                                : BorderButtonWidget(
+                                    title: Titles.openDeal,
+                                    margin: const EdgeInsets.only(
+                                      bottom: 30.0,
+                                      left: 16.0,
+                                      right: 16.0,
+                                    ),
+                                    onTap: () => _phaseViewModel
+                                        .showDealCreateScreen(context),
+                                  ),
 
                         /// CHECKLIST TITLE
                         _phaseViewModel.phaseChecklistResponse == null
@@ -283,7 +290,8 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 16.0),
                                     text: Titles.checkList,
-                                    isSmall: true),
+                                    isSmall: true,
+                                  ),
 
                         /// CHECKBOX LIST
                         _phaseViewModel.phaseChecklistResponse == null
@@ -316,52 +324,55 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                           .state,
                                       onTap: () =>
                                           _phaseViewModel.showCompleteTaskSheet(
-                                            context,
+                                            this.context,
                                             index,
-                                            _phaseViewModel
-                                                .phaseChecklistResponse!
-                                                .canEdit,
                                           ));
                                 }),
 
                         /// SET TASK BUTTON
-                        _phaseViewModel.loadingStatus == LoadingStatus.searching
-                            ? Container(
-                                height: 56.0,
-                              )
-                            : BorderButtonWidget(
-                                title: Titles.setTask,
-                                margin: const EdgeInsets.only(
-                                    bottom: 20.0, left: 16.0, right: 16.0),
-                                onTap: () => _phaseViewModel
-                                    .showTaskCreateScreen(context)),
+                        _phaseViewModel.phaseChecklistResponse == null
+                            ? Container()
+                            : _phaseViewModel.phaseChecklistResponse!
+                                    .phaseChecklists.isEmpty
+                                ? Container()
+                                : BorderButtonWidget(
+                                    title: Titles.setTask,
+                                    margin: const EdgeInsets.only(
+                                        bottom: 20.0, left: 16.0, right: 16.0),
+                                    onTap: () => _phaseViewModel
+                                        .showTaskCreateScreen(context),
+                                  ),
                       ]),
 
                   /// EDIT PHASE BUTTON
-                  _phaseViewModel.loadingStatus == LoadingStatus.searching
+                  _phaseViewModel.phaseChecklistResponse == null
                       ? Container()
-                      : Align(
-                          alignment: Alignment.bottomCenter,
-                          child: ButtonWidget(
-                              isDisabled: false,
-                              title: Titles.edit,
-                              margin: EdgeInsets.only(
-                                  left: 16.0,
-                                  right: 16.0,
-                                  bottom: MediaQuery.of(context)
+                      : _phaseViewModel
+                              .phaseChecklistResponse!.phaseChecklists.isEmpty
+                          ? Container()
+                          : Align(
+                              alignment: Alignment.bottomCenter,
+                              child: ButtonWidget(
+                                  title: Titles.edit,
+                                  margin: EdgeInsets.only(
+                                      left: 16.0,
+                                      right: 16.0,
+                                      bottom: MediaQuery.of(context)
+                                                  .padding
+                                                  .bottom ==
+                                              0.0
+                                          ? 20.0
+                                          : MediaQuery.of(context)
                                               .padding
-                                              .bottom ==
-                                          0.0
-                                      ? 20.0
-                                      : MediaQuery.of(context).padding.bottom),
-                              onTap: () =>
-                                  _phaseViewModel.showPhaseCreateScreen(
-                                      context,
-                                      () =>
-                                          // UPDATE UI
-                                          WidgetsBinding.instance
-                                              .addPostFrameCallback(
-                                                  (_) => setState(() {}))))),
+                                              .bottom),
+                                  onTap: () =>
+                                      _phaseViewModel.showPhaseCreateScreen(
+                                          context,
+                                          () =>
+                                              // UPDATE UI
+                                              WidgetsBinding.instance
+                                                  .addPostFrameCallback((_) =>
+                                                      setState(() {}))))),
                   const SeparatorWidget(),
 
                   /// INDICATOR

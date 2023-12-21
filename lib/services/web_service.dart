@@ -1,5 +1,6 @@
 import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:izowork/components/user_params.dart';
 
 class WebService {
@@ -10,19 +11,21 @@ class WebService {
 
   Future<Options> _options() async {
     String token = await UserParams().getToken() ?? '';
+    debugPrint(token);
 
     return Options(
-        headers: token.isNotEmpty
-            ? {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer $token'
-              }
-            : {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-              },
-        followRedirects: false);
+      headers: token.isNotEmpty
+          ? {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token'
+            }
+          : {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+      followRedirects: false,
+    );
   }
 
   Future<Options> _multipartOptions() async {

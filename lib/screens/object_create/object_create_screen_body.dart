@@ -23,9 +23,13 @@ class ObjectCreateScreenBodyWidget extends StatefulWidget {
   final double? long;
   final Function(Object) onCreate;
 
-  const ObjectCreateScreenBodyWidget(
-      {Key? key, this.address, this.lat, this.long, required this.onCreate})
-      : super(key: key);
+  const ObjectCreateScreenBodyWidget({
+    Key? key,
+    this.address,
+    this.lat,
+    this.long,
+    required this.onCreate,
+  }) : super(key: key);
 
   @override
   _ObjectCreateScreenBodyState createState() => _ObjectCreateScreenBodyState();
@@ -433,67 +437,70 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
 
                   /// CREATE TASK BUTTON
                   Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ButtonWidget(
-                          isDisabled: _nameTextEditingController.text.isEmpty ||
-                              _addressTextEditingController.text.isEmpty ||
-                              !_coordinatesTextEditingController.text
-                                  .contains(',') ||
-                              _objectCreateViewModel.objectType == null ||
-                              _objectCreateViewModel.objectStage == null,
-                          title: _objectCreateViewModel.object == null
-                              ? Titles.createObject
-                              : Titles.save,
-                          margin: EdgeInsets.only(
-                              left: 16.0,
-                              right: 16.0,
-                              bottom:
-                                  MediaQuery.of(context).padding.bottom == 0.0
-                                      ? 20.0
-                                      : MediaQuery.of(context).padding.bottom),
-                          onTap: () => _objectCreateViewModel.object == null
-                              ? _objectCreateViewModel.createNewObject(
-                                  context,
-                                  _addressTextEditingController.text,
-                                  int.tryParse(
-                                      _areaCountTextEditingController.text),
-                                  int.tryParse(
-                                      _buildingTimeTextEditingController.text),
-                                  int.tryParse(
-                                      _floorCountTextEditingController.text),
-                                  _coordinatesTextEditingController.text,
-                                  _nameTextEditingController.text,
-                                  _kisoTextEditingController.text,
-                                  (object) => {
-                                        if (mounted)
-                                          {
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ObjectPageViewScreenWidget(
-                                                            object: object)))
-                                          }
-                                      })
-                              : _objectCreateViewModel.editObject(
-                                  context,
-                                  _addressTextEditingController.text,
-                                  int.tryParse(
-                                      _areaCountTextEditingController.text),
-                                  int.tryParse(
-                                      _buildingTimeTextEditingController.text),
-                                  int.tryParse(
-                                      _floorCountTextEditingController.text),
-                                  _coordinatesTextEditingController.text,
-                                  _nameTextEditingController.text,
-                                  _kisoTextEditingController.text,
-                                  (object) => {
-                                        if (mounted)
-                                          {
-                                            widget.onCreate(object),
-                                            Navigator.pop(context)
-                                          }
-                                      }))),
+                    alignment: Alignment.bottomCenter,
+                    child: ButtonWidget(
+                        isDisabled: _nameTextEditingController.text.isEmpty ||
+                            _addressTextEditingController.text.isEmpty ||
+                            !_coordinatesTextEditingController.text
+                                .contains(',') ||
+                            _objectCreateViewModel.objectType == null ||
+                            _objectCreateViewModel.objectStage == null,
+                        title: _objectCreateViewModel.object == null
+                            ? Titles.createObject
+                            : Titles.save,
+                        margin: EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: MediaQuery.of(context).padding.bottom == 0.0
+                                ? 20.0
+                                : MediaQuery.of(context).padding.bottom),
+                        onTap: () => _objectCreateViewModel.object == null
+                            ? _objectCreateViewModel.createNewObject(
+                                context,
+                                _addressTextEditingController.text,
+                                int.tryParse(
+                                    _areaCountTextEditingController.text),
+                                int.tryParse(
+                                    _buildingTimeTextEditingController.text),
+                                int.tryParse(
+                                    _floorCountTextEditingController.text),
+                                _coordinatesTextEditingController.text,
+                                _nameTextEditingController.text,
+                                _kisoTextEditingController.text,
+                                (object) => {
+                                  /// SHOW CREATED OBJECT
+                                  if (mounted)
+                                    {
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ObjectPageViewScreenWidget(
+                                                      object: object)))
+                                    }
+                                },
+                              )
+                            : _objectCreateViewModel.editObject(
+                                context,
+                                _addressTextEditingController.text,
+                                int.tryParse(
+                                    _areaCountTextEditingController.text),
+                                int.tryParse(
+                                    _buildingTimeTextEditingController.text),
+                                int.tryParse(
+                                    _floorCountTextEditingController.text),
+                                _coordinatesTextEditingController.text,
+                                _nameTextEditingController.text,
+                                _kisoTextEditingController.text,
+                                (object) => {
+                                  if (mounted)
+                                    {
+                                      widget.onCreate(object),
+                                      Navigator.pop(context)
+                                    }
+                                },
+                              )),
+                  ),
                   const SeparatorWidget(),
 
                   /// INDICATOR

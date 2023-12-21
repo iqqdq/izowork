@@ -35,10 +35,11 @@ class _AnalyticsCompaniesScreenBodyState
         padding: const EdgeInsets.all(16.0),
         child: Text(text,
             style: TextStyle(
-                color: HexColors.black,
-                fontSize: 19.0,
-                fontFamily: 'PT Root UI',
-                fontWeight: FontWeight.w500)));
+              color: HexColors.black,
+              fontSize: 19.0,
+              fontFamily: 'PT Root UI',
+              fontWeight: FontWeight.w500,
+            )));
   }
 
   Widget _companyPieChart() {
@@ -192,8 +193,11 @@ class _AnalyticsCompaniesScreenBodyState
                     value: _analyticsCompaniesViewModel.office?.name ??
                         Titles.notSelected,
                     isVertical: true,
-                    onTap: () => _analyticsCompaniesViewModel
-                        .showSearchOfficeSheet(context, false)),
+                    onTap: () =>
+                        _analyticsCompaniesViewModel.showSearchOfficeSheet(
+                          context,
+                          false,
+                        )),
                 SizedBox(
                     height: _analyticsCompaniesViewModel.office == null
                         ? 0.0
@@ -228,49 +232,73 @@ class _AnalyticsCompaniesScreenBodyState
 
                 /// FILIAL SELECTION
                 SelectionInputWidget(
-                    title: Titles.filial,
-                    value: _analyticsCompaniesViewModel.managerOffice?.name ??
-                        Titles.notSelected,
-                    isVertical: true,
-                    onTap: () => _analyticsCompaniesViewModel
-                        .showSearchOfficeSheet(context, true)),
+                  title: Titles.filial,
+                  value: _analyticsCompaniesViewModel.managerOffice?.name ??
+                      Titles.notSelected,
+                  isVertical: true,
+                  onTap: () =>
+                      _analyticsCompaniesViewModel.showSearchOfficeSheet(
+                    context,
+                    true,
+                  ),
+                ),
                 const SizedBox(height: 20.0),
 
                 /// EMPTY LIST TEXT
-                _analyticsCompaniesViewModel.managerAnalytics == null
+                _analyticsCompaniesViewModel.managerOffice == null
                     ? Container()
-                    : _analyticsCompaniesViewModel
-                            .managerAnalytics!.users.isEmpty
+                    : _analyticsCompaniesViewModel.managerAnalytics == null
                         ? Container(
                             padding: const EdgeInsets.only(bottom: 20.0),
                             height: 120.0,
                             child: Center(
-                                child: Text(Titles.noResult,
+                              child: Text(
+                                Titles.noResult,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontSize: 16.0,
+                                    color: HexColors.grey50),
+                              ),
+                            ),
+                          )
+                        : _analyticsCompaniesViewModel
+                                .managerAnalytics!.users.isEmpty
+                            ? Container(
+                                padding: const EdgeInsets.only(bottom: 20.0),
+                                height: 120.0,
+                                child: Center(
+                                  child: Text(
+                                    Titles.noResult,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontFamily: 'Inter',
                                         fontSize: 16.0,
-                                        color: HexColors.grey50))))
-                        :
+                                        color: HexColors.grey50),
+                                  ),
+                                ),
+                              )
+                            :
 
-                        /// MANAGER LIST
-                        ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            itemCount: _analyticsCompaniesViewModel
-                                .managerAnalytics?.users.length,
-                            itemBuilder: (context, index) {
-                              return AnalitycsManagerListItemWidget(
-                                  user: _analyticsCompaniesViewModel
-                                      .managerAnalytics?.users[index],
-                                  value: _analyticsCompaniesViewModel
-                                          .managerAnalytics?.efficiency[index]
-                                          .toDouble() ??
-                                      0.0,
-                                  onTap: () => _analyticsCompaniesViewModel
-                                      .showProfileScreen(context, index));
-                            })
+                            /// MANAGER LIST
+                            ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                itemCount: _analyticsCompaniesViewModel
+                                    .managerAnalytics?.users.length,
+                                itemBuilder: (context, index) {
+                                  return AnalitycsManagerListItemWidget(
+                                      user: _analyticsCompaniesViewModel
+                                          .managerAnalytics?.users[index],
+                                      value: _analyticsCompaniesViewModel
+                                              .managerAnalytics
+                                              ?.efficiency[index]
+                                              .toDouble() ??
+                                          0.0,
+                                      onTap: () => _analyticsCompaniesViewModel
+                                          .showProfileScreen(context, index));
+                                })
               ]),
 
           /// INDICATOR

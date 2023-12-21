@@ -50,10 +50,11 @@ class ObjectRepository {
     }
   }
 
-  Future<dynamic> getObjects(
-      {required Pagination pagination,
-      required String search,
-      List<String>? params}) async {
+  Future<dynamic> getObjects({
+    required Pagination pagination,
+    required String search,
+    List<String>? params,
+  }) async {
     var url =
         objectsUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
@@ -80,9 +81,10 @@ class ObjectRepository {
     }
   }
 
-  Future<dynamic> getMapObjects(
-      {required List<String> params,
-      required LatLngBounds? visibleRegion}) async {
+  Future<dynamic> getMapObjects({
+    required List<String> params,
+    required LatLngBounds? visibleRegion,
+  }) async {
     var url = objectsUrl;
 
     if (visibleRegion != null) {
@@ -110,7 +112,10 @@ class ObjectRepository {
   }
 
   Future<dynamic> createObject(ObjectRequest objectRequest) async {
-    dynamic json = await WebService().post(objectCreateUrl, objectRequest);
+    dynamic json = await WebService().post(
+      objectCreateUrl,
+      objectRequest,
+    );
 
     try {
       return Object.fromJson(json["object"]);
@@ -120,7 +125,10 @@ class ObjectRepository {
   }
 
   Future<dynamic> updateObject(ObjectRequest objectRequest) async {
-    dynamic json = await WebService().patch(objectUpdateUrl, objectRequest);
+    dynamic json = await WebService().patch(
+      objectUpdateUrl,
+      objectRequest,
+    );
 
     try {
       return Object.fromJson(json["object"]);
@@ -130,8 +138,10 @@ class ObjectRepository {
   }
 
   Future<dynamic> addObjectFile(ObjectFileRequest objectFileRequest) async {
-    dynamic json = await WebService()
-        .postFormData(objectFileUrl, await objectFileRequest.toFormData());
+    dynamic json = await WebService().postFormData(
+      objectFileUrl,
+      await objectFileRequest.toFormData(),
+    );
 
     try {
       return Document.fromJson(json["object_file"]);
@@ -141,7 +151,10 @@ class ObjectRepository {
   }
 
   Future<dynamic> deleteObjectFile(DeleteRequest deleteRequest) async {
-    dynamic json = await WebService().delete(objectFileUrl, deleteRequest);
+    dynamic json = await WebService().delete(
+      objectFileUrl,
+      deleteRequest,
+    );
 
     if (json == true) {
       return json;
