@@ -55,6 +55,7 @@ class _HorizontalChartState extends State<HorizontalChartWidget> {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return Align(
+                  key: ValueKey(widget.values[index]),
                   alignment: Alignment.bottomCenter,
                   child: HorizontalChartListItemWidget(
                     index: index,

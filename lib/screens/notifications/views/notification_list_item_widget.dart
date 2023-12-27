@@ -72,8 +72,8 @@ class NotificationListItemWidget extends StatelessWidget {
                                     : _isToday
                                         ? 'Сегодня, $_hour:$_minute'
                                         : _year.isEmpty
-                                            ? '$_day $_month, $_hour:$_minute'
-                                            : '$_day $_month $_year, $_hour:$_minute',
+                                            ? '$_day.$_month, $_hour:$_minute'
+                                            : '$_day.$_month.$_year, $_hour:$_minute',
                                 padding: EdgeInsets.zero,
                                 isSmall: true),
 

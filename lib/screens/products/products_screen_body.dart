@@ -145,17 +145,22 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
                   controller: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      top: 16.0,
-                      bottom: 80.0 + MediaQuery.of(context).padding.bottom),
+                    left: 16.0,
+                    right: 16.0,
+                    top: 16.0,
+                    bottom: 80.0 + MediaQuery.of(context).padding.bottom,
+                  ),
                   itemCount: _productsViewModel.products.length,
                   itemBuilder: (context, index) {
                     return ProductsListItemWidget(
-                        tag: index.toString(),
-                        product: _productsViewModel.products[index],
-                        onTap: () => _productsViewModel
-                            .showProductPageViewScreen(context, index));
+                      key: ValueKey(_productsViewModel.products[index].id),
+                      tag: index.toString(),
+                      product: _productsViewModel.products[index],
+                      onTap: () => _productsViewModel.showProductPageViewScreen(
+                        context,
+                        index,
+                      ),
+                    );
                   })),
           const SeparatorWidget(),
 

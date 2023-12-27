@@ -74,11 +74,14 @@ class DocumentsFilterScreenWidget extends StatelessWidget {
                                 itemCount: options.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
+                                    key: ValueKey(options[index]),
                                     child: Container(
                                         margin:
                                             const EdgeInsets.only(right: 10.0),
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0, vertical: 4.0),
+                                          horizontal: 10.0,
+                                          vertical: 4.0,
+                                        ),
                                         decoration: BoxDecoration(
                                             color: tags.contains(index)
                                                 ? HexColors.additionalViolet
@@ -114,11 +117,14 @@ class DocumentsFilterScreenWidget extends StatelessWidget {
                                 itemCount: options2.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
+                                    key: ValueKey(options2[index]),
                                     child: Container(
                                         margin:
                                             const EdgeInsets.only(right: 10.0),
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0, vertical: 4.0),
+                                          horizontal: 10.0,
+                                          vertical: 4.0,
+                                        ),
                                         decoration: BoxDecoration(
                                             color: tags2.contains(index)
                                                 ? HexColors.additionalViolet

@@ -75,6 +75,7 @@ class _AnalyticsObjectsScreenBodyState
               itemCount: _objectsViewModel.objects.length,
               itemBuilder: (context, index) {
                 return AnalitycsObjectListItemWidget(
+                  key: ValueKey(_objectsViewModel.objects[index]),
                   object: _objectsViewModel.objects[index],
                   onTap: () => _objectsViewModel.showObjectPageViewScreen(
                       context, index),

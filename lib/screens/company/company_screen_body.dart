@@ -262,6 +262,8 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                         return _companyViewModel.company == null
                             ? Container()
                             : ContactListItemWidget(
+                                key: ValueKey(
+                                    _companyViewModel.company?.contacts[index]),
                                 contact: _companyViewModel
                                         .company?.contacts[index] ??
                                     _companyViewModel
@@ -330,10 +332,15 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                   itemCount: _companyViewModel.products.length,
                   itemBuilder: (context, index) {
                     return ProductsListItemWidget(
+                        key: ValueKey(
+                          _companyViewModel.products[index],
+                        ),
                         tag: index.toString(),
                         product: _companyViewModel.products[index],
                         onTap: () => _companyViewModel.showProductPageScreen(
-                            context, index));
+                              context,
+                              index,
+                            ));
                   })))
     ]);
   }

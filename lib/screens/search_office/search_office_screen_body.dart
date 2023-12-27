@@ -134,44 +134,43 @@ class _SearchOfficeScreenBodyState extends State<SearchOfficeScreenBodyWidget> {
 
                     /// USER LIST VIEW
                     SizedBox(
-                        height: _height - 86.0,
-                        child: GestureDetector(
-                            onTap: () => FocusScope.of(context).unfocus(),
-                            child: ListView.builder(
-                                controller: _scrollController,
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                padding: EdgeInsets.only(
-                                    top: 12.0,
-                                    left: 16.0,
-                                    right: 16.0,
-                                    bottom: (MediaQuery.of(context)
-                                                    .viewInsets
-                                                    .bottom !=
-                                                0.0
-                                            ? MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom
-                                            : MediaQuery.of(context)
-                                                        .padding
-                                                        .bottom ==
-                                                    0.0
-                                                ? 12.0
-                                                : MediaQuery.of(context)
-                                                    .padding
-                                                    .bottom) +
-                                        124.0),
-                                itemCount:
-                                    _searchOfficeViewModel.offices.length,
-                                itemBuilder: (context, index) {
-                                  return SearchUserListItemWidget(
-                                      name: _searchOfficeViewModel
-                                          .offices[index].name,
-                                      onTap: () => {
-                                            FocusScope.of(context).unfocus(),
-                                            widget.onPop(_searchOfficeViewModel
-                                                .offices[index]),
-                                          });
-                                })))
+                      height: _height - 86.0,
+                      child: GestureDetector(
+                        onTap: () => FocusScope.of(context).unfocus(),
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: EdgeInsets.only(
+                            top: 12.0,
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: (MediaQuery.of(context).viewInsets.bottom !=
+                                        0.0
+                                    ? MediaQuery.of(context).viewInsets.bottom
+                                    : MediaQuery.of(context).padding.bottom ==
+                                            0.0
+                                        ? 12.0
+                                        : MediaQuery.of(context)
+                                            .padding
+                                            .bottom) +
+                                124.0,
+                          ),
+                          itemCount: _searchOfficeViewModel.offices.length,
+                          itemBuilder: (context, index) {
+                            return SearchUserListItemWidget(
+                              key: ValueKey(
+                                  _searchOfficeViewModel.offices[index].id),
+                              name: _searchOfficeViewModel.offices[index].name,
+                              onTap: () => {
+                                FocusScope.of(context).unfocus(),
+                                widget.onPop(
+                                    _searchOfficeViewModel.offices[index]),
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    )
                   ]),
 
               /// EMPTY LIST TEXT

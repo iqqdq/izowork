@@ -55,18 +55,28 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
       setState(() {
         int index = 0;
         _newsCommentsViewModel.comments.forEach((element) {
-          _bubbles.add(CommentBubbleWidget(
+          _bubbles.add(
+            CommentBubbleWidget(
+              key: ValueKey(_newsCommentsViewModel.comments[index].id),
               comment: _newsCommentsViewModel.comments[index],
               animate: _newsCommentsViewModel.comment?.id == element.id,
-              onUserTap: () =>
-                  _newsCommentsViewModel.showProfileScreen(context, index)));
+              onUserTap: () => _newsCommentsViewModel.showProfileScreen(
+                context,
+                index,
+              ),
+            ),
+          );
+
           index++;
         });
       });
     }
 
     if (_newsCommentsViewModel.comment != null) {
-      Future.delayed(const Duration(milliseconds: 300), () => _scrollDown());
+      Future.delayed(
+        const Duration(milliseconds: 300),
+        () => _scrollDown(),
+      );
       _newsCommentsViewModel.clearComment();
     }
   }
@@ -195,17 +205,17 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
                         GestureDetector(
                             onTap: () => FocusScope.of(context).unfocus(),
                             child: ListView.builder(
-                                controller: _scrollController,
-                                shrinkWrap: true,
-                                padding: const EdgeInsets.only(
-                                    left: 16.0,
-                                    right: 16.0,
-                                    top: 12.0,
-                                    bottom: 12.0),
-                                itemCount:
-                                    _newsCommentsViewModel.comments.length,
-                                itemBuilder: (context, index) =>
-                                    _bubbles[index])))),
+                              controller: _scrollController,
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.only(
+                                left: 16.0,
+                                right: 16.0,
+                                top: 12.0,
+                                bottom: 12.0,
+                              ),
+                              itemCount: _newsCommentsViewModel.comments.length,
+                              itemBuilder: (context, index) => _bubbles[index],
+                            )))),
             Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(

@@ -301,6 +301,8 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                         .selectedObject.files.length,
                             itemBuilder: (context, index) {
                               return FileListItemWidget(
+                                  key: ValueKey(_objectPageViewModel
+                                      .object?.files[index].id),
                                   fileName: _objectPageViewModel
                                           .object?.files[index].name ??
                                       _objectPageViewModel
@@ -309,7 +311,9 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                       _objectPageViewModel.downloadIndex ==
                                           index,
                                   onTap: () => _objectPageViewModel.openFile(
-                                      context, index));
+                                        context,
+                                        index,
+                                      ));
                             }),
 
                         /// PHASES TABLE
@@ -340,6 +344,9 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                               .phases.length,
                                           itemBuilder: (context, index) {
                                             return ObjectStageListItemWidget(
+                                                key: ValueKey(
+                                                    _objectPageViewModel
+                                                        .phases[index].id),
                                                 title: _objectPageViewModel
                                                     .phases[index].name,
                                                 effectivenes:
@@ -355,26 +362,30 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                                 onTap: () =>
                                                     _objectPageViewModel
                                                         .showPhaseScreen(
-                                                            context, index));
+                                                      context,
+                                                      index,
+                                                    ));
                                           })
                                 ])),
                         const SizedBox(height: 20.0),
 
                         /// DOCUMENTS BUTTON
                         SelectionInputWidget(
-                            margin: const EdgeInsets.only(bottom: 10.0),
-                            title: '',
-                            value: Titles.documents,
-                            onTap: () => _objectPageViewModel
-                                .showDocumentsScreen(context)),
+                          margin: const EdgeInsets.only(bottom: 10.0),
+                          title: '',
+                          value: Titles.documents,
+                          onTap: () =>
+                              _objectPageViewModel.showDocumentsScreen(context),
+                        ),
 
                         /// ANALYTICS BUTTON
                         SelectionInputWidget(
-                            margin: const EdgeInsets.only(bottom: 20.0),
-                            title: '',
-                            value: Titles.analytics,
-                            onTap: () => _objectPageViewModel
-                                .showObjectAnalyticsPageViewScreen(context)),
+                          margin: const EdgeInsets.only(bottom: 20.0),
+                          title: '',
+                          value: Titles.analytics,
+                          onTap: () => _objectPageViewModel
+                              .showObjectAnalyticsPageViewScreen(context),
+                        ),
 
                         /// SHOW CHAT BUTTON
                         _objectPageViewModel.object?.chat == null
@@ -383,7 +394,8 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                 title: Titles.goChat,
                                 margin: const EdgeInsets.only(bottom: 30.0),
                                 onTap: () => _objectPageViewModel
-                                    .showDialogScreen(context)),
+                                    .showDialogScreen(context),
+                              ),
                       ]),
 
                   Align(
@@ -392,22 +404,20 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
 
                           /// EDIT TASK BUTTON
                           ButtonWidget(
-                              title: Titles.edit,
-                              margin: EdgeInsets.only(
-                                  right: 16.0,
-                                  left: 16.0,
-                                  // left: 4.0,
-                                  bottom: MediaQuery.of(context)
-                                              .padding
-                                              .bottom ==
-                                          0.0
-                                      ? 20.0
-                                      : MediaQuery.of(context).padding.bottom),
-                              onTap: () =>
-                                  _objectPageViewModel.showObjectCreateSheet(
-                                      context,
-                                      () => widget.onUpdate(
-                                          _objectPageViewModel.object!)))),
+                        title: Titles.edit,
+                        margin: EdgeInsets.only(
+                          right: 16.0,
+                          left: 16.0,
+                          // left: 4.0,
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 20.0
+                              : MediaQuery.of(context).padding.bottom,
+                        ),
+                        onTap: () => _objectPageViewModel.showObjectCreateSheet(
+                            context,
+                            () =>
+                                widget.onUpdate(_objectPageViewModel.object!)),
+                      )),
                   const SeparatorWidget(),
 
                   /// INDICATOR

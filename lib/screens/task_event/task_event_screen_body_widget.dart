@@ -100,9 +100,14 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
                               itemCount: _taskEventViewModel.tasks.length,
                               itemBuilder: (context, index) {
                                 return TaskListItemWidget(
+                                    key: ValueKey(
+                                        _taskEventViewModel.tasks[index].id),
                                     task: _taskEventViewModel.tasks[index],
                                     onTap: () => _taskEventViewModel
-                                        .showTaskScreenWidget(context, index));
+                                            .showTaskScreenWidget(
+                                          context,
+                                          index,
+                                        ));
                               }),
                         ])))));
   }

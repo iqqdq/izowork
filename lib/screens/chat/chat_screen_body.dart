@@ -187,6 +187,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                   itemCount: _chatViewModel.chats.length,
                   itemBuilder: (context, index) {
                     return ChatListItemWidget(
+                        key: ValueKey(_chatViewModel.chats[index]),
                         chat: _chatViewModel.chats[index],
                         onTap: () =>
                             _chatViewModel.showDialogScreen(context, index));

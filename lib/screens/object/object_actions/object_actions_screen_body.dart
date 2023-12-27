@@ -77,16 +77,20 @@ class _ObjectActionsScreenBodyState
               onRefresh: _onRefresh,
               child: ListView.builder(
                   padding: EdgeInsets.only(
-                      top: 16.0,
-                      bottom: MediaQuery.of(context).padding.bottom == 0.0
-                          ? 90.0
-                          : MediaQuery.of(context).padding.bottom + 70.0),
+                    top: 16.0,
+                    bottom: MediaQuery.of(context).padding.bottom == 0.0
+                        ? 90.0
+                        : MediaQuery.of(context).padding.bottom + 70.0,
+                  ),
                   itemCount: _objectActionsViewModel.traces.length,
                   itemBuilder: (context, index) {
                     return AnalitycsActionListItemWidget(
+                        key: ValueKey(_objectActionsViewModel.traces[index].id),
                         trace: _objectActionsViewModel.traces[index],
                         onTap: () => _objectActionsViewModel.showTraceScreen(
-                            context, index));
+                              context,
+                              index,
+                            ));
                   })),
 
           /// INDICATOR

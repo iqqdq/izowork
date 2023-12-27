@@ -69,19 +69,27 @@ class _NotificationsScreenBodyState
           /// NOTIFICATIONS LIST VIEW
           ListView.builder(
               padding: const EdgeInsets.only(
-                  left: 16.0, right: 16.0, top: 16.0, bottom: 16.0 + 48.0),
+                left: 16.0,
+                right: 16.0,
+                top: 16.0,
+                bottom: 16.0 + 48.0,
+              ),
               itemCount: _notificationsViewModel.notifications.length,
               itemBuilder: (context, index) {
                 return NotificationListItemWidget(
-                    dateTime: _notificationsViewModel
-                        .notifications[index].createdAt
-                        .toUtc()
-                        .toLocal(),
-                    isUnread:
-                        !_notificationsViewModel.notifications[index].read,
-                    text: _notificationsViewModel.notifications[index].text,
-                    onTap: () => _notificationsViewModel.readNotification(
-                        context, index));
+                  key:
+                      ValueKey(_notificationsViewModel.notifications[index].id),
+                  dateTime: _notificationsViewModel
+                      .notifications[index].createdAt
+                      .toUtc()
+                      .toLocal(),
+                  isUnread: !_notificationsViewModel.notifications[index].read,
+                  text: _notificationsViewModel.notifications[index].text,
+                  onTap: () => _notificationsViewModel.readNotification(
+                    context,
+                    index,
+                  ),
+                );
               }),
           const SeparatorWidget(),
 

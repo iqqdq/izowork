@@ -63,6 +63,7 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                                 itemCount: _mapViewModel.urls.length,
                                 itemBuilder: (context, index) {
                                   return Container(
+                                      key: ValueKey(_mapViewModel.urls[index]),
                                       width: 84.0,
                                       height: 88.0,
                                       decoration: BoxDecoration(
@@ -76,20 +77,20 @@ class MapObjectScreenBodyWidget extends StatelessWidget {
                                               ? 0.0
                                               : 10.0),
                                       child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          child: CachedNetworkImage(
-                                              imageUrl: objectMediaUrl +
-                                                  _mapViewModel.urls[index],
-                                              cacheKey:
-                                                  _mapViewModel.urls[index],
-                                              width: 84.0,
-                                              height: 88.0,
-                                              memCacheWidth: 88 *
-                                                  MediaQuery.of(context)
-                                                      .devicePixelRatio
-                                                      .toInt(),
-                                              fit: BoxFit.cover)));
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        child: CachedNetworkImage(
+                                            imageUrl: objectMediaUrl +
+                                                _mapViewModel.urls[index],
+                                            cacheKey: _mapViewModel.urls[index],
+                                            width: 84.0,
+                                            height: 88.0,
+                                            memCacheWidth: 88 *
+                                                MediaQuery.of(context)
+                                                    .devicePixelRatio
+                                                    .toInt(),
+                                            fit: BoxFit.cover),
+                                      ));
                                 })),
 
                         /// TITLE

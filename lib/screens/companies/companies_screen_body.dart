@@ -156,6 +156,7 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
                   itemCount: _companiesViewModel.companies.length,
                   itemBuilder: (context, index) {
                     return CompaniesListItemWidget(
+                        key: ValueKey(_companiesViewModel.companies[index]),
                         company: _companiesViewModel.companies[index],
                         onTap: () => _companiesViewModel
                             .showCompanyPageViewScreen(context, index));

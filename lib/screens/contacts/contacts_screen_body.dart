@@ -166,6 +166,7 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
                   itemCount: _contactsViewModel.contacts.length,
                   itemBuilder: (context, index) {
                     return ContactListItemWidget(
+                        key: ValueKey(_contactsViewModel.contacts[index]),
                         contact: _contactsViewModel.contacts[index],
                         onContactTap: () => widget.onPop == null
                             ? _contactsViewModel.showContactScreen(

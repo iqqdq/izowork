@@ -143,16 +143,21 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                   child: ListView.builder(
                       physics: const AlwaysScrollableScrollPhysics(),
                       padding: const EdgeInsets.only(
-                          left: 16.0,
-                          right: 16.0,
-                          top: 16.0,
-                          bottom: 16.0 + 48.0),
+                        left: 16.0,
+                        right: 16.0,
+                        top: 16.0,
+                        bottom: 16.0 + 48.0,
+                      ),
                       itemCount: _objectsViewModel.objects.length,
                       itemBuilder: (context, index) {
                         return ObjectListItemWidget(
+                            key: ValueKey(_objectsViewModel.objects[index].id),
                             object: _objectsViewModel.objects[index],
-                            onTap: () => _objectsViewModel
-                                .showObjectPageViewScreen(context, index));
+                            onTap: () =>
+                                _objectsViewModel.showObjectPageViewScreen(
+                                  context,
+                                  index,
+                                ));
                       }))),
 
           /// FILTER BUTTON
@@ -167,8 +172,9 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                             () => {
                                   _pagination = Pagination(offset: 0, size: 50),
                                   _objectsViewModel.getObjectList(
-                                      pagination: _pagination,
-                                      search: _textEditingController.text)
+                                    pagination: _pagination,
+                                    search: _textEditingController.text,
+                                  )
                                 }),
                         // onClearTap: () => {}
                       )))),

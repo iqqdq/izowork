@@ -148,20 +148,25 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
               child: ListView.builder(
                   shrinkWrap: true,
                   padding: EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      top: 16.0,
-                      bottom: 80.0 + MediaQuery.of(context).padding.bottom),
+                    left: 16.0,
+                    right: 16.0,
+                    top: 16.0,
+                    bottom: 80.0 + MediaQuery.of(context).padding.bottom,
+                  ),
                   itemCount: _newsViewModel.news.length,
                   itemBuilder: (context, index) {
                     return NewsListItemWidget(
-                        tag: index.toString(),
-                        news: _newsViewModel.news[index],
-                        onTap: () =>
-                            _newsViewModel.showNewsPageScreen(context, index),
-                        onUserTap: () => {},
-                        onShowCommentsTap: () => _newsViewModel
-                            .showNewsCommentsScreen(context, index));
+                      key: ValueKey(_newsViewModel.news[index].id),
+                      tag: index.toString(),
+                      news: _newsViewModel.news[index],
+                      onTap: () => _newsViewModel.showNewsPageScreen(
+                        context,
+                        index,
+                      ),
+                      onUserTap: () => {},
+                      onShowCommentsTap: () =>
+                          _newsViewModel.showNewsCommentsScreen(context, index),
+                    );
                   })),
           const SeparatorWidget(),
 

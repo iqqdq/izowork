@@ -201,24 +201,29 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                             itemCount: _profileViewModel.user?.social.length,
                             itemBuilder: (context, index) {
                               return Padding(
-                                  padding: const EdgeInsets.only(bottom: 4.0),
-                                  child: InkWell(
-                                      highlightColor: Colors.transparent,
-                                      splashColor: Colors.transparent,
-                                      onTap: () => _profileViewModel.openUrl(
-                                          _profileViewModel.user?.social[index] ??
-                                              _profileViewModel
-                                                  .currentUser.social[index]),
-                                      child: Text(
-                                          _profileViewModel.user?.social[index] ??
-                                              _profileViewModel
-                                                  .currentUser.social[index],
-                                          style: TextStyle(
-                                              color: HexColors.primaryDark,
-                                              fontSize: 14.0,
-                                              fontFamily: 'PT Root UI',
-                                              decoration:
-                                                  TextDecoration.underline))));
+                                key: ValueKey(
+                                    _profileViewModel.user?.social[index]),
+                                padding: const EdgeInsets.only(bottom: 4.0),
+                                child: InkWell(
+                                  highlightColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
+                                  onTap: () => _profileViewModel.openUrl(
+                                      _profileViewModel.user?.social[index] ??
+                                          _profileViewModel
+                                              .currentUser.social[index]),
+                                  child: Text(
+                                    _profileViewModel.user?.social[index] ??
+                                        _profileViewModel
+                                            .currentUser.social[index],
+                                    style: TextStyle(
+                                      color: HexColors.primaryDark,
+                                      fontSize: 14.0,
+                                      fontFamily: 'PT Root UI',
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              );
                             })
               ]),
 

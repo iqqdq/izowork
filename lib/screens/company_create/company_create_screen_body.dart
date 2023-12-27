@@ -342,15 +342,20 @@ class _CompanyCreateScreenBodyState
                                 .company?.contacts.length,
                             itemBuilder: (context, index) {
                               return ContactListItemWidget(
-                                  contact: _companyCreateViewModel
-                                          .company?.contacts[index] ??
-                                      _companyCreateViewModel
-                                          .company!.contacts[index],
-                                  onContactTap: () => _companyCreateViewModel
-                                      .showContactSelectionSheet(context),
-                                  onPhoneTap: () => {},
-                                  onLinkTap: (url) =>
-                                      _companyCreateViewModel.openUrl(url));
+                                key: ValueKey(_companyCreateViewModel
+                                        .company?.contacts[index] ??
+                                    _companyCreateViewModel
+                                        .company!.contacts[index]),
+                                contact: _companyCreateViewModel
+                                        .company?.contacts[index] ??
+                                    _companyCreateViewModel
+                                        .company!.contacts[index],
+                                onContactTap: () => _companyCreateViewModel
+                                    .showContactSelectionSheet(context),
+                                onPhoneTap: () => {},
+                                onLinkTap: (url) =>
+                                    _companyCreateViewModel.openUrl(url),
+                              );
                             }),
 
                     /// ADD CONTACT BUTTON

@@ -179,14 +179,20 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                                 _taskViewModel.selectedTask.files.length,
                             itemBuilder: (context, index) {
                               return FileListItemWidget(
+                                  key: ValueKey(
+                                      _taskViewModel.task?.files[index].id ??
+                                          _taskViewModel
+                                              .selectedTask.files[index].id),
                                   fileName:
                                       _taskViewModel.task?.files[index].name ??
                                           _taskViewModel
                                               .selectedTask.files[index].name,
                                   isDownloading:
                                       _taskViewModel.downloadIndex == index,
-                                  onTap: () =>
-                                      _taskViewModel.openFile(context, index));
+                                  onTap: () => _taskViewModel.openFile(
+                                        context,
+                                        index,
+                                      ));
                             }),
                       ]),
 

@@ -108,6 +108,7 @@ class DealsFilterScreenWidget extends StatelessWidget {
                                 itemCount: options.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
+                                    key: ValueKey(options[index]),
                                     child: Container(
                                         margin:
                                             const EdgeInsets.only(right: 10.0),

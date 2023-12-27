@@ -86,6 +86,7 @@ class _AnalyticsActionsScreenBodyState
                   itemCount: _analyticsActionsViewModel.traces.length,
                   itemBuilder: (context, index) {
                     return AnalitycsActionListItemWidget(
+                        key: ValueKey(_analyticsActionsViewModel.traces[index]),
                         trace: _analyticsActionsViewModel.traces[index],
                         onTap: () => _analyticsActionsViewModel.showTraceScreen(
                             context, index));

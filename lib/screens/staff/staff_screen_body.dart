@@ -134,36 +134,43 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
             child: Stack(children: [
           /// STAFF LIST VIEW
           LiquidPullToRefresh(
-              color: HexColors.primaryMain,
-              backgroundColor: HexColors.white,
-              springAnimationDurationInMilliseconds: 300,
-              onRefresh: _onRefresh,
-              child: ListView.builder(
-                  controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      top: 16.0,
-                      bottom: MediaQuery.of(context).padding.bottom == 0.0
-                          ? 12.0
-                          : MediaQuery.of(context).padding.bottom),
-                  shrinkWrap: true,
-                  itemCount: _staffViewModel.users.length,
-                  itemBuilder: (context, index) {
-                    return StaffListItemWidget(
-                        user: _staffViewModel.users[index],
-                        onUserTap: () => _staffViewModel.showProfileScreen(
-                            context, _staffViewModel.users[index]),
-                        onLinkTap: _staffViewModel.users[index].social.isEmpty
-                            ? null
-                            : (url) => _staffViewModel.openUrl(url),
-                        onChatTap: _staffViewModel.users[index].id ==
-                                _staffViewModel.userId
-                            ? null
-                            : () =>
-                                _staffViewModel.createUserChat(context, index));
-                  })),
+            color: HexColors.primaryMain,
+            backgroundColor: HexColors.white,
+            springAnimationDurationInMilliseconds: 300,
+            onRefresh: _onRefresh,
+            child: ListView.builder(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.only(
+                  left: 16.0,
+                  right: 16.0,
+                  top: 16.0,
+                  bottom: MediaQuery.of(context).padding.bottom == 0.0
+                      ? 12.0
+                      : MediaQuery.of(context).padding.bottom,
+                ),
+                shrinkWrap: true,
+                itemCount: _staffViewModel.users.length,
+                itemBuilder: (context, index) {
+                  return StaffListItemWidget(
+                      key: ValueKey(_staffViewModel.users[index].id),
+                      user: _staffViewModel.users[index],
+                      onUserTap: () => _staffViewModel.showProfileScreen(
+                            context,
+                            _staffViewModel.users[index],
+                          ),
+                      onLinkTap: _staffViewModel.users[index].social.isEmpty
+                          ? null
+                          : (url) => _staffViewModel.openUrl(url),
+                      onChatTap: _staffViewModel.users[index].id ==
+                              _staffViewModel.userId
+                          ? null
+                          : () => _staffViewModel.createUserChat(
+                                context,
+                                index,
+                              ));
+                }),
+          ),
           const SeparatorWidget(),
 
           /// EMPTY LIST TEXT

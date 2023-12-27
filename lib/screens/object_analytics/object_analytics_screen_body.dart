@@ -37,10 +37,14 @@ class _ObjectAnalyticsScreenBodyState
             shrinkWrap: true,
             children: [
                 TitleWidget(
-                    padding: const EdgeInsets.only(
-                        left: 16.0, right: 16.0, bottom: 4.0),
-                    text: _objectAnalyticsViewModel.phases[index].name,
-                    isSmall: true),
+                  padding: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 16.0,
+                    bottom: 4.0,
+                  ),
+                  text: _objectAnalyticsViewModel.phases[index].name,
+                  isSmall: true,
+                ),
                 const SizedBox(height: 10.0),
 
                 /// TABLE
@@ -48,117 +52,117 @@ class _ObjectAnalyticsScreenBodyState
                     width: MediaQuery.of(context).size.width,
                     height: 50.0 * (phaseProducts.length + 1),
                     child: SpreadsheetTable(
-                        cellBuilder: (_, int row, int col) => Container(
-                            height: 42.0,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 0.65, color: HexColors.grey20)),
-                            child: Row(children: [
-                              Expanded(
-                                  child: Text(
-                                      col == 0
-                                          ? phaseProducts[row].count.toString()
-                                          : col == 1
-                                              ? '${(phaseProducts[row].product?.price ?? 0).toString()} ${Titles.currency}'
-                                              : col == 2
-                                                  ? (phaseProducts[row].count -
-                                                          phaseProducts[row]
-                                                              .bought)
-                                                      .toString()
-                                                  : col == 3
-                                                      ? phaseProducts[row]
-                                                                  .bought ==
-                                                              0
-                                                          ? '0 %'
-                                                          : ((phaseProducts[row]
-                                                                              .bought /
-                                                                          phaseProducts[row]
-                                                                              .count) *
-                                                                      100)
-                                                                  .toString() +
-                                                              ' %'
-                                                      : (phaseProducts[row]
-                                                                  .count -
-                                                              (phaseProducts[
-                                                                          row]
-                                                                      .count -
-                                                                  phaseProducts[
-                                                                          row]
-                                                                      .bought))
-                                                          .toString(),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
+                      cellBuilder: (_, int row, int col) => Container(
+                          height: 42.0,
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            width: 0.65,
+                            color: HexColors.grey20,
+                          )),
+                          child: Row(children: [
+                            Expanded(
+                                child: Text(
+                                    col == 0
+                                        ? phaseProducts[row].count.toString()
+                                        : col == 1
+                                            ? '${(phaseProducts[row].product?.price ?? 0).toString()} ${Titles.currency}'
+                                            : col == 2
+                                                ? (phaseProducts[row].count -
+                                                        phaseProducts[row]
+                                                            .bought)
+                                                    .toString()
+                                                : col == 3
+                                                    ? phaseProducts[row]
+                                                                .bought ==
+                                                            0
+                                                        ? '0 %'
+                                                        : ((phaseProducts[row]
+                                                                            .bought /
+                                                                        phaseProducts[row]
+                                                                            .count) *
+                                                                    100)
+                                                                .toString() +
+                                                            ' %'
+                                                    : (phaseProducts[row]
+                                                                .count -
+                                                            (phaseProducts[row]
+                                                                    .count -
+                                                                phaseProducts[
+                                                                        row]
+                                                                    .bought))
+                                                        .toString(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: HexColors.black,
+                                    )))
+                          ])),
+                      legendBuilder: (_) => Container(
+                          height: 42.0,
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            width: 0.65,
+                            color: HexColors.grey20,
+                          )),
+                          child: Row(children: [
+                            Text(Titles.product,
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: HexColors.black,
+                                    fontFamily: 'PT Root UI'))
+                          ])),
+                      rowHeaderBuilder: (_, index) => Container(
+                          height: 42.0,
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            width: 0.65,
+                            color: HexColors.grey20,
+                          )),
+                          child: Row(children: [
+                            Expanded(
+                                child: Text(
+                                    phaseProducts[index].product?.name ?? '-',
+                                    maxLines: 2,
+                                    style: TextStyle(
                                         fontSize: 14.0,
                                         color: HexColors.black,
-                                      )))
-                            ])),
-                        legendBuilder: (_) => Container(
-                            height: 42.0,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                              width: 0.65,
-                              color: HexColors.grey20,
-                            )),
-                            child: Row(children: [
-                              Text(Titles.product,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontFamily: 'PT Root UI')))
+                          ])),
+                      colHeaderBuilder: (_, index) => Container(
+                          height: 42.0,
+                          padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 0.65, color: HexColors.grey20)),
+                          child: Center(
+                              child: Text(
+                                  index == 0
+                                      ? Titles.count
+                                      : index == 1
+                                          ? Titles.totalPrice
+                                          : index == 2
+                                              ? Titles.remain
+                                              : index == 3
+                                                  ? Titles.complitionPercent
+                                                  : Titles.complitionSum,
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
                                       color: HexColors.black,
-                                      fontFamily: 'PT Root UI'))
-                            ])),
-                        rowHeaderBuilder: (_, index) => Container(
-                            height: 42.0,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 0.65, color: HexColors.grey20)),
-                            child: Row(children: [
-                              Expanded(
-                                  child: Text(
-                                      phaseProducts[index].product?.name ?? '-',
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: HexColors.black,
-                                          overflow: TextOverflow.ellipsis,
-                                          fontFamily: 'PT Root UI')))
-                            ])),
-                        colHeaderBuilder: (_, index) => Container(
-                            height: 42.0,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 0.65, color: HexColors.grey20)),
-                            child: Center(
-                                child: Text(
-                                    index == 0
-                                        ? Titles.count
-                                        : index == 1
-                                            ? Titles.totalPrice
-                                            : index == 2
-                                                ? Titles.remain
-                                                : index == 3
-                                                    ? Titles.complitionPercent
-                                                    : Titles.complitionSum,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w500,
-                                        color: HexColors.black,
-                                        fontFamily: 'PT Root UI')))),
-                        rowHeaderWidth: 144.0,
-                        colsHeaderHeight: 42.0,
-                        cellHeight: 50.0,
-                        cellWidth: 100.0,
-                        rowsCount: phaseProducts.length,
-                        colCount: 5))
+                                      fontFamily: 'PT Root UI')))),
+                      rowHeaderWidth: 144.0,
+                      colsHeaderHeight: 42.0,
+                      cellHeight: 50.0,
+                      cellWidth: 100.0,
+                      rowsCount: phaseProducts.length,
+                      colCount: 5,
+                    ))
               ]);
   }
 
@@ -169,8 +173,11 @@ class _ObjectAnalyticsScreenBodyState
         shrinkWrap: true,
         children: [
           TitleWidget(
-              padding:
-                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 4.0),
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+                bottom: 4.0,
+              ),
               text: title,
               isSmall: true),
           const SizedBox(height: 10.0),
@@ -184,8 +191,10 @@ class _ObjectAnalyticsScreenBodyState
                     height: 42.0,
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 0.65, color: HexColors.grey20)),
+                        border: Border.all(
+                      width: 0.65,
+                      color: HexColors.grey20,
+                    )),
                     child: Row(children: [
                       Expanded(
                           child: Text(
@@ -200,8 +209,10 @@ class _ObjectAnalyticsScreenBodyState
                     height: 42.0,
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 0.65, color: HexColors.grey20)),
+                        border: Border.all(
+                      width: 0.65,
+                      color: HexColors.grey20,
+                    )),
                     child: Row(children: [
                       Text(Titles.phases,
                           style: TextStyle(
@@ -214,25 +225,31 @@ class _ObjectAnalyticsScreenBodyState
                     height: 42.0,
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 0.65, color: HexColors.grey20)),
+                        border: Border.all(
+                      width: 0.65,
+                      color: HexColors.grey20,
+                    )),
                     child: Row(children: [
                       Expanded(
-                          child: Text(
-                              _objectAnalyticsViewModel.phases[index].name,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  fontSize: 12.0,
-                                  color: HexColors.black,
-                                  overflow: TextOverflow.ellipsis,
-                                  fontFamily: 'PT Root UI')))
+                        child: Text(
+                          _objectAnalyticsViewModel.phases[index].name,
+                          maxLines: 2,
+                          style: TextStyle(
+                              fontSize: 12.0,
+                              color: HexColors.black,
+                              overflow: TextOverflow.ellipsis,
+                              fontFamily: 'PT Root UI'),
+                        ),
+                      )
                     ])),
                 colHeaderBuilder: (_, index) => Container(
                     height: 42.0,
                     padding: const EdgeInsets.symmetric(horizontal: 2.0),
                     decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 0.65, color: HexColors.grey20)),
+                        border: Border.all(
+                      width: 0.65,
+                      color: HexColors.grey20,
+                    )),
                     child: Row(children: [
                       Expanded(
                           child: Text(
@@ -307,11 +324,12 @@ class _ObjectAnalyticsScreenBodyState
 
                       /// PRODUCT TABLE LIST VIEW
                       ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: const EdgeInsets.only(top: 20.0),
-                          shrinkWrap: true,
-                          itemCount: _objectAnalyticsViewModel.phases.length,
-                          itemBuilder: (context, index) => _table(index)),
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.only(top: 20.0),
+                        shrinkWrap: true,
+                        itemCount: _objectAnalyticsViewModel.phases.length,
+                        itemBuilder: (context, index) => _table(index),
+                      ),
 
                       /// EFFECTIVENESS TABLE
                       _bottomTable(Titles.effectiveness),
@@ -393,10 +411,14 @@ class _ObjectAnalyticsScreenBodyState
                               _objectAnalyticsViewModel.object.files.length,
                           itemBuilder: (context, index) {
                             return FileListItemWidget(
+                                key: ValueKey(_objectAnalyticsViewModel
+                                    .object.files[index].id),
                                 fileName: _objectAnalyticsViewModel
                                     .object.files[index].name,
                                 onTap: () => _objectAnalyticsViewModel.openFile(
-                                    context, index));
+                                      context,
+                                      index,
+                                    ));
                           })
                     ]),
           const SeparatorWidget()

@@ -94,7 +94,9 @@ class ProductsFilterScreenWidget extends StatelessWidget {
                                         margin:
                                             const EdgeInsets.only(right: 10.0),
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0, vertical: 4.0),
+                                          horizontal: 10.0,
+                                          vertical: 4.0,
+                                        ),
                                         decoration: BoxDecoration(
                                             color: tags.contains(index)
                                                 ? HexColors.additionalViolet
@@ -135,7 +137,9 @@ class ProductsFilterScreenWidget extends StatelessWidget {
                                         margin:
                                             const EdgeInsets.only(right: 10.0),
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0, vertical: 4.0),
+                                          horizontal: 10.0,
+                                          vertical: 4.0,
+                                        ),
                                         decoration: BoxDecoration(
                                             color: tags2.contains(index)
                                                 ? HexColors.additionalViolet

@@ -98,6 +98,8 @@ class _DealProcessScreenBodyState extends State<DealProcessScreenBodyWidget> {
                   itemCount: _dealProcessViewModel.informations.length,
                   itemBuilder: (context, index) {
                     return DealProcessInfoListItemWidget(
+                        key: ValueKey(
+                            _dealProcessViewModel.informations[index].id),
                         information: _dealProcessViewModel.informations[index],
                         onUserTap: () => _dealProcessViewModel
                             .showProfileScreen(context, index),

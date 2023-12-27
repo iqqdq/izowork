@@ -155,9 +155,12 @@ class _TasksScreenBodyState extends State<TasksScreenBodyWidget>
                   itemCount: _tasksViewModel.tasks.length,
                   itemBuilder: (context, index) {
                     return TaskListItemWidget(
+                        key: ValueKey(_tasksViewModel.tasks[index].id),
                         task: _tasksViewModel.tasks[index],
                         onTap: () => _tasksViewModel.showTaskScreenWidget(
-                            context, index));
+                              context,
+                              index,
+                            ));
                   })),
 
           /// FILTER BUTTON

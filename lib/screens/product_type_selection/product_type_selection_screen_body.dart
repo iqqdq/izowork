@@ -67,6 +67,8 @@ class _ProductTypeSelectionScreenBodyState
                                     .productTypes[index].id;
 
                     return SelectionListItemWidget(
+                        key: ValueKey(_productTypeSelectionViewModel
+                            .productTypes[index].id),
                         isSelected: isSelected,
                         name: _productTypeSelectionViewModel
                             .productTypes[index].name,
@@ -78,7 +80,10 @@ class _ProductTypeSelectionScreenBodyState
                   title: Titles.apply,
                   isDisabled:
                       _productTypeSelectionViewModel.productType == null,
-                  margin: const EdgeInsets.only(left: 16.0, right: 5.0),
+                  margin: const EdgeInsets.only(
+                    left: 16.0,
+                    right: 5.0,
+                  ),
                   onTap: () => widget
                       .onSelect(_productTypeSelectionViewModel.productType))
             ]));

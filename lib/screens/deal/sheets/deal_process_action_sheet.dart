@@ -46,8 +46,10 @@ class DealProcessActionSheet extends StatelessWidget {
                         return BorderButtonWidget(
                             margin: const EdgeInsets.only(top: 16.0),
                             title: Titles.delete,
-                            onTap: () =>
-                                {onTap(index), Navigator.pop(context)});
+                            onTap: () => {
+                                  onTap(index),
+                                  Navigator.pop(context),
+                                });
                       })
                 ])));
   }

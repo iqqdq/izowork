@@ -320,7 +320,10 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                 : ListView.builder(
                                     shrinkWrap: true,
                                     padding: const EdgeInsets.only(
-                                        bottom: 10.0, left: 16.0, right: 16.0),
+                                      bottom: 10.0,
+                                      left: 16.0,
+                                      right: 16.0,
+                                    ),
                                     physics:
                                         const NeverScrollableScrollPhysics(),
                                     itemCount:
@@ -329,6 +332,8 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                                 .selectedDeal.files.length,
                                     itemBuilder: (context, index) {
                                       return FileListItemWidget(
+                                          key: ValueKey(_dealViewModel
+                                              .deal!.files[index]),
                                           fileName: _dealViewModel
                                                   .deal?.files[index].name ??
                                               _dealViewModel.selectedDeal
@@ -369,6 +374,8 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                       null
                                   ? Container()
                                   : DealProcessListItemWidget(
+                                      key: ValueKey(
+                                          _dealViewModel.dealStages[index]),
                                       dealStage:
                                           _dealViewModel.dealStages[index],
                                       dealProcesses: _dealViewModel

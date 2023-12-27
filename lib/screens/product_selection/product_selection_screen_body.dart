@@ -134,29 +134,32 @@ class _ProductSelectionScreenBodyState
                                 controller: _scrollController,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 padding: EdgeInsets.only(
-                                    top: 12.0,
-                                    left: 16.0,
-                                    right: 16.0,
-                                    bottom: (MediaQuery.of(context)
-                                                    .viewInsets
-                                                    .bottom !=
-                                                0.0
-                                            ? MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom
-                                            : MediaQuery.of(context)
-                                                        .padding
-                                                        .bottom ==
-                                                    0.0
-                                                ? 12.0
-                                                : MediaQuery.of(context)
-                                                    .padding
-                                                    .bottom) +
-                                        124.0),
+                                  top: 12.0,
+                                  left: 16.0,
+                                  right: 16.0,
+                                  bottom: (MediaQuery.of(context)
+                                                  .viewInsets
+                                                  .bottom !=
+                                              0.0
+                                          ? MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom
+                                          : MediaQuery.of(context)
+                                                      .padding
+                                                      .bottom ==
+                                                  0.0
+                                              ? 12.0
+                                              : MediaQuery.of(context)
+                                                  .padding
+                                                  .bottom) +
+                                      124.0,
+                                ),
                                 itemCount:
                                     _productSelectionViewModel.products.length,
                                 itemBuilder: (context, index) {
                                   return SearchUserListItemWidget(
+                                      key: ValueKey(_productSelectionViewModel
+                                          .products[index].id),
                                       name: _productSelectionViewModel
                                           .products[index].name,
                                       onTap: () => {
@@ -175,14 +178,17 @@ class _ProductSelectionScreenBodyState
                       !_isSearching
                   ? Center(
                       child: Padding(
-                          padding:
-                              const EdgeInsets.only(left: 20.0, right: 20.0),
-                          child: Text(Titles.noResult,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontSize: 16.0,
-                                  color: HexColors.grey50))))
+                        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                        child: Text(
+                          Titles.noResult,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16.0,
+                              color: HexColors.grey50),
+                        ),
+                      ),
+                    )
                   : Container(),
 
               /// INDICATOR

@@ -13,12 +13,16 @@ import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
 class CompleteChecklistBodyWidget extends StatefulWidget {
+  final bool canEdit;
   final String title;
   final Function(String, List<PlatformFile>) onTap;
 
-  const CompleteChecklistBodyWidget(
-      {Key? key, required this.title, required this.onTap})
-      : super(key: key);
+  const CompleteChecklistBodyWidget({
+    Key? key,
+    required this.canEdit,
+    required this.title,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   _CompleteChecklistBodyState createState() => _CompleteChecklistBodyState();
@@ -35,7 +39,8 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_completeChecklistViewModel.phaseChecklistInformation == null) {
+      if (widget.canEdit &&
+          _completeChecklistViewModel.phaseChecklistInformation == null) {
         _focusNode.requestFocus();
       }
     });
@@ -96,21 +101,24 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
                       /// REASON INPUT
                       _completeChecklistViewModel.phaseChecklistInformation ==
                               null
-                          ? InputWidget(
-                              textEditingController: _textEditingController,
-                              focusNode: _focusNode,
-                              height: 168.0,
-                              maxLines: 10,
-                              margin: EdgeInsets.zero,
-                              placeholder: '${Titles.description}...',
-                              onTap: () => setState,
-                              onChange: (text) => setState(() {}),
-                            )
+                          ? IgnorePointer(
+                              ignoring: !widget.canEdit,
+                              child: InputWidget(
+                                textEditingController: _textEditingController,
+                                focusNode: _focusNode,
+                                height: 168.0,
+                                maxLines: 10,
+                                margin: EdgeInsets.zero,
+                                placeholder: '${Titles.description}...',
+                                onTap: () => setState,
+                                onChange: (text) => setState(() {}),
+                              ))
                           : SubtitleWidget(
                               text: _completeChecklistViewModel
                                       .phaseChecklistInformation?.description ??
                                   '-',
-                              padding: const EdgeInsets.only(bottom: 4.0)),
+                              padding: const EdgeInsets.only(bottom: 4.0),
+                            ),
 
                       /// FILE LIST
                       ListView.builder(
@@ -122,6 +130,14 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
                               _completeChecklistViewModel.files.length,
                           itemBuilder: (context, index) {
                             return FileListItemWidget(
+                              key: ValueKey(
+                                _completeChecklistViewModel
+                                        .phaseChecklistInformation
+                                        ?.files[index]
+                                        .name ??
+                                    _completeChecklistViewModel
+                                        .files[index].name,
+                              ),
                               fileName: _completeChecklistViewModel
                                       .phaseChecklistInformation
                                       ?.files[index]
@@ -139,34 +155,44 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
                           }),
 
                       /// ADD FILE BUTTON
-                      _completeChecklistViewModel.phaseChecklistInformation ==
-                              null
+                      widget.canEdit &&
+                              _completeChecklistViewModel
+                                      .phaseChecklistInformation !=
+                                  null
                           ? BorderButtonWidget(
                               margin: const EdgeInsets.only(bottom: 16.0),
                               title: Titles.addFile,
                               onTap: () =>
-                                  _completeChecklistViewModel.addFile())
+                                  _completeChecklistViewModel.addFile(),
+                            )
                           : Container(),
 
                       /// ADD BUTTON
                       ButtonWidget(
-                          margin: EdgeInsets.zero,
-                          title: _completeChecklistViewModel
-                                      .phaseChecklistInformation ==
-                                  null
-                              ? Titles.add
-                              : Titles.close,
-                          isDisabled: _completeChecklistViewModel
-                                      .phaseChecklistInformation !=
-                                  null
-                              ? false
-                              : _textEditingController.text.isEmpty,
-                          onTap: () => _completeChecklistViewModel
-                                      .phaseChecklistInformation ==
-                                  null
-                              ? widget.onTap(_textEditingController.text,
-                                  _completeChecklistViewModel.files)
-                              : Navigator.pop(context)),
+                        margin: EdgeInsets.zero,
+                        title: widget.canEdit &&
+                                _completeChecklistViewModel
+                                        .phaseChecklistInformation !=
+                                    null
+                            ? Titles.add
+                            : Titles.close,
+                        isDisabled: !widget.canEdit
+                            ? false
+                            : _completeChecklistViewModel
+                                        .phaseChecklistInformation !=
+                                    null
+                                ? false
+                                : _textEditingController.text.isEmpty,
+                        onTap: () => widget.canEdit &&
+                                _completeChecklistViewModel
+                                        .phaseChecklistInformation ==
+                                    null
+                            ? widget.onTap(
+                                _textEditingController.text,
+                                _completeChecklistViewModel.files,
+                              )
+                            : Navigator.pop(context),
+                      ),
                     ]))));
   }
 }

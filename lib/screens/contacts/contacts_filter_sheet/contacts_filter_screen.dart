@@ -62,6 +62,7 @@ class ContactsFilterScreenWidget extends StatelessWidget {
                                 itemCount: options.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
+                                    key: ValueKey(options.length),
                                     child: Container(
                                         margin:
                                             const EdgeInsets.only(right: 10.0),
@@ -103,6 +104,7 @@ class ContactsFilterScreenWidget extends StatelessWidget {
                                 itemCount: options2.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
+                                    key: ValueKey(options2[index]),
                                     child: Container(
                                         margin:
                                             const EdgeInsets.only(right: 10.0),

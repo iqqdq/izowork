@@ -262,6 +262,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
                         itemBuilder: (context, index) {
                           return Column(children: [
                             InputWidget(
+                                key: ValueKey(_socials[index]),
                                 margin: const EdgeInsets.only(bottom: 10.0),
                                 height: 56.0,
                                 textEditingController:

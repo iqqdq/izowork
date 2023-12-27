@@ -275,59 +275,40 @@ class PhaseViewModel with ChangeNotifier {
             phaseChecklistInformation = _phaseChecklistInformations.first,
 
           // SHOW CHECKLIST SHEET
-          if (_phaseChecklistResponse == null)
-            {
-              Toast().showTopToast(
-                context,
-                Titles.uHaveNotChecklistPermission,
-              )
-            }
-          else
-            {
-              if (_phaseChecklistResponse!.canEdit)
-                {
-                  showCupertinoModalBottomSheet(
-                      enableDrag: false,
-                      topRadius: const Radius.circular(16.0),
-                      barrierColor: Colors.black.withOpacity(0.6),
-                      backgroundColor: HexColors.white,
-                      context: context,
-                      builder: (sheetContext) => CompleteChecklistScreenWidget(
-                          title: _phaseChecklistResponse
-                                  ?.phaseChecklists[index].name ??
-                              '',
-                          phaseChecklistInformation: phaseChecklistInformation,
-                          onTap: (
-                            text,
-                            files,
-                          ) =>
-                              {
-                                // HIDE BOTTOM SHEET
-                                Navigator.pop(context),
 
-                                // SET SELECTED FILES
-                                files.forEach((element) {
-                                  if (element.path != null) {
-                                    _files.add(File(element.path!));
-                                  }
-                                }),
+          showCupertinoModalBottomSheet(
+              enableDrag: false,
+              topRadius: const Radius.circular(16.0),
+              barrierColor: Colors.black.withOpacity(0.6),
+              backgroundColor: HexColors.white,
+              context: context,
+              builder: (sheetContext) => CompleteChecklistScreenWidget(
+                  canEdit: _phaseChecklistResponse!.canEdit,
+                  title: _phaseChecklistResponse?.phaseChecklists[index].name ??
+                      '',
+                  phaseChecklistInformation: phaseChecklistInformation,
+                  onTap: (
+                    text,
+                    files,
+                  ) =>
+                      {
+                        // HIDE BOTTOM SHEET
+                        Navigator.pop(context),
 
-                                // CREATE NEW PHASE CHECKLIST
-                                createPhaseChecklistInfo(
-                                  context,
-                                  index,
-                                  text,
-                                )
-                              }))
-                }
-              else
-                {
-                  Toast().showTopToast(
-                    context,
-                    Titles.uHaveNotChecklistPermission,
-                  )
-                }
-            }
+                        // SET SELECTED FILES
+                        files.forEach((element) {
+                          if (element.path != null) {
+                            _files.add(File(element.path!));
+                          }
+                        }),
+
+                        // CREATE NEW PHASE CHECKLIST
+                        createPhaseChecklistInfo(
+                          context,
+                          index,
+                          text,
+                        )
+                      }))
         });
   }
 

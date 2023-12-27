@@ -232,6 +232,8 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                         .dealProducts.length,
                                     itemBuilder: (context, index) {
                                       return DealProductListItemWidget(
+                                        key: ValueKey(_dealCreateViewModel
+                                            .dealProducts[index].id),
                                         index: index + 1,
                                         dealProduct: _dealCreateViewModel
                                             .dealProducts[index],
@@ -269,6 +271,12 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                     : _dealCreateViewModel.deal!.files.length,
                                 itemBuilder: (context, index) {
                                   return IgnorePointer(
+                                      key: ValueKey(
+                                        _dealCreateViewModel.deal == null
+                                            ? _dealCreateViewModel.files[index]
+                                            : _dealCreateViewModel
+                                                .deal!.files[index],
+                                      ),
                                       ignoring: _dealCreateViewModel.downloadIndex !=
                                           -1,
                                       child: FileListItemWidget(

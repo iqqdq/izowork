@@ -289,6 +289,8 @@ class _AnalyticsCompaniesScreenBodyState
                                     .managerAnalytics?.users.length,
                                 itemBuilder: (context, index) {
                                   return AnalitycsManagerListItemWidget(
+                                      key: ValueKey(_analyticsCompaniesViewModel
+                                          .managerAnalytics?.users[index]),
                                       user: _analyticsCompaniesViewModel
                                           .managerAnalytics?.users[index],
                                       value: _analyticsCompaniesViewModel

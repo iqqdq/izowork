@@ -145,36 +145,40 @@ class _SearchProductScreenBodyState
                                 controller: _scrollController,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 padding: EdgeInsets.only(
-                                    top: 12.0,
-                                    left: 16.0,
-                                    right: 16.0,
-                                    bottom: (MediaQuery.of(context)
-                                                    .viewInsets
-                                                    .bottom !=
-                                                0.0
-                                            ? MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom
-                                            : MediaQuery.of(context)
-                                                        .padding
-                                                        .bottom ==
-                                                    0.0
-                                                ? 12.0
-                                                : MediaQuery.of(context)
-                                                    .padding
-                                                    .bottom) +
-                                        124.0),
+                                  top: 12.0,
+                                  left: 16.0,
+                                  right: 16.0,
+                                  bottom: (MediaQuery.of(context)
+                                                  .viewInsets
+                                                  .bottom !=
+                                              0.0
+                                          ? MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom
+                                          : MediaQuery.of(context)
+                                                      .padding
+                                                      .bottom ==
+                                                  0.0
+                                              ? 12.0
+                                              : MediaQuery.of(context)
+                                                  .padding
+                                                  .bottom) +
+                                      124.0,
+                                ),
                                 itemCount:
                                     _searchProductViewModel.products.length,
                                 itemBuilder: (context, index) {
                                   return SearchUserListItemWidget(
-                                      name: _searchProductViewModel
-                                          .products[index].name,
-                                      onTap: () => {
-                                            FocusScope.of(context).unfocus(),
-                                            widget.onPop(_searchProductViewModel
-                                                .products[index])
-                                          });
+                                    key: ValueKey(_searchProductViewModel
+                                        .products[index].id),
+                                    name: _searchProductViewModel
+                                        .products[index].name,
+                                    onTap: () => {
+                                      FocusScope.of(context).unfocus(),
+                                      widget.onPop(_searchProductViewModel
+                                          .products[index])
+                                    },
+                                  );
                                 })))
                   ]),
 

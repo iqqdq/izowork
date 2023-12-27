@@ -158,6 +158,7 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
                         _documentsViewModel.documents[index].type == 'dir';
 
                     return FileListItemWidget(
+                        key: ValueKey(_documentsViewModel.documents[index].id),
                         fileName: _documentsViewModel.documents[index].name,
                         isFolder: isFolder,
                         isDownloading:

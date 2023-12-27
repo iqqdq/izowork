@@ -208,6 +208,8 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                             itemCount: _contactViewModel.contact?.social.length,
                             itemBuilder: (context, index) {
                               return Padding(
+                                  key: ValueKey(
+                                      _contactViewModel.contact?.social[index]),
                                   padding: const EdgeInsets.only(bottom: 4.0),
                                   child: InkWell(
                                       highlightColor: Colors.transparent,

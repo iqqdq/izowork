@@ -128,7 +128,9 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
                                         margin:
                                             const EdgeInsets.only(right: 10.0),
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0, vertical: 4.0),
+                                          horizontal: 10.0,
+                                          vertical: 4.0,
+                                        ),
                                         decoration: BoxDecoration(
                                             color: tags.contains(index)
                                                 ? HexColors.additionalViolet
@@ -162,7 +164,9 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
                             child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 0.0),
+                                  horizontal: 16.0,
+                                  vertical: 0.0,
+                                ),
                                 itemCount: options2.length,
                                 itemBuilder: (context, index) {
                                   return GestureDetector(

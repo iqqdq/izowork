@@ -131,6 +131,7 @@ class DealProcessInfoListItemWidget extends StatelessWidget {
                   itemCount: information.files.length,
                   itemBuilder: (context, index) {
                     return FileListItemWidget(
+                      key: ValueKey(information.files[index].id),
                       fileName: information.files[index].name,
                       onTap: () => onFileTap(index),
                     );

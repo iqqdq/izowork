@@ -142,20 +142,24 @@ class _ParticipantsScreenBodyState extends State<ParticipantsScreenBodyWidget> {
                   controller: _scrollController,
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      top: 16.0,
-                      bottom: MediaQuery.of(context).padding.bottom == 0.0
-                          ? 12.0
-                          : MediaQuery.of(context).padding.bottom),
+                    left: 16.0,
+                    right: 16.0,
+                    top: 16.0,
+                    bottom: MediaQuery.of(context).padding.bottom == 0.0
+                        ? 12.0
+                        : MediaQuery.of(context).padding.bottom,
+                  ),
                   shrinkWrap: true,
                   itemCount: _participantsViewModel.users.length,
                   itemBuilder: (context, index) {
                     return StaffListItemWidget(
+                        key: ValueKey(_participantsViewModel.users[index].id),
                         user: _participantsViewModel.users[index],
                         onUserTap: () =>
                             _participantsViewModel.showProfileScreen(
-                                context, _participantsViewModel.users[index]),
+                              context,
+                              _participantsViewModel.users[index],
+                            ),
                         onLinkTap:
                             _participantsViewModel.users[index].social.isEmpty
                                 ? null
@@ -164,7 +168,9 @@ class _ParticipantsScreenBodyState extends State<ParticipantsScreenBodyWidget> {
                                 _participantsViewModel.userId
                             ? null
                             : () => _participantsViewModel.createUserChat(
-                                context, index));
+                                  context,
+                                  index,
+                                ));
                   })),
           const SeparatorWidget(),
 
@@ -174,14 +180,18 @@ class _ParticipantsScreenBodyState extends State<ParticipantsScreenBodyWidget> {
                   !_isSearching
               ? Center(
                   child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20.0, right: 20.0, bottom: 100.0),
-                      child: Text(Titles.noResult,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 16.0,
-                              color: HexColors.grey50))))
+                    padding: const EdgeInsets.only(
+                        left: 20.0, right: 20.0, bottom: 100.0),
+                    child: Text(
+                      Titles.noResult,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 16.0,
+                          color: HexColors.grey50),
+                    ),
+                  ),
+                )
               : Container(),
 
           /// INDICATOR

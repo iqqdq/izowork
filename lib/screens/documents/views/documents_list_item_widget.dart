@@ -62,6 +62,7 @@ class DocumentListItemWidget extends StatelessWidget {
               itemCount: documents.length,
               itemBuilder: (context, index) {
                 return FileListItemWidget(
+                    key: ValueKey(documents[index].id),
                     fileName: documents[index].name,
                     // isDownloading: isDownloading,
                     onTap: () => onTap(index));

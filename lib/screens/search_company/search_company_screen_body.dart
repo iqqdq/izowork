@@ -149,25 +149,26 @@ class _SearchCompanyScreenBodyState
                                 controller: _scrollController,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 padding: EdgeInsets.only(
-                                    top: 12.0,
-                                    left: 16.0,
-                                    right: 16.0,
-                                    bottom: (MediaQuery.of(context)
-                                                    .viewInsets
-                                                    .bottom !=
-                                                0.0
-                                            ? MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom
-                                            : MediaQuery.of(context)
-                                                        .padding
-                                                        .bottom ==
-                                                    0.0
-                                                ? 12.0
-                                                : MediaQuery.of(context)
-                                                    .padding
-                                                    .bottom) +
-                                        124.0),
+                                  top: 12.0,
+                                  left: 16.0,
+                                  right: 16.0,
+                                  bottom: (MediaQuery.of(context)
+                                                  .viewInsets
+                                                  .bottom !=
+                                              0.0
+                                          ? MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom
+                                          : MediaQuery.of(context)
+                                                      .padding
+                                                      .bottom ==
+                                                  0.0
+                                              ? 12.0
+                                              : MediaQuery.of(context)
+                                                  .padding
+                                                  .bottom) +
+                                      124.0,
+                                ),
                                 itemCount:
                                     _searchCompanyViewModel.companies.length,
                                 itemBuilder: (context, index) {
@@ -178,6 +179,8 @@ class _SearchCompanyScreenBodyState
                                     shrinkWrap: true,
                                     children: [
                                       SearchUserListItemWidget(
+                                          key: ValueKey(_searchCompanyViewModel
+                                              .companies[index].id),
                                           name: _searchCompanyViewModel
                                               .companies[index].name,
                                           onTap: () => {
@@ -188,12 +191,13 @@ class _SearchCompanyScreenBodyState
                                                         .companies[index])
                                               }),
                                       SizedBox(
-                                          height: index ==
-                                                  _searchCompanyViewModel
-                                                          .companies.length -
-                                                      1
-                                              ? 20.0
-                                              : 0.0),
+                                        height: index ==
+                                                _searchCompanyViewModel
+                                                        .companies.length -
+                                                    1
+                                            ? 20.0
+                                            : 0.0,
+                                      ),
                                       index ==
                                               _searchCompanyViewModel
                                                       .companies.length -

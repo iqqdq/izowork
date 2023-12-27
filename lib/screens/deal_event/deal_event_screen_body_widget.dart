@@ -100,6 +100,8 @@ class _DealEventScreenBodyState extends State<DealEventScreenBodyWidget> {
                               itemCount: _dealEventViewModel.deals.length,
                               itemBuilder: (context, index) {
                                 return DealListItemWidget(
+                                    key: ValueKey(
+                                        _dealEventViewModel.deals[index].id),
                                     deal: _dealEventViewModel.deals[index],
                                     onTap: () => _dealEventViewModel
                                         .showDealScreenWidget(context, index));

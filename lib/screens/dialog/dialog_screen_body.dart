@@ -171,48 +171,48 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
         setState(() {
           if (mounted) {
             _bubbles.insert(
-                0,
-                BubbleWidget(
-                    animate: animate && _bubbles.isEmpty,
-                    verticalSpacing: !_isSameNextAuthor(index)
-                        ? isMine
-                            ? 16.0
-                            : 10.0
-                        : 0.0,
-                    isMine: isMine,
-                    isRead: element.readAt != null,
-                    isFile: isFile,
-                    isDownloading: _dialogViewModel.downloadIndex == index,
-                    isAudio: isAudio,
-                    showDate: index == _dialogViewModel.messages.length - 1
-                        ? true
-                        : !_isSamePrevDate(index),
-                    showName: _isGroupChat
-                        ? !_isSamePrevAuthor(index) ||
-                            !_isSamePrevDate(index) &&
-                                !_isSameNextAuthor(index) ||
-                            !_isSamePrevDate(index) && !_isSamePrevAuthor(index)
-                        : false,
-                    isGroupLastMessage:
-                        _isGroupChat ? !_isSameNextAuthor(index) : false,
-                    user: _isGroupChat ? element.user : null,
-                    text: isFile
-                        ? element.files.first.name
-                        : isAudio
-                            ? messageMediaUrl +
-                                (element.files.first.filename ?? '')
-                            : element.text,
-                    dateTime: element.createdAt.toLocal(),
-                    onUserTap: () =>
-                        _dialogViewModel.showProfileScreen(context, element),
-                    onTap: isFile
-                        ? () =>
-                            _dialogViewModel.openFile(context, index, element)
-                        : null,
-                    onLongPress: isFile || isAudio
-                        ? null
-                        : () => _dialogViewModel.showAddTaskSheet(
-                            context, element.text)));
+              0,
+              BubbleWidget(
+                key: ValueKey(_dialogViewModel.messages[index].id),
+                animate: animate && _bubbles.isEmpty,
+                verticalSpacing: !_isSameNextAuthor(index)
+                    ? isMine
+                        ? 16.0
+                        : 10.0
+                    : 0.0,
+                isMine: isMine,
+                isRead: element.readAt != null,
+                isFile: isFile,
+                isDownloading: _dialogViewModel.downloadIndex == index,
+                isAudio: isAudio,
+                showDate: index == _dialogViewModel.messages.length - 1
+                    ? true
+                    : !_isSamePrevDate(index),
+                showName: _isGroupChat
+                    ? !_isSamePrevAuthor(index) ||
+                        !_isSamePrevDate(index) && !_isSameNextAuthor(index) ||
+                        !_isSamePrevDate(index) && !_isSamePrevAuthor(index)
+                    : false,
+                isGroupLastMessage:
+                    _isGroupChat ? !_isSameNextAuthor(index) : false,
+                user: _isGroupChat ? element.user : null,
+                text: isFile
+                    ? element.files.first.name
+                    : isAudio
+                        ? messageMediaUrl + (element.files.first.filename ?? '')
+                        : element.text,
+                dateTime: element.createdAt.toLocal(),
+                onUserTap: () =>
+                    _dialogViewModel.showProfileScreen(context, element),
+                onTap: isFile
+                    ? () => _dialogViewModel.openFile(context, index, element)
+                    : null,
+                onLongPress: isFile || isAudio
+                    ? null
+                    : () => _dialogViewModel.showAddTaskSheet(
+                        context, element.text),
+              ),
+            );
           }
 
           index++;
@@ -345,15 +345,16 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
                             child: GestureDetector(
                                 onTap: () => FocusScope.of(context).unfocus(),
                                 child: ListView.builder(
-                                    cacheExtent: 0.0,
-                                    reverse: false,
-                                    primary: false,
-                                    shrinkWrap: true,
-                                    padding: const EdgeInsets.only(
-                                        top: 12.0, left: 10.0, right: 10.0),
-                                    itemCount: _bubbles.length,
-                                    itemBuilder: (context, index) =>
-                                        _bubbles[index])))))),
+                                  cacheExtent: 0.0,
+                                  reverse: false,
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  padding: const EdgeInsets.only(
+                                      top: 12.0, left: 10.0, right: 10.0),
+                                  itemCount: _bubbles.length,
+                                  itemBuilder: (context, index) =>
+                                      _bubbles[index],
+                                )))))),
 
             /// MESSAGE BAR
             ChatMessageBarWidget(

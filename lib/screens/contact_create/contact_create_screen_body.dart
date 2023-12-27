@@ -279,43 +279,48 @@ class _ContactCreateScreenBodyState
                         padding: const EdgeInsets.only(bottom: 10.0),
                         itemCount: _socials.length,
                         itemBuilder: (context, index) {
-                          return Column(children: [
-                            InputWidget(
-                                margin: const EdgeInsets.only(bottom: 10.0),
-                                height: 56.0,
-                                textEditingController:
-                                    _socials[index].textEditingController,
-                                focusNode: _socials[index].focusNode,
-                                textCapitalization: TextCapitalization.none,
-                                placeholder: Titles.socialLink,
-                                onTap: () => {
-                                      setState(() => {
-                                            _index = index,
-                                            FocusScope.of(context).unfocus(),
-                                            _socials[index]
-                                                .focusNode
-                                                .requestFocus()
-                                          })
-                                    },
-                                onEditingComplete: () =>
-                                    FocusScope.of(context).unfocus(),
-                                onClearTap: () => _socials[index]
-                                    .textEditingController
-                                    .clear()),
+                          return Column(
+                              key: ValueKey(_socials[index]),
+                              children: [
+                                InputWidget(
+                                    margin: const EdgeInsets.only(bottom: 10.0),
+                                    height: 56.0,
+                                    textEditingController:
+                                        _socials[index].textEditingController,
+                                    focusNode: _socials[index].focusNode,
+                                    textCapitalization: TextCapitalization.none,
+                                    placeholder: Titles.socialLink,
+                                    onTap: () => {
+                                          setState(() => {
+                                                _index = index,
+                                                FocusScope.of(context)
+                                                    .unfocus(),
+                                                _socials[index]
+                                                    .focusNode
+                                                    .requestFocus()
+                                              })
+                                        },
+                                    onEditingComplete: () =>
+                                        FocusScope.of(context).unfocus(),
+                                    onClearTap: () => _socials[index]
+                                        .textEditingController
+                                        .clear()),
 
-                            /// ADD SOCIAL BUTTON
-                            index == _socials.length - 1
-                                ? BorderButtonWidget(
-                                    title: Titles.addSocial,
-                                    margin: EdgeInsets.zero,
-                                    onTap: () => setState(() => {
-                                          _socials[_index].focusNode.unfocus(),
-                                          _socials.add(SocialInputModel(
-                                              TextEditingController(),
-                                              FocusNode())),
-                                        }))
-                                : Container()
-                          ]);
+                                /// ADD SOCIAL BUTTON
+                                index == _socials.length - 1
+                                    ? BorderButtonWidget(
+                                        title: Titles.addSocial,
+                                        margin: EdgeInsets.zero,
+                                        onTap: () => setState(() => {
+                                              _socials[_index]
+                                                  .focusNode
+                                                  .unfocus(),
+                                              _socials.add(SocialInputModel(
+                                                  TextEditingController(),
+                                                  FocusNode())),
+                                            }))
+                                    : Container()
+                              ]);
                         }),
                     _contactCreateViewModel.selectedContact == null
                         ? Container()
@@ -327,6 +332,7 @@ class _ContactCreateScreenBodyState
                                 _contactCreateViewModel.delete(context))
                   ])),
 
+          /// SAVE BUTTON
           Align(
               alignment: Alignment.bottomCenter,
               child: Padding(

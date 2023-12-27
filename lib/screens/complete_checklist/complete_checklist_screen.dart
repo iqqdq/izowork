@@ -6,22 +6,28 @@ import 'package:izowork/screens/complete_checklist/complete_checklist_screen_bod
 import 'package:provider/provider.dart';
 
 class CompleteChecklistScreenWidget extends StatelessWidget {
+  final bool canEdit;
   final String title;
   final PhaseChecklistInformation? phaseChecklistInformation;
   final Function(String, List<PlatformFile>) onTap;
 
-  const CompleteChecklistScreenWidget(
-      {Key? key,
-      required this.title,
-      this.phaseChecklistInformation,
-      required this.onTap})
-      : super(key: key);
+  const CompleteChecklistScreenWidget({
+    Key? key,
+    required this.canEdit,
+    required this.title,
+    this.phaseChecklistInformation,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) =>
             CompleteChecklistViewModel(phaseChecklistInformation),
-        child: CompleteChecklistBodyWidget(title: title, onTap: onTap));
+        child: CompleteChecklistBodyWidget(
+          canEdit: canEdit,
+          title: title,
+          onTap: onTap,
+        ));
   }
 }

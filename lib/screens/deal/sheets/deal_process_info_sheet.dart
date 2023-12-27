@@ -102,6 +102,7 @@ class _DealProcessInfoSheetState extends State<DealProcessInfoSheetWidget> {
                       itemCount: _files.length,
                       itemBuilder: (context, index) {
                         return FileListItemWidget(
+                          key: ValueKey(_files[index].name),
                           fileName: _files[index].name,
                           onRemoveTap: () => _removeFile(index),
                         );

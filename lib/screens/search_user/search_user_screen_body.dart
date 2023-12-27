@@ -141,35 +141,39 @@ class _SearchUserScreenBodyState extends State<SearchUserScreenBodyWidget> {
                                 controller: _scrollController,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 padding: EdgeInsets.only(
-                                    top: 12.0,
-                                    left: 16.0,
-                                    right: 16.0,
-                                    bottom: (MediaQuery.of(context)
-                                                    .viewInsets
-                                                    .bottom !=
-                                                0.0
-                                            ? MediaQuery.of(context)
-                                                .viewInsets
-                                                .bottom
-                                            : MediaQuery.of(context)
-                                                        .padding
-                                                        .bottom ==
-                                                    0.0
-                                                ? 12.0
-                                                : MediaQuery.of(context)
-                                                    .padding
-                                                    .bottom) +
-                                        124.0),
+                                  top: 12.0,
+                                  left: 16.0,
+                                  right: 16.0,
+                                  bottom: (MediaQuery.of(context)
+                                                  .viewInsets
+                                                  .bottom !=
+                                              0.0
+                                          ? MediaQuery.of(context)
+                                              .viewInsets
+                                              .bottom
+                                          : MediaQuery.of(context)
+                                                      .padding
+                                                      .bottom ==
+                                                  0.0
+                                              ? 12.0
+                                              : MediaQuery.of(context)
+                                                  .padding
+                                                  .bottom) +
+                                      124.0,
+                                ),
                                 itemCount: _searchUserViewModel.users.length,
                                 itemBuilder: (context, index) {
                                   return SearchUserListItemWidget(
-                                      name: _searchUserViewModel
-                                          .users[index].name,
-                                      onTap: () => {
-                                            FocusScope.of(context).unfocus(),
-                                            widget.onPop(_searchUserViewModel
-                                                .users[index]),
-                                          });
+                                    key: ValueKey(
+                                        _searchUserViewModel.users[index].id),
+                                    name:
+                                        _searchUserViewModel.users[index].name,
+                                    onTap: () => {
+                                      FocusScope.of(context).unfocus(),
+                                      widget.onPop(
+                                          _searchUserViewModel.users[index]),
+                                    },
+                                  );
                                 })))
                   ]),
 

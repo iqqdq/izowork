@@ -227,12 +227,15 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                 : _taskCreateViewModel.task!.files.length,
                             itemBuilder: (context, index) {
                               return IgnorePointer(
+                                  key: ValueKey(_taskCreateViewModel.task == null
+                                      ? _taskCreateViewModel.files[index].path
+                                      : _taskCreateViewModel
+                                          .task!.files[index].id),
                                   ignoring:
                                       _taskCreateViewModel.downloadIndex != -1,
                                   child: FileListItemWidget(
                                       fileName: _taskCreateViewModel.task == null
-                                          ? _taskCreateViewModel
-                                              .files[index].path
+                                          ? _taskCreateViewModel.files[index].path
                                               .substring(
                                                   _taskCreateViewModel
                                                           .files[index]
@@ -246,10 +249,9 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                       isDownloading:
                                           _taskCreateViewModel.downloadIndex ==
                                               index,
-                                      onTap: () => _taskCreateViewModel
-                                          .openFile(context, index),
-                                      onRemoveTap: () => _taskCreateViewModel
-                                          .deleteTaskFile(context, index)));
+                                      onTap: () =>
+                                          _taskCreateViewModel.openFile(context, index),
+                                      onRemoveTap: () => _taskCreateViewModel.deleteTaskFile(context, index)));
                             }),
 
                         /// ADD FILE BUTTON

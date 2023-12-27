@@ -224,11 +224,14 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                             itemCount: _phaseViewModel.phaseContractors.length,
                             itemBuilder: (context, index) {
                               return IgnorePointer(
+                                  key: ValueKey(_phaseViewModel
+                                      .phaseContractors[index].id),
                                   ignoring: true,
                                   child: ContractorListItemWidget(
-                                      phaseContractor: _phaseViewModel
-                                          .phaseContractors[index],
-                                      onTap: () => {}));
+                                    phaseContractor:
+                                        _phaseViewModel.phaseContractors[index],
+                                    onTap: () => {},
+                                  ));
                             }),
 
                         /// DEALS
@@ -245,14 +248,16 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                             : ListView.builder(
                                 shrinkWrap: true,
                                 padding: const EdgeInsets.only(
-                                    top: 12.0,
-                                    bottom: 10.0,
-                                    left: 16.0,
-                                    right: 16.0),
+                                  top: 12.0,
+                                  bottom: 10.0,
+                                  left: 16.0,
+                                  right: 16.0,
+                                ),
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: _phaseViewModel.deals.length,
                                 itemBuilder: (context, index) {
                                   return SearchListItemWidget(
+                                    key: ValueKey(_phaseViewModel.deals[index]),
                                     name:
                                         '${Titles.deal} №${_phaseViewModel.deals[index].number}',
                                     onTap: () =>
@@ -310,6 +315,10 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                     .length,
                                 itemBuilder: (context, index) {
                                   return CheckListItemWidget(
+                                      key: ValueKey(_phaseViewModel
+                                          .phaseChecklistResponse!
+                                          .phaseChecklists[index]
+                                          .id),
                                       isSelected: _phaseViewModel
                                           .phaseChecklistResponse!
                                           .phaseChecklists[index]

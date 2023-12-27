@@ -112,17 +112,21 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                     ListView.builder(
                                         shrinkWrap: true,
                                         padding: EdgeInsets.only(
-                                            top: _phaseCreateViewModel
-                                                    .phaseProducts.isEmpty
-                                                ? 0.0
-                                                : 16.0,
-                                            bottom: 4.0),
+                                          top: _phaseCreateViewModel
+                                                  .phaseProducts.isEmpty
+                                              ? 0.0
+                                              : 16.0,
+                                          bottom: 4.0,
+                                        ),
                                         physics:
                                             const NeverScrollableScrollPhysics(),
                                         itemCount: _phaseCreateViewModel
                                             .phaseProducts.length,
                                         itemBuilder: (context, index) {
                                           return PhaseProductListItemWidget(
+                                              key: ValueKey(
+                                                  _phaseCreateViewModel
+                                                      .phaseProducts[index].id),
                                               index: index + 1,
                                               phaseProduct:
                                                   _phaseCreateViewModel
@@ -184,34 +188,52 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                     ListView.builder(
                                         shrinkWrap: true,
                                         padding: EdgeInsets.only(
-                                            top: _phaseCreateViewModel
-                                                    .phaseContractors.isEmpty
-                                                ? 0.0
-                                                : 16.0,
-                                            bottom: 4.0),
+                                          top: _phaseCreateViewModel
+                                                  .phaseContractors.isEmpty
+                                              ? 0.0
+                                              : 16.0,
+                                          bottom: 4.0,
+                                        ),
                                         physics:
                                             const NeverScrollableScrollPhysics(),
                                         itemCount: _phaseCreateViewModel
                                             .phaseContractors.length,
                                         itemBuilder: (context, index) {
                                           return PhaseContractorListItemWidget(
+                                              key: ValueKey(_phaseCreateViewModel
+                                                  .phaseContractors[index].id),
                                               index: index + 1,
-                                              phaseContractor: _phaseCreateViewModel
-                                                  .phaseContractors[index],
+                                              phaseContractor:
+                                                  _phaseCreateViewModel
+                                                      .phaseContractors[index],
                                               onContractorTap: () =>
-                                                  _phaseCreateViewModel.changeContractor(
-                                                      context, index),
-                                              onResponsibleTap: () => _phaseCreateViewModel
-                                                  .changeContractorResponsible(
-                                                      context, index),
-                                              onCoExecutorTap: () => _phaseCreateViewModel
-                                                  .changeContractorCoExecutor(
-                                                      context, index),
+                                                  _phaseCreateViewModel
+                                                      .changeContractor(
+                                                    context,
+                                                    index,
+                                                  ),
+                                              onResponsibleTap: () =>
+                                                  _phaseCreateViewModel
+                                                      .changeContractorResponsible(
+                                                          context, index),
+                                              onCoExecutorTap: () =>
+                                                  _phaseCreateViewModel
+                                                      .changeContractorCoExecutor(
+                                                    context,
+                                                    index,
+                                                  ),
                                               onObserverTap: () =>
                                                   _phaseCreateViewModel
                                                       .changeContractorObserver(
-                                                          context, index),
-                                              onDeleteTap: () => _phaseCreateViewModel.deleteContractor(context, index));
+                                                    context,
+                                                    index,
+                                                  ),
+                                              onDeleteTap: () =>
+                                                  _phaseCreateViewModel
+                                                      .deleteContractor(
+                                                    context,
+                                                    index,
+                                                  ));
                                         }),
 
                                     /// ADD CONTRACTOR BUTTON
@@ -220,7 +242,10 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                         margin:
                                             const EdgeInsets.only(bottom: 20.0),
                                         onTap: () => _phaseCreateViewModel
-                                            .createContractor(context, null)),
+                                                .createContractor(
+                                              context,
+                                              null,
+                                            )),
                                   ]))),
 
                       const SeparatorWidget(),

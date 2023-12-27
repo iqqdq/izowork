@@ -101,20 +101,24 @@ class StaffListItemWidget extends StatelessWidget {
                           itemCount: user.social.length,
                           itemBuilder: (context, index) {
                             return InkWell(
-                                highlightColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                borderRadius: BorderRadius.circular(16.0),
-                                child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 4.0),
-                                    child: Text(user.social[index],
-                                        style: TextStyle(
-                                            color: HexColors.primaryDark,
-                                            fontSize: 14.0,
-                                            fontFamily: 'PT Root UI',
-                                            fontWeight: FontWeight.w600,
-                                            decoration:
-                                                TextDecoration.underline))),
-                                onTap: () => onLinkTap!(user.social[index]));
+                              key: ValueKey(user.social[index]),
+                              highlightColor: Colors.transparent,
+                              splashColor: Colors.transparent,
+                              borderRadius: BorderRadius.circular(16.0),
+                              child: Padding(
+                                padding: const EdgeInsets.only(bottom: 4.0),
+                                child: Text(
+                                  user.social[index],
+                                  style: TextStyle(
+                                      color: HexColors.primaryDark,
+                                      fontSize: 14.0,
+                                      fontFamily: 'PT Root UI',
+                                      fontWeight: FontWeight.w600,
+                                      decoration: TextDecoration.underline),
+                                ),
+                              ),
+                              onTap: () => onLinkTap!(user.social[index]),
+                            );
                           }),
                   SizedBox(height: onChatTap == null ? 0.0 : 16.0),
 

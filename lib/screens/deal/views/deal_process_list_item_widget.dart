@@ -103,21 +103,12 @@ class _DealProcessListItemState extends State<DealProcessListItemWidget> {
                                     .dealProcesses[index].confirmations?[c])
                                 .reduce((a, c) => a == true && c == true);
 
-                            return
-                                // widget.dealProcesses[index].hidden
-                                // ? Container()
-                                // :
-                                //  IgnorePointer(
-                                //     ignoring: widget.dealStage.locked,
-                                //     child:
-                                InkWell(
+                            return InkWell(
+                              key: ValueKey(widget.dealProcesses[index].id),
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
                               borderRadius: BorderRadius.circular(16.0),
                               child: Column(children: [
-                                // widget.dealProcesses[index].hidden
-                                //     ? Container()
-                                //     :
                                 Container(
                                     margin: const EdgeInsets.symmetric(
                                         vertical: 10.0),

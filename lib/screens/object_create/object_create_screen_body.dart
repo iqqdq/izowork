@@ -401,30 +401,46 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                     : _objectCreateViewModel.documents.length,
                                 itemBuilder: (context, index) {
                                   return IgnorePointer(
-                                      ignoring: _objectCreateViewModel.downloadIndex !=
+                                      key: ValueKey(
+                                          _objectCreateViewModel.object == null
+                                              ? _objectCreateViewModel
+                                                  .files[index].path
+                                              : _objectCreateViewModel
+                                                  .documents[index].id),
+                                      ignoring: _objectCreateViewModel
+                                              .downloadIndex !=
                                           -1,
                                       child: FileListItemWidget(
-                                          fileName: _objectCreateViewModel.object == null
-                                              ? _objectCreateViewModel.files[index].path
+                                          fileName: _objectCreateViewModel
+                                                      .object ==
+                                                  null
+                                              ? _objectCreateViewModel
+                                                  .files[index].path
                                                   .substring(
-                                                      _objectCreateViewModel
-                                                              .files[index]
-                                                              .path
-                                                              .length -
-                                                          10,
-                                                      _objectCreateViewModel
+                                                  _objectCreateViewModel
                                                           .files[index]
                                                           .path
-                                                          .length)
+                                                          .length -
+                                                      10,
+                                                  _objectCreateViewModel
+                                                      .files[index].path.length,
+                                                )
                                               : _objectCreateViewModel
                                                   .documents[index].name,
-                                          isDownloading:
-                                              _objectCreateViewModel.downloadIndex ==
-                                                  index,
-                                          onTap: () => _objectCreateViewModel
-                                              .openFile(context, index),
-                                          onRemoveTap: () => _objectCreateViewModel
-                                              .deleteObjectFile(context, index)));
+                                          isDownloading: _objectCreateViewModel
+                                                  .downloadIndex ==
+                                              index,
+                                          onTap: () =>
+                                              _objectCreateViewModel.openFile(
+                                                context,
+                                                index,
+                                              ),
+                                          onRemoveTap: () =>
+                                              _objectCreateViewModel
+                                                  .deleteObjectFile(
+                                                context,
+                                                index,
+                                              )));
                                 }),
 
                             /// ADD IMAGE BUTTON
