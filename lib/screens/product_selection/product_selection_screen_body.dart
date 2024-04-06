@@ -1,5 +1,5 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
@@ -31,13 +31,9 @@ class _ProductSelectionScreenBodyState
     extends State<ProductSelectionScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-
   final ScrollController _scrollController = ScrollController();
-  final Debouncer _debouncer = Debouncer(milliseconds: 500);
-
   Pagination _pagination = Pagination(offset: 0, size: 50);
   bool _isSearching = false;
-
   late ProductSelectionViewModel _productSelectionViewModel;
 
   @override
@@ -104,15 +100,20 @@ class _ProductSelectionScreenBodyState
                         onTap: () => setState,
                         onChange: (text) => {
                               setState(() => _isSearching = true),
-                              _debouncer.run(() {
+                              EasyDebounce.debounce('product_debouncer',
+                                  const Duration(milliseconds: 500), () async {
                                 _pagination = Pagination(offset: 0, size: 50);
 
                                 _productSelectionViewModel
                                     .getProductList(
-                                        pagination: _pagination,
-                                        search: _textEditingController.text)
-                                    .then((value) =>
-                                        setState(() => _isSearching = false));
+                                      pagination: _pagination,
+                                      search: _textEditingController.text,
+                                    )
+                                    .then(
+                                      (value) => setState(
+                                        () => _isSearching = false,
+                                      ),
+                                    );
                               })
                             },
                         onClearTap: () => {

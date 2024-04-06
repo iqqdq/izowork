@@ -8,7 +8,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/components/user_params.dart';
+import 'package:izowork/services/local_service.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/product.dart';
@@ -176,7 +176,7 @@ class CompanyViewModel with ChangeNotifier {
 
   Future showUserScreen(BuildContext context) async {
     if (_company?.manager != null) {
-      String? userId = await UserParams().getUserId();
+      String? userId = await LocalService().getUserId();
 
       Navigator.push(
           context,

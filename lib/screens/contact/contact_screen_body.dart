@@ -49,9 +49,9 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
             title: Column(children: [
               Stack(children: [
                 Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: BackButtonWidget(onTap: () => Navigator.pop(context)),
+                ),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Text(Titles.contact,
                       style: TextStyle(
@@ -97,14 +97,16 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                 const SizedBox(height: 14.0),
 
                 /// NAME
-                Text(
-                  _contactViewModel.contact?.name ?? '-',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: HexColors.black,
-                      fontSize: 18.0,
-                      fontFamily: 'PT Root UI',
-                      fontWeight: FontWeight.bold),
+                SelectionArea(
+                  child: Text(
+                    _contactViewModel.contact?.name ?? '-',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: HexColors.black,
+                        fontSize: 18.0,
+                        fontFamily: 'PT Root UI',
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
 
                 /// POST
@@ -112,11 +114,13 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                     text: Titles.speciality,
                     padding: EdgeInsets.only(top: 16.0, bottom: 4.0),
                     isSmall: true),
-                Text(_contactViewModel.contact?.post ?? '-',
-                    style: TextStyle(
-                        color: HexColors.black,
-                        fontSize: 14.0,
-                        fontFamily: 'PT Root UI')),
+                SelectionArea(
+                  child: Text(_contactViewModel.contact?.post ?? '-',
+                      style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 14.0,
+                          fontFamily: 'PT Root UI')),
+                ),
                 const SizedBox(height: 16.0),
                 const SeparatorWidget(),
                 const SizedBox(height: 16.0),
@@ -129,12 +133,14 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                 Row(
                   children: [
                     Expanded(
-                        child: Text(
-                            _contactViewModel.contact?.company?.name ?? '-',
-                            style: TextStyle(
-                                color: HexColors.black,
-                                fontSize: 14.0,
-                                fontFamily: 'PT Root UI'))),
+                      child: SelectionArea(
+                          child: Text(
+                              _contactViewModel.contact?.company?.name ?? '-',
+                              style: TextStyle(
+                                  color: HexColors.black,
+                                  fontSize: 14.0,
+                                  fontFamily: 'PT Root UI'))),
+                    ),
                     const SizedBox(width: 10.0),
 
                     /// TAG
@@ -161,11 +167,13 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                     text: Titles.email,
                     padding: EdgeInsets.only(bottom: 4.0),
                     isSmall: true),
-                Text(_contactViewModel.contact?.email ?? '-',
-                    style: TextStyle(
-                        color: HexColors.black,
-                        fontSize: 14.0,
-                        fontFamily: 'PT Root UI')),
+                SelectionArea(
+                  child: Text(_contactViewModel.contact?.email ?? '-',
+                      style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 14.0,
+                          fontFamily: 'PT Root UI')),
+                ),
                 const SizedBox(height: 16.0),
                 const SeparatorWidget(),
                 const SizedBox(height: 16.0),
@@ -175,11 +183,13 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                     text: Titles.phone,
                     padding: EdgeInsets.only(bottom: 4.0),
                     isSmall: true),
-                Text(_contactViewModel.contact?.phone ?? '-',
-                    style: TextStyle(
-                        color: HexColors.black,
-                        fontSize: 14.0,
-                        fontFamily: 'PT Root UI')),
+                SelectionArea(
+                  child: Text(_contactViewModel.contact?.phone ?? '-',
+                      style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 14.0,
+                          fontFamily: 'PT Root UI')),
+                ),
                 const SizedBox(height: 16.0),
                 _contactViewModel.contact == null
                     ? Container()
@@ -212,20 +222,21 @@ class _ContactScreenBodyState extends State<ContactScreenBodyWidget> {
                                       _contactViewModel.contact?.social[index]),
                                   padding: const EdgeInsets.only(bottom: 4.0),
                                   child: InkWell(
-                                      highlightColor: Colors.transparent,
-                                      splashColor: Colors.transparent,
-                                      onTap: () => _contactViewModel.openUrl(
-                                          _contactViewModel
-                                              .contact!.social[index]),
-                                      child: Text(
-                                          _contactViewModel
-                                              .contact!.social[index],
-                                          style: TextStyle(
-                                              color: HexColors.primaryDark,
-                                              fontSize: 14.0,
-                                              fontFamily: 'PT Root UI',
-                                              decoration:
-                                                  TextDecoration.underline))));
+                                    highlightColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    onTap: () => _contactViewModel.openUrl(
+                                        _contactViewModel
+                                            .contact!.social[index]),
+                                    child: Text(
+                                        _contactViewModel
+                                            .contact!.social[index],
+                                        style: TextStyle(
+                                            color: HexColors.primaryDark,
+                                            fontSize: 14.0,
+                                            fontFamily: 'PT Root UI',
+                                            decoration:
+                                                TextDecoration.underline)),
+                                  ));
                             })
               ]),
 

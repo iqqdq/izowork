@@ -4,7 +4,7 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
-import 'package:izowork/components/user_params.dart';
+import 'package:izowork/services/local_service.dart';
 import 'package:izowork/entities/request/chat_dm_request.dart';
 import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/entities/response/user.dart';
@@ -28,7 +28,7 @@ class ParticipantsViewModel with ChangeNotifier {
   }
 
   ParticipantsViewModel(this.chat) {
-    getUserParams().then((value) =>
+    getLocalService().then((value) =>
         getParticipantList(pagination: Pagination(offset: 0, size: 50)));
   }
 
@@ -115,8 +115,8 @@ class ParticipantsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  Future getUserParams() async {
-    userId = await UserParams().getUserId();
+  Future getLocalService() async {
+    userId = await LocalService().getUserId();
   }
 
   void openUrl(String url) async {

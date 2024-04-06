@@ -11,18 +11,20 @@ class ObjectsFilterPageViewScreenWidget extends StatelessWidget {
 
   final Function(ObjectsFilter?) onPop;
 
-  const ObjectsFilterPageViewScreenWidget(
-      {Key? key,
-      required this.objectStages,
-      this.objectsFilter,
-      required this.onPop})
-      : super(key: key);
+  const ObjectsFilterPageViewScreenWidget({
+    Key? key,
+    required this.objectStages,
+    this.objectsFilter,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) =>
-            ObjectsFilterViewModel(objectStages, objectsFilter),
+        create: (context) => ObjectsFilterViewModel(
+              objectStages,
+              objectsFilter,
+            ),
         child: ObjectsFilterPageViewScreenBodyWidget(onPop: onPop));
   }
 }

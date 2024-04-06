@@ -1,6 +1,6 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/models/staff_view_model.dart';
@@ -24,12 +24,8 @@ class StaffScreenBodyWidget extends StatefulWidget {
 class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-
   final ScrollController _scrollController = ScrollController();
-  final Debouncer _debouncer = Debouncer(milliseconds: 500);
-
   late StaffViewModel _staffViewModel;
-
   Pagination _pagination = Pagination(offset: 0, size: 50);
   bool _isSearching = false;
 
@@ -111,16 +107,21 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
                             onTap: () => setState,
                             onChange: (text) => {
                                   setState(() => _isSearching = true),
-                                  _debouncer.run(() {
+                                  EasyDebounce.debounce('staff_debouncer',
+                                      const Duration(milliseconds: 500),
+                                      () async {
                                     _pagination =
                                         Pagination(offset: 0, size: 50);
 
                                     _staffViewModel
                                         .getUserList(
-                                            pagination: _pagination,
-                                            search: _textEditingController.text)
-                                        .then((value) => setState(
-                                            () => _isSearching = false));
+                                          pagination: _pagination,
+                                          search: _textEditingController.text,
+                                        )
+                                        .then(
+                                          (value) => setState(
+                                              () => _isSearching = false),
+                                        );
                                   })
                                 },
                             onClearTap: () => {

@@ -31,7 +31,7 @@ class _NewsFilterPageViewScreenBodyState
     extends State<NewsFilterPageViewScreenBodyWidget> {
   final PageController _pageController = PageController();
   late NewsFilterViewModel _newsFilterViewModel;
-  bool _isSearching = false;
+  // bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +52,10 @@ class _NewsFilterPageViewScreenBodyState
               const DismissIndicatorWidget(),
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: _isSearching
-                      ? MediaQuery.of(context).size.height * 0.9
-                      : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 334.0
-                          : 364.0,
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  // height: _isSearching
+                  //     ? MediaQuery.of(context).size.height * 0.9
+                  //     : MediaQuery.of(context).size.height * 0.6,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
@@ -68,10 +67,12 @@ class _NewsFilterPageViewScreenBodyState
                           options2: _newsFilterViewModel.options2,
                           tags2: _newsFilterViewModel.tags2,
                           onTypeTap: () => {
-                                _pageController.animateToPage(1,
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeIn),
-                                setState(() => _isSearching = true)
+                                _pageController.animateToPage(
+                                  1,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn,
+                                ),
+                                // setState(() => _isSearching = true)
                               },
                           onTagTap: (index) =>
                               _newsFilterViewModel.sortByStatus(index),
@@ -97,11 +98,13 @@ class _NewsFilterPageViewScreenBodyState
                                 _newsFilterViewModel
                                     .setUser(user)
                                     .then((value) => {
-                                          _pageController.animateToPage(0,
-                                              duration: const Duration(
-                                                  milliseconds: 300),
-                                              curve: Curves.easeIn),
-                                          setState(() => _isSearching = false),
+                                          _pageController.animateToPage(
+                                            0,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            curve: Curves.easeIn,
+                                          ),
+                                          // setState(() => _isSearching = false),
                                         })
                               })
                     ],

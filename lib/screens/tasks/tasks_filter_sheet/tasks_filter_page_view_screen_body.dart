@@ -30,7 +30,7 @@ class _TasksFilterPageViewScreenBodyState
     extends State<TasksFilterPageViewScreenBodyWidget> {
   final PageController _pageController = PageController();
   late TasksFilterViewModel _tasksFilterViewModel;
-  bool _isSearching = false;
+  // bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +51,12 @@ class _TasksFilterPageViewScreenBodyState
               const DismissIndicatorWidget(),
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: _isSearching
-                      ? MediaQuery.of(context).size.height * 0.9
-                      : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 270.0
-                          : 300.0,
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  // _isSearching
+                  //     ? MediaQuery.of(context).size.height * 0.9
+                  //     : MediaQuery.of(context).padding.bottom == 0.0
+                  //         ? 270.0
+                  //         : 300.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
@@ -65,10 +66,12 @@ class _TasksFilterPageViewScreenBodyState
                           options: _tasksFilterViewModel.options,
                           tags: _tasksFilterViewModel.tags,
                           onManagerTap: () => {
-                                _pageController.animateToPage(1,
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeIn),
-                                setState(() => _isSearching = true)
+                                _pageController.animateToPage(
+                                  1,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn,
+                                ),
+                                // setState(() => _isSearching = true)
                               },
                           onTagTap: (index) =>
                               _tasksFilterViewModel.sortByStage(index),
@@ -91,11 +94,13 @@ class _TasksFilterPageViewScreenBodyState
                                 _tasksFilterViewModel
                                     .setUser(user)
                                     .then((value) => {
-                                          _pageController.animateToPage(0,
-                                              duration: const Duration(
-                                                  milliseconds: 300),
-                                              curve: Curves.easeIn),
-                                          setState(() => _isSearching = false),
+                                          _pageController.animateToPage(
+                                            0,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            curve: Curves.easeIn,
+                                          ),
+                                          // setState(() => _isSearching = false),
                                         })
                               })
                     ],

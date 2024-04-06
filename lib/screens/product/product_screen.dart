@@ -35,14 +35,16 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
               const SizedBox(width: 16.0),
               BackButtonWidget(onTap: () => Navigator.pop(context)),
               Expanded(
-                  child: Text(widget.product.name,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 18.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold))),
+                child: SelectionArea(
+                    child: Text(widget.product.name,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: HexColors.black,
+                            fontSize: 18.0,
+                            fontFamily: 'PT Root UI',
+                            fontWeight: FontWeight.bold))),
+              ),
               const SizedBox(width: 36.0)
             ])),
         body: SizedBox.expand(
@@ -53,36 +55,40 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               children: [
                 /// IMAGE
-                Center(
-                    child: Stack(children: [
-                  ClipRRect(
-                      borderRadius: BorderRadius.circular(6.0),
-                      child: Container(
-                          width: 160.0,
-                          height: 160.0,
-                          decoration: BoxDecoration(
-                              color: HexColors.grey20,
-                              borderRadius: BorderRadius.circular(6.0)))),
-                  widget.product.image == null
-                      ? Container()
-                      : CachedNetworkImage(
-                          imageUrl: productMedialUrl + widget.product.image!,
-                          width: 160.0,
-                          height: 160.0,
-                          memCacheWidth: 160 *
-                              (MediaQuery.of(context).devicePixelRatio).round(),
-                          fit: BoxFit.cover),
-                ])),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Stack(children: [
+                    ClipRRect(
+                        borderRadius: BorderRadius.circular(6.0),
+                        child: Container(
+                            width: 160.0,
+                            height: 160.0,
+                            decoration: BoxDecoration(
+                                color: HexColors.grey20,
+                                borderRadius: BorderRadius.circular(6.0)))),
+                    widget.product.image == null
+                        ? Container()
+                        : CachedNetworkImage(
+                            imageUrl: productMedialUrl + widget.product.image!,
+                            width: 160.0,
+                            height: 160.0,
+                            memCacheWidth: 160 *
+                                (MediaQuery.of(context).devicePixelRatio)
+                                    .round(),
+                            fit: BoxFit.cover),
+                  ]),
+                ]),
                 const SizedBox(height: 16.0),
 
                 /// PRICE
-                Text(
-                    '${widget.product.price} ${Titles.currency} / ${Titles.kg}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: HexColors.primaryDark,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold)),
+                SelectionArea(
+                  child: Text(
+                      '${widget.product.price} ${Titles.currency} / ${Titles.kg}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: HexColors.primaryDark,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold)),
+                ),
                 const SizedBox(height: 16.0),
 
                 /// COMPANY
@@ -91,13 +97,15 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                     padding: EdgeInsets.zero,
                     isSmall: true),
                 const SizedBox(height: 4.0),
-                Text(widget.product.company?.name ?? '-',
-                    style: TextStyle(
-                        color: HexColors.primaryDark,
-                        fontSize: 14.0,
-                        fontFamily: 'PT Root UI',
-                        fontWeight: FontWeight.w500,
-                        decoration: TextDecoration.underline)),
+                SelectionArea(
+                  child: Text(widget.product.company?.name ?? '-',
+                      style: TextStyle(
+                          color: HexColors.primaryDark,
+                          fontSize: 14.0,
+                          fontFamily: 'PT Root UI',
+                          fontWeight: FontWeight.w500,
+                          decoration: TextDecoration.underline)),
+                ),
                 const SizedBox(height: 16.0),
 
                 /// PRODUCT TYPE
@@ -106,24 +114,28 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
                     padding: EdgeInsets.zero,
                     isSmall: true),
                 const SizedBox(height: 4.0),
-                Text(widget.product.productType?.name ?? '-',
-                    style: TextStyle(
-                        color: HexColors.black,
-                        fontSize: 14.0,
-                        fontFamily: 'PT Root UI')),
+                SelectionArea(
+                  child: Text(widget.product.productType?.name ?? '-',
+                      style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 14.0,
+                          fontFamily: 'PT Root UI')),
+                ),
                 const SizedBox(height: 16.0),
 
                 /// PRODUCT SUBTYPE
-                const TitleWidget(
-                    text: Titles.productSubtype,
-                    padding: EdgeInsets.zero,
-                    isSmall: true),
-                const SizedBox(height: 4.0),
-                Text('???',
-                    style: TextStyle(
-                        color: HexColors.black,
-                        fontSize: 14.0,
-                        fontFamily: 'PT Root UI')),
+                // const TitleWidget(
+                //     text: Titles.productSubtype,
+                //     padding: EdgeInsets.zero,
+                //     isSmall: true),
+                // const SizedBox(height: 4.0),
+                // SelectionArea(
+                //   child: Text('???',
+                //       style: TextStyle(
+                //           color: HexColors.black,
+                //           fontSize: 14.0,
+                //           fontFamily: 'PT Root UI')),
+                // ),
               ]),
           const SeparatorWidget()
         ])));

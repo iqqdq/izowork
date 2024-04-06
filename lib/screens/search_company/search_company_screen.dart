@@ -23,6 +23,10 @@ class SearchCompanyScreenWidget extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => SearchCompanyViewModel(),
         child: SearchCompanyScreenBodyWidget(
-            title: title, isRoot: isRoot, onFocus: onFocus, onPop: onPop));
+          title: title,
+          isRoot: isRoot,
+          onFocus: onFocus,
+          onPop: onPop,
+        ));
   }
 }

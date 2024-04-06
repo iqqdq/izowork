@@ -7,7 +7,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/components/user_params.dart';
+import 'package:izowork/services/local_service.dart';
 import 'package:izowork/entities/request/user_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/user.dart';
@@ -124,7 +124,7 @@ class ProfileEditViewModel with ChangeNotifier {
                       Duration.zero,
                       () => {
                             /// LOGOUT
-                            UserParams().clear(),
+                            LocalService().clear(),
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(

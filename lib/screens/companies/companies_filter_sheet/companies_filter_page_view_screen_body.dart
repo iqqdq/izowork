@@ -31,7 +31,7 @@ class _CompaniesFilterPageViewScreenBodyState
     extends State<CompaniesFilterPageViewScreenBodyWidget> {
   final PageController _pageController = PageController();
   late CompaniesFilterViewModel _companiesFilterViewModel;
-  bool _isSearching = false;
+  // bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +52,12 @@ class _CompaniesFilterPageViewScreenBodyState
               const DismissIndicatorWidget(),
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: _isSearching
-                      ? MediaQuery.of(context).size.height * 0.9
-                      : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 328.0
-                          : 364.0,
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  // _isSearching
+                  //     ? MediaQuery.of(context).size.height * 0.9
+                  //     : MediaQuery.of(context).padding.bottom == 0.0
+                  //         ? 328.0
+                  //         : 364.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
@@ -68,10 +69,12 @@ class _CompaniesFilterPageViewScreenBodyState
                           options2: _companiesFilterViewModel.options2,
                           tags2: _companiesFilterViewModel.tags2,
                           onManagerTap: () => {
-                                _pageController.animateToPage(1,
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.easeIn),
-                                setState(() => _isSearching = true)
+                                _pageController.animateToPage(
+                                  1,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn,
+                                ),
+                                // setState(() => _isSearching = true)
                               },
                           onTagTap: (index) =>
                               _companiesFilterViewModel.sortByAlphabet(index),
@@ -100,11 +103,13 @@ class _CompaniesFilterPageViewScreenBodyState
                                 _companiesFilterViewModel
                                     .setUser(user)
                                     .then((value) => {
-                                          _pageController.animateToPage(0,
-                                              duration: const Duration(
-                                                  milliseconds: 300),
-                                              curve: Curves.easeIn),
-                                          setState(() => _isSearching = false),
+                                          _pageController.animateToPage(
+                                            0,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            curve: Curves.easeIn,
+                                          ),
+                                          // setState(() => _isSearching = false),
                                         })
                               })
                     ],

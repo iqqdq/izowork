@@ -157,13 +157,15 @@ class ContactListItemWidget extends StatelessWidget {
                               highlightColor: Colors.transparent,
                               splashColor: Colors.transparent,
                               borderRadius: BorderRadius.circular(16.0),
-                              child: Text(contact.social[index],
-                                  style: TextStyle(
-                                      color: HexColors.primaryDark,
-                                      fontSize: 14.0,
-                                      fontFamily: 'PT Root UI',
-                                      fontWeight: FontWeight.w600,
-                                      decoration: TextDecoration.underline)),
+                              child: Text(
+                                contact.social[index],
+                                style: TextStyle(
+                                    color: HexColors.primaryDark,
+                                    fontSize: 14.0,
+                                    fontFamily: 'PT Root UI',
+                                    fontWeight: FontWeight.w600,
+                                    decoration: TextDecoration.underline),
+                              ),
                               onTap: () => onLinkTap(contact.social[index])));
                     })
               ]),

@@ -40,7 +40,7 @@ class _AnalyticsActionsFilterPageViewScreenBodyState
   final PageController _pageController = PageController();
   late AnalyticsActionsFilterViewModel _analyticsActionsFilterViewModel;
   bool _isFromDateTimeSelection = true;
-  bool _isSearching = false;
+  // bool _isSearching = false;
   bool _isDateTimeSelection = false;
 
   @override
@@ -67,11 +67,12 @@ class _AnalyticsActionsFilterPageViewScreenBodyState
                       ? MediaQuery.of(context).padding.bottom == 0.0
                           ? 304.0
                           : 324.0
-                      : _isSearching
-                          ? MediaQuery.of(context).size.height * 0.9
-                          : MediaQuery.of(context).padding.bottom == 0.0
-                              ? 410.0
-                              : 440.0,
+                      : MediaQuery.of(context).size.height * 0.9,
+                  // _isSearching
+                  //     ? MediaQuery.of(context).size.height * 0.9
+                  //     : MediaQuery.of(context).padding.bottom == 0.0
+                  //         ? 410.0
+                  //         : 440.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
@@ -84,13 +85,13 @@ class _AnalyticsActionsFilterPageViewScreenBodyState
                           toDateTime:
                               _analyticsActionsFilterViewModel.toDateTime,
                           onOfficeTap: () => {
-                                setState(() => _isSearching = true),
+                                // setState(() => _isSearching = true),
                                 _pageController.animateToPage(1,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn),
                               },
                           onManagerTap: () => {
-                                setState(() => _isSearching = true),
+                                // setState(() => _isSearching = true),
                                 _pageController.animateToPage(2,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn),
@@ -144,11 +145,13 @@ class _AnalyticsActionsFilterPageViewScreenBodyState
                                 _analyticsActionsFilterViewModel
                                     .setOffice(office)
                                     .then((value) => {
-                                          _pageController.animateToPage(0,
-                                              duration: const Duration(
-                                                  milliseconds: 300),
-                                              curve: Curves.easeIn),
-                                          setState(() => _isSearching = false),
+                                          _pageController.animateToPage(
+                                            0,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            curve: Curves.easeIn,
+                                          ),
+                                          // setState(() => _isSearching = false),
                                         })
                               }),
 
@@ -165,7 +168,7 @@ class _AnalyticsActionsFilterPageViewScreenBodyState
                                               duration: const Duration(
                                                   milliseconds: 300),
                                               curve: Curves.easeIn),
-                                          setState(() => _isSearching = false),
+                                          // setState(() => _isSearching = false),
                                         })
                               }),
 

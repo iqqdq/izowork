@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/fade_page_route.dart';
-import 'package:izowork/components/user_params.dart';
+import 'package:izowork/services/local_service.dart';
 import 'package:izowork/screens/authorization/authorization_screen.dart';
 import 'package:izowork/screens/tab_controller/tab_controller_screen.dart';
 
@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreenWidget> {
   // MARK: - FUNCTIONS
 
   Future _validate() async {
-    _isTokenExist = (await UserParams().getToken())?.isNotEmpty ?? false;
+    _isTokenExist = (await LocalService().getToken())?.isNotEmpty ?? false;
   }
 
   void _push() async {

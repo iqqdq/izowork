@@ -38,7 +38,7 @@ class _DealsFilterPageViewScreenBodyState
   final PageController _pageController = PageController();
   late DealsFilterViewModel _dealsFilterViewModel;
 
-  bool _isSearching = false;
+  // bool _isSearching = false;
   int _index = 1;
 
   @override
@@ -60,11 +60,12 @@ class _DealsFilterPageViewScreenBodyState
               const DismissIndicatorWidget(),
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: _isSearching
-                      ? MediaQuery.of(context).size.height * 0.9
-                      : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 410.0
-                          : 420.0,
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  // _isSearching
+                  // ? MediaQuery.of(context).size.height * 0.9
+                  // : MediaQuery.of(context).padding.bottom == 0.0
+                  //     ? 410.0
+                  //     : 420.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
@@ -77,7 +78,10 @@ class _DealsFilterPageViewScreenBodyState
                           tags: _dealsFilterViewModel.tags,
                           onResponsibleTap: () => {
                                 setState(
-                                    () => {_isSearching = true, _index = 1}),
+                                  () =>
+                                      // _isSearching = true,
+                                      _index = 1,
+                                ),
                                 Future.delayed(
                                     Duration.zero,
                                     () => _pageController.animateToPage(1,
@@ -87,7 +91,10 @@ class _DealsFilterPageViewScreenBodyState
                               },
                           onObjectTap: () => {
                                 setState(
-                                    () => {_isSearching = true, _index = 2}),
+                                  () =>
+                                      // _isSearching = true,
+                                      _index = 2,
+                                ),
                                 Future.delayed(
                                     Duration.zero,
                                     () => _pageController.animateToPage(1,
@@ -97,13 +104,18 @@ class _DealsFilterPageViewScreenBodyState
                               },
                           onCompanyTap: () => {
                                 setState(
-                                    () => {_isSearching = true, _index = 3}),
+                                  () =>
+                                      // _isSearching = true,
+                                      _index = 3,
+                                ),
                                 Future.delayed(
                                     Duration.zero,
-                                    () => _pageController.animateToPage(1,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeIn))
+                                    () => _pageController.animateToPage(
+                                          1,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          curve: Curves.easeIn,
+                                        ))
                               },
                           onTagTap: (index) =>
                               _dealsFilterViewModel.sortByStage(index),
@@ -129,12 +141,14 @@ class _DealsFilterPageViewScreenBodyState
                                     _dealsFilterViewModel
                                         .setUser(user)
                                         .then((value) => {
-                                              _pageController.animateToPage(0,
-                                                  duration: const Duration(
-                                                      milliseconds: 300),
-                                                  curve: Curves.easeIn),
-                                              setState(
-                                                  () => _isSearching = false),
+                                              _pageController.animateToPage(
+                                                0,
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                                curve: Curves.easeIn,
+                                              ),
+                                              // setState(
+                                              //     () => _isSearching = false),
                                             })
                                   })
                           : _index == 2
@@ -147,12 +161,13 @@ class _DealsFilterPageViewScreenBodyState
                                             .setObject(object)
                                             .then((value) => {
                                                   _pageController.animateToPage(
-                                                      0,
-                                                      duration: const Duration(
-                                                          milliseconds: 300),
-                                                      curve: Curves.easeIn),
-                                                  setState(() =>
-                                                      _isSearching = false),
+                                                    0,
+                                                    duration: const Duration(
+                                                        milliseconds: 300),
+                                                    curve: Curves.easeIn,
+                                                  ),
+                                                  // setState(() =>
+                                                  //     _isSearching = false),
                                                 })
                                       })
                               : SearchCompanyScreenWidget(
@@ -164,12 +179,13 @@ class _DealsFilterPageViewScreenBodyState
                                             .setCompany(company)
                                             .then((value) => {
                                                   _pageController.animateToPage(
-                                                      0,
-                                                      duration: const Duration(
-                                                          milliseconds: 300),
-                                                      curve: Curves.easeIn),
-                                                  setState(() =>
-                                                      _isSearching = false),
+                                                    0,
+                                                    duration: const Duration(
+                                                        milliseconds: 300),
+                                                    curve: Curves.easeIn,
+                                                  ),
+                                                  // setState(() =>
+                                                  //     _isSearching = false),
                                                 })
                                       }),
                     ],

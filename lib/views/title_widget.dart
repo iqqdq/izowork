@@ -17,22 +17,26 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final small = isSmall == null
+    final bool small = isSmall == null
         ? false
         : isSmall == true
             ? true
             : false;
 
+    final Widget textWidget = Text(
+      text,
+      textAlign: textAlign,
+      style: TextStyle(
+          fontSize: small ? 12.0 : 20.0,
+          fontWeight: small ? FontWeight.w400 : FontWeight.w700,
+          color: small ? HexColors.grey40 : HexColors.black,
+          fontFamily: 'PT Root UI'),
+    );
+
     return Padding(
         padding: padding == null
             ? const EdgeInsets.symmetric(horizontal: 16.0)
             : padding!,
-        child: Text(text,
-            textAlign: textAlign,
-            style: TextStyle(
-                fontSize: small ? 12.0 : 20.0,
-                fontWeight: small ? FontWeight.w400 : FontWeight.w700,
-                color: small ? HexColors.grey40 : HexColors.black,
-                fontFamily: 'PT Root UI')));
+        child: small ? textWidget : SelectionArea(child: textWidget));
   }
 }

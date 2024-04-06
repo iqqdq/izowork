@@ -47,9 +47,10 @@ class _ContactsFilterPageViewScreenBodyState
               const DismissIndicatorWidget(),
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: MediaQuery.of(context).padding.bottom == 0.0
-                      ? 260.0
-                      : 280.0,
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  // height: MediaQuery.of(context).padding.bottom == 0.0
+                  //     ? 260.0
+                  //     : 280.0,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),

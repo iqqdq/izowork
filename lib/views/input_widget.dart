@@ -69,10 +69,11 @@ class _InputWidgetState extends State<InputWidget> {
             borderRadius: BorderRadius.circular(16.0),
             color: HexColors.white,
             border: Border.all(
-                width: widget.focusNode.hasFocus ? 1.0 : 0.5,
-                color: widget.focusNode.hasFocus
-                    ? HexColors.primaryDark
-                    : HexColors.grey30)),
+              width: widget.focusNode.hasFocus ? 1.0 : 0.5,
+              color: widget.focusNode.hasFocus
+                  ? HexColors.primaryDark
+                  : HexColors.grey30,
+            )),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           _maxLines > 1
               ? Container()

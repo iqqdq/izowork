@@ -44,10 +44,12 @@ class DealsFilterScreenWidget extends StatelessWidget {
         type: MaterialType.transparency,
         child: Container(
             color: HexColors.white,
-            child: ListView(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 8.0),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom == 0.0
+                    ? 12.0
+                    : MediaQuery.of(context).padding.bottom),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   /// TITLE
                   Padding(
@@ -65,97 +67,99 @@ class DealsFilterScreenWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 17.0),
 
-                  /// CONTENT LIST
-                  ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).padding.bottom == 0.0
-                              ? 12.0
-                              : MediaQuery.of(context).padding.bottom),
-                      children: [
-                        /// RESPONSIBLE SELECTION INPUT
-                        SelectionInputWidget(
-                            title: Titles.responsible,
-                            value: responsible?.name ?? Titles.notSelected,
-                            onTap: () => onResponsibleTap()),
-                        const SizedBox(height: 10.0),
+                  /// FILTER CONTENT
+                  Expanded(
+                    child: ListView(
+                        // physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).padding.bottom == 0.0
+                                ? 12.0
+                                : MediaQuery.of(context).padding.bottom),
+                        children: [
+                          /// RESPONSIBLE SELECTION INPUT
+                          SelectionInputWidget(
+                              title: Titles.responsible,
+                              value: responsible?.name ?? Titles.notSelected,
+                              onTap: () => onResponsibleTap()),
+                          const SizedBox(height: 10.0),
 
-                        /// OBJECT SELECTION INPUT
-                        SelectionInputWidget(
-                            title: Titles.object,
-                            value: object?.name ?? Titles.notSelected,
-                            onTap: () => onObjectTap()),
-                        const SizedBox(height: 10.0),
+                          /// OBJECT SELECTION INPUT
+                          SelectionInputWidget(
+                              title: Titles.object,
+                              value: object?.name ?? Titles.notSelected,
+                              onTap: () => onObjectTap()),
+                          const SizedBox(height: 10.0),
 
-                        /// COMPANY SELECTION INPUT
-                        SelectionInputWidget(
-                            title: Titles.company,
-                            value: company?.name ?? Titles.notSelected,
-                            onTap: () => onCompanyTap()),
+                          /// COMPANY SELECTION INPUT
+                          SelectionInputWidget(
+                              title: Titles.company,
+                              value: company?.name ?? Titles.notSelected,
+                              onTap: () => onCompanyTap()),
 
-                        const SizedBox(height: 16.0),
-                        const TitleWidget(text: Titles.stages, isSmall: true),
-                        const SizedBox(height: 10.0),
+                          const SizedBox(height: 16.0),
+                          const TitleWidget(text: Titles.stages, isSmall: true),
+                          const SizedBox(height: 10.0),
 
-                        /// STAGE HORIZONTAL LIST
-                        SizedBox(
-                            height: 28.0,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                itemCount: options.length,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    key: ValueKey(options[index]),
-                                    child: Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 10.0),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10.0, vertical: 4.0),
-                                        decoration: BoxDecoration(
-                                            color: tags.contains(index)
-                                                ? HexColors.additionalViolet
-                                                : HexColors.grey10,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(18.0),
-                                            )),
-                                        child: Text(options[index],
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: tags.contains(index)
-                                                    ? FontWeight.w500
-                                                    : FontWeight.w400,
-                                                color: tags.contains(index)
-                                                    ? HexColors.white
-                                                    : HexColors.black,
-                                                fontFamily: 'PT Root UI'))),
-                                    onTap: () => onTagTap(index),
-                                  );
-                                })),
-                        const SizedBox(height: 20.0),
+                          /// STAGE HORIZONTAL LIST
+                          SizedBox(
+                              height: 28.0,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  itemCount: options.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      key: ValueKey(options[index]),
+                                      child: Container(
+                                          margin: const EdgeInsets.only(
+                                              right: 10.0),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0, vertical: 4.0),
+                                          decoration: BoxDecoration(
+                                              color: tags.contains(index)
+                                                  ? HexColors.additionalViolet
+                                                  : HexColors.grey10,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(18.0),
+                                              )),
+                                          child: Text(options[index],
+                                              style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  fontWeight:
+                                                      tags.contains(index)
+                                                          ? FontWeight.w500
+                                                          : FontWeight.w400,
+                                                  color: tags.contains(index)
+                                                      ? HexColors.white
+                                                      : HexColors.black,
+                                                  fontFamily: 'PT Root UI'))),
+                                      onTap: () => onTagTap(index),
+                                    );
+                                  })),
+                          const SizedBox(height: 20.0),
+                        ]),
+                  ),
 
-                        /// BUTTON's
-                        Row(children: [
-                          /// APPLY
-                          Expanded(
-                              child: ButtonWidget(
-                                  title: Titles.apply,
-                                  margin: const EdgeInsets.only(
-                                      left: 16.0, right: 5.0),
-                                  onTap: () => onApplyTap())),
+                  /// BUTTON's
+                  Row(children: [
+                    /// APPLY
+                    Expanded(
+                        child: ButtonWidget(
+                            title: Titles.apply,
+                            margin:
+                                const EdgeInsets.only(left: 16.0, right: 5.0),
+                            onTap: () => onApplyTap())),
 
-                          /// RESET
-                          Expanded(
-                              child: TransparentButtonWidget(
-                                  title: Titles.reset,
-                                  margin: const EdgeInsets.only(
-                                      left: 5.0, right: 16.0),
-                                  onTap: () => onResetTap()))
-                        ])
-                      ])
+                    /// RESET
+                    Expanded(
+                        child: TransparentButtonWidget(
+                            title: Titles.reset,
+                            margin:
+                                const EdgeInsets.only(left: 5.0, right: 16.0),
+                            onTap: () => onResetTap()))
+                  ])
                 ])));
   }
 }

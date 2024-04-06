@@ -100,11 +100,18 @@ class NotificationsViewModel with ChangeNotifier {
 
                   /// SHOW OBJECT/DEAL/TASK SCREEN
 
-                  Future.delayed(Duration.zero,
-                      () => showNotificationScreen(context, index))
+                  Future.delayed(
+                      Duration.zero,
+                      () => showNotificationScreen(
+                            context,
+                            index,
+                          ))
                 }
               else
-                {loadingStatus = LoadingStatus.error, notifyListeners()}
+                {
+                  loadingStatus = LoadingStatus.error,
+                  notifyListeners(),
+                }
             });
   }
 
@@ -192,8 +199,10 @@ class NotificationsViewModel with ChangeNotifier {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              NewsPageScreenWidget(news: response, tag: '')))
+                          builder: (context) => NewsPageScreenWidget(
+                                news: response,
+                                tag: '',
+                              )))
                 }
             }
           else
@@ -239,17 +248,29 @@ class NotificationsViewModel with ChangeNotifier {
   void showNotificationScreen(BuildContext context, int index) {
     if (_notifications[index].metadata.objectId != null) {
       if (_notifications[index].metadata.phaseId != null) {
-        getPhaseById(context, _notifications[index].metadata.objectId!,
-            _notifications[index].metadata.phaseId!);
+        getPhaseById(
+          context,
+          _notifications[index].metadata.objectId!,
+          _notifications[index].metadata.phaseId!,
+        );
       } else {
         getObjectById(context, _notifications[index].metadata.objectId!);
       }
     } else if (_notifications[index].metadata.dealId != null) {
-      getDealById(context, _notifications[index].metadata.dealId!);
+      getDealById(
+        context,
+        _notifications[index].metadata.dealId!,
+      );
     } else if (_notifications[index].metadata.taskId != null) {
-      getTaskById(context, _notifications[index].metadata.taskId!);
+      getTaskById(
+        context,
+        _notifications[index].metadata.taskId!,
+      );
     } else if (_notifications[index].metadata.newsId != null) {
-      getNewsById(context, _notifications[index].metadata.newsId!);
+      getNewsById(
+        context,
+        _notifications[index].metadata.newsId!,
+      );
     }
   }
 

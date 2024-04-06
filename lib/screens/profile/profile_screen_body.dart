@@ -117,15 +117,17 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                 const SizedBox(height: 14.0),
 
                 /// NAME
-                Text(
-                  _profileViewModel.user?.name ??
-                      _profileViewModel.currentUser.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: HexColors.black,
-                      fontSize: 18.0,
-                      fontFamily: 'PT Root UI',
-                      fontWeight: FontWeight.bold),
+                SelectionArea(
+                  child: Text(
+                    _profileViewModel.user?.name ??
+                        _profileViewModel.currentUser.name,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: HexColors.black,
+                        fontSize: 18.0,
+                        fontFamily: 'PT Root UI',
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
                 const SizedBox(height: 24.0),
 
@@ -134,13 +136,15 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     text: Titles.post,
                     padding: EdgeInsets.only(bottom: 4.0),
                     isSmall: true),
-                Text(
-                    _profileViewModel.user?.post ??
-                        _profileViewModel.currentUser.post,
-                    style: TextStyle(
-                        color: HexColors.black,
-                        fontSize: 14.0,
-                        fontFamily: 'PT Root UI')),
+                SelectionArea(
+                  child: Text(
+                      _profileViewModel.user?.post ??
+                          _profileViewModel.currentUser.post,
+                      style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 14.0,
+                          fontFamily: 'PT Root UI')),
+                ),
                 const SizedBox(height: 16.0),
                 const SeparatorWidget(),
                 const SizedBox(height: 16.0),
@@ -150,13 +154,15 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     text: Titles.email,
                     padding: EdgeInsets.only(bottom: 4.0),
                     isSmall: true),
-                Text(
-                    _profileViewModel.user?.email ??
-                        _profileViewModel.currentUser.email,
-                    style: TextStyle(
-                        color: HexColors.black,
-                        fontSize: 14.0,
-                        fontFamily: 'PT Root UI')),
+                SelectionArea(
+                  child: Text(
+                      _profileViewModel.user?.email ??
+                          _profileViewModel.currentUser.email,
+                      style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 14.0,
+                          fontFamily: 'PT Root UI')),
+                ),
                 const SizedBox(height: 16.0),
                 const SeparatorWidget(),
                 const SizedBox(height: 16.0),
@@ -166,13 +172,15 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
                     text: Titles.phone,
                     padding: EdgeInsets.only(bottom: 4.0),
                     isSmall: true),
-                Text(
-                    _profileViewModel.user?.phone ??
-                        _profileViewModel.currentUser.phone,
-                    style: TextStyle(
-                        color: HexColors.black,
-                        fontSize: 14.0,
-                        fontFamily: 'PT Root UI')),
+                SelectionArea(
+                  child: Text(
+                      _profileViewModel.user?.phone ??
+                          _profileViewModel.currentUser.phone,
+                      style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 14.0,
+                          fontFamily: 'PT Root UI')),
+                ),
                 const SizedBox(height: 16.0),
                 _profileViewModel.user == null
                     ? Container()

@@ -37,7 +37,7 @@ class _ObjectsFilterPageViewScreenBodyState
     extends State<ObjectsFilterPageViewScreenBodyWidget> {
   final PageController _pageController = PageController();
   late ObjectsFilterViewModel _objectsFilterViewModel;
-  bool _isSearching = false;
+  // bool _isSearching = false;
   int _index = 0;
 
   @override
@@ -59,11 +59,7 @@ class _ObjectsFilterPageViewScreenBodyState
               const DismissIndicatorWidget(),
               AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  height: _isSearching
-                      ? MediaQuery.of(context).size.height * 0.9
-                      : MediaQuery.of(context).padding.bottom == 0.0
-                          ? 550.0
-                          : 570.0,
+                  height: MediaQuery.of(context).size.height * 0.9,
                   child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
@@ -78,28 +74,37 @@ class _ObjectsFilterPageViewScreenBodyState
                           options2: _objectsFilterViewModel.options2,
                           tags2: _objectsFilterViewModel.tags2,
                           onManagerTap: () => {
-                                setState(() => _isSearching = true),
+                                // setState(() => _isSearching = true),
                                 _pageController.animateToPage(2,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn),
                               },
                           onDesignerTap: () => {
                                 setState(
-                                    () => {_isSearching = true, _index = 0}),
+                                  () =>
+                                      // _isSearching = true,
+                                      _index = 0,
+                                ),
                                 _pageController.animateToPage(1,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn),
                               },
                           onContractorTap: () => {
                                 setState(
-                                    () => {_isSearching = true, _index = 1}),
+                                  () =>
+                                      // _isSearching = true,
+                                      _index = 1,
+                                ),
                                 _pageController.animateToPage(1,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn)
                               },
                           onCustomerTap: () => {
                                 setState(
-                                    () => {_isSearching = true, _index = 2}),
+                                  () =>
+                                      // _isSearching = true,
+                                      _index = 2,
+                                ),
                                 _pageController.animateToPage(1,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeIn),
@@ -121,8 +126,11 @@ class _ObjectsFilterPageViewScreenBodyState
                                       Navigator.pop(context)
                                     })
                               },
-                          onResetTap: () => _objectsFilterViewModel.reset(() =>
-                              {widget.onPop(null), Navigator.pop(context)})),
+                          onResetTap: () =>
+                              _objectsFilterViewModel.reset(() => {
+                                    widget.onPop(null),
+                                    Navigator.pop(context),
+                                  })),
                       SearchCompanyScreenWidget(
                           title: _index == 0
                               ? Titles.designer
@@ -135,11 +143,13 @@ class _ObjectsFilterPageViewScreenBodyState
                                 _objectsFilterViewModel
                                     .setCompany(company, _index)
                                     .then((value) => {
-                                          _pageController.animateToPage(0,
-                                              duration: const Duration(
-                                                  milliseconds: 300),
-                                              curve: Curves.easeIn),
-                                          setState(() => _isSearching = false),
+                                          _pageController.animateToPage(
+                                            0,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            curve: Curves.easeIn,
+                                          ),
+                                          // setState(() => _isSearching = false),
                                         })
                               }),
                       SearchUserScreenWidget(
@@ -154,7 +164,7 @@ class _ObjectsFilterPageViewScreenBodyState
                                               duration: const Duration(
                                                   milliseconds: 300),
                                               curve: Curves.easeIn),
-                                          setState(() => _isSearching = false),
+                                          // setState(() => _isSearching = false),
                                         })
                               })
                     ],

@@ -3,6 +3,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/office.dart';
 import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/date_selection_input_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';
@@ -48,67 +49,78 @@ class _AnalyticsActionsFilterScreenBodyState
         type: MaterialType.transparency,
         child: Container(
             color: HexColors.white,
-            child: ListView(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(top: 8.0),
-                children: [
-                  /// TITLE
-                  const TitleWidget(text: Titles.filter),
-                  const SizedBox(height: 17.0),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom == 0.0
+                    ? 12.0
+                    : MediaQuery.of(context).padding.bottom),
+            child: Column(children: [
+              /// TITLE
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const TitleWidget(text: Titles.filter),
+                    BackButtonWidget(
+                      asset: 'assets/ic_close.svg',
+                      onTap: () => Navigator.pop(context),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(height: 17.0),
 
-                  /// SCROLLABLE LIST
-                  ListView(
+              /// SCROLLABLE LIST
+              Expanded(
+                  child: ListView(
                       shrinkWrap: true,
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).padding.bottom == 0.0
                               ? 12.0
                               : MediaQuery.of(context).padding.bottom),
                       children: [
-                        /// OFFICE SELECTION INPUT
-                        SelectionInputWidget(
-                            title: Titles.filial,
-                            value: widget.office?.name ?? Titles.notSelected,
-                            onTap: () => widget.onOfficeTap()),
-                        const SizedBox(height: 10.0),
+                    /// OFFICE SELECTION INPUT
+                    SelectionInputWidget(
+                        title: Titles.filial,
+                        value: widget.office?.name ?? Titles.notSelected,
+                        onTap: () => widget.onOfficeTap()),
+                    const SizedBox(height: 10.0),
 
-                        /// MANAGER SELECTION INPUT
-                        SelectionInputWidget(
-                            title: Titles.manager,
-                            value: widget.manager?.name ?? Titles.notSelected,
-                            onTap: () => widget.onManagerTap()),
+                    /// MANAGER SELECTION INPUT
+                    SelectionInputWidget(
+                        title: Titles.manager,
+                        value: widget.manager?.name ?? Titles.notSelected,
+                        onTap: () => widget.onManagerTap()),
 
-                        const SizedBox(height: 10.0),
-                        DateSelectionInputWidget(
-                            title: Titles.fromDate,
-                            dateTime: widget.fromDateTime,
-                            onTap: () => widget.onFromDateTimeTap()),
-                        const SizedBox(height: 10.0),
-                        DateSelectionInputWidget(
-                            title: Titles.toDate,
-                            dateTime: widget.toDateTime,
-                            onTap: () => widget.onToDateTimeTap()),
-                      ]),
-                  const SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
+                    DateSelectionInputWidget(
+                        title: Titles.fromDate,
+                        dateTime: widget.fromDateTime,
+                        onTap: () => widget.onFromDateTimeTap()),
+                    const SizedBox(height: 10.0),
+                    DateSelectionInputWidget(
+                        title: Titles.toDate,
+                        dateTime: widget.toDateTime,
+                        onTap: () => widget.onToDateTimeTap()),
+                    const SizedBox(height: 10.0),
+                  ])),
 
-                  /// BUTTON's
-                  Row(children: [
-                    /// APPLY
-                    Expanded(
-                        child: ButtonWidget(
-                            title: Titles.apply,
-                            margin:
-                                const EdgeInsets.only(left: 16.0, right: 5.0),
-                            onTap: () => widget.onApplyTap())),
+              /// BUTTON's
+              Row(children: [
+                /// APPLY
+                Expanded(
+                    child: ButtonWidget(
+                        title: Titles.apply,
+                        margin: const EdgeInsets.only(left: 16.0, right: 5.0),
+                        onTap: () => widget.onApplyTap())),
 
-                    /// RESET
-                    Expanded(
-                        child: TransparentButtonWidget(
-                            title: Titles.reset,
-                            margin:
-                                const EdgeInsets.only(left: 5.0, right: 16.0),
-                            onTap: () => widget.onResetTap()))
-                  ])
-                ])));
+                /// RESET
+                Expanded(
+                    child: TransparentButtonWidget(
+                        title: Titles.reset,
+                        margin: const EdgeInsets.only(left: 5.0, right: 16.0),
+                        onTap: () => widget.onResetTap()))
+              ])
+            ])));
   }
 }

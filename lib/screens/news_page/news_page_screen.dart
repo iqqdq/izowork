@@ -17,8 +17,11 @@ class NewsPageScreenWidget extends StatefulWidget {
   final News news;
   final String tag;
 
-  const NewsPageScreenWidget({Key? key, required this.news, required this.tag})
-      : super(key: key);
+  const NewsPageScreenWidget({
+    Key? key,
+    required this.news,
+    required this.tag,
+  }) : super(key: key);
 
   @override
   _NewsScreenBodyState createState() => _NewsScreenBodyState();
@@ -99,10 +102,16 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                       tag: widget.tag,
                       child: ClipRRect(
                           borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(16.0),
-                              topRight: Radius.circular(16.0)),
+                            topLeft: Radius.circular(16.0),
+                            topRight: Radius.circular(16.0),
+                          ),
                           child: _images.isEmpty
-                              ? Container()
+                              ? Container(
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.height / 3.5,
+                                  color: HexColors.grey30,
+                                )
                               : Stack(children: [
                                   ImageSlideshow(
                                     width: double.infinity,
@@ -147,7 +156,11 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                     ),
                     Padding(
                         padding: const EdgeInsets.only(
-                            left: 16.0, right: 16.0, top: 18.0, bottom: 10.0),
+                          left: 16.0,
+                          right: 16.0,
+                          top: 18.0,
+                          bottom: 10.0,
+                        ),
                         child: Row(children: [
                           /// NAME
                           Text(widget.news.user?.name ?? '-',
@@ -166,16 +179,22 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                                   fontSize: 12.0,
                                   fontFamily: 'PT Root UI'))
                         ])),
+
+                    /// NEWS TITLE
                     TitleWidget(text: widget.news.name),
                     const SizedBox(height: 10.0),
+
+                    /// NEWS TEXT
                     Padding(
-                        padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                        child: Text(widget.news.description,
-                            style: TextStyle(
-                                height: 1.4,
-                                color: HexColors.black,
-                                fontSize: 14.0,
-                                fontFamily: 'PT Root UI'))),
+                      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                      child: SelectionArea(
+                          child: Text(widget.news.description,
+                              style: TextStyle(
+                                  height: 1.4,
+                                  color: HexColors.black,
+                                  fontSize: 14.0,
+                                  fontFamily: 'PT Root UI'))),
+                    ),
                   ])),
 
           /// BACK BUTTON

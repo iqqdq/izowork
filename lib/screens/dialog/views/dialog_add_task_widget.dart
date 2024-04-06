@@ -36,14 +36,18 @@ class DialogAddTaskWidget extends StatelessWidget {
 
                       /// ADDRESS
                       const TitleWidget(
-                          text: Titles.message, padding: EdgeInsets.zero),
+                        text: Titles.message,
+                        padding: EdgeInsets.zero,
+                      ),
                       Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: Text(text,
-                              style: TextStyle(
-                                  color: HexColors.black,
-                                  fontSize: 14.0,
-                                  fontFamily: 'PT Root UI'))),
+                          child: SelectionArea(
+                            child: Text(text,
+                                style: TextStyle(
+                                    color: HexColors.black,
+                                    fontSize: 14.0,
+                                    fontFamily: 'PT Root UI')),
+                          )),
 
                       /// BUTTON
                       ButtonWidget(

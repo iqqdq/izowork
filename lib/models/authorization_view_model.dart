@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/components/user_params.dart';
+import 'package:izowork/services/local_service.dart';
 import 'package:izowork/entities/request/authorization_request.dart';
 import 'package:izowork/entities/response/authorization.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -35,7 +35,7 @@ class AuthorizationViewModel with ChangeNotifier {
               if (response is Authorization)
                 {
                   // SAVE USER TOKEN
-                  UserParams().setToken(response.token),
+                  LocalService().setToken(response.token),
                   getUserProfile(context)
                 }
               else if (response is ErrorResponse)
@@ -55,7 +55,7 @@ class AuthorizationViewModel with ChangeNotifier {
               notifyListeners(),
 
               // SAVE USER
-              UserParams().setUserId(response.id).then((value) =>
+              LocalService().setUserId(response.id).then((value) =>
                   // SHOW MAIN SREEN
                   Navigator.pushAndRemoveUntil(
                     context,

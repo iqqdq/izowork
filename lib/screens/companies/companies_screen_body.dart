@@ -1,6 +1,6 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/models/companies_view_model.dart';
@@ -26,10 +26,7 @@ class CompaniesScreenBodyWidget extends StatefulWidget {
 class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-
   final ScrollController _scrollController = ScrollController();
-  final Debouncer _debouncer = Debouncer(milliseconds: 500);
-
   late CompaniesViewModel _companiesViewModel;
 
   Pagination _pagination = Pagination(offset: 0, size: 50);
@@ -116,7 +113,9 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
                             onTap: () => setState,
                             onChange: (text) => {
                                   setState(() => _isSearching = true),
-                                  _debouncer.run(() {
+                                  EasyDebounce.debounce('company_debouncer',
+                                      const Duration(milliseconds: 500),
+                                      () async {
                                     _pagination =
                                         Pagination(offset: 0, size: 50);
 

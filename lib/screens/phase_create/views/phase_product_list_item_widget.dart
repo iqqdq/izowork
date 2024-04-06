@@ -1,5 +1,5 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/phase_product.dart';
@@ -36,7 +36,6 @@ class _PhaseProductListItemState extends State<PhaseProductListItemWidget> {
   final TextEditingController _countTextEditingController =
       TextEditingController();
   final FocusNode _countFocusNode = FocusNode();
-  final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
   @override
   void initState() {
@@ -102,15 +101,21 @@ class _PhaseProductListItemState extends State<PhaseProductListItemWidget> {
 
                   /// TIME INPUT
                   InputWidget(
-                      textEditingController: _timeTextEditingController,
-                      focusNode: _timeFocusNode,
-                      textInputType: TextInputType.number,
-                      margin: const EdgeInsets.only(top: 16.0, bottom: 10.0),
-                      height: 56.0,
-                      placeholder: Titles.deliveryTimeInMonth,
-                      onTap: () => setState,
-                      onChange: (text) => _debouncer.run(() => widget
-                          .onTimeChange(_timeTextEditingController.text))),
+                    textEditingController: _timeTextEditingController,
+                    focusNode: _timeFocusNode,
+                    textInputType: TextInputType.number,
+                    margin: const EdgeInsets.only(top: 16.0, bottom: 10.0),
+                    height: 56.0,
+                    placeholder: Titles.deliveryTimeInMonth,
+                    onTap: () => setState,
+                    onChange: (text) => EasyDebounce.debounce(
+                      'time_debouncer',
+                      const Duration(milliseconds: 500),
+                      () async => widget.onTimeChange(
+                        _timeTextEditingController.text,
+                      ),
+                    ),
+                  ),
 
                   /// PRODUCT SELECTION INPUT
                   SelectionInputWidget(
@@ -123,15 +128,21 @@ class _PhaseProductListItemState extends State<PhaseProductListItemWidget> {
 
                   /// COUNT INPUT
                   InputWidget(
-                      textEditingController: _countTextEditingController,
-                      focusNode: _countFocusNode,
-                      textInputType: TextInputType.number,
-                      margin: const EdgeInsets.only(bottom: 10.0),
-                      height: 56.0,
-                      placeholder: Titles.count,
-                      onTap: () => setState,
-                      onChange: (text) => _debouncer.run(() => widget
-                          .onCountChange(_countTextEditingController.text)))
+                    textEditingController: _countTextEditingController,
+                    focusNode: _countFocusNode,
+                    textInputType: TextInputType.number,
+                    margin: const EdgeInsets.only(bottom: 10.0),
+                    height: 56.0,
+                    placeholder: Titles.count,
+                    onTap: () => setState,
+                    onChange: (text) => EasyDebounce.debounce(
+                      'count_debouncer',
+                      const Duration(milliseconds: 500),
+                      () async => widget.onCountChange(
+                        _countTextEditingController.text,
+                      ),
+                    ),
+                  )
                 ])));
   }
 }

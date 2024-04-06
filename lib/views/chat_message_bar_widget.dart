@@ -94,6 +94,7 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
         text: widget.textEditingController.text.replaceAll('\n', ''),
         style: _style,
       ),
+      // ignore: deprecated_member_use
       textScaleFactor: MediaQuery.of(context).textScaleFactor,
       textDirection: TextDirection.ltr,
     )..layout())

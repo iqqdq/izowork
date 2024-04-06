@@ -4,7 +4,7 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
-import 'package:izowork/components/user_params.dart';
+import 'package:izowork/services/local_service.dart';
 import 'package:izowork/entities/request/chat_dm_request.dart';
 import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/entities/response/user.dart';
@@ -26,7 +26,7 @@ class StaffViewModel with ChangeNotifier {
   }
 
   StaffViewModel() {
-    getUserParams().then(
+    getLocalService().then(
         (value) => getUserList(pagination: Pagination(offset: 0, size: 50)));
   }
 
@@ -106,14 +106,17 @@ class StaffViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => ProfileScreenWidget(
-                isMine: false, user: user, onPop: (user) => null)));
+                  isMine: false,
+                  user: user,
+                  onPop: (user) => null,
+                )));
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
 
-  Future getUserParams() async {
-    userId = await UserParams().getUserId();
+  Future getLocalService() async {
+    userId = await LocalService().getUserId();
   }
 
   void openUrl(String url) async {

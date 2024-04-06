@@ -9,7 +9,6 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/components/user_params.dart';
 import 'package:izowork/entities/request/message_file_request.dart';
 import 'package:izowork/entities/request/message_read_request.dart';
 import 'package:izowork/entities/response/chat.dart';
@@ -20,6 +19,7 @@ import 'package:izowork/screens/dialog/views/dialog_add_task_widget.dart';
 import 'package:izowork/screens/participants/participants_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
+import 'package:izowork/services/local_service.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_filex/open_filex.dart';
@@ -170,10 +170,10 @@ class DialogViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  Future getUserParams() async {
-    UserParams userParams = UserParams();
-    token = await userParams.getToken();
-    userId = await userParams.getUserId();
+  Future getLocalService() async {
+    LocalService localService = LocalService();
+    token = await localService.getToken();
+    userId = await localService.getUserId();
   }
 
   Future<String> getLocalAudioPath() async {

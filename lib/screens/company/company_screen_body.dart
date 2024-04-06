@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
@@ -40,7 +40,6 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
   final PageController _pageController = PageController(initialPage: 0);
 
   final ScrollController _scrollController = ScrollController();
-  final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
   late CompanyViewModel _companyViewModel;
 
@@ -293,7 +292,8 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                       onTap: () => setState,
                       onChange: (text) => {
                             setState(() => _isSearching = true),
-                            _debouncer.run(() {
+                            EasyDebounce.debounce('product_debouncer',
+                                const Duration(milliseconds: 500), () async {
                               _pagination = Pagination(offset: 0, size: 50);
 
                               _companyViewModel

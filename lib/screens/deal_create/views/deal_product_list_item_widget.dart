@@ -1,5 +1,5 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/deal.dart';
@@ -34,7 +34,6 @@ class _DealProductListItemState extends State<DealProductListItemWidget> {
   final TextEditingController _priceTextEditingController =
       TextEditingController();
   final FocusNode _priceFocusNode = FocusNode();
-  final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
   @override
   void initState() {
@@ -132,8 +131,12 @@ class _DealProductListItemState extends State<DealProductListItemWidget> {
                             height: 56.0,
                             placeholder: '${Titles.weight}, ${Titles.kg}',
                             onTap: () => setState,
-                            onChange: (text) => setState(() => _debouncer
-                                .run(() => widget.onWeightChange(text))),
+                            onChange: (text) => setState(() =>
+                                EasyDebounce.debounce('weight_debouncer',
+                                    const Duration(milliseconds: 500),
+                                    () async {
+                                  widget.onWeightChange(text);
+                                })),
                           ))),
 
                   /// PRICE INPUT

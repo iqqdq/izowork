@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
-import 'package:izowork/components/user_params.dart';
+import 'package:izowork/services/local_service.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/user_repository.dart';
 import 'package:izowork/screens/analytics/analytics_page_view_screen.dart';
@@ -144,7 +144,7 @@ class MoreViewModel with ChangeNotifier {
                             fontWeight: FontWeight.w400)),
                     onPressed: () {
                       /// LOGOUT
-                      UserParams().clear();
+                      LocalService().clear();
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(

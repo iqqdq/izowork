@@ -19,7 +19,18 @@ class ManagerAnalytics {
   factory ManagerAnalytics.fromJson(Map<String, dynamic> json) =>
       ManagerAnalytics(
         users: List<User>.from(json["users"].map((x) => User.fromJson(x))),
-        efficiency: List<int>.from(json["efficiency"].map((x) => x)),
+        efficiency: List<int>.from(json["efficiency"].map((x) {
+          if (x is int && x == 0) {
+            return x;
+          }
+          if (x is int && x == 1) {
+            return 100;
+          }
+          double decimalPart = x * 100;
+          int result = decimalPart.toInt();
+
+          return result;
+        })),
       );
 
   Map<String, dynamic> toJson() => {

@@ -1,7 +1,7 @@
 import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/components/user_params.dart';
+import 'package:izowork/services/local_service.dart';
 
 class WebService {
   final _dio = Dio();
@@ -10,7 +10,7 @@ class WebService {
   }
 
   Future<Options> _options() async {
-    String token = await UserParams().getToken() ?? '';
+    String token = await LocalService().getToken() ?? '';
     debugPrint(token);
 
     return Options(
@@ -29,7 +29,7 @@ class WebService {
   }
 
   Future<Options> _multipartOptions() async {
-    String token = await UserParams().getToken() ?? '';
+    String token = await LocalService().getToken() ?? '';
 
     return Options(
       headers: {

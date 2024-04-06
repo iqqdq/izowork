@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/place_model.dart';
 import 'package:izowork/screens/map/views/map_control_widget.dart';
@@ -24,8 +24,6 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
   final Completer<GoogleMapController> _completer = Completer();
   late GoogleMapController _googleMapController;
-
-  final Debouncer _debouncer = Debouncer(milliseconds: 500);
 
   late MapViewModel _mapViewModel;
   ClusterManager? _clusterManager;
@@ -47,19 +45,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
       _mapViewModel.places,
       _mapViewModel.updateMarkers,
       markerBuilder: _markerBuilder,
-      levels: [
-        1.0,
-        4.25,
-        6.75,
-        8.25,
-        11.5,
-        12.5,
-        13.0,
-        14.5,
-        16.0,
-        16.5,
-        20.0,
-      ],
+      levels: [1.0, 4.25, 6.75, 8.25, 11.5, 12.5, 13.0, 14.5, 16.0, 16.5, 20.0],
     );
   }
 
@@ -102,78 +88,149 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
               LatLngBounds? bounds = getBounds(cluster.items
                   .map(
                     (marker) => LatLng(
-                        marker.location.latitude, marker.location.longitude),
+                      marker.location.latitude,
+                      marker.location.longitude,
+                    ),
                   )
                   .toList());
 
               await _googleMapController
                   .animateCamera(CameraUpdate.newLatLngBounds(bounds, 20.0));
             } else {
-              await _googleMapController.animateCamera(
-                  CameraUpdate.newCameraPosition(
-                      CameraPosition(target: cluster.location, zoom: 16.0)));
+              await _googleMapController
+                  .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+                target: cluster.location,
+                zoom: 16.0,
+              )));
 
               Future.delayed(
                   const Duration(milliseconds: 300),
                   () => _mapViewModel.showMapObjectSheet(
-                      context, cluster.items.first.id));
+                        context,
+                        cluster.items.first.id,
+                      ));
             }
           },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 85, cluster),
+          icon: await _getMarkerBitmap(
+            cluster.isMultiple ? 160 : 120,
+            cluster,
+          ),
         );
       };
 
   Future<BitmapDescriptor> _getMarkerBitmap(
-      int size, Cluster<Place> cluster) async {
-    num newSize = Platform.isAndroid ? size / 1.25 : size;
+    int size,
+    Cluster<Place> cluster,
+  ) async {
+    double newSize =
+        Platform.isAndroid ? size.toDouble() / 1.25 : size.toDouble();
 
     final PictureRecorder pictureRecorder = PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
     final Paint paint1 = Paint()..color = cluster.items.first.color;
     final Paint paint2 = Paint()..color = HexColors.white;
 
-    canvas.drawCircle(
-        Offset(newSize / 2.0, newSize / 2.0), newSize / 2.0, paint1);
-    canvas.drawCircle(
-        Offset(newSize / 2.0, newSize / 2.0), newSize / 2.2, paint2);
-    canvas.drawCircle(
-        Offset(newSize / 2.0, newSize / 2.0), newSize / 2.6, paint1);
+    final Path path1 = Path()
+      ..addRRect(
+        RRect.fromLTRBR(
+          0.0,
+          0.0,
+          newSize,
+          newSize,
+          const Radius.elliptical(12.0, 12.0),
+        ),
+      );
 
+    final Path path2 = Path()
+      ..addRRect(
+        RRect.fromLTRBR(
+          8.0,
+          8.0,
+          newSize - 8.0,
+          newSize - 8.0,
+          const Radius.elliptical(12.0, 12.0),
+        ),
+      );
+
+    final Path path3 = Path()
+      ..addRRect(
+        RRect.fromLTRBR(
+          16.0,
+          16.0,
+          newSize - 16.0,
+          newSize - 16.0,
+          const Radius.elliptical(12.0, 12.0),
+        ),
+      );
+
+    canvas.drawPath(
+      Path.from(path1),
+      paint1,
+    );
+
+    canvas.drawPath(
+      Path.from(path2),
+      paint2,
+    );
+
+    canvas.drawPath(
+      Path.from(path3),
+      paint1,
+    );
+
+    // LETTER
     TextPainter painter = TextPainter(
-        textDirection: TextDirection.ltr, textAlign: TextAlign.center);
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+    );
+
+    String title1 = cluster.count.toString();
+    title1 = title1.length > 3 ? '${title1.substring(0, 2)}...' : title1;
+    final String title2 = cluster.items.first.name.substring(0, 1);
 
     painter.text = TextSpan(
-        text: cluster.isMultiple
-            ? cluster.count.toString()
-            : cluster.items.first.name.substring(0, 1),
+        text: cluster.isMultiple ? title1 : title2,
         style: TextStyle(
-            fontSize: newSize / 2.0,
-            color: HexColors.black,
-            fontWeight: FontWeight.w700));
+          fontSize: cluster.isMultiple
+              ? title1.length >= 3
+                  ? newSize / 3.0
+                  : newSize / 2.0
+              : newSize / 2.0,
+          color: HexColors.black,
+          fontWeight: FontWeight.w600,
+          overflow: TextOverflow.ellipsis,
+        ));
 
     painter.layout();
 
     painter.paint(
         canvas,
-        Offset(newSize / 2.0 - painter.width / 2.0,
-            newSize / 2.0 - painter.height / 2.0));
+        Offset(
+          newSize / 2.0 - painter.width / 2.0,
+          newSize / 2.0 - painter.height / 2.0,
+        ));
 
-    final img = await pictureRecorder
-        .endRecording()
-        .toImage(newSize.toInt(), newSize.toInt());
+    final img = await pictureRecorder.endRecording().toImage(
+          newSize.toInt(),
+          newSize.toInt(),
+        );
+
     final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
 
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }
 
   void _updateMap() async {
-    _debouncer.run(() => _mapViewModel
-        .getObjectList(controller: _googleMapController)
-        .then((value) => _mapViewModel.updatePlaces().then((value) => {
-              /// UPDATE CLUSTER
-              _clusterManager?.setItems(_mapViewModel.places),
-              _clusterManager?.updateMap(),
-            })));
+    EasyDebounce.debounce('object_debouncer', const Duration(milliseconds: 500),
+        () async {
+      _mapViewModel
+          .getObjectList(controller: _googleMapController)
+          .then((value) => _mapViewModel.updatePlaces().then((value) => {
+                /// UPDATE CLUSTER
+                _clusterManager?.setItems(_mapViewModel.places),
+                _clusterManager?.updateMap(),
+              }));
+    });
 
     double zoom = await _googleMapController.getZoomLevel();
 

@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserParams {
+class LocalService {
   late SharedPreferences _sharedPreferences;
 
   Future<String?> getToken() async {
@@ -11,6 +11,11 @@ class UserParams {
   Future setToken(String token) async {
     _sharedPreferences = await SharedPreferences.getInstance();
     _sharedPreferences.setString('token', token);
+  }
+
+  Future setDeviceToken(String deviceToken) async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+    _sharedPreferences.setString('device_token', deviceToken);
   }
 
   Future<String?> getUserId() async {

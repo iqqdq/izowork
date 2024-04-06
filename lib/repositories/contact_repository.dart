@@ -43,8 +43,10 @@ class ContactRepository {
   }
 
   Future<dynamic> deleteContact(DeleteRequest deleteRequest) async {
-    dynamic json =
-        await WebService().delete(contactDeleteUrl, jsonEncode(deleteRequest));
+    dynamic json = await WebService().delete(
+      contactDeleteUrl,
+      jsonEncode(deleteRequest),
+    );
 
     if (json == true) {
       return json;

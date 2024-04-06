@@ -20,29 +20,32 @@ class NewsFilterScreenWidget extends StatelessWidget {
   final VoidCallback onApplyTap;
   final VoidCallback onResetTap;
 
-  const NewsFilterScreenWidget(
-      {Key? key,
-      this.responsible,
-      required this.options,
-      required this.tags,
-      required this.options2,
-      required this.tags2,
-      required this.onTypeTap,
-      required this.onTagTap,
-      required this.onTag2Tap,
-      required this.onApplyTap,
-      required this.onResetTap})
-      : super(key: key);
+  const NewsFilterScreenWidget({
+    Key? key,
+    this.responsible,
+    required this.options,
+    required this.tags,
+    required this.options2,
+    required this.tags2,
+    required this.onTypeTap,
+    required this.onTagTap,
+    required this.onTag2Tap,
+    required this.onApplyTap,
+    required this.onResetTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
         type: MaterialType.transparency,
         child: Container(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom == 0.0
+                    ? 12.0
+                    : MediaQuery.of(context).padding.bottom),
             color: HexColors.white,
-            child: ListView(
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.only(top: 8.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   /// TITLE
                   Padding(
@@ -60,15 +63,15 @@ class NewsFilterScreenWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 17.0),
 
-                  /// SCROLLABLE LIST
-                  ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).padding.bottom == 0.0
-                              ? 12.0
-                              : MediaQuery.of(context).padding.bottom),
-                      children: [
+                  /// FILTER CONTENT
+                  Expanded(
+                      child: ListView(
+                          padding: EdgeInsets.only(
+                              bottom:
+                                  MediaQuery.of(context).padding.bottom == 0.0
+                                      ? 12.0
+                                      : MediaQuery.of(context).padding.bottom),
+                          children: [
                         /// RESPONSIBLE SELECTION INPUT
                         SelectionInputWidget(
                             title: Titles.responsible,
@@ -160,8 +163,8 @@ class NewsFilterScreenWidget extends StatelessWidget {
                                     onTap: () => onTag2Tap(index),
                                   );
                                 }))
-                      ]),
-                  const SizedBox(height: 10.0),
+                      ])),
+                  const SizedBox(height: 20.0),
 
                   /// BUTTON's
                   Row(children: [

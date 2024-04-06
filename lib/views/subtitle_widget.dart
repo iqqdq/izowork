@@ -22,12 +22,14 @@ class SubtitleWidget extends StatelessWidget {
         padding: padding == null
             ? const EdgeInsets.symmetric(horizontal: 16.0)
             : padding!,
-        child: Text(text,
-            textAlign: textAlign,
-            style: TextStyle(
-                fontSize: 14.0,
-                fontWeight: fontWeight ?? FontWeight.w400,
-                fontFamily: 'PT Root UI',
-                color: titleColor)));
+        child: SelectionArea(
+            child: Text(text,
+                textAlign: textAlign,
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: fontWeight ?? FontWeight.w400,
+                  fontFamily: 'PT Root UI',
+                  color: titleColor,
+                ))));
   }
 }

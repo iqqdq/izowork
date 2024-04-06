@@ -9,14 +9,20 @@ class ProfileScreenWidget extends StatelessWidget {
   final User user;
   final Function(User) onPop;
 
-  const ProfileScreenWidget(
-      {Key? key, required this.isMine, required this.user, required this.onPop})
-      : super(key: key);
+  const ProfileScreenWidget({
+    Key? key,
+    required this.isMine,
+    required this.user,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => ProfileViewModel(user),
-        child: ProfileScreenBodyWidget(isMine: isMine, onPop: onPop));
+        child: ProfileScreenBodyWidget(
+          isMine: isMine,
+          onPop: onPop,
+        ));
   }
 }

@@ -3,11 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
-import 'package:izowork/components/user_params.dart';
 import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/repositories/chat_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
+import 'package:izowork/services/local_service.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class ChatViewModel with ChangeNotifier {
@@ -19,13 +19,9 @@ class ChatViewModel with ChangeNotifier {
 
   final List<Chat> _chats = [];
 
-  Socket? get socket {
-    return _socket;
-  }
+  Socket? get socket => _socket;
 
-  List<Chat> get chats {
-    return _chats;
-  }
+  List<Chat> get chats => _chats;
 
   // MARK: -
   // MARK: - API CALL
@@ -107,9 +103,9 @@ class ChatViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  Future getUserParams() async {
-    UserParams userParams = UserParams();
-    token = await userParams.getToken();
+  Future getLocalService() async {
+    LocalService localService = LocalService();
+    token = await localService.getToken();
   }
 
   void clearChats() {

@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "_flutterfire_internals",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/_flutterfire_internals-1.3.16",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "adaptive_dialog",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/adaptive_dialog-1.9.0",
       "packageUri": "lib/",
@@ -200,6 +206,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "dbus",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/dbus-0.7.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "dio",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/dio-5.3.2",
       "packageUri": "lib/",
@@ -210,6 +222,12 @@
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/dynamic_color-1.6.6",
       "packageUri": "lib/",
       "languageVersion": "2.16"
+    },
+    {
+      "name": "easy_debounce",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/easy_debounce-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "equatable",
@@ -266,6 +284,42 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "firebase_core",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/firebase_core-2.24.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_core_platform_interface",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/firebase_core_platform_interface-5.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_core_web",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/firebase_core_web-2.10.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_messaging",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/firebase_messaging-14.7.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_messaging_platform_interface",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/firebase_messaging_platform_interface-4.5.18",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_messaging_web",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/firebase_messaging_web-3.5.18",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "fl_chart",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/fl_chart-0.55.2",
       "packageUri": "lib/",
@@ -282,6 +336,12 @@
       "rootUri": "file:///Users/iqqddq/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "flutter_app_badger",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/flutter_app_badger-1.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_automation",
@@ -320,10 +380,28 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "flutter_native_splash",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/flutter_native_splash-2.2.0+1",
+      "name": "flutter_local_notifications",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/flutter_local_notifications-17.0.0",
       "packageUri": "lib/",
-      "languageVersion": "2.15"
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_local_notifications_linux",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/flutter_local_notifications_linux-4.0.0+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_local_notifications_platform_interface",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/flutter_local_notifications_platform_interface-7.0.0+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_native_splash",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/flutter_native_splash-2.2.16",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
     },
     {
       "name": "flutter_plugin_android_lifecycle",
@@ -333,9 +411,9 @@
     },
     {
       "name": "flutter_svg",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/flutter_svg-0.22.0",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/flutter_svg-2.0.9",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.19"
     },
     {
       "name": "flutter_test",
@@ -465,9 +543,9 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/image-3.1.3",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/image-3.3.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.15"
     },
     {
       "name": "image_picker",
@@ -552,12 +630,6 @@
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/linked_scroll_controller-0.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
-    },
-    {
-      "name": "lint",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/lint-1.10.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.17"
     },
     {
       "name": "lints",
@@ -650,14 +722,8 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "path_drawing",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/path_drawing-0.5.1+1",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "path_parsing",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/path_parsing-0.2.1",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/path_parsing-1.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -699,9 +765,9 @@
     },
     {
       "name": "petitparser",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/petitparser-5.4.0",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/petitparser-6.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.0"
     },
     {
       "name": "platform",
@@ -920,6 +986,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "timezone",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/timezone-0.9.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "typed_data",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/typed_data-1.3.2",
       "packageUri": "lib/",
@@ -986,6 +1058,24 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "vector_graphics",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/vector_graphics-1.1.10+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "vector_graphics_codec",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/vector_graphics_codec-1.1.10+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "vector_graphics_compiler",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.1.10+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
@@ -1023,9 +1113,9 @@
     },
     {
       "name": "xml",
-      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/xml-5.4.1",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/xml-6.4.2",
       "packageUri": "lib/",
-      "languageVersion": "2.16"
+      "languageVersion": "3.0"
     },
     {
       "name": "yaml",
@@ -1040,7 +1130,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2023-12-27T02:56:49.041948Z",
+  "generated": "2024-04-06T00:36:50.055394Z",
   "generator": "pub",
   "generatorVersion": "3.2.0-22.0.dev"
 }

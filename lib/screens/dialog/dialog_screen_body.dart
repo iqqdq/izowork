@@ -66,7 +66,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _dialogViewModel.getUserParams().then((value) => _dialogViewModel
+      _dialogViewModel.getLocalService().then((value) => _dialogViewModel
           .connectSocket()
           .then((value) => _addSocketListener(_dialogViewModel.socket))
           .then(

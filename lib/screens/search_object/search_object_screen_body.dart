@@ -1,5 +1,5 @@
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/components/debouncer.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
@@ -35,13 +35,9 @@ class SearchObjectScreenBodyWidget extends StatefulWidget {
 class _SearchObjectScreenBodyState extends State<SearchObjectScreenBodyWidget> {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-
   final ScrollController _scrollController = ScrollController();
-  final Debouncer _debouncer = Debouncer(milliseconds: 500);
-
   Pagination _pagination = Pagination(offset: 0, size: 50);
   bool _isSearching = false;
-
   late SearchObjectViewModel _searchObjectViewModel;
 
   @override
@@ -111,15 +107,18 @@ class _SearchObjectScreenBodyState extends State<SearchObjectScreenBodyWidget> {
                         onTap: () => setState,
                         onChange: (text) => {
                               setState(() => _isSearching = true),
-                              _debouncer.run(() {
+                              EasyDebounce.debounce('object_debouncer',
+                                  const Duration(milliseconds: 500), () async {
                                 _pagination = Pagination(offset: 0, size: 50);
 
                                 _searchObjectViewModel
                                     .getObjectList(
-                                        pagination: _pagination,
-                                        search: _textEditingController.text)
-                                    .then((value) =>
-                                        setState(() => _isSearching = false));
+                                      pagination: _pagination,
+                                      search: _textEditingController.text,
+                                    )
+                                    .then((value) => setState(
+                                          () => _isSearching = false,
+                                        ));
                               })
                             },
                         onClearTap: () => {
