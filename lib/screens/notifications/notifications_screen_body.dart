@@ -87,7 +87,7 @@ class _NotificationsScreenBodyState
                   text: _notificationsViewModel.notifications[index].text,
                   onTap: () => _notificationsViewModel.readNotification(
                     context,
-                    index,
+                    _notificationsViewModel.notifications[index].id,
                   ),
                 );
               }),

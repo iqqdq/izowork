@@ -83,19 +83,24 @@ class NotificationsViewModel with ChangeNotifier {
         .then((value) => notifyListeners());
   }
 
-  Future readNotification(BuildContext context, int index) async {
+  Future readNotification(
+    BuildContext context,
+    String id,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
     await NotificationRepository()
-        .read(
-            readNotificationRequest:
-                ReadNotificationRequest(id: _notifications[index].id))
+        .read(readNotificationRequest: ReadNotificationRequest(id: id))
         .then((response) => {
               if (response == true)
                 {
                   loadingStatus = LoadingStatus.completed,
-                  _notifications[index].read = true,
+                  // _notifications[index].read = true,
+                  _notifications
+                      .firstWhere((element) => element.id == id)
+                      .read = true,
+
                   notifyListeners(),
 
                   /// SHOW OBJECT/DEAL/TASK SCREEN
@@ -104,7 +109,7 @@ class NotificationsViewModel with ChangeNotifier {
                       Duration.zero,
                       () => showNotificationScreen(
                             context,
-                            index,
+                            id,
                           ))
                 }
               else
@@ -245,31 +250,75 @@ class NotificationsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showNotificationScreen(BuildContext context, int index) {
-    if (_notifications[index].metadata.objectId != null) {
-      if (_notifications[index].metadata.phaseId != null) {
+  void showNotificationScreen(
+    BuildContext context,
+    String id,
+  ) {
+    if (_notifications
+            .firstWhere((element) => element.id == id)
+            .metadata
+            .objectId !=
+        null) {
+      if (_notifications
+              .firstWhere((element) => element.id == id)
+              .metadata
+              .phaseId !=
+          null) {
         getPhaseById(
           context,
-          _notifications[index].metadata.objectId!,
-          _notifications[index].metadata.phaseId!,
+          _notifications
+              .firstWhere((element) => element.id == id)
+              .metadata
+              .objectId!,
+          _notifications
+              .firstWhere((element) => element.id == id)
+              .metadata
+              .phaseId!,
         );
       } else {
-        getObjectById(context, _notifications[index].metadata.objectId!);
+        getObjectById(
+          context,
+          _notifications
+              .firstWhere((element) => element.id == id)
+              .metadata
+              .objectId!,
+        );
       }
-    } else if (_notifications[index].metadata.dealId != null) {
+    } else if (_notifications
+            .firstWhere((element) => element.id == id)
+            .metadata
+            .dealId !=
+        null) {
       getDealById(
         context,
-        _notifications[index].metadata.dealId!,
+        _notifications
+            .firstWhere((element) => element.id == id)
+            .metadata
+            .dealId!,
       );
-    } else if (_notifications[index].metadata.taskId != null) {
+    } else if (_notifications
+            .firstWhere((element) => element.id == id)
+            .metadata
+            .taskId !=
+        null) {
       getTaskById(
         context,
-        _notifications[index].metadata.taskId!,
+        _notifications
+            .firstWhere((element) => element.id == id)
+            .metadata
+            .taskId!,
       );
-    } else if (_notifications[index].metadata.newsId != null) {
+    } else if (_notifications
+            .firstWhere((element) => element.id == id)
+            .metadata
+            .newsId !=
+        null) {
       getNewsById(
         context,
-        _notifications[index].metadata.newsId!,
+        _notifications
+            .firstWhere((element) => element.id == id)
+            .metadata
+            .newsId!,
       );
     }
   }

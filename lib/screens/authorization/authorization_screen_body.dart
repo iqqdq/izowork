@@ -64,19 +64,21 @@ class _AuthorizationScreenBodyState
 
                   /// LOGIN INPUT
                   InputWidget(
-                    height: 56.0,
-                    textEditingController: _loginTextEditingController,
-                    focusNode: _loginFocusNode,
-                    textInputType: TextInputType.emailAddress,
-                    textCapitalization: TextCapitalization.none,
-                    margin: EdgeInsets.zero,
-                    placeholder: Titles.login,
-                    onTap: () => setState(() {}),
-                    onChange: (text) => setState(() {}),
-                    onClearTap: () => setState(() {}),
-                    onEditingComplete: (() =>
-                        setState(() => _passwordFocusNode.requestFocus())),
-                  ),
+                      height: 56.0,
+                      textEditingController: _loginTextEditingController,
+                      focusNode: _loginFocusNode,
+                      textInputType: TextInputType.emailAddress,
+                      textCapitalization: TextCapitalization.none,
+                      margin: EdgeInsets.zero,
+                      placeholder: Titles.login,
+                      onTap: () => setState(() {}),
+                      onChange: (text) => setState(() {}),
+                      onClearTap: () => setState(() {}),
+                      onEditingComplete: () => {
+                            setState(() {}),
+                            Future.delayed(Duration.zero,
+                                () => _passwordFocusNode.requestFocus())
+                          }),
                   const SizedBox(height: 16.0),
 
                   /// PASSWORD INPUT
