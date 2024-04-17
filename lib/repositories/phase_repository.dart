@@ -113,7 +113,9 @@ class PhaseRepository {
   Future<dynamic> createPhaseChecklistInformation(
       PhaseChecklistInformationRequest phaseChecklistInformationRequest) async {
     dynamic json = await WebService().post(
-        phaseChecklistInformationCreateUrl, phaseChecklistInformationRequest);
+      phaseChecklistInformationCreateUrl,
+      phaseChecklistInformationRequest.toJson(),
+    );
 
     try {
       return PhaseChecklistInformation.fromJson(json['checklist_information']);
@@ -124,8 +126,11 @@ class PhaseRepository {
 
   Future<dynamic> updatePhaseChecklistState(
       PhaseChecklistStateRequest phaseChecklistStateRequest) async {
-    dynamic json = await WebService()
-        .patch(phaseChecklistStateUpdateUrl, phaseChecklistStateRequest);
+    dynamic json = await WebService().patch(
+      phaseChecklistStateUpdateUrl,
+      phaseChecklistStateRequest.toJson(),
+      null,
+    );
 
     try {
       return PhaseChecklist.fromJson(json['phase_checklist']);
@@ -150,8 +155,10 @@ class PhaseRepository {
 
   Future<dynamic> createPhaseContractor(
       PhaseContractorRequest phaseContractorRequest) async {
-    dynamic json = await WebService()
-        .post(phaseContractorCreateUrl, phaseContractorRequest);
+    dynamic json = await WebService().post(
+      phaseContractorCreateUrl,
+      phaseContractorRequest.toJson(),
+    );
 
     try {
       return PhaseContractor.fromJson(json['phase_contractor']);
@@ -164,7 +171,8 @@ class PhaseRepository {
       PhaseContractorUpdateRequest phaseContractorUpdateRequest) async {
     dynamic json = await WebService().patch(
       phaseContractorUpdateUrl,
-      phaseContractorUpdateRequest,
+      phaseContractorUpdateRequest.toJson(),
+      null,
     );
 
     try {
@@ -175,8 +183,10 @@ class PhaseRepository {
   }
 
   Future<dynamic> deletePhaseContractor(DeleteRequest deleteRequest) async {
-    dynamic json =
-        await WebService().delete(phaseContractorDeleteUrl, deleteRequest);
+    dynamic json = await WebService().delete(
+      phaseContractorDeleteUrl,
+      deleteRequest.toJson(),
+    );
 
     if (json == true) {
       return json;
@@ -187,8 +197,10 @@ class PhaseRepository {
 
   Future<dynamic> createPhaseProduct(
       PhaseProductRequest phaseProductRequest) async {
-    dynamic json =
-        await WebService().post(phaseProductCreateUrl, phaseProductRequest);
+    dynamic json = await WebService().post(
+      phaseProductCreateUrl,
+      phaseProductRequest.toJson(),
+    );
 
     try {
       return PhaseProduct.fromJson(json['phase_product']);
@@ -199,8 +211,11 @@ class PhaseRepository {
 
   Future<dynamic> updatePhaseProduct(
       PhaseProductUpdateRequest phaseProductUpdateRequest) async {
-    dynamic json = await WebService()
-        .patch(phaseProductUpdateUrl, phaseProductUpdateRequest);
+    dynamic json = await WebService().patch(
+      phaseProductUpdateUrl,
+      phaseProductUpdateRequest.toJson(),
+      null,
+    );
 
     try {
       return PhaseProduct.fromJson(json['phase_product']);
@@ -210,8 +225,10 @@ class PhaseRepository {
   }
 
   Future<dynamic> deletePhaseProduct(DeleteRequest deleteRequest) async {
-    dynamic json =
-        await WebService().delete(phaseProductDeleteUrl, deleteRequest);
+    dynamic json = await WebService().delete(
+      phaseProductDeleteUrl,
+      deleteRequest.toJson(),
+    );
 
     if (json == true) {
       return json;

@@ -28,10 +28,11 @@ class CompanyRepository {
     }
   }
 
-  Future<dynamic> getCompanies(
-      {required Pagination pagination,
-      required String search,
-      List<String>? params}) async {
+  Future<dynamic> getCompanies({
+    required Pagination pagination,
+    required String search,
+    List<String>? params,
+  }) async {
     var url =
         companiesUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
@@ -59,7 +60,10 @@ class CompanyRepository {
   }
 
   Future<dynamic> createCompany(CompanyRequest companyRequest) async {
-    dynamic json = await WebService().post(companyCreateUrl, companyRequest);
+    dynamic json = await WebService().post(
+      companyCreateUrl,
+      companyRequest.toJson(),
+    );
 
     try {
       return Company.fromJson(json["company"]);
@@ -69,7 +73,11 @@ class CompanyRepository {
   }
 
   Future<dynamic> updateCompany(CompanyRequest companyRequest) async {
-    dynamic json = await WebService().patch(companyUpdateUrl, companyRequest);
+    dynamic json = await WebService().patch(
+      companyUpdateUrl,
+      companyRequest.toJson(),
+      null,
+    );
 
     try {
       return Company.fromJson(json["company"]);
@@ -79,7 +87,10 @@ class CompanyRepository {
   }
 
   Future<dynamic> updateCompanyAvatar(FormData formData) async {
-    dynamic json = await WebService().put(companyAvatarUrl, formData);
+    dynamic json = await WebService().put(
+      companyAvatarUrl,
+      formData,
+    );
 
     if (json == "" || json == true) {
       return true;

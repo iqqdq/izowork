@@ -1,6 +1,8 @@
 // const baseUrl = 'http://185.116.194.234/api/';
 const baseUrl = 'https://izowork.kz/api/';
 
+const fcmTokenUrl = baseUrl + 'notification/tokenFCM';
+
 const avatarUrl = baseUrl + 'resourses/avatar/';
 const contactAvatarUrl = baseUrl + 'resourses/contact-avatar/';
 const uploadAvatarUrl = baseUrl + 'user/avatar';

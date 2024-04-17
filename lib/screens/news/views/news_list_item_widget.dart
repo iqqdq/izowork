@@ -18,14 +18,14 @@ class NewsListItemWidget extends StatefulWidget {
   final VoidCallback onUserTap;
   final VoidCallback onShowCommentsTap;
 
-  const NewsListItemWidget(
-      {Key? key,
-      required this.tag,
-      required this.news,
-      required this.onTap,
-      required this.onUserTap,
-      required this.onShowCommentsTap})
-      : super(key: key);
+  const NewsListItemWidget({
+    Key? key,
+    required this.tag,
+    required this.news,
+    required this.onTap,
+    required this.onUserTap,
+    required this.onShowCommentsTap,
+  }) : super(key: key);
 
   @override
   _NewsListItemState createState() => _NewsListItemState();
@@ -96,11 +96,30 @@ class _NewsListItemState extends State<NewsListItemWidget> {
       }
     }
 
+    Widget newsTitle = Padding(
+        padding: const EdgeInsets.only(
+          left: 16.0,
+          right: 16.0,
+          top: 16.0,
+          bottom: 4.0,
+        ),
+        child: Text(widget.news.name,
+            maxLines: 2,
+            style: TextStyle(
+              color: HexColors.black,
+              fontSize: 16.0,
+              fontFamily: 'PT Root UI',
+              fontWeight: FontWeight.bold,
+            )));
+
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
-            border: Border.all(width: 0.5, color: HexColors.grey30)),
+            border: Border.all(
+              width: 0.5,
+              color: HexColors.grey30,
+            )),
         child: InkWell(
             highlightColor: HexColors.grey20,
             splashColor: Colors.transparent,
@@ -112,27 +131,29 @@ class _NewsListItemState extends State<NewsListItemWidget> {
                 shrinkWrap: true,
                 children: [
                   /// SLIDESHOW
-                  Hero(
-                    tag: widget.tag,
-                    child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(16.0),
-                            topRight: Radius.circular(16.0)),
-                        child: _images.isEmpty
-                            ? Container()
-                            : Stack(children: [
+                  _images.isEmpty
+                      ? Container()
+                      : Hero(
+                          tag: widget.tag,
+                          child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(16.0),
+                                topRight: Radius.circular(16.0),
+                              ),
+                              child: Stack(children: [
                                 ImageSlideshow(
-                                    width: MediaQuery.of(context).size.width -
-                                        32.0,
-                                    height: 180.0,
-                                    children: _images,
-                                    initialPage: 0,
-                                    indicatorColor: HexColors.white,
-                                    indicatorBackgroundColor: HexColors.grey40,
-                                    indicatorRadius:
-                                        _images.length == 1 ? 0.0 : 4.0,
-                                    autoPlayInterval: 6000,
-                                    isLoop: true),
+                                  width:
+                                      MediaQuery.of(context).size.width - 32.0,
+                                  height: 180.0,
+                                  children: _images,
+                                  initialPage: 0,
+                                  indicatorColor: HexColors.white,
+                                  indicatorBackgroundColor: HexColors.grey40,
+                                  indicatorRadius:
+                                      _images.length == 1 ? 0.0 : 4.0,
+                                  autoPlayInterval: 6000,
+                                  isLoop: true,
+                                ),
 
                                 /// TAG
                                 widget.news.important
@@ -151,24 +172,23 @@ class _NewsListItemState extends State<NewsListItemWidget> {
                                       )
                                     : Container(),
                               ])),
-                  ),
+                        ),
 
                   /// TITLE
-                  Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 10.0),
-                      child: Text(widget.news.name,
-                          maxLines: 2,
-                          style: TextStyle(
-                              color: HexColors.black,
-                              fontSize: 16.0,
-                              fontFamily: 'PT Root UI',
-                              fontWeight: FontWeight.bold))),
+                  _images.isEmpty
+                      ? Hero(
+                          tag: widget.tag,
+                          child: newsTitle,
+                        )
+                      : newsTitle,
 
                   /// TEXT
                   Padding(
                       padding: const EdgeInsets.only(
-                          left: 16.0, right: 16.0, bottom: 10.0),
+                        left: 16.0,
+                        right: 16.0,
+                        bottom: 10.0,
+                      ),
                       child: Text(widget.news.description,
                           maxLines: 3,
                           style: TextStyle(

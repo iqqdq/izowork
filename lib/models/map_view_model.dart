@@ -120,37 +120,55 @@ class MapViewModel with ChangeNotifier {
               else
                 loadingStatus = LoadingStatus.error
             })
-        .then((value) => updatePlaces());
+        .then(
+          (value) => updatePlaces(),
+        );
   }
 
   // MARK: -
   // MARK: - ACTIONS
 
-  void zoomIn(GoogleMapController googleMapController) {
+  Future zoomIn(GoogleMapController googleMapController) async {
     if (_position != null) {
-      googleMapController.getZoomLevel().then((value) =>
-          googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: _position!, zoom: value + 1.0))));
+      googleMapController.getZoomLevel().then((value) => googleMapController
+              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+            target: _position!,
+            zoom: value + 1.0,
+          ))));
+
+      double zoom = await googleMapController.getZoomLevel();
+      debugPrint('Current zoom is: $zoom');
     }
   }
 
-  void zoomOut(GoogleMapController googleMapController) {
+  Future zoomOut(GoogleMapController googleMapController) async {
     if (_position != null) {
-      googleMapController.getZoomLevel().then((value) =>
-          googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: _position!, zoom: value - 1.0))));
+      googleMapController.getZoomLevel().then((value) => googleMapController
+              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+            target: _position!,
+            zoom: value - 1.0,
+          ))));
+
+      double zoom = await googleMapController.getZoomLevel();
+      debugPrint('Current zoom is: $zoom');
     }
   }
 
   void showUserLocation(GoogleMapController googleMapController) {
-    googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: _userPosition!, zoom: 16.0)));
+    googleMapController
+        .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: _userPosition!,
+      zoom: 12.0,
+    )));
   }
 
   // MARK: -
   // MARK: - PUSH
 
-  void showObjectsFilterSheet(BuildContext context, Function() onFilter) {
+  void showObjectsFilterSheet(
+    BuildContext context,
+    Function() onFilter,
+  ) {
     if (_objectStages != null) {
       showCupertinoModalBottomSheet(
           enableDrag: false,
@@ -232,40 +250,62 @@ class MapViewModel with ChangeNotifier {
   }
 
   void showSearchMapObjectSheet(
-      BuildContext context, GoogleMapController controller) {
+    BuildContext context,
+    GoogleMapController controller,
+  ) {
     bool found = false;
 
     showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchObjectScreenWidget(
-            isRoot: true,
-            title: Titles.object,
-            onFocus: () => {},
-            onPop: (object) => {
-                  Navigator.pop(context),
-                  if (object != null)
-                    {
-                      _objects.forEach((element) {
-                        if (object.id == element.id) {
-                          found = true;
-                        }
-                      }),
-                      if (found)
-                        {
-                          _objects.removeWhere(
-                              (element) => element.id == object.id),
-                        },
-                      _objects.add(object),
-                      updatePlaces().then((value) => controller.animateCamera(
-                          CameraUpdate.newCameraPosition(CameraPosition(
-                              target: LatLng(object.lat, object.long),
-                              zoom: 18))))
-                    }
-                }));
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => SearchObjectScreenWidget(
+        isRoot: true,
+        title: Titles.object,
+        onFocus: () => {},
+        onPop: (object) => {
+          Navigator.pop(context),
+          Future.delayed(
+              const Duration(milliseconds: 500),
+              () => {
+                    if (object != null)
+                      {
+                        _objects.forEach((element) {
+                          if (object.id == element.id) {
+                            found = true;
+                          }
+                        }),
+                        if (found)
+                          {
+                            _objects.removeWhere(
+                                (element) => element.id == object.id),
+                          },
+                        _objects.add(object),
+                        updatePlaces()
+                            .whenComplete(() => controller.animateCamera(
+                                    CameraUpdate.newCameraPosition(
+                                        CameraPosition(
+                                  target: LatLng(
+                                    object.lat,
+                                    object.long,
+                                  ),
+                                  zoom: 20.0,
+                                ))))
+                            .whenComplete(
+                              () => Future.delayed(
+                                  const Duration(seconds: 1),
+                                  () => showMapObjectSheet(
+                                        context,
+                                        object.id,
+                                      )),
+                            )
+                      }
+                  })
+        },
+      ),
+    );
   }
 
   // MARK: -
@@ -382,17 +422,25 @@ class MapViewModel with ChangeNotifier {
   Future updatePlaces() async {
     places.clear();
 
-    _objects.forEach((element) {
-      places.add(Place(
-          id: element.id,
-          name: element.manager?.name ?? '-',
-          color: element.hasOverdueTask == true
-              ? HexColors.additionalRed.withOpacity(0.75)
-              : element.objectStage?.color == null
-                  ? HexColors.primaryMain
-                  : HexColor(element.objectStage!.color!),
-          latLng: LatLng(element.lat, element.long)));
-    });
+    _objects.forEach(
+      (element) {
+        places.add(
+          Place(
+            id: element.id,
+            name: element.manager?.name ?? '-',
+            color: element.hasOverdueTask == true
+                ? HexColors.additionalRed.withOpacity(0.75)
+                : element.objectStage?.color == null
+                    ? HexColors.primaryMain
+                    : HexColor(element.objectStage!.color!),
+            latLng: LatLng(
+              element.lat,
+              element.long,
+            ),
+          ),
+        );
+      },
+    );
 
     notifyListeners();
   }

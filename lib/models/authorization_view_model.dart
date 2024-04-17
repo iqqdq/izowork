@@ -11,7 +11,6 @@ import 'package:izowork/repositories/authorization_repository.dart';
 import 'package:izowork/repositories/user_repository.dart';
 import 'package:izowork/screens/recovery/recovery_screen.dart';
 import 'package:izowork/screens/tab_controller/tab_controller_screen.dart';
-import 'package:izowork/services/push_notification_service.dart';
 
 class AuthorizationViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;
@@ -27,29 +26,30 @@ class AuthorizationViewModel with ChangeNotifier {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
-    PushNotificationService pushNotificationService = PushNotificationService();
-    pushNotificationService.deleteDeviceToken().whenComplete(
-          () async => pushNotificationService.getDeviceToken().whenComplete(
-                () async => await AuthorizationRepository()
-                    .login(AuthorizationRequest(
-                      email: email,
-                      password: password,
-                    ))
-                    .then((response) => {
-                          if (response is Authorization)
-                            {
-                              // SAVE USER TOKEN
-                              LocalService().setToken(response.token),
-                              getUserProfile(context)
-                            }
-                          else if (response is ErrorResponse)
-                            {
-                              loadingStatus = LoadingStatus.error,
-                              notifyListeners(),
-                              Toast().showTopToast(context, Titles.invalidLogin)
-                            }
-                        }),
-              ),
+    await AuthorizationRepository()
+        .login(AuthorizationRequest(
+          email: email,
+          password: password,
+        ))
+        .then(
+          (response) => {
+            if (response is Authorization)
+              {
+                /// SAVE USER TOKEN
+                LocalService()
+                    .setToken(response.token)
+                    .whenComplete(() => getUserProfile(context))
+              }
+            else if (response is ErrorResponse)
+              {
+                loadingStatus = LoadingStatus.error,
+                notifyListeners(),
+                Toast().showTopToast(
+                  context,
+                  Titles.invalidLogin,
+                )
+              }
+          },
         );
   }
 
@@ -72,7 +72,10 @@ class AuthorizationViewModel with ChangeNotifier {
                   ))
             }
           else
-            {loadingStatus = LoadingStatus.error, notifyListeners()}
+            {
+              loadingStatus = LoadingStatus.error,
+              notifyListeners(),
+            }
         });
   }
 

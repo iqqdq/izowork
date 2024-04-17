@@ -22,7 +22,11 @@ class UserRepository {
   }
 
   Future<dynamic> updateUser(UserRequest userRequest) async {
-    dynamic json = await WebService().patch(userUpdateUrl, userRequest);
+    dynamic json = await WebService().patch(
+      userUpdateUrl,
+      userRequest.toJson(),
+      null,
+    );
 
     try {
       return User.fromJson(json["user"]);
@@ -32,7 +36,10 @@ class UserRepository {
   }
 
   Future<dynamic> updateAvatar(FormData formData) async {
-    dynamic json = await WebService().put(uploadAvatarUrl, formData);
+    dynamic json = await WebService().put(
+      uploadAvatarUrl,
+      formData,
+    );
 
     try {
       return json["avatar"] as String;
@@ -41,8 +48,10 @@ class UserRepository {
     }
   }
 
-  Future<dynamic> getUsers(
-      {required Pagination pagination, String? search}) async {
+  Future<dynamic> getUsers({
+    required Pagination pagination,
+    String? search,
+  }) async {
     var url =
         usersUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
@@ -64,10 +73,11 @@ class UserRepository {
     }
   }
 
-  Future<dynamic> getParticipants(
-      {required Pagination pagination,
-      required String id,
-      String? search}) async {
+  Future<dynamic> getParticipants({
+    required Pagination pagination,
+    required String id,
+    String? search,
+  }) async {
     var url = participants +
         '?offset=${pagination.offset}&limit=${pagination.size}&chat_id=$id';
 
@@ -90,8 +100,10 @@ class UserRepository {
   }
 
   Future deleteUser({required String id}) async {
-    dynamic json =
-        await WebService().delete(deleteAccountUrl, DeleteRequest(id: id));
+    dynamic json = await WebService().delete(
+      deleteAccountUrl,
+      DeleteRequest(id: id),
+    );
 
     if (json == null) {
       return true;
@@ -100,9 +112,11 @@ class UserRepository {
     }
   }
 
-  Future resetPassword({required String email}) async {
-    dynamic json =
-        await WebService().put(resetPasswordUrl, ResetPasswordRequest(email));
+  Future resetPassword(ResetPasswordRequest resetPasswordRequest) async {
+    dynamic json = await WebService().put(
+      resetPasswordUrl,
+      resetPasswordRequest.toJson(),
+    );
 
     if (json == null || json == '' || json == true) {
       return true;

@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    
+
      <!--#docregion android-queries-->
     <!-- Provide required visibility configuration for API level 30 and above -->
     <queries>
@@ -35,13 +35,16 @@
       <data android:scheme="https" />
     </intent>
   </queries>
-    
+
    <application
         android:label="Izowork"
         android:name="${applicationName}"
         android:allowBackup="false"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/launcher_icon">
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/launcher_icon" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

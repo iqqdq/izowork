@@ -15,6 +15,7 @@ import 'package:izowork/screens/notifications/notifications_screen.dart';
 import 'package:izowork/screens/products/products_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
+import 'package:izowork/services/push_notification_service.dart';
 
 class MoreViewModel with ChangeNotifier {
   final int count;
@@ -145,6 +146,11 @@ class MoreViewModel with ChangeNotifier {
                     onPressed: () {
                       /// LOGOUT
                       LocalService().clear();
+
+                      /// DELETE DEVICE TOKEN
+                      PushNotificationService().deleteDeviceToken();
+
+                      /// SHOW AUTHORIZATION SCREEN
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(

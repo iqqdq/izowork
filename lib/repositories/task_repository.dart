@@ -81,7 +81,10 @@ class TaskRepository {
   }
 
   Future<dynamic> createTask(TaskRequest taskRequest) async {
-    dynamic json = await WebService().post(taskCreateUrl, taskRequest);
+    dynamic json = await WebService().post(
+      taskCreateUrl,
+      taskRequest.toJson(),
+    );
 
     try {
       return Task.fromJson(json["task"]);
@@ -91,7 +94,11 @@ class TaskRepository {
   }
 
   Future<dynamic> updateTask(TaskRequest taskRequest) async {
-    dynamic json = await WebService().patch(taskUpdateUrl, taskRequest);
+    dynamic json = await WebService().patch(
+      taskUpdateUrl,
+      taskRequest.toJson(),
+      null,
+    );
 
     try {
       return Task.fromJson(json["task"]);
@@ -112,7 +119,10 @@ class TaskRepository {
   }
 
   Future<dynamic> deleteTaskFile(DeleteRequest deleteRequest) async {
-    dynamic json = await WebService().delete(taskFileUrl, deleteRequest);
+    dynamic json = await WebService().delete(
+      taskFileUrl,
+      deleteRequest.toJson(),
+    );
 
     if (json == true) {
       return json;

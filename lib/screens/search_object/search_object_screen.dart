@@ -10,19 +10,23 @@ class SearchObjectScreenWidget extends StatelessWidget {
   final VoidCallback onFocus;
   final Function(Object?) onPop;
 
-  const SearchObjectScreenWidget(
-      {Key? key,
-      required this.title,
-      required this.isRoot,
-      required this.onFocus,
-      required this.onPop})
-      : super(key: key);
+  const SearchObjectScreenWidget({
+    Key? key,
+    required this.title,
+    required this.isRoot,
+    required this.onFocus,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => SearchObjectViewModel(),
         child: SearchObjectScreenBodyWidget(
-            title: title, isRoot: isRoot, onFocus: onFocus, onPop: onPop));
+          title: title,
+          isRoot: isRoot,
+          onFocus: onFocus,
+          onPop: onPop,
+        ));
   }
 }

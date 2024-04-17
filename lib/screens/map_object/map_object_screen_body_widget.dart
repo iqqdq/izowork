@@ -13,8 +13,10 @@ import 'package:provider/provider.dart';
 class MapObjectScreenBodyWidget extends StatelessWidget {
   final bool? hideInfoButton;
 
-  const MapObjectScreenBodyWidget({Key? key, this.hideInfoButton})
-      : super(key: key);
+  const MapObjectScreenBodyWidget({
+    Key? key,
+    this.hideInfoButton,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

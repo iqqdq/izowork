@@ -88,6 +88,13 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
       }
     }
 
+    Widget newsTitle = Padding(
+      padding: EdgeInsets.only(
+        left: _images.isEmpty ? 44.0 : 0.0,
+      ),
+      child: TitleWidget(text: widget.news.name),
+    );
+
     return Scaffold(
         backgroundColor: HexColors.grey10,
         body: Stack(children: [
@@ -98,21 +105,16 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                       bottom: 70.0 + MediaQuery.of(context).padding.bottom),
                   children: [
                     /// SLIDESHOW
-                    Hero(
-                      tag: widget.tag,
-                      child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(16.0),
-                            topRight: Radius.circular(16.0),
-                          ),
-                          child: _images.isEmpty
-                              ? Container(
-                                  width: double.infinity,
-                                  height:
-                                      MediaQuery.of(context).size.height / 3.5,
-                                  color: HexColors.grey30,
-                                )
-                              : Stack(children: [
+                    _images.isEmpty
+                        ? Container()
+                        : Hero(
+                            tag: widget.tag,
+                            child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(16.0),
+                                  topRight: Radius.circular(16.0),
+                                ),
+                                child: Stack(children: [
                                   ImageSlideshow(
                                     width: double.infinity,
                                     height: MediaQuery.of(context).size.height /
@@ -134,26 +136,29 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                                               MainAxisAlignment.end,
                                           children: [
                                             Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: MediaQuery.of(context)
-                                                                .padding
-                                                                .top ==
-                                                            0.0
-                                                        ? 30.0
-                                                        : MediaQuery.of(context)
-                                                                .padding
-                                                                .top +
-                                                            10.0,
-                                                    right: 10.0),
-                                                child: const FittedBox(
-                                                    child: StatusWidget(
-                                                        title: Titles.important,
-                                                        status: 0)))
+                                              padding: EdgeInsets.only(
+                                                  top: MediaQuery.of(context)
+                                                              .padding
+                                                              .top ==
+                                                          0.0
+                                                      ? 30.0
+                                                      : MediaQuery.of(context)
+                                                              .padding
+                                                              .top +
+                                                          10.0,
+                                                  right: 10.0),
+                                              child: const FittedBox(
+                                                child: StatusWidget(
+                                                  title: Titles.important,
+                                                  status: 0,
+                                                ),
+                                              ),
+                                            )
                                           ],
                                         )
                                       : Container(),
                                 ])),
-                    ),
+                          ),
                     Padding(
                         padding: const EdgeInsets.only(
                           left: 16.0,
@@ -163,12 +168,15 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                         ),
                         child: Row(children: [
                           /// NAME
-                          Text(widget.news.user?.name ?? '-',
-                              maxLines: 1,
-                              style: TextStyle(
-                                  color: HexColors.grey40,
-                                  fontSize: 12.0,
-                                  fontFamily: 'PT Root UI')),
+                          Text(
+                            widget.news.user?.name ?? '-',
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: HexColors.grey40,
+                              fontSize: 12.0,
+                              fontFamily: 'PT Root UI',
+                            ),
+                          ),
                           const SizedBox(width: 8.0),
 
                           /// DATE
@@ -181,12 +189,21 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                         ])),
 
                     /// NEWS TITLE
-                    TitleWidget(text: widget.news.name),
+                    _images.isEmpty
+                        ? Hero(
+                            tag: widget.tag,
+                            child: newsTitle,
+                          )
+                        : newsTitle,
                     const SizedBox(height: 10.0),
 
                     /// NEWS TEXT
                     Padding(
-                      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                      padding: EdgeInsets.only(
+                        top: _images.isEmpty ? 20.0 : 0.0,
+                        left: 16.0,
+                        right: 16.0,
+                      ),
                       child: SelectionArea(
                           child: Text(widget.news.description,
                               style: TextStyle(

@@ -81,7 +81,10 @@ class DealRepository {
   }
 
   Future<dynamic> createDeal(DealCreateRequest dealCreateRequest) async {
-    dynamic json = await WebService().post(dealCreateUrl, dealCreateRequest);
+    dynamic json = await WebService().post(
+      dealCreateUrl,
+      dealCreateRequest.toJson(),
+    );
 
     try {
       return Deal.fromJson(json["deal"]);
@@ -91,7 +94,11 @@ class DealRepository {
   }
 
   Future<dynamic> updateDeal(DealCreateRequest dealCreateRequest) async {
-    dynamic json = await WebService().patch(dealUpdateUrl, dealCreateRequest);
+    dynamic json = await WebService().patch(
+      dealUpdateUrl,
+      dealCreateRequest.toJson(),
+      null,
+    );
 
     try {
       return Deal.fromJson(json["deal"]);
@@ -135,7 +142,10 @@ class DealRepository {
   }
 
   Future<dynamic> addProduct(DealProductRequest dealProductRequest) async {
-    dynamic json = await WebService().post(dealProductUrl, dealProductRequest);
+    dynamic json = await WebService().post(
+      dealProductUrl,
+      dealProductRequest.toJson(),
+    );
 
     try {
       return DealProduct.fromJson(json["product"]);
@@ -145,7 +155,11 @@ class DealRepository {
   }
 
   Future<dynamic> updateProduct(DealProductRequest dealProductRequest) async {
-    dynamic json = await WebService().patch(dealProductUrl, dealProductRequest);
+    dynamic json = await WebService().patch(
+      dealProductUrl,
+      dealProductRequest.toJson(),
+      null,
+    );
 
     try {
       return DealProduct.fromJson(json["product"]);
@@ -155,7 +169,10 @@ class DealRepository {
   }
 
   Future<dynamic> deleteProduct(DeleteRequest deleteRequest) async {
-    dynamic json = await WebService().delete(dealProductUrl, deleteRequest);
+    dynamic json = await WebService().delete(
+      dealProductUrl,
+      deleteRequest.toJson(),
+    );
 
     if (json == true) {
       return json;
@@ -176,7 +193,10 @@ class DealRepository {
   }
 
   Future<dynamic> deleteDealFile(DeleteRequest deleteRequest) async {
-    dynamic json = await WebService().delete(dealFileUrl, deleteRequest);
+    dynamic json = await WebService().delete(
+      dealFileUrl,
+      deleteRequest.toJson(),
+    );
 
     if (json == true) {
       return json;
@@ -202,8 +222,11 @@ class DealRepository {
 
   Future<dynamic> updateProcess(
       DealProcessUpdateRequest dealProcessUpdateRequest) async {
-    dynamic json =
-        await WebService().patch(dealProcessUrl, dealProcessUpdateRequest);
+    dynamic json = await WebService().patch(
+      dealProcessUrl,
+      dealProcessUpdateRequest.toJson(),
+      null,
+    );
 
     try {
       return DealProcess.fromJson(json["process"]);
@@ -240,8 +263,10 @@ class DealRepository {
 
   Future<dynamic> createProcessInfo(
       DealProcessInfoRequest dealProcessInfoRequest) async {
-    dynamic json =
-        await WebService().post(dealProcessInfoUrl, dealProcessInfoRequest);
+    dynamic json = await WebService().post(
+      dealProcessInfoUrl,
+      dealProcessInfoRequest.toJson(),
+    );
 
     try {
       return DealProcessInfo.fromJson(json["information"]);
@@ -251,9 +276,9 @@ class DealRepository {
   }
 
   // Future<dynamic> updateProcessInfo(
-  //     DealProcessInfoRequest dealProcessInfoRequest) async {
+  //     DealProcessInfoRequest dealProcessInfoRequest.toJson(),) async {
   //   dynamic json =
-  //       await WebService().patch(dealProcessInfoUrl, dealProcessInfoRequest);
+  //       await WebService().patch(dealProcessInfoUrl, dealProcessInfoRequest.toJson(),);
 
   //   try {
   //     return DealProcessInfo.fromJson(json["information"]);

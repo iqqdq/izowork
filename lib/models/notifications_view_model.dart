@@ -85,39 +85,48 @@ class NotificationsViewModel with ChangeNotifier {
 
   Future readNotification(
     BuildContext context,
-    String id,
+    bool isPushNotification,
+    NotificationEntity notificationEntity,
   ) async {
-    loadingStatus = LoadingStatus.searching;
-    notifyListeners();
+    if (notificationEntity.read == true) {
+      // SHOW OBJECT/DEAL/TASK SCREEN
+      showNotificationScreen(
+        context,
+        notificationEntity,
+      );
+    } else {
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
 
-    await NotificationRepository()
-        .read(readNotificationRequest: ReadNotificationRequest(id: id))
-        .then((response) => {
-              if (response == true)
-                {
-                  loadingStatus = LoadingStatus.completed,
-                  // _notifications[index].read = true,
-                  _notifications
-                      .firstWhere((element) => element.id == id)
-                      .read = true,
+      await NotificationRepository()
+          .read(
+              readNotificationRequest:
+                  ReadNotificationRequest(id: notificationEntity.id))
+          .then((response) => {
+                if (response == true)
+                  {
+                    if (!isPushNotification)
+                      {
+                        loadingStatus = LoadingStatus.completed,
+                        notificationEntity.read = true,
+                        notifyListeners(),
+                      },
 
-                  notifyListeners(),
-
-                  /// SHOW OBJECT/DEAL/TASK SCREEN
-
-                  Future.delayed(
-                      Duration.zero,
-                      () => showNotificationScreen(
-                            context,
-                            id,
-                          ))
-                }
-              else
-                {
-                  loadingStatus = LoadingStatus.error,
-                  notifyListeners(),
-                }
-            });
+                    // SHOW OBJECT/DEAL/TASK SCREEN
+                    Future.delayed(
+                        Duration.zero,
+                        () => showNotificationScreen(
+                              context,
+                              notificationEntity,
+                            ))
+                  }
+                else
+                  {
+                    loadingStatus = LoadingStatus.error,
+                    notifyListeners(),
+                  }
+              });
+    }
   }
 
   Future getObjectById(BuildContext context, String id) async {
@@ -134,12 +143,16 @@ class NotificationsViewModel with ChangeNotifier {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              ObjectPageViewScreenWidget(object: response)))
+                        builder: (context) =>
+                            ObjectPageViewScreenWidget(object: response),
+                      ))
                 }
             }
           else if (response is ErrorResponse)
-            {loadingStatus = LoadingStatus.error, notifyListeners()}
+            {
+              loadingStatus = LoadingStatus.error,
+              notifyListeners(),
+            }
         });
   }
 
@@ -194,57 +207,68 @@ class NotificationsViewModel with ChangeNotifier {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
-    await NewsRepository().getNewsOne(id).then((response) => {
-          if (response is News)
-            {
-              loadingStatus = LoadingStatus.completed,
-              notifyListeners(),
-              if (context.mounted)
+    await NewsRepository()
+        .getNewsOne(id)
+        .then((response) => {
+              if (response is News)
                 {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NewsPageScreenWidget(
-                                news: response,
-                                tag: '',
-                              )))
+                  loadingStatus = LoadingStatus.completed,
+                  notifyListeners(),
+                  if (context.mounted)
+                    {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NewsPageScreenWidget(
+                                    news: response,
+                                    tag: '',
+                                  )))
+                    }
                 }
-            }
-          else
-            loadingStatus = LoadingStatus.error,
-          notifyListeners()
-        });
+              else
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(
+          () => notifyListeners(),
+        );
   }
 
   Future getPhaseById(
-      BuildContext context, String objectId, String phaseId) async {
+    BuildContext context,
+    String objectId,
+    String phaseId,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
-    await PhaseRepository().getPhase(phaseId).then((phase) async => {
-          if (phase is Phase)
-            await ObjectRepository().getObject(objectId).then((object) => {
-                  if (object is Object)
-                    {
-                      loadingStatus = LoadingStatus.completed,
-                      notifyListeners(),
-                      if (context.mounted)
+    await PhaseRepository()
+        .getPhase(phaseId)
+        .then((phase) async => {
+              if (phase is Phase)
+                await ObjectRepository().getObject(objectId).then((object) => {
+                      if (object is Object)
                         {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ObjectPageViewScreenWidget(
-                                        object: object,
-                                        phase: phase,
-                                      )))
+                          loadingStatus = LoadingStatus.completed,
+                          notifyListeners(),
+                          if (context.mounted)
+                            {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ObjectPageViewScreenWidget(
+                                            object: object,
+                                            phase: phase,
+                                          )))
+                            }
                         }
-                    }
-                })
-          else
-            loadingStatus = LoadingStatus.error,
-          notifyListeners()
-        });
+                    })
+              else
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(
+          () => notifyListeners(),
+        );
   }
 
   // MARK: -
@@ -252,73 +276,35 @@ class NotificationsViewModel with ChangeNotifier {
 
   void showNotificationScreen(
     BuildContext context,
-    String id,
+    NotificationEntity notificationEntity,
   ) {
-    if (_notifications
-            .firstWhere((element) => element.id == id)
-            .metadata
-            .objectId !=
-        null) {
-      if (_notifications
-              .firstWhere((element) => element.id == id)
-              .metadata
-              .phaseId !=
-          null) {
+    if (notificationEntity.metadata.objectId != null) {
+      if (notificationEntity.metadata.phaseId != null) {
         getPhaseById(
           context,
-          _notifications
-              .firstWhere((element) => element.id == id)
-              .metadata
-              .objectId!,
-          _notifications
-              .firstWhere((element) => element.id == id)
-              .metadata
-              .phaseId!,
+          notificationEntity.metadata.objectId!,
+          notificationEntity.metadata.phaseId!,
         );
       } else {
         getObjectById(
           context,
-          _notifications
-              .firstWhere((element) => element.id == id)
-              .metadata
-              .objectId!,
+          notificationEntity.metadata.objectId!,
         );
       }
-    } else if (_notifications
-            .firstWhere((element) => element.id == id)
-            .metadata
-            .dealId !=
-        null) {
+    } else if (notificationEntity.metadata.dealId != null) {
       getDealById(
         context,
-        _notifications
-            .firstWhere((element) => element.id == id)
-            .metadata
-            .dealId!,
+        notificationEntity.metadata.dealId!,
       );
-    } else if (_notifications
-            .firstWhere((element) => element.id == id)
-            .metadata
-            .taskId !=
-        null) {
+    } else if (notificationEntity.metadata.taskId != null) {
       getTaskById(
         context,
-        _notifications
-            .firstWhere((element) => element.id == id)
-            .metadata
-            .taskId!,
+        notificationEntity.metadata.taskId!,
       );
-    } else if (_notifications
-            .firstWhere((element) => element.id == id)
-            .metadata
-            .newsId !=
-        null) {
+    } else if (notificationEntity.metadata.newsId != null) {
       getNewsById(
         context,
-        _notifications
-            .firstWhere((element) => element.id == id)
-            .metadata
-            .newsId!,
+        notificationEntity.metadata.newsId!,
       );
     }
   }

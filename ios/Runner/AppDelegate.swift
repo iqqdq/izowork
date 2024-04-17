@@ -14,7 +14,9 @@ import Firebase
     GeneratedPluginRegistrant.register(with: self)
     
     // Initialize FirebaseApp
-    FirebaseApp.configure()
+    if FirebaseApp.app() == nil {
+        FirebaseApp.configure()
+    }
 
     // Initialize Firebase push-notification plugin
     FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in

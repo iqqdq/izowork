@@ -17,22 +17,22 @@ class LabelInputWidget extends StatefulWidget {
   final VoidCallback? onEditingComplete;
   final VoidCallback? onClearTap;
 
-  const LabelInputWidget(
-      {Key? key,
-      required this.textEditingController,
-      required this.focusNode,
-      required this.labelText,
-      this.height,
-      this.margin,
-      this.textInputType,
-      this.textInputAction,
-      this.textCapitalization,
-      this.placeholder,
-      this.onTap,
-      this.onChange,
-      this.onEditingComplete,
-      this.onClearTap})
-      : super(key: key);
+  const LabelInputWidget({
+    Key? key,
+    required this.textEditingController,
+    required this.focusNode,
+    required this.labelText,
+    this.height,
+    this.margin,
+    this.textInputType,
+    this.textInputAction,
+    this.textCapitalization,
+    this.placeholder,
+    this.onTap,
+    this.onChange,
+    this.onEditingComplete,
+    this.onClearTap,
+  }) : super(key: key);
 
   @override
   _LabelInputState createState() => _LabelInputState();
@@ -42,15 +42,19 @@ class _LabelInputState extends State<LabelInputWidget> {
   @override
   Widget build(BuildContext context) {
     final _textStyle = TextStyle(
-        fontFamily: 'PT Root UI',
-        fontSize: 16.0,
-        fontWeight: FontWeight.w400,
-        color: HexColors.black);
+      fontFamily: 'PT Root UI',
+      fontSize: 16.0,
+      fontWeight: FontWeight.w400,
+      color: HexColors.black,
+    );
 
     return Container(
         height: widget.height ?? 56.0,
         margin: widget.margin ?? const EdgeInsets.symmetric(horizontal: 16.0),
-        padding: const EdgeInsets.only(left: 16.0, right: 4.0),
+        padding: const EdgeInsets.only(
+          left: 16.0,
+          right: 4.0,
+        ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
             color: HexColors.white,
@@ -92,7 +96,8 @@ class _LabelInputState extends State<LabelInputWidget> {
                             widget.onEditingComplete!(),
                             FocusScope.of(context).unfocus()
                           })),
-          widget.textEditingController.text.isEmpty
+          widget.textEditingController.text.isEmpty ||
+                  !widget.focusNode.hasFocus
               ? Container()
               : IconButton(
                   highlightColor: Colors.transparent,

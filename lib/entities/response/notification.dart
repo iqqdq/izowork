@@ -35,8 +35,13 @@ class NotificationEntity {
 }
 
 class Metadata {
-  Metadata(
-      {this.objectId, this.dealId, this.taskId, this.newsId, this.phaseId});
+  Metadata({
+    this.objectId,
+    this.dealId,
+    this.taskId,
+    this.newsId,
+    this.phaseId,
+  });
 
   String? objectId;
   String? dealId;
@@ -45,9 +50,10 @@ class Metadata {
   String? phaseId;
 
   factory Metadata.fromJson(Map<String, dynamic> json) => Metadata(
-      objectId: json["object_id"],
-      dealId: json["deal_id"],
-      taskId: json["task_id"],
-      newsId: json["news_id"],
-      phaseId: json["phase_id"]);
+        objectId: json["object_id"],
+        dealId: json["deal_id"],
+        taskId: json["task_id"],
+        newsId: json["news_id"],
+        phaseId: json["phase_id"],
+      );
 }

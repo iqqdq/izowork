@@ -6,8 +6,6 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/place_model.dart';
 import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SingleObjectMapViewModel with ChangeNotifier {
   final Object object;
@@ -57,39 +55,30 @@ class SingleObjectMapViewModel with ChangeNotifier {
 
   void zoomIn(GoogleMapController googleMapController) {
     if (_position != null) {
-      googleMapController.getZoomLevel().then((value) =>
-          googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: _position!, zoom: value + 1.0))));
+      googleMapController.getZoomLevel().then((value) => googleMapController
+              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+            target: _position!,
+            zoom: value + 1.0,
+          ))));
     }
   }
 
   void zoomOut(GoogleMapController googleMapController) {
     if (_position != null) {
-      googleMapController.getZoomLevel().then((value) =>
-          googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: _position!, zoom: value - 1.0))));
+      googleMapController.getZoomLevel().then((value) => googleMapController
+              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+            target: _position!,
+            zoom: value - 1.0,
+          ))));
     }
   }
 
   void showUserLocation(GoogleMapController googleMapController) {
-    googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: _userPosition!, zoom: 16.0)));
-  }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showMapObjectSheet(BuildContext context, String id) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => MapObjectScreenWidget(
-              object: object,
-              hideInfoButton: true,
-            ));
+    googleMapController
+        .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: _userPosition!,
+      zoom: 16.0,
+    )));
   }
 
   // MARK: -

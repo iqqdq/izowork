@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:izowork/components/custom_scroll_behavior.dart';
+import 'package:izowork/entities/response/notification.dart';
 import 'package:izowork/models/notifications_view_model.dart';
+import 'package:izowork/repositories/fcm_token_repository.dart';
 import 'package:izowork/screens/splash/splash_screen.dart';
 import 'package:izowork/services/local_service.dart';
 import 'package:izowork/services/push_notification_service.dart';
@@ -37,13 +39,13 @@ class IzoworkApp extends StatefulWidget {
 }
 
 class _IzoworkAppState extends State<IzoworkApp> {
-  /// Initialize the [FlutterLocalNotificationsPlugin] package.
-  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
   @override
   void initState() {
-    _flutterLocalNotificationsPlugin.initialize(
+    // UPDATE DEVICE TOKEN
+    _updateDeviceToken();
+
+    // INIT LOCAL NOTIFICATION'S
+    FlutterLocalNotificationsPlugin().initialize(
       const InitializationSettings(
         android: AndroidInitializationSettings(
           '@mipmap/ic_launcher',
@@ -51,24 +53,43 @@ class _IzoworkAppState extends State<IzoworkApp> {
         iOS: DarwinInitializationSettings(),
       ),
       onDidReceiveNotificationResponse: (details) =>
-          onSelectNotification(details),
+          _onSelectNotification(details),
     );
 
     super.initState();
   }
 
-  Future<dynamic> onSelectNotification(
-      NotificationResponse notificationResponse) async {
-    String? token = await LocalService().getToken();
-    if (token != null) {
-      if (notificationResponse.payload != null) {
-        Map payload = jsonDecode(notificationResponse.payload!);
+  Future _updateDeviceToken() async {
+    // DELETE CURRENT DEVICE TOKEN FROM FIREBASE
+    PushNotificationService pushNotificationService = PushNotificationService();
+    await pushNotificationService.deleteDeviceToken();
 
-        if (payload['action'] == 'izowork_notification') {
+    // GET NEW DEVICE TOKEN FROM FIREBASE
+    String? deviceToken = await pushNotificationService.getDeviceToken();
+
+    // SEND NEW DEVICE TOKEN ON DATABASE
+    if (deviceToken != null) {
+      await FcmTokenRepository().sendDeviceToken(deviceToken);
+    }
+  }
+
+  Future<dynamic> _onSelectNotification(
+      NotificationResponse notificationResponse) async {
+    // CHECK USER IS AUTHORIZED
+    if (await LocalService().getToken() != null) {
+      // CHECK PUSH NOTIFICATION PAYLOAD
+      if (notificationResponse.payload != null) {
+        Map<String, dynamic>? payload =
+            jsonDecode(notificationResponse.payload!);
+        if (payload != null) {
+          // CHECK IF PAYLOAD CONTAINS APP's NOTIFICATION ID
+
           if (_navigatorKey.currentContext != null) {
+            // READ & OPEN NOTIFICATION
             NotificationsViewModel().readNotification(
-              _navigatorKey.currentContext!,
-              payload['id'],
+              context,
+              true,
+              NotificationEntity.fromJson(payload),
             );
           }
         }

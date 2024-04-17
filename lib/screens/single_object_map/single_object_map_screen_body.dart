@@ -9,7 +9,9 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/place_model.dart';
 import 'package:izowork/models/single_object_map_view_model.dart';
 import 'package:izowork/screens/map/views/map_control_widget.dart';
+import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class SingleObjectMapScreenBodyWidget extends StatefulWidget {
@@ -48,16 +50,18 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
           onTap: () async {
             debugPrint('---- $cluster');
 
-            await _googleMapController.animateCamera(
-                CameraUpdate.newCameraPosition(
-                    CameraPosition(target: cluster.location, zoom: 16.0)));
+            await _googleMapController
+                .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+              target: cluster.location,
+              zoom: 16.0,
+            )));
 
-            Future.delayed(
-                const Duration(milliseconds: 300),
-                () => _singleObjectMapViewModel.showMapObjectSheet(
-                    context, cluster.items.first.id));
+            _pushMapObjectScreenWidget();
           },
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 125 : 75, cluster),
+          icon: await _getMarkerBitmap(
+            cluster.isMultiple ? 125 : 75,
+            cluster,
+          ),
         );
       };
 
@@ -112,6 +116,25 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
     Future.delayed(const Duration(seconds: 1), () => setState(() {}));
   }
 
+  // MARK: -
+  // MARK: - PUSH
+
+  void _pushMapObjectScreenWidget() {
+    Future.delayed(
+      const Duration(milliseconds: 300),
+      () => showCupertinoModalBottomSheet(
+          enableDrag: false,
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (sheetContext) => MapObjectScreenWidget(
+                object: _singleObjectMapViewModel.object,
+                hideInfoButton: true,
+              )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _singleObjectMapViewModel = Provider.of<SingleObjectMapViewModel>(
@@ -152,8 +175,9 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
               myLocationButtonEnabled: false,
               myLocationEnabled: _singleObjectMapViewModel.hasPermission,
               initialCameraPosition: CameraPosition(
-                  target: _singleObjectMapViewModel.places.first.latLng,
-                  zoom: 11.0),
+                target: _singleObjectMapViewModel.places.first.latLng,
+                zoom: 12.0,
+              ),
               markers: _singleObjectMapViewModel.markers,
               onMapCreated: (controller) => {
                     _googleMapController = controller,

@@ -20,13 +20,13 @@ class SearchObjectScreenBodyWidget extends StatefulWidget {
   final VoidCallback onFocus;
   final Function(Object?) onPop;
 
-  const SearchObjectScreenBodyWidget(
-      {Key? key,
-      required this.title,
-      required this.isRoot,
-      required this.onFocus,
-      required this.onPop})
-      : super(key: key);
+  const SearchObjectScreenBodyWidget({
+    Key? key,
+    required this.title,
+    required this.isRoot,
+    required this.onFocus,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   _SearchObjectScreenBodyState createState() => _SearchObjectScreenBodyState();
@@ -49,7 +49,9 @@ class _SearchObjectScreenBodyState extends State<SearchObjectScreenBodyWidget> {
           _scrollController.position.maxScrollExtent) {
         _pagination.offset += 1;
         _searchObjectViewModel.getObjectList(
-            pagination: _pagination, search: _textEditingController.text);
+          pagination: _pagination,
+          search: _textEditingController.text,
+        );
       }
     });
   }

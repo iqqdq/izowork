@@ -29,11 +29,17 @@ class DialogRepository {
 
   Future<dynamic> readChatMessages(
       MessageReadRequest messageReadRequest) async {
-    await WebService().patch(messageReadUrl, messageReadRequest);
+    await WebService().patch(
+      messageReadUrl,
+      messageReadRequest.toJson(),
+      null,
+    );
   }
 
   Future addChatFile(MessageFileRequest messageFileRequest) async {
-    await WebService()
-        .postFormData(chatFileUrl, await messageFileRequest.toFormData());
+    await WebService().postFormData(
+      chatFileUrl,
+      await messageFileRequest.toFormData(),
+    );
   }
 }

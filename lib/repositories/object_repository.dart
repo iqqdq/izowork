@@ -114,7 +114,7 @@ class ObjectRepository {
   Future<dynamic> createObject(ObjectRequest objectRequest) async {
     dynamic json = await WebService().post(
       objectCreateUrl,
-      objectRequest,
+      objectRequest.toJson(),
     );
 
     try {
@@ -127,7 +127,8 @@ class ObjectRepository {
   Future<dynamic> updateObject(ObjectRequest objectRequest) async {
     dynamic json = await WebService().patch(
       objectUpdateUrl,
-      objectRequest,
+      objectRequest.toJson(),
+      null,
     );
 
     try {
@@ -153,7 +154,7 @@ class ObjectRepository {
   Future<dynamic> deleteObjectFile(DeleteRequest deleteRequest) async {
     dynamic json = await WebService().delete(
       objectFileUrl,
-      deleteRequest,
+      deleteRequest.toJson(),
     );
 
     if (json == true) {

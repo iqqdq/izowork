@@ -42,11 +42,24 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
 
   ClusterManager _initClusterManager() {
     return ClusterManager<Place>(
-      _mapViewModel.places,
-      _mapViewModel.updateMarkers,
-      markerBuilder: _markerBuilder,
-      levels: [1.0, 4.25, 6.75, 8.25, 11.5, 12.5, 13.0, 14.5, 16.0, 16.5, 20.0],
-    );
+        _mapViewModel.places, _mapViewModel.updateMarkers,
+        markerBuilder: _markerBuilder,
+        stopClusteringZoom: 20.0,
+        extraPercent: 0.5,
+        levels: [
+          1.0,
+          2.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0,
+          8.0,
+          9.0,
+          10.0,
+          12.0,
+          16.0,
+          20.0
+        ]);
   }
 
   LatLngBounds getBounds(List<LatLng> markers) {
@@ -95,17 +108,17 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                   .toList());
 
               await _googleMapController
-                  .animateCamera(CameraUpdate.newLatLngBounds(bounds, 20.0));
+                  .animateCamera(CameraUpdate.newLatLngBounds(
+                bounds,
+                40.0,
+              ));
             } else {
               await _googleMapController
                   .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-                target: cluster.location,
-                zoom: 16.0,
-              )));
-
-              Future.delayed(
-                  const Duration(milliseconds: 300),
-                  () => _mapViewModel.showMapObjectSheet(
+                    target: cluster.location,
+                    zoom: 20.0,
+                  )))
+                  .whenComplete(() => _mapViewModel.showMapObjectSheet(
                         context,
                         cluster.items.first.id,
                       ));
@@ -123,7 +136,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     Cluster<Place> cluster,
   ) async {
     double newSize =
-        Platform.isAndroid ? size.toDouble() / 1.25 : size.toDouble();
+        Platform.isAndroid ? size.toDouble() / 1.75 : size.toDouble();
 
     final PictureRecorder pictureRecorder = PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
@@ -137,7 +150,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           0.0,
           newSize,
           newSize,
-          const Radius.elliptical(12.0, 12.0),
+          const Radius.elliptical(10.0, 10.0),
         ),
       );
 
@@ -148,7 +161,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           8.0,
           newSize - 8.0,
           newSize - 8.0,
-          const Radius.elliptical(12.0, 12.0),
+          const Radius.elliptical(10.0, 10.0),
         ),
       );
 
@@ -159,7 +172,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           16.0,
           newSize - 16.0,
           newSize - 16.0,
-          const Radius.elliptical(12.0, 12.0),
+          const Radius.elliptical(10.0, 10.0),
         ),
       );
 
@@ -231,10 +244,6 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                 _clusterManager?.updateMap(),
               }));
     });
-
-    double zoom = await _googleMapController.getZoomLevel();
-
-    debugPrint(zoom.toString());
   }
 
   @override
@@ -258,30 +267,33 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
               myLocationButtonEnabled: false,
               myLocationEnabled: _mapViewModel.hasPermission,
               initialCameraPosition: CameraPosition(
-                  target: _mapViewModel.userPosition!, zoom: 11.0),
+                target: _mapViewModel.userPosition!,
+                zoom: 11.0,
+              ),
               markers: _mapViewModel.markers,
               onMapCreated: (controller) => {
-                    _googleMapController = controller,
+                _googleMapController = controller,
 
-                    /// SET COMPLETER
-                    _completer.complete(controller),
+                /// SET COMPLETER
+                _completer.complete(controller),
 
-                    /// SET CLUSTER ID
-                    _clusterManager?.setMapId(_googleMapController.mapId),
+                /// SET CLUSTER ID
+                _clusterManager?.setMapId(_googleMapController.mapId),
 
-                    /// UPDATE LOCATION
-                    _updateMap()
-                  },
+                /// UPDATE LOCATION
+                _updateMap()
+              },
               onCameraMove: (position) => {
-                    /// UPDATE MAP CAMERA POSITION
-                    _mapViewModel.onCameraMove(position),
+                /// UPDATE MAP CAMERA POSITION
+                _mapViewModel.onCameraMove(position),
 
-                    /// UPDATE CLUSTER MANAGER POSITION
-                    _clusterManager?.onCameraMove(position)
-                  },
+                /// UPDATE CLUSTER MANAGER POSITION
+                _clusterManager?.onCameraMove(position)
+              },
               onCameraIdle: () => _updateMap(),
               onLongPress: (position) =>
-                  _mapViewModel.showAddMapObjectSheet(context, position)),
+                  _mapViewModel.showAddMapObjectSheet(context, position),
+            ),
 
       /// MAP CONTROL
       Align(
@@ -294,7 +306,9 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                   ? _mapViewModel.showUserLocation(_googleMapController)
                   : _mapViewModel.getLocationPermission(),
               onSearchTap: () => _mapViewModel.showSearchMapObjectSheet(
-                  context, _googleMapController))),
+                    context,
+                    _googleMapController,
+                  ))),
 
       /// FILTER BUTTON
       Align(
@@ -303,10 +317,13 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
               padding: const EdgeInsets.only(bottom: 6.0),
               child: FilterButtonWidget(
                 onTap: () => _mapViewModel.showObjectsFilterSheet(
-                    context,
-                    () => _mapViewModel
-                        .getObjectList(controller: _googleMapController)
-                        .then((value) => _updateMap())),
+                  context,
+                  () => _mapViewModel
+                      .getObjectList(controller: _googleMapController)
+                      .then(
+                        (value) => _updateMap(),
+                      ),
+                ),
                 // onClearTap: () => {}
               )))
     ]));

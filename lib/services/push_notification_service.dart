@@ -75,14 +75,15 @@ class PushNotificationService {
     });
   }
 
-  Future getDeviceToken() async {
-    await firebaseMessaging.getToken().then((deviceToken) async => {
-          if (deviceToken != null)
-            {
-              debugPrint('NEW DEVICE TOKEN = $deviceToken'),
-              await LocalService().setDeviceToken(deviceToken)
-            }
-        });
+  Future<String?> getDeviceToken() async {
+    String? deviceToken = await firebaseMessaging.getToken();
+
+    if (deviceToken != null) {
+      debugPrint('NEW DEVICE TOKEN = $deviceToken');
+      await LocalService().setDeviceToken(deviceToken);
+    }
+
+    return deviceToken;
   }
 
   Future deleteDeviceToken() async {

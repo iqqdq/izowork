@@ -140,33 +140,37 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
             child: Stack(children: [
           /// NEWS LIST VIEW
           LiquidPullToRefresh(
-              color: HexColors.primaryMain,
-              backgroundColor: HexColors.white,
-              springAnimationDurationInMilliseconds: 300,
-              onRefresh: _onRefresh,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.only(
-                    left: 16.0,
-                    right: 16.0,
-                    top: 16.0,
-                    bottom: 80.0 + MediaQuery.of(context).padding.bottom,
-                  ),
-                  itemCount: _newsViewModel.news.length,
-                  itemBuilder: (context, index) {
-                    return NewsListItemWidget(
-                      key: ValueKey(_newsViewModel.news[index].id),
-                      tag: index.toString(),
-                      news: _newsViewModel.news[index],
-                      onTap: () => _newsViewModel.showNewsPageScreen(
-                        context,
-                        index,
-                      ),
-                      onUserTap: () => {},
-                      onShowCommentsTap: () =>
-                          _newsViewModel.showNewsCommentsScreen(context, index),
-                    );
-                  })),
+            color: HexColors.primaryMain,
+            backgroundColor: HexColors.white,
+            springAnimationDurationInMilliseconds: 300,
+            onRefresh: _onRefresh,
+            child: ListView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.only(
+                  left: 16.0,
+                  right: 16.0,
+                  top: 16.0,
+                  bottom: 80.0 + MediaQuery.of(context).padding.bottom,
+                ),
+                itemCount: _newsViewModel.news.length,
+                itemBuilder: (context, index) {
+                  return NewsListItemWidget(
+                    key: ValueKey(_newsViewModel.news[index].id),
+                    tag: index.toString(),
+                    news: _newsViewModel.news[index],
+                    onTap: () => _newsViewModel.showNewsPageScreen(
+                      context,
+                      index,
+                    ),
+                    onUserTap: () => {},
+                    onShowCommentsTap: () =>
+                        _newsViewModel.showNewsCommentsScreen(
+                      context,
+                      index,
+                    ),
+                  );
+                }),
+          ),
           const SeparatorWidget(),
 
           /// EMPTY LIST TEXT

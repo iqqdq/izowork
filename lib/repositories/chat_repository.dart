@@ -50,7 +50,10 @@ class ChatRepository {
   }
 
   Future<dynamic> createDmChat({required ChatDmRequest chatDmRequest}) async {
-    dynamic json = await WebService().post(chatDmUrl, chatDmRequest);
+    dynamic json = await WebService().post(
+      chatDmUrl,
+      chatDmRequest.toJson(),
+    );
 
     try {
       return Chat.fromJson(json["chat"]);

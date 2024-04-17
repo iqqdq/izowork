@@ -44,8 +44,10 @@ class _NewsCreateScreenBodyState extends State<NewsCreateScreenBodyWidget> {
   void dispose() {
     _titleTextEditingController.dispose();
     _titleFocusNode.dispose();
+
     _descriptionTextEditingController.dispose();
     _focusNode.dispose();
+
     super.dispose();
   }
 
@@ -195,14 +197,15 @@ class _NewsCreateScreenBodyState extends State<NewsCreateScreenBodyWidget> {
                   ])),
 
           /// ADD NEWS BUTTON
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).padding.bottom == 0.0
-                          ? 20.0
-                          : MediaQuery.of(context).padding.bottom),
-                  child: ButtonWidget(
+          Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+            _titleFocusNode.hasFocus || _focusNode.hasFocus
+                ? Container()
+                : Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).padding.bottom == 0.0
+                            ? 20.0
+                            : MediaQuery.of(context).padding.bottom),
+                    child: ButtonWidget(
                       title: Titles.publicate,
                       isDisabled: _titleTextEditingController.text.isEmpty ||
                           _descriptionTextEditingController.text.isEmpty,
@@ -212,7 +215,10 @@ class _NewsCreateScreenBodyState extends State<NewsCreateScreenBodyWidget> {
                           _descriptionTextEditingController.text,
                           _newsCreateViewModel.important,
                           (news) =>
-                              {widget.onPop(news), Navigator.pop(context)})))),
+                              {widget.onPop(news), Navigator.pop(context)}),
+                    ),
+                  ),
+          ]),
 
           /// INDICATOR
           _newsCreateViewModel.loadingStatus == LoadingStatus.searching

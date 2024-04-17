@@ -188,7 +188,11 @@ class DealViewModel with ChangeNotifier {
     }
   }
 
-  Future uploadFile(BuildContext context, String id, File file) async {
+  Future uploadFile(
+    BuildContext context,
+    String id,
+    File file,
+  ) async {
     await DealRepository()
         .addDealFile(DealFileRequest(id, file))
         .then((response) => {

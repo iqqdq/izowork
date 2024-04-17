@@ -159,7 +159,10 @@ class DocumentsViewModel with ChangeNotifier {
                 )));
   }
 
-  void showDocumentsFilterSheet(BuildContext context, Function() onFilter) {
+  void showDocumentsFilterSheet(
+    BuildContext context,
+    Function() onFilter,
+  ) {
     showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),

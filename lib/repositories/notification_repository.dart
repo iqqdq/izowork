@@ -36,8 +36,10 @@ class NotificationRepository {
 
   Future<dynamic> read(
       {required ReadNotificationRequest readNotificationRequest}) async {
-    dynamic json =
-        await WebService().put(readNotificationUrl, readNotificationRequest);
+    dynamic json = await WebService().put(
+      readNotificationUrl,
+      readNotificationRequest.toJson(),
+    );
 
     if (json == true || json == '') {
       return true;

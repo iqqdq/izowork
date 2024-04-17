@@ -49,7 +49,10 @@ class NewsRepository {
   }
 
   Future<dynamic> createNews(NewsRequest newsRequest) async {
-    dynamic json = await WebService().post(newsCreateUrl, newsRequest);
+    dynamic json = await WebService().post(
+      newsCreateUrl,
+      newsRequest.toJson(),
+    );
 
     try {
       return News.fromJson(json["news"]);
@@ -84,7 +87,10 @@ class NewsRepository {
 
   Future<dynamic> createNewsComment(
       NewsCommentRequest newsCommentRequest) async {
-    dynamic json = await WebService().post(newsCommentUrl, newsCommentRequest);
+    dynamic json = await WebService().post(
+      newsCommentUrl,
+      newsCommentRequest.toJson(),
+    );
 
     try {
       return NewsComment.fromJson(json["comment"]);
@@ -94,8 +100,10 @@ class NewsRepository {
   }
 
   Future<dynamic> addNewsFile(NewsFileRequest newsFileRequest) async {
-    dynamic json = await WebService()
-        .postFormData(newsFileUrl, await newsFileRequest.toFormData());
+    dynamic json = await WebService().postFormData(
+      newsFileUrl,
+      await newsFileRequest.toFormData(),
+    );
 
     try {
       return NewsFile.fromJson(json["file"]);

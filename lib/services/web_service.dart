@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:izowork/services/local_service.dart';
 
 class WebService {
@@ -11,7 +11,6 @@ class WebService {
 
   Future<Options> _options() async {
     String token = await LocalService().getToken() ?? '';
-    debugPrint(token);
 
     return Options(
       headers: token.isNotEmpty
@@ -103,12 +102,15 @@ class WebService {
   Future<dynamic> patch(
     String url,
     Object object,
+    String? queryParameters,
   ) async {
     try {
       Response response = await _dio.patch(
         url,
         data: object,
         options: await _options(),
+        queryParameters:
+            queryParameters == null ? null : jsonDecode(queryParameters),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
