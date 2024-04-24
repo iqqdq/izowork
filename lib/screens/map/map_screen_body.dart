@@ -8,8 +8,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/place_model.dart';
+import 'package:izowork/components/titles.dart';
 import 'package:izowork/screens/map/views/map_control_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';
+import 'package:izowork/views/segmented_control_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:izowork/models/map_view_model.dart';
 
@@ -294,6 +296,30 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
               onLongPress: (position) =>
                   _mapViewModel.showAddMapObjectSheet(context, position),
             ),
+
+      /// SEGMENTED CONTROL
+      SafeArea(
+        child: Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: SegmentedControlWidget(
+                titles: const [
+                  Titles.objects,
+                  Titles.clients,
+                ],
+                width: 212.0,
+                backgroundColor: HexColors.grey10,
+                activeColor: HexColors.black,
+                disableColor: HexColors.grey40,
+                thumbColor: HexColors.white,
+                borderColor: HexColors.grey20,
+                onTap: (index) => {
+                      // TODO: - GET OBJECTS / COMPANIES & UPDATE MAP
+                    }),
+          ),
+        ),
+      ),
 
       /// MAP CONTROL
       Align(

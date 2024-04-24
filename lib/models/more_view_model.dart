@@ -16,6 +16,7 @@ import 'package:izowork/screens/products/products_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
 import 'package:izowork/services/push_notification_service.dart';
+import 'package:izowork/views/border_button_widget.dart';
 
 class MoreViewModel with ChangeNotifier {
   final int count;
@@ -131,40 +132,49 @@ class MoreViewModel with ChangeNotifier {
         barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: Text(Titles.logoutAreYouSure,
-                  style: TextStyle(
-                      color: HexColors.black,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w400)),
+              title: Text(
+                Titles.logoutAreYouSure,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: HexColors.black,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
               actions: <Widget>[
-                TextButton(
-                    child: Text(Titles.logout,
-                        style: TextStyle(
-                            color: HexColors.additionalRed,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400)),
-                    onPressed: () {
-                      /// LOGOUT
-                      LocalService().clear();
+                Row(
+                  children: [
+                    Expanded(
+                        child: BorderButtonWidget(
+                            margin: EdgeInsets.zero,
+                            title: Titles.logout,
+                            isDestructive: true,
+                            onTap: () {
+                              /// LOGOUT
+                              LocalService().clear();
 
-                      /// DELETE DEVICE TOKEN
-                      PushNotificationService().deleteDeviceToken();
+                              /// DELETE DEVICE TOKEN
+                              PushNotificationService().deleteDeviceToken();
 
-                      /// SHOW AUTHORIZATION SCREEN
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const AuthorizationScreenWidget()),
-                          (route) => false);
-                    }),
-                TextButton(
-                    child: Text(Titles.cancel,
-                        style: TextStyle(
-                            color: HexColors.black,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400)),
-                    onPressed: () => Navigator.of(context).pop())
+                              /// SHOW AUTHORIZATION SCREEN
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const AuthorizationScreenWidget()),
+                                (route) => false,
+                              );
+                            })),
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                      child: BorderButtonWidget(
+                        margin: EdgeInsets.zero,
+                        title: Titles.cancel,
+                        onTap: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                  ],
+                ),
               ]);
         });
   }

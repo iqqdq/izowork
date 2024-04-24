@@ -173,7 +173,9 @@ class DialogViewModel with ChangeNotifier {
   Future getLocalService() async {
     LocalService localService = LocalService();
     token = await localService.getToken();
-    userId = await localService.getUserId();
+    await localService.getUser().then((value) => {
+          userId = value?.id,
+        });
   }
 
   Future<String> getLocalAudioPath() async {

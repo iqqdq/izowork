@@ -366,19 +366,25 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                               ? 1.0
                               : _opacity,
                       child: Row(children: [
-                        SvgPicture.asset('assets/ic_arrow_cancel.svg',
-                            fit: BoxFit.scaleDown,
-                            color: _isRecording ? null : Colors.transparent),
+                        SvgPicture.asset(
+                          'assets/ic_arrow_cancel.svg',
+                          fit: BoxFit.scaleDown,
+                          color: _isRecording ? null : Colors.transparent,
+                        ),
                         const SizedBox(width: 8.0),
                         Material(
-                            type: MaterialType.transparency,
-                            child: Text(Titles.cancel,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontFamily: 'PT Root UI',
-                                    color: _isRecording
-                                        ? HexColors.grey50
-                                        : Colors.transparent))),
+                          type: MaterialType.transparency,
+                          child: Text(
+                            Titles.cancel,
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: 'PT Root UI',
+                              color: _isRecording
+                                  ? HexColors.grey50
+                                  : Colors.transparent,
+                            ),
+                          ),
+                        ),
                         const SizedBox(width: 8.0),
                       ])),
                   _sendButton,

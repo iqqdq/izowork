@@ -105,14 +105,22 @@ class _AnalyticsObjectsScreenBodyState
                   _objectsViewModel.objects.isEmpty
               ? Center(
                   child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20.0, right: 20.0, bottom: 100.0),
-                      child: Text(Titles.noResult,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 16.0,
-                              color: HexColors.grey50))))
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20.0,
+                      bottom: 100.0,
+                    ),
+                    child: Text(
+                      Titles.noResult,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 16.0,
+                        color: HexColors.grey50,
+                      ),
+                    ),
+                  ),
+                )
               : Container(),
 
           /// INDICATOR

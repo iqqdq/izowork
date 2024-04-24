@@ -86,7 +86,9 @@ class FileListItemWidget extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: SvgPicture.asset(
                                           'assets/ic_clear.svg'),
-                                      onTap: () => onRemoveTap!()))
+                                      onTap: () => onRemoveTap!(),
+                                    ),
+                            )
                     ])))));
   }
 }

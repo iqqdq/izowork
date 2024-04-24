@@ -8,6 +8,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/toast.dart';
+import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/services/local_service.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -176,13 +177,13 @@ class CompanyViewModel with ChangeNotifier {
 
   Future showUserScreen(BuildContext context) async {
     if (_company?.manager != null) {
-      String? userId = await LocalService().getUserId();
+      User? user = await LocalService().getUser();
 
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => ProfileScreenWidget(
-                  isMine: _company?.manager?.id == userId,
+                  isMine: _company?.manager?.id == user?.id,
                   user: _company!.manager!,
                   onPop: (user) => {
                         if (context.mounted)

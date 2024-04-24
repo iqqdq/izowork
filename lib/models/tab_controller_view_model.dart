@@ -5,6 +5,7 @@ import 'package:izowork/repositories/notification_repository.dart';
 
 class TabControllerViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
+  // LoadingStatus loadingStatus = LoadingStatus.completed;
 
   int _messageCount = 0;
 

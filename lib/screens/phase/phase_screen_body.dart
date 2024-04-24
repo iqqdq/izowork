@@ -4,6 +4,8 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/phase.dart';
+import 'package:izowork/entities/response/phase_checklist.dart';
+import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/models/phase_view_model.dart';
 import 'package:izowork/screens/phase/views/check_list_item_widget.dart';
 import 'package:izowork/screens/phase/views/contractor_list_item_widget.dart';
@@ -18,10 +20,12 @@ import 'package:spreadsheet_table/spreadsheet_table.dart';
 import 'package:izowork/screens/phase/views/search_list_item_widget.dart';
 
 class PhaseCreateScreenBodyWidget extends StatefulWidget {
+  final User? user;
   final Phase phase;
 
   const PhaseCreateScreenBodyWidget({
     Key? key,
+    required this.user,
     required this.phase,
   }) : super(key: key);
 
@@ -31,6 +35,100 @@ class PhaseCreateScreenBodyWidget extends StatefulWidget {
 
 class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
   late PhaseViewModel _phaseViewModel;
+
+  void _showAcceptDeclineChecklistAlert({
+    required PhaseChecklist phaseChecklist,
+    required Widget statusWidget,
+  }) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      phaseChecklist.name,
+                      maxLines: 8,
+                      style: TextStyle(
+                        color: HexColors.black,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w400,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16.0),
+                  statusWidget,
+                ],
+              ),
+              actions: <Widget>[
+                Row(
+                  children: [
+                    Expanded(
+                        child: BorderButtonWidget(
+                            margin: EdgeInsets.zero,
+                            title: Titles.accept,
+                            onTap: () {
+                              // TODO: - ACCEPT CHECKLIST
+                            })),
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                        child: BorderButtonWidget(
+                            margin: EdgeInsets.zero,
+                            title: Titles.decline,
+                            isDestructive: true,
+                            onTap: () {
+                              // TODO: - DECLINE CHECKLIST
+                            })),
+                  ],
+                ),
+              ]);
+        });
+  }
+
+  void _showRemoveChecklistAlert({required PhaseChecklist phaseChecklist}) {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text(
+                '${Titles.deleteAreYouSure} "${phaseChecklist.name}"?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: HexColors.black,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              actions: <Widget>[
+                Row(
+                  children: [
+                    Expanded(
+                        child: BorderButtonWidget(
+                            margin: EdgeInsets.zero,
+                            title: Titles.delete,
+                            isDestructive: true,
+                            onTap: () {
+                              // TODO: - DELETE CHECKLIST
+                            })),
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                      child: BorderButtonWidget(
+                        margin: EdgeInsets.zero,
+                        title: Titles.cancel,
+                        onTap: () => Navigator.pop(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ]);
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,21 +141,25 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
         backgroundColor: HexColors.white,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-            centerTitle: true,
-            elevation: 0.0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: Colors.transparent,
-            leading: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: BackButtonWidget(onTap: () => Navigator.pop(context))),
-            title: Text(_phaseViewModel.phase.name,
-                style: TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  fontFamily: 'PT Root UI',
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w700,
-                  color: HexColors.black,
-                ))),
+          centerTitle: true,
+          elevation: 0.0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          backgroundColor: Colors.transparent,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: BackButtonWidget(onTap: () => Navigator.pop(context)),
+          ),
+          title: Text(
+            _phaseViewModel.phase.name,
+            style: TextStyle(
+              overflow: TextOverflow.ellipsis,
+              fontFamily: 'PT Root UI',
+              fontSize: 18.0,
+              fontWeight: FontWeight.w700,
+              color: HexColors.black,
+            ),
+          ),
+        ),
         body: Material(
             type: MaterialType.transparency,
             child: Container(
@@ -65,7 +167,7 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                 child: Stack(children: [
                   ListView(
                       padding: EdgeInsets.only(
-                        top: 14.0,
+                        top: 20.0,
                         bottom: MediaQuery.of(context).padding.bottom == 0.0
                             ? 20.0 + 54.0
                             : MediaQuery.of(context).padding.bottom + 54.0,
@@ -77,12 +179,16 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                             : Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0),
-                                child: Text(Titles.products,
-                                    style: TextStyle(
-                                        color: HexColors.black,
-                                        fontSize: 18.0,
-                                        fontFamily: 'PT Root UI',
-                                        fontWeight: FontWeight.bold))),
+                                child: Text(
+                                  Titles.products,
+                                  style: TextStyle(
+                                    color: HexColors.black,
+                                    fontSize: 18.0,
+                                    fontFamily: 'PT Root UI',
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
 
                         SizedBox(
                             height: _phaseViewModel.phaseProducts.isEmpty
@@ -101,87 +207,104 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                       Container(
                                           padding: const EdgeInsets.all(6.0),
                                           decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 0.65,
-                                                  color: HexColors.grey20)),
+                                            border: Border.all(
+                                              width: 0.65,
+                                              color: HexColors.grey20,
+                                            ),
+                                          ),
                                           child: Row(children: [
                                             Expanded(
-                                                child: Text(
-                                                    col == 0
-                                                        ? _phaseViewModel
-                                                            .phaseProducts[row]
-                                                            .termInDays
-                                                            .toString()
-                                                        : _phaseViewModel
-                                                            .phaseProducts[row]
-                                                            .count
-                                                            .toString(),
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 14.0,
-                                                        color: HexColors.black,
-                                                        fontFamily:
-                                                            'PT Root UI')))
+                                              child: Text(
+                                                col == 0
+                                                    ? _phaseViewModel
+                                                        .phaseProducts[row]
+                                                        .termInDays
+                                                        .toString()
+                                                    : _phaseViewModel
+                                                        .phaseProducts[row]
+                                                        .count
+                                                        .toString(),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 14.0,
+                                                  color: HexColors.black,
+                                                  fontFamily: 'PT Root UI',
+                                                ),
+                                              ),
+                                            )
                                           ])),
                                   legendBuilder: (_) => Container(
-                                      height: 42.0,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0, vertical: 2.0),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 0.65,
-                                              color: HexColors.grey20)),
-                                      child: Row(children: [
-                                        Text(Titles.product,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                                fontSize: 12.0,
-                                                fontWeight: FontWeight.w500,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: HexColors.black,
-                                                fontFamily: 'PT Root UI'))
-                                      ])),
+                                    height: 42.0,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                      vertical: 2.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 0.65,
+                                        color: HexColors.grey20,
+                                      ),
+                                    ),
+                                    child: Row(children: [
+                                      Text(
+                                        Titles.product,
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w500,
+                                          overflow: TextOverflow.ellipsis,
+                                          color: HexColors.black,
+                                          fontFamily: 'PT Root UI',
+                                        ),
+                                      ),
+                                    ]),
+                                  ),
                                   rowHeaderBuilder: (_, index) => Container(
                                       height: 42.0,
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16.0),
                                       decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 0.65,
-                                              color: HexColors.grey20)),
+                                        border: Border.all(
+                                          width: 0.65,
+                                          color: HexColors.grey20,
+                                        ),
+                                      ),
                                       child: Row(children: [
                                         Expanded(
-                                            child: Text(
-                                                _phaseViewModel
-                                                        .phaseProducts[index]
-                                                        .product
-                                                        ?.name ??
-                                                    '-',
-                                                style: TextStyle(
-                                                    fontSize: 14.0,
-                                                    color: HexColors.black,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    fontFamily: 'PT Root UI')))
+                                          child: Text(
+                                            _phaseViewModel.phaseProducts[index]
+                                                    .product?.name ??
+                                                '-',
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                color: HexColors.black,
+                                                overflow: TextOverflow.ellipsis,
+                                                fontFamily: 'PT Root UI'),
+                                          ),
+                                        )
                                       ])),
                                   colHeaderBuilder: (_, index) => Container(
-                                      height: 42.0,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 2.0),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 0.65,
-                                              color: HexColors.grey20)),
-                                      child: Center(
-                                          child: Text(
-                                              index == 0
-                                                  ? Titles.deliveryTime
-                                                  : Titles.count,
-                                              style: TextStyle(
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: HexColors.black,
-                                                  fontFamily: 'PT Root UI')))),
+                                    height: 42.0,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2.0),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 0.65,
+                                            color: HexColors.grey20)),
+                                    child: Center(
+                                      child: Text(
+                                        index == 0
+                                            ? Titles.deliveryTime
+                                            : Titles.count,
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: HexColors.black,
+                                          fontFamily: 'PT Root UI',
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   rowHeaderWidth:
                                       MediaQuery.of(context).size.width * 0.4,
                                   colsHeaderHeight: 42.0,
@@ -191,7 +314,8 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                   rowsCount:
                                       _phaseViewModel.phaseProducts.length,
                                   colCount: 2,
-                                )),
+                                ),
+                              ),
                         SizedBox(
                             height: _phaseViewModel.phaseProducts.isEmpty
                                 ? 0.0
@@ -203,12 +327,15 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                             : Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0),
-                                child: Text(Titles.contractors,
-                                    style: TextStyle(
-                                        color: HexColors.black,
-                                        fontSize: 18.0,
-                                        fontFamily: 'PT Root UI',
-                                        fontWeight: FontWeight.bold))),
+                                child: Text(
+                                  Titles.contractors,
+                                  style: TextStyle(
+                                      color: HexColors.black,
+                                      fontSize: 18.0,
+                                      fontFamily: 'PT Root UI',
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
 
                         SizedBox(
                             height: _phaseViewModel.phaseContractors.isEmpty
@@ -269,20 +396,34 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                 }),
 
                         /// OPEN DEAL BUTTON
+                        // _phaseViewModel.phaseChecklistResponse == null
+                        //     ? Container()
+                        //     : _phaseViewModel.phaseChecklistResponse!
+                        //             .phaseChecklists.isEmpty
+                        //         ? Container()
+                        //         : BorderButtonWidget(
+                        //             title: Titles.openDeal,
+                        //             margin: const EdgeInsets.only(
+                        //               bottom: 30.0,
+                        //               left: 16.0,
+                        //               right: 16.0,
+                        //             ),
+                        //             onTap: () => _phaseViewModel
+                        //                 .showDealCreateScreen(context),
+                        //           ),
+
+                        /// SET TASK BUTTON
                         _phaseViewModel.phaseChecklistResponse == null
                             ? Container()
                             : _phaseViewModel.phaseChecklistResponse!
                                     .phaseChecklists.isEmpty
                                 ? Container()
                                 : BorderButtonWidget(
-                                    title: Titles.openDeal,
+                                    title: Titles.setTask,
                                     margin: const EdgeInsets.only(
-                                      bottom: 30.0,
-                                      left: 16.0,
-                                      right: 16.0,
-                                    ),
+                                        bottom: 20.0, left: 16.0, right: 16.0),
                                     onTap: () => _phaseViewModel
-                                        .showDealCreateScreen(context),
+                                        .showTaskCreateScreen(context),
                                   ),
 
                         /// CHECKLIST TITLE
@@ -315,41 +456,55 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                     .length,
                                 itemBuilder: (context, index) {
                                   return CheckListItemWidget(
-                                      key: ValueKey(_phaseViewModel
+                                    key: ValueKey(_phaseViewModel
+                                        .phaseChecklistResponse!
+                                        .phaseChecklists[index]
+                                        .id),
+                                    isSelected: _phaseViewModel
+                                        .phaseChecklistResponse!
+                                        .phaseChecklists[index]
+                                        .isCompleted,
+                                    title: _phaseViewModel
+                                        .phaseChecklistResponse!
+                                        .phaseChecklists[index]
+                                        .name,
+                                    state: _phaseViewModel
+                                        .phaseChecklistResponse!
+                                        .phaseChecklists[index]
+                                        .state,
+                                    onTap: () =>
+                                        _phaseViewModel.showCompleteTaskSheet(
+                                      this.context,
+                                      index,
+                                    ),
+                                    onStatusTap: (statusWidget) =>
+                                        _showAcceptDeclineChecklistAlert(
+                                      statusWidget: statusWidget,
+                                      phaseChecklist: _phaseViewModel
                                           .phaseChecklistResponse!
-                                          .phaseChecklists[index]
-                                          .id),
-                                      isSelected: _phaseViewModel
-                                          .phaseChecklistResponse!
-                                          .phaseChecklists[index]
-                                          .isCompleted,
-                                      title: _phaseViewModel
-                                          .phaseChecklistResponse!
-                                          .phaseChecklists[index]
-                                          .name,
-                                      state: _phaseViewModel
-                                          .phaseChecklistResponse!
-                                          .phaseChecklists[index]
-                                          .state,
-                                      onTap: () =>
-                                          _phaseViewModel.showCompleteTaskSheet(
-                                            this.context,
-                                            index,
-                                          ));
+                                          .phaseChecklists[index],
+                                    ),
+                                    onRemoveTap: widget.user?.state != 'ADMIN'
+                                        ? null
+                                        : () => _showRemoveChecklistAlert(
+                                              phaseChecklist: _phaseViewModel
+                                                  .phaseChecklistResponse!
+                                                  .phaseChecklists[index],
+                                            ),
+                                  );
                                 }),
 
-                        /// SET TASK BUTTON
+                        /// CREATE CHECKLIST BUTTON
                         _phaseViewModel.phaseChecklistResponse == null
                             ? Container()
                             : _phaseViewModel.phaseChecklistResponse!
                                     .phaseChecklists.isEmpty
                                 ? Container()
                                 : BorderButtonWidget(
-                                    title: Titles.setTask,
+                                    title: Titles.createChecklist,
                                     margin: const EdgeInsets.only(
                                         bottom: 20.0, left: 16.0, right: 16.0),
-                                    onTap: () => _phaseViewModel
-                                        .showTaskCreateScreen(context),
+                                    onTap: () => {},
                                   ),
                       ]),
 

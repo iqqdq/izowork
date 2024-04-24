@@ -116,7 +116,9 @@ class StaffViewModel with ChangeNotifier {
   // MARK: - FUNCTIONS
 
   Future getLocalService() async {
-    userId = await LocalService().getUserId();
+    await LocalService().getUser().then((value) => {
+          userId = value?.id,
+        });
   }
 
   void openUrl(String url) async {

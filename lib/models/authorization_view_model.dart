@@ -61,7 +61,7 @@ class AuthorizationViewModel with ChangeNotifier {
               notifyListeners(),
 
               // SAVE USER
-              LocalService().setUserId(response.id).then((value) =>
+              LocalService().setUser(response).then((value) =>
                   // SHOW MAIN SREEN
                   Navigator.pushAndRemoveUntil(
                     context,

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:izowork/entities/response/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalService {
@@ -18,14 +21,22 @@ class LocalService {
     _sharedPreferences.setString('device_token', deviceToken);
   }
 
-  Future<String?> getUserId() async {
+  Future<User?> getUser() async {
     _sharedPreferences = await SharedPreferences.getInstance();
-    return _sharedPreferences.getString('user_id');
+
+    Map<String, dynamic>? map;
+    String? encodedString = _sharedPreferences.getString('user');
+
+    if (encodedString != null) {
+      map = json.decode(encodedString);
+    }
+
+    return map == null ? null : User.fromJson(map);
   }
 
-  Future setUserId(String id) async {
+  Future setUser(User user) async {
     _sharedPreferences = await SharedPreferences.getInstance();
-    _sharedPreferences.setString('user_id', id);
+    _sharedPreferences.setString('user', jsonEncode(user.toJson()));
   }
 
   Future<bool?> getLocationPermission() async {

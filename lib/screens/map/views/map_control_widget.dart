@@ -19,75 +19,92 @@ class MapControlWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const borderRadius = BorderRadius.only(
-        topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0));
+    final borderRadius = BorderRadius.circular(10.0);
 
     return Container(
-        width: 44.0,
-        decoration: BoxDecoration(
-            border: Border.all(width: 1.0, color: HexColors.grey20),
-            borderRadius: borderRadius),
-        child: Blur(
-            blur: 15.0,
+      margin: const EdgeInsets.only(right: 8.0),
+      width: 44.0,
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1.0,
+          color: HexColors.grey20,
+        ),
+        borderRadius: borderRadius,
+      ),
+      child: Blur(
+        blur: 15.0,
+        borderRadius: borderRadius,
+        child: Container(
+          height: 176.0,
+          decoration: BoxDecoration(
+            color: HexColors.white80,
             borderRadius: borderRadius,
-            child: Container(
-                height: 176.0,
-                decoration: BoxDecoration(
-                    color: HexColors.white80, borderRadius: borderRadius)),
-            overlay: Column(children: [
-              Expanded(
+          ),
+        ),
+        overlay: Column(children: [
+          Expanded(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                  highlightColor: HexColors.grey20,
+                  splashColor: Colors.transparent,
+                  borderRadius:
+                      const BorderRadius.only(topLeft: Radius.circular(10.0)),
+                  child: SvgPicture.asset(
+                    'assets/ic_plus.svg',
+                    width: 44.0,
+                    fit: BoxFit.none,
+                  ),
+                  onTap: onZoomInTap),
+            ),
+          ),
+          Expanded(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                  highlightColor: HexColors.grey20,
+                  splashColor: Colors.transparent,
+                  child: SvgPicture.asset(
+                    'assets/ic_minus.svg',
+                    width: 44.0,
+                    fit: BoxFit.none,
+                  ),
+                  onTap: onZoomOutTap),
+            ),
+          ),
+          Expanded(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                  highlightColor: HexColors.grey20,
+                  splashColor: Colors.transparent,
+                  child: SvgPicture.asset(
+                    'assets/ic_location.svg',
+                    width: 44.0,
+                    fit: BoxFit.none,
+                  ),
+                  onTap: onShowLocationTap),
+            ),
+          ),
+          onSearchTap == null
+              ? Container()
+              : Expanded(
                   child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                          highlightColor: HexColors.grey20,
-                          splashColor: Colors.transparent,
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10.0)),
-                          child: SvgPicture.asset(
-                            'assets/ic_plus.svg',
+                    color: Colors.transparent,
+                    child: InkWell(
+                        highlightColor: HexColors.grey20,
+                        splashColor: Colors.transparent,
+                        borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(10.0)),
+                        child: SvgPicture.asset('assets/ic_search.svg',
                             width: 44.0,
                             fit: BoxFit.none,
-                          ),
-                          onTap: onZoomInTap))),
-              Expanded(
-                  child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                          highlightColor: HexColors.grey20,
-                          splashColor: Colors.transparent,
-                          child: SvgPicture.asset(
-                            'assets/ic_minus.svg',
-                            width: 44.0,
-                            fit: BoxFit.none,
-                          ),
-                          onTap: onZoomOutTap))),
-              Expanded(
-                  child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                          highlightColor: HexColors.grey20,
-                          splashColor: Colors.transparent,
-                          child: SvgPicture.asset(
-                            'assets/ic_location.svg',
-                            width: 44.0,
-                            fit: BoxFit.none,
-                          ),
-                          onTap: onShowLocationTap))),
-              onSearchTap == null
-                  ? Container()
-                  : Expanded(
-                      child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                              highlightColor: HexColors.grey20,
-                              splashColor: Colors.transparent,
-                              borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(10.0)),
-                              child: SvgPicture.asset('assets/ic_search.svg',
-                                  width: 44.0,
-                                  fit: BoxFit.none,
-                                  color: HexColors.grey50),
-                              onTap: onSearchTap))),
-            ])));
+                            color: HexColors.grey50),
+                        onTap: onSearchTap),
+                  ),
+                ),
+        ]),
+      ),
+    );
   }
 }

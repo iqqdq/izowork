@@ -61,131 +61,138 @@ class _TabControllerScreenBodyState
     }
 
     final textStyle = TextStyle(
-        color: HexColors.grey40,
-        fontSize: 12.0,
-        fontFamily: 'PT Root UI',
-        fontWeight: FontWeight.w500);
+      color: HexColors.grey40,
+      fontSize: 12.0,
+      fontFamily: 'PT Root UI',
+      fontWeight: FontWeight.w500,
+    );
 
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-            toolbarHeight: 0.0,
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-            systemOverlayStyle: SystemUiOverlayStyle.dark),
-        body: _pages?.length == 4
-            ? const Center(
-                child: Padding(
-                    padding: EdgeInsets.only(top: 60.0),
-                    child: LoadingIndicatorWidget()))
-            : PageView(
-                controller: _pageController,
-                physics: _index == 0
-                    ? const NeverScrollableScrollPhysics()
-                    : const AlwaysScrollableScrollPhysics(),
-                children: _pages!,
-                onPageChanged: (page) => setState(() => _index = page),
-              ),
-        bottomNavigationBar: BottomNavigationBar(
-            selectedLabelStyle:
-                textStyle.copyWith(color: HexColors.primaryMain),
-            unselectedLabelStyle: textStyle,
-            fixedColor: HexColors.primaryMain,
-            unselectedItemColor: HexColors.grey40,
-            type: BottomNavigationBarType.fixed,
-            items: <BottomNavigationBarItem>[
-              /// MAP
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(_index == 0
-                    ? 'assets/ic_map_selected.svg'
-                    : 'assets/ic_map.svg'),
-                label: Titles.map,
-              ),
-
-              /// OBJECTS
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(_index == 1
-                    ? 'assets/ic_objects_selected.svg'
-                    : 'assets/ic_objects.svg'),
-                label: Titles.objects,
-              ),
-
-              /// ACTIONS
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(_index == 2
-                    ? 'assets/ic_actions_selected.svg'
-                    : 'assets/ic_actions.svg'),
-                label: Titles.myDoing,
-              ),
-
-              /// CHAT
-              BottomNavigationBarItem(
-                icon: Badge(
-                  backgroundColor: HexColors.additionalViolet,
-                  label: Text(
-                      _tabControllerViewModel.messageCount.toString().length > 4
-                          ? _tabControllerViewModel.messageCount
-                              .toString()
-                              .substring(0, 3)
-                          : _tabControllerViewModel.messageCount.toString(),
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w600,
-                        color: HexColors.white,
-                      )),
-                  isLabelVisible: _tabControllerViewModel.messageCount > 0,
-                  child: SvgPicture.asset(_index == 3
-                      ? 'assets/ic_chat_selected.svg'
-                      : 'assets/ic_chat.svg'),
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+          toolbarHeight: 0.0,
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          systemOverlayStyle: SystemUiOverlayStyle.dark),
+      body: _pages?.length == 4
+          ? const Center(
+              child: Padding(
+                  padding: EdgeInsets.only(top: 60.0),
+                  child: LoadingIndicatorWidget()))
+          : PageView(
+              controller: _pageController,
+              physics: _index == 0
+                  ? const NeverScrollableScrollPhysics()
+                  : const AlwaysScrollableScrollPhysics(),
+              children: _pages!,
+              onPageChanged: (page) => setState(() => _index = page),
+            ),
+      bottomNavigationBar: _pages?.length == 4
+          ? Container()
+          : BottomNavigationBar(
+              selectedLabelStyle:
+                  textStyle.copyWith(color: HexColors.primaryMain),
+              unselectedLabelStyle: textStyle,
+              fixedColor: HexColors.primaryMain,
+              unselectedItemColor: HexColors.grey40,
+              type: BottomNavigationBarType.fixed,
+              items: <BottomNavigationBarItem>[
+                /// MAP
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(_index == 0
+                      ? 'assets/ic_map_selected.svg'
+                      : 'assets/ic_map.svg'),
+                  label: Titles.map,
                 ),
-                label: Titles.chat,
-              ),
 
-              /// MORE
+                /// OBJECTS
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(_index == 1
+                      ? 'assets/ic_objects_selected.svg'
+                      : 'assets/ic_objects.svg'),
+                  label: Titles.objects,
+                ),
 
-              BottomNavigationBarItem(
-                icon: Badge(
-                  backgroundColor: HexColors.additionalViolet,
-                  label: Text(
-                      _tabControllerViewModel.notificationCount
-                                  .toString()
-                                  .length >
-                              4
-                          ? _tabControllerViewModel.notificationCount
-                              .toString()
-                              .substring(0, 3)
-                          : _tabControllerViewModel.notificationCount
-                              .toString(),
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.w600,
-                        color: HexColors.white,
-                      )),
-                  isLabelVisible: _tabControllerViewModel.notificationCount > 0,
-                  child: SvgPicture.asset(
-                    _index == 4
-                        ? 'assets/ic_more_selected.svg'
-                        : 'assets/ic_more.svg',
+                /// ACTIONS
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(_index == 2
+                      ? 'assets/ic_actions_selected.svg'
+                      : 'assets/ic_actions.svg'),
+                  label: Titles.myDoing,
+                ),
+
+                /// CHAT
+                BottomNavigationBarItem(
+                  icon: Badge(
+                    backgroundColor: HexColors.additionalViolet,
+                    label: Text(
+                        _tabControllerViewModel.messageCount.toString().length >
+                                4
+                            ? _tabControllerViewModel.messageCount
+                                .toString()
+                                .substring(0, 3)
+                            : _tabControllerViewModel.messageCount.toString(),
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w600,
+                          color: HexColors.white,
+                        )),
+                    isLabelVisible: _tabControllerViewModel.messageCount > 0,
+                    child: SvgPicture.asset(_index == 3
+                        ? 'assets/ic_chat_selected.svg'
+                        : 'assets/ic_chat.svg'),
                   ),
+                  label: Titles.chat,
                 ),
-                label: Titles.more,
-              ),
-            ],
-            currentIndex: _index,
-            onTap: (index) => setState(() {
-                  switch (index) {
-                    case 3:
-                      _tabControllerViewModel.clearMessageBadge();
-                      break;
-                    case 4:
-                      _tabControllerViewModel.clearNotificationBadge();
-                      break;
-                    default:
-                  }
 
-                  _index = index;
-                  _pageController?.jumpToPage(_index);
-                })));
+                /// MORE
+
+                BottomNavigationBarItem(
+                  icon: Badge(
+                    backgroundColor: HexColors.additionalViolet,
+                    label: Text(
+                        _tabControllerViewModel.notificationCount
+                                    .toString()
+                                    .length >
+                                4
+                            ? _tabControllerViewModel.notificationCount
+                                .toString()
+                                .substring(0, 3)
+                            : _tabControllerViewModel.notificationCount
+                                .toString(),
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.w600,
+                          color: HexColors.white,
+                        )),
+                    isLabelVisible:
+                        _tabControllerViewModel.notificationCount > 0,
+                    child: SvgPicture.asset(
+                      _index == 4
+                          ? 'assets/ic_more_selected.svg'
+                          : 'assets/ic_more.svg',
+                    ),
+                  ),
+                  label: Titles.more,
+                ),
+              ],
+              currentIndex: _index,
+              onTap: (index) => setState(() {
+                switch (index) {
+                  case 3:
+                    _tabControllerViewModel.clearMessageBadge();
+                    break;
+                  case 4:
+                    _tabControllerViewModel.clearNotificationBadge();
+                    break;
+                  default:
+                }
+
+                _index = index;
+                _pageController?.jumpToPage(_index);
+              }),
+            ),
+    );
   }
 }

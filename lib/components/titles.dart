@@ -31,6 +31,7 @@ abstract class Titles {
   static const addTask = 'Добавить задачу';
   static const createTask = 'Создать задачу';
   static const setTask = 'Поставить задачу';
+  static const createChecklist = 'Создать чеклист';
   static const createDeal = 'Создать сделку';
   static const createObject = 'Создать объект';
   static const createPhase = 'Создать этап';
@@ -47,12 +48,14 @@ abstract class Titles {
   static const addMedia = 'Добавить медиа';
   static const edit = 'Редактировать';
   static const showOnMap = 'Смотреть на карте';
+  static const accept = 'Принять';
+  static const decline = 'Отклонить';
   static const stop = 'Остановить';
   static const save = 'Сохранить';
   static const delete = 'Удалить';
   static const addAvatar = 'Добавить аватар';
   static const changeAvatar = 'Изменить аватар';
-  static const cancel = 'Отменить';
+  static const cancel = 'Отмена';
   static const addSocial = 'Добавить соц.сеть';
   static const addComment = 'Добавить комментарий';
   static const addContact = 'Добавить контакт';
@@ -81,6 +84,7 @@ abstract class Titles {
   static const contactEdit = 'Редактирование контакта';
   static const company = 'Компания';
   static const companies = 'Компании';
+  static const clients = 'Клиенты';
   static const product = 'Товар';
   static const tonProductPlaceholder = 'Название товара, тонн';
   static const literProductPlaceholder = 'Название товара, литров';
@@ -93,6 +97,7 @@ abstract class Titles {
   static const deleteAccount = 'Удалить аккаунт';
   static const deleteAccountAreYouSure =
       'Вы уверены, что хотите удалить аккаунт без возможности его восстановления?';
+  static const deleteAreYouSure = 'Вы уверены, что хотите удалить';
   static const requisites = 'Реквизиты';
   static const productType = 'Тип товара';
   static const productSubtype = 'Подтип товара';

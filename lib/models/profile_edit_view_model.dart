@@ -14,6 +14,7 @@ import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/user_repository.dart';
 import 'package:izowork/screens/authorization/authorization_screen.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen_body.dart';
+import 'package:izowork/views/border_button_widget.dart';
 
 class ProfileEditViewModel with ChangeNotifier {
   final User currentUser;
@@ -160,26 +161,36 @@ class ProfileEditViewModel with ChangeNotifier {
         barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
-              title: Text(Titles.deleteAccountAreYouSure,
-                  style: TextStyle(
-                      color: HexColors.black,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w400)),
+              title: Text(
+                Titles.deleteAccountAreYouSure,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: HexColors.black,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
               actions: <Widget>[
-                TextButton(
-                    child: Text(Titles.deleteAccount,
-                        style: TextStyle(
-                            color: HexColors.additionalRed,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400)),
-                    onPressed: () => deleteAccount(context)),
-                TextButton(
-                    child: Text(Titles.cancel,
-                        style: TextStyle(
-                            color: HexColors.black,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w400)),
-                    onPressed: () => Navigator.of(context).pop())
+                Row(
+                  children: [
+                    Expanded(
+                      child: BorderButtonWidget(
+                        margin: EdgeInsets.zero,
+                        title: Titles.deleteAccount,
+                        isDestructive: true,
+                        onTap: () => deleteAccount(context),
+                      ),
+                    ),
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                      child: BorderButtonWidget(
+                        margin: EdgeInsets.zero,
+                        title: Titles.cancel,
+                        onTap: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                  ],
+                ),
               ]);
         });
   }

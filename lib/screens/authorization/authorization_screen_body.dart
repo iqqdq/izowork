@@ -54,12 +54,15 @@ class _AuthorizationScreenBodyState
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 shrinkWrap: true,
                 children: [
-                  Text(Titles.authorization,
-                      style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 32.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold)),
+                  Text(
+                    Titles.authorization,
+                    style: TextStyle(
+                      color: HexColors.black,
+                      fontSize: 32.0,
+                      fontFamily: 'PT Root UI',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 24.0),
 
                   /// LOGIN INPUT

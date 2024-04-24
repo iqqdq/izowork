@@ -10,6 +10,7 @@ import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/phase.dart';
+import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/object_repository.dart';
 import 'package:izowork/repositories/phase_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
@@ -18,6 +19,7 @@ import 'package:izowork/screens/object_analytics/object_analytics_screen.dart';
 import 'package:izowork/screens/object_create/object_create_screen.dart';
 import 'package:izowork/screens/phase/phase_screen.dart';
 import 'package:izowork/screens/single_object_map/single_object_map_screen.dart';
+import 'package:izowork/services/local_service.dart';
 import 'package:izowork/services/urls.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -188,11 +190,17 @@ class ObjectPageViewModel with ChangeNotifier {
                 DocumentsScreenWidget(id: selectedObject.id)));
   }
 
-  void showPhaseScreen(BuildContext context, int index) {
+  Future showPhaseScreen(
+    BuildContext context,
+    int index,
+  ) async {
+    User? user = await LocalService().getUser();
+
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => PhaseScreenWidget(
+                  user: user,
                   phase: _phases[index],
                   object: object,
                 )));

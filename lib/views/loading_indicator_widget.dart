@@ -24,7 +24,7 @@ class LoadingIndicatorWidget extends StatelessWidget {
       child: CircularProgressIndicator(
         strokeWidth: 6.0,
         valueColor: AlwaysStoppedAnimation<Color>(
-          color ?? (_onlyIndicator ? HexColors.primaryMain : HexColors.white),
+          color ?? (_onlyIndicator ? HexColors.primaryDark : HexColors.white),
         ),
       ),
     );
@@ -36,7 +36,7 @@ class LoadingIndicatorWidget extends StatelessWidget {
               width: 54.0,
               height: 54.0,
               decoration: BoxDecoration(
-                color: HexColors.primaryMain,
+                color: HexColors.primaryDark,
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Center(child: _indicator),
