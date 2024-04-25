@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/company_request.dart';
 import 'package:izowork/entities/response/company.dart';
@@ -41,6 +42,36 @@ class CompanyRepository {
     }
 
     if (params != null) {
+      for (var element in params) {
+        url += element;
+      }
+    }
+
+    dynamic json = await WebService().get(url);
+    List<Company> companies = [];
+
+    try {
+      json['companies'].forEach((element) {
+        companies.add(Company.fromJson(element));
+      });
+      return companies;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> getMapCompanies({
+    required List<String> params,
+    required LatLngBounds? visibleRegion,
+  }) async {
+    var url = companiesUrl;
+
+    if (visibleRegion != null) {
+      url +=
+          '?lat=gte:${visibleRegion.southwest.latitude}&lat=lte:${visibleRegion.northeast.latitude}&long=gte:${visibleRegion.southwest.longitude}&long=lte:${visibleRegion.northeast.longitude}';
+    }
+
+    if (params.isNotEmpty) {
       for (var element in params) {
         url += element;
       }

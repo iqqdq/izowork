@@ -8,11 +8,12 @@ class Place with ClusterItem {
   final Color color;
   final LatLng latLng;
 
-  Place(
-      {required this.id,
-      required this.name,
-      required this.color,
-      required this.latLng});
+  Place({
+    required this.id,
+    required this.name,
+    required this.color,
+    required this.latLng,
+  });
 
   @override
   LatLng get location => latLng;

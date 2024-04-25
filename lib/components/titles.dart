@@ -21,6 +21,7 @@ abstract class Titles {
   static const search = 'Поиск';
   static const add = 'Добавить';
   static const addCompany = 'Добавить компанию';
+  static const addClient = 'Добавить клиента';
   static const close = 'Закрыть';
   static const addContractor = 'Добавить подрядчика';
   static const addFile = 'Добавить файл';
@@ -84,6 +85,7 @@ abstract class Titles {
   static const contactEdit = 'Редактирование контакта';
   static const company = 'Компания';
   static const companies = 'Компании';
+  static const client = 'Клиент';
   static const clients = 'Клиенты';
   static const product = 'Товар';
   static const tonProductPlaceholder = 'Название товара, тонн';

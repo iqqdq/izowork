@@ -84,22 +84,32 @@ class _SearchProductScreenBodyState
                   physics: const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.zero,
                   children: [
+                    /// TITLE / CLOSE BUTTON
                     Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Stack(children: [
-                          widget.isRoot
-                              ? BackButtonWidget(
-                                  asset: 'assets/ic_close.svg',
-                                  onTap: () => widget.onPop(null),
-                                )
-                              : BackButtonWidget(
-                                  title: Titles.back,
-                                  onTap: () => widget.onPop(null),
-                                ),
-                          Center(
-                              child: TitleWidget(
-                                  text: widget.title ?? Titles.manager))
-                        ])),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: widget.isRoot
+                          ? Row(children: [
+                              const SizedBox(width: 24.0),
+                              Expanded(
+                                child: Center(
+                                    child: TitleWidget(
+                                        text: widget.title ?? Titles.manager)),
+                              ),
+                              BackButtonWidget(
+                                asset: 'assets/ic_close.svg',
+                                onTap: () => widget.onPop(null),
+                              )
+                            ])
+                          : Stack(children: [
+                              BackButtonWidget(
+                                title: Titles.back,
+                                onTap: () => widget.onPop(null),
+                              ),
+                              Center(
+                                  child: TitleWidget(
+                                      text: widget.title ?? Titles.manager))
+                            ]),
+                    ),
                     const SizedBox(height: 16.0),
 
                     /// SEARCH INPUT

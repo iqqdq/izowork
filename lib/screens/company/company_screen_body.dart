@@ -74,7 +74,9 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
     _companyViewModel.getProductList(
-        pagination: _pagination, search: _textEditingController.text);
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   Widget _page() {
@@ -84,8 +86,8 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
         children: [
           /// IMAGE
           Center(
-              child: Stack(children: [
-            ClipRRect(
+            child: Stack(children: [
+              ClipRRect(
                 borderRadius: BorderRadius.circular(20.0),
                 child: _companyViewModel.company?.image == null
                     ? SvgPicture.asset('assets/ic_avatar.svg',
@@ -96,27 +98,31 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
                     : ClipRRect(
                         borderRadius: BorderRadius.circular(40.0),
                         child: CachedNetworkImage(
-                            cacheKey: _companyViewModel.company!.image!,
-                            imageUrl: companyMedialUrl +
-                                _companyViewModel.company!.image!,
-                            width: 80.0,
-                            height: 80.0,
-                            memCacheWidth: 80 *
-                                (MediaQuery.of(context).devicePixelRatio)
-                                    .round(),
-                            fit: BoxFit.cover)))
-          ])),
+                          cacheKey: _companyViewModel.company!.image!,
+                          imageUrl: companyMedialUrl +
+                              _companyViewModel.company!.image!,
+                          width: 80.0,
+                          height: 80.0,
+                          memCacheWidth: 80 *
+                              (MediaQuery.of(context).devicePixelRatio).round(),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+              )
+            ]),
+          ),
           const SizedBox(height: 16.0),
 
           /// TAG
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             StatusWidget(
-                title: _companyViewModel.company?.type ?? '-',
-                status: _companyViewModel.company?.type == 'Поставщик'
-                    ? 0
-                    : _companyViewModel.company?.type == 'Проектировщик'
-                        ? 1
-                        : 2)
+              title: _companyViewModel.company?.type ?? '-',
+              status: _companyViewModel.company?.type == 'Поставщик'
+                  ? 0
+                  : _companyViewModel.company?.type == 'Проектировщик'
+                      ? 1
+                      : 2,
+            )
           ]),
           const SizedBox(height: 16.0),
 
@@ -243,7 +249,10 @@ class _CompanyScreenBodyState extends State<CompanyScreenBodyWidget> {
 
           /// CONTACTS LIST
           const TitleWidget(
-              text: Titles.contact, padding: EdgeInsets.zero, isSmall: true),
+            text: Titles.contacts,
+            padding: EdgeInsets.zero,
+            isSmall: true,
+          ),
           _companyViewModel.company == null
               ? Container()
               : _companyViewModel.company!.contacts.isEmpty

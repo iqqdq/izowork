@@ -181,7 +181,7 @@ class ObjectsViewModel with ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => ObjectCreateScreenWidget(
-                onCreate: (object) => Toast()
+                onPop: (object) => Toast()
                     .showTopToast(context, '${Titles.object} добавлен!'))));
   }
 }

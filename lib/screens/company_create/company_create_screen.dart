@@ -6,15 +6,29 @@ import 'package:provider/provider.dart';
 
 class CompanyCreateScreenWidget extends StatelessWidget {
   final Company? company;
+  final String? address;
+  final double? lat;
+  final double? long;
   final Function(Company?)? onPop;
 
-  const CompanyCreateScreenWidget({Key? key, this.company, required this.onPop})
-      : super(key: key);
+  const CompanyCreateScreenWidget({
+    Key? key,
+    this.company,
+    required this.onPop,
+    this.address,
+    this.lat,
+    this.long,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => CompanyCreateViewModel(company),
-        child: CompanyCreateScreenBodyWidget(onPop: onPop));
+        child: CompanyCreateScreenBodyWidget(
+          address: address,
+          lat: lat,
+          long: long,
+          onPop: onPop,
+        ));
   }
 }

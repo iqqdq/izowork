@@ -7,13 +7,13 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/contact.dart';
+import 'package:izowork/helpers/browser.dart';
 import 'package:izowork/repositories/contact_repository.dart';
 import 'package:izowork/screens/contact/contact_screen.dart';
 import 'package:izowork/screens/contact_create/contact_create_screen.dart';
 import 'package:izowork/screens/contacts/contacts_filter_sheet/contacts_filter_page_view_screen.dart';
 import 'package:izowork/screens/contacts/contacts_filter_sheet/contacts_filter_page_view_screen_body.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ContactsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -163,6 +163,7 @@ class ContactsViewModel with ChangeNotifier {
 
   void openUrl(String url) async {
     if (url.isNotEmpty) {
+      WebViewHelper webViewHelper = WebViewHelper();
       String? nativeUrl;
 
       if (url.contains('t.me')) {
@@ -180,24 +181,13 @@ class ContactsViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          openBrowser(url);
+          webViewHelper.openWebView(url);
         }
       } else {
-        if (nativeUrl != null) {
-          openBrowser(nativeUrl);
-        } else {
-          openBrowser(url);
-        }
+        nativeUrl != null
+            ? webViewHelper.openWebView(nativeUrl)
+            : webViewHelper.openWebView(url);
       }
-    }
-  }
-
-  void openBrowser(String url) async {
-    if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-      launchUrl(Uri.parse(url.replaceAll(' ', '')));
-    } else if (await canLaunchUrl(
-        Uri.parse('https://' + url.replaceAll(' ', '')))) {
-      launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
     }
   }
 }

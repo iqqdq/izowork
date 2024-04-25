@@ -8,9 +8,11 @@ class CompanyScreenWidget extends StatelessWidget {
   final Company company;
   final Function(Company?)? onPop;
 
-  const CompanyScreenWidget(
-      {Key? key, required this.company, required this.onPop})
-      : super(key: key);
+  const CompanyScreenWidget({
+    Key? key,
+    required this.company,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

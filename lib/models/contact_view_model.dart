@@ -3,8 +3,8 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/entities/response/contact.dart';
+import 'package:izowork/helpers/browser.dart';
 import 'package:izowork/screens/contact_create/contact_create_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ContactViewModel with ChangeNotifier {
   final Contact selectedContact;
@@ -46,6 +46,7 @@ class ContactViewModel with ChangeNotifier {
 
   void openUrl(String url) async {
     if (url.isNotEmpty) {
+      WebViewHelper webViewHelper = WebViewHelper();
       String? nativeUrl;
 
       if (url.contains('t.me')) {
@@ -63,27 +64,13 @@ class ContactViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          openBrowser(url);
+          webViewHelper.openWebView(url);
         }
       } else {
-        if (nativeUrl != null) {
-          openBrowser(nativeUrl);
-        } else {
-          openBrowser(url);
-        }
+        nativeUrl != null
+            ? webViewHelper.openWebView(nativeUrl)
+            : webViewHelper.openWebView(url);
       }
-    }
-  }
-
-  // MARK: -
-  // MARK: - FUNCTIONS
-
-  void openBrowser(String url) async {
-    if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-      launchUrl(Uri.parse(url.replaceAll(' ', '')));
-    } else if (await canLaunchUrl(
-        Uri.parse('https://' + url.replaceAll(' ', '')))) {
-      launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
     }
   }
 }

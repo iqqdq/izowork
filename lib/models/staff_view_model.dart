@@ -4,6 +4,7 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
+import 'package:izowork/helpers/browser.dart';
 import 'package:izowork/services/local_service.dart';
 import 'package:izowork/entities/request/chat_dm_request.dart';
 import 'package:izowork/entities/response/chat.dart';
@@ -12,7 +13,6 @@ import 'package:izowork/repositories/chat_repository.dart';
 import 'package:izowork/repositories/user_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class StaffViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -123,6 +123,7 @@ class StaffViewModel with ChangeNotifier {
 
   void openUrl(String url) async {
     if (url.isNotEmpty) {
+      WebViewHelper webViewHelper = WebViewHelper();
       String? nativeUrl;
 
       if (url.contains('t.me')) {
@@ -140,24 +141,13 @@ class StaffViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          openBrowser(url);
+          webViewHelper.openWebView(url);
         }
       } else {
-        if (nativeUrl != null) {
-          openBrowser(nativeUrl);
-        } else {
-          openBrowser(url);
-        }
+        nativeUrl != null
+            ? webViewHelper.openWebView(nativeUrl)
+            : webViewHelper.openWebView(url);
       }
-    }
-  }
-
-  void openBrowser(String url) async {
-    if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-      launchUrl(Uri.parse(url.replaceAll(' ', '')));
-    } else if (await canLaunchUrl(
-        Uri.parse('https://' + url.replaceAll(' ', '')))) {
-      launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
     }
   }
 }

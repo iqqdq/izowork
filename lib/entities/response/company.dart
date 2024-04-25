@@ -11,6 +11,8 @@ class Company {
     required this.name,
     required this.address,
     required this.phone,
+    this.lat,
+    this.long,
     this.email,
     this.details,
     this.description,
@@ -26,6 +28,8 @@ class Company {
   String name;
   String address;
   String phone;
+  double? long;
+  double? lat;
   String? email;
   String? details;
   String? description;

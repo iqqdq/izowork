@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'dart:io';
-
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
@@ -9,6 +8,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/helpers/browser.dart';
 import 'package:izowork/services/local_service.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -22,7 +22,6 @@ import 'package:izowork/screens/products/products_filter_sheet/products_filter_p
 import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen_body.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class CompanyViewModel with ChangeNotifier {
   final Company selectedCompany;
@@ -50,7 +49,9 @@ class CompanyViewModel with ChangeNotifier {
   CompanyViewModel(this.selectedCompany) {
     _company = selectedCompany;
     getCompanyById(null, selectedCompany.id).then((value) => getProductList(
-        pagination: Pagination(offset: 0, size: 50), search: ''));
+          pagination: Pagination(offset: 0, size: 50),
+          search: '',
+        ));
   }
 
   // MARK: -
@@ -134,6 +135,7 @@ class CompanyViewModel with ChangeNotifier {
 
   void openUrl(String url) async {
     if (url.isNotEmpty) {
+      WebViewHelper webViewHelper = WebViewHelper();
       String? nativeUrl;
 
       if (url.contains('t.me')) {
@@ -151,24 +153,13 @@ class CompanyViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          openBrowser(url);
+          webViewHelper.openWebView(url);
         }
       } else {
-        if (nativeUrl != null) {
-          openBrowser(nativeUrl);
-        } else {
-          openBrowser(url);
-        }
+        nativeUrl != null
+            ? webViewHelper.openWebView(nativeUrl)
+            : webViewHelper.openWebView(url);
       }
-    }
-  }
-
-  void openBrowser(String url) async {
-    if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-      launchUrl(Uri.parse(url.replaceAll(' ', '')));
-    } else if (await canLaunchUrl(
-        Uri.parse('https://' + url.replaceAll(' ', '')))) {
-      launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
     }
   }
 
@@ -242,7 +233,10 @@ class CompanyViewModel with ChangeNotifier {
                 }));
   }
 
-  void showContactScreen(BuildContext context, int index) {
+  void showContactScreen(
+    BuildContext context,
+    int index,
+  ) {
     Navigator.push(
         context,
         MaterialPageRoute(

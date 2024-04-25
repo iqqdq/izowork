@@ -9,7 +9,7 @@ class ObjectCreateScreenWidget extends StatelessWidget {
   final String? address;
   final double? lat;
   final double? long;
-  final Function(Object) onCreate;
+  final Function(Object) onPop;
 
   const ObjectCreateScreenWidget(
       {Key? key,
@@ -17,7 +17,7 @@ class ObjectCreateScreenWidget extends StatelessWidget {
       this.address,
       this.lat,
       this.long,
-      required this.onCreate})
+      required this.onPop})
       : super(key: key);
 
   @override
@@ -25,6 +25,10 @@ class ObjectCreateScreenWidget extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => ObjectCreateViewModel(object),
         child: ObjectCreateScreenBodyWidget(
-            address: address, lat: lat, long: long, onCreate: onCreate));
+          address: address,
+          lat: lat,
+          long: long,
+          onPop: onPop,
+        ));
   }
 }

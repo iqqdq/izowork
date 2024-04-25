@@ -21,14 +21,14 @@ class ObjectCreateScreenBodyWidget extends StatefulWidget {
   final String? address;
   final double? lat;
   final double? long;
-  final Function(Object) onCreate;
+  final Function(Object) onPop;
 
   const ObjectCreateScreenBodyWidget({
     Key? key,
     this.address,
     this.lat,
     this.long,
-    required this.onCreate,
+    required this.onPop,
   }) : super(key: key);
 
   @override
@@ -511,7 +511,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                 (object) => {
                                   if (mounted)
                                     {
-                                      widget.onCreate(object),
+                                      widget.onPop(object),
                                       Navigator.pop(context)
                                     }
                                 },

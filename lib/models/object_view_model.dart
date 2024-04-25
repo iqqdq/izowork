@@ -157,7 +157,7 @@ class ObjectPageViewModel with ChangeNotifier {
         MaterialPageRoute(
             builder: (context) => ObjectCreateScreenWidget(
                 object: _object,
-                onCreate: (object) {
+                onPop: (object) {
                   _object = object;
                   onUpdate();
                   notifyListeners();

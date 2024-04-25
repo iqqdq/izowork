@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
-
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,18 +10,13 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/place_model.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/components/toast.dart';
+import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/object_stage.dart';
+import 'package:izowork/repositories/company_repository.dart';
 import 'package:izowork/repositories/object_repository.dart';
-import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
-import 'package:izowork/screens/map_object/views/map_add_object_widget.dart';
-import 'package:izowork/screens/object_create/object_create_screen.dart';
-import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen.dart';
+import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen_body.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen_body.dart';
-import 'package:izowork/screens/search_object/search_object_screen.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class MapViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;
@@ -40,6 +33,8 @@ class MapViewModel with ChangeNotifier {
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   bool _hasPermission = false;
 
+  bool _isObjectMarkers = true;
+
   // GEOCODER
   String _address = '';
 
@@ -47,41 +42,29 @@ class MapViewModel with ChangeNotifier {
   final List<Object> _objects = [];
   List<ObjectStage>? _objectStages;
   ObjectsFilter? _objectsFilter;
-  String? _error;
 
-  bool isHidden = true;
+  final List<Company> _companies = [];
+  CompaniesFilter? _companiesFilter;
 
-  bool get hasPermission {
-    return _hasPermission;
-  }
+  bool get hasPermission => _hasPermission;
 
-  LatLng? get userPosition {
-    return _userPosition;
-  }
+  LatLng? get userPosition => _userPosition;
 
-  LatLng? get position {
-    return _position;
-  }
+  LatLng? get position => _position;
 
-  String get address {
-    return _address;
-  }
+  bool get isObjectMarkers => _isObjectMarkers;
 
-  List<Object> get objects {
-    return _objects;
-  }
+  String get address => _address;
 
-  ObjectsFilter? get objectsFilter {
-    return _objectsFilter;
-  }
+  List<Object> get objects => _objects;
 
-  List<ObjectStage>? get objectStages {
-    return _objectStages;
-  }
+  ObjectsFilter? get objectsFilter => _objectsFilter;
 
-  String? get error {
-    return _error;
-  }
+  List<ObjectStage>? get objectStages => _objectStages;
+
+  List<Company> get companies => _companies;
+
+  CompaniesFilter? get companiesFilter => _companiesFilter;
 
   MapViewModel() {
     getLocationPermission()
@@ -103,12 +86,12 @@ class MapViewModel with ChangeNotifier {
         .then((value) => getObjectList());
   }
 
-  Future getObjectList({GoogleMapController? controller}) async {
-    LatLngBounds? visibleRegion = await controller?.getVisibleRegion();
-
+  Future getObjectList({LatLngBounds? latLngBounds}) async {
     await ObjectRepository()
         .getMapObjects(
-            params: _objectsFilter?.params ?? [], visibleRegion: visibleRegion)
+          params: _objectsFilter?.params ?? [],
+          visibleRegion: latLngBounds,
+        )
         .then((response) => {
               if (response is List<Object>)
                 {
@@ -119,193 +102,26 @@ class MapViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error
-            })
-        .then(
-          (value) => updatePlaces(),
-        );
+            });
   }
 
-  // MARK: -
-  // MARK: - ACTIONS
-
-  Future zoomIn(GoogleMapController googleMapController) async {
-    if (_position != null) {
-      googleMapController.getZoomLevel().then((value) => googleMapController
-              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-            target: _position!,
-            zoom: value + 1.0,
-          ))));
-
-      double zoom = await googleMapController.getZoomLevel();
-      debugPrint('Current zoom is: $zoom');
-    }
-  }
-
-  Future zoomOut(GoogleMapController googleMapController) async {
-    if (_position != null) {
-      googleMapController.getZoomLevel().then((value) => googleMapController
-              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-            target: _position!,
-            zoom: value - 1.0,
-          ))));
-
-      double zoom = await googleMapController.getZoomLevel();
-      debugPrint('Current zoom is: $zoom');
-    }
-  }
-
-  void showUserLocation(GoogleMapController googleMapController) {
-    googleMapController
-        .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-      target: _userPosition!,
-      zoom: 12.0,
-    )));
-  }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showObjectsFilterSheet(
-    BuildContext context,
-    Function() onFilter,
-  ) {
-    if (_objectStages != null) {
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => ObjectsFilterPageViewScreenWidget(
-              objectStages: _objectStages!,
-              objectsFilter: _objectsFilter,
-              onPop: (objectsFilter) => {
-                    if (objectsFilter == null)
-                      {
-                        // CLEAR
-                        resetFilter(),
-                        onFilter()
-                      }
-                    else
-                      {
-                        // FILTER
-                        _objectsFilter = objectsFilter,
-                        onFilter()
-                      }
-                  }));
-    }
-  }
-
-  void showAddMapObjectSheet(
-    BuildContext context,
-    LatLng position,
-  ) {
-    _position = position;
-
-    if (isHidden) {
-      getAddressName().then((value) => {
-            isHidden = false,
-            showCupertinoModalBottomSheet(
-                enableDrag: false,
-                topRadius: const Radius.circular(16.0),
-                barrierColor: Colors.black.withOpacity(0.6),
-                backgroundColor: HexColors.white,
-                context: context,
-                builder: (sheetContext) => MapAddObjectScreenWidget(
-                    address: address,
-                    onPop: () => isHidden = true,
-                    onTap: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ObjectCreateScreenWidget(
-                                          address: address,
-                                          lat: position.latitude,
-                                          long: position.longitude,
-                                          onCreate: (object) => {
-                                                Toast().showTopToast(context,
-                                                    '${Titles.object} ${object.name} добавлен!'),
-                                                getObjectList()
-                                              })))
-                        }))
-          });
-    }
-  }
-
-  void showMapObjectSheet(
-    BuildContext context,
-    String id,
-  ) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => MapObjectScreenWidget(
-                object: objects.firstWhere(
-              (element) => element.id == id,
-            )));
-  }
-
-  void showSearchMapObjectSheet(
-    BuildContext context,
-    GoogleMapController controller,
-  ) {
-    bool found = false;
-
-    showCupertinoModalBottomSheet(
-      enableDrag: false,
-      topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
-      backgroundColor: HexColors.white,
-      context: context,
-      builder: (sheetContext) => SearchObjectScreenWidget(
-        isRoot: true,
-        title: Titles.object,
-        onFocus: () => {},
-        onPop: (object) => {
-          Navigator.pop(context),
-          Future.delayed(
-              const Duration(milliseconds: 500),
-              () => {
-                    if (object != null)
-                      {
-                        _objects.forEach((element) {
-                          if (object.id == element.id) {
-                            found = true;
-                          }
-                        }),
-                        if (found)
-                          {
-                            _objects.removeWhere(
-                                (element) => element.id == object.id),
-                          },
-                        _objects.add(object),
-                        updatePlaces()
-                            .whenComplete(() => controller.animateCamera(
-                                    CameraUpdate.newCameraPosition(
-                                        CameraPosition(
-                                  target: LatLng(
-                                    object.lat,
-                                    object.long,
-                                  ),
-                                  zoom: 20.0,
-                                ))))
-                            .whenComplete(
-                              () => Future.delayed(
-                                  const Duration(seconds: 1),
-                                  () => showMapObjectSheet(
-                                        context,
-                                        object.id,
-                                      )),
-                            )
-                      }
-                  })
-        },
-      ),
-    );
+  Future getCompanyList({LatLngBounds? latLngBounds}) async {
+    await CompanyRepository()
+        .getMapCompanies(
+          params: _objectsFilter?.params ?? [],
+          visibleRegion: latLngBounds,
+        )
+        .then((response) => {
+              if (response is List<Company>)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _companies.clear(),
+                  _companies.addAll(response),
+                  updatePlaces()
+                }
+              else
+                loadingStatus = LoadingStatus.error
+            });
   }
 
   // MARK: -
@@ -358,8 +174,11 @@ class MapViewModel with ChangeNotifier {
             result.result!.geometry!.location!.lng!);
 
         if (_position != null) {
-          controller.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(target: _position!, zoom: 18)));
+          controller
+              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+            target: _position!,
+            zoom: 18,
+          )));
         }
       }
     }
@@ -369,8 +188,10 @@ class MapViewModel with ChangeNotifier {
   // MARK: - PERMISSION
 
   Future<void> getLocationPermission() async {
-    await handlePermission()
-        .then((value) => {_hasPermission = value, notifyListeners()});
+    await handlePermission().then((value) => {
+          _hasPermission = value,
+          notifyListeners(),
+        });
 
     if (_hasPermission) {
       getUserLocation();
@@ -422,25 +243,45 @@ class MapViewModel with ChangeNotifier {
   Future updatePlaces() async {
     places.clear();
 
-    _objects.forEach(
-      (element) {
+    if (_isObjectMarkers == true) {
+      for (var object in _objects) {
         places.add(
           Place(
-            id: element.id,
-            name: element.manager?.name ?? '-',
-            color: element.hasOverdueTask == true
+            id: object.id,
+            name: object.manager?.name ?? '-',
+            color: object.hasOverdueTask == true
                 ? HexColors.additionalRed.withOpacity(0.75)
-                : element.objectStage?.color == null
+                : object.objectStage?.color == null
                     ? HexColors.primaryMain
-                    : HexColor(element.objectStage!.color!),
+                    : HexColor(object.objectStage!.color!),
             latLng: LatLng(
-              element.lat,
-              element.long,
+              object.lat,
+              object.long,
             ),
           ),
         );
-      },
-    );
+      }
+    } else {
+      for (var company in _companies) {
+        if (company.lat != null && company.long != null) {
+          places.add(
+            Place(
+              id: company.id,
+              name: company.manager?.name ?? '-',
+              color: company.type == 'Поставщик'
+                  ? HexColors.additionalViolet
+                  : company.type == 'Проектировщик'
+                      ? HexColors.additionalDeepBlue
+                      : HexColors.grey70,
+              latLng: LatLng(
+                company.lat!,
+                company.long!,
+              ),
+            ),
+          );
+        }
+      }
+    }
 
     notifyListeners();
   }
@@ -448,11 +289,24 @@ class MapViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  void onCameraMove(CameraPosition position) {
-    _position = position.target;
+  Future changeMarkerType({required int index}) async {
+    _isObjectMarkers = index == 0 ? true : false;
+    notifyListeners();
   }
 
-  void resetFilter() {
-    _objectsFilter = null;
+  Future setPosition({required LatLng position}) async {
+    _position = position;
+    await getAddressName();
   }
+
+  void onCameraMove(CameraPosition position) => _position = position.target;
+
+  void setObjectsFilter({required ObjectsFilter filter}) =>
+      _objectsFilter = filter;
+
+  void setCompaniesFilter({required CompaniesFilter filter}) =>
+      _companiesFilter = filter;
+
+  void resetFilter() =>
+      _isObjectMarkers ? _objectsFilter = null : _companiesFilter = null;
 }

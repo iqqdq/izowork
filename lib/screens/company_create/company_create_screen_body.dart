@@ -19,10 +19,18 @@ import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 
 class CompanyCreateScreenBodyWidget extends StatefulWidget {
+  final String? address;
+  final double? lat;
+  final double? long;
   final Function(Company?)? onPop;
 
-  const CompanyCreateScreenBodyWidget({Key? key, required this.onPop})
-      : super(key: key);
+  const CompanyCreateScreenBodyWidget({
+    Key? key,
+    required this.onPop,
+    this.address,
+    this.lat,
+    this.long,
+  }) : super(key: key);
 
   @override
   _CompanyCreateScreenBodyState createState() =>

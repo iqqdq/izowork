@@ -4,9 +4,9 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/helpers/browser.dart';
 import 'package:izowork/repositories/user_repository.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ProfileViewModel with ChangeNotifier {
   final User currentUser;
@@ -45,6 +45,7 @@ class ProfileViewModel with ChangeNotifier {
 
   void openUrl(String url) async {
     if (url.isNotEmpty) {
+      WebViewHelper webViewHelper = WebViewHelper();
       String? nativeUrl;
 
       if (url.contains('t.me')) {
@@ -62,27 +63,13 @@ class ProfileViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          openBrowser(url);
+          webViewHelper.openWebView(url);
         }
       } else {
-        if (nativeUrl != null) {
-          openBrowser(nativeUrl);
-        } else {
-          openBrowser(url);
-        }
+        nativeUrl != null
+            ? webViewHelper.openWebView(nativeUrl)
+            : webViewHelper.openWebView(url);
       }
-    }
-  }
-
-  // MARK: -
-  // MARK: - FUNCTIONS
-
-  void openBrowser(String url) async {
-    if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-      launchUrl(Uri.parse(url.replaceAll(' ', '')));
-    } else if (await canLaunchUrl(
-        Uri.parse('https://' + url.replaceAll(' ', '')))) {
-      launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
     }
   }
 
@@ -92,14 +79,16 @@ class ProfileViewModel with ChangeNotifier {
   void showProfileEditScreen(BuildContext context) {
     if (_user != null) {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProfileEditScreenWidget(
-                  user: _user!,
-                  onPop: (user) => {
-                        _user = user,
-                        notifyListeners(),
-                      })));
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileEditScreenWidget(
+              user: _user!,
+              onPop: (user) => {
+                    _user = user,
+                    notifyListeners(),
+                  }),
+        ),
+      );
     }
   }
 }
