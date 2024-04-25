@@ -250,7 +250,10 @@ class ObjectCreateViewModel with ChangeNotifier {
                 });
       }
     } else {
-      Toast().showTopToast(context, Titles.wrongCoordFormat);
+      Toast().showTopToast(
+        context,
+        Titles.wrongCoordFormat,
+      );
     }
   }
 

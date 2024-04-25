@@ -180,8 +180,12 @@ class ObjectsViewModel with ChangeNotifier {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ObjectCreateScreenWidget(
-                onPop: (object) => Toast()
-                    .showTopToast(context, '${Titles.object} добавлен!'))));
+          builder: (context) => ObjectCreateScreenWidget(
+              onPop: (object) => {
+                    if (object != null)
+                      Toast()
+                          .showTopToast(context, '${Titles.object} добавлен!')
+                  }),
+        ));
   }
 }

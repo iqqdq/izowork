@@ -246,11 +246,15 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
               backgroundColor: HexColors.white,
               context: context,
               builder: (sheetContext) => MapAddObjectScreenWidget(
-                  title: _mapViewModel.isObjectMarkers == true
-                      ? Titles.addObject
-                      : Titles.addClient,
-                  address: _mapViewModel.address,
-                  onTap: () => Navigator.push(
+                title: _mapViewModel.isObjectMarkers == true
+                    ? Titles.addObject
+                    : Titles.addClient,
+                address: _mapViewModel.address,
+                onTap: () => {
+                  Navigator.pop(context),
+                  Future.delayed(
+                    const Duration(milliseconds: 500),
+                    () => Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
@@ -260,21 +264,21 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                                       lat: position.latitude,
                                       long: position.longitude,
                                       onPop: (object) => {
-                                            Toast().showTopToast(context,
-                                                '${Titles.object} ${object.name} добавлен!'),
-                                            _mapViewModel.getObjectList(),
+                                            if (object != null)
+                                              _mapViewModel.getObjectList(),
                                           })
                                   : CompanyCreateScreenWidget(
                                       address: _mapViewModel.address,
                                       lat: position.latitude,
                                       long: position.longitude,
                                       onPop: (company) => {
-                                            Toast().showTopToast(context,
-                                                '${Titles.client} ${company?.name} добавлен!'),
-                                            _mapViewModel.getCompanyList(),
+                                            if (company != null)
+                                              _mapViewModel.getCompanyList(),
                                           }),
-                        ),
-                      )),
+                        )),
+                  )
+                },
+              ),
             ));
   }
 
@@ -371,6 +375,9 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                                                 zoom: 20.0,
                                               )),
                                             )
+                                          else
+                                            Toast().showTopToast(context,
+                                                '${company.name} не добавлен на карту!')
                                         })
                                     .whenComplete(
                                       () => Future.delayed(

@@ -21,7 +21,7 @@ class ObjectCreateScreenBodyWidget extends StatefulWidget {
   final String? address;
   final double? lat;
   final double? long;
-  final Function(Object) onPop;
+  final Function(Object?) onPop;
 
   const ObjectCreateScreenBodyWidget({
     Key? key,
@@ -77,8 +77,11 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
         _addressTextEditingController.text =
             _objectCreateViewModel.object!.address;
 
-        _coordinatesTextEditingController.text =
-            '${_objectCreateViewModel.object!.lat}, ${_objectCreateViewModel.object!.long}';
+        _coordinatesTextEditingController.text = _objectCreateViewModel
+                    .object?.lat ==
+                null
+            ? ''
+            : '${_objectCreateViewModel.object?.lat}, ${_objectCreateViewModel.object?.long}';
 
         _floorCountTextEditingController.text =
             _objectCreateViewModel.object!.floors.toString();
@@ -95,6 +98,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
             _objectCreateViewModel.object!.kiso ?? '';
       } else {
         _addressTextEditingController.text = widget.address ?? '';
+
         _coordinatesTextEditingController.text =
             widget.lat == null || widget.long == null
                 ? ''
@@ -107,18 +111,25 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
   void dispose() {
     _nameTextEditingController.dispose();
     _nameFocusNode.dispose();
+
     _addressTextEditingController.dispose();
     _addressFocusNode.dispose();
+
     _coordinatesTextEditingController.dispose();
     _coordinatesFocusNode.dispose();
+
     _floorCountTextEditingController.dispose();
     _floorCountFocusNode.dispose();
+
     _areaCountTextEditingController.dispose();
     _areaCountFocusNode.dispose();
+
     _buildingTimeTextEditingController.dispose();
     _buildingTimeFocusNode.dispose();
+
     _kisoTextEditingController.dispose();
     _kisoFocusNode.dispose();
+
     super.dispose();
   }
 

@@ -42,18 +42,27 @@ class _CompanyCreateScreenBodyState
   final TextEditingController _nameTextEditingController =
       TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
+
   final TextEditingController _phoneTextEditingController =
       TextEditingController();
   final FocusNode _phoneFocusNode = FocusNode();
+
   final TextEditingController _descriptionTextEditingController =
       TextEditingController();
   final FocusNode _descriptionFocusNode = FocusNode();
-  final TextEditingController _addressTextEditingConrtoller =
+
+  final TextEditingController _addressTextEditingController =
       TextEditingController();
   final FocusNode _addressFocusNode = FocusNode();
+
+  final TextEditingController _coordinatesTextEditingController =
+      TextEditingController();
+  final FocusNode _coordinatesFocusNode = FocusNode();
+
   final TextEditingController _emailTextEditingConrtoller =
       TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
+
   final TextEditingController _requisitesTextEditingController =
       TextEditingController();
   final FocusNode _requisitesFocusNode = FocusNode();
@@ -68,16 +77,34 @@ class _CompanyCreateScreenBodyState
       if (_companyCreateViewModel.company != null) {
         _nameTextEditingController.text =
             _companyCreateViewModel.company?.name ?? '';
+
         _phoneTextEditingController.text =
             _companyCreateViewModel.company?.phone ?? '';
-        _addressTextEditingConrtoller.text =
-            _companyCreateViewModel.company!.address;
+
+        _addressTextEditingController.text =
+            _companyCreateViewModel.company?.address ?? '';
+
+        _coordinatesTextEditingController.text = _companyCreateViewModel
+                    .company?.lat ==
+                null
+            ? ''
+            : '${_companyCreateViewModel.company?.lat}, ${_companyCreateViewModel.company?.long}';
+
         _emailTextEditingConrtoller.text =
-            _companyCreateViewModel.company!.email ?? '';
+            _companyCreateViewModel.company?.email ?? '';
+
         _descriptionTextEditingController.text =
-            _companyCreateViewModel.company!.description ?? '';
+            _companyCreateViewModel.company?.description ?? '';
+
         _requisitesTextEditingController.text =
-            _companyCreateViewModel.company!.details ?? '';
+            _companyCreateViewModel.company?.details ?? '';
+      } else {
+        _addressTextEditingController.text = widget.address ?? '';
+
+        _coordinatesTextEditingController.text =
+            widget.lat == null || widget.long == null
+                ? ''
+                : '${widget.lat}, ${widget.long}';
       }
     });
   }
@@ -86,14 +113,22 @@ class _CompanyCreateScreenBodyState
   void dispose() {
     _nameTextEditingController.dispose();
     _nameFocusNode.dispose();
+
     _phoneTextEditingController.dispose();
     _phoneFocusNode.dispose();
+
     _descriptionTextEditingController.dispose();
     _descriptionFocusNode.dispose();
-    _addressTextEditingConrtoller.dispose();
+
+    _addressTextEditingController.dispose();
     _addressFocusNode.dispose();
+
+    _coordinatesTextEditingController.dispose();
+    _coordinatesFocusNode.dispose();
+
     _emailTextEditingConrtoller.dispose();
     _emailFocusNode.dispose();
+
     _requisitesTextEditingController.dispose();
     _requisitesFocusNode.dispose();
 
@@ -256,6 +291,37 @@ class _CompanyCreateScreenBodyState
                             FocusScope.of(context).unfocus(),
                         onClearTap: () => _phoneTextEditingController.clear()),
 
+                    /// ADDRESS INPUT
+                    InputWidget(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        height: 56.0,
+                        textEditingController: _addressTextEditingController,
+                        focusNode: _addressFocusNode,
+                        textCapitalization: TextCapitalization.sentences,
+                        placeholder: Titles.address,
+                        onTap: () => setState(() => {
+                              FocusScope.of(context).unfocus(),
+                              _addressFocusNode.requestFocus()
+                            }),
+                        onEditingComplete: () =>
+                            FocusScope.of(context).unfocus(),
+                        onClearTap: () =>
+                            _addressTextEditingController.clear()),
+
+                    /// COORDINATES INPUT
+                    InputWidget(
+                        textEditingController:
+                            _coordinatesTextEditingController,
+                        focusNode: _coordinatesFocusNode,
+                        textInputType:
+                            const TextInputType.numberWithOptions(signed: true),
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        height: 56.0,
+                        placeholder: Titles.coordinates,
+                        onTap: () => setState(() {}),
+                        onChange: (text) => setState(() {}),
+                        onEditingComplete: () => setState(() {})),
+
                     /// DESCRTIPTION INPUT
                     InputWidget(
                       margin: const EdgeInsets.only(bottom: 10.0),
@@ -270,23 +336,6 @@ class _CompanyCreateScreenBodyState
                           }),
                       onChange: (text) => setState,
                     ),
-
-                    /// ADDRESS INPUT
-                    InputWidget(
-                        margin: const EdgeInsets.only(bottom: 10.0),
-                        height: 56.0,
-                        textEditingController: _addressTextEditingConrtoller,
-                        focusNode: _addressFocusNode,
-                        textCapitalization: TextCapitalization.sentences,
-                        placeholder: Titles.address,
-                        onTap: () => setState(() => {
-                              FocusScope.of(context).unfocus(),
-                              _addressFocusNode.requestFocus()
-                            }),
-                        onEditingComplete: () =>
-                            FocusScope.of(context).unfocus(),
-                        onClearTap: () =>
-                            _addressTextEditingConrtoller.clear()),
 
                     /// EMAIL INPUT
                     InputWidget(
@@ -383,77 +432,81 @@ class _CompanyCreateScreenBodyState
 
           /// CREATE/EDIT BUTTON
           AnimatedOpacity(
-              opacity: _descriptionFocusNode.hasFocus ||
-                      _addressFocusNode.hasFocus ||
-                      _emailFocusNode.hasFocus ||
-                      _requisitesFocusNode.hasFocus
-                  ? 0.0
-                  : 1.0,
-              duration: const Duration(milliseconds: 300),
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).padding.bottom == 0.0
-                              ? 12.0
-                              : MediaQuery.of(context).padding.bottom),
-                      child: ButtonWidget(
-                          title: _companyCreateViewModel.company == null
-                              ? Titles.createCompany
-                              : Titles.save,
-                          isDisabled:
-                              _addressTextEditingConrtoller.text.isEmpty ||
-                                  _nameTextEditingController.text.isEmpty,
-                          onTap: () =>
+            opacity: _descriptionFocusNode.hasFocus ||
+                    _addressFocusNode.hasFocus ||
+                    _emailFocusNode.hasFocus ||
+                    _requisitesFocusNode.hasFocus
+                ? 0.0
+                : 1.0,
+            duration: const Duration(milliseconds: 300),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).padding.bottom == 0.0
+                        ? 12.0
+                        : MediaQuery.of(context).padding.bottom),
+                child: ButtonWidget(
+                  title: _companyCreateViewModel.company == null
+                      ? Titles.createCompany
+                      : Titles.save,
+                  isDisabled: _addressTextEditingController.text.isEmpty ||
+                      _nameTextEditingController.text.isEmpty,
+                  onTap: () =>
 
-                              /// CREATE
-                              _companyCreateViewModel.company == null
-                                  ? _companyCreateViewModel.createNewCompany(
-                                      context,
-                                      _addressTextEditingConrtoller.text,
-                                      _nameTextEditingController.text,
-                                      _companyCreateViewModel.phone ??
-                                          _companyCreateViewModel
-                                              .selectedCompany?.phone ??
-                                          '',
-                                      _descriptionTextEditingController.text,
-                                      _requisitesTextEditingController.text,
-                                      _emailTextEditingConrtoller.text,
-                                      (company) => {
-                                            if (widget.onPop == null)
-                                              {
-                                                Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            CompanyScreenWidget(
-                                                                company:
-                                                                    company,
-                                                                onPop: null)))
-                                              }
-                                            else
-                                              {
-                                                widget.onPop!(company),
-                                                Navigator.pop(context)
-                                              }
-                                          })
+                      /// CREATE
+                      _companyCreateViewModel.company == null
+                          ? _companyCreateViewModel.createNewCompany(
+                              context,
+                              _addressTextEditingController.text,
+                              _coordinatesTextEditingController.text,
+                              _nameTextEditingController.text,
+                              _companyCreateViewModel.phone ??
+                                  _companyCreateViewModel
+                                      .selectedCompany?.phone ??
+                                  '',
+                              _descriptionTextEditingController.text,
+                              _requisitesTextEditingController.text,
+                              _emailTextEditingConrtoller.text,
+                              (company) => {
+                                    if (widget.onPop == null)
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CompanyScreenWidget(
+                                                    company: company,
+                                                    onPop: null,
+                                                  )))
+                                    else
+                                      {
+                                        widget.onPop!(company),
+                                        Navigator.pop(context)
+                                      }
+                                  })
 
-                                  /// UPDATE
-                                  : _companyCreateViewModel.editCompany(
-                                      context,
-                                      _addressTextEditingConrtoller.text,
-                                      _nameTextEditingController.text,
-                                      _companyCreateViewModel.phone ??
-                                          _companyCreateViewModel
-                                              .selectedCompany?.phone ??
-                                          '',
-                                      _descriptionTextEditingController.text,
-                                      _requisitesTextEditingController.text,
-                                      _emailTextEditingConrtoller.text,
-                                      (company) => {
-                                            widget.onPop!(company),
-                                            Navigator.pop(context)
-                                          }))))),
+                          /// UPDATE
+                          : _companyCreateViewModel.editCompany(
+                              context,
+                              _addressTextEditingController.text,
+                              _coordinatesTextEditingController.text,
+                              _nameTextEditingController.text,
+                              _companyCreateViewModel.phone ??
+                                  _companyCreateViewModel
+                                      .selectedCompany?.phone ??
+                                  '',
+                              _descriptionTextEditingController.text,
+                              _requisitesTextEditingController.text,
+                              _emailTextEditingConrtoller.text,
+                              (company) => {
+                                widget.onPop!(company),
+                                Navigator.pop(context)
+                              },
+                            ),
+                ),
+              ),
+            ),
+          ),
 
           /// INDICATOR
           _companyCreateViewModel.loadingStatus == LoadingStatus.searching

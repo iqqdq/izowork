@@ -9,16 +9,16 @@ class ObjectCreateScreenWidget extends StatelessWidget {
   final String? address;
   final double? lat;
   final double? long;
-  final Function(Object) onPop;
+  final Function(Object?) onPop;
 
-  const ObjectCreateScreenWidget(
-      {Key? key,
-      this.object,
-      this.address,
-      this.lat,
-      this.long,
-      required this.onPop})
-      : super(key: key);
+  const ObjectCreateScreenWidget({
+    Key? key,
+    this.object,
+    this.address,
+    this.lat,
+    this.long,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

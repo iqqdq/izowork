@@ -1,4 +1,3 @@
-// const baseUrl = 'http://185.116.194.234/api/';
 const baseUrl = 'https://izowork.kz/api/';
 
 const fcmTokenUrl = baseUrl + 'notification/tokenFCM';

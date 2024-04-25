@@ -116,6 +116,7 @@ class CompanyCreateViewModel with ChangeNotifier {
   Future createNewCompany(
     BuildContext context,
     String address,
+    String coord,
     String name,
     String phone,
     String? description,
@@ -126,16 +127,29 @@ class CompanyCreateViewModel with ChangeNotifier {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
+    double? lat;
+    double? long;
+
+    if (coord.characters.length > 8 &&
+        coord.contains('.') &&
+        coord.contains(',')) {
+      lat = double.tryParse(coord.split(',')[0]);
+      long = double.tryParse(coord.split(',')[1]);
+    }
+
     await CompanyRepository()
         .createCompany(CompanyRequest(
-            address: address,
-            name: name,
-            phone: phone,
-            type: _type,
-            description: description,
-            details: details,
-            email: email,
-            productTypeId: _productType?.id))
+          address: address,
+          lat: lat,
+          long: long,
+          name: name,
+          phone: phone,
+          type: _type,
+          description: description,
+          details: details,
+          email: email,
+          productTypeId: _productType?.id,
+        ))
         .then((response) async => {
               if (response is Company)
                 {
@@ -144,9 +158,7 @@ class CompanyCreateViewModel with ChangeNotifier {
                   // CHECK IF FILE SELECTED
                   if (_file != null)
                     await changeCompanyAvatar(context, _file!, response.id)
-                        .then((value) => {
-                              onCreate(response),
-                            })
+                        .then((value) => onCreate(response))
                   else
                     onCreate(response),
                 }
@@ -162,6 +174,7 @@ class CompanyCreateViewModel with ChangeNotifier {
   Future editCompany(
       BuildContext context,
       String address,
+      String coord,
       String name,
       String phone,
       String? description,
@@ -171,17 +184,30 @@ class CompanyCreateViewModel with ChangeNotifier {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
+    double? lat;
+    double? long;
+
+    if (coord.characters.length > 8 &&
+        coord.contains('.') &&
+        coord.contains(',')) {
+      lat = double.tryParse(coord.split(',')[0]);
+      long = double.tryParse(coord.split(',')[1]);
+    }
+
     await CompanyRepository()
         .updateCompany(CompanyRequest(
-            id: _company?.id,
-            address: address,
-            name: name,
-            phone: phone,
-            type: _type ?? _company?.type,
-            description: description,
-            details: details,
-            email: email,
-            productTypeId: _productType?.id ?? _company?.productType?.id))
+          id: _company?.id,
+          address: address,
+          lat: lat,
+          long: long,
+          name: name,
+          phone: phone,
+          type: _type ?? _company?.type,
+          description: description,
+          details: details,
+          email: email,
+          productTypeId: _productType?.id ?? _company?.productType?.id,
+        ))
         .then((response) => {
               if (response is Company)
                 {
@@ -192,9 +218,7 @@ class CompanyCreateViewModel with ChangeNotifier {
                     onCreate(_company!)
                   else
                     changeCompanyAvatar(context, _file!, response.id)
-                        .then((value) => {
-                              onCreate(response),
-                            })
+                        .then((value) => onCreate(response))
                 }
               else if (response is ErrorResponse)
                 {
@@ -205,7 +229,11 @@ class CompanyCreateViewModel with ChangeNotifier {
         .then((value) => notifyListeners());
   }
 
-  Future changeCompanyAvatar(BuildContext context, File file, String id) async {
+  Future changeCompanyAvatar(
+    BuildContext context,
+    File file,
+    String id,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
