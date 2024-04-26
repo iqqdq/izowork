@@ -7,7 +7,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/delete_request.dart';
-import 'package:izowork/entities/request/phase_checklist_information_file_request.dart';
+import 'package:izowork/entities/request/phase_checklist_info_file_request.dart';
 import 'package:izowork/entities/request/phase_contractor_request.dart';
 import 'package:izowork/entities/request/phase_contractor_update_request.dart';
 import 'package:izowork/entities/request/phase_product_request.dart';
@@ -146,11 +146,12 @@ class PhaseCreateViewModel with ChangeNotifier {
   Future updateProduct(BuildContext context, int index) async {
     await PhaseRepository()
         .updatePhaseProduct(PhaseProductUpdateRequest(
-            id: phaseProducts[index].id,
-            phaseId: phase.id,
-            count: phaseProducts[index].count,
-            productId: phaseProducts[index].productId,
-            termInDays: phaseProducts[index].termInDays))
+          id: phaseProducts[index].id,
+          phaseId: phase.id,
+          count: phaseProducts[index].count,
+          productId: phaseProducts[index].productId,
+          termInDays: phaseProducts[index].termInDays,
+        ))
         .then((response) => {
               if (response is ErrorResponse)
                 {
@@ -182,10 +183,16 @@ class PhaseCreateViewModel with ChangeNotifier {
             });
   }
 
-  Future uploadFile(BuildContext context, String id, File file) async {
+  Future uploadFile(
+    BuildContext context,
+    String id,
+    File file,
+  ) async {
     await PhaseRepository()
-        .addPhaseChecklistInformationFile(
-            PhaseChecklistInformationFileRequest(id, file))
+        .addPhaseChecklistInfoFile(PhaseChecklistInfoFileRequest(
+          id,
+          file,
+        ))
         .then((response) => {
               if (response is ErrorResponse)
                 {

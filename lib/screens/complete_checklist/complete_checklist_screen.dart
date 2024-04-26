@@ -8,22 +8,21 @@ import 'package:provider/provider.dart';
 class CompleteChecklistScreenWidget extends StatelessWidget {
   final bool canEdit;
   final String title;
-  final PhaseChecklistInformation? phaseChecklistInformation;
+  final PhaseChecklistInfo? phaseChecklistInfo;
   final Function(String, List<PlatformFile>) onTap;
 
   const CompleteChecklistScreenWidget({
     Key? key,
     required this.canEdit,
     required this.title,
-    this.phaseChecklistInformation,
+    this.phaseChecklistInfo,
     required this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) =>
-            CompleteChecklistViewModel(phaseChecklistInformation),
+        create: (context) => CompleteChecklistViewModel(phaseChecklistInfo),
         child: CompleteChecklistBodyWidget(
           canEdit: canEdit,
           title: title,

@@ -12,7 +12,7 @@ import 'dart:io' as io;
 import 'package:path_provider/path_provider.dart';
 
 class CompleteChecklistViewModel with ChangeNotifier {
-  final PhaseChecklistInformation? phaseChecklistInformation;
+  final PhaseChecklistInfo? phaseChecklistInfo;
 
   final List<PlatformFile> _files = [];
 
@@ -26,7 +26,7 @@ class CompleteChecklistViewModel with ChangeNotifier {
     return _downloadIndex;
   }
 
-  CompleteChecklistViewModel(this.phaseChecklistInformation);
+  CompleteChecklistViewModel(this.phaseChecklistInfo);
 
   // MARK: -
   // MARK: - FUNCTIONS
@@ -46,21 +46,21 @@ class CompleteChecklistViewModel with ChangeNotifier {
   }
 
   Future openFile(BuildContext context, int index) async {
-    if (phaseChecklistInformation == null) {
+    if (phaseChecklistInfo == null) {
       OpenResult openResult = await OpenFilex.open(_files[index].path);
 
       if (openResult.type == ResultType.noAppToOpen) {
         Toast().showTopToast(context, Titles.unsupportedFileFormat);
       }
     } else {
-      String url = phaseChecklistInformationMediaUrl +
-          phaseChecklistInformation!.files[index].filename;
+      String url = phaseChecklistInfoMediaUrl +
+          phaseChecklistInfo!.files[index].filename;
 
       if (Platform.isAndroid) {
         Directory appDocumentsDirectory =
             await getApplicationDocumentsDirectory();
         String appDocumentsPath = appDocumentsDirectory.path;
-        String fileName = phaseChecklistInformation!.files[index].name;
+        String fileName = phaseChecklistInfo!.files[index].name;
         String filePath = '$appDocumentsPath/$fileName';
         bool isFileExists = await io.File(filePath).exists();
 

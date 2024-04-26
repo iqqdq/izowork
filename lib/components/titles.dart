@@ -208,6 +208,8 @@ abstract class Titles {
   static const status = 'Статус';
   static const checkList = 'Чек-лист';
   static const checkLists = 'Чек-листы';
+  static const checkListName = 'Название чек-листа';
+  static const newCheckList = 'Новый чек-лист';
   static const companyName = 'Название компании';
   static const fullname = 'Фио';
   static const sorting = 'Сортировка';

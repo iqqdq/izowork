@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-PhaseChecklistInformation phaseChecklistInformationFromJson(String str) =>
-    PhaseChecklistInformation.fromJson(json.decode(str));
+PhaseChecklistInfo phaseChecklistInfoFromJson(String str) =>
+    PhaseChecklistInfo.fromJson(json.decode(str));
 
-String phaseChecklistInformationToJson(PhaseChecklistInformation data) =>
+String phaseChecklistInfoToJson(PhaseChecklistInfo data) =>
     json.encode(data.toJson());
 
-class PhaseChecklistInformation {
-  PhaseChecklistInformation({
+class PhaseChecklistInfo {
+  PhaseChecklistInfo({
     this.createdAt,
     this.description,
     required this.files,
@@ -23,8 +23,8 @@ class PhaseChecklistInformation {
   String phaseChecklistId;
   String? userId;
 
-  factory PhaseChecklistInformation.fromJson(Map<String, dynamic> json) =>
-      PhaseChecklistInformation(
+  factory PhaseChecklistInfo.fromJson(Map<String, dynamic> json) =>
+      PhaseChecklistInfo(
         createdAt: json["created_at"],
         description: json["description"],
         files: json["files"] == null
@@ -48,21 +48,21 @@ class PhaseChecklistInformation {
 
 class FileElement {
   FileElement({
-    required this.checklistInformationId,
+    required this.ChecklistInfoId,
     required this.filename,
     required this.id,
     required this.mimetype,
     required this.name,
   });
 
-  String checklistInformationId;
+  String ChecklistInfoId;
   String filename;
   String id;
   String mimetype;
   String name;
 
   factory FileElement.fromJson(Map<String, dynamic> json) => FileElement(
-        checklistInformationId: json["checklist_information_id"],
+        ChecklistInfoId: json["checklist_information_id"],
         filename: json["filename"],
         id: json["id"],
         mimetype: json["mimetype"],
@@ -70,7 +70,7 @@ class FileElement {
       );
 
   Map<String, dynamic> toJson() => {
-        "checklist_information_id": checklistInformationId,
+        "checklist_information_id": ChecklistInfoId,
         "filename": filename,
         "id": id,
         "mimetype": mimetype,

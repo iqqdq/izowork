@@ -71,13 +71,11 @@ const phaseUrl = baseUrl + 'phase/one';
 const phaseProductsUrl = baseUrl + 'phase/product/all';
 const phaseContractorsUrl = baseUrl + 'phase/contractor/all';
 const phaseChecklistUrl = baseUrl + 'phase/checklist/all';
-const phaseChecklistInformationUrl =
-    baseUrl + 'phase/checklist/information/all';
-const phaseChecklistInformationCreateUrl =
+const phaseChecklistInfoUrl = baseUrl + 'phase/checklist/information/all';
+const phaseChecklistInfoCreateUrl =
     baseUrl + 'phase/checklist/information/create';
-const phaseChecklistInformationFileUrl =
-    baseUrl + 'phase/checklist/information/file';
-const phaseChecklistInformationMediaUrl =
+const phaseChecklistInfoFileUrl = baseUrl + 'phase/checklist/information/file';
+const phaseChecklistInfoMediaUrl =
     baseUrl + 'resourses/checklist-information-file/';
 const phaseContractorCreateUrl = baseUrl + 'phase/contractor/create';
 const phaseChecklistStateUpdateUrl = baseUrl + 'phase/checklist/update';

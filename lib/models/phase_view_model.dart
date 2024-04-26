@@ -6,8 +6,9 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/request/phase_checklist_request.dart';
-import 'package:izowork/entities/request/phase_checklist_information_file_request.dart';
+import 'package:izowork/entities/request/delete_request.dart';
+import 'package:izowork/entities/request/phase_checklist_info_request.dart';
+import 'package:izowork/entities/request/phase_checklist_info_file_request.dart';
 import 'package:izowork/entities/request/phase_checklist_state_request.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/entities/response/error_response.dart';
@@ -35,7 +36,7 @@ class PhaseViewModel with ChangeNotifier {
 
   final List<Deal> _deals = [];
 
-  int current = 0;
+  int _current = 0;
 
   List<PhaseProduct> _phaseProducts = [];
 
@@ -43,31 +44,23 @@ class PhaseViewModel with ChangeNotifier {
 
   PhaseChecklistResponse? _phaseChecklistResponse;
 
-  List<PhaseChecklistInformation> _phaseChecklistInformations = [];
+  List<PhaseChecklistInfo> _phaseChecklistInfos = [];
 
-  List<File> get files {
-    return _files;
-  }
+  String? _error;
 
-  List<Deal> get deals {
-    return _deals;
-  }
+  List<File> get files => _files;
 
-  List<PhaseProduct> get phaseProducts {
-    return _phaseProducts;
-  }
+  List<Deal> get deals => _deals;
 
-  List<PhaseContractor> get phaseContractors {
-    return _phaseContractors;
-  }
+  List<PhaseProduct> get phaseProducts => _phaseProducts;
 
-  PhaseChecklistResponse? get phaseChecklistResponse {
-    return _phaseChecklistResponse;
-  }
+  List<PhaseContractor> get phaseContractors => _phaseContractors;
 
-  List<PhaseChecklistInformation> get phaseChecklistInformations {
-    return _phaseChecklistInformations;
-  }
+  PhaseChecklistResponse? get phaseChecklistResponse => _phaseChecklistResponse;
+
+  List<PhaseChecklistInfo> get phaseChecklistInfos => _phaseChecklistInfos;
+
+  String? get error => _error;
 
   PhaseViewModel(
     this.phase,
@@ -114,14 +107,12 @@ class PhaseViewModel with ChangeNotifier {
                     },
                 },
             })
-        .then(
-          (value) => getPhaseChecklistList(),
-        );
+        .then((value) => getPhaseChecklistList());
   }
 
   Future getPhaseChecklistList() async {
     await PhaseRepository()
-        .getPhaseChecklists(phase.id)
+        .getPhaseChecklistList(phase.id)
         .then((response) => {
               if (response is PhaseChecklistResponse)
                 {
@@ -129,21 +120,41 @@ class PhaseViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.completed
                 }
             })
-        .then(
-          (value) => notifyListeners(),
-        );
+        .then((value) => notifyListeners());
   }
 
-  Future getPhaseChecklistInformationList(String id) async {
+  Future removePhaseChecklist(String id) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
     await PhaseRepository()
-        .getPhaseChecklistInformations(id)
+        .deletePhaseChecklist(DeleteRequest(id: id))
         .then((response) => {
-              if (response is List<PhaseChecklistInformation>)
+              if (response == true)
                 {
-                  _phaseChecklistInformations = response,
+                  loadingStatus = LoadingStatus.completed,
+                  _phaseChecklistResponse?.phaseChecklists
+                      .removeWhere((element) => element.id == id),
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  _error = response.message,
+                }
+            })
+        .then((value) => notifyListeners());
+  }
+
+  Future getPhaseChecklistInfoList(String id) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await PhaseRepository()
+        .getPhaseChecklistInfoList(id)
+        .then((response) => {
+              if (response is List<PhaseChecklistInfo>)
+                {
+                  _phaseChecklistInfos = response,
                   loadingStatus = LoadingStatus.completed,
                 }
             })
@@ -159,21 +170,21 @@ class PhaseViewModel with ChangeNotifier {
     notifyListeners();
 
     await PhaseRepository()
-        .createPhaseChecklistInformation(PhaseChecklistInformationRequest(
+        .createPhaseChecklistInfo(PhaseChecklistInfoRequest(
           phaseChecklistId:
               _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
           description: description,
         ))
         .then((response) => {
-              if (response is PhaseChecklistInformation)
+              if (response is PhaseChecklistInfo)
                 {
                   if (_files.isNotEmpty)
                     {
                       _files.forEach((element) async {
                         await uploadFile(context, response.id, element)
                             .then((value) => {
-                                  current++,
-                                  if (current == _files.length)
+                                  _current++,
+                                  if (_current == _files.length)
                                     updateChecklistState(
                                       context,
                                       index,
@@ -182,12 +193,10 @@ class PhaseViewModel with ChangeNotifier {
                       })
                     }
                   else
-                    {
-                      updateChecklistState(
-                        context,
-                        index,
-                      ),
-                    }
+                    updateChecklistState(
+                      context,
+                      index,
+                    ),
                 }
               else if (response is ErrorResponse)
                 {
@@ -236,7 +245,7 @@ class PhaseViewModel with ChangeNotifier {
     File file,
   ) async {
     await PhaseRepository()
-        .addPhaseChecklistInformationFile(PhaseChecklistInformationFileRequest(
+        .addPhaseChecklistInfoFile(PhaseChecklistInfoFileRequest(
           id,
           file,
         ))
@@ -266,13 +275,13 @@ class PhaseViewModel with ChangeNotifier {
     BuildContext context,
     int index,
   ) async {
-    PhaseChecklistInformation? phaseChecklistInformation;
+    PhaseChecklistInfo? phaseChecklistInfo;
 
-    await getPhaseChecklistInformationList(
+    await getPhaseChecklistInfoList(
       _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
     ).then((value) => {
-          if (_phaseChecklistInformations.isNotEmpty)
-            phaseChecklistInformation = _phaseChecklistInformations.first,
+          if (_phaseChecklistInfos.isNotEmpty)
+            phaseChecklistInfo = _phaseChecklistInfos.first,
 
           // SHOW CHECKLIST SHEET
 
@@ -286,7 +295,7 @@ class PhaseViewModel with ChangeNotifier {
                   canEdit: _phaseChecklistResponse!.canEdit,
                   title: _phaseChecklistResponse?.phaseChecklists[index].name ??
                       '',
-                  phaseChecklistInformation: phaseChecklistInformation,
+                  phaseChecklistInfo: phaseChecklistInfo,
                   onTap: (
                     text,
                     files,

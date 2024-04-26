@@ -40,7 +40,7 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.canEdit &&
-          _completeChecklistViewModel.phaseChecklistInformation == null) {
+          _completeChecklistViewModel.phaseChecklistInfo == null) {
         _focusNode.requestFocus();
       }
     });
@@ -99,8 +99,7 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
                       const SizedBox(height: 24.0),
 
                       /// REASON INPUT
-                      _completeChecklistViewModel.phaseChecklistInformation ==
-                              null
+                      _completeChecklistViewModel.phaseChecklistInfo == null
                           ? IgnorePointer(
                               ignoring: !widget.canEdit,
                               child: InputWidget(
@@ -115,7 +114,7 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
                               ))
                           : SubtitleWidget(
                               text: _completeChecklistViewModel
-                                      .phaseChecklistInformation?.description ??
+                                      .phaseChecklistInfo?.description ??
                                   '-',
                               padding: const EdgeInsets.only(bottom: 4.0),
                             ),
@@ -126,27 +125,23 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: _completeChecklistViewModel
-                                  .phaseChecklistInformation?.files.length ??
+                                  .phaseChecklistInfo?.files.length ??
                               _completeChecklistViewModel.files.length,
                           itemBuilder: (context, index) {
                             return FileListItemWidget(
                               key: ValueKey(
-                                _completeChecklistViewModel
-                                        .phaseChecklistInformation
-                                        ?.files[index]
-                                        .name ??
+                                _completeChecklistViewModel.phaseChecklistInfo
+                                        ?.files[index].name ??
                                     _completeChecklistViewModel
                                         .files[index].name,
                               ),
                               fileName: _completeChecklistViewModel
-                                      .phaseChecklistInformation
-                                      ?.files[index]
-                                      .name ??
+                                      .phaseChecklistInfo?.files[index].name ??
                                   _completeChecklistViewModel.files[index].name,
                               onTap: () => _completeChecklistViewModel.openFile(
                                   context, index),
                               onRemoveTap: _completeChecklistViewModel
-                                          .phaseChecklistInformation ==
+                                          .phaseChecklistInfo ==
                                       null
                                   ? () => _completeChecklistViewModel
                                       .removeFile(index)
@@ -156,8 +151,7 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
 
                       /// ADD FILE BUTTON
                       widget.canEdit &&
-                              _completeChecklistViewModel
-                                      .phaseChecklistInformation !=
+                              _completeChecklistViewModel.phaseChecklistInfo !=
                                   null
                           ? BorderButtonWidget(
                               margin: const EdgeInsets.only(bottom: 16.0),
@@ -172,20 +166,19 @@ class _CompleteChecklistBodyState extends State<CompleteChecklistBodyWidget> {
                         margin: EdgeInsets.zero,
                         title: widget.canEdit &&
                                 _completeChecklistViewModel
-                                        .phaseChecklistInformation !=
+                                        .phaseChecklistInfo !=
                                     null
                             ? Titles.add
                             : Titles.close,
                         isDisabled: !widget.canEdit
                             ? false
-                            : _completeChecklistViewModel
-                                        .phaseChecklistInformation !=
+                            : _completeChecklistViewModel.phaseChecklistInfo !=
                                     null
                                 ? false
                                 : _textEditingController.text.isEmpty,
                         onTap: () => widget.canEdit &&
                                 _completeChecklistViewModel
-                                        .phaseChecklistInformation ==
+                                        .phaseChecklistInfo ==
                                     null
                             ? widget.onTap(
                                 _textEditingController.text,

@@ -1,6 +1,7 @@
-import 'package:izowork/entities/request/phase_checklist_request.dart';
+import 'package:izowork/entities/request/phase_checklist_create_request.dart';
+import 'package:izowork/entities/request/phase_checklist_info_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
-import 'package:izowork/entities/request/phase_checklist_information_file_request.dart';
+import 'package:izowork/entities/request/phase_checklist_info_file_request.dart';
 import 'package:izowork/entities/request/phase_checklist_state_request.dart';
 import 'package:izowork/entities/request/phase_contractor_request.dart';
 import 'package:izowork/entities/request/phase_contractor_update_request.dart';
@@ -84,7 +85,7 @@ class PhaseRepository {
     }
   }
 
-  Future<dynamic> getPhaseChecklists(String id) async {
+  Future<dynamic> getPhaseChecklistList(String id) async {
     dynamic json = await WebService().get(phaseChecklistUrl + '?phase_id=$id');
 
     try {
@@ -94,31 +95,57 @@ class PhaseRepository {
     }
   }
 
-  Future<dynamic> getPhaseChecklistInformations(String id) async {
-    dynamic json = await WebService()
-        .get(phaseChecklistInformationUrl + '?phase_checklist_id=$id');
-    List<PhaseChecklistInformation> phaseChecklistInformations = [];
+  Future<dynamic> createPhaseChecklist(
+      PhaseChecklistCreateRequest phaseChecklistCreateRequest) async {
+    dynamic json = await WebService().post(
+      phaseChecklistUrl.replaceAll('all', 'create'),
+      phaseChecklistCreateRequest,
+    );
 
     try {
-      json['checklist_informations'].forEach((element) {
-        phaseChecklistInformations
-            .add(PhaseChecklistInformation.fromJson(element));
-      });
-      return phaseChecklistInformations;
+      return json as String;
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }
   }
 
-  Future<dynamic> createPhaseChecklistInformation(
-      PhaseChecklistInformationRequest phaseChecklistInformationRequest) async {
+  Future<dynamic> deletePhaseChecklist(DeleteRequest deleteRequest) async {
+    dynamic json = await WebService().delete(
+      phaseChecklistUrl.replaceAll('all', 'delete'),
+      deleteRequest.toJson(),
+    );
+
+    if (json == true) {
+      return json;
+    } else {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> getPhaseChecklistInfoList(String id) async {
+    dynamic json = await WebService()
+        .get(phaseChecklistInfoUrl + '?phase_checklist_id=$id');
+    List<PhaseChecklistInfo> phaseChecklistInfos = [];
+
+    try {
+      json['checklist_informations'].forEach((element) {
+        phaseChecklistInfos.add(PhaseChecklistInfo.fromJson(element));
+      });
+      return phaseChecklistInfos;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> createPhaseChecklistInfo(
+      PhaseChecklistInfoRequest phaseChecklistInfoRequest) async {
     dynamic json = await WebService().post(
-      phaseChecklistInformationCreateUrl,
-      phaseChecklistInformationRequest.toJson(),
+      phaseChecklistInfoCreateUrl,
+      phaseChecklistInfoRequest.toJson(),
     );
 
     try {
-      return PhaseChecklistInformation.fromJson(json['checklist_information']);
+      return PhaseChecklistInfo.fromJson(json['checklist_information']);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }
@@ -139,12 +166,10 @@ class PhaseRepository {
     }
   }
 
-  Future<dynamic> addPhaseChecklistInformationFile(
-      PhaseChecklistInformationFileRequest
-          phaseChecklistInformationFileRequest) async {
-    dynamic json = await WebService().postFormData(
-        phaseChecklistInformationFileUrl,
-        await phaseChecklistInformationFileRequest.toFormData());
+  Future<dynamic> addPhaseChecklistInfoFile(
+      PhaseChecklistInfoFileRequest phaseChecklistInfoFileRequest) async {
+    dynamic json = await WebService().postFormData(phaseChecklistInfoFileUrl,
+        await phaseChecklistInfoFileRequest.toFormData());
 
     if (json == null || json == '' || json == true) {
       return true;
