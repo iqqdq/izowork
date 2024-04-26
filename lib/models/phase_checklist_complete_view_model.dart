@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' as io;
 import 'package:path_provider/path_provider.dart';
 
-class CompleteChecklistViewModel with ChangeNotifier {
+class PhaseChecklistCompleteViewModel with ChangeNotifier {
   final PhaseChecklistInfo? phaseChecklistInfo;
 
   final List<PlatformFile> _files = [];
@@ -26,7 +26,7 @@ class CompleteChecklistViewModel with ChangeNotifier {
     return _downloadIndex;
   }
 
-  CompleteChecklistViewModel(this.phaseChecklistInfo);
+  PhaseChecklistCompleteViewModel(this.phaseChecklistInfo);
 
   // MARK: -
   // MARK: - FUNCTIONS

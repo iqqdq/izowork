@@ -103,7 +103,7 @@ class PhaseRepository {
     );
 
     try {
-      return json as String;
+      return PhaseChecklist.fromJson(json);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }

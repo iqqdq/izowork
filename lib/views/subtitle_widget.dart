@@ -7,29 +7,33 @@ class SubtitleWidget extends StatelessWidget {
   final EdgeInsets? padding;
   final Color? titleColor;
 
-  const SubtitleWidget(
-      {Key? key,
-      required this.text,
-      this.fontWeight,
-      this.textAlign,
-      this.padding,
-      this.titleColor})
-      : super(key: key);
+  const SubtitleWidget({
+    Key? key,
+    required this.text,
+    this.fontWeight,
+    this.textAlign,
+    this.padding,
+    this.titleColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: padding == null
-            ? const EdgeInsets.symmetric(horizontal: 16.0)
-            : padding!,
-        child: SelectionArea(
-            child: Text(text,
-                textAlign: textAlign,
-                style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: fontWeight ?? FontWeight.w400,
-                  fontFamily: 'PT Root UI',
-                  color: titleColor,
-                ))));
+      padding: padding == null
+          ? const EdgeInsets.symmetric(horizontal: 16.0)
+          : padding!,
+      child: SelectionArea(
+        child: Text(
+          text,
+          textAlign: textAlign,
+          style: TextStyle(
+            fontSize: 14.0,
+            fontWeight: fontWeight ?? FontWeight.w400,
+            fontFamily: 'PT Root UI',
+            color: titleColor,
+          ),
+        ),
+      ),
+    );
   }
 }

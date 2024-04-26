@@ -113,9 +113,9 @@ class TaskListItemWidget extends StatelessWidget {
                               fontWeight: FontWeight.w400)),
                       const SizedBox(height: 10.0),
 
-                      /// CREATOR
+                      /// USER
                       Row(children: [
-                        /// CREATOR AVATAR
+                        /// USER AVATAR
                         Stack(children: [
                           task.taskManager == null
                               ? SvgPicture.asset('assets/ic_avatar.svg',
@@ -144,7 +144,7 @@ class TaskListItemWidget extends StatelessWidget {
                         ]),
                         const SizedBox(width: 10.0),
 
-                        /// CREATOR NAME
+                        /// USER NAME
                         task.taskManager == null
                             ? Container()
                             : Expanded(

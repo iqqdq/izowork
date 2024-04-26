@@ -1,8 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/entities/response/phase_checklist_information.dart';
-import 'package:izowork/models/complete_checklist_view_model.dart';
-import 'package:izowork/screens/complete_checklist/complete_checklist_screen_body.dart';
+import 'package:izowork/models/phase_checklist_complete_view_model.dart';
+import 'package:izowork/screens/phase_checklist_complete/phase_checklist_complete_screen_body.dart';
 import 'package:provider/provider.dart';
 
 class CompleteChecklistScreenWidget extends StatelessWidget {
@@ -22,8 +22,9 @@ class CompleteChecklistScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => CompleteChecklistViewModel(phaseChecklistInfo),
-        child: CompleteChecklistBodyWidget(
+        create: (context) =>
+            PhaseChecklistCompleteViewModel(phaseChecklistInfo),
+        child: PhaseChecklistCompleteBodyWidget(
           canEdit: canEdit,
           title: title,
           onTap: onTap,

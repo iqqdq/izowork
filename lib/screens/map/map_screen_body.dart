@@ -315,24 +315,24 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                                         (element) => element.id == object.id),
                                   },
                                 _mapViewModel.objects.add(object),
-                                _mapViewModel
-                                    .updatePlaces()
-                                    .whenComplete(() =>
-                                        _googleMapController.animateCamera(
-                                            CameraUpdate.newCameraPosition(
-                                                CameraPosition(
+                                _mapViewModel.updatePlaces().whenComplete(
+                                      () => _googleMapController.animateCamera(
+                                          CameraUpdate.newCameraPosition(
+                                        CameraPosition(
                                           target: LatLng(
                                             object.lat,
                                             object.long,
                                           ),
                                           zoom: 20.0,
-                                        ))))
-                                    .whenComplete(
-                                      () => Future.delayed(
-                                          const Duration(seconds: 1),
-                                          () =>
-                                              _showMarkerSheet(id: object.id)),
+                                        ),
+                                      )),
                                     )
+                                // .whenComplete(
+                                //   () => Future.delayed(
+                                //       const Duration(seconds: 1),
+                                //       () =>
+                                //           _showMarkerSheet(id: object.id)),
+                                // )
                               }
                           })
                 },
@@ -341,7 +341,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
             /// SEARCH COMPANY
             : SearchCompanyScreenWidget(
                 isRoot: true,
-                title: Titles.company,
+                title: Titles.client,
                 onFocus: () => {},
                 onPop: (company) => {
                   Navigator.pop(context),
@@ -379,12 +379,12 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                                             Toast().showTopToast(context,
                                                 '${company.name} не добавлен на карту!')
                                         })
-                                    .whenComplete(
-                                      () => Future.delayed(
-                                          const Duration(seconds: 1),
-                                          () =>
-                                              _showMarkerSheet(id: company.id)),
-                                    )
+                                // .whenComplete(
+                                //   () => Future.delayed(
+                                //       const Duration(seconds: 1),
+                                //       () =>
+                                //           _showMarkerSheet(id: company.id)),
+                                // )
                               }
                           })
                 },

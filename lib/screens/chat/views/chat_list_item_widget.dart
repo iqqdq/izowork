@@ -87,7 +87,7 @@ class ChatListItemWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14.0, vertical: 10.0),
                     child: Row(children: [
-                      /// CREATOR AVATAR
+                      /// USER AVATAR
                       Stack(children: [
                         Container(
                             width: 40.0,

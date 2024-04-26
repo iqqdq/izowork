@@ -19,7 +19,7 @@ import 'package:izowork/entities/response/phase_checklist_information.dart';
 import 'package:izowork/entities/response/phase_contractor.dart';
 import 'package:izowork/entities/response/phase_product.dart';
 import 'package:izowork/repositories/phase_repository.dart';
-import 'package:izowork/screens/complete_checklist/complete_checklist_screen.dart';
+import 'package:izowork/screens/phase_checklist_complete/phase_checklist_complete_screen.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen.dart';
 import 'package:izowork/screens/phase_create/phase_create_screen.dart';

@@ -105,11 +105,7 @@ class _AnalyticsObjectsScreenBodyState
                   _objectsViewModel.objects.isEmpty
               ? Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 20.0,
-                      right: 20.0,
-                      bottom: 100.0,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
                       Titles.noResult,
                       textAlign: TextAlign.center,

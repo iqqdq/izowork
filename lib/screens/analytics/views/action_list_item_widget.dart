@@ -115,9 +115,9 @@ class ActionListItemWidget extends StatelessWidget {
                               fontWeight: FontWeight.w400)),
                       const SizedBox(height: 10.0),
 
-                      /// CREATOR
+                      /// USER
                       Row(children: [
-                        /// CREATOR AVATAR
+                        /// USER AVATAR
                         Stack(children: [
                           SvgPicture.asset('assets/ic_avatar.svg',
                               color: HexColors.grey40,
@@ -131,7 +131,7 @@ class ActionListItemWidget extends StatelessWidget {
                         ]),
                         const SizedBox(width: 10.0),
 
-                        /// CREATOR NAME
+                        /// USER NAME
                         Expanded(
                             child: Text('Имя Фамилия',
                                 style: TextStyle(

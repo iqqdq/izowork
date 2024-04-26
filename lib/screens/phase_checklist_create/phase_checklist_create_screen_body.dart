@@ -3,7 +3,8 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/models/create_checklist_view_model.dart';
+import 'package:izowork/entities/response/phase_checklist.dart';
+import 'package:izowork/models/phase_checklist_create_view_model.dart';
 import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/input_widget.dart';
@@ -11,26 +12,28 @@ import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 import 'package:provider/provider.dart';
 
-class CreateChecklistBodyWidget extends StatefulWidget {
+class PhaseChecklistCreateBodyWidget extends StatefulWidget {
   final String phaseId;
-  final VoidCallback onPop;
+  final Function(PhaseChecklist? phaseChecklist) onPop;
 
-  const CreateChecklistBodyWidget({
+  const PhaseChecklistCreateBodyWidget({
     Key? key,
     required this.phaseId,
     required this.onPop,
   }) : super(key: key);
 
   @override
-  _CreateChecklistBodyState createState() => _CreateChecklistBodyState();
+  _PhaseChecklistCreateBodyState createState() =>
+      _PhaseChecklistCreateBodyState();
 }
 
-class _CreateChecklistBodyState extends State<CreateChecklistBodyWidget> {
+class _PhaseChecklistCreateBodyState
+    extends State<PhaseChecklistCreateBodyWidget> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
-  late CreateChecklistViewModel _createChecklistViewModel;
+  late PhaseChecklistCreateViewModel _checklistCreateViewModel;
 
   @override
   void initState() {
@@ -47,14 +50,14 @@ class _CreateChecklistBodyState extends State<CreateChecklistBodyWidget> {
     _textEditingController.dispose();
     _focusNode.dispose();
 
-    widget.onPop();
+    widget.onPop(_checklistCreateViewModel.phaseChecklist);
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _createChecklistViewModel = Provider.of<CreateChecklistViewModel>(
+    _checklistCreateViewModel = Provider.of<PhaseChecklistCreateViewModel>(
       context,
       listen: true,
     );
@@ -109,7 +112,7 @@ class _CreateChecklistBodyState extends State<CreateChecklistBodyWidget> {
                     onEditingComplete: () => setState(() {})),
 
                 /// CREATE BUTTON
-                _createChecklistViewModel.loadingStatus ==
+                _checklistCreateViewModel.loadingStatus ==
                         LoadingStatus.searching
                     ? const SizedBox(
                         height: 54.0,
@@ -121,18 +124,18 @@ class _CreateChecklistBodyState extends State<CreateChecklistBodyWidget> {
                         isDisabled: _textEditingController.text.isEmpty,
                         onTap: () => {
                               FocusScope.of(context).unfocus(),
-                              _createChecklistViewModel
+                              _checklistCreateViewModel
                                   .createPhaseChecklist(
                                       name: _textEditingController.text)
                                   .then((value) => {
-                                        if (_createChecklistViewModel
+                                        if (_checklistCreateViewModel
                                                 .loadingStatus ==
                                             LoadingStatus.completed)
                                           Navigator.pop(context)
                                         else
                                           Toast().showTopToast(
                                             context,
-                                            _createChecklistViewModel.error ??
+                                            _checklistCreateViewModel.error ??
                                                 'Возникла ошибка при добавлении чеклиста',
                                           )
                                       }),

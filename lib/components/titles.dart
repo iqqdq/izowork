@@ -109,6 +109,7 @@ abstract class Titles {
   static const profileEdit = 'Редактирование профиля';
   static const message = 'Сообщение';
   static const typeMessage = 'Сообщение...';
+  static const typeComment = 'Комментарий...';
   static const notSelected = 'Не выбран';
   static const notAssigned = 'Не назначен';
   static const deadline = 'Дедлайн';
@@ -129,7 +130,8 @@ abstract class Titles {
   static const complitionPercent = 'Процент выполнения';
   static const complitionSum = 'Сумма выполнения';
   static const noResult = 'Список пуст';
-  static const noMessages = 'Нет сообщений';
+  static const noMessages = 'Здесь пока нет\nни одного сообщения...';
+  static const noComments = 'Здесь пока нет\nни одного комментария...';
   static const changesSuccess = 'Изменения сохранены';
   static const passwordRecoverySuccess =
       'Новый пароль был выслан на указанный электронный адрес';
