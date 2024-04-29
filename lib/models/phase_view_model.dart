@@ -19,9 +19,9 @@ import 'package:izowork/entities/response/phase_checklist_information.dart';
 import 'package:izowork/entities/response/phase_contractor.dart';
 import 'package:izowork/entities/response/phase_product.dart';
 import 'package:izowork/repositories/phase_repository.dart';
-import 'package:izowork/screens/phase_checklist_complete/phase_checklist_complete_screen.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen.dart';
+import 'package:izowork/screens/phase_checklist_complete/phase_checklist_complete_screen.dart';
 import 'package:izowork/screens/phase_create/phase_create_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -285,39 +285,49 @@ class PhaseViewModel with ChangeNotifier {
 
           // SHOW CHECKLIST SHEET
 
-          showCupertinoModalBottomSheet(
-              enableDrag: false,
-              topRadius: const Radius.circular(16.0),
-              barrierColor: Colors.black.withOpacity(0.6),
-              backgroundColor: HexColors.white,
-              context: context,
-              builder: (sheetContext) => CompleteChecklistScreenWidget(
-                  canEdit: _phaseChecklistResponse!.canEdit,
-                  title: _phaseChecklistResponse?.phaseChecklists[index].name ??
-                      '',
-                  phaseChecklistInfo: phaseChecklistInfo,
-                  onTap: (
-                    text,
-                    files,
-                  ) =>
-                      {
-                        // HIDE BOTTOM SHEET
-                        Navigator.pop(context),
+          if (_phaseChecklistResponse != null)
+            {
+              if (_phaseChecklistResponse!.canEdit)
+                showCupertinoModalBottomSheet(
+                    enableDrag: false,
+                    topRadius: const Radius.circular(16.0),
+                    barrierColor: Colors.black.withOpacity(0.6),
+                    backgroundColor: HexColors.white,
+                    context: context,
+                    builder: (sheetContext) =>
+                        PhaseChecklistCompleteScreenWidget(
+                            title: _phaseChecklistResponse
+                                    ?.phaseChecklists[index].name ??
+                                '',
+                            phaseChecklistInfo: phaseChecklistInfo,
+                            onTap: (
+                              text,
+                              files,
+                            ) =>
+                                {
+                                  // HIDE BOTTOM SHEET
+                                  Navigator.pop(context),
 
-                        // SET SELECTED FILES
-                        files.forEach((element) {
-                          if (element.path != null) {
-                            _files.add(File(element.path!));
-                          }
-                        }),
+                                  // SET SELECTED FILES
+                                  files.forEach((element) {
+                                    if (element.path != null) {
+                                      _files.add(File(element.path!));
+                                    }
+                                  }),
 
-                        // CREATE NEW PHASE CHECKLIST
-                        createPhaseChecklistInfo(
-                          context,
-                          index,
-                          text,
-                        )
-                      }))
+                                  // CREATE NEW PHASE CHECKLIST
+                                  createPhaseChecklistInfo(
+                                    context,
+                                    index,
+                                    text,
+                                  )
+                                }))
+              else
+                Toast().showTopToast(
+                  context,
+                  Titles.youHaveNotPermissionToFillChecklist,
+                )
+            }
         });
   }
 

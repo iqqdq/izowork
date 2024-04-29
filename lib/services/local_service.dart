@@ -13,12 +13,18 @@ class LocalService {
 
   Future setToken(String token) async {
     _sharedPreferences = await SharedPreferences.getInstance();
-    _sharedPreferences.setString('token', token);
+    _sharedPreferences.setString(
+      'token',
+      token,
+    );
   }
 
   Future setDeviceToken(String deviceToken) async {
     _sharedPreferences = await SharedPreferences.getInstance();
-    _sharedPreferences.setString('device_token', deviceToken);
+    _sharedPreferences.setString(
+      'device_token',
+      deviceToken,
+    );
   }
 
   Future<User?> getUser() async {
@@ -36,7 +42,11 @@ class LocalService {
 
   Future setUser(User user) async {
     _sharedPreferences = await SharedPreferences.getInstance();
-    _sharedPreferences.setString('user', jsonEncode(user.toJson()));
+    _sharedPreferences.setString(
+        'user',
+        jsonEncode(
+          user.toJson(),
+        ));
   }
 
   Future<bool?> getLocationPermission() async {
@@ -46,7 +56,10 @@ class LocalService {
 
   Future setLocationPermission(bool isGranted) async {
     _sharedPreferences = await SharedPreferences.getInstance();
-    _sharedPreferences.setBool('location_permission', isGranted);
+    _sharedPreferences.setBool(
+      'location_permission',
+      isGranted,
+    );
   }
 
   Future clear() async {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -439,7 +440,13 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           child: Align(
             alignment: Alignment.topRight,
             child: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
+              padding: EdgeInsets.only(
+                right: 8.0,
+                top: Platform.isAndroid ||
+                        MediaQuery.of(context).padding.top == 0.0
+                    ? 12.0
+                    : 0.0,
+              ),
               child: SegmentedControlWidget(
                 titles: const [
                   Titles.objects,

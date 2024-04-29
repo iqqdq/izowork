@@ -27,7 +27,10 @@ class MarkerHelper {
           0.0,
           newSize,
           newSize,
-          const Radius.elliptical(10.0, 10.0),
+          const Radius.elliptical(
+            10.0,
+            10.0,
+          ),
         ),
       );
 
@@ -38,7 +41,10 @@ class MarkerHelper {
           8.0,
           newSize - 8.0,
           newSize - 8.0,
-          const Radius.elliptical(10.0, 10.0),
+          const Radius.elliptical(
+            10.0,
+            10.0,
+          ),
         ),
       );
 
@@ -49,7 +55,10 @@ class MarkerHelper {
           16.0,
           newSize - 16.0,
           newSize - 16.0,
-          const Radius.elliptical(10.0, 10.0),
+          const Radius.elliptical(
+            10.0,
+            10.0,
+          ),
         ),
       );
 
@@ -131,7 +140,10 @@ class MarkerHelper {
           0.0,
           newSize,
           newSize,
-          const Radius.elliptical(10.0, 10.0),
+          const Radius.elliptical(
+            10.0,
+            10.0,
+          ),
         ),
       );
 
@@ -142,7 +154,10 @@ class MarkerHelper {
           8.0,
           newSize - 8.0,
           newSize - 8.0,
-          const Radius.elliptical(10.0, 10.0),
+          const Radius.elliptical(
+            10.0,
+            10.0,
+          ),
         ),
       );
 
@@ -153,7 +168,10 @@ class MarkerHelper {
           16.0,
           newSize - 16.0,
           newSize - 16.0,
-          const Radius.elliptical(10.0, 10.0),
+          const Radius.elliptical(
+            10.0,
+            10.0,
+          ),
         ),
       );
 

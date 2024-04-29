@@ -1,11 +1,3 @@
-import 'dart:convert';
-
-PhaseChecklistResponse phaseChecklistResponseFromJson(String str) =>
-    PhaseChecklistResponse.fromJson(json.decode(str));
-
-String phaseChecklistResponseToJson(PhaseChecklistResponse data) =>
-    json.encode(data.toJson());
-
 class PhaseChecklistResponse {
   final bool canEdit;
   List<PhaseChecklist> phaseChecklists;
@@ -18,15 +10,14 @@ class PhaseChecklistResponse {
   factory PhaseChecklistResponse.fromJson(Map<String, dynamic> json) =>
       PhaseChecklistResponse(
         canEdit: json["can_edit"],
-        phaseChecklists: List<PhaseChecklist>.from(
-            json["phase_checklists"].map((x) => PhaseChecklist.fromJson(x))),
+        phaseChecklists: json.containsKey("phase_checklists")
+            ? List<PhaseChecklist>.from(json["phase_checklists"].map(
+                (x) => PhaseChecklist.fromJson(x),
+              ))
+            : [
+                PhaseChecklist.fromJson(json["phase_checklist"]),
+              ],
       );
-
-  Map<String, dynamic> toJson() => {
-        "can_edit": canEdit,
-        "phase_checklists":
-            List<dynamic>.from(phaseChecklists.map((x) => x.toJson())),
-      };
 }
 
 abstract class PhaseChecklistState {
@@ -43,6 +34,7 @@ class PhaseChecklist {
   final String phaseId;
   final String state;
   final String type;
+  final List<PhaseChecklistComment> phaseChecklistComments;
 
   PhaseChecklist({
     required this.id,
@@ -51,23 +43,44 @@ class PhaseChecklist {
     required this.phaseId,
     required this.state,
     required this.type,
+    required this.phaseChecklistComments,
   });
 
   factory PhaseChecklist.fromJson(Map<String, dynamic> json) => PhaseChecklist(
-        id: json["id"],
-        isCompleted: json["is_completed"],
-        name: json["name"],
-        phaseId: json["phase_id"],
-        state: json["state"],
-        type: json["type"],
-      );
+      id: json["id"],
+      isCompleted: json["is_completed"],
+      name: json["name"],
+      phaseId: json["phase_id"],
+      state: json["state"],
+      type: json["type"],
+      phaseChecklistComments: json["chat"] == null
+          ? []
+          : List<PhaseChecklistComment>.from(json["chat"].map(
+              (x) => PhaseChecklistComment.fromJson(x),
+            )));
+}
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "is_completed": isCompleted,
-        "name": name,
-        "phase_id": phaseId,
-        "state": state,
-        "type": type,
-      };
+class PhaseChecklistComment {
+  final String id;
+  final String checklistId;
+  final String body;
+  final String userId;
+  final DateTime createdAt;
+
+  PhaseChecklistComment({
+    required this.id,
+    required this.checklistId,
+    required this.body,
+    required this.userId,
+    required this.createdAt,
+  });
+
+  factory PhaseChecklistComment.fromJson(Map<String, dynamic> json) =>
+      PhaseChecklistComment(
+        id: json["id"],
+        checklistId: json["checklist_id"],
+        body: json["body"],
+        userId: json["user_id"],
+        createdAt: DateTime.parse(json["created_at"]).toUtc(),
+      );
 }

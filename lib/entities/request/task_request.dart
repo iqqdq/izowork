@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-String taskRequestToJson(TaskRequest data) => json.encode(data.toJson());
-
 class TaskRequest {
   TaskRequest({
     this.id,

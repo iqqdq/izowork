@@ -88,16 +88,17 @@ class _PhaseChecklistCommentsBodyState
             child: Row(children: [
               /// PHASE CHECKLIST TITLE
               Expanded(
-                child:
-                    Text(_phaseChecklistCommentsViewModel.phaseChecklist.name,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          color: HexColors.black,
-                          fontSize: 18.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold,
-                        )),
+                child: Text(
+                  _phaseChecklistCommentsViewModel.phaseChecklist.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    color: HexColors.black,
+                    fontSize: 18.0,
+                    fontFamily: 'PT Root UI',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ]),
           ),
@@ -126,15 +127,37 @@ class _PhaseChecklistCommentsBodyState
                           reverse: false,
                           primary: false,
                           shrinkWrap: true,
-                          itemCount:
-                              2, // TODO: - _phaseChecklistCommentsViewModel.comments.lenght
+                          itemCount: 0
+                          // _phaseChecklistCommentsViewModel
+                          //     .phaseChecklistResponse
+                          //     ?.phaseChecklists
+                          //     .first
+                          //     .phaseChecklistComments
+                          //     .length
+                          ,
                           itemBuilder: (context, index) {
                             return Column(
                               children: [
                                 PhaseChecklistCommentItemWidget(
+                                  phaseChecklistComment:
+                                      _phaseChecklistCommentsViewModel
+                                          .phaseChecklistResponse
+                                          ?.phaseChecklists
+                                          .first
+                                          .phaseChecklistComments[index],
                                   onUserTap: () => {}, // TODO: - SHOW USER
                                 ),
-                                // _phaseChecklistCommentsViewModel.comments.isEmpty ? Container() :
+                                // _phaseChecklistCommentsViewModel
+                                //             .phaseChecklistResponse ==
+                                //         null
+                                //     ? Container()
+                                //     : _phaseChecklistCommentsViewModel
+                                //             .phaseChecklistResponse!
+                                //             .phaseChecklists
+                                //             .first
+                                //             .phaseChecklistComments
+                                //             .isEmpty
+                                //         ? Container() :
                                 const SeparatorWidget(),
                               ],
                             );
@@ -155,10 +178,12 @@ class _PhaseChecklistCommentsBodyState
               onSendTap: () => {
                 FocusScope.of(context).unfocus(),
 
-                // TODO: - SEND PHASE CHECKLIST COMMENT
-
                 /// CLEAR INPUT
                 _textEditingController.clear(),
+
+                /// SEND COMMENT
+                // _phaseChecklistCommentsViewModel.sendComment(
+                //     comment: _textEditingController.text)
               },
               // onClipTap: () => _dialogViewModel.addFile(context),
             ),
@@ -170,8 +195,9 @@ class _PhaseChecklistCommentsBodyState
           ]),
 
           /// EMPTY LIST TEXT
-          _phaseChecklistCommentsViewModel.loadingStatus ==
-                  LoadingStatus.completed
+          _phaseChecklistCommentsViewModel.loadingStatus == LoadingStatus.empty
+              // _phaseChecklistCommentsViewModel.loadingStatus ==
+              //         LoadingStatus.completed
               // && _phaseChecklistCommentsViewModel.comments.isEmpty
               ? Center(
                   child: Padding(

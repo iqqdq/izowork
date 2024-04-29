@@ -265,6 +265,8 @@ abstract class Titles {
       'Введите имя ответственного\nв строку поиска';
   static const enterTypeName = 'Введите тип\nв строку поиска';
   static const enterPhaseName = 'Введите этап\nв строку поиска';
+  static const youHaveNotPermissionToFillChecklist =
+      'У вас нет прав вносить информацию\nв чек-лист';
   static const didCopied = 'Скопировано в буфер обмена';
   static const wrongCoordFormat = 'Неверный формат координат';
   static const contactWasDeleted = 'Контакт был удален';

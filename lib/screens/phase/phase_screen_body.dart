@@ -65,9 +65,12 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
             phaseId: widget.phase.id,
             onPop: (phaseChecklist) => {
               if (phaseChecklist != null)
-                setState(() => _phaseViewModel
-                    .phaseChecklistResponse?.phaseChecklists
-                    .add(phaseChecklist)),
+                Future.delayed(
+                  const Duration(milliseconds: 500),
+                  () => setState(() => _phaseViewModel
+                      .phaseChecklistResponse?.phaseChecklists
+                      .add(phaseChecklist)),
+                )
             },
           ));
 
@@ -508,11 +511,14 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                     isSelected: phaseChecklist.isCompleted,
                                     title: phaseChecklist.name,
                                     state: phaseChecklist.state,
-                                    onTap: () =>
-                                        _phaseViewModel.showCompleteTaskSheet(
-                                      this.context,
-                                      index,
-                                    ),
+                                    onTap: () => phaseChecklist.state ==
+                                            PhaseChecklistState.created
+                                        ? _phaseViewModel.showCompleteTaskSheet(
+                                            this.context,
+                                            index,
+                                          )
+                                        : _showPhaseChecklistCommentsScreenWidget(
+                                            phaseChecklist: phaseChecklist),
                                     onStatusTap: (statusWidget) =>
                                         _showAcceptDeclinePhaseChecklistAlert(
                                       statusWidget: statusWidget,

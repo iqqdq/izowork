@@ -9,7 +9,7 @@ import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/request/deal_create_request.dart';
+import 'package:izowork/entities/request/deal_request.dart';
 import 'package:izowork/entities/request/deal_file_request.dart';
 import 'package:izowork/entities/request/deal_product_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
@@ -175,7 +175,7 @@ class DealCreateViewModel with ChangeNotifier {
     notifyListeners();
 
     await DealRepository()
-        .createDeal(DealCreateRequest(
+        .createDeal(DealRequest(
           closed: false,
           comment: comment,
           companyId: _company?.id,
@@ -217,7 +217,7 @@ class DealCreateViewModel with ChangeNotifier {
     notifyListeners();
 
     await DealRepository()
-        .updateDeal(DealCreateRequest(
+        .updateDeal(DealRequest(
           closed: false,
           id: deal!.id,
           comment: comment,

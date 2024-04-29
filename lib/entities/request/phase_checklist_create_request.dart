@@ -1,8 +1,8 @@
-class PhaseChecklistCreateRequest {
+class PhaseChecklistRequest {
   final String? name;
   final String? phaseId;
 
-  PhaseChecklistCreateRequest({
+  PhaseChecklistRequest({
     this.name,
     this.phaseId,
   });

@@ -90,14 +90,47 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
 
     Widget newsTitle = Padding(
       padding: EdgeInsets.only(
-        left: _images.isEmpty ? 44.0 : 0.0,
+        top: _images.isEmpty ? 12.0 : 0.0,
+        left: _images.isEmpty ? 52.0 : 0.0,
       ),
       child: TitleWidget(text: widget.news.name),
     );
 
+    Widget authorWidget = Padding(
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        right: 16.0,
+        top: 18.0,
+        bottom: 12.0,
+      ),
+      child: Row(children: [
+        /// NAME
+        Text(
+          widget.news.user?.name ?? '-',
+          maxLines: 1,
+          style: TextStyle(
+            color: HexColors.grey40,
+            fontSize: 12.0,
+            fontFamily: 'PT Root UI',
+          ),
+        ),
+        const SizedBox(width: 8.0),
+
+        /// DATE
+        Text('$_day.$_month.$_year',
+            textAlign: TextAlign.end,
+            style: TextStyle(
+                color: HexColors.grey40,
+                fontSize: 12.0,
+                fontFamily: 'PT Root UI'))
+      ]),
+    );
+
     return Scaffold(
-        backgroundColor: HexColors.grey10,
-        body: Stack(children: [
+      body: SafeArea(
+        top: _images.isEmpty,
+        bottom: false,
+        child: Stack(children: [
           Container(
               color: HexColors.white,
               child: ListView(
@@ -159,34 +192,7 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                                       : Container(),
                                 ])),
                           ),
-                    Padding(
-                        padding: const EdgeInsets.only(
-                          left: 16.0,
-                          right: 16.0,
-                          top: 18.0,
-                          bottom: 10.0,
-                        ),
-                        child: Row(children: [
-                          /// NAME
-                          Text(
-                            widget.news.user?.name ?? '-',
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: HexColors.grey40,
-                              fontSize: 12.0,
-                              fontFamily: 'PT Root UI',
-                            ),
-                          ),
-                          const SizedBox(width: 8.0),
-
-                          /// DATE
-                          Text('$_day.$_month.$_year',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: HexColors.grey40,
-                                  fontSize: 12.0,
-                                  fontFamily: 'PT Root UI'))
-                        ])),
+                    _images.isEmpty ? Container() : authorWidget,
 
                     /// NEWS TITLE
                     _images.isEmpty
@@ -197,10 +203,12 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
                         : newsTitle,
                     const SizedBox(height: 10.0),
 
+                    _images.isEmpty ? authorWidget : Container(),
+
                     /// NEWS TEXT
                     Padding(
-                      padding: EdgeInsets.only(
-                        top: _images.isEmpty ? 20.0 : 0.0,
+                      padding: const EdgeInsets.only(
+                        top: 0.0,
                         left: 16.0,
                         right: 16.0,
                       ),
@@ -216,34 +224,45 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
 
           /// BACK BUTTON
           SafeArea(
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                      width: 40.0,
-                      height: 40.0,
-                      margin: const EdgeInsets.only(left: 10.0, top: 8.0),
-                      padding: const EdgeInsets.only(left: 7.0),
-                      decoration: BoxDecoration(
-                          color: HexColors.white,
-                          border:
-                              Border.all(width: 1.0, color: HexColors.grey20),
-                          borderRadius: BorderRadius.circular(20.0)),
-                      child: ClipRRect(
-                          child: BackButtonWidget(
-                              onTap: () => Navigator.pop(context)))))),
+            top: _images.isNotEmpty,
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Container(
+                width: 40.0,
+                height: 40.0,
+                margin: const EdgeInsets.only(left: 10.0, top: 8.0),
+                padding: const EdgeInsets.only(left: 7.0),
+                decoration: BoxDecoration(
+                    color: HexColors.white,
+                    border: Border.all(width: 1.0, color: HexColors.grey20),
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: ClipRRect(
+                  child: BackButtonWidget(
+                    onTap: () => Navigator.pop(context),
+                  ),
+                ),
+              ),
+            ),
+          ),
 
           /// COMMENT BUTTON
           Align(
-              alignment: Alignment.bottomCenter,
-              child: BottomButtonWidget(
-                  title: widget.news.commentsTotal == 0
-                      ? Titles.addComment
-                      : '${Titles.showAllComments} (${widget.news.commentsTotal})',
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NewsCommentsScreenWidget(
-                              tag: widget.tag, news: widget.news)))))
-        ]));
+            alignment: Alignment.bottomCenter,
+            child: BottomButtonWidget(
+              title: widget.news.commentsTotal == 0
+                  ? Titles.addComment
+                  : '${Titles.showAllComments} (${widget.news.commentsTotal})',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewsCommentsScreenWidget(
+                      tag: widget.tag, news: widget.news),
+                ),
+              ),
+            ),
+          )
+        ]),
+      ),
+    );
   }
 }

@@ -25,7 +25,7 @@ class PhaseChecklistCreateViewModel with ChangeNotifier {
     notifyListeners();
 
     await PhaseRepository()
-        .createPhaseChecklist(PhaseChecklistCreateRequest(
+        .createPhaseChecklist(PhaseChecklistRequest(
           phaseId: phaseId,
           name: name,
         ))

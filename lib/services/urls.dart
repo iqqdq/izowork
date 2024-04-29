@@ -77,6 +77,8 @@ const phaseChecklistInfoCreateUrl =
 const phaseChecklistInfoFileUrl = baseUrl + 'phase/checklist/information/file';
 const phaseChecklistInfoMediaUrl =
     baseUrl + 'resourses/checklist-information-file/';
+const phaseChecklistCreateMessageUrl =
+    baseUrl + 'phase/checklist/create-message';
 const phaseContractorCreateUrl = baseUrl + 'phase/contractor/create';
 const phaseChecklistStateUpdateUrl = baseUrl + 'phase/checklist/update';
 const phaseContractorUpdateUrl = baseUrl + 'phase/contractor/update';

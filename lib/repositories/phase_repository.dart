@@ -2,6 +2,7 @@ import 'package:izowork/entities/request/phase_checklist_create_request.dart';
 import 'package:izowork/entities/request/phase_checklist_info_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/request/phase_checklist_info_file_request.dart';
+import 'package:izowork/entities/request/phase_checklist_message_request.dart';
 import 'package:izowork/entities/request/phase_checklist_state_request.dart';
 import 'package:izowork/entities/request/phase_contractor_request.dart';
 import 'package:izowork/entities/request/phase_contractor_update_request.dart';
@@ -85,6 +86,17 @@ class PhaseRepository {
     }
   }
 
+  Future<dynamic> getPhaseChecklist(String id) async {
+    dynamic json = await WebService()
+        .get(phaseChecklistUrl.replaceFirst('all', 'one') + '?id=$id');
+
+    try {
+      return PhaseChecklistResponse.fromJson(json);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
   Future<dynamic> getPhaseChecklistList(String id) async {
     dynamic json = await WebService().get(phaseChecklistUrl + '?phase_id=$id');
 
@@ -96,14 +108,14 @@ class PhaseRepository {
   }
 
   Future<dynamic> createPhaseChecklist(
-      PhaseChecklistCreateRequest phaseChecklistCreateRequest) async {
+      PhaseChecklistRequest phaseChecklistRequest) async {
     dynamic json = await WebService().post(
       phaseChecklistUrl.replaceAll('all', 'create'),
-      phaseChecklistCreateRequest,
+      phaseChecklistRequest,
     );
 
     try {
-      return PhaseChecklist.fromJson(json);
+      return PhaseChecklist.fromJson(json['phase_checklist']);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }
@@ -174,6 +186,20 @@ class PhaseRepository {
     if (json == null || json == '' || json == true) {
       return true;
     } else {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> createPhaseChecklistComment(
+      PhaseChecklistCommentRequest phaseChecklistCommentRequest) async {
+    dynamic json = await WebService().post(
+      phaseChecklistCreateMessageUrl,
+      phaseChecklistCommentRequest.toJson(),
+    );
+
+    try {
+      return true;
+    } catch (e) {
       return ErrorResponse.fromJson(json);
     }
   }

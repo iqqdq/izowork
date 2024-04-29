@@ -7,7 +7,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/request/deal_create_request.dart';
+import 'package:izowork/entities/request/deal_request.dart';
 import 'package:izowork/entities/request/deal_file_request.dart';
 import 'package:izowork/entities/request/deal_process_update_request.dart';
 import 'package:izowork/entities/response/deal.dart';
@@ -211,7 +211,7 @@ class DealViewModel with ChangeNotifier {
     notifyListeners();
 
     await DealRepository()
-        .updateDeal(DealCreateRequest(
+        .updateDeal(DealRequest(
           closed: true,
           id: selectedDeal.id,
           comment: comment,

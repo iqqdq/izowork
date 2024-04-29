@@ -1,8 +1,3 @@
-import 'dart:convert';
-
-String phaseContractorRequestToJson(PhaseContractorRequest data) =>
-    json.encode(data.toJson());
-
 class PhaseContractorRequest {
   PhaseContractorRequest({
     this.coExecutorId,

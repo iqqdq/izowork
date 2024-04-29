@@ -3,5 +3,7 @@ class ResetPasswordRequest {
 
   ResetPasswordRequest(this.email);
 
-  Map<String, dynamic> toJson() => {"email": email};
+  Map<String, dynamic> toJson() => {
+        "email": email,
+      };
 }
