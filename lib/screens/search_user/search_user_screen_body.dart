@@ -64,12 +64,12 @@ class _SearchUserScreenBodyState extends State<SearchUserScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final _height = MediaQuery.of(context).size.height * 0.9;
-
     _searchUserViewModel = Provider.of<SearchUserViewModel>(
       context,
       listen: true,
     );
+
+    final _height = MediaQuery.of(context).size.height * 0.9;
 
     return Material(
         type: MaterialType.transparency,

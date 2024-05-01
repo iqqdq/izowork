@@ -4,9 +4,7 @@ class SelectionViewModel with ChangeNotifier {
   final List<String> items;
   int _index = -1;
 
-  int get index {
-    return _index;
-  }
+  int get index => _index;
 
   SelectionViewModel(this.items);
 

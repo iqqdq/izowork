@@ -27,9 +27,7 @@ class NotificationsViewModel with ChangeNotifier {
 
   final List<NotificationEntity> _notifications = [];
 
-  List<NotificationEntity> get notifications {
-    return _notifications;
-  }
+  List<NotificationEntity> get notifications => _notifications;
 
   NotificationsViewModel() {
     getNotificationList(pagination: Pagination(offset: 0, size: 50));
@@ -80,7 +78,7 @@ class NotificationsViewModel with ChangeNotifier {
               else
                 loadingStatus = LoadingStatus.error
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future readNotification(
@@ -121,11 +119,9 @@ class NotificationsViewModel with ChangeNotifier {
                             ))
                   }
                 else
-                  {
-                    loadingStatus = LoadingStatus.error,
-                    notifyListeners(),
-                  }
-              });
+                  loadingStatus = LoadingStatus.error,
+              })
+          .whenComplete(() => notifyListeners());
     }
   }
 

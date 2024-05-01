@@ -54,29 +54,29 @@ class AuthorizationViewModel with ChangeNotifier {
   }
 
   Future getUserProfile(BuildContext context) async {
-    await UserRepository().getUser(null).then((response) => {
-          if (response is User)
-            {
-              loadingStatus = LoadingStatus.completed,
-              notifyListeners(),
+    await UserRepository()
+        .getUser(null)
+        .then((response) => {
+              if (response is User)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  notifyListeners(),
 
-              // SAVE USER
-              LocalService().setUser(response).then((value) =>
-                  // SHOW MAIN SREEN
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const TabControllerScreenWidget()),
-                    (route) => false,
-                  ))
-            }
-          else
-            {
-              loadingStatus = LoadingStatus.error,
-              notifyListeners(),
-            }
-        });
+                  // SAVE USER
+                  LocalService().setUser(response).then((value) =>
+                      // SHOW MAIN SREEN
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const TabControllerScreenWidget()),
+                        (route) => false,
+                      ))
+                }
+              else
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -

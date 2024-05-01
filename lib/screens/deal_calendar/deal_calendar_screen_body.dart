@@ -34,11 +34,14 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle _textStyle =
-        TextStyle(overflow: TextOverflow.ellipsis, fontFamily: 'PT Root UI');
     _dealCalendarViewModel = Provider.of<DealCalendarViewModel>(
       context,
       listen: true,
+    );
+
+    const TextStyle _textStyle = TextStyle(
+      overflow: TextOverflow.ellipsis,
+      fontFamily: 'PT Root UI',
     );
 
     _cleanCalendarController = CleanCalendarController(

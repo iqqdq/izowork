@@ -34,37 +34,21 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
 
   int _dealCount = 0;
 
-  ProductAnalytics? get productAnalytics {
-    return _productAnalytics;
-  }
+  ProductAnalytics? get productAnalytics => _productAnalytics;
 
-  CompanyAnalytics? get companyAnalytics {
-    return _companyAnalytics;
-  }
+  CompanyAnalytics? get companyAnalytics => _companyAnalytics;
 
-  ObjectAnalytics? get objectAnalytics {
-    return _objectAnalytics;
-  }
+  ObjectAnalytics? get objectAnalytics => _objectAnalytics;
 
-  ManagerAnalytics? get managerAnalytics {
-    return _managerAnalytics;
-  }
+  ManagerAnalytics? get managerAnalytics => _managerAnalytics;
 
-  Office? get office {
-    return _office;
-  }
+  Office? get office => _office;
 
-  Office? get managerOffice {
-    return _managerOffice;
-  }
+  Office? get managerOffice => _managerOffice;
 
-  Product? get product {
-    return _product;
-  }
+  Product? get product => _product;
 
-  int get dealCount {
-    return _dealCount;
-  }
+  int get dealCount => _dealCount;
 
   AnalyticsCompaniesViewModel() {
     getCompanyPieChart();
@@ -86,14 +70,14 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
                   _productAnalytics = response
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future getCompanyPieChart() async {
     await AnalyticsRepository()
         .getCompanyAnalytics()
         .then((response) => {
-              if (response is CompanyAnalytics) {_companyAnalytics = response}
+              if (response is CompanyAnalytics) _companyAnalytics = response,
             })
         .then((value) => getObjectPieChart());
   }
@@ -108,7 +92,7 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
                   _objectAnalytics = response
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future getDealCount(String id) async {
@@ -124,7 +108,7 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
                   _dealCount = response,
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future getManagerList(String id) async {
@@ -150,8 +134,8 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
   void showSearchOfficeSheet(
     BuildContext context,
     bool isManagerOffice,
-  ) {
-    showCupertinoModalBottomSheet(
+  ) =>
+      showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -176,11 +160,11 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
                           getDealCount(office.id),
                         }
                     }
-                }));
-  }
+                }),
+      );
 
-  void showSearchProductSheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
+  void showSearchProductSheet(BuildContext context) =>
+      showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -198,20 +182,20 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
                       notifyListeners(),
                       getProductChart(product.id)
                     }
-                }));
-  }
+                }),
+      );
 
   void showProfileScreen(
     BuildContext context,
     int index,
-  ) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
+  ) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
             builder: (context) => ProfileScreenWidget(
-                  isMine: false,
-                  user: _managerAnalytics!.users[index],
-                  onPop: (user) => null,
-                )));
-  }
+              isMine: false,
+              user: _managerAnalytics!.users[index],
+              onPop: (user) => null,
+            ),
+          ));
 }

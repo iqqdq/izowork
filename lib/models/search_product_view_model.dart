@@ -11,9 +11,7 @@ class SearchProductViewModel with ChangeNotifier {
 
   final List<Product> _products = [];
 
-  List<Product> get products {
-    return _products;
-  }
+  List<Product> get products => _products;
 
   SearchProductViewModel() {
     getProductList(pagination: Pagination(offset: 0, size: 50));
@@ -22,8 +20,10 @@ class SearchProductViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future getProductList(
-      {required Pagination pagination, String? search}) async {
+  Future getProductList({
+    required Pagination pagination,
+    String? search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _products.clear();
@@ -64,7 +64,7 @@ class SearchProductViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 }

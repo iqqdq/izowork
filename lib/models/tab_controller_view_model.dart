@@ -11,13 +11,9 @@ class TabControllerViewModel with ChangeNotifier {
 
   int _notificationCount = 0;
 
-  int get messageCount {
-    return _messageCount;
-  }
+  int get messageCount => _messageCount;
 
-  int get notificationCount {
-    return _notificationCount;
-  }
+  int get notificationCount => _notificationCount;
 
   TabControllerViewModel() {
     getUnreadMessageCount()

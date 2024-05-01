@@ -22,23 +22,24 @@ class NewsViewModel with ChangeNotifier {
 
   NewsFilter? _newsFilter;
 
-  List<News> get news {
-    return _news;
-  }
+  List<News> get news => _news;
 
-  NewsFilter? get newsFilter {
-    return _newsFilter;
-  }
+  NewsFilter? get newsFilter => _newsFilter;
 
   NewsViewModel() {
-    getNews(pagination: Pagination(offset: 0, size: 50), search: '');
+    getNews(
+      pagination: Pagination(offset: 0, size: 50),
+      search: '',
+    );
   }
 
   // MARK: -
   // MARK: - API CALL
 
-  Future getNews(
-      {required Pagination pagination, required String search}) async {
+  Future getNews({
+    required Pagination pagination,
+    required String search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _news.clear();
@@ -49,7 +50,10 @@ class NewsViewModel with ChangeNotifier {
     }
     await NewsRepository()
         .getNews(
-            pagination: pagination, search: search, params: _newsFilter?.params)
+          pagination: pagination,
+          search: search,
+          params: _newsFilter?.params,
+        )
         .then((response) => {
               if (response is List<News>)
                 {
@@ -79,22 +83,23 @@ class NewsViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
 
-  void resetFilter() {
-    _newsFilter = null;
-  }
+  void resetFilter() => _newsFilter = null;
 
   // MARK: -
   // MARK: - PUSH
 
-  void showNewsFilterSheet(BuildContext context, Function() onFilter) {
-    showCupertinoModalBottomSheet(
+  void showNewsFilterSheet(
+    BuildContext context,
+    Function() onFilter,
+  ) =>
+      showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -115,38 +120,53 @@ class NewsViewModel with ChangeNotifier {
                       _newsFilter = newsFilter,
                       onFilter()
                     }
-                }));
-  }
+                }),
+      );
 
   void showNewsCreationScreen(
     BuildContext context,
     Pagination pagination,
     String search,
-  ) {
-    Navigator.push(
+  ) =>
+      Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => NewsCreateScreenWidget(
-                onPop: (news) => {
-                      pagination.size += 1,
-                      getNews(pagination: pagination, search: search),
-                      Toast().showTopToast(context, Titles.newsWasAdded)
-                    })));
-  }
+          builder: (context) => NewsCreateScreenWidget(
+              onPop: (news) => {
+                    pagination.size += 1,
+                    getNews(
+                      pagination: pagination,
+                      search: search,
+                    ),
+                    Toast().showTopToast(
+                      context,
+                      Titles.newsWasAdded,
+                    )
+                  }),
+        ),
+      );
 
-  void showNewsPageScreen(BuildContext context, int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => NewsPageScreenWidget(
-                news: _news[index], tag: index.toString())));
-  }
+  void showNewsPageScreen(
+    BuildContext context,
+    int index,
+  ) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => NewsPageScreenWidget(
+                    news: _news[index],
+                    tag: index.toString(),
+                  )));
 
-  void showNewsCommentsScreen(BuildContext context, int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => NewsCommentsScreenWidget(
-                tag: index.toString(), news: _news[index])));
-  }
+  void showNewsCommentsScreen(
+    BuildContext context,
+    int index,
+  ) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => NewsCommentsScreenWidget(
+                    tag: index.toString(),
+                    news: _news[index],
+                  )));
 }

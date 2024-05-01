@@ -34,11 +34,14 @@ class _TaskCalendarScreenBodyState extends State<TaskCalendarScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    const TextStyle _textStyle =
-        TextStyle(overflow: TextOverflow.ellipsis, fontFamily: 'PT Root UI');
     _taskCalendarViewModel = Provider.of<TaskCalendarViewModel>(
       context,
       listen: true,
+    );
+
+    const TextStyle _textStyle = TextStyle(
+      overflow: TextOverflow.ellipsis,
+      fontFamily: 'PT Root UI',
     );
 
     _cleanCalendarController = CleanCalendarController(

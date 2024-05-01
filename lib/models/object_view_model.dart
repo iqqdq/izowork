@@ -37,17 +37,11 @@ class ObjectPageViewModel with ChangeNotifier {
 
   int _downloadIndex = -1;
 
-  Object? get object {
-    return _object;
-  }
+  Object? get object => _object;
 
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
-  List<Phase> get phases {
-    return _phases;
-  }
+  List<Phase> get phases => _phases;
 
   ObjectPageViewModel(this.selectedObject) {
     _object = selectedObject;
@@ -89,7 +83,7 @@ class ObjectPageViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.completed,
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -

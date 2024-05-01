@@ -26,13 +26,9 @@ class ObjectAnalyticsViewModel with ChangeNotifier {
 
   int _downloadIndex = -1;
 
-  List<List<PhaseProduct>> get phaseProductList {
-    return _phaseProductList;
-  }
+  List<List<PhaseProduct>> get phaseProductList => _phaseProductList;
 
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
   ObjectAnalyticsViewModel(this.object, this.phases) {
     getPhaseProductList();
@@ -52,9 +48,12 @@ class ObjectAnalyticsViewModel with ChangeNotifier {
               })
           .then((value) => {
                 if (index == phases.length - 1)
-                  {loadingStatus = LoadingStatus.completed, notifyListeners()}
+                  {
+                    loadingStatus = LoadingStatus.completed,
+                    notifyListeners(),
+                  }
                 else
-                  {index++}
+                  index++
               });
     });
   }
@@ -79,7 +78,10 @@ class ObjectAnalyticsViewModel with ChangeNotifier {
 
         await Dio().download(url, filePath, onReceiveProgress: (count, total) {
           debugPrint('---Download----Rec: $count, Total: $total');
-        }).then((value) => {_downloadIndex = -1, notifyListeners()});
+        }).whenComplete(() => {
+              _downloadIndex = -1,
+              notifyListeners(),
+            });
       }
 
       OpenResult openResult = await OpenFilex.open(filePath);

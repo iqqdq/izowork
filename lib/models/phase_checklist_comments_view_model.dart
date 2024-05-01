@@ -36,7 +36,7 @@ class PhaseChecklistCommentsViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 loadingStatus = LoadingStatus.error,
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future getPhaseChecklistCommentsList({required Pagination pagination}) async {

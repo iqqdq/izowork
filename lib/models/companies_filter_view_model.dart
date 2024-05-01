@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
-
 import 'package:flutter/material.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen_body.dart';
@@ -15,9 +13,7 @@ class CompaniesFilterViewModel with ChangeNotifier {
 
   User? _user;
 
-  User? get user {
-    return _user;
-  }
+  User? get user => _user;
 
   CompaniesFilterViewModel(this.companiesFilter) {
     if (companiesFilter != null) {
@@ -80,9 +76,9 @@ class CompaniesFilterViewModel with ChangeNotifier {
     if (tags2.isNotEmpty) {
       var state = '&type=';
 
-      tags2.forEach((element) {
+      for (var element in tags2) {
         state += '${options2[element]},';
-      });
+      }
 
       state = state.characters.last == ','
           ? state.substring(0, state.length - 1)

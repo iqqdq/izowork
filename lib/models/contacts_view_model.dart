@@ -22,13 +22,9 @@ class ContactsViewModel with ChangeNotifier {
 
   ContactsFilter? _contactsFilter;
 
-  ContactsFilter? get contactsFilter {
-    return _contactsFilter;
-  }
+  ContactsFilter? get contactsFilter => _contactsFilter;
 
-  List<Contact> get contacts {
-    return _contacts;
-  }
+  List<Contact> get contacts => _contacts;
 
   ContactsViewModel() {
     getContactList(pagination: Pagination(offset: 0, size: 50));
@@ -37,8 +33,10 @@ class ContactsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future getContactList(
-      {required Pagination pagination, String? search}) async {
+  Future getContactList({
+    required Pagination pagination,
+    String? search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _contacts.clear();

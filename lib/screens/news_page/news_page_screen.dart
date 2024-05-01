@@ -249,18 +249,19 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
           Align(
             alignment: Alignment.bottomCenter,
             child: BottomButtonWidget(
-              title: widget.news.commentsTotal == 0
-                  ? Titles.addComment
-                  : '${Titles.showAllComments} (${widget.news.commentsTotal})',
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NewsCommentsScreenWidget(
-                      tag: widget.tag, news: widget.news),
-                ),
-              ),
-            ),
-          )
+                title: widget.news.commentsTotal == 0
+                    ? Titles.addComment
+                    : '${Titles.showAllComments} (${widget.news.commentsTotal})',
+                onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NewsCommentsScreenWidget(
+                          tag: widget.tag,
+                          news: widget.news,
+                        ),
+                      ),
+                    )),
+          ),
         ]),
       ),
     );

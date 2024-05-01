@@ -22,9 +22,7 @@ class ProfileEditViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;
   User? _user;
 
-  User? get user {
-    return _user;
-  }
+  User? get user => _user;
 
   ProfileEditViewModel(this.currentUser) {
     _user = currentUser;

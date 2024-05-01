@@ -23,13 +23,9 @@ class TasksViewModel with ChangeNotifier {
 
   TaskState? _taskState;
 
-  List<Task> get tasks {
-    return _tasks;
-  }
+  List<Task> get tasks => _tasks;
 
-  TaskState? get taskState {
-    return _taskState;
-  }
+  TaskState? get taskState => _taskState;
 
   TasksViewModel() {
     getStateList();
@@ -45,29 +41,35 @@ class TasksViewModel with ChangeNotifier {
     await TaskRepository()
         .getTaskStates()
         .then((response) => {
-              if (response is TaskState) {_taskState = response}
+              if (response is TaskState) _taskState = response,
             })
-        .then((value) => getTaskList(
-            pagination: Pagination(offset: 0, size: 50), search: ''));
+        .whenComplete(() => getTaskList(
+              pagination: Pagination(offset: 0, size: 50),
+              search: '',
+            ));
   }
 
   Future getTaskById(String id) async {
     loadingStatus = LoadingStatus.searching;
 
-    await TaskRepository().getTask(id).then((response) => {
-          if (response is Task)
-            {
-              _tasks.insert(0, response),
-              loadingStatus = LoadingStatus.completed,
-            }
-          else
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
-        });
+    await TaskRepository()
+        .getTask(id)
+        .then((response) => {
+              if (response is Task)
+                {
+                  _tasks.insert(0, response),
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else
+                loadingStatus = LoadingStatus.error
+            })
+        .whenComplete(() => notifyListeners());
   }
 
-  Future getTaskList(
-      {required Pagination pagination, required String search}) async {
+  Future getTaskList({
+    required Pagination pagination,
+    required String search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _tasks.clear();
@@ -79,19 +81,16 @@ class TasksViewModel with ChangeNotifier {
 
     await TaskRepository()
         .getTasks(
-            pagination: pagination,
-            search: search,
-            params: _tasksFilter?.params ??
-                ["&sort_by=deadline", "&sort_order=desc"])
+          pagination: pagination,
+          search: search,
+          params:
+              _tasksFilter?.params ?? ["&sort_by=deadline", "&sort_order=desc"],
+        )
         .then((response) => {
               if (response is List<Task>)
                 {
                   if (_tasks.isEmpty)
-                    {
-                      response.forEach((task) {
-                        _tasks.add(task);
-                      })
-                    }
+                    response.forEach((task) => _tasks.add(task))
                   else
                     {
                       response.forEach((newTask) {
@@ -112,38 +111,36 @@ class TasksViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
 
-  void resetFilter() {
-    _tasksFilter = null;
-  }
+  void resetFilter() => _tasksFilter = null;
 
   // MARK: -
   // MARK: - PUSH
 
-  void showCalendarScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const TaskCalendarScreenWidget()));
-  }
+  void showCalendarScreen(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => const TaskCalendarScreenWidget()));
 
-  void showTaskCreateScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => TaskCreateScreenWidget(
-                onCreate: (task) => {
-                      if (task != null) {getTaskById(task.id)}
-                    })));
-  }
+  void showTaskCreateScreen(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TaskCreateScreenWidget(
+            onCreate: (task) => {
+                  if (task != null) getTaskById(task.id),
+                }),
+      ));
 
-  void showTasksFilterSheet(BuildContext context, Function() onFilter) {
+  void showTasksFilterSheet(
+    BuildContext context,
+    Function() onFilter,
+  ) {
     if (_taskState != null) {
       if (_taskState!.states.isNotEmpty) {
         showCupertinoModalBottomSheet(
@@ -173,10 +170,12 @@ class TasksViewModel with ChangeNotifier {
     }
   }
 
-  void showTaskScreenWidget(BuildContext context, int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => TaskScreenWidget(task: _tasks[index])));
-  }
+  void showTaskScreenWidget(
+    BuildContext context,
+    int index,
+  ) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => TaskScreenWidget(task: _tasks[index])));
 }

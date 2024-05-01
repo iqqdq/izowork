@@ -9,18 +9,26 @@ class AnalyticsActionsFilterViewModel with ChangeNotifier {
   final AnalyticsActionsFilter? analyticsActionsFilter;
 
   final DateTime minDateTime = DateTime(
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-              .year -
-          5,
-      1,
-      1);
+    DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        ).year -
+        5,
+    1,
+    1,
+  );
 
   final DateTime maxDateTime = DateTime(
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-              .year +
-          5,
-      1,
-      1);
+    DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        ).year +
+        5,
+    1,
+    1,
+  );
 
   Office? _office;
 
@@ -30,21 +38,13 @@ class AnalyticsActionsFilterViewModel with ChangeNotifier {
 
   DateTime? _toDateTime;
 
-  Office? get office {
-    return _office;
-  }
+  Office? get office => _office;
 
-  User? get user {
-    return _user;
-  }
+  User? get user => _user;
 
-  DateTime? get fromDateTime {
-    return _fromDateTime;
-  }
+  DateTime? get fromDateTime => _fromDateTime;
 
-  DateTime? get toDateTime {
-    return _toDateTime;
-  }
+  DateTime? get toDateTime => _toDateTime;
 
   AnalyticsActionsFilterViewModel(this.analyticsActionsFilter) {
     if (analyticsActionsFilter != null) {

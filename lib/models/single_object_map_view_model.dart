@@ -26,17 +26,11 @@ class SingleObjectMapViewModel with ChangeNotifier {
 
   bool isHidden = true;
 
-  bool get hasPermission {
-    return _hasPermission;
-  }
+  bool get hasPermission => _hasPermission;
 
-  LatLng? get userPosition {
-    return _userPosition;
-  }
+  LatLng? get userPosition => _userPosition;
 
-  LatLng? get position {
-    return _position;
-  }
+  LatLng? get position => _position;
 
   SingleObjectMapViewModel(this.object) {
     places.add(Place(
@@ -47,7 +41,7 @@ class SingleObjectMapViewModel with ChangeNotifier {
             : HexColor(object.objectStage!.color!),
         latLng: LatLng(object.lat, object.long)));
 
-    getLocationPermission().then((value) => notifyListeners());
+    getLocationPermission().whenComplete(() => notifyListeners());
   }
 
   // MARK: -
@@ -98,8 +92,10 @@ class SingleObjectMapViewModel with ChangeNotifier {
   // MARK: - PERMISSION
 
   Future<void> getLocationPermission() async {
-    await handlePermission()
-        .then((value) => {_hasPermission = value, notifyListeners()});
+    await handlePermission().then((value) => {
+          _hasPermission = value,
+          notifyListeners(),
+        });
 
     if (_hasPermission) {
       getUserLocation();

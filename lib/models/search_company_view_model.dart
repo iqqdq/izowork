@@ -12,9 +12,7 @@ class SearchCompanyViewModel with ChangeNotifier {
 
   final List<Company> _companies = [];
 
-  List<Company> get companies {
-    return _companies;
-  }
+  List<Company> get companies => _companies;
 
   SearchCompanyViewModel() {
     getCompanyList(pagination: Pagination(offset: 0, size: 50));
@@ -65,19 +63,23 @@ class SearchCompanyViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -
   // MARK: - PUSH
 
   void showCreateCompanyScreen(
-      BuildContext context, Function(Company) onCreate) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
+    BuildContext context,
+    Function(Company) onCreate,
+  ) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
             builder: (context) => CompanyCreateScreenWidget(
-                onPop: (company) => {if (company != null) onCreate(company)})));
-  }
+                onPop: (company) => {
+                      if (company != null) onCreate(company),
+                    }),
+          ));
 }

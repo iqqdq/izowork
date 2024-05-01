@@ -36,9 +36,7 @@ class PhaseCreateViewModel with ChangeNotifier {
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
-  List<File> get files {
-    return _files;
-  }
+  List<File> get files => _files;
 
   PhaseCreateViewModel(
     this.phase,
@@ -79,8 +77,8 @@ class PhaseCreateViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.error,
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future updateContractor(BuildContext context, int index) async {
@@ -97,8 +95,8 @@ class PhaseCreateViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.error,
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future deleteContractor(BuildContext context, int index) async {
@@ -118,8 +116,8 @@ class PhaseCreateViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.error,
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future createProduct(BuildContext context) async {
@@ -139,8 +137,8 @@ class PhaseCreateViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.error,
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future updateProduct(BuildContext context, int index) async {
@@ -159,7 +157,8 @@ class PhaseCreateViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
               notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future deletePhaseProduct(BuildContext context, int index) async {
@@ -179,8 +178,8 @@ class PhaseCreateViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.error,
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future uploadFile(
@@ -205,12 +204,20 @@ class PhaseCreateViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - ACTIONS
 
-  void changeProductTermInDays(BuildContext context, int index, int days) {
+  void changeProductTermInDays(
+    BuildContext context,
+    int index,
+    int days,
+  ) {
     phaseProducts[index].termInDays = days;
     updateProduct(context, index);
   }
 
-  void changeProductCount(BuildContext context, int index, int count) {
+  void changeProductCount(
+    BuildContext context,
+    int index,
+    int count,
+  ) {
     phaseProducts[index].count = count;
     updateProduct(context, index);
   }
@@ -218,27 +225,32 @@ class PhaseCreateViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void changeContractor(BuildContext context, int index) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchCompanyScreenWidget(
-            title: Titles.contractor,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (company) => {
-                  Navigator.pop(context),
-                  phaseContractors[index].contractor = company,
-                  phaseContractors[index].contractorId = company?.id,
-                  updateContractor(context, index)
-                }));
-  }
+  void changeContractor(
+    BuildContext context,
+    int index,
+  ) =>
+      showCupertinoModalBottomSheet(
+          enableDrag: false,
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (sheetContext) => SearchCompanyScreenWidget(
+              title: Titles.contractor,
+              isRoot: true,
+              onFocus: () => {},
+              onPop: (company) => {
+                    Navigator.pop(context),
+                    phaseContractors[index].contractor = company,
+                    phaseContractors[index].contractorId = company?.id,
+                    updateContractor(context, index)
+                  }));
 
-  void changeContractorResponsible(BuildContext context, int index) {
-    showCupertinoModalBottomSheet(
+  void changeContractorResponsible(
+    BuildContext context,
+    int index,
+  ) =>
+      showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -253,11 +265,14 @@ class PhaseCreateViewModel with ChangeNotifier {
                   phaseContractors[index].responsible = user,
                   phaseContractors[index].responsibleId = user?.id,
                   updateContractor(context, index)
-                }));
-  }
+                }),
+      );
 
-  void changeContractorCoExecutor(BuildContext context, int index) {
-    showCupertinoModalBottomSheet(
+  void changeContractorCoExecutor(
+    BuildContext context,
+    int index,
+  ) =>
+      showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -272,56 +287,57 @@ class PhaseCreateViewModel with ChangeNotifier {
                   phaseContractors[index].coExecutor = user,
                   phaseContractors[index].coExecutorId = user?.id,
                   updateContractor(context, index)
-                }));
-  }
+                }),
+      );
 
-  void changeContractorObserver(BuildContext context, int index) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchUserScreenWidget(
-            title: Titles.observer,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (user) => {
-                  Navigator.pop(context),
-                  phaseContractors[index].observer = user,
-                  phaseContractors[index].observerId = user?.id,
-                  updateContractor(context, index)
-                }));
-  }
+  void changeContractorObserver(
+    BuildContext context,
+    int index,
+  ) =>
+      showCupertinoModalBottomSheet(
+          enableDrag: false,
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (sheetContext) => SearchUserScreenWidget(
+              title: Titles.observer,
+              isRoot: true,
+              onFocus: () => {},
+              onPop: (user) => {
+                    Navigator.pop(context),
+                    phaseContractors[index].observer = user,
+                    phaseContractors[index].observerId = user?.id,
+                    updateContractor(context, index)
+                  }));
 
-  void showProductSearchSheet(BuildContext context, int index) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => ProductSelectionScreenWidget(
-            title: Titles.product,
-            onPop: (product) => {
-                  Navigator.pop(context),
-                  phaseProducts[index].productId = product?.id,
-                  phaseProducts[index].product = product,
-                  updateProduct(context, index)
-                }));
-  }
+  void showProductSearchSheet(
+    BuildContext context,
+    int index,
+  ) =>
+      showCupertinoModalBottomSheet(
+          enableDrag: false,
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (sheetContext) => ProductSelectionScreenWidget(
+              title: Titles.product,
+              onPop: (product) => {
+                    Navigator.pop(context),
+                    phaseProducts[index].productId = product?.id,
+                    phaseProducts[index].product = product,
+                    updateProduct(context, index)
+                  }));
 
-  void showTaskCreateScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => TaskCreateScreenWidget(
-                onCreate: (task) => {
-                      if (task != null)
-                        {
-                          Toast().showTopToast(
-                              context, '${Titles.task} "${task.name}" создана')
-                        }
-                    })));
-  }
+  void showTaskCreateScreen(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TaskCreateScreenWidget(
+            onCreate: (task) => {
+                  if (task != null)
+                    Toast().showTopToast(
+                        context, '${Titles.task} "${task.name}" создана')
+                }),
+      ));
 }

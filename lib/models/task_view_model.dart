@@ -22,13 +22,9 @@ class TaskViewModel with ChangeNotifier {
 
   int _downloadIndex = -1;
 
-  Task? get task {
-    return _task;
-  }
+  Task? get task => _task;
 
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
   TaskViewModel(this.selectedTask);
 
@@ -36,16 +32,18 @@ class TaskViewModel with ChangeNotifier {
   // MARK: - API CALL
 
   Future getTaskById(String id) async {
-    await TaskRepository().getTask(id).then((response) => {
-          if (response is Task)
-            {
-              _task = response,
-              loadingStatus = LoadingStatus.completed,
-            }
-          else
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
-        });
+    await TaskRepository()
+        .getTask(id)
+        .then((response) => {
+              if (response is Task)
+                {
+                  _task = response,
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -
@@ -93,12 +91,11 @@ class TaskViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showTaskCreateSheet(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => TaskCreateScreenWidget(
+  void showTaskCreateSheet(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => TaskCreateScreenWidget(
                 task: selectedTask,
-                onCreate: (task) => getTaskById(selectedTask.id))));
-  }
+                onCreate: (task) => getTaskById(selectedTask.id),
+              )));
 }

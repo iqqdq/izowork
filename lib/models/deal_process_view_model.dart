@@ -35,17 +35,11 @@ class DealProcessViewModel with ChangeNotifier {
 
   int current = 0;
 
-  List<DealProcessInfo> get informations {
-    return _informations;
-  }
+  List<DealProcessInfo> get informations => _informations;
 
-  DealProcessInfo? get information {
-    return _information;
-  }
+  DealProcessInfo? get information => _information;
 
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
   DealProcessViewModel(this.dealProcess) {
     getDealProcessInformation(dealProcess.id);
@@ -96,7 +90,7 @@ class DealProcessViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   // Future updateDealProcessInformation(
@@ -121,7 +115,7 @@ class DealProcessViewModel with ChangeNotifier {
   //                 Toast().showTopToast(context, response.message ?? 'Ошибка')
   //               }
   //           })
-  //       .then((value) => notifyListeners());
+  //       .whenComplete(() => notifyListeners());
   // }
 
   Future uploadDealProccessInfoFile(

@@ -31,6 +31,6 @@ class RecoveryViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка'),
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 }

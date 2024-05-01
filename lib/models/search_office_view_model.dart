@@ -11,9 +11,7 @@ class SearchOfficeViewModel with ChangeNotifier {
 
   final List<Office> _offices = [];
 
-  List<Office> get offices {
-    return _offices;
-  }
+  List<Office> get offices => _offices;
 
   SearchOfficeViewModel() {
     getOfficeList(pagination: Pagination(offset: 0, size: 50));
@@ -22,7 +20,10 @@ class SearchOfficeViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future getOfficeList({required Pagination pagination, String? search}) async {
+  Future getOfficeList({
+    required Pagination pagination,
+    String? search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _offices.clear();
@@ -63,7 +64,7 @@ class SearchOfficeViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 }

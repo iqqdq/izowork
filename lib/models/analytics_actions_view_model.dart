@@ -32,13 +32,9 @@ class AnalyticsActionsViewModel with ChangeNotifier {
 
   AnalyticsActionsFilter? _analyticsActionsFilter;
 
-  List<Trace> get traces {
-    return _traces;
-  }
+  List<Trace> get traces => _traces;
 
-  AnalyticsActionsFilter? get analyticsActionsFilter {
-    return _analyticsActionsFilter;
-  }
+  AnalyticsActionsFilter? get analyticsActionsFilter => _analyticsActionsFilter;
 
   AnalyticsActionsViewModel() {
     getTraceList(pagination: Pagination(offset: 0, size: 50));
@@ -241,27 +237,28 @@ class AnalyticsActionsViewModel with ChangeNotifier {
     Function() onFilter,
   ) {
     showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => AnalyticsActionsFilterPageViewScreenWidget(
-            analyticsActionsFilter: _analyticsActionsFilter,
-            onPop: (analyticsActionsFilter) => {
-                  if (analyticsActionsFilter == null)
-                    {
-                      // CLEAR
-                      resetFilter(),
-                      onFilter()
-                    }
-                  else
-                    {
-                      // FILTER
-                      _analyticsActionsFilter = analyticsActionsFilter,
-                      onFilter()
-                    }
-                }));
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => AnalyticsActionsFilterPageViewScreenWidget(
+          analyticsActionsFilter: _analyticsActionsFilter,
+          onPop: (analyticsActionsFilter) => {
+                if (analyticsActionsFilter == null)
+                  {
+                    // CLEAR
+                    resetFilter(),
+                    onFilter()
+                  }
+                else
+                  {
+                    // FILTER
+                    _analyticsActionsFilter = analyticsActionsFilter,
+                    onFilter()
+                  }
+              }),
+    );
   }
 
   void showTraceScreen(BuildContext context, int index) {

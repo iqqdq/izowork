@@ -13,9 +13,7 @@ class NewsFilterViewModel with ChangeNotifier {
 
   User? _responsible;
 
-  User? get responsible {
-    return _responsible;
-  }
+  User? get responsible => _responsible;
 
   NewsFilterViewModel(this.newsFilter) {
     if (newsFilter != null) {

@@ -27,13 +27,9 @@ class MoreViewModel with ChangeNotifier {
 
   int _notificationCount = 0;
 
-  int get notificationCount {
-    return _notificationCount;
-  }
+  int get notificationCount => _notificationCount;
 
-  User? get user {
-    return _user;
-  }
+  User? get user => _user;
 
   MoreViewModel(this.count) {
     _notificationCount = count;
@@ -126,56 +122,54 @@ class MoreViewModel with ChangeNotifier {
                     })));
   }
 
-  Future showLogoutDialog(BuildContext context) async {
-    return showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: Text(
-                Titles.logoutAreYouSure,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: HexColors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w400,
-                ),
+  Future showLogoutDialog(BuildContext context) async => showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            title: Text(
+              Titles.logoutAreYouSure,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: HexColors.black,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w400,
               ),
-              actions: <Widget>[
-                Row(
-                  children: [
-                    Expanded(
-                        child: BorderButtonWidget(
-                            margin: EdgeInsets.zero,
-                            title: Titles.logout,
-                            isDestructive: true,
-                            onTap: () {
-                              /// LOGOUT
-                              LocalService().clear();
-
-                              /// DELETE DEVICE TOKEN
-                              PushNotificationService().deleteDeviceToken();
-
-                              /// SHOW AUTHORIZATION SCREEN
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const AuthorizationScreenWidget()),
-                                (route) => false,
-                              );
-                            })),
-                    const SizedBox(width: 16.0),
-                    Expanded(
+            ),
+            actions: <Widget>[
+              Row(
+                children: [
+                  Expanded(
                       child: BorderButtonWidget(
-                        margin: EdgeInsets.zero,
-                        title: Titles.cancel,
-                        onTap: () => Navigator.of(context).pop(),
-                      ),
+                          margin: EdgeInsets.zero,
+                          title: Titles.logout,
+                          isDestructive: true,
+                          onTap: () {
+                            /// LOGOUT
+                            LocalService().clear();
+
+                            /// DELETE DEVICE TOKEN
+                            PushNotificationService().deleteDeviceToken();
+
+                            /// SHOW AUTHORIZATION SCREEN
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AuthorizationScreenWidget()),
+                              (route) => false,
+                            );
+                          })),
+                  const SizedBox(width: 16.0),
+                  Expanded(
+                    child: BorderButtonWidget(
+                      margin: EdgeInsets.zero,
+                      title: Titles.cancel,
+                      onTap: () => Navigator.of(context).pop(),
                     ),
-                  ],
-                ),
-              ]);
-        });
-  }
+                  ),
+                ],
+              ),
+            ]);
+      });
 }

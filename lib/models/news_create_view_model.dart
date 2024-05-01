@@ -20,25 +20,29 @@ class NewsCreateViewModel with ChangeNotifier {
 
   int current = 0;
 
-  List<File> get files {
-    return _files;
-  }
+  List<File> get files => _files;
 
-  bool get important {
-    return _important;
-  }
+  bool get important => _important;
 
   // MARK: -
   // MARK: - API CALL
 
-  Future createNewDeal(BuildContext context, String name, String description,
-      bool important, Function(News) onCreate) async {
+  Future createNewDeal(
+    BuildContext context,
+    String name,
+    String description,
+    bool important,
+    Function(News) onCreate,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
     await NewsRepository()
         .createNews(NewsRequest(
-            description: description, important: important, name: name))
+          description: description,
+          important: important,
+          name: name,
+        ))
         .then((response) => {
               if (response is News)
                 {
@@ -46,31 +50,35 @@ class NewsCreateViewModel with ChangeNotifier {
                     {
                       _files.forEach((element) async {
                         await uploadFile(context, response.id, element)
-                            .then((value) => {
+                            .whenComplete(() => {
                                   current++,
                                   if (current == _files.length)
-                                    {onCreate(response)}
+                                    onCreate(response)
                                 });
                       })
                     }
                   else
-                    {onCreate(response)}
+                    onCreate(response)
                 }
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
-  Future uploadFile(BuildContext context, String id, File file) async {
+  Future uploadFile(
+    BuildContext context,
+    String id,
+    File file,
+  ) async {
     await NewsRepository()
         .addNewsFile(NewsFileRequest(id, file))
         .then((response) => {
               if (response is NewsFile)
-                {loadingStatus = LoadingStatus.completed}
+                loadingStatus = LoadingStatus.completed
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,

@@ -17,20 +17,16 @@ class ProductsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
   final List<Product> _products = [];
+
   Product? _product;
+
   ProductsFilter? _productsFilter;
 
-  List<Product> get products {
-    return _products;
-  }
+  List<Product> get products => _products;
 
-  Product? get product {
-    return _product;
-  }
+  Product? get product => _product;
 
-  ProductsFilter? get productsFilter {
-    return _productsFilter;
-  }
+  ProductsFilter? get productsFilter => _productsFilter;
 
   ProductsViewModel() {
     getProductList(pagination: Pagination(offset: 0, size: 50), search: '');
@@ -42,23 +38,27 @@ class ProductsViewModel with ChangeNotifier {
   Future getProductById(BuildContext context, String id) async {
     loadingStatus = LoadingStatus.searching;
 
-    await ProductRepository().getProduct(id).then((response) => {
-          if (response is Product)
-            {
-              _product = response,
-              loadingStatus = LoadingStatus.completed,
-            }
-          else if (response is ErrorResponse)
-            {
-              loadingStatus = LoadingStatus.error,
-              Toast().showTopToast(context, response.message ?? 'Ошибка')
-            },
-          notifyListeners()
-        });
+    await ProductRepository()
+        .getProduct(id)
+        .then((response) => {
+              if (response is Product)
+                {
+                  _product = response,
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                },
+            })
+        .whenComplete(() => notifyListeners());
   }
 
-  Future getProductList(
-      {required Pagination pagination, required String search}) async {
+  Future getProductList({
+    required Pagination pagination,
+    required String search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _products.clear();
@@ -101,50 +101,50 @@ class ProductsViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
 
-  void resetFilter() {
-    _productsFilter = null;
-  }
+  void resetFilter() => _productsFilter = null;
 
   // MARK: -
   // MARK: - PUSH
 
-  void showProductPageViewScreen(BuildContext context, int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ProductPageScreenWidget(product: _products[index])));
-  }
+  void showProductPageViewScreen(
+          BuildContext context, int index) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  ProductPageScreenWidget(product: _products[index])));
 
-  void showProductFilterSheet(BuildContext context, Function() onFilter) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => ProductsFilterPageViewScreenWidget(
-            productsFilter: _productsFilter,
-            onPop: (productsFilter) => {
-                  if (productsFilter == null)
-                    {
-                      // CLEAR
-                      resetFilter(),
-                      onFilter()
-                    }
-                  else
-                    {
-                      // FILTER
-                      _productsFilter = productsFilter,
-                      onFilter()
-                    }
-                }));
-  }
+  void showProductFilterSheet(
+    BuildContext context,
+    Function() onFilter,
+  ) =>
+      showCupertinoModalBottomSheet(
+          enableDrag: false,
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (sheetContext) => ProductsFilterPageViewScreenWidget(
+              productsFilter: _productsFilter,
+              onPop: (productsFilter) => {
+                    if (productsFilter == null)
+                      {
+                        // CLEAR
+                        resetFilter(),
+                        onFilter()
+                      }
+                    else
+                      {
+                        // FILTER
+                        _productsFilter = productsFilter,
+                        onFilter()
+                      }
+                  }));
 }

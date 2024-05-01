@@ -15,43 +15,46 @@ class DealCalendarViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
   final DateTime _minDateTime = DateTime(
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-              .year -
-          5,
-      1,
-      1);
+    DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        ).year -
+        5,
+    1,
+    1,
+  );
 
   final DateTime _maxDateTime = DateTime(
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-              .year +
-          5,
-      1,
-      1);
+    DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        ).year +
+        5,
+    1,
+    1,
+  );
 
   final List<DateTime> _eventDateTimes = [];
 
-  DateTime _pickedDateTime =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime _pickedDateTime = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
 
   DateTime? _selectedDateTime;
 
   final List<Deal> _deals = [];
 
-  List<DateTime> get eventDateTimes {
-    return _eventDateTimes;
-  }
+  List<DateTime> get eventDateTimes => _eventDateTimes;
 
-  DateTime get pickedDateTime {
-    return _pickedDateTime;
-  }
+  DateTime get pickedDateTime => _pickedDateTime;
 
-  DateTime? get selectedDateTime {
-    return _selectedDateTime;
-  }
+  DateTime? get selectedDateTime => _selectedDateTime;
 
-  List<Deal> get deals {
-    return _deals;
-  }
+  List<Deal> get deals => _deals;
 
   DealCalendarViewModel() {
     getDealList(_pickedDateTime);
@@ -102,14 +105,15 @@ class DealCalendarViewModel with ChangeNotifier {
               else
                 loadingStatus = LoadingStatus.error
             })
-        .then((value) => {
+        .whenComplete(() => {
               // UPDATE CALENDART EVENT DAYS
               if (_deals.isNotEmpty)
                 _deals.forEach((element) {
                   _eventDateTimes.add(DateTime(
-                      DateTime.parse(element.finishAt).year,
-                      DateTime.parse(element.finishAt).month,
-                      DateTime.parse(element.finishAt).day));
+                    DateTime.parse(element.finishAt).year,
+                    DateTime.parse(element.finishAt).month,
+                    DateTime.parse(element.finishAt).day,
+                  ));
                 }),
               notifyListeners()
             });

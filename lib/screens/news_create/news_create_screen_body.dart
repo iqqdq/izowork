@@ -59,17 +59,22 @@ class _NewsCreateScreenBodyState extends State<NewsCreateScreenBodyWidget> {
     );
 
     final TextStyle _style = TextStyle(
-        color: HexColors.black, fontFamily: 'PT Root UI', fontSize: 16.0);
+      color: HexColors.black,
+      fontFamily: 'PT Root UI',
+      fontSize: 16.0,
+    );
 
     if (_newsCreateViewModel.files.isNotEmpty &&
         _images.length != _newsCreateViewModel.files.length) {
       if (_newsCreateViewModel.files.isNotEmpty) {
         _images.clear();
         _newsCreateViewModel.files.forEach((element) {
-          _images.add(Image.file(File(element.path),
-              width: MediaQuery.of(context).size.width - 32.0,
-              height: 180.0,
-              fit: BoxFit.cover));
+          _images.add(
+            Image.file(File(element.path),
+                width: MediaQuery.of(context).size.width - 32.0,
+                height: 180.0,
+                fit: BoxFit.cover),
+          );
         });
       }
     }

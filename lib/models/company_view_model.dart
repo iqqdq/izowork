@@ -34,17 +34,11 @@ class CompanyViewModel with ChangeNotifier {
 
   ProductsFilter? _productsFilter;
 
-  Company? get company {
-    return _company;
-  }
+  Company? get company => _company;
 
-  List<Product> get products {
-    return _products;
-  }
+  List<Product> get products => _products;
 
-  ProductsFilter? get productsFilter {
-    return _productsFilter;
-  }
+  ProductsFilter? get productsFilter => _productsFilter;
 
   CompanyViewModel(this.selectedCompany) {
     _company = selectedCompany;
@@ -60,25 +54,28 @@ class CompanyViewModel with ChangeNotifier {
   Future getCompanyById(BuildContext? context, String id) async {
     loadingStatus = LoadingStatus.searching;
 
-    await CompanyRepository().getCompany(id).then((response) => {
-          if (response is Company)
-            {
-              _company = response,
-              loadingStatus = LoadingStatus.completed,
-              notifyListeners()
-            }
-          else if (response is ErrorResponse)
-            {
-              if (context != null)
-                Toast().showTopToast(context, response.message ?? 'Ошибка'),
-              loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            }
-        });
+    await CompanyRepository()
+        .getCompany(id)
+        .then((response) => {
+              if (response is Company)
+                {
+                  _company = response,
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else if (response is ErrorResponse)
+                {
+                  if (context != null)
+                    Toast().showTopToast(context, response.message ?? 'Ошибка'),
+                  loadingStatus = LoadingStatus.error,
+                }
+            })
+        .whenComplete(() => notifyListeners());
   }
 
-  Future getProductList(
-      {required Pagination pagination, required String search}) async {
+  Future getProductList({
+    required Pagination pagination,
+    required String search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _products.clear();

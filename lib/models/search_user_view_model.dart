@@ -11,9 +11,7 @@ class SearchUserViewModel with ChangeNotifier {
 
   final List<User> _users = [];
 
-  List<User> get users {
-    return _users;
-  }
+  List<User> get users => _users;
 
   SearchUserViewModel() {
     getUserList(pagination: Pagination(offset: 0, size: 50));
@@ -22,7 +20,10 @@ class SearchUserViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future getUserList({required Pagination pagination, String? search}) async {
+  Future getUserList({
+    required Pagination pagination,
+    String? search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _users.clear();
@@ -63,7 +64,7 @@ class SearchUserViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 }

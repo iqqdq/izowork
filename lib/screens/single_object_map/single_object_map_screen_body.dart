@@ -141,6 +141,7 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
       context,
       listen: true,
     );
+
     _clusterManager ??= _initClusterManager();
 
     return Scaffold(

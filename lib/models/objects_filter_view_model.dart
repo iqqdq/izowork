@@ -21,25 +21,15 @@ class ObjectsFilterViewModel with ChangeNotifier {
   Company? _contractor;
   Company? _customer;
 
-  User? get manager {
-    return _manager;
-  }
+  User? get manager => _manager;
 
-  Company? get designer {
-    return _designer;
-  }
+  Company? get designer => _designer;
 
-  Company? get contractor {
-    return _contractor;
-  }
+  Company? get contractor => _contractor;
 
-  Company? get customer {
-    return _customer;
-  }
+  Company? get customer => _customer;
 
-  List<String> get options {
-    return _options;
-  }
+  List<String> get options => _options;
 
   ObjectsFilterViewModel(this.objectStages, this.objectsFilter) {
     objectStages.forEach((element) {

@@ -21,19 +21,20 @@ class StaffViewModel with ChangeNotifier {
 
   final List<User> _users = [];
 
-  List<User> get users {
-    return _users;
-  }
+  List<User> get users => _users;
 
   StaffViewModel() {
-    getLocalService().then(
-        (value) => getUserList(pagination: Pagination(offset: 0, size: 50)));
+    getLocalService().whenComplete(
+        () => getUserList(pagination: Pagination(offset: 0, size: 50)));
   }
 
   // MARK: -
   // MARK: - API CALL
 
-  Future getUserList({required Pagination pagination, String? search}) async {
+  Future getUserList({
+    required Pagination pagination,
+    String? search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _users.clear();
@@ -74,11 +75,14 @@ class StaffViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
-  Future createUserChat(BuildContext context, int index) async {
+  Future createUserChat(
+    BuildContext context,
+    int index,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -94,23 +98,27 @@ class StaffViewModel with ChangeNotifier {
                               DialogScreenWidget(chat: response)))
                 }
             })
-        .then((value) =>
-            {loadingStatus = LoadingStatus.completed, notifyListeners()});
+        .whenComplete(() => {
+              loadingStatus = LoadingStatus.completed,
+              notifyListeners(),
+            });
   }
 
   // MARK: -
   // MARK: - PUSH
 
-  void showProfileScreen(BuildContext context, User user) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ProfileScreenWidget(
-                  isMine: false,
-                  user: user,
-                  onPop: (user) => null,
-                )));
-  }
+  void showProfileScreen(
+    BuildContext context,
+    User user,
+  ) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProfileScreenWidget(
+                    isMine: false,
+                    user: user,
+                    onPop: (user) => null,
+                  )));
 
   // MARK: -
   // MARK: - FUNCTIONS

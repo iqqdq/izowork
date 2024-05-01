@@ -44,27 +44,19 @@ class DialogViewModel with ChangeNotifier {
 
   Socket? _socket;
 
+  final List<Message> _messages = [];
+
   bool _isSending = false;
 
   int _downloadIndex = -1;
 
-  final List<Message> _messages = [];
+  Socket? get socket => _socket;
 
-  Socket? get socket {
-    return _socket;
-  }
+  List<Message> get messages => _messages;
 
-  List<Message> get messages {
-    return _messages;
-  }
+  bool get isSending => _isSending;
 
-  bool get isSending {
-    return _isSending;
-  }
-
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
   DialogViewModel(
     this.chatSocket,
@@ -139,7 +131,7 @@ class DialogViewModel with ChangeNotifier {
   Future readMessages() async {
     await DialogRepository()
         .readChatMessages(MessageReadRequest(chatId: chat.id))
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future uploadFile(
@@ -317,25 +309,30 @@ class DialogViewModel with ChangeNotifier {
         backgroundColor: HexColors.white,
         context: context,
         builder: (sheetContext) => DialogAddTaskWidget(
-            text: text,
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => TaskCreateScreenWidget(
-                          message: text,
-                          onCreate: (task) => Toast().showTopToast(context,
-                              '${Titles.task} "${task?.name}" создана'),
-                        )))));
+              text: text,
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TaskCreateScreenWidget(
+                            message: text,
+                            onCreate: (task) => Toast().showTopToast(
+                              context,
+                              '${Titles.task} "${task?.name}" создана',
+                            ),
+                          ))),
+            ));
   }
 
-  void showProfileScreen(BuildContext context, Message message) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ProfileScreenWidget(
-                  isMine: false,
-                  user: message.user!,
-                  onPop: (user) => null,
-                )));
-  }
+  void showProfileScreen(
+    BuildContext context,
+    Message message,
+  ) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProfileScreenWidget(
+                    isMine: false,
+                    user: message.user!,
+                    onPop: (user) => null,
+                  )));
 }

@@ -68,65 +68,35 @@ class ObjectCreateViewModel with ChangeNotifier {
 
   int current = 0;
 
-  bool get isKiso {
-    return _isKiso;
-  }
+  bool get isKiso => _isKiso;
 
-  bool get hideDir {
-    return _hideDir;
-  }
+  bool get hideDir => _hideDir;
 
-  List<Document> get documents {
-    return _documents;
-  }
+  List<Document> get documents => _documents;
 
-  List<File> get files {
-    return _files;
-  }
+  List<File> get files => _files;
 
-  ObjectStage? get objectStage {
-    return _objectStage;
-  }
+  ObjectStage? get objectStage => _objectStage;
 
-  List<ObjectStage> get objectStages {
-    return _objectStages;
-  }
+  List<ObjectStage> get objectStages => _objectStages;
 
-  ObjectType? get objectType {
-    return _objectType;
-  }
+  ObjectType? get objectType => _objectType;
 
-  List<ObjectType> get objectTypes {
-    return _objectTypes;
-  }
+  List<ObjectType> get objectTypes => _objectTypes;
 
-  User? get techManager {
-    return _techManager;
-  }
+  User? get techManager => _techManager;
 
-  Office? get office {
-    return _office;
-  }
+  Office? get office => _office;
 
-  User? get manager {
-    return _manager;
-  }
+  User? get manager => _manager;
 
-  Company? get designer {
-    return _designer;
-  }
+  Company? get designer => _designer;
 
-  Company? get customer {
-    return _customer;
-  }
+  Company? get customer => _customer;
 
-  Company? get contractor {
-    return _contractor;
-  }
+  Company? get contractor => _contractor;
 
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
   ObjectCreateViewModel(this.object) {
     if (object != null) {
@@ -180,7 +150,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                   })
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future createNewObject(
@@ -206,23 +176,24 @@ class ObjectCreateViewModel with ChangeNotifier {
 
         await ObjectRepository()
             .createObject(ObjectRequest(
-                address: address,
-                area: area,
-                constructionPeriod: constructionPeriod,
-                contractorId: _contractor?.id,
-                customerId: _customer?.id,
-                designerId: _designer?.id,
-                managerId: _manager?.id,
-                techManagerId: _techManager?.id,
-                officeId: _office?.id,
-                floors: floors,
-                lat: lat,
-                long: long,
-                name: name,
-                objectStageId: _objectStage!.id,
-                objectTypeId: _objectType!.id,
-                hideDir: _hideDir,
-                kiso: kiso))
+              address: address,
+              area: area,
+              constructionPeriod: constructionPeriod,
+              contractorId: _contractor?.id,
+              customerId: _customer?.id,
+              designerId: _designer?.id,
+              managerId: _manager?.id,
+              techManagerId: _techManager?.id,
+              officeId: _office?.id,
+              floors: floors,
+              lat: lat,
+              long: long,
+              name: name,
+              objectStageId: _objectStage!.id,
+              objectTypeId: _objectType!.id,
+              hideDir: _hideDir,
+              kiso: kiso,
+            ))
             .then((response) => {
                   if (response is Object)
                     {
@@ -246,27 +217,25 @@ class ObjectCreateViewModel with ChangeNotifier {
                       Toast()
                           .showTopToast(context, response.message ?? 'Ошибка')
                     },
-                  notifyListeners()
-                });
+                })
+            .whenComplete(() => notifyListeners());
       }
     } else {
-      Toast().showTopToast(
-        context,
-        Titles.wrongCoordFormat,
-      );
+      Toast().showTopToast(context, Titles.wrongCoordFormat);
     }
   }
 
   Future editObject(
-      BuildContext context,
-      String address,
-      int? area,
-      int? constructionPeriod,
-      int? floors,
-      String coord,
-      String name,
-      String kiso,
-      Function(Object) onCreate) async {
+    BuildContext context,
+    String address,
+    int? area,
+    int? constructionPeriod,
+    int? floors,
+    String coord,
+    String name,
+    String kiso,
+    Function(Object) onCreate,
+  ) async {
     if (coord.characters.length > 8 &&
         coord.contains('.') &&
         coord.contains(',')) {
@@ -314,8 +283,8 @@ class ObjectCreateViewModel with ChangeNotifier {
                       Toast()
                           .showTopToast(context, response.message ?? 'Ошибка')
                     },
-                  notifyListeners()
-                });
+                })
+            .whenComplete(() => notifyListeners());
       } else {
         Toast().showTopToast(context, Titles.wrongCoordFormat);
       }
@@ -360,8 +329,8 @@ class ObjectCreateViewModel with ChangeNotifier {
                     loadingStatus = LoadingStatus.error,
                     Toast().showTopToast(context, response.message ?? 'Ошибка')
                   },
-                notifyListeners()
-              });
+              })
+          .whenComplete(() => notifyListeners());
     }
   }
 
@@ -532,51 +501,49 @@ class ObjectCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  void showSearchCompanySheet(BuildContext context, int index) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchCompanyScreenWidget(
-            title: index == 0
-                ? Titles.generalContractor
-                : index == 1
-                    ? Titles.developer
-                    : index == 2
-                        ? Titles.customer
-                        : Titles.designer,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (company) => {
-                  index == 0
-                      ? _contractor = company
-                      : index == 1
-                          ? debugPrint(index.toString())
-                          : index == 2
-                              ? _customer = company
-                              : _designer = company,
-                  notifyListeners(),
-                  Navigator.pop(context),
-                }));
-  }
+  void showSearchCompanySheet(BuildContext context, int index) =>
+      showCupertinoModalBottomSheet(
+          enableDrag: false,
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (sheetContext) => SearchCompanyScreenWidget(
+              title: index == 0
+                  ? Titles.generalContractor
+                  : index == 1
+                      ? Titles.developer
+                      : index == 2
+                          ? Titles.customer
+                          : Titles.designer,
+              isRoot: true,
+              onFocus: () => {},
+              onPop: (company) => {
+                    index == 0
+                        ? _contractor = company
+                        : index == 1
+                            ? debugPrint(index.toString())
+                            : index == 2
+                                ? _customer = company
+                                : _designer = company,
+                    notifyListeners(),
+                    Navigator.pop(context),
+                  }));
 
-  void showSearchOfficeSheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchOfficeScreenWidget(
-            title: Titles.filial,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (office) => {
-                  _office = office,
-                  notifyListeners(),
-                  Navigator.pop(context),
-                }));
-  }
+  void showSearchOfficeSheet(BuildContext context) =>
+      showCupertinoModalBottomSheet(
+          enableDrag: false,
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (sheetContext) => SearchOfficeScreenWidget(
+              title: Titles.filial,
+              isRoot: true,
+              onFocus: () => {},
+              onPop: (office) => {
+                    _office = office,
+                    notifyListeners(),
+                    Navigator.pop(context),
+                  }));
 }

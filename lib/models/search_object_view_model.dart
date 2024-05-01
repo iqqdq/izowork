@@ -11,9 +11,7 @@ class SearchObjectViewModel with ChangeNotifier {
 
   final List<Object> _objects = [];
 
-  List<Object> get objects {
-    return _objects;
-  }
+  List<Object> get objects => _objects;
 
   SearchObjectViewModel() {
     getObjectList(pagination: Pagination(offset: 0, size: 50));
@@ -22,7 +20,10 @@ class SearchObjectViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future getObjectList({required Pagination pagination, String? search}) async {
+  Future getObjectList({
+    required Pagination pagination,
+    String? search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _objects.clear();
@@ -63,7 +64,7 @@ class SearchObjectViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 }

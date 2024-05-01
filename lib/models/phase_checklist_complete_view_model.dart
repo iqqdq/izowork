@@ -18,13 +18,9 @@ class PhaseChecklistCompleteViewModel with ChangeNotifier {
 
   int _downloadIndex = -1;
 
-  List<PlatformFile> get files {
-    return _files;
-  }
+  List<PlatformFile> get files => _files;
 
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
   PhaseChecklistCompleteViewModel(this.phaseChecklistInfo);
 

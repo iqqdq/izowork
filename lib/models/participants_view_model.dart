@@ -23,9 +23,7 @@ class ParticipantsViewModel with ChangeNotifier {
 
   final List<User> _users = [];
 
-  List<User> get users {
-    return _users;
-  }
+  List<User> get users => _users;
 
   ParticipantsViewModel(this.chat) {
     getLocalService().then((value) =>

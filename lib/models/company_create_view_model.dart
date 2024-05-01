@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
-
 import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:dio/dio.dart' as dio;
@@ -44,33 +42,19 @@ class CompanyCreateViewModel with ChangeNotifier {
 
   File? _file;
 
-  CompanyType? get companyType {
-    return _companyType;
-  }
+  CompanyType? get companyType => _companyType;
 
-  List<ProductType> get productTypes {
-    return _productTypes;
-  }
+  List<ProductType> get productTypes => _productTypes;
 
-  ProductType? get productType {
-    return _productType;
-  }
+  ProductType? get productType => _productType;
 
-  Company? get company {
-    return _company;
-  }
+  Company? get company => _company;
 
-  String? get phone {
-    return _phone;
-  }
+  String? get phone => _phone;
 
-  String? get type {
-    return _type;
-  }
+  String? get type => _type;
 
-  File? get file {
-    return _file;
-  }
+  File? get file => _file;
 
   CompanyCreateViewModel(this.selectedCompany) {
     if (selectedCompany != null) {
@@ -94,7 +78,10 @@ class CompanyCreateViewModel with ChangeNotifier {
               getProductTypeList(),
             }
           else
-            loadingStatus = LoadingStatus.error,
+            {
+              loadingStatus = LoadingStatus.error,
+              notifyListeners(),
+            }
         });
   }
 
@@ -168,7 +155,7 @@ class CompanyCreateViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future editCompany(
@@ -226,7 +213,7 @@ class CompanyCreateViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future changeCompanyAvatar(
@@ -255,7 +242,7 @@ class CompanyCreateViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future updateContactInfo(

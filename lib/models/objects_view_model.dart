@@ -24,21 +24,13 @@ class ObjectsViewModel with ChangeNotifier {
   ObjectsFilter? _objectsFilter;
   List<ObjectStage>? _objectStages;
 
-  List<Object> get objects {
-    return _objects;
-  }
+  List<Object> get objects => _objects;
 
-  Object? get object {
-    return _object;
-  }
+  Object? get object => _object;
 
-  ObjectsFilter? get objectsFilter {
-    return _objectsFilter;
-  }
+  ObjectsFilter? get objectsFilter => _objectsFilter;
 
-  List<ObjectStage>? get objectStages {
-    return _objectStages;
-  }
+  List<ObjectStage>? get objectStages => _objectStages;
 
   ObjectsViewModel() {
     getStageList();

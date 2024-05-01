@@ -13,13 +13,9 @@ class TasksFilterViewModel with ChangeNotifier {
 
   User? _user;
 
-  User? get user {
-    return _user;
-  }
+  User? get user => _user;
 
-  List<String> get options {
-    return _options;
-  }
+  List<String> get options => _options;
 
   TasksFilterViewModel(this.stages, this.tasksFilter) {
     _options = stages;

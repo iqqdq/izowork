@@ -10,10 +10,12 @@ class TaskEventViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - PUSH
 
-  void showTaskScreenWidget(BuildContext context, int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => TaskScreenWidget(task: tasks[index])));
-  }
+  void showTaskScreenWidget(
+    BuildContext context,
+    int index,
+  ) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => TaskScreenWidget(task: tasks[index])));
 }

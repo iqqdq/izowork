@@ -41,6 +41,6 @@ class PhaseChecklistCreateViewModel with ChangeNotifier {
                   _error = response.message,
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 }

@@ -67,9 +67,10 @@ class _ContactsFilterPageViewScreenBodyState
                           onApplyTap: () => {
                                 _contactsFilterViewModel.apply((params) => {
                                       widget.onPop(ContactsFilter(
-                                          _contactsFilterViewModel.tags,
-                                          _contactsFilterViewModel.tags2,
-                                          params)),
+                                        _contactsFilterViewModel.tags,
+                                        _contactsFilterViewModel.tags2,
+                                        params,
+                                      )),
                                       Navigator.pop(context)
                                     })
                               },

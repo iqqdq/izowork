@@ -40,28 +40,28 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
         .toUtc()
         .toLocal();
 
-    final _startDay = startDateTime.day.toString().length == 1
+    final startDay = startDateTime.day.toString().length == 1
         ? '0${startDateTime.day}'
         : '${startDateTime.day}';
-    final _startMonth = startDateTime.month.toString().length == 1
+    final startMonth = startDateTime.month.toString().length == 1
         ? '0${startDateTime.month}'
         : '${startDateTime.month}';
-    final _startYear = '${startDateTime.year}';
+    final startYear = '${startDateTime.year}';
 
     final endDateTime = DateTime.parse(_dealViewModel.deal?.finishAt ??
             _dealViewModel.selectedDeal.finishAt)
         .toUtc()
         .toLocal();
 
-    final _endDay = endDateTime.day.toString().length == 1
+    final endDay = endDateTime.day.toString().length == 1
         ? '0${endDateTime.day}'
         : '${endDateTime.day}';
-    final _endMonth = endDateTime.month.toString().length == 1
+    final endMonth = endDateTime.month.toString().length == 1
         ? '0${endDateTime.month}'
         : '${endDateTime.month}';
-    final _endYear = '${endDateTime.year}';
+    final endYear = '${endDateTime.year}';
 
-    final _comment = _dealViewModel.deal?.comment ??
+    final comment = _dealViewModel.deal?.comment ??
         _dealViewModel.selectedDeal.comment ??
         '-';
 
@@ -106,9 +106,10 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             text: Titles.startDate,
                             isSmall: true),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 16.0),
-                            text: '$_startDay.$_startMonth.$_startYear'),
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 16.0, bottom: 16.0),
+                          text: '$startDay.$startMonth.$startYear',
+                        ),
 
                         /// END DATE
                         const TitleWidget(
@@ -117,9 +118,10 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             text: Titles.endDate,
                             isSmall: true),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 16.0),
-                            text: '$_endDay.$_endMonth.$_endYear'),
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 16.0, bottom: 16.0),
+                          text: '$endDay.$endMonth.$endYear',
+                        ),
 
                         /// RESPONSIBLE
                         const TitleWidget(
@@ -173,13 +175,14 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             text: Titles.comment,
                             isSmall: true),
                         SubtitleWidget(
-                            padding: EdgeInsets.only(
-                                left: 16.0,
-                                right: 16.0,
-                                bottom: _dealViewModel.dealProducts.isEmpty
-                                    ? 0.0
-                                    : 16.0),
-                            text: _comment.isEmpty ? '-' : _comment),
+                          padding: EdgeInsets.only(
+                              left: 16.0,
+                              right: 16.0,
+                              bottom: _dealViewModel.dealProducts.isEmpty
+                                  ? 0.0
+                                  : 16.0),
+                          text: comment,
+                        ),
 
                         /// PRODUCT TABLE
                         _dealViewModel.dealProducts.isEmpty
@@ -191,43 +194,39 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                 child: SpreadsheetTable(
                                   cellBuilder: (_, int row, int col) =>
                                       Container(
-                                          height: 42.0,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 2.0),
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 0.65,
-                                                  color: HexColors.grey20)),
-                                          child: Row(children: [
-                                            Expanded(
-                                                child: Text(
-                                                    col == 0
-                                                        ? _dealViewModel
-                                                                .dealProducts[
-                                                                    row]
-                                                                .product
-                                                                ?.unit ??
-                                                            '-'
-                                                        : col == 1
-                                                            ? _dealViewModel
-                                                                .dealProducts[
-                                                                    row]
-                                                                .count
-                                                                .toString()
-                                                            : _dealViewModel
-                                                                    .dealProducts[
-                                                                        row]
-                                                                    .product
-                                                                    ?.price
-                                                                    .toString() ??
-                                                                '-',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        fontSize: 14.0,
-                                                        color: HexColors.black,
-                                                        fontFamily:
-                                                            'PT Root UI')))
-                                          ])),
+                                    height: 42.0,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2.0),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 0.65,
+                                            color: HexColors.grey20)),
+                                    child: Row(children: [
+                                      Expanded(
+                                        child: Text(
+                                          col == 0
+                                              ? _dealViewModel.dealProducts[row]
+                                                      .product?.unit ??
+                                                  '-'
+                                              : col == 1
+                                                  ? _dealViewModel
+                                                      .dealProducts[row].count
+                                                      .toString()
+                                                  : _dealViewModel
+                                                          .dealProducts[row]
+                                                          .product
+                                                          ?.price
+                                                          .toString() ??
+                                                      '-',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: HexColors.black,
+                                              fontFamily: 'PT Root UI'),
+                                        ),
+                                      )
+                                    ]),
+                                  ),
                                   legendBuilder: (_) => Container(
                                       height: 42.0,
                                       padding: const EdgeInsets.symmetric(

@@ -19,27 +19,26 @@ class CompaniesViewModel with ChangeNotifier {
   Company? _company;
   CompaniesFilter? _companiesFilter;
 
-  List<Company> get companies {
-    return _companies;
-  }
+  List<Company> get companies => _companies;
 
-  Company? get company {
-    return _company;
-  }
+  Company? get company => _company;
 
-  CompaniesFilter? get companiesFilter {
-    return _companiesFilter;
-  }
+  CompaniesFilter? get companiesFilter => _companiesFilter;
 
   CompaniesViewModel() {
-    getCompanyList(pagination: Pagination(offset: 0, size: 50), search: '');
+    getCompanyList(
+      pagination: Pagination(offset: 0, size: 50),
+      search: '',
+    );
   }
 
   // MARK: -
   // MARK: - API CALL
 
-  Future getCompanyList(
-      {required Pagination pagination, required String search}) async {
+  Future getCompanyList({
+    required Pagination pagination,
+    required String search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _companies.clear();
@@ -50,9 +49,10 @@ class CompaniesViewModel with ChangeNotifier {
     }
     await CompanyRepository()
         .getCompanies(
-            pagination: pagination,
-            search: search,
-            params: _companiesFilter?.params)
+          pagination: pagination,
+          search: search,
+          params: _companiesFilter?.params,
+        )
         .then((response) => {
               if (response is List<Company>)
                 {
@@ -82,8 +82,8 @@ class CompaniesViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -

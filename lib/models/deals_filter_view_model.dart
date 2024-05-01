@@ -16,21 +16,13 @@ class DealsFilterViewModel with ChangeNotifier {
   Object? _object;
   Company? _company;
 
-  User? get responsible {
-    return _responsible;
-  }
+  User? get responsible => _responsible;
 
-  Object? get object {
-    return _object;
-  }
+  Object? get object => _object;
 
-  Company? get company {
-    return _company;
-  }
+  Company? get company => _company;
 
-  List<String> get options {
-    return _options;
-  }
+  List<String> get options => _options;
 
   DealsFilterViewModel(this.dealsFilter) {
     if (dealsFilter != null) {

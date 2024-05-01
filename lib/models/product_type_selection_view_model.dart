@@ -11,15 +11,12 @@ class ProductTypeSelectionViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
   final List<ProductType> _productTypes = [];
+
   ProductType? _productType;
 
-  List<ProductType> get productTypes {
-    return _productTypes;
-  }
+  List<ProductType> get productTypes => _productTypes;
 
-  ProductType? get productType {
-    return _productType;
-  }
+  ProductType? get productType => _productType;
 
   ProductTypeSelectionViewModel(this.selectedProductType) {
     _productType = selectedProductType;
@@ -32,18 +29,20 @@ class ProductTypeSelectionViewModel with ChangeNotifier {
   // MARK: - API CALL
 
   Future getProductTypeList() async {
-    await ProductRepository().getProductTypes().then((response) => {
-          if (response is List<ProductType>)
-            {
-              response.forEach((productType) {
-                _productTypes.add(productType);
-              }),
-              loadingStatus = LoadingStatus.completed
-            }
-          else
-            loadingStatus = LoadingStatus.error,
-          notifyListeners()
-        });
+    await ProductRepository()
+        .getProductTypes()
+        .then((response) => {
+              if (response is List<ProductType>)
+                {
+                  response.forEach((productType) {
+                    _productTypes.add(productType);
+                  }),
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -

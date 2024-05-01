@@ -11,9 +11,7 @@ class ProductSelectionViewModel with ChangeNotifier {
 
   final List<Product> _products = [];
 
-  List<Product> get products {
-    return _products;
-  }
+  List<Product> get products => _products;
 
   ProductSelectionViewModel() {
     getProductList(pagination: Pagination(offset: 0, size: 50), search: '');

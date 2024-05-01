@@ -120,7 +120,7 @@ class PhaseViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.completed
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future removePhaseChecklist(String id) async {
@@ -142,7 +142,7 @@ class PhaseViewModel with ChangeNotifier {
                   _error = response.message,
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future getPhaseChecklistInfoList(String id) async {
@@ -158,7 +158,7 @@ class PhaseViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.completed,
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future createPhaseChecklistInfo(

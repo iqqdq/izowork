@@ -78,57 +78,31 @@ class TaskCreateViewModel with ChangeNotifier {
 
   int current = 0;
 
-  TaskState? get taskState {
-    return _taskState;
-  }
+  TaskState? get taskState => _taskState;
 
-  String? get state {
-    return _state;
-  }
+  String? get state => _state;
 
-  User? get responsible {
-    return _responsible;
-  }
+  User? get responsible => _responsible;
 
-  User? get taskManager {
-    return _taskManager;
-  }
+  User? get taskManager => _taskManager;
 
-  User? get coExecutor {
-    return _coExecutor;
-  }
+  User? get coExecutor => _coExecutor;
 
-  Object? get object {
-    return _object;
-  }
+  Object? get object => _object;
 
-  Company? get company {
-    return _company;
-  }
+  Company? get company => _company;
 
-  DateTime get minDateTime {
-    return _minDateTime;
-  }
+  DateTime get minDateTime => _minDateTime;
 
-  DateTime get maxDateTime {
-    return _maxDateTime;
-  }
+  DateTime get maxDateTime => _maxDateTime;
 
-  DateTime get pickedDateTime {
-    return _pickedDateTime;
-  }
+  DateTime get pickedDateTime => _pickedDateTime;
 
-  List<Document> get documents {
-    return _documents;
-  }
+  List<Document> get documents => _documents;
 
-  List<File> get files {
-    return _files;
-  }
+  List<File> get files => _files;
 
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
   TaskCreateViewModel(this.task) {
     if (task != null) {
@@ -153,17 +127,26 @@ class TaskCreateViewModel with ChangeNotifier {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
-    await TaskRepository().getTaskStates().then((response) => {
-          if (response is TaskState)
-            {loadingStatus = LoadingStatus.completed, _taskState = response}
-          else if (response is ErrorResponse)
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
-        });
+    await TaskRepository()
+        .getTaskStates()
+        .then((response) => {
+              if (response is TaskState)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _taskState = response,
+                }
+              else if (response is ErrorResponse)
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(() => notifyListeners());
   }
 
-  Future createNewTask(BuildContext context, String name, String? description,
-      Function(Task) onCreate) async {
+  Future createNewTask(
+    BuildContext context,
+    String name,
+    String? description,
+    Function(Task) onCreate,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -185,27 +168,31 @@ class TaskCreateViewModel with ChangeNotifier {
                     {
                       _files.forEach((element) async {
                         await uploadFile(context, response.id, element)
-                            .then((value) => {
+                            .whenComplete(() => {
                                   current++,
                                   if (current == _files.length)
-                                    {onCreate(response)}
+                                    onCreate(response)
                                 });
                       })
                     }
                   else
-                    {onCreate(response)}
+                    onCreate(response)
                 }
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
-  Future editTask(BuildContext context, String name, String? description,
-      Function(Task) onCreate) async {
+  Future editTask(
+    BuildContext context,
+    String name,
+    String? description,
+    Function(Task) onCreate,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -224,17 +211,21 @@ class TaskCreateViewModel with ChangeNotifier {
         ))
         .then((response) => {
               if (response is Task)
-                {onCreate(response)}
+                onCreate(response)
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 },
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
-  Future uploadFile(BuildContext context, String id, File file) async {
+  Future uploadFile(
+    BuildContext context,
+    String id,
+    File file,
+  ) async {
     await TaskRepository()
         .addTaskFile(TaskFileRequest(id, file))
         .then((response) => {
@@ -248,7 +239,8 @@ class TaskCreateViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.error,
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 }
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future deleteTaskFile(BuildContext context, int index) async {
@@ -272,8 +264,8 @@ class TaskCreateViewModel with ChangeNotifier {
                     loadingStatus = LoadingStatus.error,
                     Toast().showTopToast(context, response.message ?? 'Ошибка')
                   },
-                notifyListeners()
-              });
+              })
+          .whenComplete(() => notifyListeners());
     }
   }
 
@@ -282,9 +274,10 @@ class TaskCreateViewModel with ChangeNotifier {
 
   Future addFile(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowMultiple: true,
-        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc']);
+      type: FileType.custom,
+      allowMultiple: true,
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf', 'doc'],
+    );
 
     if (result != null) {
       if (result.files.isNotEmpty) {
@@ -387,7 +380,9 @@ class TaskCreateViewModel with ChangeNotifier {
 
   void showDateTimeSelectionSheet(BuildContext context) {
     TextStyle textStyle = const TextStyle(
-        overflow: TextOverflow.ellipsis, fontFamily: 'PT Root UI');
+      overflow: TextOverflow.ellipsis,
+      fontFamily: 'PT Root UI',
+    );
 
     showCupertinoModalBottomSheet(
         enableDrag: false,
@@ -424,34 +419,33 @@ class TaskCreateViewModel with ChangeNotifier {
                 }));
   }
 
-  void showSearchUserSheet(BuildContext context, int index) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchUserScreenWidget(
-            title: index == 1
-                ? Titles.manager
-                : index == 2
-                    ? Titles.coExecutor
-                    : Titles.responsible,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (user) => {
-                  index == 1
-                      ? _taskManager = user
-                      : index == 2
-                          ? _coExecutor = user
-                          : _responsible = user,
-                  notifyListeners(),
-                  Navigator.pop(context)
-                }));
-  }
+  void showSearchUserSheet(BuildContext context, int index) =>
+      showCupertinoModalBottomSheet(
+          enableDrag: false,
+          topRadius: const Radius.circular(16.0),
+          barrierColor: Colors.black.withOpacity(0.6),
+          backgroundColor: HexColors.white,
+          context: context,
+          builder: (sheetContext) => SearchUserScreenWidget(
+              title: index == 1
+                  ? Titles.manager
+                  : index == 2
+                      ? Titles.coExecutor
+                      : Titles.responsible,
+              isRoot: true,
+              onFocus: () => {},
+              onPop: (user) => {
+                    index == 1
+                        ? _taskManager = user
+                        : index == 2
+                            ? _coExecutor = user
+                            : _responsible = user,
+                    notifyListeners(),
+                    Navigator.pop(context)
+                  }));
 
-  void showSearchObjectSheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
+  void showSearchObjectSheet(BuildContext context) =>
+      showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -461,12 +455,15 @@ class TaskCreateViewModel with ChangeNotifier {
             title: Titles.manager,
             isRoot: true,
             onFocus: () => {},
-            onPop: (object) =>
-                {_object = object, notifyListeners(), Navigator.pop(context)}));
-  }
+            onPop: (object) => {
+                  _object = object,
+                  notifyListeners(),
+                  Navigator.pop(context),
+                }),
+      );
 
-  void showSearchCompanySheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
+  void showSearchCompanySheet(BuildContext context) =>
+      showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -479,7 +476,7 @@ class TaskCreateViewModel with ChangeNotifier {
             onPop: (company) => {
                   _company = company,
                   notifyListeners(),
-                  Navigator.pop(context)
-                }));
-  }
+                  Navigator.pop(context),
+                }),
+      );
 }

@@ -19,9 +19,7 @@ class DealsViewModel with ChangeNotifier {
   final List<Deal> _deals = [];
   DealsFilter? _dealsFilter;
 
-  List<Deal> get deals {
-    return _deals;
-  }
+  List<Deal> get deals => _deals;
 
   DealsViewModel() {
     getDealList(pagination: Pagination(offset: 0, size: 50), search: '');

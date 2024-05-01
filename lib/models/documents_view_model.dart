@@ -30,19 +30,13 @@ class DocumentsViewModel with ChangeNotifier {
 
   DocumentsFilter? _documentsFilter;
 
-  List<Document> get documents {
-    return _documents;
-  }
+  List<Document> get documents => _documents;
 
-  DocumentsFilter? get documentsFilter {
-    return _documentsFilter;
-  }
+  DocumentsFilter? get documentsFilter => _documentsFilter;
 
   int _downloadIndex = -1;
 
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
   DocumentsViewModel(this.id, this.namespace) {
     getDealList(pagination: Pagination(offset: 0, size: 50), search: '');

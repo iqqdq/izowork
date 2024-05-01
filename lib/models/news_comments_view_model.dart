@@ -19,17 +19,16 @@ class NewsCommentsViewModel with ChangeNotifier {
 
   NewsComment? _comment;
 
-  List<NewsComment> get comments {
-    return _comments;
-  }
+  List<NewsComment> get comments => _comments;
 
-  NewsComment? get comment {
-    return _comment;
-  }
+  NewsComment? get comment => _comment;
 
   NewsCommentsViewModel(this.news) {
     getNewsComments(
-        pagination: Pagination(offset: 0, size: 50), search: '', id: news.id);
+      pagination: Pagination(offset: 0, size: 50),
+      search: '',
+      id: news.id,
+    );
   }
 
   // MARK: -
@@ -99,7 +98,7 @@ class NewsCommentsViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -

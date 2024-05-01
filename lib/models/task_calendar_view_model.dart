@@ -13,23 +13,34 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TaskCalendarViewModel with ChangeNotifier {
   final DateTime _minDateTime = DateTime(
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-              .year -
-          5,
-      1,
-      1);
+    DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        ).year -
+        5,
+    1,
+    1,
+  );
 
   final DateTime _maxDateTime = DateTime(
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
-              .year +
-          5,
-      1,
-      1);
+    DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        ).year +
+        5,
+    1,
+    1,
+  );
 
   final List<DateTime> _eventDateTimes = [];
 
-  DateTime _pickedDateTime =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime _pickedDateTime = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
 
   DateTime? _selectedDateTime;
 
@@ -37,21 +48,13 @@ class TaskCalendarViewModel with ChangeNotifier {
 
   final List<Task> _tasks = [];
 
-  List<DateTime> get eventDateTimes {
-    return _eventDateTimes;
-  }
+  List<DateTime> get eventDateTimes => _eventDateTimes;
 
-  DateTime get pickedDateTime {
-    return _pickedDateTime;
-  }
+  DateTime get pickedDateTime => _pickedDateTime;
 
-  DateTime? get selectedDateTime {
-    return _selectedDateTime;
-  }
+  DateTime? get selectedDateTime => _selectedDateTime;
 
-  List<Task> get tasks {
-    return _tasks;
-  }
+  List<Task> get tasks => _tasks;
 
   TaskCalendarViewModel() {
     getTaskList(_pickedDateTime);
@@ -68,49 +71,51 @@ class TaskCalendarViewModel with ChangeNotifier {
       notifyListeners();
     });
 
-    await TaskRepository().getYearTasks(params: [
-      "deadline=gte:${_pickedDateTime.year}-01-01T00:00:00Z&deadline=lte:${_pickedDateTime.year}-12-31T00:00:00Z"
-    ]).then((response) => {
-          if (response is List<Task>)
-            {
-              if (_tasks.isEmpty)
+    await TaskRepository()
+        .getYearTasks(params: [
+          "deadline=gte:${_pickedDateTime.year}-01-01T00:00:00Z&deadline=lte:${_pickedDateTime.year}-12-31T00:00:00Z"
+        ])
+        .then((response) => {
+              if (response is List<Task>)
                 {
-                  response.forEach((task) {
-                    _tasks.add(task);
-                  })
+                  if (_tasks.isEmpty)
+                    {
+                      response.forEach((task) {
+                        _tasks.add(task);
+                      })
+                    }
+                  else
+                    {
+                      response.forEach((newTask) {
+                        bool found = false;
+
+                        _tasks.forEach((task) {
+                          if (newTask.id == task.id) {
+                            found = true;
+                          }
+                        });
+
+                        if (!found) {
+                          _tasks.add(newTask);
+                        }
+                      })
+                    },
+
+                  // UPDATE CALENDART EVENT DAYS
+                  _tasks.forEach((element) {
+                    _eventDateTimes.add(DateTime(
+                      DateTime.parse(element.deadline).year,
+                      DateTime.parse(element.deadline).month,
+                      DateTime.parse(element.deadline).day,
+                    ));
+                  }),
+
+                  loadingStatus = LoadingStatus.completed,
                 }
               else
-                {
-                  response.forEach((newTask) {
-                    bool found = false;
-
-                    _tasks.forEach((task) {
-                      if (newTask.id == task.id) {
-                        found = true;
-                      }
-                    });
-
-                    if (!found) {
-                      _tasks.add(newTask);
-                    }
-                  })
-                },
-
-              // UPDATE CALENDART EVENT DAYS
-              _tasks.forEach((element) {
-                _eventDateTimes.add(DateTime(
-                    DateTime.parse(element.deadline).year,
-                    DateTime.parse(element.deadline).month,
-                    DateTime.parse(element.deadline).day));
-              }),
-
-              loadingStatus = LoadingStatus.completed,
-              notifyListeners()
-            }
-          else
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
-        });
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -

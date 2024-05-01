@@ -12,9 +12,7 @@ class ContactViewModel with ChangeNotifier {
 
   Contact? _contact;
 
-  Contact? get contact {
-    return _contact;
-  }
+  Contact? get contact => _contact;
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
@@ -28,17 +26,18 @@ class ContactViewModel with ChangeNotifier {
 
   void showContactEditScreen(BuildContext context) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (sheetContext) => ContactCreateScreenWidget(
-                  company: selectedContact.company,
-                  contact: selectedContact,
-                  onPop: (contact) => {
-                    _contact = contact,
-                    if (context.mounted) notifyListeners()
-                  },
-                  onDelete: (contact) => onDelete(contact),
-                )));
+      context,
+      MaterialPageRoute(
+          builder: (sheetContext) => ContactCreateScreenWidget(
+                company: selectedContact.company,
+                contact: selectedContact,
+                onPop: (contact) => {
+                  _contact = contact,
+                  if (context.mounted) notifyListeners()
+                },
+                onDelete: (contact) => onDelete(contact),
+              )),
+    );
   }
 
   // MARK: -

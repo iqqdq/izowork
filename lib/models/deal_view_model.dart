@@ -53,47 +53,32 @@ class DealViewModel with ChangeNotifier {
 
   final List<int> _expanded = [];
 
-  Deal? get deal {
-    return _deal;
-  }
+  Deal? get deal => _deal;
 
-  List<DealProduct> get dealProducts {
-    return _dealProducts;
-  }
+  List<DealProduct> get dealProducts => _dealProducts;
 
-  List<Document> get documents {
-    return _documents;
-  }
+  List<Document> get documents => _documents;
 
-  List<DealStage> get dealStages {
-    return _dealStages;
-  }
+  List<DealStage> get dealStages => _dealStages;
 
-  List<Phase> get phases {
-    return _phases;
-  }
+  List<Phase> get phases => _phases;
 
-  Phase? get phase {
-    return _phase;
-  }
+  Phase? get phase => _phase;
 
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
-  List<int> get expanded {
-    return _expanded;
-  }
+  List<int> get expanded => _expanded;
 
   DealViewModel(this.selectedDeal) {
     _deal = selectedDeal;
     _documents = selectedDeal.files;
     notifyListeners();
 
-    getDealProducts()
-        .then((value) => getPhaseList().then((value) => getDealStageList().then(
-              (value) => getDealProcesses(),
-            )));
+    getDealProducts().whenComplete(() => getPhaseList().whenComplete(
+          () => getDealStageList().whenComplete(
+            () => getDealProcesses(),
+          ),
+        ));
   }
 
   // MARK: -
@@ -107,9 +92,7 @@ class DealViewModel with ChangeNotifier {
               loadingStatus = LoadingStatus.completed,
             }
           else
-            {
-              loadingStatus = LoadingStatus.error,
-            }
+            loadingStatus = LoadingStatus.error,
         });
   }
 
@@ -124,9 +107,7 @@ class DealViewModel with ChangeNotifier {
               loadingStatus = LoadingStatus.completed,
             }
           else
-            {
-              loadingStatus = LoadingStatus.error,
-            }
+            loadingStatus = LoadingStatus.error,
         });
   }
 
@@ -155,9 +136,7 @@ class DealViewModel with ChangeNotifier {
               _dealStages = response,
             }
           else if (response is ErrorResponse)
-            {
-              loadingStatus = LoadingStatus.error,
-            }
+            loadingStatus = LoadingStatus.error,
         });
   }
 
@@ -171,16 +150,11 @@ class DealViewModel with ChangeNotifier {
             .getProcesses(element.id)
             .then((response) => {
                   if (response is List<DealProcess>)
-                    {
-                      element.processes = response,
-                      loadingStatus = LoadingStatus.completed,
-                    }
+                    element.processes = response
                   else
-                    {
-                      loadingStatus = LoadingStatus.error,
-                    }
+                    loadingStatus = LoadingStatus.error,
                 })
-            .then((value) => {
+            .whenComplete(() => {
                   loadingStatus = LoadingStatus.completed,
                   notifyListeners(),
                 });
@@ -425,6 +399,6 @@ class DealViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 }

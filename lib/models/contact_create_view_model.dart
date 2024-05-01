@@ -31,17 +31,11 @@ class ContactCreateViewModel with ChangeNotifier {
 
   File? _file;
 
-  Contact? get contact {
-    return _contact;
-  }
+  Contact? get contact => _contact;
 
-  Company? get company {
-    return _company;
-  }
+  Company? get company => _company;
 
-  File? get file {
-    return _file;
-  }
+  File? get file => _file;
 
   ContactCreateViewModel(
     this.selectedCompany,
@@ -115,7 +109,7 @@ class ContactCreateViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.error
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future updateContactInfo(BuildContext context, String name, String post,
@@ -179,7 +173,7 @@ class ContactCreateViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.error
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future changeAvatar(BuildContext context, String id, File file) async {
@@ -206,7 +200,7 @@ class ContactCreateViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future delete(BuildContext context) async {

@@ -14,9 +14,7 @@ class ProfileViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;
   User? _user;
 
-  User? get user {
-    return _user;
-  }
+  User? get user => _user;
 
   ProfileViewModel(this.currentUser) {
     getUserProfile(currentUser.id);
@@ -28,16 +26,18 @@ class ProfileViewModel with ChangeNotifier {
   Future getUserProfile(String? id) async {
     loadingStatus = LoadingStatus.searching;
 
-    await UserRepository().getUser(id).then((response) => {
-          if (response is User)
-            {
-              _user = response,
-              loadingStatus = LoadingStatus.completed,
-            }
-          else
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
-        });
+    await UserRepository()
+        .getUser(id)
+        .then((response) => {
+              if (response is User)
+                {
+                  _user = response,
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -

@@ -13,9 +13,7 @@ class ProductsFilterViewModel with ChangeNotifier {
 
   ProductType? _productType;
 
-  ProductType? get productType {
-    return _productType;
-  }
+  ProductType? get productType => _productType;
 
   ProductsFilterViewModel(this.productsFilter) {
     if (productsFilter != null) {

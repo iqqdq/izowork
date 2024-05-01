@@ -84,59 +84,37 @@ class DealCreateViewModel with ChangeNotifier {
 
   int current = 0;
 
-  User? get responsible {
-    return _responsible;
-  }
+  User? get responsible => _responsible;
 
-  Object? get object {
-    return _object;
-  }
+  Object? get object => _object;
 
-  Company? get company {
-    return _company;
-  }
+  Company? get company => _company;
 
-  List<DealProduct> get dealProducts {
-    return _dealProducts;
-  }
+  List<DealProduct> get dealProducts => _dealProducts;
 
-  DateTime get minDateTime {
-    return _minDateTime;
-  }
+  DateTime get minDateTime => _minDateTime;
 
-  DateTime get maxDateTime {
-    return _maxDateTime;
-  }
+  DateTime get maxDateTime => _maxDateTime;
 
-  DateTime get startDateTime {
-    return _startDateTime;
-  }
+  DateTime get startDateTime => _startDateTime;
 
-  DateTime get endDateTime {
-    return _endDateTime;
-  }
+  DateTime get endDateTime => _endDateTime;
 
-  List<Document> get documents {
-    return _documents;
-  }
+  List<Document> get documents => _documents;
 
-  List<File> get files {
-    return _files;
-  }
+  List<File> get files => _files;
 
-  List<Phase> get phases {
-    return _phases;
-  }
+  List<Phase> get phases => _phases;
 
-  Phase? get phase {
-    return _phase;
-  }
+  Phase? get phase => _phase;
 
-  int get downloadIndex {
-    return _downloadIndex;
-  }
+  int get downloadIndex => _downloadIndex;
 
-  DealCreateViewModel(this.deal, this.selectedPhase, this.selectedObject) {
+  DealCreateViewModel(
+    this.deal,
+    this.selectedPhase,
+    this.selectedObject,
+  ) {
     if (deal != null) {
       _startDateTime = DateTime.parse(deal!.createdAt);
       _endDateTime = DateTime.parse(deal!.finishAt);
@@ -271,7 +249,7 @@ class DealCreateViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.completed,
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future addDealProduct(BuildContext context) async {
@@ -293,7 +271,7 @@ class DealCreateViewModel with ChangeNotifier {
                     Toast().showTopToast(context, response.message ?? 'Ошибка')
                   }
               })
-          .then((value) => notifyListeners());
+          .whenComplete(() => notifyListeners());
     }
   }
 
@@ -322,7 +300,7 @@ class DealCreateViewModel with ChangeNotifier {
                   Toast().showTopToast(context, response.message ?? 'Ошибка')
                 }
             })
-        .then((value) => notifyListeners());
+        .whenComplete(() => notifyListeners());
   }
 
   Future deleteDealProduct(BuildContext context, int index) async {
@@ -456,7 +434,10 @@ class DealCreateViewModel with ChangeNotifier {
           await Dio().download(url, filePath,
               onReceiveProgress: (count, total) {
             debugPrint('---Download----Rec: $count, Total: $total');
-          }).then((value) => {_downloadIndex = -1, notifyListeners()});
+          }).whenComplete(() => {
+                _downloadIndex = -1,
+                notifyListeners(),
+              });
         }
 
         OpenResult openResult = await OpenFilex.open(filePath);
@@ -475,10 +456,19 @@ class DealCreateViewModel with ChangeNotifier {
     }
   }
 
-  void changeProductWeight(BuildContext context, int index, int weight) {
+  void changeProductWeight(
+    BuildContext context,
+    int index,
+    int weight,
+  ) {
     _dealProducts[index].count = weight;
-    updateDealProduct(context, index, _dealProducts[index].id,
-        _dealProducts[index].productId!, weight);
+    updateDealProduct(
+      context,
+      index,
+      _dealProducts[index].id,
+      _dealProducts[index].productId!,
+      weight,
+    );
   }
 
   // MARK: -
