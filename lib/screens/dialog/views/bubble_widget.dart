@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/screens/dialog/views/date_header_widget.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 
 class BubbleWidget extends StatefulWidget {
   final bool animate;

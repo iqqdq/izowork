@@ -11,10 +11,12 @@ import 'package:izowork/views/separator_widget.dart';
 import 'package:provider/provider.dart';
 
 class NotificationsScreenBodyWidget extends StatefulWidget {
-  final Function(int) onPop;
+  final VoidCallback onPop;
 
-  const NotificationsScreenBodyWidget({Key? key, required this.onPop})
-      : super(key: key);
+  const NotificationsScreenBodyWidget({
+    Key? key,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   _NotificationsScreenBodyState createState() =>
@@ -33,7 +35,7 @@ class _NotificationsScreenBodyState
     _textEditingController.dispose();
     _focusNode.dispose();
 
-    widget.onPop(_notificationsViewModel.getUnreadCount());
+    widget.onPop();
 
     super.dispose();
   }

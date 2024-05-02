@@ -15,7 +15,7 @@ import 'package:izowork/entities/response/phase_checklist.dart';
 import 'package:izowork/entities/response/phase_checklist_information.dart';
 import 'package:izowork/entities/response/phase_contractor.dart';
 import 'package:izowork/entities/response/phase_product.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/services/web_service.dart';
 
 class PhaseRepository {

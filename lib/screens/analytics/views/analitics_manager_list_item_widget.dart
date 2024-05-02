@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 
 class AnalitycsManagerListItemWidget extends StatelessWidget {
   final User? user;

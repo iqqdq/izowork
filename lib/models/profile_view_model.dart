@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/loading_status.dart';
@@ -12,6 +11,7 @@ class ProfileViewModel with ChangeNotifier {
   final User currentUser;
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
+
   User? _user;
 
   User? get user => _user;

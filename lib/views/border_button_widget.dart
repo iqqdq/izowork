@@ -9,15 +9,15 @@ class BorderButtonWidget extends StatefulWidget {
   final EdgeInsets? margin;
   final VoidCallback onTap;
 
-  const BorderButtonWidget(
-      {Key? key,
-      required this.title,
-      this.height,
-      this.isDestructive,
-      this.isDisabled,
-      this.margin,
-      required this.onTap})
-      : super(key: key);
+  const BorderButtonWidget({
+    Key? key,
+    required this.title,
+    this.height,
+    this.isDestructive,
+    this.isDisabled,
+    this.margin,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   _BorderButtonState createState() => _BorderButtonState();

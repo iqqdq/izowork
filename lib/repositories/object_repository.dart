@@ -3,12 +3,13 @@ import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/request/object_file_request.dart';
 import 'package:izowork/entities/request/object_request.dart';
+import 'package:izowork/entities/request/object_stage_request.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/object_type.dart';
 import 'package:izowork/entities/response/object_stage.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/services/web_service.dart';
 
 class ObjectRepository {
@@ -160,7 +161,22 @@ class ObjectRepository {
     if (json == true) {
       return json;
     } else {
-      return ErrorResponse.fromJson(json).message ?? 'Ошибка';
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> changeObjectStage(
+      ObjectStageRequest objectStageRequest) async {
+    dynamic json = await WebService().patch(
+      objectChangeStatusUrl,
+      objectStageRequest.toJson(),
+      null,
+    );
+
+    if (json == true) {
+      return json;
+    } else {
+      return ErrorResponse.fromJson(json);
     }
   }
 }

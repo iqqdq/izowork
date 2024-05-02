@@ -43,7 +43,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _chatViewModel.getLocalService().then((value) => _chatViewModel
+      _chatViewModel.getLocalStorageParams().then((value) => _chatViewModel
           .connectSocket()
           .then((value) => _addSocketListener(_chatViewModel.socket))
           .then((value) => _chatViewModel.getChatList(

@@ -6,7 +6,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/contact_view_model.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';

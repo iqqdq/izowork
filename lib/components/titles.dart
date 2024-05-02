@@ -63,6 +63,9 @@ abstract class Titles {
   static const addAction = 'Добавить действие';
   static const sendInfo = 'Отправить информацию';
   static const goChat = 'Перейти в чат';
+  static const sendToApproval = 'Отправить на согласовение';
+  static const sendToRevision = 'Отправить на доработку';
+  static const complete = 'Завершить';
 
   /// MORE
   static const taskName = 'Название задачи';
@@ -138,6 +141,7 @@ abstract class Titles {
   static const important = 'Важно';
   static const importantNews = 'Важная новость';
   static const actionAdded = 'Действие добавлено';
+  static const objectStageChanged = 'Стадия объекта изменена';
 
   /// CHART
   static const generalContractor = 'Ген.подрядчик';

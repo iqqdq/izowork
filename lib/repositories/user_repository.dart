@@ -5,7 +5,7 @@ import 'package:izowork/entities/request/reset_password_request.dart';
 import 'package:izowork/entities/request/user_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/services/web_service.dart';
 
 class UserRepository {

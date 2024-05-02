@@ -9,7 +9,7 @@ import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/models/company_create_view_model.dart';
 import 'package:izowork/screens/company/company_screen.dart';
 import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/button_widget.dart';

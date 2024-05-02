@@ -35,9 +35,10 @@ class StatusWidget extends StatelessWidget {
             child: Text(title,
                 textAlign: textAlign ?? TextAlign.center,
                 style: TextStyle(
-                    fontSize: 14.0,
-                    fontFamily: 'PT Root UI',
-                    fontWeight: FontWeight.w500,
-                    color: HexColors.white))));
+                  fontSize: 14.0,
+                  fontFamily: 'PT Root UI',
+                  fontWeight: FontWeight.w500,
+                  color: HexColors.white,
+                ))));
   }
 }

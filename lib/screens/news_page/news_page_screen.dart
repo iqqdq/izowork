@@ -7,7 +7,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/news.dart';
 import 'package:izowork/screens/news_comments/news_comments_screen.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/bottom_button_widget.dart';
 import 'package:izowork/views/status_widget.dart';

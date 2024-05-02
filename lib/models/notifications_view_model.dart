@@ -304,15 +304,4 @@ class NotificationsViewModel with ChangeNotifier {
       );
     }
   }
-
-  int getUnreadCount() {
-    int count = 0;
-    _notifications.forEach((element) {
-      if (!element.read) {
-        count++;
-      }
-    });
-
-    return count;
-  }
 }

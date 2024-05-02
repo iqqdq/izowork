@@ -1,15 +1,13 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
-
 import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/helpers/browser.dart';
-import 'package:izowork/services/local_service.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/product.dart';
@@ -21,6 +19,7 @@ import 'package:izowork/screens/product/product_screen.dart';
 import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen.dart';
 import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen_body.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
+import 'package:izowork/services/local_storage/local_storage.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CompanyViewModel with ChangeNotifier {
@@ -164,23 +163,23 @@ class CompanyViewModel with ChangeNotifier {
   // MARK: - PUSH
 
   Future showUserScreen(BuildContext context) async {
-    if (_company?.manager != null) {
-      User? user = await LocalService().getUser();
+    if (_company?.manager == null) return;
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProfileScreenWidget(
-                  isMine: _company?.manager?.id == user?.id,
-                  user: _company!.manager!,
-                  onPop: (user) => {
-                        if (context.mounted)
-                          {
-                            _company?.manager = user,
-                            notifyListeners(),
-                          }
-                      })));
-    }
+    User? user = await GetIt.I<LocalStorageService>().getUser();
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ProfileScreenWidget(
+                isMine: _company?.manager?.id == user?.id,
+                user: _company!.manager!,
+                onPop: (user) => {
+                      if (context.mounted)
+                        {
+                          _company?.manager = user,
+                          notifyListeners(),
+                        }
+                    })));
   }
 
   void showProductPageScreen(BuildContext context, int index) {

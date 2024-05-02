@@ -24,7 +24,7 @@ import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/search_object/search_object_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/views/date_time_wheel_picker_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_filex/open_filex.dart';

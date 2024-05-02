@@ -6,9 +6,9 @@ import 'package:izowork/firebase_options.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:izowork/services/local_service.dart';
+import 'package:izowork/services/push_notification/abstract_push_notification_service.dart';
 
-class PushNotificationService {
+class PushNotificationServiceImpl extends PushNotificationService {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   /// Initialize the [FlutterLocalNotificationsPlugin] package.
@@ -22,7 +22,8 @@ class PushNotificationService {
     importance: Importance.high,
   );
 
-  Future<void> init() async {
+  @override
+  Future setupFlutterLocalNotificationsPlugin() async {
     // Update the iOS foreground notification presentation options to allow heads up notifications.
     if (Platform.isIOS) {
       await firebaseMessaging.setForegroundNotificationPresentationOptions(
@@ -46,26 +47,27 @@ class PushNotificationService {
 
       if (notification != null) {
         flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            Platform.isIOS ? '' : notification.body,
-            NotificationDetails(
-                android: AndroidNotificationDetails(
-                  channel.id,
-                  channel.name,
-                  channelDescription: channel.description,
-                  icon: '@mipmap/ic_launcher',
-                  largeIcon: const DrawableResourceAndroidBitmap(
-                    '@mipmap/launcher_icon',
-                  ),
+          notification.hashCode,
+          notification.title,
+          Platform.isIOS ? '' : notification.body,
+          NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channelDescription: channel.description,
+                icon: '@mipmap/ic_launcher',
+                largeIcon: const DrawableResourceAndroidBitmap(
+                  '@mipmap/launcher_icon',
                 ),
-                iOS: DarwinNotificationDetails(
-                  presentAlert: true,
-                  presentBadge: true,
-                  presentSound: true,
-                  subtitle: notification.body,
-                )),
-            payload: jsonEncode(message.data));
+              ),
+              iOS: DarwinNotificationDetails(
+                presentAlert: true,
+                presentBadge: true,
+                presentSound: true,
+                subtitle: notification.body,
+              )),
+          payload: jsonEncode(message.data),
+        );
       }
     });
 
@@ -75,29 +77,20 @@ class PushNotificationService {
     });
   }
 
-  Future<String?> getDeviceToken() async {
-    String? deviceToken = await firebaseMessaging.getToken();
+  @override
+  Future<String?> getDeviceToken() async => await firebaseMessaging.getToken();
 
-    if (deviceToken != null) {
-      debugPrint('NEW DEVICE TOKEN = $deviceToken');
-      await LocalService().setDeviceToken(deviceToken);
-    }
+  @override
+  Future deleteDeviceToken() async => await firebaseMessaging.deleteToken();
 
-    return deviceToken;
+  Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    // If you're going to use other Firebase services in the background, such as Firestore,
+    // make sure you call `initializeApp` before using other Firebase services.
+    await Firebase.initializeApp(
+      name: 'Izowork',
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    debugPrint('Handling a background message ${message.messageId}');
   }
-
-  Future deleteDeviceToken() async {
-    await firebaseMessaging.deleteToken();
-  }
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
-  await Firebase.initializeApp(
-    name: 'Izowork',
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  debugPrint('Handling a background message ${message.messageId}');
 }

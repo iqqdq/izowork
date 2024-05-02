@@ -8,7 +8,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/news_comments_view_model.dart';
 import 'package:izowork/screens/news_comments/views/comment_list_item_widget.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/views/chat_message_bar_widget.dart';
@@ -239,7 +239,7 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
                                         /// UPDATE BUBBLE
                                         if (_newsCommentsViewModel.comment !=
                                             null)
-                                          {_updateBubble()}
+                                          _updateBubble()
                                       })
                             }))),
           ]),

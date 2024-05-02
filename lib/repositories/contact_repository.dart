@@ -4,7 +4,7 @@ import 'package:izowork/entities/request/contact_request.dart';
 import 'package:izowork/entities/request/delete_request.dart';
 import 'package:izowork/entities/response/contact.dart';
 import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/services/web_service.dart';
 
 class ContactRepository {
@@ -56,7 +56,7 @@ class ContactRepository {
     if (json == true) {
       return json;
     } else {
-      return ErrorResponse.fromJson(json).message ?? 'Ошибка';
+      return ErrorResponse.fromJson(json);
     }
   }
 

@@ -13,7 +13,7 @@ import 'package:izowork/repositories/document_repository.dart';
 import 'package:izowork/screens/documents/documents_filter_sheet/documents_filter_page_view_screen.dart';
 import 'package:izowork/screens/documents/documents_filter_sheet/documents_filter_page_view_screen_body.dart';
 import 'package:izowork/screens/documents/documents_screen.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,8 +45,10 @@ class DocumentsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future getDealList(
-      {required Pagination pagination, required String search}) async {
+  Future getDealList({
+    required Pagination pagination,
+    required String search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _documents.clear();

@@ -17,7 +17,7 @@ import 'package:izowork/screens/deal/sheets/deal_process_info_sheet.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' as io;

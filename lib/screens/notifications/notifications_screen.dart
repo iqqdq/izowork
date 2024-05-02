@@ -4,10 +4,12 @@ import 'package:izowork/screens/notifications/notifications_screen_body.dart';
 import 'package:provider/provider.dart';
 
 class NotificationsScreenWidget extends StatelessWidget {
-  final Function(int) onPop;
+  final VoidCallback onPop;
 
-  const NotificationsScreenWidget({Key? key, required this.onPop})
-      : super(key: key);
+  const NotificationsScreenWidget({
+    Key? key,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

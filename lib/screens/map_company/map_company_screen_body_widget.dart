@@ -1,18 +1,14 @@
-import 'dart:io';
-import 'package:android_intent_plus/android_intent.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/company.dart';
-import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/helpers/browser.dart';
 import 'package:izowork/screens/company/company_screen.dart';
-import 'package:izowork/screens/contact/contact_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
-import 'package:izowork/services/local_service.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
+import 'package:izowork/services/local_storage/local_storage.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/status_widget.dart';
@@ -55,67 +51,18 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
   }
 
   Future _showUserScreen() async {
-    if (_company.manager != null) {
-      User? user = await LocalService().getUser();
+    User? user = await GetIt.I<LocalStorageService>().getUser();
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProfileScreenWidget(
-                  isMine: _company.manager?.id == user?.id,
-                  user: _company.manager!,
-                  onPop: (user) => {
-                        if (context.mounted)
-                          setState(() => _company.manager = user)
-                      })));
-    }
-  }
-
-  void _showContactScreen(int index) {
     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ContactScreenWidget(
-            contact: _company.contacts[index],
-            onDelete: (contact) => {
-                  setState(
-                    () => _company.contacts.removeWhere(
-                      (element) => element.id == contact.id,
-                    ),
-                  )
-                }),
-      ),
-    );
-  }
-
-  void _openUrl(String url) async {
-    if (url.isNotEmpty) {
-      WebViewHelper webViewHelper = WebViewHelper();
-      String? nativeUrl;
-
-      if (url.contains('t.me')) {
-        nativeUrl = 'tg:resolve?domain=${url.replaceAll('t.me/', '')}';
-      } else if (url.characters.first == '@') {
-        nativeUrl = 'instagram://user?username=${url.replaceAll('@', '')}';
-      }
-
-      if (Platform.isAndroid) {
-        if (nativeUrl != null) {
-          AndroidIntent intent = AndroidIntent(
-              action: 'android.intent.action.VIEW', data: nativeUrl);
-
-          if ((await intent.canResolveActivity()) == true) {
-            await intent.launch();
-          }
-        } else {
-          webViewHelper.openWebView(url);
-        }
-      } else {
-        nativeUrl != null
-            ? webViewHelper.openWebView(nativeUrl)
-            : webViewHelper.openWebView(url);
-      }
-    }
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileScreenWidget(
+              isMine: _company.manager?.id == user?.id,
+              user: _company.manager!,
+              onPop: (user) => {
+                    if (context.mounted) setState(() => _company.manager = user)
+                  }),
+        ));
   }
 
   @override
@@ -208,7 +155,9 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
                             ),
                           ),
                         ]),
-                    onTap: () => _showUserScreen(),
+                    onTap: _company.manager == null
+                        ? null
+                        : () => _showUserScreen(),
                   ),
                   const SizedBox(height: 16.0),
 

@@ -155,15 +155,16 @@ class _TabControllerScreenBodyState
                         _tabControllerViewModel.notificationCount
                                     .toString()
                                     .length >
-                                4
+                                3
                             ? _tabControllerViewModel.notificationCount
-                                .toString()
-                                .substring(0, 3)
+                                    .toString()
+                                    .substring(0, 2) +
+                                '...'
                             : _tabControllerViewModel.notificationCount
                                 .toString(),
                         style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.w500,
                           color: HexColors.white,
                         )),
                     isLabelVisible:
@@ -178,20 +179,13 @@ class _TabControllerScreenBodyState
                 ),
               ],
               currentIndex: _index,
-              onTap: (index) => setState(() {
-                switch (index) {
-                  case 3:
-                    _tabControllerViewModel.clearMessageBadge();
-                    break;
-                  case 4:
-                    _tabControllerViewModel.clearNotificationBadge();
-                    break;
-                  default:
-                }
-
-                _index = index;
-                _pageController?.jumpToPage(_index);
-              }),
+              onTap: (index) => {
+                if (index == 3) _tabControllerViewModel.clearMessageBadge(),
+                if (index == 4)
+                  _tabControllerViewModel.clearNotificationBadge(),
+                _index = index,
+                _pageController?.jumpToPage(_index),
+              },
             ),
     );
   }

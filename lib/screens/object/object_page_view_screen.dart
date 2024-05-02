@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/object.dart';
+import 'package:izowork/entities/response/object_stage.dart';
 import 'package:izowork/entities/response/phase.dart';
-import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/screens/object/object_page/object_page_screen.dart';
 import 'package:izowork/screens/object/object_actions/object_actions_screen.dart';
 import 'package:izowork/screens/phase/phase_screen.dart';
-import 'package:izowork/services/local_service.dart';
+import 'package:izowork/services/local_storage/local_storage.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/segmented_control_widget.dart';
 
 class ObjectPageViewScreenWidget extends StatefulWidget {
   final Object object;
+  final List<ObjectStage>? objectStages;
   final Phase? phase;
 
   const ObjectPageViewScreenWidget({
     Key? key,
     required this.object,
+    this.objectStages,
     this.phase,
   }) : super(key: key);
 
@@ -38,6 +41,7 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
     _pages = [
       ObjectPageScreenWidget(
         object: widget.object,
+        objectStages: widget.objectStages,
         onCoordCopy: () => Toast().showTopToast(
           context,
           Titles.didCopied,
@@ -51,7 +55,7 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
 
     // PUSH FROM NOTIFICATION's SCREEN
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      User? user = await LocalService().getUser();
+      User? user = await GetIt.I<LocalStorageService>().getUser();
 
       if (widget.phase != null) {
         if (mounted) {
@@ -89,9 +93,9 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
               const SizedBox(height: 12.0),
               Stack(children: [
                 Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: BackButtonWidget(onTap: () => Navigator.pop(context)),
+                ),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.75,

@@ -2,15 +2,15 @@ import 'dart:io';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/services/local_service.dart';
+import 'package:izowork/services/local_storage/local_storage.dart';
 import 'package:izowork/entities/request/user_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/user_repository.dart';
 import 'package:izowork/screens/authorization/authorization_screen.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen_body.dart';
@@ -122,8 +122,9 @@ class ProfileEditViewModel with ChangeNotifier {
                   Future.delayed(
                       Duration.zero,
                       () => {
-                            /// LOGOUT
-                            LocalService().clear(),
+                            /// CLEAR LOCAL STORAGE
+                            GetIt.I<LocalStorageService>().clear(),
+
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(

@@ -12,7 +12,7 @@ import 'package:izowork/entities/request/message_request.dart';
 import 'package:izowork/entities/response/message.dart';
 import 'package:izowork/models/dialog_view_model.dart';
 import 'package:izowork/screens/dialog/views/bubble_widget.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -66,7 +66,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _dialogViewModel.getLocalService().then((value) => _dialogViewModel
+      _dialogViewModel.getLocalStorageParams().then((value) => _dialogViewModel
           .connectSocket()
           .then((value) => _addSocketListener(_dialogViewModel.socket))
           .then(

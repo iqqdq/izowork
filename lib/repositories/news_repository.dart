@@ -5,14 +5,15 @@ import 'package:izowork/entities/request/news_request.dart';
 import 'package:izowork/entities/response/error_response.dart';
 import 'package:izowork/entities/response/news.dart';
 import 'package:izowork/entities/response/news_comment.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/services/web_service.dart';
 
 class NewsRepository {
-  Future<dynamic> getNews(
-      {required Pagination pagination,
-      required String search,
-      List<String>? params}) async {
+  Future<dynamic> getNews({
+    required Pagination pagination,
+    required String search,
+    List<String>? params,
+  }) async {
     var url = newsUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
     if (search.isNotEmpty) {

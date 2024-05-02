@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
-import 'package:izowork/services/local_service.dart';
+import 'package:izowork/services/local_storage/local_storage.dart';
 import 'package:izowork/entities/request/authorization_request.dart';
 import 'package:izowork/entities/response/authorization.dart';
 import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/authorization_repository.dart';
 import 'package:izowork/repositories/user_repository.dart';
 import 'package:izowork/screens/recovery/recovery_screen.dart';
@@ -36,7 +36,7 @@ class AuthorizationViewModel with ChangeNotifier {
             if (response is Authorization)
               {
                 /// SAVE USER TOKEN
-                LocalService()
+                GetIt.I<LocalStorageService>()
                     .setToken(response.token)
                     .whenComplete(() => getUserProfile(context))
               }
@@ -44,10 +44,7 @@ class AuthorizationViewModel with ChangeNotifier {
               {
                 loadingStatus = LoadingStatus.error,
                 notifyListeners(),
-                Toast().showTopToast(
-                  context,
-                  Titles.invalidLogin,
-                )
+                Toast().showTopToast(context, Titles.invalidLogin)
               }
           },
         );
@@ -62,16 +59,19 @@ class AuthorizationViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.completed,
                   notifyListeners(),
 
-                  // SAVE USER
-                  LocalService().setUser(response).then((value) =>
-                      // SHOW MAIN SREEN
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const TabControllerScreenWidget()),
-                        (route) => false,
-                      ))
+                  /// SAVE USER
+                  GetIt.I<LocalStorageService>()
+                      .setUser(response)
+                      .then((value) =>
+
+                          /// SHOW TAB CONTROLLER SCREEN
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const TabControllerScreenWidget()),
+                            (route) => false,
+                          ))
                 }
               else
                 loadingStatus = LoadingStatus.error,

@@ -8,17 +8,21 @@ import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page
 
 class ObjectsFilterViewModel with ChangeNotifier {
   final ObjectsFilter? objectsFilter;
-  List<ObjectStage> objectStages;
+
+  final List<ObjectStage> objectStages;
 
   final List<String> _options = [];
   List<int> tags = [];
 
-  List<String> options2 = ['По возрастанию', 'По убыванию'];
+  final List<String> options2 = ['По возрастанию', 'По убыванию'];
   List<int> tags2 = [];
 
   User? _manager;
+
   Company? _designer;
+
   Company? _contractor;
+
   Company? _customer;
 
   User? get manager => _manager;

@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/company.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/views/status_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 import 'package:izowork/views/title_widget.dart';

@@ -40,10 +40,13 @@ class MapViewModel with ChangeNotifier {
 
   // DATA
   final List<Object> _objects = [];
+
   List<ObjectStage>? _objectStages;
+
   ObjectsFilter? _objectsFilter;
 
   final List<Company> _companies = [];
+
   CompaniesFilter? _companiesFilter;
 
   bool get hasPermission => _hasPermission;

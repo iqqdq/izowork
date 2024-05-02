@@ -8,7 +8,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/chat.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/views/count_widget.dart';
 import 'package:izowork/views/title_widget.dart';
 

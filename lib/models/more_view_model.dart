@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
+import 'package:get_it/get_it.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/services/local_service.dart';
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/repositories/notification_repository.dart';
+import 'package:izowork/services/local_storage/local_storage.dart';
 import 'package:izowork/repositories/user_repository.dart';
-import 'package:izowork/screens/analytics/analytics_page_view_screen.dart';
-import 'package:izowork/screens/authorization/authorization_screen.dart';
-import 'package:izowork/screens/companies/companies_screen.dart';
-import 'package:izowork/screens/contacts/contacts_screen.dart';
-import 'package:izowork/screens/documents/documents_screen.dart';
-import 'package:izowork/screens/news/news_screen.dart';
-import 'package:izowork/screens/notifications/notifications_screen.dart';
-import 'package:izowork/screens/products/products_screen.dart';
-import 'package:izowork/screens/profile/profile_screen.dart';
-import 'package:izowork/screens/staff/staff_screen.dart';
-import 'package:izowork/services/push_notification_service.dart';
-import 'package:izowork/views/border_button_widget.dart';
+import 'package:izowork/services/push_notification/push_notification.dart';
 
 class MoreViewModel with ChangeNotifier {
   final int count;
+
+  final GetIt _getIt = GetIt.I;
 
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
@@ -43,133 +33,45 @@ class MoreViewModel with ChangeNotifier {
   Future getProfile() async {
     loadingStatus = LoadingStatus.searching;
 
-    await UserRepository().getUser(null).then((response) => {
-          if (response is User)
-            {
-              _user = response,
-              loadingStatus = LoadingStatus.completed,
-            }
-          else
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
-        });
+    await UserRepository()
+        .getUser(null)
+        .then((response) => {
+              if (response is User)
+                {
+                  _user = response,
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else
+                loadingStatus = LoadingStatus.error,
+            })
+        .then((value) => notifyListeners());
+  }
+
+  Future getUnreadNotificationCount() async {
+    await NotificationRepository()
+        .getNotificationUnreadCount()
+        .then((response) => {
+              if (response is int)
+                {
+                  _notificationCount = response,
+                  notifyListeners(),
+                }
+            });
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
-  void showProfileScreen(BuildContext context) {
-    if (_user != null) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProfileScreenWidget(
-                  isMine: true,
-                  user: _user!,
-                  onPop: (user) => {
-                        _user = user,
-                        notifyListeners(),
-                      })));
-    }
+  void updateUser(User user) {
+    _user = user;
+    notifyListeners();
   }
 
-  void showNewsScreen(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const NewsScreenWidget()));
+  Future logout() async {
+    /// CLEAR LOCAL STORAGE
+    await _getIt<LocalStorageService>().clear();
+
+    /// DELETE DEVICE TOKEN
+    await _getIt<PushNotificationService>().deleteDeviceToken();
   }
-
-  void showStaffScreen(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const StaffScreenWidget()));
-  }
-
-  void showContactsScreen(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const ContactsScreenWidget()));
-  }
-
-  void showCompaniesScreen(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const CompaniesScreenWidget()));
-  }
-
-  void showProductsScreen(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const ProductsScreenWidget()));
-  }
-
-  void showAnaliticsScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const AnalyticsPageViewScreenBodyWidget()));
-  }
-
-  void showDocumentsScreen(BuildContext context) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const DocumentsScreenWidget()));
-  }
-
-  void showNotificationsScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => NotificationsScreenWidget(
-                onPop: (count) => {
-                      _notificationCount = count,
-                      Future.delayed(Duration.zero),
-                      () => notifyListeners(),
-                    })));
-  }
-
-  Future showLogoutDialog(BuildContext context) async => showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-            title: Text(
-              Titles.logoutAreYouSure,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: HexColors.black,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            actions: <Widget>[
-              Row(
-                children: [
-                  Expanded(
-                      child: BorderButtonWidget(
-                          margin: EdgeInsets.zero,
-                          title: Titles.logout,
-                          isDestructive: true,
-                          onTap: () {
-                            /// LOGOUT
-                            LocalService().clear();
-
-                            /// DELETE DEVICE TOKEN
-                            PushNotificationService().deleteDeviceToken();
-
-                            /// SHOW AUTHORIZATION SCREEN
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const AuthorizationScreenWidget()),
-                              (route) => false,
-                            );
-                          })),
-                  const SizedBox(width: 16.0),
-                  Expanded(
-                    child: BorderButtonWidget(
-                      margin: EdgeInsets.zero,
-                      title: Titles.cancel,
-                      onTap: () => Navigator.of(context).pop(),
-                    ),
-                  ),
-                ],
-              ),
-            ]);
-      });
 }

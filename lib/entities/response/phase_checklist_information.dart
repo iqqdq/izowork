@@ -48,21 +48,21 @@ class PhaseChecklistInfo {
 
 class FileElement {
   FileElement({
-    required this.ChecklistInfoId,
+    required this.checklistInfoId,
     required this.filename,
     required this.id,
     required this.mimetype,
     required this.name,
   });
 
-  String ChecklistInfoId;
+  String checklistInfoId;
   String filename;
   String id;
   String mimetype;
   String name;
 
   factory FileElement.fromJson(Map<String, dynamic> json) => FileElement(
-        ChecklistInfoId: json["checklist_information_id"],
+        checklistInfoId: json["checklist_information_id"],
         filename: json["filename"],
         id: json["id"],
         mimetype: json["mimetype"],
@@ -70,7 +70,7 @@ class FileElement {
       );
 
   Map<String, dynamic> toJson() => {
-        "checklist_information_id": ChecklistInfoId,
+        "checklist_information_id": checklistInfoId,
         "filename": filename,
         "id": id,
         "mimetype": mimetype,

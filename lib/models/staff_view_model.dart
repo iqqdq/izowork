@@ -2,13 +2,13 @@
 import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/helpers/browser.dart';
-import 'package:izowork/services/local_service.dart';
+import 'package:izowork/services/local_storage/local_storage.dart';
 import 'package:izowork/entities/request/chat_dm_request.dart';
 import 'package:izowork/entities/response/chat.dart';
-import 'package:izowork/entities/response/user.dart';
 import 'package:izowork/repositories/chat_repository.dart';
 import 'package:izowork/repositories/user_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
@@ -24,7 +24,7 @@ class StaffViewModel with ChangeNotifier {
   List<User> get users => _users;
 
   StaffViewModel() {
-    getLocalService().whenComplete(
+    setUserId().whenComplete(
         () => getUserList(pagination: Pagination(offset: 0, size: 50)));
   }
 
@@ -123,10 +123,9 @@ class StaffViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  Future getLocalService() async {
-    await LocalService().getUser().then((value) => {
-          userId = value?.id,
-        });
+  Future setUserId() async {
+    User? user = await GetIt.I<LocalStorageService>().getUser();
+    userId = user?.id;
   }
 
   void openUrl(String url) async {

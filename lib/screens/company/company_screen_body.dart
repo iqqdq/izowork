@@ -11,7 +11,7 @@ import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/models/company_view_model.dart';
 import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
 import 'package:izowork/screens/products/views/product_list_item_widget.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/filter_button_widget.dart';

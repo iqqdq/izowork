@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/repositories/chat_repository.dart';
+import 'package:izowork/repositories/fcm_token_repository.dart';
 import 'package:izowork/repositories/notification_repository.dart';
+import 'package:izowork/services/push_notification/push_notification.dart';
 
 class TabControllerViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
-  // LoadingStatus loadingStatus = LoadingStatus.completed;
 
   int _messageCount = 0;
 
@@ -16,15 +18,29 @@ class TabControllerViewModel with ChangeNotifier {
   int get notificationCount => _notificationCount;
 
   TabControllerViewModel() {
-    getUnreadMessageCount()
-        .then((value) => getUnreadNotificationCount().then((value) => {
+    _updateDeviceToken().whenComplete(
+      () => getUnreadMessageCount().then(
+        (value) => getUnreadNotificationCount().then((value) => {
               loadingStatus = LoadingStatus.completed,
               notifyListeners(),
-            }));
+            }),
+      ),
+    );
   }
 
   // MARK: -
   // MARK: - API CALLS
+
+  Future _updateDeviceToken() async {
+    // GET DEVICE TOKEN FROM FIREBASE
+    await GetIt.I<PushNotificationService>()
+        .getDeviceToken()
+        .then((value) async {
+      if (value == null) return;
+      // CALL API TO SAVE SEVICE TOKEN
+      await FcmTokenRepository().sendDeviceToken(value);
+    });
+  }
 
   Future getUnreadMessageCount() async {
     await ChatRepository().getUnreadMessageCount().then((response) => {

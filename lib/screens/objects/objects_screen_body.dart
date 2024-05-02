@@ -27,8 +27,10 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
+
   Pagination _pagination = Pagination(offset: 0, size: 50);
   bool _isSearching = false;
+
   late ObjectsViewModel _objectsViewModel;
 
   @override
@@ -146,7 +148,7 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                         left: 16.0,
                         right: 16.0,
                         top: 16.0,
-                        bottom: 16.0 + 48.0,
+                        bottom: 64.0,
                       ),
                       itemCount: _objectsViewModel.objects.length,
                       itemBuilder: (context, index) {

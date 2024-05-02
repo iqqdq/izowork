@@ -5,7 +5,7 @@ import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/map_object_view_model.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/object/object_page_view_screen.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/views/border_button_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
 import 'package:izowork/views/subtitle_widget.dart';

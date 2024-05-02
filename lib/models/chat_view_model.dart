@@ -1,13 +1,14 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/entities/response/chat.dart';
 import 'package:izowork/repositories/chat_repository.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
-import 'package:izowork/services/local_service.dart';
+import 'package:izowork/services/local_storage/local_storage.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class ChatViewModel with ChangeNotifier {
@@ -103,14 +104,10 @@ class ChatViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  Future getLocalService() async {
-    LocalService localService = LocalService();
-    token = await localService.getToken();
-  }
+  Future getLocalStorageParams() async =>
+      token = await GetIt.I<LocalStorageService>().getToken();
 
-  void clearChats() {
-    _chats.clear();
-  }
+  void clearChats() => _chats.clear();
 
   // MARK: -
   // MARK: - PUSH

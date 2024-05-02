@@ -12,7 +12,7 @@ import 'package:izowork/entities/response/deal_process_info.dart';
 import 'package:izowork/entities/response/deal_stage.dart';
 import 'package:izowork/entities/response/document.dart';
 import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:izowork/services/web_service.dart';
 
 class DealRepository {
@@ -177,7 +177,7 @@ class DealRepository {
     if (json == true) {
       return json;
     } else {
-      return ErrorResponse.fromJson(json).message ?? 'Ошибка';
+      return ErrorResponse.fromJson(json);
     }
   }
 
@@ -201,7 +201,7 @@ class DealRepository {
     if (json == true) {
       return json;
     } else {
-      return ErrorResponse.fromJson(json).message ?? 'Ошибка';
+      return ErrorResponse.fromJson(json);
     }
   }
 

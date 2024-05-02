@@ -27,7 +27,9 @@ class _ObjectAnalyticsScreenBodyState
 
   Widget _table(int index) {
     List<PhaseProduct> phaseProducts =
-        _objectAnalyticsViewModel.phaseProductList[index];
+        _objectAnalyticsViewModel.phaseProductList.isEmpty
+            ? []
+            : _objectAnalyticsViewModel.phaseProductList[index];
 
     return phaseProducts.isEmpty
         ? Container()
@@ -115,30 +117,34 @@ class _ObjectAnalyticsScreenBodyState
                                     fontFamily: 'PT Root UI'))
                           ])),
                       rowHeaderBuilder: (_, index) => Container(
-                          height: 42.0,
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            width: 0.65,
-                            color: HexColors.grey20,
-                          )),
-                          child: Row(children: [
-                            Expanded(
-                                child: Text(
-                                    phaseProducts[index].product?.name ?? '-',
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: HexColors.black,
-                                        overflow: TextOverflow.ellipsis,
-                                        fontFamily: 'PT Root UI')))
-                          ])),
+                        height: 42.0,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                          width: 0.65,
+                          color: HexColors.grey20,
+                        )),
+                        child: Row(children: [
+                          Expanded(
+                              child: Text(
+                                  phaseProducts[index].product?.name ?? '-',
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: HexColors.black,
+                                    overflow: TextOverflow.ellipsis,
+                                    fontFamily: 'PT Root UI',
+                                  )))
+                        ]),
+                      ),
                       colHeaderBuilder: (_, index) => Container(
                           height: 42.0,
                           padding: const EdgeInsets.symmetric(horizontal: 2.0),
                           decoration: BoxDecoration(
                               border: Border.all(
-                                  width: 0.65, color: HexColors.grey20)),
+                            width: 0.65,
+                            color: HexColors.grey20,
+                          )),
                           child: Center(
                               child: Text(
                                   index == 0
@@ -152,10 +158,11 @@ class _ObjectAnalyticsScreenBodyState
                                                   : Titles.complitionSum,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: HexColors.black,
-                                      fontFamily: 'PT Root UI')))),
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: HexColors.black,
+                                    fontFamily: 'PT Root UI',
+                                  )))),
                       rowHeaderWidth: 144.0,
                       colsHeaderHeight: 42.0,
                       cellHeight: 50.0,

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
+import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/models/object_view_model.dart';
 import 'package:izowork/screens/object/object_page/views/object_stage_header_widget.dart';
@@ -47,385 +48,424 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
       listen: true,
     );
 
-    String _kiso = _objectPageViewModel.object?.kiso ??
-        _objectPageViewModel.selectedObject.kiso ??
-        '';
+    String _kiso = _objectPageViewModel.object?.kiso ?? '';
 
     return Scaffold(
-        backgroundColor: HexColors.white,
-        body: Material(
-            type: MaterialType.transparency,
-            child: Container(
-                color: HexColors.white,
-                child: Stack(children: [
-                  ListView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(
-                          top: 14.0,
-                          left: 16.0,
-                          right: 16.0,
-                          bottom: MediaQuery.of(context).padding.bottom == 0.0
-                              ? 20.0 + 54.0
-                              : MediaQuery.of(context).padding.bottom + 54.0),
-                      children: [
-                        ///  NAME
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.objectName,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _objectPageViewModel.object?.name ??
-                                _objectPageViewModel.selectedObject.name),
+      backgroundColor: HexColors.white,
+      body: Material(
+        type: MaterialType.transparency,
+        child: Container(
+          color: HexColors.white,
+          child: Stack(children: [
+            ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.only(
+                  top: 14.0,
+                  left: 16.0,
+                  right: 16.0,
+                  bottom: MediaQuery.of(context).padding.bottom == 0.0
+                      ? 74.0
+                      : MediaQuery.of(context).padding.bottom + 54.0,
+                ),
+                children: [
+                  ///  NAME
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.objectName,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.name ?? '',
+                  ),
 
-                        /// ADDRESS
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.address,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _objectPageViewModel.object?.address ??
-                                _objectPageViewModel.selectedObject.address),
+                  /// ADDRESS
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.address,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.address ?? '',
+                  ),
 
-                        Row(children: [
-                          Expanded(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                /// COORDINATES
-                                const TitleWidget(
-                                  padding: EdgeInsets.only(bottom: 4.0),
-                                  text: Titles.coordinates,
-                                  isSmall: true,
-                                ),
+                  Row(children: [
+                    Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          /// COORDINATES
+                          const TitleWidget(
+                            padding: EdgeInsets.only(bottom: 4.0),
+                            text: Titles.coordinates,
+                            isSmall: true,
+                          ),
 
-                                GestureDetector(
-                                    onLongPress: () => _objectPageViewModel
-                                        .copyCoordinates(
-                                            context,
-                                            _objectPageViewModel.object?.lat ??
-                                                _objectPageViewModel
-                                                    .selectedObject.lat,
-                                            _objectPageViewModel.object?.long ??
-                                                _objectPageViewModel
-                                                    .selectedObject.long)
-                                        .then((value) => widget.onCoordCopy()),
-                                    child: SubtitleWidget(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 16.0),
-                                        text: _objectPageViewModel.object ==
-                                                null
-                                            ? '${_objectPageViewModel.selectedObject.lat}, ${_objectPageViewModel.selectedObject.long}'
-                                            : '${_objectPageViewModel.object?.lat}, ${_objectPageViewModel.object?.long}'))
-                              ])),
-                          GestureDetector(
-                              onTap: () => _objectPageViewModel
-                                  .showSingleObjectMap(context),
-                              child: SvgPicture.asset('assets/ic_map.svg',
-                                  color: HexColors.primaryMain))
-                        ]),
-
-                        /// TECHNICAL MANAGER
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.techManager,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text:
-                              _objectPageViewModel.object?.techManager?.name ??
-                                  '-',
-                        ),
-
-                        /// OFFICE
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.filial,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _objectPageViewModel.object?.office?.name ??
-                              _objectPageViewModel
-                                  .selectedObject.office?.name ??
-                              '-',
-                        ),
-
-                        /// MANAGER
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.manager,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text:
-                              _objectPageViewModel.object?.manager?.name ?? '-',
-                        ),
-
-                        /// GENERAL CONTRACTOR
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.generalContractor,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _objectPageViewModel.object?.contractor?.name ??
-                              '-',
-                        ),
-
-                        /// CUSTOMER
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.customer,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _objectPageViewModel.object?.customer?.name ??
-                              '-',
-                        ),
-
-                        /// DEGISNER
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.designer,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _objectPageViewModel.object?.designer?.name ??
-                              '-',
-                        ),
-
-                        /// TYPE
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.objectType,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _objectPageViewModel.object?.objectType?.name ??
-                              _objectPageViewModel
-                                  .selectedObject.objectType?.name ??
-                              '-',
-                        ),
-
-                        /// FLOOR COUNT
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.floorCount,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _objectPageViewModel.object?.floors
-                                    .toString() ??
-                                _objectPageViewModel.selectedObject.floors
-                                    .toString()),
-
-                        /// AREA
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.area,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text:
-                                _objectPageViewModel.object?.area.toString() ??
-                                    _objectPageViewModel.selectedObject.area
-                                        .toString()),
-
-                        /// BUILDING TIME
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.buildingTime,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _objectPageViewModel.object?.constructionPeriod
-                                  ?.toString() ??
-                              '-',
-                        ),
-
-                        /// STAGE
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.stages,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text:
-                              _objectPageViewModel.object?.objectStage?.name ??
-                                  _objectPageViewModel
-                                      .selectedObject.objectStage?.name ??
-                                  '-',
-                        ),
-
-                        /// KISO
-                        const TitleWidget(
-                          padding: EdgeInsets.only(bottom: 4.0),
-                          text: Titles.kiso,
-                          isSmall: true,
-                        ),
-                        SubtitleWidget(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _kiso.isEmpty ? '-' : _kiso,
-                        ),
-
-                        /// FILE LIST
-                        _objectPageViewModel.selectedObject.files.isEmpty
-                            ? Container()
-                            : const TitleWidget(
-                                padding: EdgeInsets.only(bottom: 10.0),
-                                text: Titles.files,
-                                isSmall: true,
-                              ),
-
-                        ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount:
-                                _objectPageViewModel.object?.files.length ??
-                                    _objectPageViewModel
-                                        .selectedObject.files.length,
-                            itemBuilder: (context, index) {
-                              return FileListItemWidget(
-                                  key: ValueKey(_objectPageViewModel
-                                      .object?.files[index].id),
-                                  fileName: _objectPageViewModel
-                                          .object?.files[index].name ??
-                                      _objectPageViewModel
-                                          .selectedObject.files[index].name,
-                                  isDownloading:
-                                      _objectPageViewModel.downloadIndex ==
-                                          index,
-                                  onTap: () => _objectPageViewModel.openFile(
+                          _objectPageViewModel.object == null
+                              ? Container()
+                              : GestureDetector(
+                                  onLongPress: () => _objectPageViewModel
+                                      .copyCoordinates(
                                         context,
-                                        index,
-                                      ));
-                            }),
+                                        _objectPageViewModel.object!.lat,
+                                        _objectPageViewModel.object!.long,
+                                      )
+                                      .then((value) => widget.onCoordCopy()),
+                                  child: SubtitleWidget(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 16.0),
+                                    text:
+                                        '${_objectPageViewModel.object!.lat}, ${_objectPageViewModel.object!.long}',
+                                  ))
+                        ])),
+                    GestureDetector(
+                        onTap: () =>
+                            _objectPageViewModel.showSingleObjectMap(context),
+                        child: SvgPicture.asset(
+                          'assets/ic_map.svg',
+                          color: HexColors.primaryMain,
+                        ))
+                  ]),
 
-                        /// PHASES TABLE
-                        Container(
-                            decoration: BoxDecoration(
-                                color: HexColors.white,
-                                borderRadius: BorderRadius.circular(16.0),
-                                border: Border.all(
-                                    width: 1.0, color: HexColors.grey20)),
-                            child: ListView(
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                children: [
-                                  const ObjectStageHeaderWidget(),
-                                  const SizedBox(height: 10.0),
-                                  const SeparatorWidget(),
-                                  _objectPageViewModel.phases.isEmpty
-                                      ? const SizedBox(
-                                          height: 400.0,
-                                          child: LoadingIndicatorWidget())
-                                      : ListView.builder(
-                                          shrinkWrap: true,
-                                          padding: EdgeInsets.zero,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemCount: _objectPageViewModel
-                                              .phases.length,
-                                          itemBuilder: (context, index) {
-                                            return ObjectStageListItemWidget(
-                                                key: ValueKey(
-                                                    _objectPageViewModel
-                                                        .phases[index].id),
-                                                title: _objectPageViewModel
-                                                    .phases[index].name,
-                                                effectivenes:
-                                                    _objectPageViewModel
-                                                        .phases[index]
-                                                        .efficiency,
-                                                readiness: _objectPageViewModel
-                                                    .phases[index].readiness,
-                                                showSeparator: index <
-                                                    _objectPageViewModel
-                                                            .phases.length -
-                                                        1,
-                                                onTap: () =>
-                                                    _objectPageViewModel
-                                                        .showPhaseScreen(
-                                                      context,
-                                                      index,
-                                                    ));
-                                          })
-                                ])),
-                        const SizedBox(height: 20.0),
+                  /// TECHNICAL MANAGER
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.techManager,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.techManager?.name ?? '-',
+                  ),
 
-                        /// DOCUMENTS BUTTON
-                        SelectionInputWidget(
-                          margin: const EdgeInsets.only(bottom: 10.0),
-                          title: '',
-                          value: Titles.documents,
-                          onTap: () =>
-                              _objectPageViewModel.showDocumentsScreen(context),
-                        ),
+                  /// OFFICE
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.filial,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.office?.name ?? '-',
+                  ),
 
-                        /// ANALYTICS BUTTON
-                        SelectionInputWidget(
+                  /// MANAGER
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.manager,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.manager?.name ?? '-',
+                  ),
+
+                  /// GENERAL CONTRACTOR
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.generalContractor,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.contractor?.name ?? '-',
+                  ),
+
+                  /// CUSTOMER
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.customer,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.customer?.name ?? '-',
+                  ),
+
+                  /// DEGISNER
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.designer,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.designer?.name ?? '-',
+                  ),
+
+                  /// TYPE
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.objectType,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.objectType?.name ?? '-',
+                  ),
+
+                  /// FLOOR COUNT
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.floorCount,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.floors.toString() ?? '-',
+                  ),
+
+                  /// AREA
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.area,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.area.toString() ?? '-',
+                  ),
+
+                  /// BUILDING TIME
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.buildingTime,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.constructionPeriod
+                            ?.toString() ??
+                        '-',
+                  ),
+
+                  /// STAGE
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.stages,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _objectPageViewModel.object?.objectStage?.name ?? '-',
+                  ),
+
+                  /// KISO
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.kiso,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _kiso.isEmpty ? '-' : _kiso,
+                  ),
+
+                  /// FILE LIST
+                  _objectPageViewModel.object == null
+                      ? Container()
+                      : _objectPageViewModel.object!.files.isEmpty
+                          ? Container()
+                          : const TitleWidget(
+                              padding: EdgeInsets.only(bottom: 10.0),
+                              text: Titles.files,
+                              isSmall: true,
+                            ),
+
+                  ListView.builder(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _objectPageViewModel.object?.files.length ?? 0,
+                      itemBuilder: (context, index) {
+                        return FileListItemWidget(
+                            key: ValueKey(
+                                _objectPageViewModel.object?.files[index].id),
+                            fileName: _objectPageViewModel
+                                    .object?.files[index].name ??
+                                '',
+                            isDownloading:
+                                _objectPageViewModel.downloadIndex == index,
+                            onTap: () => _objectPageViewModel.openFile(
+                                  context,
+                                  index,
+                                ));
+                      }),
+
+                  /// PHASES TABLE
+                  Container(
+                      decoration: BoxDecoration(
+                          color: HexColors.white,
+                          borderRadius: BorderRadius.circular(16.0),
+                          border:
+                              Border.all(width: 1.0, color: HexColors.grey20)),
+                      child: ListView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          children: [
+                            const ObjectStageHeaderWidget(),
+                            const SizedBox(height: 10.0),
+                            const SeparatorWidget(),
+                            _objectPageViewModel.phases.isEmpty
+                                ? const SizedBox(
+                                    height: 400.0,
+                                    child: LoadingIndicatorWidget())
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.zero,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount:
+                                        _objectPageViewModel.phases.length,
+                                    itemBuilder: (context, index) {
+                                      return ObjectStageListItemWidget(
+                                          key: ValueKey(_objectPageViewModel
+                                              .phases[index].id),
+                                          title: _objectPageViewModel
+                                              .phases[index].name,
+                                          effectivenes: _objectPageViewModel
+                                              .phases[index].efficiency,
+                                          readiness: _objectPageViewModel
+                                              .phases[index].readiness,
+                                          showSeparator: index <
+                                              _objectPageViewModel
+                                                      .phases.length -
+                                                  1,
+                                          onTap: () => _objectPageViewModel
+                                                  .showPhaseScreen(
+                                                context,
+                                                index,
+                                              ));
+                                    })
+                          ])),
+                  const SizedBox(height: 20.0),
+
+                  /// DOCUMENTS BUTTON
+                  SelectionInputWidget(
+                    margin: const EdgeInsets.only(bottom: 10.0),
+                    title: '',
+                    value: Titles.documents,
+                    onTap: () =>
+                        _objectPageViewModel.showDocumentsScreen(context),
+                  ),
+
+                  /// ANALYTICS BUTTON
+                  SelectionInputWidget(
+                    margin: const EdgeInsets.only(bottom: 10.0),
+                    title: '',
+                    value: Titles.analytics,
+                    onTap: () => _objectPageViewModel
+                        .showObjectAnalyticsPageViewScreen(context),
+                  ),
+
+                  /// SHOW CHAT BUTTON
+                  _objectPageViewModel.object?.chat == null
+                      ? Container()
+                      : SelectionInputWidget(
                           margin: const EdgeInsets.only(bottom: 20.0),
                           title: '',
-                          value: Titles.analytics,
+                          value: Titles.chat,
+                          onTap: () =>
+                              _objectPageViewModel.showDialogScreen(context),
+                        ),
+
+                  /// CHANGE OBJECT STAGE ADMIN BUTTON
+                  !_objectPageViewModel.isAdmin
+                      ? _objectPageViewModel.object?.objectStage?.name ==
+                                  'Закончен' ||
+                              _objectPageViewModel.object?.objectStage?.name ==
+                                  'На доработке'
+                          ? Container()
+                          : BorderButtonWidget(
+                              title: Titles.sendToRevision,
+                              margin: const EdgeInsets.only(bottom: 16.0),
+                              onTap: () => _objectPageViewModel
+                                  .changeObjectStage()
+                                  .whenComplete(() => {
+                                        if (_objectPageViewModel
+                                                .loadingStatus ==
+                                            LoadingStatus.completed)
+                                          {
+                                            Toast().showTopToast(context,
+                                                Titles.objectStageChanged)
+                                          }
+                                      }),
+                            )
+
+                      /// CHANGE OBJECT STAGE ADMIN BUTTON
+                      : _objectPageViewModel.object?.objectStage?.name ==
+                                  'Закончен' ||
+                              _objectPageViewModel.object?.objectStage?.name ==
+                                  'На рассмотрении руководителя'
+                          ? Container()
+                          : BorderButtonWidget(
+                              title: Titles.sendToApproval,
+                              margin: const EdgeInsets.only(bottom: 16.0),
+                              onTap: () => _objectPageViewModel
+                                  .changeObjectStage()
+                                  .whenComplete(() => {
+                                        if (_objectPageViewModel
+                                                .loadingStatus ==
+                                            LoadingStatus.completed)
+                                          {
+                                            Toast().showTopToast(context,
+                                                Titles.objectStageChanged)
+                                          }
+                                      }),
+                            ),
+
+                  /// COMPLETE OBJECT BUTTON
+                  _objectPageViewModel.object?.objectStage?.name ==
+                              'Закончен' ||
+                          !_objectPageViewModel.isAdmin
+                      ? Container()
+                      : BorderButtonWidget(
+                          isDestructive: true,
+                          title: Titles.complete,
+                          margin: const EdgeInsets.only(bottom: 30.0),
                           onTap: () => _objectPageViewModel
-                              .showObjectAnalyticsPageViewScreen(context),
+                              .completeObject()
+                              .whenComplete(() => {
+                                    if (_objectPageViewModel.loadingStatus ==
+                                        LoadingStatus.completed)
+                                      {
+                                        Toast().showTopToast(
+                                            context, Titles.objectStageChanged)
+                                      }
+                                  }),
                         ),
+                ]),
 
-                        /// SHOW CHAT BUTTON
-                        _objectPageViewModel.object?.chat == null
-                            ? Container()
-                            : BorderButtonWidget(
-                                title: Titles.goChat,
-                                margin: const EdgeInsets.only(bottom: 30.0),
-                                onTap: () => _objectPageViewModel
-                                    .showDialogScreen(context),
-                              ),
-                      ]),
+            /// EDIT TASK BUTTON
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: ButtonWidget(
+                  title: Titles.edit,
+                  margin: EdgeInsets.only(
+                    right: 16.0,
+                    left: 16.0,
+                    // left: 4.0,
+                    bottom: MediaQuery.of(context).padding.bottom == 0.0
+                        ? 20.0
+                        : MediaQuery.of(context).padding.bottom,
+                  ),
+                  onTap: () => _objectPageViewModel.showObjectCreateSheet(
+                      context,
+                      () => widget.onUpdate(_objectPageViewModel.object!)),
+                )),
+            const SeparatorWidget(),
 
-                  Align(
-                      alignment: Alignment.bottomCenter,
-                      child:
-
-                          /// EDIT TASK BUTTON
-                          ButtonWidget(
-                        title: Titles.edit,
-                        margin: EdgeInsets.only(
-                          right: 16.0,
-                          left: 16.0,
-                          // left: 4.0,
-                          bottom: MediaQuery.of(context).padding.bottom == 0.0
-                              ? 20.0
-                              : MediaQuery.of(context).padding.bottom,
-                        ),
-                        onTap: () => _objectPageViewModel.showObjectCreateSheet(
-                            context,
-                            () =>
-                                widget.onUpdate(_objectPageViewModel.object!)),
-                      )),
-                  const SeparatorWidget(),
-
-                  /// INDICATOR
-                  _objectPageViewModel.loadingStatus == LoadingStatus.searching
-                      ? const Padding(
-                          padding: EdgeInsets.only(bottom: 90.0),
-                          child: LoadingIndicatorWidget())
-                      : Container()
-                ]))));
+            /// INDICATOR
+            _objectPageViewModel.loadingStatus == LoadingStatus.searching
+                ? const Padding(
+                    padding: EdgeInsets.only(bottom: 90.0),
+                    child: LoadingIndicatorWidget())
+                : Container()
+          ]),
+        ),
+      ),
+    );
   }
 }

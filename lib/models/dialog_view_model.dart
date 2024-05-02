@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/pagination.dart';
@@ -19,8 +20,8 @@ import 'package:izowork/screens/dialog/views/dialog_add_task_widget.dart';
 import 'package:izowork/screens/participants/participants_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
-import 'package:izowork/services/local_service.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
+import 'package:izowork/services/local_storage/local_storage.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:record/record.dart';
@@ -162,12 +163,12 @@ class DialogViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  Future getLocalService() async {
-    LocalService localService = LocalService();
-    token = await localService.getToken();
-    await localService.getUser().then((value) => {
-          userId = value?.id,
-        });
+  Future getLocalStorageParams() async {
+    final localStorageService = GetIt.I<LocalStorageService>();
+    token = await localStorageService.getToken();
+
+    User? user = await localStorageService.getUser();
+    userId = user?.id;
   }
 
   Future<String> getLocalAudioPath() async {

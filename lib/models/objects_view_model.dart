@@ -21,7 +21,9 @@ class ObjectsViewModel with ChangeNotifier {
   final List<Object> _objects = [];
 
   Object? _object;
+
   ObjectsFilter? _objectsFilter;
+
   List<ObjectStage>? _objectStages;
 
   List<Object> get objects => _objects;
@@ -46,14 +48,25 @@ class ObjectsViewModel with ChangeNotifier {
     await ObjectRepository()
         .getObjectStages()
         .then((response) => {
-              if (response is List<ObjectStage>) {_objectStages = response}
+              if (response is List<ObjectStage>)
+                {
+                  _objectStages = response,
+                  for (var element in _objectStages!)
+                    {
+                      debugPrint('id: ${element.id}, name: ${element.name}'),
+                    }
+                },
             })
         .then((value) => getObjectList(
-            pagination: Pagination(offset: 0, size: 50), search: ''));
+              pagination: Pagination(offset: 0, size: 50),
+              search: '',
+            ));
   }
 
-  Future getObjectList(
-      {required Pagination pagination, required String search}) async {
+  Future getObjectList({
+    required Pagination pagination,
+    required String search,
+  }) async {
     if (pagination.offset == 0) {
       loadingStatus = LoadingStatus.searching;
       _objects.clear();
@@ -160,13 +173,17 @@ class ObjectsViewModel with ChangeNotifier {
     }
   }
 
-  void showObjectPageViewScreen(BuildContext context, int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ObjectPageViewScreenWidget(object: _objects[index])));
-  }
+  void showObjectPageViewScreen(
+    BuildContext context,
+    int index,
+  ) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ObjectPageViewScreenWidget(
+                    object: _objects[index],
+                    objectStages: _objectStages,
+                  )));
 
   void showObjectCreateScreen(BuildContext context) {
     Navigator.push(

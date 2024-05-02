@@ -10,7 +10,7 @@ import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/phase.dart';
 import 'package:izowork/entities/response/phase_product.dart';
 import 'package:izowork/repositories/phase_repository.dart';
-import 'package:izowork/services/urls.dart';
+import 'package:izowork/api/urls.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';

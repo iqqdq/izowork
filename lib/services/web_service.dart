@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
-import 'package:izowork/services/local_service.dart';
+import 'package:get_it/get_it.dart';
+import 'package:izowork/services/local_storage/local_storage_service.dart';
 
 class WebService {
   final _dio = Dio();
@@ -10,25 +11,25 @@ class WebService {
   }
 
   Future<Options> _options() async {
-    String token = await LocalService().getToken() ?? '';
+    String? token = await GetIt.I<LocalStorageService>().getToken();
 
     return Options(
-      headers: token.isNotEmpty
+      headers: token == null
           ? {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer $token'
             }
           : {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token'
             },
       followRedirects: false,
     );
   }
 
   Future<Options> _multipartOptions() async {
-    String token = await LocalService().getToken() ?? '';
+    String? token = await GetIt.I<LocalStorageService>().getToken();
 
     return Options(
       headers: {

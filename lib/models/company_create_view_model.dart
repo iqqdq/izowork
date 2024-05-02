@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:dio/dio.dart' as dio;
@@ -86,18 +88,20 @@ class CompanyCreateViewModel with ChangeNotifier {
   }
 
   Future getProductTypeList() async {
-    await ProductRepository().getProductTypes().then((response) => {
-          if (response is List<ProductType>)
-            {
-              response.forEach((productType) {
-                _productTypes.add(productType);
-              }),
-              loadingStatus = LoadingStatus.completed
-            }
-          else
-            loadingStatus = LoadingStatus.error,
-          notifyListeners()
-        });
+    await ProductRepository()
+        .getProductTypes()
+        .then((response) => {
+              if (response is List<ProductType>)
+                {
+                  response.forEach((productType) {
+                    _productTypes.add(productType);
+                  }),
+                  loadingStatus = LoadingStatus.completed
+                }
+              else
+                loadingStatus = LoadingStatus.error,
+            })
+        .then((value) => notifyListeners());
   }
 
   Future createNewCompany(
