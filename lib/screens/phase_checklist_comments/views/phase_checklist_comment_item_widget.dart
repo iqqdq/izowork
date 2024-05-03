@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:izowork/components/date_time_string_formatter.dart';
+import 'package:izowork/components/date_time_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/entities/response/phase_checklist.dart';
 import 'package:izowork/views/title_widget.dart';

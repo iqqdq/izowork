@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/date_time_string_formatter.dart';
+import 'package:izowork/components/date_time_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/views/title_widget.dart';
 
