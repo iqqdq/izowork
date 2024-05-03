@@ -6,7 +6,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/deal_request.dart';
@@ -517,7 +516,7 @@ class DealCreateViewModel with ChangeNotifier {
             maxDateTime: _maxDateTime,
             initialDateTime: index == 0 ? _startDateTime : _endDateTime,
             showDays: true,
-            locale: locale,
+            locale: Platform.localeName,
             backgroundColor: HexColors.white,
             buttonColor: HexColors.primaryMain,
             buttonHighlightColor: HexColors.primaryDark,

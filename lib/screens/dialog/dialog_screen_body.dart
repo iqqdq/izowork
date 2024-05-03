@@ -278,8 +278,11 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
             backgroundColor: HexColors.white,
             automaticallyImplyLeading: false,
             leading: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: BackButtonWidget(onTap: () => {Navigator.pop(context)})),
+              padding: const EdgeInsets.only(left: 16.0),
+              child: BackButtonWidget(
+                onTap: () => Navigator.pop(context),
+              ),
+            ),
             title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               /// AVATAR
               Stack(children: [

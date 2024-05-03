@@ -20,7 +20,7 @@ class Task {
     this.coExecutorId,
     this.objectId,
     this.companyId,
-    this.description,
+    required this.description,
     required this.files,
     this.responsible,
     this.taskManager,
@@ -39,7 +39,7 @@ class Task {
   String? coExecutorId;
   String? objectId;
   String? companyId;
-  String? description;
+  String description;
   List<Document> files;
   User? responsible;
   User? taskManager;
@@ -58,7 +58,7 @@ class Task {
         coExecutorId: json["co_executor_id"],
         objectId: json["object_id"],
         companyId: json["company_id"],
-        description: json["description"],
+        description: json["description"] == null ? '' : json["description"],
         files: json["files"] == null
             ? []
             : List<Document>.from(

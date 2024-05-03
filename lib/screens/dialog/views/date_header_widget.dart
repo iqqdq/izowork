@@ -30,16 +30,24 @@ class DateHeaderWidget extends StatelessWidget {
 
     return Column(children: [
       IgnorePointer(
-          ignoring: true,
-          child: Container(
-              margin: const EdgeInsets.only(top: 12.0, bottom: 16.0),
-              child: Text(_date,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 14.0,
-                      fontFamily: 'PT Root UI',
-                      fontWeight: FontWeight.w500,
-                      color: HexColors.grey40)))),
+        ignoring: true,
+        child: Container(
+          margin: const EdgeInsets.only(
+            top: 12.0,
+            bottom: 16.0,
+          ),
+          child: Text(
+            _date,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14.0,
+              fontFamily: 'PT Root UI',
+              fontWeight: FontWeight.w500,
+              color: HexColors.grey40,
+            ),
+          ),
+        ),
+      ),
       child
     ]);
   }

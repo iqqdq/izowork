@@ -49,6 +49,7 @@ class ObjectListItemWidget extends StatelessWidget {
                 SubtitleWidget(
                   text: object.address,
                   padding: EdgeInsets.zero,
+                  nonSelectable: true,
                 ),
                 const SizedBox(height: 10.0),
                 const SeparatorWidget(),
@@ -59,12 +60,14 @@ class ObjectListItemWidget extends StatelessWidget {
                   text: Titles.manager,
                   padding: EdgeInsets.zero,
                   isSmall: true,
+                  nonSelectable: true,
                 ),
                 const SizedBox(height: 2.0),
 
                 SubtitleWidget(
                   text: object.manager?.name ?? '-',
                   padding: EdgeInsets.zero,
+                  nonSelectable: true,
                 ),
 
                 const SizedBox(height: 10.0),
@@ -76,12 +79,14 @@ class ObjectListItemWidget extends StatelessWidget {
                   text: Titles.generalContractor,
                   padding: EdgeInsets.zero,
                   isSmall: true,
+                  nonSelectable: true,
                 ),
                 const SizedBox(height: 2.0),
 
                 SubtitleWidget(
                   text: object.contractor?.name ?? '-',
                   padding: EdgeInsets.zero,
+                  nonSelectable: true,
                 ),
 
                 const SizedBox(height: 10.0),
@@ -98,31 +103,36 @@ class ObjectListItemWidget extends StatelessWidget {
                             text: Titles.realizations,
                             padding: EdgeInsets.zero,
                             isSmall: true,
+                            nonSelectable: true,
                           ),
                           const SizedBox(height: 2.0),
                           SubtitleWidget(
                             text: '${object.readiness} %',
                             padding: EdgeInsets.zero,
+                            nonSelectable: true,
                           )
                         ]),
                   ),
 
                   /// EFFECTIVENESS
                   Expanded(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                        const TitleWidget(
-                          text: Titles.effectiveness,
-                          padding: EdgeInsets.zero,
-                          isSmall: true,
-                        ),
-                        const SizedBox(height: 2.0),
-                        SubtitleWidget(
-                          text: '${object.efficiency} %',
-                          padding: EdgeInsets.zero,
-                        )
-                      ])),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const TitleWidget(
+                            text: Titles.effectiveness,
+                            padding: EdgeInsets.zero,
+                            isSmall: true,
+                            nonSelectable: true,
+                          ),
+                          const SizedBox(height: 2.0),
+                          SubtitleWidget(
+                            text: '${object.efficiency} %',
+                            padding: EdgeInsets.zero,
+                            nonSelectable: true,
+                          )
+                        ]),
+                  ),
                 ])
               ]),
           onTap: () => onTap(),

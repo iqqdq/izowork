@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/task.dart';
 import 'package:izowork/repositories/task_repository.dart';
@@ -121,8 +121,11 @@ class TaskCalendarViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - ACTIONS
 
-  void showDateTimeSelectionSheet(BuildContext context, TextStyle textStyle,
-      Function(bool) didUpdateDateTime) {
+  void showDateTimeSelectionSheet(
+    BuildContext context,
+    TextStyle textStyle,
+    Function(bool) didUpdateDateTime,
+  ) {
     showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
@@ -134,7 +137,7 @@ class TaskCalendarViewModel with ChangeNotifier {
             maxDateTime: _maxDateTime,
             initialDateTime: _pickedDateTime,
             showDays: false,
-            locale: locale,
+            locale: Platform.localeName,
             backgroundColor: HexColors.white,
             buttonColor: HexColors.primaryMain,
             buttonHighlightColor: HexColors.primaryDark,

@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/office.dart';
 import 'package:izowork/entities/response/user.dart';
@@ -20,7 +21,12 @@ class AnalyticsActionsFilter {
   final List<String> params;
 
   AnalyticsActionsFilter(
-      this.office, this.user, this.fromDateTime, this.toDateTime, this.params);
+    this.office,
+    this.user,
+    this.fromDateTime,
+    this.toDateTime,
+    this.params,
+  );
 }
 
 class AnalyticsActionsFilterPageViewScreenBodyWidget extends StatefulWidget {
@@ -38,10 +44,10 @@ class AnalyticsActionsFilterPageViewScreenBodyWidget extends StatefulWidget {
 class _AnalyticsActionsFilterPageViewScreenBodyState
     extends State<AnalyticsActionsFilterPageViewScreenBodyWidget> {
   final PageController _pageController = PageController();
-  late AnalyticsActionsFilterViewModel _analyticsActionsFilterViewModel;
   bool _isFromDateTimeSelection = true;
-  // bool _isSearching = false;
   bool _isDateTimeSelection = false;
+
+  late AnalyticsActionsFilterViewModel _analyticsActionsFilterViewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -62,18 +68,18 @@ class _AnalyticsActionsFilterPageViewScreenBodyState
               const SizedBox(height: 6.0),
               const DismissIndicatorWidget(),
               AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  height: _isDateTimeSelection
-                      ? MediaQuery.of(context).padding.bottom == 0.0
-                          ? 304.0
-                          : 324.0
-                      : MediaQuery.of(context).size.height * 0.9,
-                  // _isSearching
-                  //     ? MediaQuery.of(context).size.height * 0.9
-                  //     : MediaQuery.of(context).padding.bottom == 0.0
-                  //         ? 410.0
-                  //         : 440.0,
-                  child: PageView(
+                duration: const Duration(milliseconds: 300),
+                height: _isDateTimeSelection
+                    ? MediaQuery.of(context).padding.bottom == 0.0
+                        ? 304.0
+                        : 324.0
+                    : MediaQuery.of(context).size.height * 0.9,
+                // _isSearching
+                //     ? MediaQuery.of(context).size.height * 0.9
+                //     : MediaQuery.of(context).padding.bottom == 0.0
+                //         ? 410.0
+                //         : 440.0,
+                child: PageView(
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
@@ -186,39 +192,44 @@ class _AnalyticsActionsFilterPageViewScreenBodyState
                               DateTime.now(),
                           showDays: true,
                           hideDismissIndicator: true,
-                          locale: locale,
+                          locale: Platform.localeName,
                           backgroundColor: HexColors.white,
                           buttonColor: HexColors.primaryMain,
                           buttonHighlightColor: HexColors.primaryDark,
                           buttonTitle: Titles.apply,
                           buttonTextStyle: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              fontFamily: 'PT Root UI',
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w700,
-                              color: HexColors.black),
+                            overflow: TextOverflow.ellipsis,
+                            fontFamily: 'PT Root UI',
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w700,
+                            color: HexColors.black,
+                          ),
                           selecteTextStyle: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              fontFamily: 'PT Root UI',
-                              fontSize: 14.0,
-                              color: HexColors.black,
-                              fontWeight: FontWeight.w400),
+                            overflow: TextOverflow.ellipsis,
+                            fontFamily: 'PT Root UI',
+                            fontSize: 14.0,
+                            color: HexColors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
                           unselectedTextStyle: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              fontFamily: 'PT Root UI',
-                              fontSize: 12.0,
-                              color: HexColors.grey70,
-                              fontWeight: FontWeight.w400),
+                            overflow: TextOverflow.ellipsis,
+                            fontFamily: 'PT Root UI',
+                            fontSize: 12.0,
+                            color: HexColors.grey70,
+                            fontWeight: FontWeight.w400,
+                          ),
                           onTap: (dateTime) => {
                                 if (_isFromDateTimeSelection)
                                   {
                                     _analyticsActionsFilterViewModel
                                         .setFromDateTime(dateTime)
                                         .then((value) => {
-                                              _pageController.animateToPage(0,
-                                                  duration: const Duration(
-                                                      milliseconds: 300),
-                                                  curve: Curves.easeIn),
+                                              _pageController.animateToPage(
+                                                0,
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                                curve: Curves.easeIn,
+                                              ),
                                               setState(() =>
                                                   _isDateTimeSelection = false)
                                             })
@@ -228,17 +239,19 @@ class _AnalyticsActionsFilterPageViewScreenBodyState
                                     _analyticsActionsFilterViewModel
                                         .setToDateTime(dateTime)
                                         .then((value) => {
-                                              _pageController.animateToPage(0,
-                                                  duration: const Duration(
-                                                      milliseconds: 300),
-                                                  curve: Curves.easeIn),
+                                              _pageController.animateToPage(
+                                                0,
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                                curve: Curves.easeIn,
+                                              ),
                                               setState(() =>
                                                   _isDateTimeSelection = false)
                                             })
                                   }
                               })
-                    ],
-                  ))
+                    ]),
+              )
             ]));
   }
 }

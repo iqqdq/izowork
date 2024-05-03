@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/entities/response/news_comment.dart';
 import 'package:izowork/api/urls.dart';
@@ -47,15 +48,6 @@ class _CommentBubbleState extends State<CommentBubbleWidget>
 
   @override
   Widget build(BuildContext context) {
-    final _day = widget.comment.createdAt.day.toString().characters.length == 1
-        ? '0${widget.comment.createdAt.day}'
-        : '${widget.comment.createdAt.day}';
-    final _month =
-        widget.comment.createdAt.month.toString().characters.length == 1
-            ? '0${widget.comment.createdAt.month}'
-            : '${widget.comment.createdAt.month}';
-    final _year = '${widget.comment.createdAt.year}';
-
     return SizeTransition(
         sizeFactor: CurvedAnimation(
           parent: _animationController,
@@ -135,7 +127,12 @@ class _CommentBubbleState extends State<CommentBubbleWidget>
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               /// DATE
-                              Text('$_day.$_month.$_year',
+                              Text(
+                                  DateTimeFormatter().formatDateTimeToString(
+                                    dateTime: widget.comment.createdAt,
+                                    showTime: true,
+                                    showMonthName: true,
+                                  ),
                                   textAlign: TextAlign.end,
                                   style: TextStyle(
                                       color: HexColors.grey40,

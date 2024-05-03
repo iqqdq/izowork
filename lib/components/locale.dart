@@ -1,1 +1,0 @@
-const String locale = 'ru';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -34,17 +35,8 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
         .toUtc()
         .toLocal();
 
-    final _day = dateTime.day.toString().length == 1
-        ? '0${dateTime.day}'
-        : '${dateTime.day}';
-    final _month = dateTime.month.toString().length == 1
-        ? '0${dateTime.month}'
-        : '${dateTime.month}';
-    final _year = '${dateTime.year}';
-
     final _description = _taskViewModel.task?.description ??
-        _taskViewModel.selectedTask.description ??
-        '';
+        _taskViewModel.selectedTask.description;
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -81,9 +73,10 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                       children: [
                         /// STATUS
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.status,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.status,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
                             text: _taskViewModel.task?.state ??
@@ -91,73 +84,89 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
 
                         /// DEADLINE
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.deadline,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.deadline,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
-                            text: '$_day.$_month.$_year'),
+                            text: DateTimeFormatter().formatDateTimeToString(
+                              dateTime: dateTime,
+                              showTime: false,
+                              showMonthName: false,
+                            )),
 
                         /// RESPONSIBLE
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.responsible,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.responsible,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _taskViewModel.task?.responsible?.name ??
-                                _taskViewModel.selectedTask.responsible?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _taskViewModel.task?.responsible?.name ??
+                              _taskViewModel.selectedTask.responsible?.name ??
+                              '-',
+                        ),
 
                         /// TASK MANAGER
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.taskManager,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.taskManager,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _taskViewModel.task?.taskManager?.name ??
-                                _taskViewModel.selectedTask.taskManager?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _taskViewModel.task?.taskManager?.name ??
+                              _taskViewModel.selectedTask.taskManager?.name ??
+                              '-',
+                        ),
 
                         /// CO-EXECUTOR
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.coExecutor,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.coExecutor,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _taskViewModel.task?.coExecutor?.name ??
-                                _taskViewModel.selectedTask.coExecutor?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _taskViewModel.task?.coExecutor?.name ??
+                              _taskViewModel.selectedTask.coExecutor?.name ??
+                              '-',
+                        ),
 
                         /// OBJECT
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.object,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.object,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _taskViewModel.task?.object?.name ??
-                                _taskViewModel.selectedTask.object?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _taskViewModel.task?.object?.name ??
+                              _taskViewModel.selectedTask.object?.name ??
+                              '-',
+                        ),
 
                         /// COMPANY
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.company,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.company,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _taskViewModel.task?.company?.name ??
-                                _taskViewModel.selectedTask.company?.name ??
-                                '-'),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _taskViewModel.task?.company?.name ??
+                              _taskViewModel.selectedTask.company?.name ??
+                              '-',
+                        ),
 
                         /// DESCRTIPTION
                         const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.description,
-                            isSmall: true),
+                          padding: EdgeInsets.only(bottom: 4.0),
+                          text: Titles.description,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
                             text: _description.isEmpty ? '-' : _description),
@@ -170,7 +179,8 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                             : const TitleWidget(
                                 padding: EdgeInsets.only(bottom: 10.0),
                                 text: Titles.files,
-                                isSmall: true),
+                                isSmall: true,
+                              ),
                         ListView.builder(
                             shrinkWrap: true,
                             padding: const EdgeInsets.only(bottom: 16.0),

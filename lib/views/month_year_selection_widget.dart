@@ -1,6 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:intl/intl.dart';
 import 'package:izowork/extensions/string_casing_extension.dart';
@@ -10,40 +11,49 @@ class MonthYearSelectionWidget extends StatefulWidget {
   final DateTime dateTime;
   final VoidCallback onTap;
 
-  const MonthYearSelectionWidget(
-      {Key? key, required this.dateTime, required this.onTap})
-      : super(key: key);
+  const MonthYearSelectionWidget({
+    Key? key,
+    required this.dateTime,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   _MonthYearSelectionState createState() => _MonthYearSelectionState();
 }
 
 class _MonthYearSelectionState extends State<MonthYearSelectionWidget> {
+  final localeName = Platform.localeName;
+
   @override
   void initState() {
     super.initState();
 
-    initializeDateFormatting(locale, null);
+    initializeDateFormatting(
+      localeName,
+      null,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     TextStyle _titleTextStyle = TextStyle(
-        fontSize: 10.0,
-        fontWeight: FontWeight.w500,
-        overflow: TextOverflow.ellipsis,
-        fontFamily: 'PT Root UI',
-        color: HexColors.grey70);
+      fontSize: 10.0,
+      fontWeight: FontWeight.w500,
+      overflow: TextOverflow.ellipsis,
+      fontFamily: 'PT Root UI',
+      color: HexColors.grey70,
+    );
 
     TextStyle _subtitleTextStyle = TextStyle(
-        fontSize: 16.0,
-        overflow: TextOverflow.ellipsis,
-        fontWeight: FontWeight.w400,
-        fontFamily: 'PT Root UI',
-        color: HexColors.black);
+      fontSize: 16.0,
+      overflow: TextOverflow.ellipsis,
+      fontWeight: FontWeight.w400,
+      fontFamily: 'PT Root UI',
+      color: HexColors.black,
+    );
 
     return Container(
-        height: 56.0,
+        height: 60.0,
         margin: const EdgeInsets.symmetric(horizontal: 16.0),
         decoration: BoxDecoration(
             color: HexColors.white,
@@ -70,10 +80,11 @@ class _MonthYearSelectionState extends State<MonthYearSelectionWidget> {
                               children: [
                             Text(Titles.month, style: _titleTextStyle),
                             Text(
-                                DateFormat.MMMM(locale)
-                                    .format(widget.dateTime)
-                                    .toCapitalized(),
-                                style: _subtitleTextStyle)
+                              DateFormat.MMMM(localeName)
+                                  .format(widget.dateTime)
+                                  .toCapitalized(),
+                              style: _subtitleTextStyle,
+                            )
                           ])),
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 12.0),

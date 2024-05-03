@@ -43,9 +43,9 @@ class _CompanyCreateScreenBodyState
       TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
 
-  final TextEditingController _phoneTextEditingController =
+  final TextEditingController _bimTextEditingController =
       TextEditingController();
-  final FocusNode _phoneFocusNode = FocusNode();
+  final FocusNode _bimFocusNode = FocusNode();
 
   final TextEditingController _descriptionTextEditingController =
       TextEditingController();
@@ -78,7 +78,7 @@ class _CompanyCreateScreenBodyState
         _nameTextEditingController.text =
             _companyCreateViewModel.company?.name ?? '';
 
-        _phoneTextEditingController.text =
+        _bimTextEditingController.text =
             _companyCreateViewModel.company?.phone ?? '';
 
         _addressTextEditingController.text =
@@ -114,8 +114,8 @@ class _CompanyCreateScreenBodyState
     _nameTextEditingController.dispose();
     _nameFocusNode.dispose();
 
-    _phoneTextEditingController.dispose();
-    _phoneFocusNode.dispose();
+    _bimTextEditingController.dispose();
+    _bimFocusNode.dispose();
 
     _descriptionTextEditingController.dispose();
     _descriptionFocusNode.dispose();
@@ -278,18 +278,18 @@ class _CompanyCreateScreenBodyState
                     InputWidget(
                         margin: const EdgeInsets.only(bottom: 10.0),
                         height: 56.0,
-                        textEditingController: _phoneTextEditingController,
-                        focusNode: _phoneFocusNode,
+                        textEditingController: _bimTextEditingController,
+                        focusNode: _bimFocusNode,
                         textCapitalization: TextCapitalization.sentences,
                         textInputType: TextInputType.phone,
                         placeholder: Titles.companyBIM,
                         onTap: () => setState(() => {
                               FocusScope.of(context).unfocus(),
-                              _phoneFocusNode.requestFocus()
+                              _bimFocusNode.requestFocus()
                             }),
                         onEditingComplete: () =>
                             FocusScope.of(context).unfocus(),
-                        onClearTap: () => _phoneTextEditingController.clear()),
+                        onClearTap: () => _bimTextEditingController.clear()),
 
                     /// ADDRESS INPUT
                     InputWidget(
@@ -450,8 +450,13 @@ class _CompanyCreateScreenBodyState
                   title: _companyCreateViewModel.company == null
                       ? Titles.createCompany
                       : Titles.save,
-                  isDisabled: _addressTextEditingController.text.isEmpty ||
-                      _nameTextEditingController.text.isEmpty,
+                  isDisabled: _companyCreateViewModel.company == null
+                      ? _addressTextEditingController.text.isEmpty ||
+                          _nameTextEditingController.text.isEmpty ||
+                          _companyCreateViewModel.type == null ||
+                          _bimTextEditingController.text.isEmpty
+                      : _addressTextEditingController.text.isEmpty ||
+                          _nameTextEditingController.text.isEmpty,
                   onTap: () =>
 
                       /// CREATE

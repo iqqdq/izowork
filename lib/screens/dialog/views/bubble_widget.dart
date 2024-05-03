@@ -465,8 +465,11 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
         children: [
           widget.showDate
               ? DateHeaderWidget(
-                  dateTime: DateTime(widget.dateTime.year,
-                      widget.dateTime.month, widget.dateTime.day),
+                  dateTime: DateTime(
+                    widget.dateTime.year,
+                    widget.dateTime.month,
+                    widget.dateTime.day,
+                  ),
                   child: gestureDetector)
               : gestureDetector
         ]);

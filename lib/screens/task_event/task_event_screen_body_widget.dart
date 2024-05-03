@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/locale.dart';
 import 'package:izowork/models/task_event_view_model.dart';
 import 'package:izowork/screens/tasks/views/task_list_item_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
@@ -10,8 +9,10 @@ import 'package:provider/provider.dart';
 class TaskEventScreenBodyWidget extends StatefulWidget {
   final DateTime dateTime;
 
-  const TaskEventScreenBodyWidget({Key? key, required this.dateTime})
-      : super(key: key);
+  const TaskEventScreenBodyWidget({
+    Key? key,
+    required this.dateTime,
+  }) : super(key: key);
 
   @override
   _TaskEventScreenBodyState createState() => _TaskEventScreenBodyState();
@@ -33,13 +34,6 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
       context,
       listen: true,
     );
-
-    final _day = DateTime.now().day.toString().length == 1
-        ? '0${DateTime.now().day}'
-        : '${DateTime.now().day}';
-    final _month =
-        DateFormat.MMMM(locale).format(widget.dateTime).toLowerCase();
-    final _year = '${DateTime.now().year}';
 
     return Material(
         type: MaterialType.transparency,
@@ -83,7 +77,13 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
                                   child: Material(
                                       type: MaterialType.transparency,
                                       child: Text(
-                                          'Сделки на $_day ${_month.substring(0, 3)} $_year',
+                                          'Сделки на ' +
+                                              DateTimeFormatter()
+                                                  .formatDateTimeToString(
+                                                dateTime: widget.dateTime,
+                                                showTime: false,
+                                                showMonthName: false,
+                                              ),
                                           style: TextStyle(
                                               fontSize: 20.0,
                                               fontWeight: FontWeight.bold,

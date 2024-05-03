@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/views/title_widget.dart';
 
@@ -18,38 +19,15 @@ class NotificationListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _minute = dateTime.minute.toString().length == 1
-        ? '0${dateTime.minute}'
-        : '${dateTime.minute}';
-    final _hour = dateTime.hour.toString().length == 1
-        ? '0${dateTime.hour}'
-        : '${dateTime.hour}';
-
-    final _day = dateTime.day.toString().length == 1
-        ? '0${dateTime.day}'
-        : '${dateTime.day}';
-    final _month = dateTime.month.toString().length == 1
-        ? '0${dateTime.month}'
-        : '${dateTime.month}';
-    final _year = '${dateTime.year}';
-
-    bool _isToday = dateTime.year == DateTime.now().year &&
-        dateTime.month == DateTime.now().month &&
-        dateTime.day == DateTime.now().day;
-
-    bool _isYesterday = dateTime.year ==
-            DateTime.now().subtract(const Duration(days: 1)).year &&
-        dateTime.month ==
-            DateTime.now().subtract(const Duration(days: 1)).month &&
-        dateTime.day == DateTime.now().subtract(const Duration(days: 1)).day;
-
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.0),
-            border: Border.all(
-                width: isUnread ? 1.0 : 0.5,
-                color: isUnread ? HexColors.primaryMain : HexColors.grey30)),
+          borderRadius: BorderRadius.circular(16.0),
+          border: Border.all(
+            width: isUnread ? 1.0 : 0.5,
+            color: isUnread ? HexColors.primaryMain : HexColors.grey30,
+          ),
+        ),
         child: Material(
             color: Colors.transparent,
             child: InkWell(
@@ -67,15 +45,14 @@ class NotificationListItemWidget extends StatelessWidget {
                           children: [
                             /// DATE
                             TitleWidget(
-                                text: _isYesterday
-                                    ? 'Вчера, $_hour:$_minute'
-                                    : _isToday
-                                        ? 'Сегодня, $_hour:$_minute'
-                                        : _year.isEmpty
-                                            ? '$_day.$_month, $_hour:$_minute'
-                                            : '$_day.$_month.$_year, $_hour:$_minute',
-                                padding: EdgeInsets.zero,
-                                isSmall: true),
+                              text: DateTimeFormatter().formatDateTimeToString(
+                                dateTime: dateTime,
+                                showTime: true,
+                                showMonthName: true,
+                              ),
+                              padding: EdgeInsets.zero,
+                              isSmall: true,
+                            ),
 
                             /// INDICATOR
                             isUnread

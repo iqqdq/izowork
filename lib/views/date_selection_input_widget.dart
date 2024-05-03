@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/views/title_widget.dart';
@@ -9,20 +10,15 @@ class DateSelectionInputWidget extends StatelessWidget {
   final DateTime? dateTime;
   final VoidCallback onTap;
 
-  const DateSelectionInputWidget(
-      {Key? key, required this.title, this.dateTime, required this.onTap})
-      : super(key: key);
+  const DateSelectionInputWidget({
+    Key? key,
+    required this.title,
+    this.dateTime,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _day = dateTime?.day.toString().length == 1
-        ? '0${dateTime?.day}'
-        : '${dateTime?.day}';
-    final _month = dateTime?.month.toString().length == 1
-        ? '0${dateTime?.month}'
-        : '${dateTime?.month}';
-    final _year = '${dateTime?.year}';
-
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Material(
@@ -50,15 +46,21 @@ class DateSelectionInputWidget extends StatelessWidget {
 
                             /// DATE
                             Text(
-                                dateTime == null
-                                    ? Titles.notSelected + 'о'
-                                    : '$_day.$_month.$_year',
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontFamily: 'PT Root UI',
-                                    fontWeight: FontWeight.w400,
-                                    color: HexColors.black))
+                              dateTime == null
+                                  ? Titles.notSelected + 'о'
+                                  : DateTimeFormatter().formatDateTimeToString(
+                                      dateTime: dateTime!,
+                                      showTime: false,
+                                      showMonthName: false,
+                                    ),
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                overflow: TextOverflow.ellipsis,
+                                fontFamily: 'PT Root UI',
+                                fontWeight: FontWeight.w400,
+                                color: HexColors.black,
+                              ),
+                            )
                           ])),
                       const SizedBox(width: 6.0),
                       SvgPicture.asset('assets/ic_calendar.svg')

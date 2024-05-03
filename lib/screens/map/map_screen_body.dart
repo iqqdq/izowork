@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/place_model.dart';
+import 'package:izowork/models/place_model.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
@@ -171,7 +171,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
       _googleMapController
           .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: _mapViewModel.userPosition!,
-        zoom: 12.0,
+        zoom: 20.0,
       )));
     }
   }
@@ -416,7 +416,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                 myLocationEnabled: _mapViewModel.hasPermission,
                 initialCameraPosition: CameraPosition(
                   target: _mapViewModel.userPosition!,
-                  zoom: 11.0,
+                  zoom: 20.0,
                 ),
                 markers: _mapViewModel.markers,
                 onMapCreated: (controller) => {
