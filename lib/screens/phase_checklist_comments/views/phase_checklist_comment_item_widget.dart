@@ -1,10 +1,7 @@
-// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/locale.dart';
 import 'package:izowork/entities/response/phase_checklist.dart';
 import 'package:izowork/views/title_widget.dart';
 
@@ -20,43 +17,6 @@ class PhaseChecklistCommentItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    initializeDateFormatting(locale, null);
-
-    // chat.lastMessage == null ? null : chat.lastMessage!.createdAt.toUtc().toLocal();
-
-    bool _isToday =
-        phaseChecklistComment?.createdAt.year == DateTime.now().year &&
-            phaseChecklistComment?.createdAt.month == DateTime.now().month &&
-            phaseChecklistComment?.createdAt.day == DateTime.now().day;
-
-    bool _isYesterday = phaseChecklistComment?.createdAt.year ==
-            DateTime.now().subtract(const Duration(days: 1)).year &&
-        phaseChecklistComment?.createdAt.month ==
-            DateTime.now().subtract(const Duration(days: 1)).month &&
-        phaseChecklistComment?.createdAt.day ==
-            DateTime.now().subtract(const Duration(days: 1)).day;
-
-    String _day = phaseChecklistComment?.createdAt.day.toString().length == 1
-        ? '0${phaseChecklistComment?.createdAt.day}'
-        : '${phaseChecklistComment?.createdAt.day}';
-    String _month = phaseChecklistComment == null
-        ? ''
-        : DateFormat.MMM(locale).format(phaseChecklistComment!.createdAt);
-    String _year = phaseChecklistComment?.createdAt.year == DateTime.now().year
-        ? ''
-        : '${phaseChecklistComment?.createdAt.year}';
-
-    String _hour = phaseChecklistComment?.createdAt.hour.toString().length == 1
-        ? '0${phaseChecklistComment?.createdAt.hour}'
-        : '${phaseChecklistComment?.createdAt.hour}';
-
-    String _minute =
-        phaseChecklistComment?.createdAt.minute.toString().length == 1
-            ? '0${phaseChecklistComment?.createdAt.minute}'
-            : '${phaseChecklistComment?.createdAt.minute}';
-
-    // bool isFile = chat.lastMessage == null ? false : !isAudio && chat.lastMessage!.files.isNotEmpty;
-
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 16.0,
@@ -139,13 +99,13 @@ class PhaseChecklistCommentItemWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TitleWidget(
-              text: _isYesterday
-                  ? 'Вчера, $_hour:$_minute'
-                  : _isToday
-                      ? 'Сегодня, $_hour:$_minute'
-                      : _year.isEmpty
-                          ? '$_day $_month, $_hour:$_minute'
-                          : '$_day $_month $_year, $_hour:$_minute',
+              text: phaseChecklistComment == null
+                  ? ''
+                  : DateTimeFormatter().formatDateTimeToString(
+                      dateTime: phaseChecklistComment!.createdAt,
+                      showTime: true,
+                      showMonthName: true,
+                    ),
               padding: EdgeInsets.zero,
               textAlign: TextAlign.end,
               isSmall: true,

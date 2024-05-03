@@ -1,9 +1,10 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/deal.dart';
 import 'package:izowork/repositories/deal_repository.dart';
@@ -139,9 +140,12 @@ class DealCalendarViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - ACTIONS
 
-  void showDateTimeSelectionSheet(BuildContext context, TextStyle textStyle,
-      Function(bool) didUpdateDateTime) {
-    showCupertinoModalBottomSheet(
+  void showDateTimeSelectionSheet(
+    BuildContext context,
+    TextStyle textStyle,
+    Function(bool) didUpdateDateTime,
+  ) =>
+      showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
         barrierColor: Colors.black.withOpacity(0.6),
@@ -152,23 +156,26 @@ class DealCalendarViewModel with ChangeNotifier {
             maxDateTime: _maxDateTime,
             initialDateTime: _pickedDateTime,
             showDays: false,
-            locale: locale,
+            locale: Platform.localeName,
             backgroundColor: HexColors.white,
             buttonColor: HexColors.primaryMain,
             buttonHighlightColor: HexColors.primaryDark,
             buttonTitle: Titles.apply,
             buttonTextStyle: textStyle.copyWith(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w700,
-                color: HexColors.black),
+              fontSize: 18.0,
+              fontWeight: FontWeight.w700,
+              color: HexColors.black,
+            ),
             selecteTextStyle: textStyle.copyWith(
-                fontSize: 14.0,
-                color: HexColors.black,
-                fontWeight: FontWeight.w400),
+              fontSize: 14.0,
+              color: HexColors.black,
+              fontWeight: FontWeight.w400,
+            ),
             unselectedTextStyle: textStyle.copyWith(
-                fontSize: 12.0,
-                color: HexColors.grey70,
-                fontWeight: FontWeight.w400),
+              fontSize: 12.0,
+              color: HexColors.grey70,
+              fontWeight: FontWeight.w400,
+            ),
             onTap: (dateTime) => {
                   Navigator.pop(context),
 
@@ -182,8 +189,8 @@ class DealCalendarViewModel with ChangeNotifier {
                       // CALL CALENDAR SCROLL TO PICKED DATE TIME
                       Future.delayed(const Duration(milliseconds: 100),
                           () => didUpdateDateTime(true)))
-                }));
-  }
+                }),
+      );
 
   // MARK: -
   // MARK: - FUNCTIONS
@@ -193,7 +200,10 @@ class DealCalendarViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void selectDateTime(BuildContext context, DateTime dateTime) {
+  void selectDateTime(
+    BuildContext context,
+    DateTime dateTime,
+  ) {
     _selectedDateTime = dateTime;
     notifyListeners();
 

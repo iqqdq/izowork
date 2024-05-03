@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -46,7 +47,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
         _nameTextEditingController.text = _taskCreateViewModel.task!.name;
 
         _descriptionTextEditingController.text =
-            _taskCreateViewModel.task!.description ?? '';
+            _taskCreateViewModel.task!.description;
       }
 
       /// CREATE TASK FROM CHAT STATE
@@ -69,15 +70,6 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
       context,
       listen: true,
     );
-
-    final _day = _taskCreateViewModel.pickedDateTime.day.toString().length == 1
-        ? '0${_taskCreateViewModel.pickedDateTime.day}'
-        : '${_taskCreateViewModel.pickedDateTime.day}';
-    final _month =
-        _taskCreateViewModel.pickedDateTime.month.toString().length == 1
-            ? '0${_taskCreateViewModel.pickedDateTime.month}'
-            : '${_taskCreateViewModel.pickedDateTime.month}';
-    final _year = '${_taskCreateViewModel.pickedDateTime.year}';
 
     return Scaffold(
         backgroundColor: HexColors.white,
@@ -144,7 +136,11 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                             margin: const EdgeInsets.only(bottom: 10.0),
                             isDate: true,
                             title: Titles.deadline,
-                            value: '$_day.$_month.$_year',
+                            value: DateTimeFormatter().formatDateTimeToString(
+                              dateTime: _taskCreateViewModel.pickedDateTime,
+                              showTime: false,
+                              showMonthName: false,
+                            ),
                             onTap: () => _taskCreateViewModel
                                 .showDateTimeSelectionSheet(context)),
 

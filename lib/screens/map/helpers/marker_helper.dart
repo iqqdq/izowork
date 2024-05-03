@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/place_model.dart';
+import 'package:izowork/models/place_model.dart';
 
 class MarkerHelper {
   Future<BitmapDescriptor> getObjectMarkerBitmap(

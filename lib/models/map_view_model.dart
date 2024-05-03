@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_geocoding_api/google_geocoding_api.dart';
@@ -8,8 +9,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:izowork/api/keys.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/locale.dart';
-import 'package:izowork/components/place_model.dart';
+import 'package:izowork/models/place_model.dart';
 import 'package:izowork/entities/response/company.dart';
 import 'package:izowork/entities/response/object.dart';
 import 'package:izowork/entities/response/object_stage.dart';
@@ -152,8 +152,9 @@ class MapViewModel with ChangeNotifier {
         GoogleGeocodingApi(google_map_api_key, isLogged: isDebugMode);
 
     GoogleGeocodingResponse reversedSearchResults = await api.reverse(
-        '${_position?.latitude}, ${_position?.longitude}',
-        language: locale);
+      '${_position?.latitude}, ${_position?.longitude}',
+      language: Platform.localeName,
+    );
 
     if (reversedSearchResults.status == 'REQUEST_DENIED') {
       log('Problem with Geocoding API');

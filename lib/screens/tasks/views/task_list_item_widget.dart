@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/task.dart';
@@ -20,14 +21,6 @@ class TaskListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final dateTime = DateTime.parse(task.deadline).toUtc().toLocal();
 
-    final _day = dateTime.day.toString().length == 1
-        ? '0${dateTime.day}'
-        : '${dateTime.day}';
-    final _month = dateTime.month.toString().length == 1
-        ? '0${dateTime.month}'
-        : '${dateTime.month}';
-    final _year = '${dateTime.year}';
-
     return Container(
         margin: const EdgeInsets.only(bottom: 10.0),
         decoration: BoxDecoration(
@@ -45,7 +38,11 @@ class TaskListItemWidget extends StatelessWidget {
                     shrinkWrap: true,
                     children: [
                       /// ACTION NAME
-                      TitleWidget(text: task.name, padding: EdgeInsets.zero),
+                      TitleWidget(
+                        text: task.name,
+                        padding: EdgeInsets.zero,
+                        nonSelectable: true,
+                      ),
                       const SizedBox(height: 10.0),
 
                       /// DEADLINE
@@ -53,15 +50,24 @@ class TaskListItemWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SubtitleWidget(
-                                text: '${Titles.deadline}:',
-                                padding: EdgeInsets.zero),
+                              text: '${Titles.deadline}:',
+                              padding: EdgeInsets.zero,
+                              nonSelectable: true,
+                            ),
                             const SizedBox(width: 10.0),
                             Expanded(
                               child: SubtitleWidget(
-                                  text: '$_day.$_month.$_year',
-                                  fontWeight: FontWeight.w700,
-                                  textAlign: TextAlign.end,
-                                  padding: EdgeInsets.zero),
+                                text:
+                                    DateTimeFormatter().formatDateTimeToString(
+                                  dateTime: dateTime,
+                                  showTime: false,
+                                  showMonthName: false,
+                                ),
+                                fontWeight: FontWeight.w700,
+                                textAlign: TextAlign.end,
+                                padding: EdgeInsets.zero,
+                                nonSelectable: true,
+                              ),
                             )
                           ]),
                       const SizedBox(height: 10.0),
@@ -71,15 +77,19 @@ class TaskListItemWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SubtitleWidget(
-                                text: '${Titles.responsible}:',
-                                padding: EdgeInsets.zero),
+                              text: '${Titles.responsible}:',
+                              padding: EdgeInsets.zero,
+                              nonSelectable: true,
+                            ),
                             const SizedBox(width: 10.0),
                             Expanded(
                               child: SubtitleWidget(
-                                  text: task.responsible?.name ?? '-',
-                                  fontWeight: FontWeight.w700,
-                                  textAlign: TextAlign.end,
-                                  padding: EdgeInsets.zero),
+                                text: task.responsible?.name ?? '-',
+                                fontWeight: FontWeight.w700,
+                                textAlign: TextAlign.end,
+                                padding: EdgeInsets.zero,
+                                nonSelectable: true,
+                              ),
                             )
                           ]),
                       const SizedBox(height: 10.0),
@@ -89,29 +99,36 @@ class TaskListItemWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SubtitleWidget(
-                                text: '${Titles.object}:',
-                                padding: EdgeInsets.zero),
+                              text: '${Titles.object}:',
+                              padding: EdgeInsets.zero,
+                              nonSelectable: true,
+                            ),
                             const SizedBox(width: 10.0),
                             Expanded(
                               child: SubtitleWidget(
-                                  text: task.object?.name ?? '-',
-                                  fontWeight: FontWeight.w700,
-                                  textAlign: TextAlign.end,
-                                  padding: EdgeInsets.zero),
+                                text: task.object?.name ?? '-',
+                                fontWeight: FontWeight.w700,
+                                textAlign: TextAlign.end,
+                                padding: EdgeInsets.zero,
+                                nonSelectable: true,
+                              ),
                             )
                           ]),
                       const SizedBox(height: 10.0),
                       const SeparatorWidget(),
-                      const SizedBox(height: 10.0),
+                      SizedBox(height: task.description.isEmpty ? 0.0 : 10.0),
 
                       /// ACTION TEXT
-                      Text(task.description ?? '',
-                          style: TextStyle(
-                              color: HexColors.black,
-                              fontSize: 14.0,
-                              fontFamily: 'PT Root UI',
-                              fontWeight: FontWeight.w400)),
-                      const SizedBox(height: 10.0),
+                      SubtitleWidget(
+                        text: task.description,
+                        padding: EdgeInsets.zero,
+                        nonSelectable: true,
+                      ),
+                      SizedBox(height: task.description.isEmpty ? 0.0 : 10.0),
+                      task.description.isEmpty
+                          ? Container()
+                          : const SeparatorWidget(),
+                      SizedBox(height: task.description.isEmpty ? 0.0 : 20.0),
 
                       /// USER
                       Row(children: [

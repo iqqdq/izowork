@@ -27,7 +27,7 @@ class NotificationEntity {
         id: json["id"],
         text: json["text"],
         userId: json["user_id"],
-        createdAt: DateTime.now(), // .parse(json["created_at"]),
+        createdAt: DateTime.parse(json["created_at"]),
         type: json["type"],
         metadata: Metadata.fromJson(json["metadata"]),
         read: json["read"],

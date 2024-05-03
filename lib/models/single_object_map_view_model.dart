@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/place_model.dart';
+import 'package:izowork/models/place_model.dart';
 import 'package:izowork/entities/response/object.dart';
 
 class SingleObjectMapViewModel with ChangeNotifier {

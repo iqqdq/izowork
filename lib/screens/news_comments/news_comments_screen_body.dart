@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/models/news_comments_view_model.dart';
@@ -110,22 +111,6 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
       }
     }
 
-    final _day = _newsCommentsViewModel.news.createdAt.day
-                .toString()
-                .characters
-                .length ==
-            1
-        ? '0${_newsCommentsViewModel.news.createdAt.day}'
-        : '${_newsCommentsViewModel.news.createdAt.day}';
-    final _month = _newsCommentsViewModel.news.createdAt.month
-                .toString()
-                .characters
-                .length ==
-            1
-        ? '0${_newsCommentsViewModel.news.createdAt.month}'
-        : '${_newsCommentsViewModel.news.createdAt.month}';
-    final _year = '${_newsCommentsViewModel.news.createdAt.year}';
-
     if (_newsCommentsViewModel.comments.isNotEmpty &&
         _newsCommentsViewModel.comment == null) {
       if (_bubbles.length < _newsCommentsViewModel.comments.length) {
@@ -176,7 +161,14 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
                         text: _newsCommentsViewModel.news.user?.name ?? '-',
                         isSmall: true),
                     TitleWidget(text: _newsCommentsViewModel.news.name),
-                    TitleWidget(text: '$_day.$_month.$_year', isSmall: true)
+                    TitleWidget(
+                      text: DateTimeFormatter().formatDateTimeToString(
+                        dateTime: _newsCommentsViewModel.news.createdAt,
+                        showTime: true,
+                        showMonthName: true,
+                      ),
+                      isSmall: true,
+                    )
                   ]))
             ])),
         body: SizedBox.expand(

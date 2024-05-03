@@ -3,7 +3,7 @@ import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/pagination.dart';
 import 'package:izowork/models/object_actions_view_model.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/screens/analytics/views/analitics_action_list_item_widget.dart';
+import 'package:izowork/screens/object/object_actions/views/object_action_list_item_widget.dart';
 import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/loading_indicator_widget.dart';
 import 'package:izowork/views/separator_widget.dart';
@@ -63,8 +63,11 @@ class _ObjectActionsScreenBodyState
     return Scaffold(
         backgroundColor: HexColors.white,
         floatingActionButton: FloatingButtonWidget(
-            onTap: () => _objectActionsViewModel.showActionCreateScreen(
-                context, _pagination)),
+          onTap: () => _objectActionsViewModel.showActionCreateScreen(
+            context,
+            _pagination,
+          ),
+        ),
         body: SizedBox.expand(
             child: Stack(children: [
           const SeparatorWidget(),
@@ -84,7 +87,7 @@ class _ObjectActionsScreenBodyState
                   ),
                   itemCount: _objectActionsViewModel.traces.length,
                   itemBuilder: (context, index) {
-                    return AnalitycsActionListItemWidget(
+                    return ObjectActionListItemWidget(
                         key: ValueKey(_objectActionsViewModel.traces[index].id),
                         trace: _objectActionsViewModel.traces[index],
                         onTap: () => _objectActionsViewModel.showTraceScreen(

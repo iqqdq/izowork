@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/news.dart';
@@ -32,14 +33,6 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final _day = widget.news.createdAt.day.toString().characters.length == 1
-        ? '0${widget.news.createdAt.day}'
-        : '${widget.news.createdAt.day}';
-    final _month = widget.news.createdAt.month.toString().characters.length == 1
-        ? '0${widget.news.createdAt.month}'
-        : '${widget.news.createdAt.month}';
-    final _year = '${widget.news.createdAt.year}';
-
     if (widget.news.files.isNotEmpty &&
         _images.length != widget.news.files.length) {
       if (widget.news.files.isNotEmpty) {
@@ -105,19 +98,26 @@ class _NewsScreenBodyState extends State<NewsPageScreenWidget> {
       ),
       child: Row(children: [
         /// NAME
-        Text(
-          widget.news.user?.name ?? '-',
-          maxLines: 1,
-          style: TextStyle(
-            color: HexColors.grey40,
-            fontSize: 12.0,
-            fontFamily: 'PT Root UI',
+        Expanded(
+          child: Text(
+            widget.news.user?.name ?? '-',
+            maxLines: 1,
+            style: TextStyle(
+              color: HexColors.grey40,
+              fontSize: 12.0,
+              fontFamily: 'PT Root UI',
+            ),
           ),
         ),
         const SizedBox(width: 8.0),
 
         /// DATE
-        Text('$_day.$_month.$_year',
+        Text(
+            DateTimeFormatter().formatDateTimeToString(
+              dateTime: widget.news.createdAt,
+              showTime: true,
+              showMonthName: true,
+            ),
             textAlign: TextAlign.end,
             style: TextStyle(
                 color: HexColors.grey40,

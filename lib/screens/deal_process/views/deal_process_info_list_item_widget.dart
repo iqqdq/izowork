@@ -2,6 +2,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/entities/response/deal_process_info.dart';
@@ -15,26 +16,18 @@ class DealProcessInfoListItemWidget extends StatelessWidget {
   final VoidCallback onUserTap;
   final Function(int) onFileTap;
 
-  const DealProcessInfoListItemWidget(
-      {Key? key,
-      required this.information,
-      required this.onUserTap,
-      required this.onFileTap})
-      : super(key: key);
+  const DealProcessInfoListItemWidget({
+    Key? key,
+    required this.information,
+    required this.onUserTap,
+    required this.onFileTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final dateTime = DateTime.parse(information.createdAt).toUtc().toLocal();
 
-    final _day = dateTime.day.toString().length == 1
-        ? '0${dateTime.day}'
-        : '${dateTime.day}';
-    final _month = dateTime.month.toString().length == 1
-        ? '0${dateTime.month}'
-        : '${dateTime.month}';
-    final _year = '${dateTime.year}';
-
-    String? _url = information.user == null
+    String? url = information.user == null
         ? null
         : information.user!.avatar == null
             ? null
@@ -68,20 +61,22 @@ class DealProcessInfoListItemWidget extends StatelessWidget {
                                 width: 24.0,
                                 height: 24.0,
                                 fit: BoxFit.cover),
-                            _url == null
+                            url == null
                                 ? Container()
                                 : ClipRRect(
                                     borderRadius: BorderRadius.circular(10.0),
                                     child: CachedNetworkImage(
-                                        cacheKey: _url,
-                                        imageUrl: avatarUrl + _url,
-                                        width: 24.0,
-                                        height: 24.0,
-                                        memCacheWidth: 24 *
-                                            MediaQuery.of(context)
-                                                .devicePixelRatio
-                                                .round(),
-                                        fit: BoxFit.cover)),
+                                      cacheKey: url,
+                                      imageUrl: avatarUrl + url,
+                                      width: 24.0,
+                                      height: 24.0,
+                                      memCacheWidth: 24 *
+                                          MediaQuery.of(context)
+                                              .devicePixelRatio
+                                              .round(),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                           ]),
                           const SizedBox(width: 10.0),
 
@@ -100,9 +95,14 @@ class DealProcessInfoListItemWidget extends StatelessWidget {
 
                 /// DATE
                 SubtitleWidget(
-                    text: '$_day.$_month.$_year',
-                    fontWeight: FontWeight.w500,
-                    padding: EdgeInsets.zero),
+                  text: DateTimeFormatter().formatDateTimeToString(
+                    dateTime: dateTime,
+                    showTime: false,
+                    showMonthName: false,
+                  ),
+                  fontWeight: FontWeight.w500,
+                  padding: EdgeInsets.zero,
+                ),
               ]),
               const TitleWidget(
                   text: Titles.description,

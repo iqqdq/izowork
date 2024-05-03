@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/locale.dart';
 import 'package:izowork/models/deal_event_view_model.dart';
 import 'package:izowork/screens/deals/views/deal_list_item_widget.dart';
 import 'package:izowork/views/dismiss_indicator_widget.dart';
@@ -33,13 +32,6 @@ class _DealEventScreenBodyState extends State<DealEventScreenBodyWidget> {
       context,
       listen: true,
     );
-
-    final _day = DateTime.now().day.toString().length == 1
-        ? '0${DateTime.now().day}'
-        : '${DateTime.now().day}';
-    final _month =
-        DateFormat.MMMM(locale).format(widget.dateTime).toLowerCase();
-    final _year = '${DateTime.now().year}';
 
     return Material(
         type: MaterialType.transparency,
@@ -77,20 +69,28 @@ class _DealEventScreenBodyState extends State<DealEventScreenBodyWidget> {
                           const DismissIndicatorWidget(),
 
                           /// TITLE
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: Material(
-                                      type: MaterialType.transparency,
-                                      child: Text(
-                                          'Сделки на $_day ${_month.substring(0, 3)} $_year',
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: HexColors.black,
-                                              fontFamily: 'PT Root UI'))))
-                            ],
-                          ),
+                          Row(children: [
+                            Expanded(
+                              child: Material(
+                                type: MaterialType.transparency,
+                                child: Text(
+                                  'Сделки на ' +
+                                      DateTimeFormatter()
+                                          .formatDateTimeToString(
+                                        dateTime: widget.dateTime,
+                                        showTime: false,
+                                        showMonthName: false,
+                                      ),
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: HexColors.black,
+                                    fontFamily: 'PT Root UI',
+                                  ),
+                                ),
+                              ),
+                            )
+                          ]),
 
                           /// TASK LIST VIEW
                           ListView.builder(

@@ -1,12 +1,10 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
-
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/locale.dart';
 import 'package:izowork/components/titles.dart';
 import 'package:izowork/components/toast.dart';
 import 'package:izowork/entities/request/delete_request.dart';
@@ -395,7 +393,7 @@ class TaskCreateViewModel with ChangeNotifier {
             maxDateTime: _maxDateTime,
             initialDateTime: _pickedDateTime,
             showDays: true,
-            locale: locale,
+            locale: Platform.localeName,
             backgroundColor: HexColors.white,
             buttonColor: HexColors.primaryMain,
             buttonHighlightColor: HexColors.primaryDark,

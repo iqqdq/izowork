@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SubtitleWidget extends StatelessWidget {
   final String text;
+  final bool? nonSelectable;
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
   final EdgeInsets? padding;
@@ -10,6 +11,7 @@ class SubtitleWidget extends StatelessWidget {
   const SubtitleWidget({
     Key? key,
     required this.text,
+    this.nonSelectable,
     this.fontWeight,
     this.textAlign,
     this.padding,
@@ -18,22 +20,26 @@ class SubtitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: padding == null
-          ? const EdgeInsets.symmetric(horizontal: 16.0)
-          : padding!,
-      child: SelectionArea(
-        child: Text(
-          text,
-          textAlign: textAlign,
-          style: TextStyle(
-            fontSize: 14.0,
-            fontWeight: fontWeight ?? FontWeight.w400,
-            fontFamily: 'PT Root UI',
-            color: titleColor,
-          ),
-        ),
+    final bool selectable = nonSelectable == null
+        ? true
+        : nonSelectable == true
+            ? false
+            : true;
+
+    Widget textWidget = Text(
+      text,
+      textAlign: textAlign,
+      style: TextStyle(
+        fontSize: 14.0,
+        fontWeight: fontWeight ?? FontWeight.w400,
+        fontFamily: 'PT Root UI',
+        color: titleColor,
       ),
+    );
+
+    return Padding(
+      padding: padding ?? const EdgeInsets.symmetric(horizontal: 16.0),
+      child: selectable ? SelectionArea(child: textWidget) : textWidget,
     );
   }
 }

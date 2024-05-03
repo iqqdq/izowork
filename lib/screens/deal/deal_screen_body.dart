@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:izowork/components/date_time_string_formatter.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/components/loading_status.dart';
 import 'package:izowork/components/titles.dart';
@@ -40,26 +41,10 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
         .toUtc()
         .toLocal();
 
-    final startDay = startDateTime.day.toString().length == 1
-        ? '0${startDateTime.day}'
-        : '${startDateTime.day}';
-    final startMonth = startDateTime.month.toString().length == 1
-        ? '0${startDateTime.month}'
-        : '${startDateTime.month}';
-    final startYear = '${startDateTime.year}';
-
     final endDateTime = DateTime.parse(_dealViewModel.deal?.finishAt ??
             _dealViewModel.selectedDeal.finishAt)
         .toUtc()
         .toLocal();
-
-    final endDay = endDateTime.day.toString().length == 1
-        ? '0${endDateTime.day}'
-        : '${endDateTime.day}';
-    final endMonth = endDateTime.month.toString().length == 1
-        ? '0${endDateTime.month}'
-        : '${endDateTime.month}';
-    final endYear = '${endDateTime.year}';
 
     final comment = _dealViewModel.deal?.comment ??
         _dealViewModel.selectedDeal.comment ??
@@ -107,80 +92,134 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             isSmall: true),
                         SubtitleWidget(
                           padding: const EdgeInsets.only(
-                              left: 16.0, right: 16.0, bottom: 16.0),
-                          text: '$startDay.$startMonth.$startYear',
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 16.0,
+                          ),
+                          text: DateTimeFormatter().formatDateTimeToString(
+                            dateTime: startDateTime,
+                            showTime: false,
+                            showMonthName: false,
+                          ),
                         ),
 
                         /// END DATE
                         const TitleWidget(
-                            padding: EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 4.0),
-                            text: Titles.endDate,
-                            isSmall: true),
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 4.0,
+                          ),
+                          text: Titles.endDate,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
                           padding: const EdgeInsets.only(
-                              left: 16.0, right: 16.0, bottom: 16.0),
-                          text: '$endDay.$endMonth.$endYear',
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 16.0,
+                          ),
+                          text: DateTimeFormatter().formatDateTimeToString(
+                            dateTime: endDateTime,
+                            showTime: false,
+                            showMonthName: false,
+                          ),
                         ),
 
                         /// RESPONSIBLE
                         const TitleWidget(
-                            padding: EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 4.0),
-                            text: Titles.responsible,
-                            isSmall: true),
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 4.0,
+                          ),
+                          text: Titles.responsible,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 16.0),
-                            text:
-                                _dealViewModel.deal?.responsible?.name ?? '-'),
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 16.0,
+                          ),
+                          text: _dealViewModel.deal?.responsible?.name ?? '-',
+                        ),
 
                         /// OBJECT
                         const TitleWidget(
-                            padding: EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 4.0),
-                            text: Titles.object,
-                            isSmall: true),
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 4.0,
+                          ),
+                          text: Titles.object,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 16.0),
-                            text: _dealViewModel.deal?.object?.name ?? '-'),
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 16.0,
+                          ),
+                          text: _dealViewModel.deal?.object?.name ?? '-',
+                        ),
 
                         /// PHASE
                         const TitleWidget(
-                            padding: EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 4.0),
-                            text: Titles.phase,
-                            isSmall: true),
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 4.0,
+                          ),
+                          text: Titles.phase,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 16.0),
-                            text: _dealViewModel.phase?.name ?? '-'),
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 16.0,
+                          ),
+                          text: _dealViewModel.phase?.name ?? '-',
+                        ),
 
                         /// COMPANY
                         const TitleWidget(
-                            padding: EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 4.0),
-                            text: Titles.company,
-                            isSmall: true),
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 4.0,
+                          ),
+                          text: Titles.company,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 16.0),
-                            text: _dealViewModel.deal?.company?.name ?? '-'),
+                          padding: const EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 16.0,
+                          ),
+                          text: _dealViewModel.deal?.company?.name ?? '-',
+                        ),
 
                         /// COMMENT
                         const TitleWidget(
-                            padding: EdgeInsets.only(
-                                left: 16.0, right: 16.0, bottom: 4.0),
-                            text: Titles.comment,
-                            isSmall: true),
+                          padding: EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 4.0,
+                          ),
+                          text: Titles.comment,
+                          isSmall: true,
+                        ),
                         SubtitleWidget(
                           padding: EdgeInsets.only(
-                              left: 16.0,
-                              right: 16.0,
-                              bottom: _dealViewModel.dealProducts.isEmpty
-                                  ? 0.0
-                                  : 16.0),
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: _dealViewModel.dealProducts.isEmpty
+                                ? 0.0
+                                : 16.0,
+                          ),
                           text: comment,
                         ),
 
@@ -198,9 +237,11 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 2.0),
                                     decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 0.65,
-                                            color: HexColors.grey20)),
+                                      border: Border.all(
+                                        width: 0.65,
+                                        color: HexColors.grey20,
+                                      ),
+                                    ),
                                     child: Row(children: [
                                       Expanded(
                                         child: Text(
@@ -220,9 +261,10 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                                       '-',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              fontSize: 14.0,
-                                              color: HexColors.black,
-                                              fontFamily: 'PT Root UI'),
+                                            fontSize: 14.0,
+                                            color: HexColors.black,
+                                            fontFamily: 'PT Root UI',
+                                          ),
                                         ),
                                       )
                                     ]),
@@ -232,62 +274,76 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 16.0),
                                       decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 0.65,
-                                              color: HexColors.grey20)),
+                                        border: Border.all(
+                                          width: 0.65,
+                                          color: HexColors.grey20,
+                                        ),
+                                      ),
                                       child: Row(children: [
                                         Expanded(
-                                            child: Text(Titles.product,
-                                                style: TextStyle(
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: HexColors.black,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    fontFamily: 'PT Root UI')))
+                                          child: Text(
+                                            Titles.product,
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: HexColors.black,
+                                              overflow: TextOverflow.ellipsis,
+                                              fontFamily: 'PT Root UI',
+                                            ),
+                                          ),
+                                        )
                                       ])),
                                   rowHeaderBuilder: (_, index) => Container(
-                                      height: 42.0,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16.0, vertical: 4.0),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 0.65,
-                                              color: HexColors.grey20)),
-                                      child: Row(children: [
-                                        Expanded(
-                                            child: Text(
-                                                _dealViewModel
-                                                        .dealProducts[index]
-                                                        .product
-                                                        ?.name ??
-                                                    '-',
-                                                maxLines: 2,
-                                                style: TextStyle(
-                                                    fontSize: 12.0,
-                                                    color: HexColors.black,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    fontFamily: 'PT Root UI')))
-                                      ])),
+                                    height: 42.0,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                      vertical: 4.0,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 0.65,
+                                        color: HexColors.grey20,
+                                      ),
+                                    ),
+                                    child: Row(children: [
+                                      Expanded(
+                                        child: Text(
+                                          _dealViewModel.dealProducts[index]
+                                                  .product?.name ??
+                                              '-',
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            color: HexColors.black,
+                                            overflow: TextOverflow.ellipsis,
+                                            fontFamily: 'PT Root UI',
+                                          ),
+                                        ),
+                                      )
+                                    ]),
+                                  ),
                                   colHeaderBuilder: (_, index) => Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 2.0),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 0.65,
-                                              color: HexColors.grey20)),
-                                      child: Center(
-                                          child: Text(
-                                              index == 0
-                                                  ? Titles.unit
-                                                  : index == 1
-                                                      ? Titles.count
-                                                      : '${Titles.price}, ${Titles.currency}',
-                                              style: TextStyle(
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: HexColors.black)))),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2.0),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 0.65,
+                                            color: HexColors.grey20)),
+                                    child: Center(
+                                      child: Text(
+                                        index == 0
+                                            ? Titles.unit
+                                            : index == 1
+                                                ? Titles.count
+                                                : '${Titles.price}, ${Titles.currency}',
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: HexColors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   rowHeaderWidth:
                                       MediaQuery.of(context).size.width * 0.4,
                                   colsHeaderHeight: 42.0,
@@ -296,7 +352,8 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                       MediaQuery.of(context).size.width * 0.3,
                                   rowsCount: _dealViewModel.dealProducts.length,
                                   colCount: 3,
-                                )),
+                                ),
+                              ),
 
                         _dealViewModel.deal == null
                             ? Container()
@@ -306,10 +363,12 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                     text: Titles.files,
                                     isSmall: true,
                                     padding: EdgeInsets.only(
-                                        left: 16.0,
-                                        right: 16.0,
-                                        top: 16.0,
-                                        bottom: 10.0)),
+                                      left: 16.0,
+                                      right: 16.0,
+                                      top: 16.0,
+                                      bottom: 10.0,
+                                    ),
+                                  ),
 
                         /// FILE LIST
                         _dealViewModel.deal == null
@@ -331,17 +390,20 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                                 .selectedDeal.files.length,
                                     itemBuilder: (context, index) {
                                       return FileListItemWidget(
-                                          key: ValueKey(_dealViewModel
-                                              .deal!.files[index]),
-                                          fileName: _dealViewModel
-                                                  .deal?.files[index].name ??
-                                              _dealViewModel.selectedDeal
-                                                  .files[index].name,
-                                          isDownloading:
-                                              _dealViewModel.downloadIndex ==
-                                                  index,
-                                          onTap: () => _dealViewModel.openFile(
-                                              context, index));
+                                        key: ValueKey(
+                                            _dealViewModel.deal!.files[index]),
+                                        fileName: _dealViewModel
+                                                .deal?.files[index].name ??
+                                            _dealViewModel
+                                                .selectedDeal.files[index].name,
+                                        isDownloading:
+                                            _dealViewModel.downloadIndex ==
+                                                index,
+                                        onTap: () => _dealViewModel.openFile(
+                                          context,
+                                          index,
+                                        ),
+                                      );
                                     }),
 
                         /// PROCESS LIST
@@ -349,9 +411,13 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             ? const SizedBox(height: 16.0)
                             : const TitleWidget(
                                 padding: EdgeInsets.only(
-                                    left: 16.0, right: 16.0, bottom: 10.0),
+                                  left: 16.0,
+                                  right: 16.0,
+                                  bottom: 10.0,
+                                ),
                                 text: Titles.processes,
-                                isSmall: true),
+                                isSmall: true,
+                              ),
                         ListView.builder(
                             shrinkWrap: true,
                             padding:
@@ -410,28 +476,31 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             : BorderButtonWidget(
                                 title: Titles.closeDeal,
                                 margin: const EdgeInsets.only(
-                                    left: 16.0,
-                                    top: 6.0,
-                                    right: 16.0,
-                                    bottom: 16.0),
+                                  left: 16.0,
+                                  top: 6.0,
+                                  right: 16.0,
+                                  bottom: 16.0,
+                                ),
                                 onTap: () =>
-                                    _dealViewModel.showDealCloseSheet(context)),
+                                    _dealViewModel.showDealCloseSheet(context),
+                              ),
                       ]),
 
                   /// EDIT DEAL BUTTON
                   Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ButtonWidget(
-                          title: Titles.edit,
-                          margin: EdgeInsets.only(
-                              left: 16.0,
-                              right: 16.0,
-                              bottom:
-                                  MediaQuery.of(context).padding.bottom == 0.0
-                                      ? 20.0
-                                      : MediaQuery.of(context).padding.bottom),
-                          onTap: () =>
-                              _dealViewModel.showDealCreateSheet(context))),
+                    alignment: Alignment.bottomCenter,
+                    child: ButtonWidget(
+                      title: Titles.edit,
+                      margin: EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        bottom: MediaQuery.of(context).padding.bottom == 0.0
+                            ? 20.0
+                            : MediaQuery.of(context).padding.bottom,
+                      ),
+                      onTap: () => _dealViewModel.showDealCreateSheet(context),
+                    ),
+                  ),
                   const SeparatorWidget(),
 
                   /// INDICATOR
