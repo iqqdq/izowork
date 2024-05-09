@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/office.dart';
-import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/button_widget.dart';
-import 'package:izowork/views/date_selection_input_widget.dart';
-import 'package:izowork/views/selection_input_widget.dart';
-import 'package:izowork/views/title_widget.dart';
-import 'package:izowork/views/transparent_button_widget_widget.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/views/views.dart';
 
 class AnalyticsActionsFilterScreenBodyWidget extends StatefulWidget {
   final Office? office;

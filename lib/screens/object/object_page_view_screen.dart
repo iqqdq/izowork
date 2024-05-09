@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/entities/response/object_stage.dart';
-import 'package:izowork/entities/response/phase.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/object/object_page/object_page_screen.dart';
 import 'package:izowork/screens/object/object_actions/object_actions_screen.dart';
 import 'package:izowork/screens/phase/phase_screen.dart';
 import 'package:izowork/services/local_storage/local_storage.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/views/segmented_control_widget.dart';
+import 'package:izowork/views/views.dart';
 
 class ObjectPageViewScreenWidget extends StatefulWidget {
   final Object object;

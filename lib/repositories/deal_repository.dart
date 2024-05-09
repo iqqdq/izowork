@@ -1,18 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/entities/request/deal_request.dart';
-import 'package:izowork/entities/request/deal_file_request.dart';
-import 'package:izowork/entities/request/deal_process_info_request.dart';
-import 'package:izowork/entities/request/deal_process_update_request.dart';
-import 'package:izowork/entities/request/deal_product_request.dart';
-import 'package:izowork/entities/request/delete_request.dart';
-import 'package:izowork/entities/response/deal.dart';
-import 'package:izowork/entities/response/deal_process.dart';
-import 'package:izowork/entities/response/deal_process_info.dart';
-import 'package:izowork/entities/response/deal_stage.dart';
-import 'package:izowork/entities/response/document.dart';
-import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/api/urls.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/api/api.dart';
 import 'package:izowork/services/web_service.dart';
 
 class DealRepository {

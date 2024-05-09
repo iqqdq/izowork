@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/models/tasks_view_model.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/tasks/tasks_screen_body.dart';
 import 'package:provider/provider.dart';
 

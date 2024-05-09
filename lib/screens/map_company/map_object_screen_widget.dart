@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/company.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/map_company/map_company_screen_body_widget.dart';
 
 class MapCompanyScreenWidget extends StatelessWidget {

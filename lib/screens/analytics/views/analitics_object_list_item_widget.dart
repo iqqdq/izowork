@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/entities/response/object.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
 
 class AnalitycsObjectListItemWidget extends StatelessWidget {
   final Object object;

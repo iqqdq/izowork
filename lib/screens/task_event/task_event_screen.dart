@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/task.dart';
-import 'package:izowork/models/task_event_view_model.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/task_event/task_event_screen_body_widget.dart';
 import 'package:provider/provider.dart';
 

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/button_widget.dart';
-import 'package:izowork/views/title_widget.dart';
-import 'package:izowork/views/transparent_button_widget_widget.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/views/views.dart';
 
 class ContactsFilterScreenWidget extends StatelessWidget {
   final List<String> options;

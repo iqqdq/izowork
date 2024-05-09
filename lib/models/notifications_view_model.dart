@@ -1,22 +1,11 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/entities/request/read_notification_request.dart';
-import 'package:izowork/entities/response/deal.dart';
-import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/entities/response/news.dart';
-import 'package:izowork/entities/response/notification.dart';
-import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/entities/response/phase.dart';
-import 'package:izowork/entities/response/task.dart';
-import 'package:izowork/repositories/deal_repository.dart';
-import 'package:izowork/repositories/news_repository.dart';
-import 'package:izowork/repositories/notification_repository.dart';
-import 'package:izowork/repositories/object_repository.dart';
-import 'package:izowork/repositories/phase_repository.dart';
-import 'package:izowork/repositories/task_repository.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/news_page/news_page_screen.dart';
 import 'package:izowork/screens/object/object_page_view_screen.dart';

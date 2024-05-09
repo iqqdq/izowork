@@ -1,9 +1,7 @@
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/entities/request/message_file_request.dart';
-import 'package:izowork/entities/request/message_read_request.dart';
-import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/entities/response/message.dart';
-import 'package:izowork/api/urls.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/api/api.dart';
 import 'package:izowork/services/web_service.dart';
 
 class DialogRepository {

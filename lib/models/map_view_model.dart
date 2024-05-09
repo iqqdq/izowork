@@ -7,14 +7,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:izowork/api/keys.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/models/place_model.dart';
-import 'package:izowork/entities/response/company.dart';
-import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/entities/response/object_stage.dart';
-import 'package:izowork/repositories/company_repository.dart';
-import 'package:izowork/repositories/object_repository.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen_body.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen_body.dart';
 

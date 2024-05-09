@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/object.dart';
+import 'package:izowork/entities/responses/responses.dart';
 
 class MapObjectViewModel with ChangeNotifier {
   final Object object;

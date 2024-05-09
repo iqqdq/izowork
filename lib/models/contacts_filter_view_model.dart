@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/company_type.dart';
-import 'package:izowork/repositories/company_repository.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/contacts/contacts_filter_sheet/contacts_filter_page_view_screen_body.dart';
 
 class ContactsFilterViewModel with ChangeNotifier {

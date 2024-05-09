@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/models/selection_view_model.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/selection/views/selection_list_item_widget.dart';
-import 'package:izowork/views/button_widget.dart';
-import 'package:izowork/views/dismiss_indicator_widget.dart';
-import 'package:izowork/views/title_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class SelectionScreenBodyWidget extends StatefulWidget {

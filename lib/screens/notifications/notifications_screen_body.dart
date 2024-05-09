@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/models/notifications_view_model.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/notifications/views/notification_list_item_widget.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/separator_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class NotificationsScreenBodyWidget extends StatefulWidget {

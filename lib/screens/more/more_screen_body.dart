@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/models/more_view_model.dart';
-import 'package:izowork/api/urls.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/models/models.dart';
+import 'package:izowork/api/api.dart';
 import 'package:izowork/screens/analytics/analytics_page_view_screen.dart';
 import 'package:izowork/screens/authorization/authorization_screen.dart';
 import 'package:izowork/screens/companies/companies_screen.dart';
@@ -16,8 +16,7 @@ import 'package:izowork/screens/notifications/notifications_screen.dart';
 import 'package:izowork/screens/products/products_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/screens/staff/staff_screen.dart';
-import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/title_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class MoreScreenBodyWidget extends StatefulWidget {

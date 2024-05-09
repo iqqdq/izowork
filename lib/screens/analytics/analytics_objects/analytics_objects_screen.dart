@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/models/objects_view_model.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/analytics/analytics_objects/analytics_objects_screen_body.dart';
 import 'package:provider/provider.dart';
 

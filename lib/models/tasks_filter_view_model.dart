@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/tasks/tasks_filter_sheet/tasks_filter_page_view_screen_body.dart';
 
 class TasksFilterViewModel with ChangeNotifier {

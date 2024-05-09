@@ -4,11 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:izowork/components/date_time_formatter.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/news.dart';
-import 'package:izowork/api/urls.dart';
+
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/api/api.dart';
 import 'package:izowork/views/status_widget.dart';
 import 'package:izowork/views/transparent_button_widget_widget.dart';
 

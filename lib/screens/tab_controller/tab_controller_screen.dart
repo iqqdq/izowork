@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/models/tab_controller_view_model.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/tab_controller/tab_controller_screen_body.dart';
 import 'package:provider/provider.dart';
 

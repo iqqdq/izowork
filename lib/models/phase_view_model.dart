@@ -2,23 +2,10 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/request/delete_request.dart';
-import 'package:izowork/entities/request/phase_checklist_info_request.dart';
-import 'package:izowork/entities/request/phase_checklist_info_file_request.dart';
-import 'package:izowork/entities/request/phase_checklist_state_request.dart';
-import 'package:izowork/entities/response/deal.dart';
-import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/entities/response/phase.dart';
-import 'package:izowork/entities/response/phase_checklist.dart';
-import 'package:izowork/entities/response/phase_checklist_information.dart';
-import 'package:izowork/entities/response/phase_contractor.dart';
-import 'package:izowork/entities/response/phase_product.dart';
-import 'package:izowork/repositories/phase_repository.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen.dart';
 import 'package:izowork/screens/phase_checklist_complete/phase_checklist_complete_screen.dart';

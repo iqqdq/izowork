@@ -1,8 +1,8 @@
 // import 'package:flutter/material.dart';
-// import 'package:izowork/components/titles.dart';
+//
 // import 'package:izowork/screens/chat/chat_filter_sheet/chat_filter/chat_filter_screen.dart';
 // import 'package:izowork/screens/search_user/search_user_screen.dart';
-// import 'package:izowork/views/dismiss_indicator_widget.dart';
+// import 'package:izowork/views/views.dart';
 
 // class ChatFilterPageViewWidget extends StatefulWidget {
 //   final VoidCallback onApplyTap;

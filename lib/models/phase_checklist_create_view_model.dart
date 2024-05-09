@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/entities/request/phase_checklist_create_request.dart';
-import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/entities/response/phase_checklist.dart';
-import 'package:izowork/repositories/phase_repository.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 
 class PhaseChecklistCreateViewModel with ChangeNotifier {
   final String phaseId;

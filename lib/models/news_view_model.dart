@@ -1,13 +1,9 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/response/news.dart';
-import 'package:izowork/repositories/news_repository.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/news/news_filter_sheet/news_filter_page_view_screen.dart';
 import 'package:izowork/screens/news/news_filter_sheet/news_filter_page_view_screen_body.dart';
 import 'package:izowork/screens/news_comments/news_comments_screen.dart';

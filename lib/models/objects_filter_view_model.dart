@@ -1,9 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/company.dart';
-import 'package:izowork/entities/response/object_stage.dart';
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen_body.dart';
 
 class ObjectsFilterViewModel with ChangeNotifier {

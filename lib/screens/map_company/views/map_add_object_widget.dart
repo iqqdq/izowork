@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/views/button_widget.dart';
-import 'package:izowork/views/dismiss_indicator_widget.dart';
-import 'package:izowork/views/subtitle_widget.dart';
-import 'package:izowork/views/title_widget.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/views/views.dart';
 
 class MapAddObjectScreenWidget extends StatelessWidget {
   final String title;

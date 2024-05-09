@@ -1,4 +1,4 @@
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/entities/responses/responses.dart';
 
 abstract class LocalStorageService {
   Future<String?> getToken();

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/components.dart';
 
 class HorizontalChartListItemWidget extends StatelessWidget {
   final int index;

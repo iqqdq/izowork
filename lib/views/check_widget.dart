@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/components.dart';
 
 class CheckWidget extends StatelessWidget {
   final bool isReady;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/entities/response/document.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/views/file_list_widget.dart';
 
 class DocumentListItemWidget extends StatelessWidget {

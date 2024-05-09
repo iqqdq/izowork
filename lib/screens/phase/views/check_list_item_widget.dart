@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/entities/response/phase_checklist.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/views/checkbox_widget.dart';
 import 'package:izowork/views/status_widget.dart';
 

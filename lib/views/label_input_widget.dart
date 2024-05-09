@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/components.dart';
 
 class LabelInputWidget extends StatefulWidget {
   final TextEditingController textEditingController;

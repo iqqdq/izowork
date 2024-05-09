@@ -4,17 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:izowork/components/date_time_formatter.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/models/news_comments_view_model.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/news_comments/views/comment_list_item_widget.dart';
-import 'package:izowork/api/urls.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/views/chat_message_bar_widget.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/title_widget.dart';
+import 'package:izowork/api/api.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class NewsCommentsScreenBodyWidget extends StatefulWidget {

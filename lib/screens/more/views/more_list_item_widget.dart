@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/views/separator_widget.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/views/views.dart';
 
 class MoreListItemWidget extends StatelessWidget {
   final bool showSeparator;

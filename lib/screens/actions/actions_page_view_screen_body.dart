@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/components.dart';
 import 'package:izowork/screens/deals/deals_screen.dart';
 import 'package:izowork/screens/tasks/tasks_screen.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/views/segmented_control_widget.dart';
+
+import 'package:izowork/views/views.dart';
 
 class ActionsPageViewScreenWidget extends StatefulWidget {
   const ActionsPageViewScreenWidget({Key? key}) : super(key: key);

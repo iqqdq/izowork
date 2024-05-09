@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/components.dart';
 
 class ScrollToEndButtonWidget extends StatelessWidget {
   final int count;

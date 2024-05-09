@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/deal.dart';
-import 'package:izowork/models/deal_event_view_model.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/deal_event/deal_event_screen_body_widget.dart';
 import 'package:provider/provider.dart';
 

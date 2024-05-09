@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/deal.dart';
-import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/entities/response/phase.dart';
-import 'package:izowork/models/deal_create_view_model.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/deal_create/deal_create_screen_body.dart';
 import 'package:provider/provider.dart';
 

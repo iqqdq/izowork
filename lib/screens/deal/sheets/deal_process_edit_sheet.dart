@@ -1,13 +1,13 @@
 // import 'package:file_picker/file_picker.dart';
 // import 'package:flutter/material.dart';
-// import 'package:izowork/components/hex_colors.dart';
-// import 'package:izowork/components/titles.dart';
-// import 'package:izowork/views/border_button_widget.dart';
+//  import 'package:izowork/components/components.dart';
+//
+// import 'package:izowork/views/views.dart';
 // import 'package:izowork/views/button_widget.dart';
-// import 'package:izowork/views/dismiss_indicator_widget.dart';
+// import 'package:izowork/views/views.dart';
 // import 'package:izowork/views/file_list_widget.dart';
 // import 'package:izowork/views/input_widget.dart';
-// import 'package:izowork/views/title_widget.dart';
+// import 'package:izowork/views/views.dart';
 
 // class DealProcessEditSheetWidget extends StatefulWidget {
 //   final Function(String, List<PlatformFile>) onTap;

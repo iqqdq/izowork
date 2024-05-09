@@ -1,11 +1,9 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/entities/response/deal.dart';
-import 'package:izowork/repositories/deal_repository.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/deal_calendar/deal_calendar_screen.dart';
 import 'package:izowork/screens/deals/deals_filter_sheet/deals_filter_page_view_screen.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';

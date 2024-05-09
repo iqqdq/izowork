@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/shadows.dart';
-import 'package:izowork/components/titles.dart';
+import 'package:izowork/components/components.dart';
 
 class FilterButtonWidget extends StatelessWidget {
   final VoidCallback onTap;

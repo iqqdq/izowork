@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/models/object_actions_view_model.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/object/object_actions/object_actions_screen_body.dart';
 import 'package:provider/provider.dart';
-import 'package:izowork/entities/response/object.dart';
+import 'package:izowork/entities/responses/responses.dart';
 
 class ObjectActionsScreenWidget extends StatelessWidget {
   final Object object;

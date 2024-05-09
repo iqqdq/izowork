@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/components.dart';
 
 class DismissIndicatorWidget extends StatelessWidget {
   const DismissIndicatorWidget({Key? key}) : super(key: key);

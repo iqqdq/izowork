@@ -1,12 +1,10 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/entities/response/task.dart';
-import 'package:izowork/entities/response/task_state.dart';
-import 'package:izowork/repositories/task_repository.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/task/task_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/screens/task_calendar/task_calendar_screen.dart';

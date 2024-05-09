@@ -4,10 +4,9 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/models/place_model.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/components/toast.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
+
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
 import 'package:izowork/screens/company_create/company_create_screen.dart';
 import 'package:izowork/screens/map/helpers/bounds_helper.dart';
@@ -21,11 +20,9 @@ import 'package:izowork/screens/object_create/object_create_screen.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/search_object/search_object_screen.dart';
-import 'package:izowork/views/filter_button_widget.dart';
-import 'package:izowork/views/segmented_control_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
-import 'package:izowork/models/map_view_model.dart';
 
 class MapScreenBodyWidget extends StatefulWidget {
   const MapScreenBodyWidget({Key? key}) : super(key: key);

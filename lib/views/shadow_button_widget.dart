@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/shadows.dart';
+import 'package:izowork/components/components.dart';
 
 class ShadowButtonWidget extends StatefulWidget {
   final String title;

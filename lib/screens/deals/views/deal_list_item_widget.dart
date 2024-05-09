@@ -1,11 +1,11 @@
 // import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/components/date_time_formatter.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/deal.dart';
+
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/views/subtitle_widget.dart';
-import 'package:izowork/views/title_widget.dart';
+import 'package:izowork/views/views.dart';
 
 class DealListItemWidget extends StatelessWidget {
   final Deal deal;

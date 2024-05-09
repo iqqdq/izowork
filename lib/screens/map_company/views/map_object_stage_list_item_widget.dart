@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/components.dart';
 import 'package:izowork/views/subtitle_widget.dart';
 
 class MapObjectStageListItemWidget extends StatelessWidget {

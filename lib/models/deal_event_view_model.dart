@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/deal.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 
 class DealEventViewModel with ChangeNotifier {

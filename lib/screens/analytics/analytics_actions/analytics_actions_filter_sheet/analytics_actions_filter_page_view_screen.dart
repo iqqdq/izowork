@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/models/analytics_actions_filter_view_model.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/analytics/analytics_actions/analytics_actions_filter_sheet/analytics_actions_filter_page_view_screen_body.dart';
 import 'package:provider/provider.dart';
 

@@ -3,13 +3,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/request/news_file_request.dart';
-import 'package:izowork/entities/request/news_request.dart';
-import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/entities/response/news.dart';
-import 'package:izowork/repositories/news_repository.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 
 class NewsCreateViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;

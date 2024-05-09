@@ -1,20 +1,11 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/entities/response/company.dart';
-import 'package:izowork/entities/response/contact.dart';
-import 'package:izowork/models/contacts_view_model.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/filter_button_widget.dart';
-import 'package:izowork/views/floating_button_widget.dart';
-import 'package:izowork/views/input_widget.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/separator_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 

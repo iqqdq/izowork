@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/news.dart';
-import 'package:izowork/models/news_comments_view_model.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/news_comments/news_comments_screen_body.dart';
 import 'package:provider/provider.dart';
 

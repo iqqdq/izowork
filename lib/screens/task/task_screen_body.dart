@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:izowork/components/date_time_formatter.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/models/task_view_model.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/button_widget.dart';
-import 'package:izowork/views/file_list_widget.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/subtitle_widget.dart';
-import 'package:izowork/views/title_widget.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class TaskScreenBodyWidget extends StatefulWidget {

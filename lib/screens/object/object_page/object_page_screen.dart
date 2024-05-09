@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/entities/response/object_stage.dart';
-import 'package:izowork/models/object_view_model.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/object/object_page/object_page_screen_body.dart';
 import 'package:provider/provider.dart';
 

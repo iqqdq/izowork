@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/extensions/date_time_extension.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/extensions/extensions.dart';
 
 class DateHeaderWidget extends StatelessWidget {
   final DateTime dateTime;

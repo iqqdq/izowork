@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/models/place_model.dart';
-import 'package:izowork/entities/response/object.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
+import 'package:izowork/entities/responses/responses.dart';
 
 class SingleObjectMapViewModel with ChangeNotifier {
   final Object object;

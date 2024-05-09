@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/models/search_user_view_model.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/search_user/search_user_screen_body.dart';
 import 'package:provider/provider.dart';
 

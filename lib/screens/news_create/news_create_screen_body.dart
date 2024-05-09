@@ -4,17 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/entities/response/news.dart';
-import 'package:izowork/models/news_create_view_model.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/views/checkbox_widget.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
-import 'package:izowork/views/label_input_widget.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class NewsCreateScreenBodyWidget extends StatefulWidget {

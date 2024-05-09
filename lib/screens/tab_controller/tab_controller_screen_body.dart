@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/models/tab_controller_view_model.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/actions/actions_page_view_screen_body.dart';
 import 'package:izowork/screens/chat/chat_screen.dart';
 import 'package:izowork/screens/map/map_screen.dart';
 import 'package:izowork/screens/more/more_screen.dart';
 import 'package:izowork/screens/objects/objects_screen.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class TabControllerScreenBodyWidget extends StatefulWidget {

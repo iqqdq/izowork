@@ -1,13 +1,10 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/request/news_comment_request.dart';
-import 'package:izowork/entities/response/news.dart';
-import 'package:izowork/entities/response/news_comment.dart';
-import 'package:izowork/repositories/news_repository.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 
 class NewsCommentsViewModel with ChangeNotifier {

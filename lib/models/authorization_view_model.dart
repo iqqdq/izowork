@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/components/toast.dart';
+import 'package:izowork/components/components.dart';
 import 'package:izowork/services/local_storage/local_storage.dart';
-import 'package:izowork/entities/request/authorization_request.dart';
-import 'package:izowork/entities/response/authorization.dart';
-import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/repositories/authorization_repository.dart';
-import 'package:izowork/repositories/user_repository.dart';
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/recovery/recovery_screen.dart';
 import 'package:izowork/screens/tab_controller/tab_controller_screen.dart';
 

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/company.dart';
-import 'package:izowork/entities/response/object.dart';
-import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/models/deals_filter_view_model.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/deals/deals_filter_sheet/deals_filter_screen.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/search_object/search_object_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
-import 'package:izowork/views/dismiss_indicator_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class DealsFilter {

@@ -1,31 +1,16 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/components/toast.dart';
-import 'package:izowork/entities/request/trace_request.dart';
-import 'package:izowork/entities/response/deal.dart';
-import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/entities/response/news.dart';
-import 'package:izowork/entities/response/phase.dart';
-import 'package:izowork/entities/response/task.dart';
-import 'package:izowork/entities/response/trace.dart';
-import 'package:izowork/repositories/deal_repository.dart';
-import 'package:izowork/repositories/news_repository.dart';
-import 'package:izowork/repositories/object_repository.dart';
-import 'package:izowork/repositories/phase_repository.dart';
-import 'package:izowork/repositories/task_repository.dart';
-import 'package:izowork/repositories/trace_repository.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/news_page/news_page_screen.dart';
 import 'package:izowork/screens/object/object_actions/object_action_create_screen.dart';
 import 'package:izowork/screens/object/object_page_view_screen.dart';
 import 'package:izowork/screens/task/task_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:izowork/entities/response/object.dart';
 
 class ObjectActionsViewModel with ChangeNotifier {
   final Object object;

@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/phase_contractor.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/views/subtitle_widget.dart';
-import 'package:izowork/views/title_widget.dart';
+import 'package:izowork/views/views.dart';
 
 class ContractorListItemWidget extends StatelessWidget {
   final PhaseContractor phaseContractor;

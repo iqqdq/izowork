@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/models/objects_view_model.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/analytics/views/analitics_object_list_item_widget.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/views/filter_button_widget.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class AnalyticsObjectsScreenBodyWidget extends StatefulWidget {

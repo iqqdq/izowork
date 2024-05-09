@@ -2,13 +2,12 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/task.dart';
-import 'package:izowork/repositories/task_repository.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/task_event/task_event_screen.dart';
-import 'package:izowork/views/date_time_wheel_picker_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TaskCalendarViewModel with ChangeNotifier {

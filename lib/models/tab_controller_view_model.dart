@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/repositories/chat_repository.dart';
-import 'package:izowork/repositories/fcm_token_repository.dart';
-import 'package:izowork/repositories/notification_repository.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/services/push_notification/push_notification.dart';
 
 class TabControllerViewModel with ChangeNotifier {

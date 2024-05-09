@@ -3,16 +3,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:izowork/components/date_time_formatter.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/news.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/news_comments/news_comments_screen.dart';
-import 'package:izowork/api/urls.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/bottom_button_widget.dart';
-import 'package:izowork/views/status_widget.dart';
-import 'package:izowork/views/title_widget.dart';
+import 'package:izowork/api/api.dart';
+import 'package:izowork/views/views.dart';
 
 class NewsPageScreenWidget extends StatefulWidget {
   final News news;

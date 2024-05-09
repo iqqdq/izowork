@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/news/news_filter_sheet/news_filter_page_view_screen_body.dart';
 
 class NewsFilterViewModel with ChangeNotifier {

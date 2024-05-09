@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/date_time_formatter.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/entities/response/trace.dart';
+
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
 
 class ObjectActionListItemWidget extends StatelessWidget {
   final Trace trace;

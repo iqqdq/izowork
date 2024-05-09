@@ -1,21 +1,7 @@
-import 'package:izowork/entities/request/phase_checklist_create_request.dart';
-import 'package:izowork/entities/request/phase_checklist_info_request.dart';
-import 'package:izowork/entities/request/delete_request.dart';
-import 'package:izowork/entities/request/phase_checklist_info_file_request.dart';
-import 'package:izowork/entities/request/phase_checklist_message_request.dart';
-import 'package:izowork/entities/request/phase_checklist_state_request.dart';
-import 'package:izowork/entities/request/phase_contractor_request.dart';
-import 'package:izowork/entities/request/phase_contractor_update_request.dart';
-import 'package:izowork/entities/request/phase_product_request.dart';
-import 'package:izowork/entities/request/phase_product_update_request.dart';
-import 'package:izowork/entities/response/deal.dart';
-import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/entities/response/phase.dart';
-import 'package:izowork/entities/response/phase_checklist.dart';
-import 'package:izowork/entities/response/phase_checklist_information.dart';
-import 'package:izowork/entities/response/phase_contractor.dart';
-import 'package:izowork/entities/response/phase_product.dart';
-import 'package:izowork/api/urls.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/api/api.dart';
 import 'package:izowork/services/web_service.dart';
 
 class PhaseRepository {
@@ -190,15 +176,33 @@ class PhaseRepository {
     }
   }
 
-  Future<dynamic> createPhaseChecklistComment(
-      PhaseChecklistCommentRequest phaseChecklistCommentRequest) async {
+  Future<dynamic> getPhaseChecklistMessages({
+    required Pagination pagination,
+    required String id,
+  }) async {
+    dynamic json =
+        await WebService().get(phaseChecklistMessagesUrl + '?checklist_id=$id');
+    List<PhaseChecklistMessage> messages = [];
+
+    try {
+      json['messages'].forEach((element) {
+        messages.add(PhaseChecklistMessage.fromJson(element));
+      });
+      return messages;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  Future<dynamic> createPhaseChecklistMessage(
+      PhaseChecklistMessageRequest phaseChecklistMessageRequest) async {
     dynamic json = await WebService().post(
       phaseChecklistCreateMessageUrl,
-      phaseChecklistCommentRequest.toJson(),
+      phaseChecklistMessageRequest.toJson(),
     );
 
     try {
-      return true;
+      return PhaseChecklistMessage.fromJson(json);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }

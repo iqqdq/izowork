@@ -4,10 +4,10 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/dialog/views/date_header_widget.dart';
-import 'package:izowork/api/urls.dart';
+import 'package:izowork/api/api.dart';
 
 class BubbleWidget extends StatefulWidget {
   final bool animate;

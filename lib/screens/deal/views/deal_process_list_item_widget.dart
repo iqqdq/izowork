@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/deal_process.dart';
-import 'package:izowork/entities/response/deal_stage.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/analytics/views/sort_orbject_button_widget.dart';
-import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/separator_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:izowork/views/status_widget.dart';
 
 class DealProcessListItemWidget extends StatefulWidget {

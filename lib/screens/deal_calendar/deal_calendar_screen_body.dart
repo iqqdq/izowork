@@ -2,16 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/helpers/same_date_time_checker.dart';
-import 'package:izowork/models/deal_calendar_view_model.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/helpers/helpers.dart';
+
+import 'package:izowork/views/views.dart';
 import 'package:izowork/views/month_year_selection_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
+import 'package:izowork/models/models.dart';
 import 'package:scrollable_clean_calendar/models/day_values_model.dart';
 import 'package:scrollable_clean_calendar/scrollable_clean_calendar.dart';
 import 'package:scrollable_clean_calendar/utils/enums.dart';

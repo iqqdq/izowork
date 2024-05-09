@@ -2,17 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/models/profile_edit_view_model.dart';
-import 'package:izowork/api/urls.dart';
-import 'package:izowork/views/back_button_widget.dart';
-import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/button_widget.dart';
-import 'package:izowork/views/input_widget.dart';
-import 'package:izowork/views/loading_indicator_widget.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
+import 'package:izowork/api/api.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class SocialInputModel {

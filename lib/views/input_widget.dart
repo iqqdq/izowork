@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/components.dart';
 
 class InputWidget extends StatefulWidget {
   final TextEditingController textEditingController;
@@ -132,9 +132,13 @@ class _InputWidgetState extends State<InputWidget> {
                             iconSize: 0.0,
                             highlightColor: Colors.transparent,
                             splashColor: Colors.transparent,
-                            icon: SvgPicture.asset('assets/ic_clear.svg',
-                                color: Colors.transparent, width: 0.0),
-                            onPressed: () => {}),
+                            icon: SvgPicture.asset(
+                              'assets/ic_clear.svg',
+                              color: Colors.transparent,
+                              width: 0.0,
+                            ),
+                            onPressed: () => {},
+                          ),
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
                   ),

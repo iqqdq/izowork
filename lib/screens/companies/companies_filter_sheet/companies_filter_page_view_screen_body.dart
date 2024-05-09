@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/models/companies_filter_view_model.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
-import 'package:izowork/views/dismiss_indicator_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class CompaniesFilter {

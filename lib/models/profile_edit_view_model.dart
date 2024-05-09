@@ -4,17 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/components/toast.dart';
+import 'package:izowork/components/components.dart';
+
 import 'package:izowork/services/local_storage/local_storage.dart';
-import 'package:izowork/entities/request/user_request.dart';
-import 'package:izowork/entities/response/error_response.dart';
-import 'package:izowork/repositories/user_repository.dart';
+import 'package:izowork/entities/requests/requests.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/authorization/authorization_screen.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen_body.dart';
-import 'package:izowork/views/border_button_widget.dart';
+import 'package:izowork/views/views.dart';
 
 class ProfileEditViewModel with ChangeNotifier {
   final User currentUser;

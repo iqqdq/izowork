@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/models/task_calendar_view_model.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/task_calendar/task_calendar_screen_body.dart';
 import 'package:provider/provider.dart';
 

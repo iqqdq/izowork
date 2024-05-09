@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
+import 'package:izowork/components/components.dart';
 
 class ChatMessageBarWidget extends StatefulWidget {
   final bool? isAudio;
@@ -330,7 +329,7 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                                 controller: widget.textEditingController,
                                 focusNode: widget.focusNode,
                                 cursorColor: HexColors.primaryDark,
-                                textInputAction: TextInputAction.send,
+                                textInputAction: TextInputAction.done,
                                 decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.only(
                                         left: 12.0, right: 12.0),

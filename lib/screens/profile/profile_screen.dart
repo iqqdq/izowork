@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/user.dart';
-import 'package:izowork/models/profile_view_model.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/profile/profile_screen_body.dart';
 import 'package:provider/provider.dart';
 

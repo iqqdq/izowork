@@ -1,15 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/components/titles.dart';
-import 'package:izowork/models/map_object_view_model.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/object/object_page_view_screen.dart';
-import 'package:izowork/api/urls.dart';
-import 'package:izowork/views/border_button_widget.dart';
-import 'package:izowork/views/dismiss_indicator_widget.dart';
-import 'package:izowork/views/subtitle_widget.dart';
-import 'package:izowork/views/title_widget.dart';
+import 'package:izowork/api/api.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class MapObjectScreenBodyWidget extends StatefulWidget {

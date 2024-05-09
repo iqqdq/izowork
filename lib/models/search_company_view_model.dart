@@ -1,10 +1,10 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:izowork/components/loading_status.dart';
-import 'package:izowork/components/pagination.dart';
-import 'package:izowork/entities/response/company.dart';
-import 'package:izowork/repositories/company_repository.dart';
+import 'package:izowork/components/components.dart';
+
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/company_create/company_create_screen.dart';
 
 class SearchCompanyViewModel with ChangeNotifier {

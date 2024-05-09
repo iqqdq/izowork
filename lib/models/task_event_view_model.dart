@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/task.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/task/task_screen.dart';
 
 class TaskEventViewModel with ChangeNotifier {

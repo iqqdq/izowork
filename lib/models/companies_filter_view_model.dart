@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/entities/responses/user.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen_body.dart';
 
 class CompaniesFilterViewModel with ChangeNotifier {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/views/dismiss_indicator_widget.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/views/views.dart';
 import 'package:wheel_chooser/wheel_chooser.dart';
 
 class Month {

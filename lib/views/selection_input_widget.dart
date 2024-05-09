@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/views/title_widget.dart';
+import 'package:izowork/components/components.dart';
+import 'package:izowork/views/views.dart';
 
 class SelectionInputWidget extends StatelessWidget {
   final String title;

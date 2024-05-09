@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/date_time_formatter.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/models/task_event_view_model.dart';
+
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/tasks/views/task_list_item_widget.dart';
-import 'package:izowork/views/dismiss_indicator_widget.dart';
+import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class TaskEventScreenBodyWidget extends StatefulWidget {

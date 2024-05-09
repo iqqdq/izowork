@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/components/hex_colors.dart';
+import 'package:izowork/components/components.dart';
 
 class SeparatorWidget extends StatelessWidget {
   const SeparatorWidget({Key? key}) : super(key: key);

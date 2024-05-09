@@ -1,6 +1,6 @@
 import 'local_storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:izowork/entities/response/user.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'dart:convert';
 
 class LocalStorageServiceImpl extends LocalStorageService {

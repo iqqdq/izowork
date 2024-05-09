@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:izowork/components/date_time_formatter.dart';
-import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/entities/response/news_comment.dart';
-import 'package:izowork/api/urls.dart';
+
+import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/api/api.dart';
 
 class CommentBubbleWidget extends StatefulWidget {
   final NewsComment comment;
@@ -58,9 +58,13 @@ class _CommentBubbleState extends State<CommentBubbleWidget>
             margin: const EdgeInsets.only(bottom: 10.0),
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
-                color: HexColors.white,
-                borderRadius: BorderRadius.circular(16.0),
-                border: Border.all(width: 0.5, color: HexColors.grey30)),
+              color: HexColors.white,
+              borderRadius: BorderRadius.circular(16.0),
+              border: Border.all(
+                width: 0.5,
+                color: HexColors.grey30,
+              ),
+            ),
             child: ListView(
                 padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),
@@ -91,53 +95,63 @@ class _CommentBubbleState extends State<CommentBubbleWidget>
                                             borderRadius:
                                                 BorderRadius.circular(12.0),
                                             child: CachedNetworkImage(
-                                                cacheKey:
-                                                    widget.comment.user.avatar,
-                                                imageUrl: avatarUrl +
-                                                    widget.comment.user.avatar!,
-                                                width: 24.0,
-                                                height: 24.0,
-                                                memCacheWidth: 24 *
-                                                    MediaQuery.of(context)
-                                                        .devicePixelRatio
-                                                        .round(),
-                                                fit: BoxFit.cover)),
+                                              cacheKey:
+                                                  widget.comment.user.avatar,
+                                              imageUrl: avatarUrl +
+                                                  widget.comment.user.avatar!,
+                                              width: 24.0,
+                                              height: 24.0,
+                                              memCacheWidth: 24 *
+                                                  MediaQuery.of(context)
+                                                      .devicePixelRatio
+                                                      .round(),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                               ]),
                               const SizedBox(width: 10.0),
 
                               ///   NAME
-                              Text(widget.comment.user.name,
-                                  style: TextStyle(
-                                      color: HexColors.grey50,
-                                      fontSize: 14.0,
-                                      fontFamily: 'PT Root UI',
-                                      fontWeight: FontWeight.bold)),
+                              Text(
+                                widget.comment.user.name,
+                                style: TextStyle(
+                                  color: HexColors.grey50,
+                                  fontSize: 14.0,
+                                  fontFamily: 'PT Root UI',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ]),
                             onTap: () => widget.onUserTap()),
                         const SizedBox(height: 12.0),
 
                         /// COMMENT
-                        Text(widget.comment.comment,
-                            style: TextStyle(
-                                color: HexColors.black,
-                                fontSize: 14.0,
-                                fontFamily: 'PT Root UI')),
+                        Text(
+                          widget.comment.comment,
+                          style: TextStyle(
+                            color: HexColors.black,
+                            fontSize: 14.0,
+                            fontFamily: 'PT Root UI',
+                          ),
+                        ),
 
                         Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               /// DATE
                               Text(
-                                  DateTimeFormatter().formatDateTimeToString(
-                                    dateTime: widget.comment.createdAt,
-                                    showTime: true,
-                                    showMonthName: true,
-                                  ),
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      color: HexColors.grey40,
-                                      fontSize: 12.0,
-                                      fontFamily: 'PT Root UI'))
+                                DateTimeFormatter().formatDateTimeToString(
+                                  dateTime: widget.comment.createdAt,
+                                  showTime: true,
+                                  showMonthName: true,
+                                ),
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  color: HexColors.grey40,
+                                  fontSize: 12.0,
+                                  fontFamily: 'PT Root UI',
+                                ),
+                              )
                             ])
                       ])
                 ])));
