@@ -37,12 +37,7 @@ class AnalyticsActionsViewModel with ChangeNotifier {
       String? group,
       String? type}) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _traces.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
 
     await TraceRepository()
@@ -91,7 +86,7 @@ class AnalyticsActionsViewModel with ChangeNotifier {
     notifyListeners();
 
     await ObjectRepository().getObject(id).then((response) => {
-          if (response is Object)
+          if (response is MapObject)
             {
               loadingStatus = LoadingStatus.completed,
               notifyListeners(),
@@ -193,7 +188,7 @@ class AnalyticsActionsViewModel with ChangeNotifier {
     await PhaseRepository().getPhase(phaseId).then((phase) async => {
           if (phase is Phase)
             await ObjectRepository().getObject(objectId).then((object) => {
-                  if (object is Object)
+                  if (object is MapObject)
                     {
                       loadingStatus = LoadingStatus.completed,
                       notifyListeners(),

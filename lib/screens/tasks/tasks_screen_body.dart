@@ -54,8 +54,10 @@ class _TasksScreenBodyState extends State<TasksScreenBodyWidget>
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _tasksViewModel.getTaskList(
-        pagination: _pagination, search: _textEditingController.text);
+    await _tasksViewModel.getTaskList(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   @override

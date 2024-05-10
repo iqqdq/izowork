@@ -42,7 +42,7 @@ class _DealProcessScreenBodyState extends State<DealProcessScreenBodyWidget> {
   // MARK: - FUNCTIONS
 
   Future _onRefresh() async {
-    _dealProcessViewModel
+    await _dealProcessViewModel
         .getDealProcessInformation(_dealProcessViewModel.dealProcess.id);
   }
 

@@ -56,6 +56,7 @@ export 'search_product_view_model.dart';
 export 'search_user_view_model.dart';
 export 'selection_view_model.dart';
 export 'single_object_map_view_model.dart';
+export 'single_company_map_view_model.dart';
 export 'staff_view_model.dart';
 export 'tab_controller_view_model.dart';
 export 'task_calendar_view_model.dart';

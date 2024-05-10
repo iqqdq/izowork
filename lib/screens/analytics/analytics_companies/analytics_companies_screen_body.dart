@@ -8,7 +8,6 @@ import 'package:izowork/screens/analytics/views/horizontal_chart/horizontal_char
 import 'package:izowork/screens/analytics/views/analitics_manager_list_item_widget.dart';
 import 'package:izowork/screens/analytics/views/pie_chart/pie_chart_widget.dart';
 import 'package:izowork/views/views.dart';
-import 'package:izowork/views/selection_input_widget.dart';
 import 'package:provider/provider.dart';
 
 class AnalyticsCompaniesScreenBodyWidget extends StatefulWidget {

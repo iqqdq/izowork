@@ -1,7 +1,7 @@
 import 'package:izowork/entities/responses/responses.dart';
 
 class PhaseChecklistMessagesResponse {
-  final int count;
+  int count;
   final List<PhaseChecklistMessage> messages;
 
   PhaseChecklistMessagesResponse({
@@ -13,7 +13,7 @@ class PhaseChecklistMessagesResponse {
       PhaseChecklistMessagesResponse(
         count: json["count"],
         messages: List<PhaseChecklistMessage>.from(
-            json["messages"].map((x) => Message.fromJson(x))),
+            json["messages"].map((x) => PhaseChecklistMessage.fromJson(x))),
       );
 }
 
@@ -36,7 +36,7 @@ class PhaseChecklistMessage {
       PhaseChecklistMessage(
         body: json["body"],
         checklistId: json["checklist_id"],
-        createdAt: DateTime.parse(json["created_at"]).toUtc(),
+        createdAt: DateTime.parse(json["created_at"]).toUtc().toLocal(),
         id: json["id"],
         user: User.fromJson(json["user"]),
       );

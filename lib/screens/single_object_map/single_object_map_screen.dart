@@ -5,10 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:izowork/entities/responses/responses.dart';
 
 class SingleObjectMapScreenWidget extends StatelessWidget {
-  final Object object;
+  final MapObject object;
 
-  const SingleObjectMapScreenWidget({Key? key, required this.object})
-      : super(key: key);
+  const SingleObjectMapScreenWidget({
+    Key? key,
+    required this.object,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

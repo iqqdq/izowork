@@ -53,8 +53,8 @@ class _DealsScreenBodyState extends State<DealsScreenBodyWidget>
   // MARK: - FUNCTIONS
 
   Future _onRefresh() async {
-    setState(() => _pagination = Pagination(offset: 0, size: 50));
-    _dealsViewModel.getDealList(
+    _pagination = Pagination(offset: 0, size: 50);
+    await _dealsViewModel.getDealList(
         pagination: _pagination, search: _textEditingController.text);
   }
 

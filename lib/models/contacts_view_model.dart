@@ -35,19 +35,15 @@ class ContactsViewModel with ChangeNotifier {
     String? search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _contacts.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
 
     await ContactRepository()
         .getContacts(
-            pagination: pagination,
-            search: search,
-            params: _contactsFilter?.params)
+          pagination: pagination,
+          search: search,
+          params: _contactsFilter?.params,
+        )
         .then((response) => {
               if (response is List<Contact>)
                 {

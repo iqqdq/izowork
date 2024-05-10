@@ -37,12 +37,7 @@ class ParticipantsViewModel with ChangeNotifier {
     String? search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _users.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
 
     await UserRepository()

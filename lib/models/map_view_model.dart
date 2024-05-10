@@ -35,7 +35,7 @@ class MapViewModel with ChangeNotifier {
   String _address = '';
 
   // DATA
-  final List<Object> _objects = [];
+  final List<MapObject> _objects = [];
 
   List<ObjectStage>? _objectStages;
 
@@ -55,7 +55,7 @@ class MapViewModel with ChangeNotifier {
 
   String get address => _address;
 
-  List<Object> get objects => _objects;
+  List<MapObject> get objects => _objects;
 
   ObjectsFilter? get objectsFilter => _objectsFilter;
 
@@ -92,7 +92,7 @@ class MapViewModel with ChangeNotifier {
           visibleRegion: latLngBounds,
         )
         .then((response) => {
-              if (response is List<Object>)
+              if (response is List<MapObject>)
                 {
                   loadingStatus = LoadingStatus.completed,
                   _objects.clear(),

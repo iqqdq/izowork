@@ -11,7 +11,7 @@ class ObjectCreateScreenBodyWidget extends StatefulWidget {
   final String? address;
   final double? lat;
   final double? long;
-  final Function(Object?) onPop;
+  final Function(MapObject?) onPop;
 
   const ObjectCreateScreenBodyWidget({
     Key? key,

@@ -35,16 +35,14 @@ class StaffViewModel with ChangeNotifier {
     String? search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _users.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
 
     await UserRepository()
-        .getUsers(pagination: pagination, search: search)
+        .getUsers(
+          pagination: pagination,
+          search: search,
+        )
         .then((response) => {
               if (response is List<User>)
                 {

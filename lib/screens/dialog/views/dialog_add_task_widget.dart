@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
-
-import 'package:izowork/views/button_widget.dart';
 import 'package:izowork/views/views.dart';
 
 class DialogAddTaskWidget extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  const DialogAddTaskWidget({Key? key, required this.text, required this.onTap})
-      : super(key: key);
+  const DialogAddTaskWidget({
+    Key? key,
+    required this.text,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

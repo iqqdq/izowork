@@ -31,20 +31,21 @@ class NewsCommentsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future getNewsComments(
-      {required Pagination pagination,
-      required String search,
-      required String id}) async {
+  Future getNewsComments({
+    required Pagination pagination,
+    required String search,
+    required String id,
+  }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _comments.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
+
     await NewsRepository()
-        .getComments(pagination: pagination, search: search, id: id)
+        .getComments(
+          pagination: pagination,
+          search: search,
+          id: id,
+        )
         .then((response) => {
               if (response is List<NewsComment>)
                 {

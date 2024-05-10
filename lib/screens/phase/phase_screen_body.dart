@@ -514,7 +514,8 @@ class _PhaseScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
                                       statusWidget: statusWidget,
                                       phaseChecklist: phaseChecklist,
                                     ),
-                                    onRemoveTap: widget.user?.state != 'ADMIN'
+                                    onRemoveTap: widget.user?.state !=
+                                            'DIRECTOR'
                                         ? null
                                         : () => _showRemovePhaseChecklistAlert(
                                             phaseChecklist: phaseChecklist),

@@ -5,10 +5,10 @@ import 'package:izowork/screens/object/object_page/object_page_screen_body.dart'
 import 'package:provider/provider.dart';
 
 class ObjectPageScreenWidget extends StatelessWidget {
-  final Object object;
+  final MapObject object;
   final List<ObjectStage>? objectStages;
   final VoidCallback onCoordCopy;
-  final Function(Object) onUpdate;
+  final Function(MapObject) onUpdate;
 
   const ObjectPageScreenWidget({
     Key? key,

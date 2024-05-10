@@ -46,18 +46,15 @@ class DealsViewModel with ChangeNotifier {
     required String search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _deals.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
+
     await DealRepository()
         .getDeals(
-            pagination: pagination,
-            search: search,
-            params: _dealsFilter?.params)
+          pagination: pagination,
+          search: search,
+          params: _dealsFilter?.params,
+        )
         .then((response) => {
               if (response is List<Deal>)
                 {

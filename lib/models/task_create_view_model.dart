@@ -54,7 +54,7 @@ class TaskCreateViewModel with ChangeNotifier {
 
   User? _coExecutor;
 
-  Object? _object;
+  MapObject? _object;
 
   Company? _company;
 
@@ -76,7 +76,7 @@ class TaskCreateViewModel with ChangeNotifier {
 
   User? get coExecutor => _coExecutor;
 
-  Object? get object => _object;
+  MapObject? get object => _object;
 
   Company? get company => _company;
 

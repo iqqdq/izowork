@@ -15,7 +15,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class PhaseViewModel with ChangeNotifier {
   final Phase phase;
-  final Object? object;
+  final MapObject? object;
 
   LoadingStatus loadingStatus = LoadingStatus.searching;
 

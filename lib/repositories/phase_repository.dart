@@ -180,15 +180,11 @@ class PhaseRepository {
     required Pagination pagination,
     required String id,
   }) async {
-    dynamic json =
-        await WebService().get(phaseChecklistMessagesUrl + '?checklist_id=$id');
-    List<PhaseChecklistMessage> messages = [];
+    dynamic json = await WebService().get(phaseChecklistMessagesUrl +
+        '?limit=${pagination.size}&offset=${pagination.offset}&checklist_id=$id');
 
     try {
-      json['messages'].forEach((element) {
-        messages.add(PhaseChecklistMessage.fromJson(element));
-      });
-      return messages;
+      return PhaseChecklistMessagesResponse.fromJson(json);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }

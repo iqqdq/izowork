@@ -37,16 +37,4 @@ class Product {
             : ProductType.fromJson(json["product_type"]),
         productTypeId: json["product_type_id"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "price": price,
-        "unit": unit,
-        "image": image,
-        "company": company?.toJson(),
-        "company_id": companyId,
-        "product_type": productType?.toJson(),
-        "product_type_id": productTypeId,
-      };
 }

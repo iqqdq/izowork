@@ -8,9 +8,11 @@ class DealsFilterPageViewScreenWidget extends StatelessWidget {
 
   final Function(DealsFilter?) onPop;
 
-  const DealsFilterPageViewScreenWidget(
-      {Key? key, this.dealsFilter, required this.onPop})
-      : super(key: key);
+  const DealsFilterPageViewScreenWidget({
+    Key? key,
+    this.dealsFilter,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

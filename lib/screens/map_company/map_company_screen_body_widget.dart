@@ -187,7 +187,7 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
                   ),
                   const SizedBox(height: 4.0),
                   Text(
-                    _company.address,
+                    _company.address ?? '-',
                     style: TextStyle(
                       color: HexColors.black,
                       fontSize: 14.0,
@@ -204,7 +204,7 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
                   ),
                   const SizedBox(height: 4.0),
                   Text(
-                    _company.phone,
+                    _company.phone ?? '-',
                     style: TextStyle(
                       color: HexColors.black,
                       fontSize: 14.0,
@@ -299,31 +299,31 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
           ),
 
           /// BOTTOM BUTTON'S
-          widget.hideInfoButton != null
-              ? Container()
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(children: [
-                    /// INFO BUTTON
-                    Expanded(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(children: [
+              /// INFO BUTTON
+              widget.hideInfoButton != null
+                  ? Container()
+                  : Expanded(
                       child: BorderButtonWidget(
                         title: Titles.showDetail,
                         margin: EdgeInsets.zero,
                         onTap: () => _showCompanyScreen(),
                       ),
                     ),
-                    SizedBox(width: widget.hideInfoButton != null ? 0.0 : 12.0),
+              SizedBox(width: widget.hideInfoButton != null ? 0.0 : 12.0),
 
-                    /// CLOSE SHEET BUTTON
-                    Expanded(
-                      child: BorderButtonWidget(
-                        title: Titles.close,
-                        margin: EdgeInsets.zero,
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ),
-                  ]),
-                )
+              /// CLOSE SHEET BUTTON
+              Expanded(
+                child: BorderButtonWidget(
+                  title: Titles.close,
+                  margin: EdgeInsets.zero,
+                  onTap: () => Navigator.pop(context),
+                ),
+              ),
+            ]),
+          )
         ]),
       ),
     );

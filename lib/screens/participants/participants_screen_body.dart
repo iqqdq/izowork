@@ -50,8 +50,10 @@ class _ParticipantsScreenBodyState extends State<ParticipantsScreenBodyWidget> {
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _participantsViewModel.getParticipantList(
-        pagination: _pagination, search: _textEditingController.text);
+    await _participantsViewModel.getParticipantList(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   @override

@@ -41,8 +41,10 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _contactsViewModel.getContactList(
-        pagination: _pagination, search: _textEditingController.text);
+    await _contactsViewModel.getContactList(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   @override

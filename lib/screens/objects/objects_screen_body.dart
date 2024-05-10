@@ -38,7 +38,9 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
           _scrollController.position.maxScrollExtent) {
         _pagination.offset += 1;
         _objectsViewModel.getObjectList(
-            pagination: _pagination, search: _textEditingController.text);
+          pagination: _pagination,
+          search: _textEditingController.text,
+        );
       }
     });
   }
@@ -56,8 +58,10 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _objectsViewModel.getObjectList(
-        pagination: _pagination, search: _textEditingController.text);
+    await _objectsViewModel.getObjectList(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   @override

@@ -13,7 +13,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 class ObjectsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
-  final List<Object> _objects = [];
+  final List<MapObject> _objects = [];
 
   Object? _object;
 
@@ -21,7 +21,7 @@ class ObjectsViewModel with ChangeNotifier {
 
   List<ObjectStage>? _objectStages;
 
-  List<Object> get objects => _objects;
+  List<MapObject> get objects => _objects;
 
   Object? get object => _object;
 
@@ -63,20 +63,17 @@ class ObjectsViewModel with ChangeNotifier {
     required String search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _objects.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
+
     await ObjectRepository()
         .getObjects(
-            pagination: pagination,
-            search: search,
-            params: _objectsFilter?.params)
+          pagination: pagination,
+          search: search,
+          params: _objectsFilter?.params,
+        )
         .then((response) => {
-              if (response is List<Object>)
+              if (response is List<MapObject>)
                 {
                   if (_objects.isEmpty)
                     {

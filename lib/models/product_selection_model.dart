@@ -23,45 +23,43 @@ class ProductSelectionViewModel with ChangeNotifier {
   Future getProductList(
       {required Pagination pagination, String? search}) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _products.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
-    await ProductRepository()
-        .getProducts(pagination: pagination, search: search ?? '', params: []).then(
-            (response) => {
-                  if (response is List<Product>)
-                    {
-                      if (_products.isEmpty)
-                        {
-                          response.forEach((user) {
-                            _products.add(user);
-                          })
-                        }
-                      else
-                        {
-                          response.forEach((newUser) {
-                            bool found = false;
 
-                            _products.forEach((user) {
-                              if (newUser.id == user.id) {
-                                found = true;
-                              }
-                            });
+    await ProductRepository().getProducts(
+      pagination: pagination,
+      search: search ?? '',
+      params: [],
+    ).then((response) => {
+          if (response is List<Product>)
+            {
+              if (_products.isEmpty)
+                {
+                  response.forEach((user) {
+                    _products.add(user);
+                  })
+                }
+              else
+                {
+                  response.forEach((newUser) {
+                    bool found = false;
 
-                            if (!found) {
-                              _products.add(newUser);
-                            }
-                          })
-                        },
-                      loadingStatus = LoadingStatus.completed
+                    _products.forEach((user) {
+                      if (newUser.id == user.id) {
+                        found = true;
+                      }
+                    });
+
+                    if (!found) {
+                      _products.add(newUser);
                     }
-                  else
-                    loadingStatus = LoadingStatus.error,
-                  notifyListeners()
-                });
+                  })
+                },
+              loadingStatus = LoadingStatus.completed
+            }
+          else
+            loadingStatus = LoadingStatus.error,
+          notifyListeners()
+        });
   }
 }

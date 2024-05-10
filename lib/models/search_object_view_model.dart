@@ -9,9 +9,9 @@ import 'package:izowork/repositories/repositories.dart';
 class SearchObjectViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
-  final List<Object> _objects = [];
+  final List<MapObject> _objects = [];
 
-  List<Object> get objects => _objects;
+  List<MapObject> get objects => _objects;
 
   SearchObjectViewModel() {
     getObjectList(pagination: Pagination(offset: 0, size: 50));
@@ -25,18 +25,16 @@ class SearchObjectViewModel with ChangeNotifier {
     String? search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _objects.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
 
     await ObjectRepository()
-        .getObjects(pagination: pagination, search: search ?? '')
+        .getObjects(
+          pagination: pagination,
+          search: search ?? '',
+        )
         .then((response) => {
-              if (response is List<Object>)
+              if (response is List<MapObject>)
                 {
                   if (_objects.isEmpty)
                     {

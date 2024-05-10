@@ -20,25 +20,25 @@ class InputWidget extends StatefulWidget {
   final VoidCallback? onEditingComplete;
   final VoidCallback? onClearTap;
 
-  const InputWidget(
-      {Key? key,
-      required this.textEditingController,
-      required this.focusNode,
-      this.isSearchInput,
-      this.obscureText,
-      this.margin,
-      this.height,
-      this.maxLines,
-      this.textInputType,
-      this.textInputAction,
-      this.textCapitalization,
-      this.backgroundColor,
-      this.placeholder,
-      this.onTap,
-      this.onChange,
-      this.onEditingComplete,
-      this.onClearTap})
-      : super(key: key);
+  const InputWidget({
+    Key? key,
+    required this.textEditingController,
+    required this.focusNode,
+    this.isSearchInput,
+    this.obscureText,
+    this.margin,
+    this.height,
+    this.maxLines,
+    this.textInputType,
+    this.textInputAction,
+    this.textCapitalization,
+    this.backgroundColor,
+    this.placeholder,
+    this.onTap,
+    this.onChange,
+    this.onEditingComplete,
+    this.onClearTap,
+  }) : super(key: key);
 
   @override
   _InputWidgetState createState() => _InputWidgetState();
@@ -78,8 +78,10 @@ class _InputWidgetState extends State<InputWidget> {
           _maxLines > 1
               ? Container()
               : _isSearchInput
-                  ? SvgPicture.asset('assets/ic_search.svg',
-                      color: HexColors.grey30)
+                  ? SvgPicture.asset(
+                      'assets/ic_search.svg',
+                      color: HexColors.grey30,
+                    )
                   : Container(),
           Expanded(
               child: TextField(
@@ -100,20 +102,25 @@ class _InputWidgetState extends State<InputWidget> {
                   decoration: InputDecoration(
                     contentPadding: _maxLines > 1
                         ? const EdgeInsets.only(
-                            left: 10.0, top: 14.0, bottom: 14.0)
+                            left: 10.0,
+                            top: 14.0,
+                            bottom: 14.0,
+                          )
                         : EdgeInsets.only(
                             left: _isSearchInput ? 10.0 : 0.0,
-                            top: _isSearchInput ? 8.0 : 2.0),
+                            top: _isSearchInput ? 8.0 : 2.0,
+                          ),
                     counterText: '',
                     labelText: _isSearchInput ? null : widget.placeholder,
                     hintText: _isSearchInput ? widget.placeholder : null,
                     labelStyle: _textStyle.copyWith(color: HexColors.grey30),
                     suffixIconConstraints: BoxConstraints(
-                        maxWidth: widget.focusNode.hasFocus &&
-                                widget.textEditingController.text.isNotEmpty &&
-                                widget.onClearTap != null
-                            ? 44.0
-                            : 16.0),
+                      maxWidth: widget.focusNode.hasFocus &&
+                              widget.textEditingController.text.isNotEmpty &&
+                              widget.onClearTap != null
+                          ? 44.0
+                          : 16.0,
+                    ),
                     suffixIcon: widget.focusNode.hasFocus &&
                             widget.textEditingController.text.isNotEmpty &&
                             widget.onClearTap != null
@@ -123,9 +130,11 @@ class _InputWidgetState extends State<InputWidget> {
                             icon: SvgPicture.asset('assets/ic_clear.svg'),
                             onPressed: () => {
                               widget.textEditingController.clear(),
-                              widget.onClearTap == null
-                                  ? null
-                                  : widget.onClearTap!()
+                              setState(() {
+                                widget.onClearTap == null
+                                    ? null
+                                    : widget.onClearTap!();
+                              })
                             },
                           )
                         : IconButton(

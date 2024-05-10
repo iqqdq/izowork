@@ -13,7 +13,7 @@ import 'package:izowork/screens/task/task_screen.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ObjectActionsViewModel with ChangeNotifier {
-  final Object object;
+  final MapObject object;
 
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
@@ -30,13 +30,7 @@ class ObjectActionsViewModel with ChangeNotifier {
 
   Future getTraceList({required Pagination pagination}) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _traces.clear();
-
-      Future.delayed(Duration.zero, () async {
-        loadingStatus = LoadingStatus.searching;
-        notifyListeners();
-      });
     }
 
     await TraceRepository()
@@ -111,7 +105,7 @@ class ObjectActionsViewModel with ChangeNotifier {
     notifyListeners();
 
     await ObjectRepository().getObject(id).then((response) => {
-          if (response is Object)
+          if (response is MapObject)
             {
               loadingStatus = LoadingStatus.completed,
               notifyListeners(),
@@ -223,7 +217,7 @@ class ObjectActionsViewModel with ChangeNotifier {
     await PhaseRepository().getPhase(phaseId).then((phase) async => {
           if (phase is Phase)
             await ObjectRepository().getObject(objectId).then((object) => {
-                  if (object is Object)
+                  if (object is MapObject)
                     {
                       loadingStatus = LoadingStatus.completed,
                       notifyListeners(),

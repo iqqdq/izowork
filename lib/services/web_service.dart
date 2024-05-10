@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:izowork/services/local_storage/local_storage_service.dart';
 
@@ -42,6 +43,8 @@ class WebService {
   }
 
   Future<dynamic> get(String url) async {
+    debugPrint(url);
+
     try {
       Response response = await _dio.get(
         url,

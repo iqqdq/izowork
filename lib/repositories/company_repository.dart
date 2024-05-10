@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:izowork/components/components.dart';
 
@@ -90,6 +91,8 @@ class CompanyRepository {
   }
 
   Future<dynamic> createCompany(CompanyRequest companyRequest) async {
+    debugPrint('${companyRequest.lat}, ${companyRequest.long}');
+
     dynamic json = await WebService().post(
       companyCreateUrl,
       companyRequest.toJson(),

@@ -38,13 +38,9 @@ class CompaniesViewModel with ChangeNotifier {
     required String search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _companies.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
+
     await CompanyRepository()
         .getCompanies(
           pagination: pagination,

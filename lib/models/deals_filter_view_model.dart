@@ -11,12 +11,12 @@ class DealsFilterViewModel with ChangeNotifier {
   List<int> tags = [];
 
   User? _responsible;
-  Object? _object;
+  MapObject? _object;
   Company? _company;
 
   User? get responsible => _responsible;
 
-  Object? get object => _object;
+  MapObject? get object => _object;
 
   Company? get company => _company;
 
@@ -42,7 +42,7 @@ class DealsFilterViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future setObject(Object? object) async {
+  Future setObject(MapObject? object) async {
     _object = object;
     notifyListeners();
   }

@@ -51,8 +51,10 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _newsViewModel.getNews(
-        pagination: _pagination, search: _textEditingController.text);
+    await _newsViewModel.getNews(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   @override

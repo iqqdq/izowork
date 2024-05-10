@@ -8,7 +8,7 @@ class SearchObjectScreenWidget extends StatelessWidget {
   final String title;
   final bool isRoot;
   final VoidCallback onFocus;
-  final Function(Object?) onPop;
+  final Function(MapObject?) onPop;
 
   const SearchObjectScreenWidget({
     Key? key,

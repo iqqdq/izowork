@@ -290,4 +290,5 @@ abstract class Titles {
   static const addContactWillAllow =
       'Добавление контактов станет доступно\n после создания компании';
   static const uHaveNotPermissionToEdit = 'У вас нет прав на редактирование';
+  static const commentAdded = 'Комментарий добавлен';
 }

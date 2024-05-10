@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class PhaseScreenWidget extends StatelessWidget {
   final User? user;
   final Phase phase;
-  final Object? object;
+  final MapObject? object;
 
   const PhaseScreenWidget({
     Key? key,

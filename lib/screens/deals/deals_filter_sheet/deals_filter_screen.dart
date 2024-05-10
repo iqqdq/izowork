@@ -5,7 +5,7 @@ import 'package:izowork/views/views.dart';
 
 class DealsFilterScreenWidget extends StatelessWidget {
   final User? responsible;
-  final Object? object;
+  final MapObject? object;
   final Company? company;
   final List<String> options;
   final List<int> tags;

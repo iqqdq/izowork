@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
-
 import 'package:izowork/entities/requests/requests.dart';
 import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/repositories/repositories.dart';
@@ -12,12 +11,16 @@ class PhaseChecklistMessagesViewModel with ChangeNotifier {
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
-  final List<PhaseChecklistMessage> _phaseChecklistMessages = [];
+  PhaseChecklistMessagesResponse _phaseChecklistMessagesResponse =
+      PhaseChecklistMessagesResponse(
+    count: 0,
+    messages: [],
+  );
 
   bool _isSending = false;
 
-  List<PhaseChecklistMessage> get phaseChecklistMessages =>
-      _phaseChecklistMessages;
+  PhaseChecklistMessagesResponse get phaseChecklistMessagesResponse =>
+      _phaseChecklistMessagesResponse;
 
   bool get isSending => _isSending;
 
@@ -25,16 +28,13 @@ class PhaseChecklistMessagesViewModel with ChangeNotifier {
     getPhaseChecklistMessagesList(
         pagination: Pagination(
       offset: 0,
-      size: 20,
+      size: 50,
     ));
   }
 
   Future getPhaseChecklistMessagesList({required Pagination pagination}) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
-      _phaseChecklistMessages.clear();
-
-      Future.delayed(Duration.zero, () async => notifyListeners());
+      _phaseChecklistMessagesResponse.messages.clear();
     }
 
     await PhaseRepository()
@@ -43,33 +43,10 @@ class PhaseChecklistMessagesViewModel with ChangeNotifier {
           id: phaseChecklist.id,
         )
         .then((response) => {
-              if (response is List<PhaseChecklistMessage>)
+              if (response is PhaseChecklistMessagesResponse)
                 {
-                  if (_phaseChecklistMessages.isEmpty)
-                    {
-                      response.forEach((phaseChecklistMessage) {
-                        _phaseChecklistMessages.add(phaseChecklistMessage);
-                      })
-                    }
-                  else
-                    {
-                      response.forEach((newPhaseChecklistMessage) {
-                        bool found = false;
-
-                        _phaseChecklistMessages
-                            .forEach((phaseChecklistMessage) {
-                          if (newPhaseChecklistMessage.id ==
-                              phaseChecklistMessage.id) {
-                            found = true;
-                          }
-                        });
-
-                        if (!found) {
-                          _phaseChecklistMessages.add(newPhaseChecklistMessage);
-                        }
-                      })
-                    },
-                  loadingStatus = LoadingStatus.completed
+                  _phaseChecklistMessagesResponse = response,
+                  loadingStatus = LoadingStatus.completed,
                 }
               else
                 loadingStatus = LoadingStatus.error,
@@ -90,7 +67,8 @@ class PhaseChecklistMessagesViewModel with ChangeNotifier {
               if (response is PhaseChecklistMessage)
                 {
                   loadingStatus = LoadingStatus.completed,
-                  _phaseChecklistMessages.add(response),
+                  _phaseChecklistMessagesResponse.messages.insert(0, response),
+                  _phaseChecklistMessagesResponse.count++,
                 }
               else if (response is ErrorResponse)
                 loadingStatus = LoadingStatus.error,

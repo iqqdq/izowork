@@ -3,7 +3,7 @@ import 'package:izowork/components/components.dart';
 import 'package:izowork/entities/responses/responses.dart';
 
 class AnalitycsObjectListItemWidget extends StatelessWidget {
-  final Object object;
+  final MapObject object;
   final VoidCallback onTap;
 
   const AnalitycsObjectListItemWidget({

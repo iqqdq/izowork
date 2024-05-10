@@ -33,7 +33,9 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
           _scrollController.position.maxScrollExtent) {
         _pagination.offset += 1;
         _companiesViewModel.getCompanyList(
-            pagination: _pagination, search: _textEditingController.text);
+          pagination: _pagination,
+          search: _textEditingController.text,
+        );
       }
     });
   }
@@ -43,16 +45,8 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
     _scrollController.dispose();
     _textEditingController.dispose();
     _focusNode.dispose();
+
     super.dispose();
-  }
-
-  // MARK: -
-  // MARK: - FUNCTIONS
-
-  Future _onRefresh() async {
-    _pagination = Pagination(offset: 0, size: 50);
-    _companiesViewModel.getCompanyList(
-        pagination: _pagination, search: _textEditingController.text);
   }
 
   @override
@@ -63,73 +57,70 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
     );
 
     return Scaffold(
-        backgroundColor: HexColors.white,
-        resizeToAvoidBottomInset: true,
-        floatingActionButton: FloatingButtonWidget(
-            onTap: () => _companiesViewModel.showCreateCompanyScreen(context)),
-        appBar: AppBar(
-            toolbarHeight: 116.0,
-            titleSpacing: 0.0,
-            elevation: 0.0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: Colors.transparent,
-            automaticallyImplyLeading: false,
-            title: Column(children: [
-              Stack(children: [
-                Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(Titles.companies,
-                      style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 18.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold)),
-                ])
-              ]),
-              const SizedBox(height: 16.0),
-              Row(children: [
-                Expanded(
-                    child:
-
-                        /// SEARCH INPUT
-                        InputWidget(
-                            textEditingController: _textEditingController,
-                            focusNode: _focusNode,
-                            margin:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            isSearchInput: true,
-                            placeholder: '${Titles.search}...',
-                            onTap: () => setState,
-                            onChange: (text) => {
-                                  setState(() => _isSearching = true),
-                                  EasyDebounce.debounce('company_debouncer',
-                                      const Duration(milliseconds: 500),
-                                      () async {
-                                    _pagination =
-                                        Pagination(offset: 0, size: 50);
-
-                                    _companiesViewModel
-                                        .getCompanyList(
-                                            pagination: _pagination,
-                                            search: _textEditingController.text)
-                                        .then((value) => setState(
-                                            () => _isSearching = false));
-                                  })
-                                },
-                            onClearTap: () => {
-                                  _companiesViewModel.resetFilter(),
-                                  _pagination.offset = 0,
-                                  _companiesViewModel.getCompanyList(
-                                      pagination: _pagination,
-                                      search: _textEditingController.text)
-                                }))
+      backgroundColor: HexColors.white,
+      resizeToAvoidBottomInset: true,
+      floatingActionButton: FloatingButtonWidget(
+          onTap: () => _companiesViewModel.showCreateCompanyScreen(context)),
+      appBar: AppBar(
+          toolbarHeight: 116.0,
+          titleSpacing: 0.0,
+          elevation: 0.0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          title: Column(children: [
+            Stack(children: [
+              Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: BackButtonWidget(onTap: () => Navigator.pop(context))),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(Titles.companies,
+                    style: TextStyle(
+                        color: HexColors.black,
+                        fontSize: 18.0,
+                        fontFamily: 'PT Root UI',
+                        fontWeight: FontWeight.bold)),
               ])
-            ])),
-        body: SizedBox.expand(
-            child: Stack(children: [
+            ]),
+            const SizedBox(height: 16.0),
+            Row(children: [
+              Expanded(
+                  child:
+
+                      /// SEARCH INPUT
+                      InputWidget(
+                          textEditingController: _textEditingController,
+                          focusNode: _focusNode,
+                          margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                          isSearchInput: true,
+                          placeholder: '${Titles.search}...',
+                          onTap: () => setState,
+                          onChange: (text) => {
+                                setState(() => _isSearching = true),
+                                EasyDebounce.debounce('company_debouncer',
+                                    const Duration(milliseconds: 500),
+                                    () async {
+                                  _pagination = Pagination(offset: 0, size: 50);
+
+                                  _companiesViewModel
+                                      .getCompanyList(
+                                          pagination: _pagination,
+                                          search: _textEditingController.text)
+                                      .then((value) =>
+                                          setState(() => _isSearching = false));
+                                })
+                              },
+                          onClearTap: () => {
+                                _companiesViewModel.resetFilter(),
+                                _pagination.offset = 0,
+                                _companiesViewModel.getCompanyList(
+                                    pagination: _pagination,
+                                    search: _textEditingController.text)
+                              }))
+            ])
+          ])),
+      body: SizedBox.expand(
+        child: Stack(children: [
           /// COMPANIES LIST VIEW
           LiquidPullToRefresh(
               color: HexColors.primaryMain,
@@ -196,6 +187,19 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
                   padding: EdgeInsets.only(bottom: 90.0),
                   child: LoadingIndicatorWidget())
               : Container()
-        ])));
+        ]),
+      ),
+    );
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    _pagination = Pagination(offset: 0, size: 50);
+    await _companiesViewModel.getCompanyList(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 }

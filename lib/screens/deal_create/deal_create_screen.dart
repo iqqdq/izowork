@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class DealCreateScreenWidget extends StatelessWidget {
   final Deal? deal;
-  final Object? object;
+  final MapObject? object;
   final Phase? phase;
   final Function(Deal?, List<DealProduct>) onCreate;
 
@@ -21,7 +21,11 @@ class DealCreateScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => DealCreateViewModel(deal, phase, object),
+        create: (context) => DealCreateViewModel(
+              deal,
+              phase,
+              object,
+            ),
         child: DealCreateScreenBodyWidget(onCreate: onCreate));
   }
 }

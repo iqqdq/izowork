@@ -5,7 +5,7 @@ import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/views/views.dart';
 
 class ObjectListItemWidget extends StatelessWidget {
-  final Object object;
+  final MapObject object;
   final VoidCallback onTap;
 
   const ObjectListItemWidget({

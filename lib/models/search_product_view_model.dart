@@ -25,16 +25,14 @@ class SearchProductViewModel with ChangeNotifier {
     String? search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _products.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
 
     await ProductRepository()
-        .getProducts(pagination: pagination, search: search ?? '')
+        .getProducts(
+          pagination: pagination,
+          search: search ?? '',
+        )
         .then((response) => {
               if (response is List<Product>)
                 {

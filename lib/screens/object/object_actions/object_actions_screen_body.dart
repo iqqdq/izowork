@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/object/object_actions/views/object_action_list_item_widget.dart';
-import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +46,7 @@ class _ObjectActionsScreenBodyState
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _objectActionsViewModel.getTraceList(pagination: _pagination);
+    await _objectActionsViewModel.getTraceList(pagination: _pagination);
   }
 
   @override

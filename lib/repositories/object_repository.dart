@@ -39,7 +39,7 @@ class ObjectRepository {
     dynamic json = await WebService().get(objectUrl + id);
 
     try {
-      return Object.fromJson(json["object"]);
+      return MapObject.fromJson(json["object"]);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }
@@ -64,11 +64,11 @@ class ObjectRepository {
     }
 
     dynamic json = await WebService().get(url);
-    List<Object> objects = [];
+    List<MapObject> objects = [];
 
     try {
       json['objects'].forEach((element) {
-        objects.add(Object.fromJson(element));
+        objects.add(MapObject.fromJson(element));
       });
       return objects;
     } catch (e) {
@@ -94,11 +94,11 @@ class ObjectRepository {
     }
 
     dynamic json = await WebService().get(url);
-    List<Object> objects = [];
+    List<MapObject> objects = [];
 
     try {
       json['objects'].forEach((element) {
-        objects.add(Object.fromJson(element));
+        objects.add(MapObject.fromJson(element));
       });
       return objects;
     } catch (e) {
@@ -113,7 +113,7 @@ class ObjectRepository {
     );
 
     try {
-      return Object.fromJson(json["object"]);
+      return MapObject.fromJson(json["object"]);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }
@@ -127,7 +127,7 @@ class ObjectRepository {
     );
 
     try {
-      return Object.fromJson(json["object"]);
+      return MapObject.fromJson(json["object"]);
     } catch (e) {
       return ErrorResponse.fromJson(json);
     }

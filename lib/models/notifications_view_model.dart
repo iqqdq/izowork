@@ -27,12 +27,7 @@ class NotificationsViewModel with ChangeNotifier {
 
   Future getNotificationList({required Pagination pagination}) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _notifications.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
 
     await NotificationRepository()
@@ -119,7 +114,7 @@ class NotificationsViewModel with ChangeNotifier {
     notifyListeners();
 
     await ObjectRepository().getObject(id).then((response) => {
-          if (response is Object)
+          if (response is MapObject)
             {
               loadingStatus = LoadingStatus.completed,
               notifyListeners(),
@@ -231,7 +226,7 @@ class NotificationsViewModel with ChangeNotifier {
         .then((phase) async => {
               if (phase is Phase)
                 await ObjectRepository().getObject(objectId).then((object) => {
-                      if (object is Object)
+                      if (object is MapObject)
                         {
                           loadingStatus = LoadingStatus.completed,
                           notifyListeners(),

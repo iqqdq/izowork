@@ -51,8 +51,10 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _productsViewModel.getProductList(
-        pagination: _pagination, search: _textEditingController.text);
+    await _productsViewModel.getProductList(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   @override

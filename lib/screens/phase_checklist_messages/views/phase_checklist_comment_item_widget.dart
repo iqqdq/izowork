@@ -27,7 +27,7 @@ class PhaseChecklistMessageItemWidget extends StatelessWidget {
         vertical: 14.0,
       ),
       color: HexColors.white,
-      child: Column(children: [
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         GestureDetector(
           child: Row(children: [
             /// USER AVATAR
@@ -83,9 +83,9 @@ class PhaseChecklistMessageItemWidget extends StatelessWidget {
           ]),
           onTap: () => onUserTap(),
         ),
-        const SizedBox(height: 8.0),
+        const SizedBox(height: 12.0),
 
-        /// COMMENT
+        /// MESSAGE
         SelectionArea(
           child: Text(phaseChecklistMessage.body,
               style: TextStyle(

@@ -7,7 +7,7 @@ import 'package:izowork/models/models.dart';
 import 'package:izowork/entities/responses/responses.dart';
 
 class SingleObjectMapViewModel with ChangeNotifier {
-  final Object object;
+  final MapObject object;
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
@@ -38,7 +38,15 @@ class SingleObjectMapViewModel with ChangeNotifier {
         color: object.objectStage?.color == null
             ? HexColors.primaryMain
             : HexColor(object.objectStage!.color!),
-        latLng: LatLng(object.lat, object.long)));
+        latLng: LatLng(
+          object.lat,
+          object.long,
+        )));
+
+    _position = LatLng(
+      object.lat,
+      object.long,
+    );
 
     getLocationPermission().whenComplete(() => notifyListeners());
   }
@@ -70,7 +78,7 @@ class SingleObjectMapViewModel with ChangeNotifier {
     googleMapController
         .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
       target: _userPosition!,
-      zoom: 16.0,
+      zoom: 20.0,
     )));
   }
 
@@ -83,7 +91,6 @@ class SingleObjectMapViewModel with ChangeNotifier {
           desiredAccuracy: LocationAccuracy.bestForNavigation);
 
       _userPosition = LatLng(position.latitude, position.longitude);
-      _position ??= _userPosition;
     }
   }
 

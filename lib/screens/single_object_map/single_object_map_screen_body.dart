@@ -1,15 +1,14 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'package:izowork/components/components.dart';
+import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/models/models.dart';
+import 'package:izowork/screens/map/helpers/marker_helper.dart';
 import 'package:izowork/screens/map/views/map_control_widget.dart';
 import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
-import 'package:izowork/views/views.dart';
+import 'package:izowork/views/back_button_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +32,7 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
   }
 
   // MARK: -
-  // MARK: - FUNCTIONS
+  // MARK: - CLUSTER FUNCTIONS
 
   ClusterManager _initClusterManager() {
     return ClusterManager<Place>(_singleObjectMapViewModel.places,
@@ -52,63 +51,19 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
             await _googleMapController
                 .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
               target: cluster.location,
-              zoom: 16.0,
+              zoom: 20.0,
             )));
 
             _pushMapObjectScreenWidget();
           },
-          icon: await _getMarkerBitmap(
-            cluster.isMultiple ? 125 : 75,
+          icon: await MarkerHelper().getObjectMarkerBitmap(
+            120,
             cluster,
           ),
         );
       };
 
-  Future<BitmapDescriptor> _getMarkerBitmap(
-      int size, Cluster<Place> cluster) async {
-    num newSize = Platform.isAndroid ? size / 1.25 : size;
-
-    final PictureRecorder pictureRecorder = PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder);
-    final Paint paint1 = Paint()..color = HexColors.primaryMain;
-    final Paint paint2 = Paint()..color = HexColors.white;
-
-    canvas.drawCircle(
-        Offset(newSize / 2.0, newSize / 2.0), newSize / 2.0, paint1);
-    canvas.drawCircle(
-        Offset(newSize / 2.0, newSize / 2.0), newSize / 2.2, paint2);
-    canvas.drawCircle(
-        Offset(newSize / 2.0, newSize / 2.0), newSize / 2.6, paint1);
-
-    TextPainter painter = TextPainter(
-        textDirection: TextDirection.ltr, textAlign: TextAlign.center);
-
-    painter.text = TextSpan(
-        text: cluster.isMultiple
-            ? cluster.count.toString()
-            : cluster.items.first.name.substring(0, 1),
-        style: TextStyle(
-            fontSize: newSize / 2.0,
-            color: HexColors.black,
-            fontWeight: FontWeight.w700));
-
-    painter.layout();
-
-    painter.paint(
-        canvas,
-        Offset(newSize / 2.0 - painter.width / 2.0,
-            newSize / 2.0 - painter.height / 2.0));
-
-    final img = await pictureRecorder
-        .endRecording()
-        .toImage(newSize.toInt(), newSize.toInt());
-    final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
-
-    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
-  }
-
   void _updateMap() async {
-    /// UPDATE CLUSTER
     _clusterManager?.setItems(_singleObjectMapViewModel.places);
     _clusterManager?.updateMap();
 
@@ -176,7 +131,7 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
               myLocationEnabled: _singleObjectMapViewModel.hasPermission,
               initialCameraPosition: CameraPosition(
                 target: _singleObjectMapViewModel.places.first.latLng,
-                zoom: 12.0,
+                zoom: 20.0,
               ),
               markers: _singleObjectMapViewModel.markers,
               onMapCreated: (controller) => {

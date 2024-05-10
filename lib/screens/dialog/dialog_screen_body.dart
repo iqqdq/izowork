@@ -18,7 +18,10 @@ import 'package:socket_io_client/socket_io_client.dart';
 class DialogScreenBodyWidget extends StatefulWidget {
   final Function(Message)? onPop;
 
-  const DialogScreenBodyWidget({Key? key, this.onPop}) : super(key: key);
+  const DialogScreenBodyWidget({
+    Key? key,
+    this.onPop,
+  }) : super(key: key);
 
   @override
   _DialogScreenBodyState createState() => _DialogScreenBodyState();
@@ -85,6 +88,262 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
     _audio.dispose();
 
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _dialogViewModel = Provider.of<DialogViewModel>(
+      context,
+      listen: true,
+    );
+
+    _isGroupChat = _dialogViewModel.chat.chatType == 'GROUP';
+
+    String? _url = _dialogViewModel.chat.user?.avatar;
+
+    return Scaffold(
+        backgroundColor: HexColors.white,
+        appBar: AppBar(
+            titleSpacing: 0.0,
+            elevation: 0.0,
+            centerTitle: true,
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
+            backgroundColor: HexColors.white,
+            automaticallyImplyLeading: false,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: BackButtonWidget(
+                onTap: () => Navigator.pop(context),
+              ),
+            ),
+            title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              /// AVATAR
+              Stack(children: [
+                Container(
+                    width: 30.0,
+                    height: 30.0,
+                    padding: EdgeInsets.all(_isGroupChat ? 6.0 : 0.0),
+                    decoration: BoxDecoration(
+                        color: _isGroupChat
+                            ? HexColors.additionalViolet.withOpacity(0.8)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(15.0)),
+                    child: SvgPicture.asset(
+                        _isGroupChat
+                            ? 'assets/ic_group.svg'
+                            : 'assets/ic_avatar.svg',
+                        color:
+                            _isGroupChat ? HexColors.white : HexColors.grey30,
+                        width: 30.0,
+                        height: 30.0,
+                        fit: BoxFit.cover)),
+                _url == null
+                    ? Container()
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(15.0),
+                        child: CachedNetworkImage(
+                            cacheKey: _url,
+                            imageUrl: avatarUrl + _url,
+                            width: 30.0,
+                            height: 30.0,
+                            fit: BoxFit.cover)),
+              ]),
+              const SizedBox(width: 12.0),
+
+              /// CHAT/USER NAME
+              Expanded(
+                  child: Text(
+                      _dialogViewModel.chat.name ??
+                          _dialogViewModel.chat.user?.name ??
+                          '-',
+                      style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          color: HexColors.black,
+                          fontSize: 18.0,
+                          fontFamily: 'PT Root UI',
+                          fontWeight: FontWeight.bold))),
+            ])),
+        body: SizedBox.expand(
+            child: Stack(children: [
+          Column(children: [
+            /// DIALOG LIST VIEW
+            Expanded(
+                child: Container(
+                    color: HexColors.grey,
+                    child: RawScrollbar(
+                        controller: _scrollController,
+                        thumbColor: HexColors.grey50,
+                        thickness: 3,
+                        child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            controller: _scrollController,
+                            reverse: true,
+                            child: GestureDetector(
+                                onTap: () => FocusScope.of(context).unfocus(),
+                                child: ListView.builder(
+                                  cacheExtent: 0.0,
+                                  reverse: false,
+                                  primary: false,
+                                  shrinkWrap: true,
+                                  padding: const EdgeInsets.only(
+                                      top: 12.0, left: 10.0, right: 10.0),
+                                  itemCount: _bubbles.length,
+                                  itemBuilder: (context, index) =>
+                                      _bubbles[index],
+                                )))))),
+
+            /// MESSAGE BAR
+            ChatMessageBarWidget(
+              isSending: _dialogViewModel.isSending,
+              isAudio: true,
+              textEditingController: _textEditingController,
+              focusNode: _focusNode,
+              hintText: Titles.typeMessage,
+              onSendTap: () => {
+                FocusScope.of(context).unfocus(),
+                _scrollDown(),
+                if (_dialogViewModel.token != null)
+                  {
+                    /// PLAY MESSAGE SENT SOUND
+                    _audio.play(),
+
+                    /// SEND MESSAGE
+                    _dialogViewModel.socket?.emit(
+                        'message',
+                        MessageRequest(
+                          chatId: _dialogViewModel.chat.id,
+                          accessToken: _dialogViewModel.token!,
+                          message: _textEditingController.text,
+                        )),
+
+                    /// REPEAT SOCKET CONNECT IF GROUP CHAT WAS EMPTY BEFORE OUR MESSAGE
+                    if (_isGroupChat && _dialogViewModel.messages.isEmpty)
+                      {
+                        _dialogViewModel
+                            .getMessageList(pagination: _pagination)
+                            .then((value) => _updateBubbles(true))
+                            .then(
+                              (value) => _dialogViewModel.connectSocket().then(
+                                    (value) => _addSocketListener(
+                                        _dialogViewModel.socket),
+                                  ),
+                            )
+                      },
+
+                    /// CLEAR INPUT
+                    _textEditingController.clear(),
+                  }
+              },
+              onClipTap: () => _dialogViewModel.addFile(context),
+              onRecordStarted: () => _dialogViewModel.recordAudio(),
+              onRecordCanceled: () => _dialogViewModel.cancelRecordAudio(),
+              onRecord: () => _dialogViewModel.sendAudioMessage(context),
+            ),
+            Container(
+                color: HexColors.white,
+                height: MediaQuery.of(context).padding.bottom == 0.0
+                    ? 0.0
+                    : MediaQuery.of(context).padding.bottom / 2.0)
+          ]),
+
+          /// SCROLL TO END / NEW MESSAGE INDICATOR
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: EdgeInsets.only(
+                  right: 10.0,
+                  bottom: MediaQuery.of(context).padding.bottom == 0.0
+                      ? 80.0
+                      : MediaQuery.of(context).padding.bottom + 60.0),
+              child: ScrollToEndButtonWidget(
+                isHidden: !_scrollController.hasClients ||
+                    !(_scrollController.position.pixels >= 50.0 &&
+                        _dialogViewModel.messages.length > 1),
+                count: _count,
+                onTap: () => _scrollDown(),
+              ),
+            ),
+          ),
+
+          /// EMPTY LIST TEXT
+          _dialogViewModel.loadingStatus == LoadingStatus.completed &&
+                  _dialogViewModel.messages.isEmpty
+              ? Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, bottom: 100.0),
+                      child: Text(Titles.noMessages,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontSize: 16.0,
+                              color: HexColors.grey50))))
+              : Container(),
+
+          /// SHOW USER LIST
+          _isGroupChat
+              ? AnimatedOpacity(
+                  opacity: _dialogViewModel.loadingStatus ==
+                              LoadingStatus.searching &&
+                          _dialogViewModel.messages.isEmpty
+                      ? 0.0
+                      : _scrollController.positions.isEmpty
+                          ? 0.0
+                          : _scrollController.position.userScrollDirection ==
+                                      ScrollDirection.reverse ||
+                                  _scrollController.position.pixels ==
+                                      _scrollController.position.maxScrollExtent
+                              ? 1.0
+                              : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 12.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () => _dialogViewModel
+                                .showGroupChatUsersScreen(context),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 0.5,
+                                      color: HexColors.additionalViolet),
+                                  borderRadius: BorderRadius.circular(16.0)),
+                              child: Blur(
+                                borderRadius: BorderRadius.circular(16.0),
+                                overlay: Center(
+                                  child: Text(
+                                    Titles.showAllUsers,
+                                    style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        color: HexColors.additionalViolet,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'PT Root UI'),
+                                  ),
+                                ),
+                                child: Container(
+                                  width: 272.0,
+                                  height: 40.0,
+                                  decoration: BoxDecoration(
+                                    color: HexColors.white10,
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ]),
+                  ),
+                )
+              : Container(),
+
+          /// INDICATOR
+          _dialogViewModel.loadingStatus == LoadingStatus.searching
+              ? const LoadingIndicatorWidget()
+              : Container()
+        ])));
   }
 
   // MARK: -
@@ -248,248 +507,5 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
         index == 0 ? null : _dialogViewModel.messages[index - 1].userId;
 
     return authorId == nextAuthorId;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _dialogViewModel = Provider.of<DialogViewModel>(
-      context,
-      listen: true,
-    );
-
-    _isGroupChat = _dialogViewModel.chat.chatType == 'GROUP';
-
-    String? _url = _dialogViewModel.chat.user?.avatar;
-
-    return Scaffold(
-        backgroundColor: HexColors.white,
-        appBar: AppBar(
-            titleSpacing: 0.0,
-            elevation: 0.0,
-            centerTitle: true,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: HexColors.white,
-            automaticallyImplyLeading: false,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: BackButtonWidget(
-                onTap: () => Navigator.pop(context),
-              ),
-            ),
-            title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              /// AVATAR
-              Stack(children: [
-                Container(
-                    width: 30.0,
-                    height: 30.0,
-                    padding: EdgeInsets.all(_isGroupChat ? 6.0 : 0.0),
-                    decoration: BoxDecoration(
-                        color: _isGroupChat
-                            ? HexColors.additionalViolet.withOpacity(0.8)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(15.0)),
-                    child: SvgPicture.asset(
-                        _isGroupChat
-                            ? 'assets/ic_group.svg'
-                            : 'assets/ic_avatar.svg',
-                        color:
-                            _isGroupChat ? HexColors.white : HexColors.grey30,
-                        width: 30.0,
-                        height: 30.0,
-                        fit: BoxFit.cover)),
-                _url == null
-                    ? Container()
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(15.0),
-                        child: CachedNetworkImage(
-                            cacheKey: _url,
-                            imageUrl: avatarUrl + _url,
-                            width: 30.0,
-                            height: 30.0,
-                            fit: BoxFit.cover)),
-              ]),
-              const SizedBox(width: 12.0),
-
-              /// CHAT/USER NAME
-              Expanded(
-                  child: Text(
-                      _dialogViewModel.chat.name ??
-                          _dialogViewModel.chat.user?.name ??
-                          '-',
-                      style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          color: HexColors.black,
-                          fontSize: 18.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold))),
-            ])),
-        body: SizedBox.expand(
-            child: Stack(children: [
-          Column(children: [
-            /// DIALOG LIST VIEW
-            Expanded(
-                child: Container(
-                    color: HexColors.grey,
-                    child: RawScrollbar(
-                        controller: _scrollController,
-                        thumbColor: HexColors.grey50,
-                        thickness: 3,
-                        child: SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            controller: _scrollController,
-                            reverse: true,
-                            child: GestureDetector(
-                                onTap: () => FocusScope.of(context).unfocus(),
-                                child: ListView.builder(
-                                  cacheExtent: 0.0,
-                                  reverse: false,
-                                  primary: false,
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.only(
-                                      top: 12.0, left: 10.0, right: 10.0),
-                                  itemCount: _bubbles.length,
-                                  itemBuilder: (context, index) =>
-                                      _bubbles[index],
-                                )))))),
-
-            /// MESSAGE BAR
-            ChatMessageBarWidget(
-              isSending: _dialogViewModel.isSending,
-              isAudio: true,
-              textEditingController: _textEditingController,
-              focusNode: _focusNode,
-              hintText: Titles.typeMessage,
-              onSendTap: () => {
-                FocusScope.of(context).unfocus(),
-                _scrollDown(),
-                if (_dialogViewModel.token != null)
-                  {
-                    /// PLAY MESSAGE SENT SOUND
-                    _audio.play(),
-
-                    /// SEND MESSAGE
-                    _dialogViewModel.socket?.emit(
-                        'message',
-                        MessageRequest(
-                          chatId: _dialogViewModel.chat.id,
-                          accessToken: _dialogViewModel.token!,
-                          message: _textEditingController.text,
-                        )),
-
-                    /// REPEAT SOCKET CONNECT IF GROUP CHAT WAS EMPTY BEFORE OUR MESSAGE
-                    if (_isGroupChat && _dialogViewModel.messages.isEmpty)
-                      {
-                        _dialogViewModel
-                            .getMessageList(pagination: _pagination)
-                            .then((value) => _updateBubbles(true))
-                            .then((value) => _dialogViewModel
-                                .connectSocket()
-                                .then((value) => _addSocketListener(
-                                    _dialogViewModel.socket)))
-                      },
-
-                    /// CLEAR INPUT
-                    _textEditingController.clear(),
-                  }
-              },
-              onClipTap: () => _dialogViewModel.addFile(context),
-              onRecordStarted: () => _dialogViewModel.recordAudio(),
-              onRecordCanceled: () => _dialogViewModel.cancelRecordAudio(),
-              onRecord: () => _dialogViewModel.sendAudioMessage(context),
-            ),
-            Container(
-                color: HexColors.white,
-                height: MediaQuery.of(context).padding.bottom == 0.0
-                    ? 0.0
-                    : MediaQuery.of(context).padding.bottom / 2.0)
-          ]),
-
-          /// SCROLL TO END / NEW MESSAGE INDICATOR
-          Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      right: 10.0,
-                      bottom: MediaQuery.of(context).padding.bottom == 0.0
-                          ? 80.0
-                          : MediaQuery.of(context).padding.bottom + 60.0),
-                  child: ScrollToEndButtonWidget(
-                      isHidden: !_scrollController.hasClients ||
-                          !(_scrollController.position.pixels >= 50.0 &&
-                              _dialogViewModel.messages.length > 1),
-                      count: _count,
-                      onTap: () => _scrollDown()))),
-
-          /// EMPTY LIST TEXT
-          _dialogViewModel.loadingStatus == LoadingStatus.completed &&
-                  _dialogViewModel.messages.isEmpty
-              ? Center(
-                  child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20.0, right: 20.0, bottom: 100.0),
-                      child: Text(Titles.noMessages,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 16.0,
-                              color: HexColors.grey50))))
-              : Container(),
-
-          /// SHOW USER LIST
-          _isGroupChat
-              ? AnimatedOpacity(
-                  opacity: _dialogViewModel.loadingStatus ==
-                              LoadingStatus.searching &&
-                          _dialogViewModel.messages.isEmpty
-                      ? 0.0
-                      : _scrollController.positions.isEmpty
-                          ? 0.0
-                          : _scrollController.position.userScrollDirection ==
-                                      ScrollDirection.reverse ||
-                                  _scrollController.position.pixels ==
-                                      _scrollController.position.maxScrollExtent
-                              ? 1.0
-                              : 0.0,
-                  duration: const Duration(milliseconds: 300),
-                  child: Container(
-                      margin: const EdgeInsets.only(top: 12.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                                onTap: () => _dialogViewModel
-                                    .showGroupChatUsersScreen(context),
-                                child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 0.5,
-                                            color: HexColors.additionalViolet),
-                                        borderRadius:
-                                            BorderRadius.circular(16.0)),
-                                    child: Blur(
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                        overlay: Center(
-                                            child: Text(Titles.showAllUsers,
-                                                style: TextStyle(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    color: HexColors
-                                                        .additionalViolet,
-                                                    fontSize: 16.0,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'PT Root UI'))),
-                                        child: Container(
-                                            width: 272.0,
-                                            height: 40.0,
-                                            decoration: BoxDecoration(color: HexColors.white10, borderRadius: BorderRadius.circular(16.0))))))
-                          ])))
-              : Container(),
-
-          /// INDICATOR
-          _dialogViewModel.loadingStatus == LoadingStatus.searching
-              ? const LoadingIndicatorWidget()
-              : Container()
-        ])));
   }
 }

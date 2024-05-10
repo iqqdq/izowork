@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 class ObjectPageScreenBodyWidget extends StatefulWidget {
   final VoidCallback onCoordCopy;
-  final Function(Object) onUpdate;
+  final Function(MapObject) onUpdate;
 
   const ObjectPageScreenBodyWidget({
     Key? key,
@@ -82,36 +82,29 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
 
                   Row(children: [
                     Expanded(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          /// COORDINATES
-                          const TitleWidget(
-                            padding: EdgeInsets.only(bottom: 4.0),
-                            text: Titles.coordinates,
-                            isSmall: true,
-                          ),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /// COORDINATES
+                            const TitleWidget(
+                              padding: EdgeInsets.only(bottom: 4.0),
+                              text: Titles.coordinates,
+                              isSmall: true,
+                            ),
 
-                          _objectPageViewModel.object == null
-                              ? Container()
-                              : GestureDetector(
-                                  onLongPress: () => _objectPageViewModel
-                                      .copyCoordinates(
-                                        context,
-                                        _objectPageViewModel.object!.lat,
-                                        _objectPageViewModel.object!.long,
-                                      )
-                                      .then((value) => widget.onCoordCopy()),
-                                  child: SubtitleWidget(
+                            _objectPageViewModel.object == null
+                                ? Container()
+                                : SubtitleWidget(
                                     padding:
                                         const EdgeInsets.only(bottom: 16.0),
                                     text:
                                         '${_objectPageViewModel.object!.lat}, ${_objectPageViewModel.object!.long}',
-                                  ))
-                        ])),
+                                  )
+                          ]),
+                    ),
                     GestureDetector(
                         onTap: () =>
-                            _objectPageViewModel.showSingleObjectMap(context),
+                            _objectPageViewModel.showObjectOnMap(context),
                         child: SvgPicture.asset(
                           'assets/ic_map.svg',
                           color: HexColors.primaryMain,
@@ -361,8 +354,8 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                               _objectPageViewModel.showDialogScreen(context),
                         ),
 
-                  /// CHANGE OBJECT STAGE ADMIN BUTTON
-                  !_objectPageViewModel.isAdmin
+                  /// CHANGE OBJECT STAGE DIRECTOR BUTTON
+                  !_objectPageViewModel.isDirector
                       ? _objectPageViewModel.object?.objectStage?.name ==
                                   'Закончен' ||
                               _objectPageViewModel.object?.objectStage?.name ==
@@ -384,7 +377,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                       }),
                             )
 
-                      /// CHANGE OBJECT STAGE ADMIN BUTTON
+                      /// CHANGE OBJECT STAGE DIRECTOR BUTTON
                       : _objectPageViewModel.object?.objectStage?.name ==
                                   'Закончен' ||
                               _objectPageViewModel.object?.objectStage?.name ==
@@ -409,7 +402,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                   /// COMPLETE OBJECT BUTTON
                   _objectPageViewModel.object?.objectStage?.name ==
                               'Закончен' ||
-                          !_objectPageViewModel.isAdmin
+                          !_objectPageViewModel.isDirector
                       ? Container()
                       : BorderButtonWidget(
                           isDestructive: true,
@@ -436,7 +429,6 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                   margin: EdgeInsets.only(
                     right: 16.0,
                     left: 16.0,
-                    // left: 4.0,
                     bottom: MediaQuery.of(context).padding.bottom == 0.0
                         ? 20.0
                         : MediaQuery.of(context).padding.bottom,

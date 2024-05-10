@@ -22,10 +22,10 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
         id: json["id"],
-        createdAt: DateTime.parse(json["created_at"]).toUtc(),
+        createdAt: DateTime.parse(json["created_at"]).toUtc().toLocal(),
         readAt: json["read_at"] == null
             ? null
-            : DateTime.parse(json["read_at"]).toUtc(),
+            : DateTime.parse(json["read_at"]).toUtc().toLocal(),
         text: json["text"],
         userId: json["user_id"],
         chatId: json["chat_id"],

@@ -5,9 +5,11 @@ class SearchUserListItemWidget extends StatelessWidget {
   final String name;
   final VoidCallback onTap;
 
-  const SearchUserListItemWidget(
-      {Key? key, required this.name, required this.onTap})
-      : super(key: key);
+  const SearchUserListItemWidget({
+    Key? key,
+    required this.name,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

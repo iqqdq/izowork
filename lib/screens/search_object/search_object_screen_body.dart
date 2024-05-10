@@ -11,7 +11,7 @@ class SearchObjectScreenBodyWidget extends StatefulWidget {
   final String title;
   final bool isRoot;
   final VoidCallback onFocus;
-  final Function(Object?) onPop;
+  final Function(MapObject?) onPop;
 
   const SearchObjectScreenBodyWidget({
     Key? key,

@@ -5,7 +5,7 @@ import 'package:izowork/screens/object_analytics/object_analytics_screen_body.da
 import 'package:provider/provider.dart';
 
 class ObjectAnalyticsScreenWidget extends StatelessWidget {
-  final Object object;
+  final MapObject object;
   final List<Phase> phases;
 
   const ObjectAnalyticsScreenWidget(

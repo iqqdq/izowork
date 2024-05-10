@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:izowork/components/components.dart';
+import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/models/models.dart';
 
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
@@ -48,8 +49,103 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    _mapViewModel = Provider.of<MapViewModel>(
+      context,
+      listen: true,
+    );
+
+    return SizedBox.expand(
+      child: Stack(children: [
+        /// GOOGLE MAP
+        _mapViewModel.userPosition == null
+            ? Container()
+            : GoogleMap(
+                mapToolbarEnabled: false,
+                zoomControlsEnabled: false,
+                myLocationButtonEnabled: false,
+                myLocationEnabled: _mapViewModel.hasPermission,
+                initialCameraPosition: CameraPosition(
+                  target: _mapViewModel.userPosition!,
+                  zoom: 20.0,
+                ),
+                markers: _mapViewModel.markers,
+                onMapCreated: (controller) => {
+                  _googleMapController = controller,
+                  _completer.complete(controller),
+                },
+                onCameraMove: (position) => {
+                  _mapViewModel.onCameraMove(position),
+                  _clusterManager?.onCameraMove(position),
+                },
+                onCameraIdle: () => _updateMarkers(
+                    isObjectMarkers: _mapViewModel.isObjectMarkers),
+                onLongPress: (position) =>
+                    _showMapAddObjectSheet(position: position),
+              ),
+
+        /// SEGMENTED CONTROL
+        SafeArea(
+          child: Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: EdgeInsets.only(
+                right: 8.0,
+                top: Platform.isAndroid ||
+                        MediaQuery.of(context).padding.top == 0.0
+                    ? 12.0
+                    : 0.0,
+              ),
+              child: SegmentedControlWidget(
+                titles: const [
+                  Titles.objects,
+                  Titles.clients,
+                ],
+                width: 212.0,
+                backgroundColor: HexColors.grey10,
+                activeColor: HexColors.black,
+                disableColor: HexColors.grey40,
+                thumbColor: HexColors.white,
+                borderColor: HexColors.grey20,
+                onTap: (index) => _switchMarkers(index: index),
+              ),
+            ),
+          ),
+        ),
+
+        /// MAP CONTROL
+        Align(
+          alignment: Alignment.centerRight,
+          child: MapControlWidget(
+            onZoomInTap: () => _zoomIn(),
+            onZoomOutTap: () => _zoomOut(),
+            onShowLocationTap: () => _mapViewModel.hasPermission &&
+                    _mapViewModel.userPosition != null
+                ? _showUserLocation()
+                : _mapViewModel.getLocationPermission(),
+            onSearchTap: () => _showSearchMapObjectSheet(),
+          ),
+        ),
+
+        /// FILTER BUTTON
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 6.0),
+            child: FilterButtonWidget(
+              onTap: () => _showFilterSheet(),
+            ),
+          ),
+        )
+      ]),
+    );
+  }
+
   // MARK: -
-  // MARK: - MAP FUNCTIONS
+  // MARK: - CLUSTER FUNCTIONS
 
   Future<Marker> Function(Cluster<Place>) get _markerBuilder =>
       (cluster) async {
@@ -113,11 +209,13 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           ? await _mapViewModel.getObjectList(
               latLngBounds: await _googleMapController
                   .getVisibleRegion()
-                  .whenComplete(() => _updateClusters()))
+                  .whenComplete(() => _updateClusters()),
+            )
           : await _mapViewModel.getCompanyList(
               latLngBounds: await _googleMapController
                   .getVisibleRegion()
-                  .whenComplete(() => _updateClusters()));
+                  .whenComplete(() => _updateClusters()),
+            );
     });
   }
 
@@ -131,6 +229,8 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
   // MARK: - ACTIONS
 
   void _switchMarkers({required int index}) async {
+    _mapViewModel.places.clear();
+
     await _mapViewModel.changeMarkerType(index: index).whenComplete(() {
       _updateClusterManager();
       _updateMarkers(isObjectMarkers: _mapViewModel.isObjectMarkers);
@@ -171,6 +271,92 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
         zoom: 20.0,
       )));
     }
+  }
+
+  // MARK: -
+  // MARK: - FUCNTIONS
+
+  void _showObject(MapObject? object) {
+    bool found = false;
+
+    Future.delayed(
+        const Duration(milliseconds: 500),
+        () => {
+              if (object != null)
+                {
+                  for (var element in _mapViewModel.objects)
+                    {
+                      if (object.id == element.id) found = true,
+                    },
+                  if (found)
+                    {
+                      _mapViewModel.objects
+                          .removeWhere((element) => element.id == object.id),
+                    },
+                  _mapViewModel.objects.add(object),
+                  _mapViewModel.updatePlaces().whenComplete(
+                        () => _googleMapController
+                            .animateCamera(CameraUpdate.newCameraPosition(
+                          CameraPosition(
+                            target: LatLng(
+                              object.lat,
+                              object.long,
+                            ),
+                            zoom: 20.0,
+                          ),
+                        )),
+                      )
+                  // .whenComplete(
+                  //   () => Future.delayed(
+                  //       const Duration(seconds: 1),
+                  //       () =>
+                  //           _showMarkerSheet(id: object.id)),
+                  // )
+                }
+            });
+  }
+
+  void _showCompany(Company? company) {
+    bool found = false;
+
+    Future.delayed(
+        const Duration(milliseconds: 500),
+        () => {
+              if (company != null)
+                {
+                  for (var element in _mapViewModel.companies)
+                    {
+                      if (company.id == element.id) found = true,
+                    },
+                  if (found)
+                    {
+                      _mapViewModel.companies
+                          .removeWhere((element) => element.id == company.id),
+                    },
+                  _mapViewModel.companies.add(company),
+                  _mapViewModel.updatePlaces().whenComplete(() => {
+                        if (company.lat != null && company.long != null)
+                          _googleMapController.animateCamera(
+                            CameraUpdate.newCameraPosition(CameraPosition(
+                              target: LatLng(
+                                company.lat!,
+                                company.long!,
+                              ),
+                              zoom: 20.0,
+                            )),
+                          )
+                        else
+                          Toast().showTopToast(
+                              context, '${company.name} не добавлен на карту!')
+                      })
+                  // .whenComplete(
+                  //   () => Future.delayed(
+                  //       const Duration(seconds: 1),
+                  //       () =>
+                  //           _showMarkerSheet(id: company.id)),
+                  // )
+                }
+            });
   }
 
   // MARK: -
@@ -244,248 +430,65 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
               backgroundColor: HexColors.white,
               context: context,
               builder: (sheetContext) => MapAddObjectScreenWidget(
-                title: _mapViewModel.isObjectMarkers == true
-                    ? Titles.addObject
-                    : Titles.addClient,
-                address: _mapViewModel.address,
-                onTap: () => {
-                  Navigator.pop(context),
-                  Future.delayed(
-                    const Duration(milliseconds: 500),
-                    () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              _mapViewModel.isObjectMarkers == true
-                                  ? ObjectCreateScreenWidget(
-                                      address: _mapViewModel.address,
-                                      lat: position.latitude,
-                                      long: position.longitude,
-                                      onPop: (object) => {
-                                            if (object != null)
-                                              _mapViewModel.getObjectList(),
-                                          })
-                                  : CompanyCreateScreenWidget(
-                                      address: _mapViewModel.address,
-                                      lat: position.latitude,
-                                      long: position.longitude,
-                                      onPop: (company) => {
-                                            if (company != null)
-                                              _mapViewModel.getCompanyList(),
-                                          }),
-                        )),
-                  )
-                },
-              ),
+                  title: _mapViewModel.isObjectMarkers == true
+                      ? Titles.addObject
+                      : Titles.addClient,
+                  address: _mapViewModel.address,
+                  onTap: () => {
+                        Navigator.pop(context),
+                        Future.delayed(
+                          const Duration(milliseconds: 500),
+                          () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    _mapViewModel.isObjectMarkers == true
+                                        ? ObjectCreateScreenWidget(
+                                            address: _mapViewModel.address,
+                                            lat: position.latitude,
+                                            long: position.longitude,
+                                            onPop: (object) =>
+                                                _showObject(object),
+                                          )
+                                        : CompanyCreateScreenWidget(
+                                            address: _mapViewModel.address,
+                                            lat: position.latitude,
+                                            long: position.longitude,
+                                            onPop: (company) =>
+                                                _showCompany(company),
+                                          ),
+                              )),
+                        )
+                      }),
             ));
   }
 
-  void _showSearchMapObjectSheet() {
-    bool found = false;
+  void _showSearchMapObjectSheet() => showCupertinoModalBottomSheet(
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => _mapViewModel.isObjectMarkers
 
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => _mapViewModel.isObjectMarkers
+          /// SEARCH OBJECT
+          ? SearchObjectScreenWidget(
+              isRoot: true,
+              title: Titles.object,
+              onFocus: () => {},
+              onPop: (object) => {
+                    Navigator.pop(context),
+                    _showObject(object),
+                  })
 
-            /// SEARCH OBJECT
-            ? SearchObjectScreenWidget(
-                isRoot: true,
-                title: Titles.object,
-                onFocus: () => {},
-                onPop: (object) => {
-                  Navigator.pop(context),
-                  Future.delayed(
-                      const Duration(milliseconds: 500),
-                      () => {
-                            if (object != null)
-                              {
-                                for (var element in _mapViewModel.objects)
-                                  {
-                                    if (object.id == element.id) found = true,
-                                  },
-                                if (found)
-                                  {
-                                    _mapViewModel.objects.removeWhere(
-                                        (element) => element.id == object.id),
-                                  },
-                                _mapViewModel.objects.add(object),
-                                _mapViewModel.updatePlaces().whenComplete(
-                                      () => _googleMapController.animateCamera(
-                                          CameraUpdate.newCameraPosition(
-                                        CameraPosition(
-                                          target: LatLng(
-                                            object.lat,
-                                            object.long,
-                                          ),
-                                          zoom: 20.0,
-                                        ),
-                                      )),
-                                    )
-                                // .whenComplete(
-                                //   () => Future.delayed(
-                                //       const Duration(seconds: 1),
-                                //       () =>
-                                //           _showMarkerSheet(id: object.id)),
-                                // )
-                              }
-                          })
-                },
-              )
-
-            /// SEARCH COMPANY
-            : SearchCompanyScreenWidget(
-                isRoot: true,
-                title: Titles.client,
-                onFocus: () => {},
-                onPop: (company) => {
-                  Navigator.pop(context),
-                  Future.delayed(
-                      const Duration(milliseconds: 500),
-                      () => {
-                            if (company != null)
-                              {
-                                for (var element in _mapViewModel.companies)
-                                  {
-                                    if (company.id == element.id) found = true,
-                                  },
-                                if (found)
-                                  {
-                                    _mapViewModel.companies.removeWhere(
-                                        (element) => element.id == company.id),
-                                  },
-                                _mapViewModel.companies.add(company),
-                                _mapViewModel
-                                    .updatePlaces()
-                                    .whenComplete(() => {
-                                          if (company.lat != null &&
-                                              company.long != null)
-                                            _googleMapController.animateCamera(
-                                              CameraUpdate.newCameraPosition(
-                                                  CameraPosition(
-                                                target: LatLng(
-                                                  company.lat!,
-                                                  company.long!,
-                                                ),
-                                                zoom: 20.0,
-                                              )),
-                                            )
-                                          else
-                                            Toast().showTopToast(context,
-                                                '${company.name} не добавлен на карту!')
-                                        })
-                                // .whenComplete(
-                                //   () => Future.delayed(
-                                //       const Duration(seconds: 1),
-                                //       () =>
-                                //           _showMarkerSheet(id: company.id)),
-                                // )
-                              }
-                          })
-                },
-              ));
-  }
-
-  // MARK: -
-  // MARK: - BUILD
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
-    _mapViewModel = Provider.of<MapViewModel>(
-      context,
-      listen: true,
-    );
-
-    return SizedBox.expand(
-      child: Stack(children: [
-        /// GOOGLE MAP
-        _mapViewModel.userPosition == null
-            ? Container()
-            : GoogleMap(
-                mapToolbarEnabled: false,
-                zoomControlsEnabled: false,
-                myLocationButtonEnabled: false,
-                myLocationEnabled: _mapViewModel.hasPermission,
-                initialCameraPosition: CameraPosition(
-                  target: _mapViewModel.userPosition!,
-                  zoom: 20.0,
-                ),
-                markers: _mapViewModel.markers,
-                onMapCreated: (controller) => {
-                  _googleMapController = controller,
-                  _completer.complete(controller),
-                  _updateClusterManager(),
-                  _updateMarkers(isObjectMarkers: _mapViewModel.isObjectMarkers)
-                },
-                onCameraMove: (position) => {
-                  _mapViewModel.onCameraMove(position),
-                  _clusterManager?.onCameraMove(position),
-                },
-                onCameraIdle: () => _updateMarkers(
-                    isObjectMarkers: _mapViewModel.isObjectMarkers),
-                onLongPress: (position) =>
-                    _showMapAddObjectSheet(position: position),
-              ),
-
-        /// SEGMENTED CONTROL
-        SafeArea(
-          child: Align(
-            alignment: Alignment.topRight,
-            child: Padding(
-              padding: EdgeInsets.only(
-                right: 8.0,
-                top: Platform.isAndroid ||
-                        MediaQuery.of(context).padding.top == 0.0
-                    ? 12.0
-                    : 0.0,
-              ),
-              child: SegmentedControlWidget(
-                titles: const [
-                  Titles.objects,
-                  Titles.clients,
-                ],
-                width: 212.0,
-                backgroundColor: HexColors.grey10,
-                activeColor: HexColors.black,
-                disableColor: HexColors.grey40,
-                thumbColor: HexColors.white,
-                borderColor: HexColors.grey20,
-                onTap: (index) => _switchMarkers(index: index),
-              ),
-            ),
-          ),
-        ),
-
-        /// MAP CONTROL
-        Align(
-          alignment: Alignment.centerRight,
-          child: MapControlWidget(
-            onZoomInTap: () => _zoomIn(),
-            onZoomOutTap: () => _zoomOut(),
-            onShowLocationTap: () => _mapViewModel.hasPermission &&
-                    _mapViewModel.userPosition != null
-                ? _showUserLocation()
-                : _mapViewModel.getLocationPermission(),
-            onSearchTap: () => _showSearchMapObjectSheet(),
-          ),
-        ),
-
-        /// FILTER BUTTON
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 6.0),
-            child: FilterButtonWidget(
-              onTap: () => _showFilterSheet(),
-            ),
-          ),
-        )
-      ]),
-    );
-  }
+          /// SEARCH COMPANY
+          : SearchCompanyScreenWidget(
+              isRoot: true,
+              title: Titles.client,
+              onFocus: () => {},
+              onPop: (company) => {
+                Navigator.pop(context),
+                _showCompany(company),
+              },
+            ));
 }

@@ -6,11 +6,13 @@ import 'package:provider/provider.dart';
 
 class CompanyScreenWidget extends StatelessWidget {
   final Company company;
+  final bool? hideInfoButton;
   final Function(Company?)? onPop;
 
   const CompanyScreenWidget({
     Key? key,
     required this.company,
+    this.hideInfoButton,
     required this.onPop,
   }) : super(key: key);
 

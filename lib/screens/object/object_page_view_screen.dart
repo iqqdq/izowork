@@ -10,7 +10,7 @@ import 'package:izowork/services/local_storage/local_storage.dart';
 import 'package:izowork/views/views.dart';
 
 class ObjectPageViewScreenWidget extends StatefulWidget {
-  final Object object;
+  final MapObject object;
   final List<ObjectStage>? objectStages;
   final Phase? phase;
 

@@ -37,13 +37,9 @@ class NewsViewModel with ChangeNotifier {
     required String search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _news.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
+
     await NewsRepository()
         .getNews(
           pagination: pagination,

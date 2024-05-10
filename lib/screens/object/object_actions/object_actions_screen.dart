@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:izowork/entities/responses/responses.dart';
 
 class ObjectActionsScreenWidget extends StatelessWidget {
-  final Object object;
+  final MapObject object;
 
   const ObjectActionsScreenWidget({Key? key, required this.object})
       : super(key: key);

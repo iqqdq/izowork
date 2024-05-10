@@ -59,13 +59,15 @@ class CheckListItemWidget extends StatelessWidget {
               ),
             ),
             state == PhaseChecklistState.created
-                ? InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: SvgPicture.asset('assets/ic_clear.svg'),
-                    onTap: () => onRemoveTap == null ? null : onRemoveTap!(),
-                  )
+                ? onRemoveTap == null
+                    ? Container()
+                    : InkWell(
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: SvgPicture.asset('assets/ic_clear.svg'),
+                        onTap: () => onRemoveTap!(),
+                      )
                 : Container(
                     margin: const EdgeInsets.only(left: 16.0),
                     child: Material(

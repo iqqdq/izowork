@@ -30,17 +30,17 @@ class ObjectPageViewModel with ChangeNotifier {
 
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
-  bool _isAdmin = false;
+  bool _isDirector = false;
 
-  Object? _object;
+  MapObject? _object;
 
   List<Phase> _phases = [];
 
   int _downloadIndex = -1;
 
-  bool get isAdmin => _isAdmin;
+  bool get isDirector => _isDirector;
 
-  Object? get object => _object;
+  MapObject? get object => _object;
 
   int get downloadIndex => _downloadIndex;
 
@@ -50,12 +50,13 @@ class ObjectPageViewModel with ChangeNotifier {
     this.objectId,
     this.objectStages,
   ) {
-    checkIsAdmin().whenComplete(
+    checkIsDirector().whenComplete(
         () => getObjectById(objectId).whenComplete(() => getPhaseList()));
   }
 
-  Future checkIsAdmin() async => _isAdmin =
-      (await GetIt.I<LocalStorageService>().getUser())?.state == 'ADMIN'
+  Future checkIsDirector() async => _isDirector =
+      (await GetIt.I<LocalStorageService>().getUser())?.state.toLowerCase() ==
+              'director'
           ? true
           : false;
 
@@ -66,7 +67,7 @@ class ObjectPageViewModel with ChangeNotifier {
     await ObjectRepository()
         .getObject(id)
         .then((response) => {
-              if (response is Object)
+              if (response is MapObject)
                 _object = response
               else if (response is ErrorResponse)
                 loadingStatus = LoadingStatus.error,
@@ -77,7 +78,7 @@ class ObjectPageViewModel with ChangeNotifier {
   Future changeObjectStage() async {
     if (object == null) return;
 
-    ObjectStage? objectStage = _isAdmin
+    ObjectStage? objectStage = _isDirector
         ? objectStages?.firstWhere((element) => element.name == 'На доработке')
         : objectStages?.firstWhere(
             (element) => element.name == 'На рассмотрении руководителя');
@@ -188,14 +189,6 @@ class ObjectPageViewModel with ChangeNotifier {
     }
   }
 
-  Future copyCoordinates(
-    BuildContext context,
-    double lat,
-    double long,
-  ) async {
-    Clipboard.setData(ClipboardData(text: '$lat, $long'));
-  }
-
   // MARK: -
   // MARK: - PUSH
 
@@ -215,7 +208,7 @@ class ObjectPageViewModel with ChangeNotifier {
                 })));
   }
 
-  void showSingleObjectMap(BuildContext context) {
+  void showObjectOnMap(BuildContext context) {
     if (_object != null) {
       Navigator.push(
           context,

@@ -10,8 +10,11 @@ class TaskListItemWidget extends StatelessWidget {
   final Task task;
   final VoidCallback onTap;
 
-  const TaskListItemWidget({Key? key, required this.task, required this.onTap})
-      : super(key: key);
+  const TaskListItemWidget({
+    Key? key,
+    required this.task,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +135,7 @@ class TaskListItemWidget extends StatelessWidget {
                         Stack(children: [
                           task.taskManager == null
                               ? SvgPicture.asset('assets/ic_avatar.svg',
+                                  // ignore: deprecated_member_use
                                   color: HexColors.grey40,
                                   width: 24.0,
                                   height: 24.0,

@@ -25,16 +25,14 @@ class SearchOfficeViewModel with ChangeNotifier {
     String? search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _offices.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
 
     await OfficeRepository()
-        .getOffices(pagination: pagination, search: search)
+        .getOffices(
+          pagination: pagination,
+          search: search,
+        )
         .then((response) => {
               if (response is List<Office>)
                 {

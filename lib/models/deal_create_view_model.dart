@@ -23,7 +23,7 @@ import 'dart:io' as io;
 
 class DealCreateViewModel with ChangeNotifier {
   final Deal? deal;
-  final Object? selectedObject;
+  final MapObject? selectedObject;
   final Phase? selectedPhase;
 
   final DateTime _minDateTime = DateTime(
@@ -52,7 +52,7 @@ class DealCreateViewModel with ChangeNotifier {
 
   User? _responsible;
 
-  Object? _object;
+  MapObject? _object;
 
   Company? _company;
 
@@ -72,7 +72,7 @@ class DealCreateViewModel with ChangeNotifier {
 
   User? get responsible => _responsible;
 
-  Object? get object => _object;
+  MapObject? get object => _object;
 
   Company? get company => _company;
 

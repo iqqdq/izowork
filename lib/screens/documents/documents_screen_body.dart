@@ -51,8 +51,10 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _documentsViewModel.getDealList(
-        pagination: _pagination, search: _textEditingController.text);
+    await _documentsViewModel.getDealList(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   @override

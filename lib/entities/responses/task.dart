@@ -36,7 +36,7 @@ class Task {
   User? responsible;
   User? taskManager;
   User? coExecutor;
-  Object? object;
+  MapObject? object;
   Company? company;
 
   factory Task.fromJson(Map<String, dynamic> json) => Task(
@@ -64,28 +64,9 @@ class Task {
         coExecutor: json["co_executor"] == null
             ? null
             : User.fromJson(json["co_executor"]),
-        object: json["object"] == null ? null : Object.fromJson(json["object"]),
+        object:
+            json["object"] == null ? null : MapObject.fromJson(json["object"]),
         company:
             json["company"] == null ? null : Company.fromJson(json["company"]),
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "number": number,
-        "name": name,
-        "state": state,
-        "deadline": deadline,
-        "responsible_id": responsibleId,
-        "task_manager_id": taskManagerId,
-        "co_executor_id": coExecutorId,
-        "object_id": objectId,
-        "company_id": companyId,
-        "description": description,
-        "files": List<Document>.from(files.map((x) => x)),
-        "responsible": responsible?.toJson(),
-        "task_manager": taskManager?.toJson(),
-        "co_executor": coExecutor?.toJson(),
-        "object": object?.toJson(),
-        "company": company?.toJson(),
-      };
 }

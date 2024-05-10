@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 class DealsFilter {
   final User? responsible;
-  final Object? object;
+  final MapObject? object;
   final Company? company;
   final List<int> tags;
   final List<String> params;

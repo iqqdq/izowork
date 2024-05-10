@@ -32,7 +32,7 @@ class Deal {
   bool closed;
   Company? company;
   User? responsible;
-  Object? object;
+  MapObject? object;
   DealStage? dealStage;
   String? phaseId;
 
@@ -58,7 +58,8 @@ class Deal {
       responsible: json["responsible"] == null
           ? null
           : User.fromJson(json["responsible"]),
-      object: json["object"] == null ? null : Object.fromJson(json["object"]),
+      object:
+          json["object"] == null ? null : MapObject.fromJson(json["object"]),
       dealStage: json["deal_stage"] == null
           ? null
           : DealStage.fromJson(json["deal_stage"]),

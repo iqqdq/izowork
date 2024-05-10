@@ -13,7 +13,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io' as io;
 
 class ObjectAnalyticsViewModel with ChangeNotifier {
-  final Object object;
+  final MapObject object;
   final List<Phase> phases;
 
   LoadingStatus loadingStatus = LoadingStatus.searching;

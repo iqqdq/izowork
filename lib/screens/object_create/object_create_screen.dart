@@ -5,11 +5,11 @@ import 'package:izowork/screens/object_create/object_create_screen_body.dart';
 import 'package:provider/provider.dart';
 
 class ObjectCreateScreenWidget extends StatelessWidget {
-  final Object? object;
+  final MapObject? object;
   final String? address;
   final double? lat;
   final double? long;
-  final Function(Object?) onPop;
+  final Function(MapObject?) onPop;
 
   const ObjectCreateScreenWidget({
     Key? key,

@@ -46,20 +46,17 @@ class DocumentsViewModel with ChangeNotifier {
     required String search,
   }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _documents.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
+
     await DocumentRepository()
         .getDocuments(
-            pagination: pagination,
-            namespace: namespace ?? 'object',
-            id: id ?? '',
-            search: search,
-            params: _documentsFilter?.params)
+          pagination: pagination,
+          namespace: namespace ?? 'object',
+          id: id ?? '',
+          search: search,
+          params: _documentsFilter?.params,
+        )
         .then((response) => {
               if (response is List<Document>)
                 {

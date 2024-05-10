@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:izowork/entities/responses/responses.dart';
 
 class MapObjectViewModel with ChangeNotifier {
-  final Object object;
+  final MapObject object;
 
   final List<String> _urls = [];
 

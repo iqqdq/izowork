@@ -1,7 +1,7 @@
 import 'package:izowork/entities/responses/responses.dart';
 
-class Object {
-  Object({
+class MapObject {
+  MapObject({
     required this.id,
     required this.name,
     required this.address,
@@ -63,7 +63,7 @@ class Object {
   Chat? chat;
   bool? hasOverdueTask;
 
-  factory Object.fromJson(Map<String, dynamic> json) => Object(
+  factory MapObject.fromJson(Map<String, dynamic> json) => MapObject(
       id: json["id"],
       name: json["name"],
       address: json["address"],

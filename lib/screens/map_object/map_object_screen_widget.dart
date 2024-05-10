@@ -5,7 +5,7 @@ import 'package:izowork/screens/map_object/map_object_screen_body_widget.dart';
 import 'package:provider/provider.dart';
 
 class MapObjectScreenWidget extends StatelessWidget {
-  final Object object;
+  final MapObject object;
   final bool? hideInfoButton;
 
   const MapObjectScreenWidget({

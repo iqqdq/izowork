@@ -50,8 +50,10 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _staffViewModel.getUserList(
-        pagination: _pagination, search: _textEditingController.text);
+    await _staffViewModel.getUserList(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   @override

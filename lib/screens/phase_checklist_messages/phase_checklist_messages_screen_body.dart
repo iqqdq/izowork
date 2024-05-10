@@ -39,9 +39,14 @@ class _PhaseChecklistCommentsBodyState
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        _pagination.offset += 1;
-        _phaseChecklistMessagesViewModel.getPhaseChecklistMessagesList(
-            pagination: _pagination);
+        if (_phaseChecklistMessagesViewModel
+                .phaseChecklistMessagesResponse.messages.length <
+            _phaseChecklistMessagesViewModel
+                .phaseChecklistMessagesResponse.count) {
+          _pagination.offset += 1;
+          _phaseChecklistMessagesViewModel.getPhaseChecklistMessagesList(
+              pagination: _pagination);
+        }
       }
     });
   }
@@ -130,13 +135,14 @@ class _PhaseChecklistCommentsBodyState
                             primary: false,
                             shrinkWrap: true,
                             itemCount: _phaseChecklistMessagesViewModel
-                                .phaseChecklistMessages.length,
+                                .phaseChecklistMessagesResponse.messages.length,
                             itemBuilder: (context, index) {
                               return Column(children: [
                                 PhaseChecklistMessageItemWidget(
                                   phaseChecklistMessage:
                                       _phaseChecklistMessagesViewModel
-                                          .phaseChecklistMessages[index],
+                                          .phaseChecklistMessagesResponse
+                                          .messages[index],
                                   onUserTap: () => showProfileScreen(index),
                                 ),
                                 const SeparatorWidget(),
@@ -161,13 +167,13 @@ class _PhaseChecklistCommentsBodyState
                 onSendTap: () => {
                   FocusScope.of(context).unfocus(),
 
-                  /// CLEAR INPUT
-                  _textEditingController.clear(),
-
                   /// SEND COMMENT
                   _phaseChecklistMessagesViewModel
                       .sendMessage(message: _textEditingController.text)
-                      .whenComplete(() => _scrollController.jumpTo(0.0))
+                      .whenComplete(() =>
+
+                          /// CLEAR INPUT
+                          _textEditingController.clear())
                 },
               ),
             ]),
@@ -182,7 +188,7 @@ class _PhaseChecklistCommentsBodyState
           _phaseChecklistMessagesViewModel.loadingStatus ==
                       LoadingStatus.completed &&
                   _phaseChecklistMessagesViewModel
-                      .phaseChecklistMessages.isEmpty
+                      .phaseChecklistMessagesResponse.messages.isEmpty
               ? Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -209,7 +215,7 @@ class _PhaseChecklistCommentsBodyState
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _phaseChecklistMessagesViewModel.getPhaseChecklistMessagesList(
+    await _phaseChecklistMessagesViewModel.getPhaseChecklistMessagesList(
         pagination: _pagination);
   }
 
@@ -219,8 +225,8 @@ class _PhaseChecklistCommentsBodyState
         builder: (context) => ProfileScreenWidget(
           isMine: false,
           user: _phaseChecklistMessagesViewModel
-              .phaseChecklistMessages[index].user,
-          onPop: (user) => null,
+              .phaseChecklistMessagesResponse.messages[index].user,
+          onPop: (user) => {},
         ),
       ));
 }

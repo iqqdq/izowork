@@ -50,7 +50,7 @@ class _AnalyticsActionsScreenBodyState
 
   Future _onRefresh() async {
     _pagination = Pagination(offset: 0, size: 50);
-    _analyticsActionsViewModel.getTraceList(pagination: _pagination);
+    await _analyticsActionsViewModel.getTraceList(pagination: _pagination);
   }
 
   @override

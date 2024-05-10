@@ -20,7 +20,7 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io' as io;
 
 class ObjectCreateViewModel with ChangeNotifier {
-  final Object? object;
+  final MapObject? object;
 
   final List<File> _files = [];
 
@@ -150,7 +150,7 @@ class ObjectCreateViewModel with ChangeNotifier {
     String coord,
     String name,
     String kiso,
-    Function(Object) onCreate,
+    Function(MapObject) onCreate,
   ) async {
     if (coord.characters.length > 8 &&
         coord.contains('.') &&
@@ -183,7 +183,7 @@ class ObjectCreateViewModel with ChangeNotifier {
               kiso: kiso,
             ))
             .then((response) => {
-                  if (response is Object)
+                  if (response is MapObject)
                     {
                       if (_files.isNotEmpty)
                         {
@@ -222,7 +222,7 @@ class ObjectCreateViewModel with ChangeNotifier {
     String coord,
     String name,
     String kiso,
-    Function(Object) onCreate,
+    Function(MapObject) onCreate,
   ) async {
     if (coord.characters.length > 8 &&
         coord.contains('.') &&
@@ -234,7 +234,7 @@ class ObjectCreateViewModel with ChangeNotifier {
         loadingStatus = LoadingStatus.searching;
         notifyListeners();
 
-        late Object newObject;
+        late MapObject newObject;
 
         await ObjectRepository()
             .updateObject(ObjectRequest(
@@ -259,7 +259,7 @@ class ObjectCreateViewModel with ChangeNotifier {
               kiso: kiso,
             ))
             .then((response) => {
-                  if (response is Object)
+                  if (response is MapObject)
                     {
                       newObject = response,
                       newObject.office = _office ?? object?.office,

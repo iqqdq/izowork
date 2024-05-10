@@ -21,19 +21,19 @@ class SearchCompanyViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future getCompanyList(
-      {required Pagination pagination, String? search}) async {
+  Future getCompanyList({
+    required Pagination pagination,
+    String? search,
+  }) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _companies.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
 
     await CompanyRepository()
-        .getCompanies(pagination: pagination, search: search ?? '')
+        .getCompanies(
+          pagination: pagination,
+          search: search ?? '',
+        )
         .then((response) => {
               if (response is List<Company>)
                 {

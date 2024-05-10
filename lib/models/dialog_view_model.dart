@@ -74,12 +74,7 @@ class DialogViewModel with ChangeNotifier {
 
   Future getMessageList({required Pagination pagination}) async {
     if (pagination.offset == 0) {
-      loadingStatus = LoadingStatus.searching;
       _messages.clear();
-
-      Future.delayed(Duration.zero, () async {
-        notifyListeners();
-      });
     }
 
     await DialogRepository()

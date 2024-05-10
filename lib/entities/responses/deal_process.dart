@@ -79,13 +79,4 @@ class Confirmations {
         administrator: json["ADMINISTRATOR"],
         manager: json["MANAGER"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "ACCOUNTANT": accountant,
-        "DIRECTOR": director,
-        "LOGISTICIAN": logistician,
-        "LAWYER": lawyer,
-        "ADMINISTRATOR": administrator,
-        "MANAGER": manager,
-      };
 }

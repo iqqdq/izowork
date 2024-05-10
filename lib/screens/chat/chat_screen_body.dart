@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/entities/requests/requests.dart';
-import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/chat/views/chat_list_item_widget.dart';
-import 'package:izowork/views/floating_button_widget.dart';
 import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +94,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
   }
 
   Future _onRefresh() async {
-    _chatViewModel.getChatList(
+    await _chatViewModel.getChatList(
       pagination: _pagination,
       search: _textEditingController.text,
     );
