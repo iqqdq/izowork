@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/components.dart';
 
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/screens/analytics/analytics_page_view_screen.dart';
 import 'package:izowork/screens/authorization/authorization_screen.dart';

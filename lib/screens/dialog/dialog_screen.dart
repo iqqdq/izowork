@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/dialog/dialog_screen_body.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';

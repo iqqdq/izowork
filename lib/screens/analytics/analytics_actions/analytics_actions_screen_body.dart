@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/analytics/views/analitics_action_list_item_widget.dart';
+import 'package:izowork/screens/deal/deal_screen.dart';
+import 'package:izowork/screens/news_page/news_page_screen.dart';
+import 'package:izowork/screens/object/object_page_view_screen.dart';
+import 'package:izowork/screens/task/task_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
@@ -18,10 +23,9 @@ class _AnalyticsActionsScreenBodyState
     extends State<AnalyticsActionsScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
   final ScrollController _scrollController = ScrollController();
+  final Pagination _pagination = Pagination(offset: 0, size: 50);
 
   late AnalyticsActionsViewModel _analyticsActionsViewModel;
-
-  Pagination _pagination = Pagination(offset: 0, size: 50);
 
   @override
   bool get wantKeepAlive => true;
@@ -49,7 +53,7 @@ class _AnalyticsActionsScreenBodyState
   // MARK: - FUNCTIONS
 
   Future _onRefresh() async {
-    _pagination = Pagination(offset: 0, size: 50);
+    _pagination.offset = 0;
     await _analyticsActionsViewModel.getTraceList(pagination: _pagination);
   }
 
@@ -67,9 +71,9 @@ class _AnalyticsActionsScreenBodyState
     );
 
     return Scaffold(
-        backgroundColor: HexColors.white,
-        body: SizedBox.expand(
-            child: Stack(children: [
+      backgroundColor: HexColors.white,
+      body: SizedBox.expand(
+        child: Stack(children: [
           /// ACTION LIST
           LiquidPullToRefresh(
               color: HexColors.primaryMain,
@@ -81,11 +85,12 @@ class _AnalyticsActionsScreenBodyState
                   shrinkWrap: true,
                   itemCount: _analyticsActionsViewModel.traces.length,
                   itemBuilder: (context, index) {
+                    var trace = _analyticsActionsViewModel.traces[index];
+
                     return AnalitycsActionListItemWidget(
-                        key: ValueKey(_analyticsActionsViewModel.traces[index]),
-                        trace: _analyticsActionsViewModel.traces[index],
-                        onTap: () => _analyticsActionsViewModel.showTraceScreen(
-                            context, index));
+                        key: ValueKey(trace.id),
+                        trace: trace,
+                        onTap: () => _onTraceTap(trace));
                   })),
 
           /// FILTER BUTTON
@@ -97,8 +102,7 @@ class _AnalyticsActionsScreenBodyState
                           .showAnalyticsActionFilterSheet(
                               context,
                               () => {
-                                    _pagination =
-                                        Pagination(offset: 0, size: 50),
+                                    _pagination.offset = 0,
                                     _analyticsActionsViewModel.getTraceList(
                                         pagination: _pagination)
                                   })
@@ -125,6 +129,32 @@ class _AnalyticsActionsScreenBodyState
           _analyticsActionsViewModel.loadingStatus == LoadingStatus.searching
               ? const LoadingIndicatorWidget()
               : Container()
-        ])));
+        ]),
+      ),
+    );
+  }
+
+  void _onTraceTap(Trace trace) {
+    Widget? screen;
+
+    if (trace.objectId != null) {
+      if (trace.phaseId != null) {
+        screen = ObjectPageViewScreenWidget(
+          id: trace.objectId!,
+          phaseId: trace.phaseId,
+        );
+      } else {
+        screen = ObjectPageViewScreenWidget(id: trace.objectId!);
+      }
+    } else if (trace.dealId != null) {
+      screen = DealScreenWidget(id: trace.dealId!);
+    } else if (trace.taskId != null) {
+      screen = TaskScreenWidget(id: trace.taskId!);
+    } else if (trace.newsId != null) {
+      screen = NewsPageScreenWidget(id: trace.newsId!);
+    }
+
+    if (screen == null) return;
+    Navigator.push(context, MaterialPageRoute(builder: (context) => screen!));
   }
 }

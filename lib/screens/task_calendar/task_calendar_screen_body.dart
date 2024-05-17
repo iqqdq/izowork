@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/helpers/helpers.dart';
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';

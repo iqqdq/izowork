@@ -3,8 +3,8 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/entities/requests/requests.dart';
 import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/chat/views/chat_list_item_widget.dart';
 import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -167,41 +167,42 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                 onTap: () => _chatViewModel.showStaffScreen(context))
             : Container(),
         body: SizedBox.expand(
-            child: Stack(children: [
-          /// CHATS LIST VIEW
-          LiquidPullToRefresh(
-              color: HexColors.primaryMain,
-              backgroundColor: HexColors.white,
-              springAnimationDurationInMilliseconds: 300,
-              onRefresh: _onRefresh,
-              child: ListView.builder(
-                  padding:
-                      const EdgeInsets.only(top: 16.0, bottom: 16.0 + 64.0),
-                  itemCount: _chatViewModel.chats.length,
-                  itemBuilder: (context, index) {
-                    return ChatListItemWidget(
-                        key: ValueKey(_chatViewModel.chats[index]),
-                        chat: _chatViewModel.chats[index],
-                        onTap: () =>
-                            _chatViewModel.showDialogScreen(context, index));
-                  })),
+          child: Stack(children: [
+            /// CHATS LIST VIEW
+            LiquidPullToRefresh(
+                color: HexColors.primaryMain,
+                backgroundColor: HexColors.white,
+                springAnimationDurationInMilliseconds: 300,
+                onRefresh: _onRefresh,
+                child: ListView.builder(
+                    padding:
+                        const EdgeInsets.only(top: 16.0, bottom: 16.0 + 64.0),
+                    itemCount: _chatViewModel.chats.length,
+                    itemBuilder: (context, index) {
+                      return ChatListItemWidget(
+                          key: ValueKey(_chatViewModel.chats[index]),
+                          chat: _chatViewModel.chats[index],
+                          onTap: () =>
+                              _chatViewModel.showDialogScreen(context, index));
+                    })),
 
-          /// FILTER BUTTON
-          // SafeArea(
-          //     child: Align(
-          //         alignment: Alignment.bottomCenter,
-          //         child: Padding(
-          //             padding: const EdgeInsets.only(bottom: 6.0),
-          //             child: FilterButtonWidget(
-          //               onTap: () => _chatViewModel.showMapFilterSheet(context),
-          //               // onClearTap: () => {}
-          //             )))),
+            /// FILTER BUTTON
+            // SafeArea(
+            //     child: Align(
+            //         alignment: Alignment.bottomCenter,
+            //         child: Padding(
+            //             padding: const EdgeInsets.only(bottom: 6.0),
+            //             child: FilterButtonWidget(
+            //               onTap: () => _chatViewModel.showMapFilterSheet(context),
+            //               // onClearTap: () => {}
+            //             )))),
 
-          /// INDICATOR
-          _chatViewModel.loadingStatus == LoadingStatus.searching &&
-                  !_isSearching
-              ? const LoadingIndicatorWidget()
-              : Container()
-        ])));
+            /// INDICATOR
+            _chatViewModel.loadingStatus == LoadingStatus.searching &&
+                    !_isSearching
+                ? const LoadingIndicatorWidget()
+                : Container()
+          ]),
+        ));
   }
 }

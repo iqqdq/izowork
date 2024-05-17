@@ -21,10 +21,8 @@ class DateTimeFormatter {
         dateTime.month == DateTime.now().month &&
         dateTime.day == DateTime.now().day;
 
-    bool isYesterday = dateTime.year ==
-            DateTime.now().subtract(const Duration(days: 1)).year &&
-        dateTime.month ==
-            DateTime.now().subtract(const Duration(days: 1)).month &&
+    bool isYesterday = dateTime.year == DateTime.now().year &&
+        dateTime.month == DateTime.now().month &&
         dateTime.day == DateTime.now().subtract(const Duration(days: 1)).day;
 
     final day = isYesterday

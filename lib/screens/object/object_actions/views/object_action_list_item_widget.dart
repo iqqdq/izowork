@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:izowork/components/components.dart';
-import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 
 class ObjectActionListItemWidget extends StatelessWidget {
   final Trace trace;

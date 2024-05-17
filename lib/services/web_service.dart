@@ -3,7 +3,7 @@ import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:izowork/services/local_storage/local_storage_service.dart';
+import 'package:izowork/repositories/local_storage/local_storage_repository_interface.dart';
 
 class WebService {
   final _dio = Dio();
@@ -12,7 +12,7 @@ class WebService {
   }
 
   Future<Options> _options() async {
-    String? token = await GetIt.I<LocalStorageService>().getToken();
+    String? token = await GetIt.I<LocalStorageRepositoryInterface>().getToken();
 
     return Options(
       headers: token == null
@@ -30,7 +30,7 @@ class WebService {
   }
 
   Future<Options> _multipartOptions() async {
-    String? token = await GetIt.I<LocalStorageService>().getToken();
+    String? token = await GetIt.I<LocalStorageRepositoryInterface>().getToken();
 
     return Options(
       headers: {

@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/repositories/repositories.dart';
+import 'package:izowork/screens/deal/deal_screen.dart';
+import 'package:izowork/screens/news_page/news_page_screen.dart';
+import 'package:izowork/screens/object/object_actions/object_action_create_screen.dart';
 import 'package:izowork/screens/object/object_actions/views/object_action_list_item_widget.dart';
+import 'package:izowork/screens/phase/phase_screen.dart';
+import 'package:izowork/screens/task/task_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class ObjectActionsScreenBodyWidget extends StatefulWidget {
@@ -41,14 +49,6 @@ class _ObjectActionsScreenBodyState
     super.dispose();
   }
 
-  // MARK: -
-  // MARK: - FUNCTIONS
-
-  Future _onRefresh() async {
-    _pagination = Pagination(offset: 0, size: 50);
-    await _objectActionsViewModel.getTraceList(pagination: _pagination);
-  }
-
   @override
   Widget build(BuildContext context) {
     _objectActionsViewModel = Provider.of<ObjectActionsViewModel>(
@@ -57,15 +57,12 @@ class _ObjectActionsScreenBodyState
     );
 
     return Scaffold(
-        backgroundColor: HexColors.white,
-        floatingActionButton: FloatingButtonWidget(
-          onTap: () => _objectActionsViewModel.showActionCreateScreen(
-            context,
-            _pagination,
-          ),
-        ),
-        body: SizedBox.expand(
-            child: Stack(children: [
+      backgroundColor: HexColors.white,
+      floatingActionButton: FloatingButtonWidget(
+        onTap: () => _showActionCreateScreen(),
+      ),
+      body: SizedBox.expand(
+        child: Stack(children: [
           const SeparatorWidget(),
 
           /// ACTION LIST
@@ -83,13 +80,13 @@ class _ObjectActionsScreenBodyState
                   ),
                   itemCount: _objectActionsViewModel.traces.length,
                   itemBuilder: (context, index) {
+                    var trace = _objectActionsViewModel.traces[index];
+
                     return ObjectActionListItemWidget(
-                        key: ValueKey(_objectActionsViewModel.traces[index].id),
-                        trace: _objectActionsViewModel.traces[index],
-                        onTap: () => _objectActionsViewModel.showTraceScreen(
-                              context,
-                              index,
-                            ));
+                      key: ValueKey(trace.id),
+                      trace: trace,
+                      onTap: () => _onTraceTap(trace),
+                    );
                   })),
 
           /// INDICATOR
@@ -98,6 +95,55 @@ class _ObjectActionsScreenBodyState
                   padding: EdgeInsets.only(bottom: 90.0),
                   child: LoadingIndicatorWidget())
               : Container()
-        ])));
+        ]),
+      ),
+    );
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    _pagination = Pagination(offset: 0, size: 50);
+    await _objectActionsViewModel.getTraceList(pagination: _pagination);
+  }
+
+  // MARK: -
+  // MARK: - PUSH
+
+  void _showActionCreateScreen() => showCupertinoModalBottomSheet(
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => ObjectActionCreateSheetWidget(
+            onTap: (text) => {
+              Navigator.pop(context),
+              _objectActionsViewModel.addObjectTrace(text)
+            },
+          ));
+
+  void _onTraceTap(Trace trace) async {
+    Widget? screen;
+
+    if (trace.phaseId != null) {
+      User? user = await GetIt.I<LocalStorageRepositoryInterface>().getUser();
+      if (user == null) return;
+
+      screen = PhaseScreenWidget(
+        id: trace.phaseId!,
+        user: user,
+      );
+    } else if (trace.dealId != null) {
+      screen = DealScreenWidget(id: trace.dealId!);
+    } else if (trace.taskId != null) {
+      screen = TaskScreenWidget(id: trace.taskId!);
+    } else if (trace.newsId != null) {
+      screen = NewsPageScreenWidget(id: trace.newsId!);
+    }
+
+    if (screen == null) return;
+    Navigator.push(context, MaterialPageRoute(builder: (context) => screen!));
   }
 }

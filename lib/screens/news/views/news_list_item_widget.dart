@@ -7,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:izowork/components/components.dart';
 
-import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/views/status_widget.dart';
 import 'package:izowork/views/transparent_button_widget_widget.dart';

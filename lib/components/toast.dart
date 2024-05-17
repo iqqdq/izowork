@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
+import 'package:izowork/main.dart';
 import 'package:oktoast/oktoast.dart';
 
 class Toast {
@@ -18,13 +19,11 @@ class Toast {
         position: const ToastPosition(align: Alignment.topCenter),
         margin: EdgeInsets.only(
           left: 16.0,
-          top: context == null
-              ? 70.0
-              : context.size == null
-                  ? 70.0
-                  : MediaQuery.of(context).padding.top == 0.0
-                      ? 30.0
-                      : MediaQuery.of(context).padding.top,
+          top: navigatorKey.currentContext == null
+              ? 30.0
+              : MediaQuery.of(navigatorKey.currentContext!).padding.top == 0.0
+                  ? 30.0
+                  : MediaQuery.of(navigatorKey.currentContext!).padding.top,
           right: 20.0,
         ),
         backgroundColor: HexColors.additionalViolet,

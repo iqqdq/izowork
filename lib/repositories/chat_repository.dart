@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/entities/requests/requests.dart';
-import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/services/web_service.dart';
 

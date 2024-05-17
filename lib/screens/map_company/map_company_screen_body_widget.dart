@@ -1,13 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get_it/get_it.dart';
+
 import 'package:izowork/components/components.dart';
-import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/company/company_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/api/api.dart';
-import 'package:izowork/services/local_storage/local_storage.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/views/views.dart';
 
 class MapCompanyScreenBodyWidget extends StatefulWidget {
@@ -47,7 +47,7 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
   }
 
   Future _showUserScreen() async {
-    User? user = await GetIt.I<LocalStorageService>().getUser();
+    User? user = await GetIt.I<LocalStorageRepositoryInterface>().getUser();
 
     Navigator.push(
         context,

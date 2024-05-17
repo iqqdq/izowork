@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/analytics/views/horizontal_chart/horizontal_chart_widget.dart';
 import 'package:izowork/screens/analytics/views/analitics_manager_list_item_widget.dart';
 import 'package:izowork/screens/analytics/views/pie_chart/pie_chart_widget.dart';

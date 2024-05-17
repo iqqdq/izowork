@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/phase_checklist_complete/phase_checklist_complete_screen_body.dart';
 import 'package:provider/provider.dart';
 

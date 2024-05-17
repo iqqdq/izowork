@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/object/object_page_view_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
@@ -493,7 +493,7 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   ObjectPageViewScreenWidget(
-                                                      object: object)))
+                                                      id: object.id)))
                                     }
                                 },
                               )

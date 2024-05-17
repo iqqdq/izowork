@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/object/object_actions/object_actions_screen_body.dart';
 import 'package:provider/provider.dart';
-import 'package:izowork/entities/responses/responses.dart';
 
 class ObjectActionsScreenWidget extends StatelessWidget {
-  final MapObject object;
+  final String id;
 
-  const ObjectActionsScreenWidget({Key? key, required this.object})
-      : super(key: key);
+  const ObjectActionsScreenWidget({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => ObjectActionsViewModel(object),
+        create: (context) => ObjectActionsViewModel(id),
         child: const ObjectActionsScreenBodyWidget());
   }
 }

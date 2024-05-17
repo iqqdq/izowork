@@ -4,15 +4,16 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
-import 'package:izowork/components/components.dart';
-import 'package:izowork/entities/responses/responses.dart';
-import 'package:izowork/models/models.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 
+import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
+import 'package:izowork/helpers/helpers.dart';
+import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/views/views.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
 import 'package:izowork/screens/company_create/company_create_screen.dart';
-import 'package:izowork/screens/map/helpers/bounds_helper.dart';
-import 'package:izowork/screens/map/helpers/cluster_helper.dart';
-import 'package:izowork/screens/map/helpers/marker_helper.dart';
 import 'package:izowork/screens/map/views/map_control_widget.dart';
 import 'package:izowork/screens/map_company/map_object_screen_widget.dart';
 import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
@@ -21,9 +22,6 @@ import 'package:izowork/screens/object_create/object_create_screen.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/search_object/search_object_screen.dart';
-import 'package:izowork/views/views.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:provider/provider.dart';
 
 class MapScreenBodyWidget extends StatefulWidget {
   const MapScreenBodyWidget({Key? key}) : super(key: key);
@@ -36,7 +34,6 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
   final Completer<GoogleMapController> _completer = Completer();
   late GoogleMapController _googleMapController;
-
   late MapViewModel _mapViewModel;
   ClusterManager? _clusterManager;
 
@@ -58,34 +55,42 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
       listen: true,
     );
 
+    if (_clusterManager == null && _mapViewModel.objects.isNotEmpty) {
+      _updateClusterManager();
+    }
+
     return SizedBox.expand(
       child: Stack(children: [
         /// GOOGLE MAP
-        _mapViewModel.userPosition == null
-            ? Container()
-            : GoogleMap(
-                mapToolbarEnabled: false,
-                zoomControlsEnabled: false,
-                myLocationButtonEnabled: false,
-                myLocationEnabled: _mapViewModel.hasPermission,
-                initialCameraPosition: CameraPosition(
-                  target: _mapViewModel.userPosition!,
-                  zoom: 20.0,
-                ),
-                markers: _mapViewModel.markers,
-                onMapCreated: (controller) => {
-                  _googleMapController = controller,
-                  _completer.complete(controller),
-                },
-                onCameraMove: (position) => {
-                  _mapViewModel.onCameraMove(position),
-                  _clusterManager?.onCameraMove(position),
-                },
-                onCameraIdle: () => _updateMarkers(
-                    isObjectMarkers: _mapViewModel.isObjectMarkers),
-                onLongPress: (position) =>
-                    _showMapAddObjectSheet(position: position),
-              ),
+        GoogleMap(
+          compassEnabled: false,
+          tiltGesturesEnabled: false,
+          mapToolbarEnabled: false,
+          zoomControlsEnabled: false,
+          myLocationButtonEnabled: false,
+          myLocationEnabled: _mapViewModel.isLocationPermissionEnabled,
+          initialCameraPosition: CameraPosition(
+            target: _mapViewModel.userPosition ?? _mapViewModel.cameraPosition,
+            zoom: 20.0,
+          ),
+          markers: _mapViewModel.markers,
+          onMapCreated: (controller) => {
+            _googleMapController = controller,
+            _completer.complete(controller),
+            _mapViewModel.handlePermission().whenComplete(
+                  () => _mapViewModel
+                      .getUserLocation()
+                      .whenComplete(() => _showUserLocation()),
+                )
+          },
+          onCameraMove: (position) => {
+            _mapViewModel.onCameraMove(position),
+            _clusterManager?.onCameraMove(position),
+          },
+          onCameraIdle: () =>
+              _updateMarkers(isObjectMarkers: _mapViewModel.isObjectMarkers),
+          onLongPress: (position) => _showMapAddObjectSheet(position: position),
+        ),
 
         /// SEGMENTED CONTROL
         SafeArea(
@@ -122,10 +127,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           child: MapControlWidget(
             onZoomInTap: () => _zoomIn(),
             onZoomOutTap: () => _zoomOut(),
-            onShowLocationTap: () => _mapViewModel.hasPermission &&
-                    _mapViewModel.userPosition != null
-                ? _showUserLocation()
-                : _mapViewModel.getLocationPermission(),
+            onShowLocationTap: () => _showUserLocation(),
             onSearchTap: () => _showSearchMapObjectSheet(),
           ),
         ),
@@ -226,7 +228,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - MAP CONTROL ACTIONS
 
   void _switchMarkers({required int index}) async {
     _mapViewModel.places.clear();
@@ -238,43 +240,41 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
   }
 
   Future _zoomIn() async {
-    if (_mapViewModel.position != null) {
-      _googleMapController.getZoomLevel().then((value) => _googleMapController
-              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-            target: _mapViewModel.position!,
-            zoom: value + 1.0,
-          ))));
+    _googleMapController.getZoomLevel().then((value) => _googleMapController
+            .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target: _mapViewModel.cameraPosition,
+          zoom: value + 1.0,
+        ))));
 
-      double zoom = await _googleMapController.getZoomLevel();
-      debugPrint('Current zoom is: $zoom');
-    }
+    double zoom = await _googleMapController.getZoomLevel();
+    debugPrint('Current zoom is: $zoom');
   }
 
   Future _zoomOut() async {
-    if (_mapViewModel.position != null) {
-      _googleMapController.getZoomLevel().then((value) => _googleMapController
-              .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-            target: _mapViewModel.position!,
-            zoom: value - 1.0,
-          ))));
+    _googleMapController.getZoomLevel().then((value) => _googleMapController
+            .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+          target: _mapViewModel.cameraPosition,
+          zoom: value - 1.0,
+        ))));
 
-      double zoom = await _googleMapController.getZoomLevel();
-      debugPrint('Current zoom is: $zoom');
-    }
+    double zoom = await _googleMapController.getZoomLevel();
+    debugPrint('Current zoom is: $zoom');
   }
 
   void _showUserLocation() {
-    if (_mapViewModel.userPosition != null) {
-      _googleMapController
-          .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: _mapViewModel.userPosition!,
-        zoom: 20.0,
-      )));
+    if (_mapViewModel.userPosition == null) {
+      return;
     }
+
+    _googleMapController
+        .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: _mapViewModel.userPosition!,
+      zoom: 20.0,
+    )));
   }
 
   // MARK: -
-  // MARK: - FUCNTIONS
+  // MARK: - ACTIONS
 
   void _showObject(MapObject? object) {
     bool found = false;
@@ -294,24 +294,17 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                           .removeWhere((element) => element.id == object.id),
                     },
                   _mapViewModel.objects.add(object),
-                  _mapViewModel.updatePlaces().whenComplete(
-                        () => _googleMapController
-                            .animateCamera(CameraUpdate.newCameraPosition(
-                          CameraPosition(
-                            target: LatLng(
-                              object.lat,
-                              object.long,
-                            ),
-                            zoom: 20.0,
+                  _mapViewModel.updatePlaces().whenComplete(() =>
+                      _googleMapController
+                          .animateCamera(CameraUpdate.newCameraPosition(
+                        CameraPosition(
+                          target: LatLng(
+                            object.lat,
+                            object.long,
                           ),
-                        )),
-                      )
-                  // .whenComplete(
-                  //   () => Future.delayed(
-                  //       const Duration(seconds: 1),
-                  //       () =>
-                  //           _showMarkerSheet(id: object.id)),
-                  // )
+                          zoom: 20.0,
+                        ),
+                      )))
                 }
             });
   }
@@ -349,12 +342,6 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                           Toast().showTopToast(
                               context, '${company.name} не добавлен на карту!')
                       })
-                  // .whenComplete(
-                  //   () => Future.delayed(
-                  //       const Duration(seconds: 1),
-                  //       () =>
-                  //           _showMarkerSheet(id: company.id)),
-                  // )
                 }
             });
   }
@@ -433,7 +420,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                   title: _mapViewModel.isObjectMarkers == true
                       ? Titles.addObject
                       : Titles.addClient,
-                  address: _mapViewModel.address,
+                  address: _mapViewModel.address ?? '',
                   onTap: () => {
                         Navigator.pop(context),
                         Future.delayed(
@@ -469,7 +456,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
       barrierColor: Colors.black.withOpacity(0.6),
       backgroundColor: HexColors.white,
       context: context,
-      builder: (sheetContext) => _mapViewModel.isObjectMarkers
+      builder: (sheetContext) => _mapViewModel.isObjectMarkers == true
 
           /// SEARCH OBJECT
           ? SearchObjectScreenWidget(

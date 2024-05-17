@@ -284,6 +284,24 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "firebase_analytics",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/firebase_analytics-10.8.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_analytics_platform_interface",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/firebase_analytics_platform_interface-3.9.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_analytics_web",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/firebase_analytics_web-0.5.5+12",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "firebase_core",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/firebase_core-2.24.2",
       "packageUri": "lib/",
@@ -1136,7 +1154,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2024-05-03T17:53:46.606682Z",
+  "generated": "2024-05-16T03:25:25.828712Z",
   "generator": "pub",
   "generatorVersion": "3.2.0-22.0.dev"
 }

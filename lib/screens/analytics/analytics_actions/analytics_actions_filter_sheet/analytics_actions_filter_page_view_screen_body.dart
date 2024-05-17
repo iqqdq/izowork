@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/search_office/search_office_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
 import 'package:izowork/views/views.dart';

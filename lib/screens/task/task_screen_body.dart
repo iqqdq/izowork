@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
@@ -22,35 +23,36 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
       listen: true,
     );
 
-    final dateTime = DateTime.parse(_taskViewModel.task?.deadline ??
-            _taskViewModel.selectedTask.deadline)
-        .toUtc()
-        .toLocal();
-
-    final _description = _taskViewModel.task?.description ??
-        _taskViewModel.selectedTask.description;
+    final dateTime = _taskViewModel.task?.deadline == null
+        ? null
+        : DateTime.parse(_taskViewModel.task!.deadline).toUtc().toLocal();
 
     return Scaffold(
-        backgroundColor: HexColors.white,
-        appBar: AppBar(
-            centerTitle: true,
-            elevation: 0.0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: Colors.transparent,
-            leading: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: BackButtonWidget(onTap: () => Navigator.pop(context))),
-            title: Text(
-                _taskViewModel.task?.name ?? _taskViewModel.selectedTask.name,
-                style: TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    fontFamily: 'PT Root UI',
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w700,
-                    color: HexColors.black))),
-        body: Material(
-            type: MaterialType.transparency,
-            child: Container(
+      backgroundColor: HexColors.white,
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0.0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        backgroundColor: Colors.transparent,
+        leading: Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: BackButtonWidget(onTap: () => Navigator.pop(context))),
+        title: Text(
+          _taskViewModel.task?.name ?? '',
+          style: TextStyle(
+            overflow: TextOverflow.ellipsis,
+            fontFamily: 'PT Root UI',
+            fontSize: 18.0,
+            fontWeight: FontWeight.w700,
+            color: HexColors.black,
+          ),
+        ),
+      ),
+      body: _taskViewModel.task == null
+          ? const LoadingIndicatorWidget()
+          : Material(
+              type: MaterialType.transparency,
+              child: Container(
                 color: HexColors.white,
                 child: Stack(children: [
                   ListView(
@@ -70,9 +72,9 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                           isSmall: true,
                         ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _taskViewModel.task?.state ??
-                                _taskViewModel.selectedTask.state),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: _taskViewModel.task?.state ?? '-',
+                        ),
 
                         /// DEADLINE
                         const TitleWidget(
@@ -81,12 +83,15 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                           isSmall: true,
                         ),
                         SubtitleWidget(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            text: DateTimeFormatter().formatDateTimeToString(
-                              dateTime: dateTime,
-                              showTime: false,
-                              showMonthName: false,
-                            )),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          text: dateTime == null
+                              ? '-'
+                              : DateTimeFormatter().formatDateTimeToString(
+                                  dateTime: dateTime,
+                                  showTime: false,
+                                  showMonthName: false,
+                                ),
+                        ),
 
                         /// RESPONSIBLE
                         const TitleWidget(
@@ -96,9 +101,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                         ),
                         SubtitleWidget(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _taskViewModel.task?.responsible?.name ??
-                              _taskViewModel.selectedTask.responsible?.name ??
-                              '-',
+                          text: _taskViewModel.task?.responsible?.name ?? '-',
                         ),
 
                         /// TASK MANAGER
@@ -109,9 +112,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                         ),
                         SubtitleWidget(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _taskViewModel.task?.taskManager?.name ??
-                              _taskViewModel.selectedTask.taskManager?.name ??
-                              '-',
+                          text: _taskViewModel.task?.taskManager?.name ?? '-',
                         ),
 
                         /// CO-EXECUTOR
@@ -122,9 +123,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                         ),
                         SubtitleWidget(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _taskViewModel.task?.coExecutor?.name ??
-                              _taskViewModel.selectedTask.coExecutor?.name ??
-                              '-',
+                          text: _taskViewModel.task?.coExecutor?.name ?? '-',
                         ),
 
                         /// OBJECT
@@ -135,9 +134,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                         ),
                         SubtitleWidget(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _taskViewModel.task?.object?.name ??
-                              _taskViewModel.selectedTask.object?.name ??
-                              '-',
+                          text: _taskViewModel.task?.object?.name ?? '-',
                         ),
 
                         /// COMPANY
@@ -148,9 +145,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                         ),
                         SubtitleWidget(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          text: _taskViewModel.task?.company?.name ??
-                              _taskViewModel.selectedTask.company?.name ??
-                              '-',
+                          text: _taskViewModel.task?.company?.name ?? '-',
                         ),
 
                         /// DESCRTIPTION
@@ -161,62 +156,78 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                         ),
                         SubtitleWidget(
                             padding: const EdgeInsets.only(bottom: 16.0),
-                            text: _description.isEmpty ? '-' : _description),
+                            text: _taskViewModel.task?.description ?? '-'),
 
                         /// FILE LIST
-                        _taskViewModel.task == null ||
-                                _taskViewModel.task!.files.isEmpty ||
-                                _taskViewModel.selectedTask.files.isEmpty
+                        _taskViewModel.task == null
                             ? Container()
-                            : const TitleWidget(
-                                padding: EdgeInsets.only(bottom: 10.0),
-                                text: Titles.files,
-                                isSmall: true,
-                              ),
+                            : _taskViewModel.task!.files.isEmpty
+                                ? Container()
+                                : const TitleWidget(
+                                    padding: EdgeInsets.only(bottom: 10.0),
+                                    text: Titles.files,
+                                    isSmall: true,
+                                  ),
                         ListView.builder(
                             shrinkWrap: true,
                             padding: const EdgeInsets.only(bottom: 16.0),
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _taskViewModel.task?.files.length ??
-                                _taskViewModel.selectedTask.files.length,
+                            itemCount: _taskViewModel.task?.files.length ?? 0,
                             itemBuilder: (context, index) {
                               return FileListItemWidget(
-                                  key: ValueKey(
-                                      _taskViewModel.task?.files[index].id ??
-                                          _taskViewModel
-                                              .selectedTask.files[index].id),
-                                  fileName:
-                                      _taskViewModel.task?.files[index].name ??
-                                          _taskViewModel
-                                              .selectedTask.files[index].name,
-                                  isDownloading:
-                                      _taskViewModel.downloadIndex == index,
-                                  onTap: () => _taskViewModel.openFile(
-                                        context,
-                                        index,
-                                      ));
+                                key: ValueKey(
+                                    _taskViewModel.task?.files[index].id ?? ''),
+                                fileName:
+                                    _taskViewModel.task?.files[index].name ??
+                                        '',
+                                isDownloading:
+                                    _taskViewModel.downloadIndex == index,
+                                onTap: () => _openFile(index),
+                              );
                             }),
                       ]),
 
                   /// EDIT TASK BUTTON
                   Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ButtonWidget(
-                          title: Titles.edit,
-                          margin: EdgeInsets.only(
-                              left: 16.0,
-                              right: 16.0,
-                              bottom:
-                                  MediaQuery.of(context).padding.bottom == 0.0
-                                      ? 20.0
-                                      : MediaQuery.of(context).padding.bottom),
-                          onTap: () =>
-                              _taskViewModel.showTaskCreateSheet(context))),
+                    alignment: Alignment.bottomCenter,
+                    child: ButtonWidget(
+                      title: Titles.edit,
+                      margin: EdgeInsets.only(
+                          left: 16.0,
+                          right: 16.0,
+                          bottom: MediaQuery.of(context).padding.bottom == 0.0
+                              ? 20.0
+                              : MediaQuery.of(context).padding.bottom),
+                      onTap: () => _showTaskCreateScreen(),
+                    ),
+                  ),
 
                   /// INDICATOR
                   _taskViewModel.loadingStatus == LoadingStatus.searching
                       ? const LoadingIndicatorWidget()
                       : Container()
-                ]))));
+                ]),
+              ),
+            ),
+    );
+  }
+
+  void _openFile(int index) {
+    _taskViewModel.openFile(
+      index,
+      () => Toast().showTopToast(context, Titles.unsupportedFileFormat),
+    );
+  }
+
+  void _showTaskCreateScreen() {
+    if (_taskViewModel.task == null) return;
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TaskCreateScreenWidget(
+                  task: _taskViewModel.task,
+                  onCreate: (task) => _taskViewModel.getTaskById(),
+                )));
   }
 }

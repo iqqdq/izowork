@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
+
 import 'package:izowork/components/fade_page_route.dart';
 import 'package:izowork/screens/authorization/authorization_screen.dart';
 import 'package:izowork/screens/tab_controller/tab_controller_screen.dart';
-import 'package:izowork/services/local_storage/local_storage.dart';
+import 'package:izowork/repositories/repositories.dart';
 
 class SplashScreenWidget extends StatefulWidget {
   const SplashScreenWidget({Key? key}) : super(key: key);
@@ -26,9 +27,10 @@ class _SplashScreenState extends State<SplashScreenWidget> {
   // MARK: - FUNCTIONS
 
   void _showStartScreen() async {
-    final startScreen = await GetIt.I<LocalStorageService>().getToken() == null
-        ? const AuthorizationScreenWidget()
-        : const TabControllerScreenWidget();
+    final startScreen =
+        await GetIt.I<LocalStorageRepositoryInterface>().getToken() == null
+            ? const AuthorizationScreenWidget()
+            : const TabControllerScreenWidget();
 
     Navigator.pushAndRemoveUntil(
       context,

@@ -5,17 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/news_comments/views/comment_list_item_widget.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class NewsCommentsScreenBodyWidget extends StatefulWidget {
-  final String tag;
-
-  const NewsCommentsScreenBodyWidget({Key? key, required this.tag})
-      : super(key: key);
+  const NewsCommentsScreenBodyWidget({Key? key}) : super(key: key);
 
   @override
   _NewsCommentsScreenBodyState createState() => _NewsCommentsScreenBodyState();
@@ -126,26 +123,23 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
               const SizedBox(width: 12.0),
 
               /// IMAGE
-              Hero(
-                tag: widget.tag,
-                child:
 
-                    /// SLIDESHOW
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(16.0),
-                        child: _images.isEmpty
-                            ? Container()
-                            : ImageSlideshow(
-                                width: 85,
-                                height: 47.0,
-                                children: _images,
-                                initialPage: 0,
-                                indicatorColor: HexColors.white,
-                                indicatorBackgroundColor: HexColors.grey40,
-                                indicatorRadius:
-                                    _images.length == 1 ? 0.0 : 4.0,
-                                autoPlayInterval: 6000,
-                                isLoop: true)),
+              /// SLIDESHOW
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16.0),
+                child: _images.isEmpty
+                    ? Container()
+                    : ImageSlideshow(
+                        width: 85,
+                        height: 47.0,
+                        children: _images,
+                        initialPage: 0,
+                        indicatorColor: HexColors.white,
+                        indicatorBackgroundColor: HexColors.grey40,
+                        indicatorRadius: _images.length == 1 ? 0.0 : 4.0,
+                        autoPlayInterval: 6000,
+                        isLoop: true,
+                      ),
               ),
               Expanded(
                   child: Column(

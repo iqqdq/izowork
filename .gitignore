@@ -1,8 +1,9 @@
 /build
-/lib/api
 /ios
 /android
-/api/keys
+/keys
+/lib/api
+/lib/api/keys.dart
 
 # Miscellaneous
 *.class

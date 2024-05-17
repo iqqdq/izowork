@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/deal/views/deal_process_list_item_widget.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
@@ -26,45 +26,51 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
       listen: true,
     );
 
-    final startDateTime = DateTime.parse(_dealViewModel.deal?.createdAt ??
-            _dealViewModel.selectedDeal.createdAt)
-        .toUtc()
-        .toLocal();
+    final startDateTime = _dealViewModel.deal == null
+        ? null
+        : DateTime.parse(_dealViewModel.deal?.createdAt ??
+                _dealViewModel.deal!.createdAt)
+            .toUtc()
+            .toLocal();
 
-    final endDateTime = DateTime.parse(_dealViewModel.deal?.finishAt ??
-            _dealViewModel.selectedDeal.finishAt)
-        .toUtc()
-        .toLocal();
+    final endDateTime = _dealViewModel.deal == null
+        ? null
+        : DateTime.parse(
+                _dealViewModel.deal?.finishAt ?? _dealViewModel.deal!.finishAt)
+            .toUtc()
+            .toLocal();
 
-    final comment = _dealViewModel.deal?.comment ??
-        _dealViewModel.selectedDeal.comment ??
-        '-';
+    final comment =
+        _dealViewModel.deal?.comment ?? _dealViewModel.deal?.comment ?? '-';
 
     return Scaffold(
-        backgroundColor: HexColors.white,
-        appBar: AppBar(
-            centerTitle: true,
-            elevation: 0.0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: Colors.transparent,
-            leading: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: BackButtonWidget(onTap: () => Navigator.pop(context))),
-            title: Text(
-                Titles.deal +
-                    ' ' +
-                    (_dealViewModel.deal?.number ??
-                            _dealViewModel.selectedDeal.number)
-                        .toString(),
-                style: TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    fontFamily: 'PT Root UI',
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w700,
-                    color: HexColors.black))),
-        body: Material(
-            type: MaterialType.transparency,
-            child: Container(
+      backgroundColor: HexColors.white,
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0.0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        backgroundColor: Colors.transparent,
+        leading: Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: BackButtonWidget(onTap: () => Navigator.pop(context))),
+        title: Text(
+          _dealViewModel.deal == null
+              ? ''
+              : '${Titles.deal} ' + (_dealViewModel.deal!.number).toString(),
+          style: TextStyle(
+            overflow: TextOverflow.ellipsis,
+            fontFamily: 'PT Root UI',
+            fontSize: 18.0,
+            fontWeight: FontWeight.w700,
+            color: HexColors.black,
+          ),
+        ),
+      ),
+      body: _dealViewModel.deal == null
+          ? const LoadingIndicatorWidget()
+          : Material(
+              type: MaterialType.transparency,
+              child: Container(
                 color: HexColors.white,
                 child: Stack(children: [
                   ListView(
@@ -86,11 +92,13 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             right: 16.0,
                             bottom: 16.0,
                           ),
-                          text: DateTimeFormatter().formatDateTimeToString(
-                            dateTime: startDateTime,
-                            showTime: false,
-                            showMonthName: false,
-                          ),
+                          text: startDateTime == null
+                              ? ''
+                              : DateTimeFormatter().formatDateTimeToString(
+                                  dateTime: startDateTime,
+                                  showTime: false,
+                                  showMonthName: false,
+                                ),
                         ),
 
                         /// END DATE
@@ -109,11 +117,13 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             right: 16.0,
                             bottom: 16.0,
                           ),
-                          text: DateTimeFormatter().formatDateTimeToString(
-                            dateTime: endDateTime,
-                            showTime: false,
-                            showMonthName: false,
-                          ),
+                          text: endDateTime == null
+                              ? ''
+                              : DateTimeFormatter().formatDateTimeToString(
+                                  dateTime: endDateTime,
+                                  showTime: false,
+                                  showMonthName: false,
+                                ),
                         ),
 
                         /// RESPONSIBLE
@@ -375,25 +385,24 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                     physics:
                                         const NeverScrollableScrollPhysics(),
                                     itemCount:
-                                        _dealViewModel.deal?.files.length ??
-                                            _dealViewModel
-                                                .selectedDeal.files.length,
+                                        _dealViewModel.deal?.files.length ?? 0,
                                     itemBuilder: (context, index) {
-                                      return FileListItemWidget(
-                                        key: ValueKey(
-                                            _dealViewModel.deal!.files[index]),
-                                        fileName: _dealViewModel
-                                                .deal?.files[index].name ??
-                                            _dealViewModel
-                                                .selectedDeal.files[index].name,
-                                        isDownloading:
-                                            _dealViewModel.downloadIndex ==
+                                      return _dealViewModel.deal == null
+                                          ? Container()
+                                          : FileListItemWidget(
+                                              key: ValueKey(_dealViewModel
+                                                  .deal!.files[index]),
+                                              fileName: _dealViewModel
+                                                  .deal!.files[index].name,
+                                              isDownloading: _dealViewModel
+                                                      .downloadIndex ==
+                                                  index,
+                                              onTap: () =>
+                                                  _dealViewModel.openFile(
+                                                context,
                                                 index,
-                                        onTap: () => _dealViewModel.openFile(
-                                          context,
-                                          index,
-                                        ),
-                                      );
+                                              ),
+                                            );
                                     }),
 
                         /// PROCESS LIST
@@ -460,20 +469,21 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             }),
 
                         /// CLOSE DEAL BUTTON
-                        _dealViewModel.deal?.closed ??
-                                _dealViewModel.selectedDeal.closed
+                        _dealViewModel.deal == null
                             ? Container()
-                            : BorderButtonWidget(
-                                title: Titles.closeDeal,
-                                margin: const EdgeInsets.only(
-                                  left: 16.0,
-                                  top: 6.0,
-                                  right: 16.0,
-                                  bottom: 16.0,
-                                ),
-                                onTap: () =>
-                                    _dealViewModel.showDealCloseSheet(context),
-                              ),
+                            : _dealViewModel.deal!.closed
+                                ? Container()
+                                : BorderButtonWidget(
+                                    title: Titles.closeDeal,
+                                    margin: const EdgeInsets.only(
+                                      left: 16.0,
+                                      top: 6.0,
+                                      right: 16.0,
+                                      bottom: 16.0,
+                                    ),
+                                    onTap: () => _dealViewModel
+                                        .showDealCloseSheet(context),
+                                  ),
                       ]),
 
                   /// EDIT DEAL BUTTON
@@ -497,6 +507,9 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                   _dealViewModel.loadingStatus == LoadingStatus.searching
                       ? const LoadingIndicatorWidget()
                       : Container()
-                ]))));
+                ]),
+              ),
+            ),
+    );
   }
 }

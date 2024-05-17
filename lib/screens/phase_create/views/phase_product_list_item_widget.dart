@@ -2,7 +2,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 
-import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/analytics/views/sort_orbject_button_widget.dart';
 import 'package:izowork/views/input_widget.dart';
 import 'package:izowork/views/selection_input_widget.dart';

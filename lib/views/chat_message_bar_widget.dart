@@ -120,33 +120,35 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                 ? 1.0
                 : _opacity,
         child: AnimatedContainer(
-            duration: const Duration(milliseconds: 100),
-            height: _textHeight,
-            width: 38.0,
-            constraints: const BoxConstraints(minHeight: 42.0, maxHeight: 90.0),
-            child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-              GestureDetector(
-                  onTap: widget.textEditingController.text.isEmpty
-                      ? null
-                      : () => widget.onSendTap(),
-                  child: Center(
-                      child: AnimatedOpacity(
-                          opacity: _isAudio
-                              ? 1.0
-                              : widget.textEditingController.text.isEmpty
-                                  ? 0.5
-                                  : 1.0,
-                          duration: const Duration(milliseconds: 200),
-                          child: SvgPicture.asset(
-                              _isAudio
-                                  ? _isRecording
-                                      ? 'assets/ic_record_selected.svg'
-                                      : 'assets/ic_record.svg'
-                                  : 'assets/ic_send.svg',
-                              fit: BoxFit.scaleDown,
-                              width: 38.0,
-                              height: 38.0))))
-            ])));
+          duration: const Duration(milliseconds: 100),
+          height: _textHeight,
+          width: 38.0,
+          constraints: const BoxConstraints(minHeight: 42.0, maxHeight: 90.0),
+          child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+            GestureDetector(
+                onTap: widget.textEditingController.text.isEmpty
+                    ? null
+                    : () => widget.onSendTap(),
+                child: Center(
+                    child: AnimatedOpacity(
+                        opacity: _isAudio
+                            ? 1.0
+                            : widget.textEditingController.text.isEmpty
+                                ? 0.5
+                                : 1.0,
+                        duration: const Duration(milliseconds: 200),
+                        child: SvgPicture.asset(
+                          _isAudio
+                              ? _isRecording
+                                  ? 'assets/ic_record_selected.svg'
+                                  : 'assets/ic_record.svg'
+                              : 'assets/ic_send.svg',
+                          fit: BoxFit.scaleDown,
+                          width: 38.0,
+                          height: 38.0,
+                        ))))
+          ]),
+        ));
 
     return Wrap(children: [
       Stack(children: [
@@ -214,7 +216,7 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     widget.isSending == null
                         ? _sendButton
-                        : widget.isSending! == true
+                        : widget.isSending == true
                             ? Transform.scale(
                                 scale: 0.6,
                                 child: CircularProgressIndicator(

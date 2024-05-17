@@ -4,13 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:izowork/components/hex_colors.dart';
-import 'package:izowork/models/models.dart';
-import 'package:izowork/screens/map/helpers/marker_helper.dart';
+import 'package:izowork/helpers/helpers.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/map/views/map_control_widget.dart';
 import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:izowork/models/models.dart';
 
 class SingleObjectMapScreenBodyWidget extends StatefulWidget {
   const SingleObjectMapScreenBodyWidget({Key? key}) : super(key: key);
@@ -125,6 +126,8 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
             child: Stack(children: [
           /// GOOGLE MAP
           GoogleMap(
+              compassEnabled: false,
+              tiltGesturesEnabled: false,
               mapToolbarEnabled: false,
               zoomControlsEnabled: false,
               myLocationButtonEnabled: false,

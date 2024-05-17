@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/selection/views/selection_list_item_widget.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';

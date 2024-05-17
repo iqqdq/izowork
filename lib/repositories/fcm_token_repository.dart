@@ -4,11 +4,11 @@ import 'package:izowork/api/api.dart';
 import 'package:izowork/services/web_service.dart';
 
 class FcmTokenRepository {
-  Future<dynamic> sendDeviceToken(String deviceToken) async {
+  Future<dynamic> sendFcmToken(String fcmToken) async {
     dynamic json = await WebService().patch(
       fcmTokenUrl,
       [],
-      jsonEncode({"token": deviceToken}),
+      jsonEncode({"token": fcmToken}),
     );
 
     if (json != null) {

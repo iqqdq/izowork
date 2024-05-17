@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
+import 'package:izowork/screens/task/task_screen.dart';
 import 'package:izowork/screens/tasks/views/task_list_item_widget.dart';
 import 'package:izowork/views/views.dart';
-import 'package:provider/provider.dart';
 
 class TaskEventScreenBodyWidget extends StatefulWidget {
   final DateTime dateTime;
+  final List<Task> tasks;
 
   const TaskEventScreenBodyWidget({
     Key? key,
     required this.dateTime,
+    required this.tasks,
   }) : super(key: key);
 
   @override
@@ -20,7 +21,6 @@ class TaskEventScreenBodyWidget extends StatefulWidget {
 
 class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
   final ScrollController _scrollController = ScrollController();
-  late TaskEventViewModel _taskEventViewModel;
 
   @override
   void dispose() {
@@ -30,11 +30,6 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _taskEventViewModel = Provider.of<TaskEventViewModel>(
-      context,
-      listen: true,
-    );
-
     return Material(
         type: MaterialType.transparency,
         child: Container(
@@ -97,18 +92,18 @@ class _TaskEventScreenBodyState extends State<TaskEventScreenBodyWidget> {
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               padding: const EdgeInsets.only(top: 16.0),
-                              itemCount: _taskEventViewModel.tasks.length,
+                              itemCount: widget.tasks.length,
                               itemBuilder: (context, index) {
                                 return TaskListItemWidget(
-                                    key: ValueKey(
-                                        _taskEventViewModel.tasks[index].id),
-                                    task: _taskEventViewModel.tasks[index],
-                                    onTap: () => _taskEventViewModel
-                                            .showTaskScreenWidget(
-                                          context,
-                                          index,
-                                        ));
+                                    key: ValueKey(widget.tasks[index].id),
+                                    task: widget.tasks[index],
+                                    onTap: () => _showTaskScreenWidget(index));
                               }),
                         ])))));
   }
+
+  void _showTaskScreenWidget(int index) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => TaskScreenWidget(id: widget.tasks[index].id)));
 }

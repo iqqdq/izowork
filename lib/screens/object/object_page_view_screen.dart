@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+
 import 'package:izowork/components/components.dart';
-import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/screens/object/object_page/object_page_screen.dart';
 import 'package:izowork/screens/object/object_actions/object_actions_screen.dart';
 import 'package:izowork/screens/phase/phase_screen.dart';
-import 'package:izowork/services/local_storage/local_storage.dart';
+import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/views/views.dart';
 
 class ObjectPageViewScreenWidget extends StatefulWidget {
-  final MapObject object;
-  final List<ObjectStage>? objectStages;
-  final Phase? phase;
+  final String id;
+  final String? phaseId;
 
   const ObjectPageViewScreenWidget({
     Key? key,
-    required this.object,
-    this.objectStages,
-    this.phase,
+    required this.id,
+    this.phaseId,
   }) : super(key: key);
 
   @override
@@ -29,40 +27,35 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
   final PageController _pageController = PageController(initialPage: 0);
   List<Widget>? _pages;
   int _index = 0;
-  String? _title;
 
   @override
   void initState() {
     _pages = [
       ObjectPageScreenWidget(
-        object: widget.object,
-        objectStages: widget.objectStages,
-        onCoordCopy: () => Toast().showTopToast(
-          context,
-          Titles.didCopied,
-        ),
-        onUpdate: (object) => setState(() => _title = object.name),
+        id: widget.id,
+        onCoordCopy: () => Toast().showTopToast(context, Titles.didCopied),
       ),
-      ObjectActionsScreenWidget(object: widget.object)
+      ObjectActionsScreenWidget(id: widget.id)
     ];
 
     super.initState();
 
     // PUSH FROM NOTIFICATION's SCREEN
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      User? user = await GetIt.I<LocalStorageService>().getUser();
+      if (widget.phaseId == null) return;
 
-      if (widget.phase != null) {
-        if (mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PhaseScreenWidget(
-                      user: user,
-                      phase: widget.phase!,
-                    )),
-          );
-        }
+      User? user = await GetIt.I<LocalStorageRepositoryInterface>().getUser();
+      if (user == null) return;
+
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PhaseScreenWidget(
+                    id: widget.phaseId!,
+                    user: user,
+                  )),
+        );
       }
     });
   }
@@ -78,35 +71,24 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
-            toolbarHeight: 112.0,
-            titleSpacing: 0.0,
-            elevation: 0.0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: Colors.transparent,
-            automaticallyImplyLeading: false,
-            title: Column(children: [
-              const SizedBox(height: 12.0),
-              Stack(children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: BackButtonWidget(onTap: () => Navigator.pop(context)),
-                ),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.75,
-                    child: Text(_title ?? widget.object.name,
-                        style: TextStyle(
-                            color: HexColors.black,
-                            fontSize: 18.0,
-                            fontFamily: 'PT Root UI',
-                            fontWeight: FontWeight.bold)),
-                  ),
-                ])
-              ]),
-              const SizedBox(height: 20.0),
+          toolbarHeight: 64.0,
+          titleSpacing: 0.0,
+          elevation: 0.0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          backgroundColor: HexColors.white,
+          automaticallyImplyLeading: false,
+          title:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: BackButtonWidget(onTap: () => Navigator.pop(context)),
+            ),
 
-              /// SEGMENTED CONTROL
-              SegmentedControlWidget(
+            /// SEGMENTED CONTROL
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: SegmentedControlWidget(
+                  width: MediaQuery.of(context).size.width - 40.0,
                   titles: const [Titles.object, Titles.actions],
                   backgroundColor: HexColors.grey10,
                   activeColor: HexColors.black,
@@ -120,8 +102,9 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.fastOutSlowIn)
                       }),
-              const SizedBox(height: 16.0)
-            ])),
+            )
+          ]),
+        ),
         body: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),

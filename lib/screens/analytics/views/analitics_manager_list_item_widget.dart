@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/api/api.dart';
 
 class AnalitycsManagerListItemWidget extends StatelessWidget {

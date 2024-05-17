@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/tasks/tasks_filter_sheet/tasks_filter_page_view_screen_body.dart';
 import 'package:provider/provider.dart';
 

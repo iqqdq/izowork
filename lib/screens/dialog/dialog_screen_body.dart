@@ -6,9 +6,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/entities/requests/requests.dart';
-import 'package:izowork/entities/responses/responses.dart';
 import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/dialog/views/bubble_widget.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/views/views.dart';
@@ -104,65 +103,67 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
-            titleSpacing: 0.0,
-            elevation: 0.0,
-            centerTitle: true,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: HexColors.white,
-            automaticallyImplyLeading: false,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: BackButtonWidget(
-                onTap: () => Navigator.pop(context),
-              ),
+          titleSpacing: 0.0,
+          elevation: 0.0,
+          centerTitle: true,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          backgroundColor: HexColors.white,
+          automaticallyImplyLeading: false,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: BackButtonWidget(
+              onTap: () => Navigator.pop(context),
             ),
-            title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              /// AVATAR
-              Stack(children: [
-                Container(
-                    width: 30.0,
-                    height: 30.0,
-                    padding: EdgeInsets.all(_isGroupChat ? 6.0 : 0.0),
-                    decoration: BoxDecoration(
-                        color: _isGroupChat
-                            ? HexColors.additionalViolet.withOpacity(0.8)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(15.0)),
-                    child: SvgPicture.asset(
-                        _isGroupChat
-                            ? 'assets/ic_group.svg'
-                            : 'assets/ic_avatar.svg',
-                        color:
-                            _isGroupChat ? HexColors.white : HexColors.grey30,
-                        width: 30.0,
-                        height: 30.0,
-                        fit: BoxFit.cover)),
-                _url == null
-                    ? Container()
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(15.0),
-                        child: CachedNetworkImage(
-                            cacheKey: _url,
-                            imageUrl: avatarUrl + _url,
-                            width: 30.0,
-                            height: 30.0,
-                            fit: BoxFit.cover)),
-              ]),
-              const SizedBox(width: 12.0),
+          ),
+          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            /// AVATAR
+            Stack(children: [
+              Container(
+                  width: 30.0,
+                  height: 30.0,
+                  padding: EdgeInsets.all(_isGroupChat ? 6.0 : 0.0),
+                  decoration: BoxDecoration(
+                      color: _isGroupChat
+                          ? HexColors.additionalViolet.withOpacity(0.8)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(15.0)),
+                  child: SvgPicture.asset(
+                      _isGroupChat
+                          ? 'assets/ic_group.svg'
+                          : 'assets/ic_avatar.svg',
+                      color: _isGroupChat ? HexColors.white : HexColors.grey30,
+                      width: 30.0,
+                      height: 30.0,
+                      fit: BoxFit.cover)),
+              _url == null
+                  ? Container()
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: CachedNetworkImage(
+                          cacheKey: _url,
+                          imageUrl: avatarUrl + _url,
+                          width: 30.0,
+                          height: 30.0,
+                          fit: BoxFit.cover)),
+            ]),
+            const SizedBox(width: 12.0),
 
-              /// CHAT/USER NAME
-              Expanded(
-                  child: Text(
-                      _dialogViewModel.chat.name ??
-                          _dialogViewModel.chat.user?.name ??
-                          '-',
-                      style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          color: HexColors.black,
-                          fontSize: 18.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold))),
-            ])),
+            /// CHAT/USER NAME
+            Expanded(
+              child: Text(
+                  _dialogViewModel.chat.name ??
+                      _dialogViewModel.chat.user?.name ??
+                      '-',
+                  style: TextStyle(
+                      overflow: TextOverflow.ellipsis,
+                      color: HexColors.black,
+                      fontSize: 18.0,
+                      fontFamily: 'PT Root UI',
+                      fontWeight: FontWeight.bold)),
+            ),
+            const SizedBox(width: 16.0),
+          ]),
+        ),
         body: SizedBox.expand(
             child: Stack(children: [
           Column(children: [

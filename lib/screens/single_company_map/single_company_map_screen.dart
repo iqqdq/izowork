@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/domain.dart';
 import 'package:izowork/screens/single_company_map/single_company_map_screen_body.dart';
 import 'package:provider/provider.dart';
-import 'package:izowork/entities/responses/responses.dart';
+import 'package:izowork/models/models.dart';
 
 class SingleCompanyMapScreenWidget extends StatelessWidget {
   final Company company;

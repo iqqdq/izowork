@@ -1,3 +1,4 @@
+export 'local_storage/local_storage.dart';
 export 'analytics_repository.dart';
 export 'authorization_repository.dart';
 export 'chat_repository.dart';

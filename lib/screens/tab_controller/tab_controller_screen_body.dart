@@ -1,16 +1,17 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:izowork/components/components.dart';
+import 'package:provider/provider.dart';
 
-import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/actions/actions_page_view_screen_body.dart';
 import 'package:izowork/screens/chat/chat_screen.dart';
 import 'package:izowork/screens/map/map_screen.dart';
 import 'package:izowork/screens/more/more_screen.dart';
+import 'package:izowork/screens/notifications/notifications_screen.dart';
 import 'package:izowork/screens/objects/objects_screen.dart';
-import 'package:izowork/views/views.dart';
-import 'package:provider/provider.dart';
+import 'package:izowork/screens/tab_controller/views/bottom_navigation_bar_widget.dart';
+import 'package:izowork/main.dart';
+import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/services/services.dart';
 
 class TabControllerScreenBodyWidget extends StatefulWidget {
   const TabControllerScreenBodyWidget({Key? key}) : super(key: key);
@@ -22,27 +23,37 @@ class TabControllerScreenBodyWidget extends StatefulWidget {
 
 class _TabControllerScreenBodyState
     extends State<TabControllerScreenBodyWidget> {
-  final PageController? _pageController = PageController(initialPage: 0);
-  late List<Widget>? _pages;
-  int _index = 0;
-
+  final PageController _pageController = PageController(initialPage: 0);
   late TabControllerViewModel _tabControllerViewModel;
+
+  final List<Widget>? _pages = [
+    const MapScreenWidget(),
+    const ObjectsScreenWidget(),
+    const ActionsPageViewScreenWidget(),
+    const ChatScreenWidget(),
+    const MoreScreenWidget()
+  ];
+
+  int _index = 0;
 
   @override
   void initState() {
-    _pages = [
-      const MapScreenWidget(),
-      const ObjectsScreenWidget(),
-      const ActionsPageViewScreenWidget(),
-      const ChatScreenWidget()
-    ];
-
     super.initState();
+
+    _configureSelectNotificationSubject();
+
+    FirebaseMessagingService(
+      onTokenReceive: (token) => _tabControllerViewModel.updateFcmToken(token),
+      onNotificationRecieve: (notification) =>
+          selectNotificationStream.add(jsonEncode(notification.data)),
+    );
   }
 
   @override
   void dispose() {
-    _pageController?.dispose();
+    _pageController.dispose();
+    selectNotificationStream.close();
+
     super.dispose();
   }
 
@@ -53,139 +64,53 @@ class _TabControllerScreenBodyState
       listen: true,
     );
 
-    if (_tabControllerViewModel.loadingStatus == LoadingStatus.completed &&
-        _pages?.length == 4) {
-      _pages?.add(
-          MoreScreenWidget(count: _tabControllerViewModel.notificationCount));
-    }
-
-    final textStyle = TextStyle(
-      color: HexColors.grey40,
-      fontSize: 12.0,
-      fontFamily: 'PT Root UI',
-      fontWeight: FontWeight.w500,
-    );
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-          toolbarHeight: 0.0,
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
-          systemOverlayStyle: SystemUiOverlayStyle.dark),
-      body: _pages?.length == 4
-          ? const Center(
-              child: Padding(
-                  padding: EdgeInsets.only(top: 60.0),
-                  child: LoadingIndicatorWidget()))
-          : PageView(
-              controller: _pageController,
-              physics: _index == 0
-                  ? const NeverScrollableScrollPhysics()
-                  : const AlwaysScrollableScrollPhysics(),
-              children: _pages!,
-              onPageChanged: (page) => setState(() => _index = page),
-            ),
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: _pages!,
+        onPageChanged: (page) => setState(() => _index = page),
+      ),
       bottomNavigationBar: _pages?.length == 4
           ? Container()
-          : BottomNavigationBar(
-              selectedLabelStyle:
-                  textStyle.copyWith(color: HexColors.primaryMain),
-              unselectedLabelStyle: textStyle,
-              fixedColor: HexColors.primaryMain,
-              unselectedItemColor: HexColors.grey40,
-              type: BottomNavigationBarType.fixed,
-              items: <BottomNavigationBarItem>[
-                /// MAP
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(_index == 0
-                      ? 'assets/ic_map_selected.svg'
-                      : 'assets/ic_map.svg'),
-                  label: Titles.map,
-                ),
-
-                /// OBJECTS
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(_index == 1
-                      ? 'assets/ic_objects_selected.svg'
-                      : 'assets/ic_objects.svg'),
-                  label: Titles.objects,
-                ),
-
-                /// ACTIONS
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(_index == 2
-                      ? 'assets/ic_actions_selected.svg'
-                      : 'assets/ic_actions.svg'),
-                  label: Titles.myDoing,
-                ),
-
-                /// CHAT
-                BottomNavigationBarItem(
-                  icon: Badge(
-                    backgroundColor: HexColors.additionalViolet,
-                    label: Text(
-                        _tabControllerViewModel.messageCount.toString().length >
-                                4
-                            ? _tabControllerViewModel.messageCount
-                                .toString()
-                                .substring(0, 3)
-                            : _tabControllerViewModel.messageCount.toString(),
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.w600,
-                          color: HexColors.white,
-                        )),
-                    isLabelVisible: _tabControllerViewModel.messageCount > 0,
-                    child: SvgPicture.asset(_index == 3
-                        ? 'assets/ic_chat_selected.svg'
-                        : 'assets/ic_chat.svg'),
-                  ),
-                  label: Titles.chat,
-                ),
-
-                /// MORE
-
-                BottomNavigationBarItem(
-                  icon: Badge(
-                    backgroundColor: HexColors.additionalViolet,
-                    label: Text(
-                        _tabControllerViewModel.notificationCount
-                                    .toString()
-                                    .length >
-                                3
-                            ? _tabControllerViewModel.notificationCount
-                                    .toString()
-                                    .substring(0, 2) +
-                                '...'
-                            : _tabControllerViewModel.notificationCount
-                                .toString(),
-                        style: TextStyle(
-                          fontSize: 10.0,
-                          fontWeight: FontWeight.w500,
-                          color: HexColors.white,
-                        )),
-                    isLabelVisible:
-                        _tabControllerViewModel.notificationCount > 0,
-                    child: SvgPicture.asset(
-                      _index == 4
-                          ? 'assets/ic_more_selected.svg'
-                          : 'assets/ic_more.svg',
-                    ),
-                  ),
-                  label: Titles.more,
-                ),
-              ],
-              currentIndex: _index,
-              onTap: (index) => {
-                if (index == 3) _tabControllerViewModel.clearMessageBadge(),
-                if (index == 4)
-                  _tabControllerViewModel.clearNotificationBadge(),
-                _index = index,
-                _pageController?.jumpToPage(_index),
-              },
+          : BottomNavigationBarWidget(
+              index: _index,
+              messageCount: _tabControllerViewModel.messageCount,
+              notificationCount: _tabControllerViewModel.notificationCount,
+              onTap: (index) => _onTabSelected(index),
             ),
     );
+  }
+
+  Future _onTabSelected(int index) async {
+    if (index == 3) {
+      _tabControllerViewModel.clearMessageCount();
+    }
+
+    if (index == 4) {
+      _tabControllerViewModel.clearNotificationCount();
+    }
+
+    _index = index;
+    _pageController.jumpToPage(_index);
+  }
+
+  void _configureSelectNotificationSubject() {
+    selectNotificationStream.stream.listen((String? event) {
+      if (event != null) {
+        // final notificationEntity =
+        //     NotificationEntity.fromJson(jsonDecode(event));
+
+        // TODO: if chat notification
+
+        _onTabSelected(4).whenComplete(
+          () => navigatorKey.currentState?.push(MaterialPageRoute(
+              builder: (context) =>
+                  NotificationsScreenWidget(onPop: () => {}))),
+        );
+      }
+    });
   }
 }

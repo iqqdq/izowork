@@ -126,25 +126,27 @@ class _DateTimeWheelPickerState extends State<DateTimeWheelPickerWidget> {
             : startPosition - 1;
 
     return SizedBox(
-        width: double.infinity,
-        height: 191.0,
-        child: WheelChooser(
-            isInfinite: false,
-            perspective: 0.005,
-            itemSize: 36.0,
-            startPosition: position,
-            selectTextStyle: widget.selecteTextStyle ??
-                const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w400),
-            unSelectTextStyle: widget.unselectedTextStyle ??
-                const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.w400),
-            onValueChanged: (value) => onValueChanged(value),
-            datas: data));
+      width: double.infinity,
+      height: 191.0,
+      child: WheelChooser(
+        isInfinite: false,
+        perspective: 0.005,
+        itemSize: 36.0,
+        startPosition: position,
+        selectTextStyle: widget.selecteTextStyle ??
+            const TextStyle(
+                color: Colors.black,
+                fontSize: 14.0,
+                fontWeight: FontWeight.w400),
+        unSelectTextStyle: widget.unselectedTextStyle ??
+            const TextStyle(
+                color: Colors.black54,
+                fontSize: 12.0,
+                fontWeight: FontWeight.w400),
+        onValueChanged: (value) => onValueChanged(value),
+        datas: data,
+      ),
+    );
   }
 
   String toCapitalized(String text) => text.isNotEmpty
