@@ -10,9 +10,12 @@ class AnalitycsManagerListItemWidget extends StatelessWidget {
   final double value;
   final VoidCallback onTap;
 
-  const AnalitycsManagerListItemWidget(
-      {Key? key, required this.user, required this.value, required this.onTap})
-      : super(key: key);
+  const AnalitycsManagerListItemWidget({
+    Key? key,
+    required this.user,
+    required this.value,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,10 @@ class AnalitycsManagerListItemWidget extends StatelessWidget {
                         /// AVATAR
                         Stack(children: [
                           SvgPicture.asset('assets/ic_avatar.svg',
-                              color: HexColors.grey40,
+                              colorFilter: ColorFilter.mode(
+                                HexColors.grey40,
+                                BlendMode.srcIn,
+                              ),
                               width: 24.0,
                               height: 24.0,
                               fit: BoxFit.cover),

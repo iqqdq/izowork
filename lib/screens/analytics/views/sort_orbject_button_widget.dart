@@ -41,8 +41,15 @@ class _SortObjectButtonState extends State<SortObjectButtonWidget> {
               const SizedBox(width: 8.0),
               widget.imagePath.isEmpty
                   ? Container()
-                  : SvgPicture.asset(widget.imagePath,
-                      color: _isHighlighted ? HexColors.grey80 : null)
+                  : SvgPicture.asset(
+                      widget.imagePath,
+                      colorFilter: _isHighlighted
+                          ? ColorFilter.mode(
+                              HexColors.grey80,
+                              BlendMode.srcIn,
+                            )
+                          : null,
+                    )
             ]),
             onTap: () => widget.onTap()));
   }

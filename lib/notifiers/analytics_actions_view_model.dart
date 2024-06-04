@@ -1,11 +1,10 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
+
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/analytics/analytics_actions/analytics_actions_filter_sheet/analytics_actions_filter_page_view_screen.dart';
 import 'package:izowork/screens/analytics/analytics_actions/analytics_actions_filter_sheet/analytics_actions_filter_page_view_screen_body.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class AnalyticsActionsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -78,39 +77,12 @@ class AnalyticsActionsViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - PUSH
-
-  void showAnalyticsActionFilterSheet(
-    BuildContext context,
-    Function() onFilter,
-  ) {
-    showCupertinoModalBottomSheet(
-      enableDrag: false,
-      topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
-      backgroundColor: HexColors.white,
-      context: context,
-      builder: (sheetContext) => AnalyticsActionsFilterPageViewScreenWidget(
-          analyticsActionsFilter: _analyticsActionsFilter,
-          onPop: (analyticsActionsFilter) => {
-                if (analyticsActionsFilter == null)
-                  {
-                    // CLEAR
-                    resetFilter(),
-                    onFilter()
-                  }
-                else
-                  {
-                    // FILTER
-                    _analyticsActionsFilter = analyticsActionsFilter,
-                    onFilter()
-                  }
-              }),
-    );
-  }
-
-  // MARK: -
   // MARK: - FUNCTIONS
+
+  void setFilter(AnalyticsActionsFilter? analyticsActionsFilter) {
+    _analyticsActionsFilter = analyticsActionsFilter;
+    notifyListeners();
+  }
 
   void resetFilter() {
     _analyticsActionsFilter = null;

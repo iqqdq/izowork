@@ -422,6 +422,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "flutter_phone_direct_caller",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/flutter_phone_direct_caller-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_plugin_android_lifecycle",
       "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/flutter_plugin_android_lifecycle-2.0.15",
       "packageUri": "lib/",
@@ -920,6 +926,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "simple_progress_indicators",
+      "rootUri": "file:///Users/iqqddq/.pub-cache/hosted/pub.dev/simple_progress_indicators-0.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///Users/iqqddq/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -1154,7 +1166,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2024-05-16T03:25:25.828712Z",
+  "generated": "2024-05-27T22:05:48.117763Z",
   "generator": "pub",
   "generatorVersion": "3.2.0-22.0.dev"
 }

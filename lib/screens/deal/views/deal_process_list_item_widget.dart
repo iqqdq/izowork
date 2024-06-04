@@ -55,10 +55,15 @@ class _DealProcessListItemState extends State<DealProcessListItemWidget> {
                           padding: EdgeInsets.only(
                               top: 16.0, bottom: widget.isExpanded ? 4.0 : 0.0),
                           child: Row(children: [
-                            SvgPicture.asset('assets/ic_done.svg',
-                                color: widget.dealStage.locked
-                                    ? HexColors.grey20
-                                    : null),
+                            SvgPicture.asset(
+                              'assets/ic_done.svg',
+                              colorFilter: widget.dealStage.locked
+                                  ? ColorFilter.mode(
+                                      HexColors.grey40,
+                                      BlendMode.srcIn,
+                                    )
+                                  : null,
+                            ),
                             const SizedBox(width: 12.0),
                             Expanded(
                                 child: Text(widget.dealStage.name,
@@ -83,75 +88,73 @@ class _DealProcessListItemState extends State<DealProcessListItemWidget> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: widget.dealProcesses.length,
                           itemBuilder: (context, index) {
-                            //   List<String> needConfirmations = widget
-                            //           .dealProcesses[index].needConfirmations;
-
-                            //  Confirmations? confirmations = widget
-                            //           .dealProcesses[index].confirmations;
-
-                            //           needConfirmations.contains(confirmations.accountant);
-
-                            //           needConfirmations.contains(confirmations.)
-
                             bool? isCompleted = widget
                                 .dealProcesses[index].needConfirmations
                                 .map((c) => widget
                                     .dealProcesses[index].confirmations?[c])
                                 .reduce((a, c) => a == true && c == true);
 
-                            return InkWell(
-                              key: ValueKey(widget.dealProcesses[index].id),
-                              highlightColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              borderRadius: BorderRadius.circular(16.0),
-                              child: Column(children: [
-                                Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        vertical: 10.0),
-                                    child: const SeparatorWidget()),
-                                Row(children: [
-                                  Expanded(
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                        /// POSITION
-                                        Text(widget.dealProcesses[index].name,
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.w500,
-                                                color: HexColors.black,
-                                                fontFamily: 'PT Root UI')),
-                                        const SizedBox(height: 6.0),
+                            return widget.dealProcesses[index].hidden == true
+                                ? Container()
+                                : InkWell(
+                                    key: ValueKey(
+                                        widget.dealProcesses[index].id),
+                                    highlightColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    child: Column(children: [
+                                      Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 10.0),
+                                          child: const SeparatorWidget()),
+                                      Row(children: [
+                                        Expanded(
+                                            child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                              /// POSITION
+                                              Text(
+                                                  widget.dealProcesses[index]
+                                                      .name,
+                                                  style: TextStyle(
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: HexColors.black,
+                                                    fontFamily: 'PT Root UI',
+                                                  )),
+                                              const SizedBox(height: 6.0),
 
-                                        /// POSITION STATUS
-                                        StatusWidget(
-                                            title: widget
-                                                .dealProcesses[index].status,
-                                            textAlign: TextAlign.start,
-                                            status: isCompleted == null
-                                                ? 1
-                                                : isCompleted
-                                                    ? 2
-                                                    : 1)
-                                      ])),
-                                  const SizedBox(width: 16.0),
+                                              /// POSITION STATUS
+                                              StatusWidget(
+                                                  title: widget
+                                                      .dealProcesses[index]
+                                                      .status,
+                                                  textAlign: TextAlign.start,
+                                                  status: isCompleted == null
+                                                      ? 1
+                                                      : isCompleted
+                                                          ? 2
+                                                          : 1)
+                                            ])),
+                                        const SizedBox(width: 16.0),
 
-                                  /// MORE BUTTON
-                                  widget.dealStage.locked
-                                      ? Container()
-                                      : SortObjectButtonWidget(
-                                          title: '',
-                                          imagePath:
-                                              'assets/ic_more_vertical.svg',
-                                          onTap: () => widget.onMenuTap(
-                                              widget.dealProcesses[index]))
-                                ])
-                              ]),
-                              onTap: () => widget
-                                  .onProcessTap(widget.dealProcesses[index]),
-                              //)
-                            );
+                                        /// MORE BUTTON
+                                        widget.dealStage.locked
+                                            ? Container()
+                                            : SortObjectButtonWidget(
+                                                title: '',
+                                                imagePath:
+                                                    'assets/ic_more_vertical.svg',
+                                                onTap: () => widget.onMenuTap(
+                                                    widget
+                                                        .dealProcesses[index]))
+                                      ])
+                                    ]),
+                                    onTap: () => widget.onProcessTap(
+                                        widget.dealProcesses[index]),
+                                    //)
+                                  );
                           })
                       : Container(),
 

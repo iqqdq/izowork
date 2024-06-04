@@ -44,7 +44,7 @@ abstract class Titles {
   static const comments = 'Комментарии';
   static const comment = 'Комментарий';
   static const showAllComments = 'Показать все комментарии';
-  static const publicate = 'Опуликовать';
+  static const publicate = 'Опубликовать';
   static const clipMedia = 'Прикрепить медиа';
   static const addMedia = 'Добавить медиа';
   static const edit = 'Редактировать';
@@ -98,6 +98,7 @@ abstract class Titles {
   static const documents = 'Документы';
   static const notifications = 'Уведомления';
   static const logout = 'Выйти из аккаунта';
+  static const exit = 'Выйти';
   static const logoutAreYouSure = 'Вы уверены, что хотите выйти из аккаунта?';
   static const deleteAccount = 'Удалить аккаунт';
   static const deleteAccountAreYouSure =

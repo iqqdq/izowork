@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/screens/objects/views/object_list_item_widget.dart';
 import 'package:izowork/views/views.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 
@@ -50,18 +50,8 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
     _scrollController.dispose();
     _textEditingController.dispose();
     _focusNode.dispose();
+
     super.dispose();
-  }
-
-  // MARK: -
-  // MARK: - FUNCTIONS
-
-  Future _onRefresh() async {
-    _pagination = Pagination(offset: 0, size: 50);
-    await _objectsViewModel.getObjectList(
-      pagination: _pagination,
-      search: _textEditingController.text,
-    );
   }
 
   @override
@@ -74,63 +64,62 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
     );
 
     return Scaffold(
-        backgroundColor: HexColors.white,
-        appBar: AppBar(
-            toolbarHeight: 68.0,
-            titleSpacing: 0.0,
-            elevation: 0.0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: Colors.transparent,
-            automaticallyImplyLeading: false,
-            title: Column(children: [
-              const SizedBox(height: 10.0),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(children: [
-                    /// SEARCH INPUT
-                    Expanded(
-                        child: InputWidget(
-                            textEditingController: _textEditingController,
-                            focusNode: _focusNode,
-                            margin: EdgeInsets.zero,
-                            isSearchInput: true,
-                            placeholder: '${Titles.search}...',
-                            onTap: () => setState,
-                            onChange: (text) => {
-                                  setState(() => _isSearching = true),
-                                  EasyDebounce.debounce('object_debouncer',
-                                      const Duration(milliseconds: 500),
-                                      () async {
-                                    _pagination =
-                                        Pagination(offset: 0, size: 50);
+      backgroundColor: HexColors.white,
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+          toolbarHeight: 68.0,
+          titleSpacing: 0.0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          title: Column(children: [
+            const SizedBox(height: 10.0),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(children: [
+                  /// SEARCH INPUT
+                  Expanded(
+                      child: InputWidget(
+                          textEditingController: _textEditingController,
+                          focusNode: _focusNode,
+                          margin: EdgeInsets.zero,
+                          isSearchInput: true,
+                          placeholder: '${Titles.search}...',
+                          onTap: () => setState,
+                          onChange: (text) => {
+                                setState(() => _isSearching = true),
+                                EasyDebounce.debounce('object_debouncer',
+                                    const Duration(milliseconds: 500),
+                                    () async {
+                                  _pagination = Pagination(offset: 0, size: 50);
 
-                                    _objectsViewModel
-                                        .getObjectList(
-                                          pagination: _pagination,
-                                          search: _textEditingController.text,
-                                        )
-                                        .then((value) => setState(
-                                              () => _isSearching = false,
-                                            ));
-                                  })
-                                },
-                            onClearTap: () => {
-                                  _objectsViewModel.resetFilter(),
-                                  _pagination.offset = 0,
-                                  _objectsViewModel.getObjectList(
-                                      pagination: _pagination,
-                                      search: _textEditingController.text)
-                                }))
-                  ])),
-              const SizedBox(height: 12.0),
-              const SeparatorWidget()
-            ])),
-        floatingActionButton: FloatingButtonWidget(
-            onTap: () => _objectsViewModel.showObjectCreateScreen(
-                  context,
-                )),
-        body: SizedBox.expand(
-            child: Stack(children: [
+                                  _objectsViewModel
+                                      .getObjectList(
+                                        pagination: _pagination,
+                                        search: _textEditingController.text,
+                                      )
+                                      .then((value) => setState(
+                                            () => _isSearching = false,
+                                          ));
+                                })
+                              },
+                          onClearTap: () => {
+                                _objectsViewModel.resetFilter(),
+                                _pagination.offset = 0,
+                                _objectsViewModel.getObjectList(
+                                    pagination: _pagination,
+                                    search: _textEditingController.text)
+                              }))
+                ])),
+            const SizedBox(height: 12.0),
+            const SeparatorWidget()
+          ])),
+      floatingActionButton: FloatingButtonWidget(
+          onTap: () => _objectsViewModel.showObjectCreateScreen(
+                context,
+              )),
+      body: SizedBox.expand(
+        child: Stack(children: [
           /// OBJECTS LIST VIEW
           LiquidPullToRefresh(
               color: HexColors.primaryMain,
@@ -198,6 +187,19 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                   _isSearching
               ? const LoadingIndicatorWidget()
               : Container()
-        ])));
+        ]),
+      ),
+    );
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    _pagination = Pagination(offset: 0, size: 50);
+    await _objectsViewModel.getObjectList(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen_body.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/views/views.dart';
@@ -104,7 +104,6 @@ class _ContactCreateScreenBodyState
         backgroundColor: HexColors.white,
         appBar: AppBar(
             titleSpacing: 0.0,
-            elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,
@@ -141,7 +140,10 @@ class _ContactCreateScreenBodyState
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       Stack(children: [
                         SvgPicture.asset('assets/ic_avatar.svg',
-                            color: HexColors.grey40,
+                            colorFilter: ColorFilter.mode(
+                              HexColors.grey40,
+                              BlendMode.srcIn,
+                            ),
                             width: 80.0,
                             height: 80.0,
                             fit: BoxFit.cover),

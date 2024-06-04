@@ -144,7 +144,7 @@ class CompanyCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
@@ -202,7 +202,7 @@ class CompanyCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
@@ -231,7 +231,7 @@ class CompanyCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 }
             })
         .whenComplete(() => notifyListeners());
@@ -276,8 +276,8 @@ class CompanyCreateViewModel with ChangeNotifier {
                             }
                           else if (response is ErrorResponse)
                             {
-                              Toast().showTopToast(
-                                  context, response.message ?? 'Ошибка'),
+                              Toast()
+                                  .showTopToast(response.message ?? 'Ошибка'),
                               loadingStatus = LoadingStatus.error
                             }
                         })
@@ -397,12 +397,12 @@ class CompanyCreateViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          webViewHelper.openWebView(url);
+          webViewHelper.open(url);
         }
       } else {
         nativeUrl != null
-            ? webViewHelper.openWebView(nativeUrl)
-            : webViewHelper.openWebView(url);
+            ? webViewHelper.open(nativeUrl)
+            : webViewHelper.open(url);
       }
     }
   }

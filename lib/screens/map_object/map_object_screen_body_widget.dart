@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/object/object_page_view_screen.dart';
 import 'package:izowork/api/api.dart';
@@ -31,13 +31,11 @@ class _MapObjectScreenBodyState extends State<MapObjectScreenBodyWidget> {
                 ObjectPageViewScreenWidget(id: _mapObjectViewModel.object.id)));
   }
 
-  void _showDialogScreen() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                DialogScreenWidget(chat: _mapObjectViewModel.object.chat!)));
-  }
+  void _showDialogScreen() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              DialogScreenWidget(id: _mapObjectViewModel.object.chat!.id)));
 
   @override
   Widget build(BuildContext context) {

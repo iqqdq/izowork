@@ -7,7 +7,7 @@ import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:scrollable_clean_calendar/models/day_values_model.dart';
 import 'package:scrollable_clean_calendar/scrollable_clean_calendar.dart';
 import 'package:scrollable_clean_calendar/utils/enums.dart';
@@ -52,7 +52,6 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
         backgroundColor: HexColors.white,
         appBar: AppBar(
             centerTitle: true,
-            elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             leading: Padding(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
+import 'package:izowork/screens/recovery/recovery_screen.dart';
+import 'package:izowork/screens/tab_controller/tab_controller_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +19,7 @@ class _AuthorizationScreenBodyState
   final TextEditingController _loginTextEditingController =
       TextEditingController();
   final FocusNode _loginFocusNode = FocusNode();
+
   final TextEditingController _passwordTextEditingController =
       TextEditingController();
   final FocusNode _passwordFocusNode = FocusNode();
@@ -29,6 +32,7 @@ class _AuthorizationScreenBodyState
     _loginFocusNode.dispose();
     _passwordTextEditingController.dispose();
     _passwordFocusNode.dispose();
+
     super.dispose();
   }
 
@@ -40,9 +44,9 @@ class _AuthorizationScreenBodyState
     );
 
     return Scaffold(
-        backgroundColor: HexColors.white,
-        body: SizedBox.expand(
-            child: Stack(children: [
+      backgroundColor: HexColors.white,
+      body: SizedBox.expand(
+        child: Stack(children: [
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             ListView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -94,29 +98,60 @@ class _AuthorizationScreenBodyState
                   ),
                   const SizedBox(height: 24.0),
                   ButtonWidget(
-                      isDisabled: _loginTextEditingController.text.isEmpty ||
-                          _passwordTextEditingController.text.isEmpty,
-                      title: Titles.enter,
-                      margin: EdgeInsets.zero,
-                      onTap: () => _authorizationViewModel.authorize(
-                            context,
-                            _loginTextEditingController.text,
-                            _passwordTextEditingController.text,
-                          )),
+                    isDisabled: _loginTextEditingController.text.isEmpty ||
+                        _passwordTextEditingController.text.isEmpty,
+                    title: Titles.enter,
+                    margin: EdgeInsets.zero,
+                    onTap: () => _authorize(),
+                  ),
                   const SizedBox(height: 24.0),
                   TransparentButtonWidget(
                     title: Titles.forgotPassword,
                     margin: EdgeInsets.zero,
-                    onTap: () =>
-                        _authorizationViewModel.showRecoveryScreen(context),
+                    onTap: () => _showRecoveryScreen(),
                   )
-                ])
+                ]),
           ]),
 
           /// INDICATOR
           _authorizationViewModel.loadingStatus == LoadingStatus.searching
               ? const LoadingIndicatorWidget()
               : Container()
-        ])));
+        ]),
+      ),
+    );
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  void _authorize() async {
+    await _authorizationViewModel.authorize(
+      _loginTextEditingController.text,
+      _passwordTextEditingController.text,
+    );
+
+    await _authorizationViewModel.getUserProfile();
+
+    if (_authorizationViewModel.loadingStatus == LoadingStatus.completed) {
+      _showTabControllerScreen();
+    }
+  }
+
+  // MARK: -
+  // MARK: - PUSH
+
+  void _showRecoveryScreen() => Navigator.push(context,
+      MaterialPageRoute(builder: (context) => const RecoveryScreenWidget()));
+
+  void _showTabControllerScreen() {
+    if (_authorizationViewModel.loadingStatus == LoadingStatus.completed) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const TabControllerScreenWidget()),
+        (route) => false,
+      );
+    }
   }
 }

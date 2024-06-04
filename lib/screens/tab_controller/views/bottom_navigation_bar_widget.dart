@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/components.dart';
+import 'package:izowork/views/badge_widget.dart';
 
 class BottomNavigationBarWidget extends StatelessWidget {
   final int index;
@@ -57,18 +58,8 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
         /// CHAT
         BottomNavigationBarItem(
-          icon: Badge(
-            backgroundColor: HexColors.additionalViolet,
-            label: Text(
-                messageCount.toString().length > 4
-                    ? messageCount.toString().substring(0, 3)
-                    : messageCount.toString(),
-                style: TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w600,
-                  color: HexColors.white,
-                )),
-            isLabelVisible: messageCount > 0,
+          icon: BadgeWidget(
+            value: messageCount,
             child: SvgPicture.asset(index == 3
                 ? 'assets/ic_chat_selected.svg'
                 : 'assets/ic_chat.svg'),
@@ -78,21 +69,11 @@ class BottomNavigationBarWidget extends StatelessWidget {
 
         /// MORE
         BottomNavigationBarItem(
-          icon: Badge(
-            backgroundColor: HexColors.additionalViolet,
-            label: Text(
-                notificationCount.toString().length > 3
-                    ? notificationCount.toString().substring(0, 2) + '...'
-                    : notificationCount.toString(),
-                style: TextStyle(
-                  fontSize: 10.0,
-                  fontWeight: FontWeight.w500,
-                  color: HexColors.white,
-                )),
-            isLabelVisible: notificationCount > 0,
-            child: SvgPicture.asset(index == 4
-                ? 'assets/ic_more_selected.svg'
-                : 'assets/ic_more.svg'),
+          icon: BadgeWidget(
+            value: notificationCount,
+            child: SvgPicture.asset(
+              index == 4 ? 'assets/ic_more_selected.svg' : 'assets/ic_more.svg',
+            ),
           ),
           label: Titles.more,
         ),

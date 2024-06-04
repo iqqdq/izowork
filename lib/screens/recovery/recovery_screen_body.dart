@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
@@ -20,12 +20,16 @@ class _RecoveryScreenBodyState extends State<RecoveryScreenBodyWidget> {
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _loginFocusNode.requestFocus());
   }
 
   @override
   void dispose() {
     _loginTextEditingController.dispose();
     _loginFocusNode.dispose();
+
     super.dispose();
   }
 
@@ -39,7 +43,6 @@ class _RecoveryScreenBodyState extends State<RecoveryScreenBodyWidget> {
     return Scaffold(
         backgroundColor: HexColors.white,
         appBar: AppBar(
-          elevation: 0.0,
           backgroundColor: Colors.white,
           leading: Padding(
               padding: const EdgeInsets.only(left: 16.0),
@@ -86,8 +89,9 @@ class _RecoveryScreenBodyState extends State<RecoveryScreenBodyWidget> {
                         !_loginTextEditingController.text.contains('.'),
                     title: Titles.send,
                     margin: EdgeInsets.zero,
-                    onTap: () => _recoveryViewModel.sendUserEmail(
-                        context, _loginTextEditingController.text)),
+                    onTap: () => _recoveryViewModel
+                        .sendUserEmail(_loginTextEditingController.text)
+                        .then((value) => Navigator.pop(context))),
                 const SizedBox(height: 60.0)
               ]),
           Center(

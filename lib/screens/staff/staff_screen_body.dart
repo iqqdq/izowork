@@ -2,7 +2,10 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/notifiers.dart';
+import 'package:izowork/screens/dialog/dialog_screen.dart';
+import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/screens/staff/views/staff_list_item_widget.dart';
 import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -64,71 +67,67 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
     );
 
     return Scaffold(
-        backgroundColor: HexColors.white,
-        appBar: AppBar(
-            toolbarHeight: 116.0,
-            titleSpacing: 0.0,
-            elevation: 0.0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: Colors.transparent,
-            automaticallyImplyLeading: false,
-            title: Column(children: [
-              Stack(children: [
-                Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(Titles.staff,
-                      style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 18.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold)),
-                ])
-              ]),
-              const SizedBox(height: 16.0),
-              Row(children: [
-                Expanded(
-                    child:
-
-                        /// SEARCH INPUT
-                        InputWidget(
-                            textEditingController: _textEditingController,
-                            focusNode: _focusNode,
-                            margin:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            isSearchInput: true,
-                            placeholder: '${Titles.search}...',
-                            onTap: () => setState,
-                            onChange: (text) => {
-                                  setState(() => _isSearching = true),
-                                  EasyDebounce.debounce('staff_debouncer',
-                                      const Duration(milliseconds: 500),
-                                      () async {
-                                    _pagination =
-                                        Pagination(offset: 0, size: 50);
-
-                                    _staffViewModel
-                                        .getUserList(
-                                          pagination: _pagination,
-                                          search: _textEditingController.text,
-                                        )
-                                        .then(
-                                          (value) => setState(
-                                              () => _isSearching = false),
-                                        );
-                                  })
-                                },
-                            onClearTap: () => {
-                                  _pagination.offset = 0,
-                                  _staffViewModel.getUserList(
-                                      pagination: _pagination)
-                                }))
+      backgroundColor: HexColors.white,
+      appBar: AppBar(
+          toolbarHeight: 116.0,
+          titleSpacing: 0.0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          title: Column(children: [
+            Stack(children: [
+              Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: BackButtonWidget(onTap: () => Navigator.pop(context))),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(Titles.staff,
+                    style: TextStyle(
+                        color: HexColors.black,
+                        fontSize: 18.0,
+                        fontFamily: 'PT Root UI',
+                        fontWeight: FontWeight.bold)),
               ])
-            ])),
-        body: SizedBox.expand(
-            child: Stack(children: [
+            ]),
+            const SizedBox(height: 16.0),
+            Row(children: [
+              Expanded(
+                  child:
+
+                      /// SEARCH INPUT
+                      InputWidget(
+                          textEditingController: _textEditingController,
+                          focusNode: _focusNode,
+                          margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                          isSearchInput: true,
+                          placeholder: '${Titles.search}...',
+                          onTap: () => setState,
+                          onChange: (text) => {
+                                setState(() => _isSearching = true),
+                                EasyDebounce.debounce('staff_debouncer',
+                                    const Duration(milliseconds: 500),
+                                    () async {
+                                  _pagination = Pagination(offset: 0, size: 50);
+
+                                  _staffViewModel
+                                      .getUserList(
+                                        pagination: _pagination,
+                                        search: _textEditingController.text,
+                                      )
+                                      .then(
+                                        (value) => setState(
+                                            () => _isSearching = false),
+                                      );
+                                })
+                              },
+                          onClearTap: () => {
+                                _pagination.offset = 0,
+                                _staffViewModel.getUserList(
+                                    pagination: _pagination)
+                              }))
+            ])
+          ])),
+      body: SizedBox.expand(
+        child: Stack(children: [
           /// STAFF LIST VIEW
           LiquidPullToRefresh(
             color: HexColors.primaryMain,
@@ -150,22 +149,20 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
                 itemCount: _staffViewModel.users.length,
                 itemBuilder: (context, index) {
                   return StaffListItemWidget(
-                      key: ValueKey(_staffViewModel.users[index].id),
-                      user: _staffViewModel.users[index],
-                      onUserTap: () => _staffViewModel.showProfileScreen(
-                            context,
-                            _staffViewModel.users[index],
-                          ),
-                      onLinkTap: _staffViewModel.users[index].social.isEmpty
-                          ? null
-                          : (url) => _staffViewModel.openUrl(url),
-                      onChatTap: _staffViewModel.users[index].id ==
-                              _staffViewModel.userId
-                          ? null
-                          : () => _staffViewModel.createUserChat(
-                                context,
-                                index,
-                              ));
+                    key: ValueKey(_staffViewModel.users[index].id),
+                    user: _staffViewModel.users[index],
+                    onUserTap: () => _showProfileScreen(
+                      context,
+                      _staffViewModel.users[index],
+                    ),
+                    onLinkTap: _staffViewModel.users[index].social.isEmpty
+                        ? null
+                        : (url) => _staffViewModel.openUrl(url),
+                    onChatTap: _staffViewModel.users[index].id ==
+                            _staffViewModel.userId
+                        ? null
+                        : () => _createChat(index),
+                  );
                 }),
           ),
           const SeparatorWidget(),
@@ -193,6 +190,35 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
                   padding: EdgeInsets.only(bottom: 90.0),
                   child: LoadingIndicatorWidget())
               : Container()
-        ])));
+        ]),
+      ),
+    );
+  }
+
+  // MARK: -
+  // MARK: - ACTIONS
+
+  void _showProfileScreen(
+    BuildContext context,
+    User user,
+  ) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProfileScreenWidget(
+                    isMine: false,
+                    user: user,
+                    onPop: (user) => null,
+                  )));
+
+  void _createChat(int index) {
+    _staffViewModel.createUserChat(index).whenComplete(() => {
+          if (_staffViewModel.chat != null)
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        DialogScreenWidget(id: _staffViewModel.chat!.id)))
+        });
   }
 }

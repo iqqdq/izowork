@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/components.dart';
 
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/company/company_screen.dart';
 import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
 import 'package:izowork/api/api.dart';
@@ -156,7 +156,6 @@ class _CompanyCreateScreenBodyState
       backgroundColor: HexColors.white,
       appBar: AppBar(
           titleSpacing: 0.0,
-          elevation: 0.0,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
           backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
@@ -195,11 +194,16 @@ class _CompanyCreateScreenBodyState
                 /// AVATAR
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Stack(children: [
-                    SvgPicture.asset('assets/ic_avatar.svg',
-                        color: HexColors.grey40,
-                        width: 80.0,
-                        height: 80.0,
-                        fit: BoxFit.cover),
+                    SvgPicture.asset(
+                      'assets/ic_avatar.svg',
+                      colorFilter: ColorFilter.mode(
+                        HexColors.grey40,
+                        BlendMode.srcIn,
+                      ),
+                      width: 80.0,
+                      height: 80.0,
+                      fit: BoxFit.cover,
+                    ),
 
                     /// URL AVATAR
                     _url == null

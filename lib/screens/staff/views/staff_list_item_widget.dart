@@ -43,11 +43,16 @@ class StaffListItemWidget extends StatelessWidget {
                       child: Row(children: [
                         /// STAFF AVATAR
                         Stack(children: [
-                          SvgPicture.asset('assets/ic_avatar.svg',
-                              color: HexColors.grey40,
-                              width: 40.0,
-                              height: 40.0,
-                              fit: BoxFit.cover),
+                          SvgPicture.asset(
+                            'assets/ic_avatar.svg',
+                            width: 40.0,
+                            height: 40.0,
+                            colorFilter: ColorFilter.mode(
+                              HexColors.grey40,
+                              BlendMode.srcIn,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
                           user.avatar == null
                               ? Container()
                               : user.avatar!.isEmpty

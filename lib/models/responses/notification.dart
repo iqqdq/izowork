@@ -40,6 +40,7 @@ class Metadata {
     this.taskId,
     this.newsId,
     this.phaseId,
+    this.chatId,
   });
 
   String? objectId;
@@ -47,6 +48,7 @@ class Metadata {
   String? taskId;
   String? newsId;
   String? phaseId;
+  String? chatId;
 
   factory Metadata.fromJson(Map<String, dynamic> json) => Metadata(
         objectId: json["object_id"],
@@ -54,5 +56,6 @@ class Metadata {
         taskId: json["task_id"],
         newsId: json["news_id"],
         phaseId: json["phase_id"],
+        chatId: json["chat_id"],
       );
 }

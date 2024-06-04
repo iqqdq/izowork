@@ -96,10 +96,15 @@ class MapControlWidget extends StatelessWidget {
                         splashColor: Colors.transparent,
                         borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(10.0)),
-                        child: SvgPicture.asset('assets/ic_search.svg',
-                            width: 44.0,
-                            fit: BoxFit.none,
-                            color: HexColors.grey50),
+                        child: SvgPicture.asset(
+                          'assets/ic_search.svg',
+                          width: 44.0,
+                          fit: BoxFit.none,
+                          colorFilter: ColorFilter.mode(
+                            HexColors.grey50,
+                            BlendMode.srcIn,
+                          ),
+                        ),
                         onTap: onSearchTap),
                   ),
                 ),

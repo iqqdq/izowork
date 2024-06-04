@@ -25,7 +25,6 @@ class _ProductPageScreenState extends State<ProductPageScreenWidget> {
         backgroundColor: HexColors.white,
         appBar: AppBar(
             titleSpacing: 0.0,
-            elevation: 0.0,
             backgroundColor: HexColors.white90,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             automaticallyImplyLeading: false,

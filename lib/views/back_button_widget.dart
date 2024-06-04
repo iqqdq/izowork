@@ -28,10 +28,13 @@ class _BackButtonState extends State<BackButtonWidget> {
         highlightColor: Colors.transparent,
         child: Row(children: [
           SvgPicture.asset(widget.asset ?? 'assets/ic_back_arrow.svg',
-              color: widget.asset == null
-                  ? _isHighlight
-                      ? HexColors.secondaryDark
-                      : HexColors.primaryDark
+              colorFilter: widget.asset == null
+                  ? ColorFilter.mode(
+                      _isHighlight
+                          ? HexColors.secondaryDark
+                          : HexColors.primaryDark,
+                      BlendMode.srcIn,
+                    )
                   : null,
               width: 24.0,
               height: 24.0),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/object/object_page_view_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
@@ -134,7 +134,6 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
         backgroundColor: HexColors.white,
         appBar: AppBar(
             centerTitle: true,
-            elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             leading: Padding(
@@ -431,11 +430,8 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
                                           isDownloading: _objectCreateViewModel
                                                   .downloadIndex ==
                                               index,
-                                          onTap: () =>
-                                              _objectCreateViewModel.openFile(
-                                                context,
-                                                index,
-                                              ),
+                                          onTap: () => _objectCreateViewModel
+                                              .openFile(index),
                                           onRemoveTap: () =>
                                               _objectCreateViewModel
                                                   .deleteObjectFile(

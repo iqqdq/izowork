@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
 import 'package:izowork/views/views.dart';

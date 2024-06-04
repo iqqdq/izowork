@@ -1,26 +1,27 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/deal_calendar/deal_calendar_screen.dart';
-import 'package:izowork/screens/deals/deals_filter_sheet/deals_filter_page_view_screen.dart';
-import 'package:izowork/screens/deal/deal_screen.dart';
-import 'package:izowork/screens/deal_create/deal_create_screen.dart';
 import 'package:izowork/screens/deals/deals_filter_sheet/deals_filter_page_view_screen_body.dart';
 
 class DealsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
   final List<Deal> _deals = [];
-  DealsFilter? _dealsFilter;
 
   List<Deal> get deals => _deals;
 
+  DealsFilter? _dealsFilter;
+
+  DealsFilter? get dealsFilter => _dealsFilter;
+
   DealsViewModel() {
-    getDealList(pagination: Pagination(offset: 0, size: 50), search: '');
+    getDealList(
+      pagination: Pagination(offset: 0, size: 50),
+      search: '',
+    );
   }
 
   // MARK: -
@@ -29,16 +30,18 @@ class DealsViewModel with ChangeNotifier {
   Future getDealById(String id) async {
     loadingStatus = LoadingStatus.searching;
 
-    await DealRepository().getDeal(id).then((response) => {
-          if (response is Deal)
-            {
-              _deals.insert(0, response),
-              loadingStatus = LoadingStatus.completed,
-            }
-          else
-            {loadingStatus = LoadingStatus.error},
-          notifyListeners()
-        });
+    await DealRepository()
+        .getDeal(id)
+        .then((response) => {
+              if (response is Deal)
+                {
+                  _deals.insert(0, response),
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future getDealList({
@@ -84,66 +87,19 @@ class DealsViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
 
+  void setFilter(DealsFilter dealsFilter) {
+    _dealsFilter = dealsFilter;
+    notifyListeners();
+  }
+
   void resetFilter() {
     _dealsFilter = null;
-  }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showCalendarScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const DealCalendarScreenWidget()));
-  }
-
-  void showDealCreateScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DealCreateScreenWidget(
-                onCreate: (deal, dealProducts) => {
-                      if (deal != null) getDealById(deal.id),
-                    })));
-  }
-
-  void showDealsFilterSheet(BuildContext context, Function() onFilter) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => DealsFilterPageViewScreenWidget(
-            dealsFilter: _dealsFilter,
-            onPop: (objectsFilter) => {
-                  if (objectsFilter == null)
-                    {
-                      // CLEAR
-                      resetFilter(),
-                      onFilter()
-                    }
-                  else
-                    {
-                      // FILTER
-                      _dealsFilter = objectsFilter,
-                      onFilter()
-                    }
-                }));
-  }
-
-  void showDealScreenWidget(BuildContext context, int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DealScreenWidget(id: _deals[index].id)));
   }
 }

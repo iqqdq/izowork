@@ -1,13 +1,8 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'dart:io';
-import 'dart:io' as io;
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:open_filex/open_filex.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:path_provider/path_provider.dart';
 
+import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/api/api.dart';
@@ -57,41 +52,20 @@ class ObjectAnalyticsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - ACTIONS
 
-  Future openFile(BuildContext context, int index) async {
-    String url = objectMediaUrl + (object.files[index].filename ?? '');
+  Future openFile(int index) async {
+    final filename = object.files[index].filename;
+    if (filename == null) return;
 
-    if (Platform.isAndroid) {
-      Directory appDocumentsDirectory =
-          await getApplicationDocumentsDirectory();
-      String appDocumentsPath = appDocumentsDirectory.path;
-      String fileName = object.files[index].name;
-      String filePath = '$appDocumentsPath/$fileName';
-      bool isFileExists = await io.File(filePath).exists();
-
-      if (!isFileExists) {
-        _downloadIndex = index;
-        notifyListeners();
-
-        await Dio().download(url, filePath, onReceiveProgress: (count, total) {
-          debugPrint('---Download----Rec: $count, Total: $total');
-        }).whenComplete(() => {
+    FileDownloadHelper().download(
+        url: objectMediaUrl + filename,
+        filename: filename,
+        onDownload: () => {
+              _downloadIndex = index,
+              notifyListeners(),
+            },
+        onComplete: () => {
               _downloadIndex = -1,
               notifyListeners(),
             });
-      }
-
-      OpenResult openResult = await OpenFilex.open(filePath);
-
-      if (openResult.type == ResultType.noAppToOpen) {
-        Toast().showTopToast(context, Titles.unsupportedFileFormat);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-        launchUrl(Uri.parse(url.replaceAll(' ', '')));
-      } else if (await canLaunchUrl(
-          Uri.parse('https://' + url.replaceAll(' ', '')))) {
-        launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
-      }
-    }
   }
 }

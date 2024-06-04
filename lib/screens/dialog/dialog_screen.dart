@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/dialog/dialog_screen_body.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class DialogScreenWidget extends StatelessWidget {
+  final String id;
   final Socket? socket;
-  final Chat chat;
   final Function(Message)? onPop;
 
   const DialogScreenWidget({
     Key? key,
+    required this.id,
     this.socket,
-    required this.chat,
     this.onPop,
   }) : super(key: key);
 
@@ -21,8 +21,8 @@ class DialogScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => DialogViewModel(
+              id,
               socket,
-              chat,
             ),
         child: DialogScreenBodyWidget(onPop: onPop));
   }

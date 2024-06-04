@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
@@ -11,13 +11,11 @@ class PhaseViewModel with ChangeNotifier {
 
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
+  bool _isDirector = false;
+
   Phase? _phase;
 
-  final List<File> _files = [];
-
   final List<Deal> _deals = [];
-
-  int _current = 0;
 
   List<PhaseProduct> _phaseProducts = [];
 
@@ -25,13 +23,11 @@ class PhaseViewModel with ChangeNotifier {
 
   PhaseChecklistResponse? _phaseChecklistResponse;
 
-  List<PhaseChecklistInfo> _phaseChecklistInfos = [];
-
   String? _error;
 
-  Phase? get phase => _phase;
+  bool get isDirector => _isDirector;
 
-  List<File> get files => _files;
+  Phase? get phase => _phase;
 
   List<Deal> get deals => _deals;
 
@@ -41,12 +37,21 @@ class PhaseViewModel with ChangeNotifier {
 
   PhaseChecklistResponse? get phaseChecklistResponse => _phaseChecklistResponse;
 
-  List<PhaseChecklistInfo> get phaseChecklistInfos => _phaseChecklistInfos;
-
   String? get error => _error;
 
   PhaseViewModel(this.id) {
-    getPhaseById();
+    _checkIsDirector().whenComplete(() => getPhaseById());
+  }
+
+  Future _checkIsDirector() async {
+    User? user = await GetIt.I<LocalStorageRepositoryInterface>().getUser();
+    if (user == null) return;
+    if (user.roles == null) return;
+
+    for (var role in user.roles!) {
+      if (role.name.toLowerCase().contains('директор')) _isDirector = true;
+      if (_isDirector == true) break;
+    }
   }
 
   // MARK: -
@@ -137,62 +142,17 @@ class PhaseViewModel with ChangeNotifier {
         .whenComplete(() => notifyListeners());
   }
 
-  Future getPhaseChecklistInfoList(String id) async {
-    loadingStatus = LoadingStatus.searching;
-    notifyListeners();
-
-    await PhaseRepository()
-        .getPhaseChecklistInfoList(id)
-        .then((response) => {
-              if (response is List<PhaseChecklistInfo>)
-                {
-                  _phaseChecklistInfos = response,
-                  loadingStatus = LoadingStatus.completed,
-                }
-            })
-        .whenComplete(() => notifyListeners());
-  }
-
-  Future createPhaseChecklistInfo(
+  Future updateChecklistState(
     int index,
-    String description,
+    String state,
   ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
     await PhaseRepository()
-        .createPhaseChecklistInfo(PhaseChecklistInfoRequest(
-          phaseChecklistId:
-              _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
-          description: description,
-        ))
-        .then((response) => {
-              if (response is PhaseChecklistInfo)
-                {
-                  if (_files.isNotEmpty)
-                    {
-                      _files.forEach((element) async {
-                        await uploadFile(
-                          response.id,
-                          element,
-                        ).then((value) => {
-                              _current++,
-                              if (_current == _files.length)
-                                updateChecklistState(index),
-                            });
-                      })
-                    }
-                  else
-                    updateChecklistState(index),
-                }
-            });
-  }
-
-  Future updateChecklistState(int index) async {
-    await PhaseRepository()
         .updatePhaseChecklistState(PhaseChecklistStateRequest(
           id: _phaseChecklistResponse?.phaseChecklists[index].id ?? '',
-          state: PhaseChecklistState.underReview,
+          state: state,
         ))
         .then((response) => {
               if (response is PhaseChecklist)
@@ -203,13 +163,6 @@ class PhaseViewModel with ChangeNotifier {
             })
         .whenComplete(() => notifyListeners());
   }
-
-  Future uploadFile(
-    String id,
-    File file,
-  ) async =>
-      await PhaseRepository()
-          .addPhaseChecklistInfoFile(PhaseChecklistInfoFileRequest(id, file));
 
   void updateDeals(Deal deal) {
     _deals.add(deal);

@@ -1,14 +1,11 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'dart:io';
-import 'dart:io' as io;
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:izowork/helpers/helpers.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:open_filex/open_filex.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
@@ -81,7 +78,7 @@ class DealProcessViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 }
             })
         .whenComplete(() => notifyListeners());
@@ -99,14 +96,14 @@ class DealProcessViewModel with ChangeNotifier {
   //             if (response is DealProcessInfo)
   //               {
   //                 loadingStatus = LoadingStatus.completed,
-  //                 Toast().showTopToast(context, Titles.infoWasUpdated),
+  //                 Toast().showTopToast( Titles.infoWasUpdated),
   //                 Future.delayed(const Duration(milliseconds: 50),
   //                     () => Navigator.pop(context))
   //               }
   //             else if (response is ErrorResponse)
   //               {
   //                 loadingStatus = LoadingStatus.error,
-  //                 Toast().showTopToast(context, response.message ?? 'Ошибка')
+  //                 Toast().showTopToast( response.message ?? 'Ошибка')
   //               }
   //           })
   //       .whenComplete(() => notifyListeners());
@@ -129,7 +126,7 @@ class DealProcessViewModel with ChangeNotifier {
           else if (response is ErrorResponse)
             {
               loadingStatus = LoadingStatus.error,
-              Toast().showTopToast(context, response.message ?? 'Ошибка')
+              Toast().showTopToast(response.message ?? 'Ошибка')
             },
           notifyListeners()
         });
@@ -138,46 +135,24 @@ class DealProcessViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - ACTIONS
 
-  Future openFile(BuildContext context, int index, int fileIndex) async {
-    if (_informations[index].files.isNotEmpty) {
-      String url = dealProcessInfoMediaUrl +
-          _informations[index].files[fileIndex].filename;
+  Future openFile(
+    int index,
+    int fileIndex,
+  ) async {
+    if (_informations[index].files.isEmpty) return;
+    final filename = _informations[index].files[fileIndex].filename;
 
-      if (Platform.isAndroid) {
-        Directory appDocumentsDirectory =
-            await getApplicationDocumentsDirectory();
-        String appDocumentsPath = appDocumentsDirectory.path;
-        String fileName = _informations[index].files[fileIndex].name;
-        String filePath = '$appDocumentsPath/$fileName';
-        bool isFileExists = await io.File(filePath).exists();
-
-        if (!isFileExists) {
-          _downloadIndex = index;
-          notifyListeners();
-
-          await Dio().download(url, filePath,
-              onReceiveProgress: (count, total) {
-            debugPrint('---Download----Rec: $count, Total: $total');
-          }).then((value) => {
-                _downloadIndex = -1,
-                notifyListeners(),
-              });
-        }
-
-        OpenResult openResult = await OpenFilex.open(filePath);
-
-        if (openResult.type == ResultType.noAppToOpen) {
-          Toast().showTopToast(context, Titles.unsupportedFileFormat);
-        }
-      } else {
-        if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-          launchUrl(Uri.parse(url.replaceAll(' ', '')));
-        } else if (await canLaunchUrl(
-            Uri.parse('https://' + url.replaceAll(' ', '')))) {
-          launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
-        }
-      }
-    }
+    FileDownloadHelper().download(
+        url: dealProcessInfoMediaUrl + filename,
+        filename: filename,
+        onDownload: () => {
+              _downloadIndex = index,
+              notifyListeners(),
+            },
+        onComplete: () => {
+              _downloadIndex = -1,
+              notifyListeners(),
+            });
   }
 
   // MARK: -
@@ -213,7 +188,6 @@ class DealProcessViewModel with ChangeNotifier {
                                                           LoadingStatus
                                                               .completed,
                                                       Toast().showTopToast(
-                                                          context,
                                                           Titles.infoWasAdded),
                                                       notifyListeners()
                                                     }
@@ -224,8 +198,7 @@ class DealProcessViewModel with ChangeNotifier {
                                 else
                                   {
                                     loadingStatus = LoadingStatus.completed,
-                                    Toast().showTopToast(
-                                        context, Titles.infoWasAdded),
+                                    Toast().showTopToast(Titles.infoWasAdded),
                                     notifyListeners()
                                   }
                               }

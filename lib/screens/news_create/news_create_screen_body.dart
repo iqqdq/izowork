@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
@@ -76,7 +76,6 @@ class _NewsCreateScreenBodyState extends State<NewsCreateScreenBodyWidget> {
         backgroundColor: HexColors.white,
         appBar: AppBar(
             titleSpacing: 16.0,
-            elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,

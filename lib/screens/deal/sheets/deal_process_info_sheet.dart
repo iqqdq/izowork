@@ -88,7 +88,6 @@ class _DealProcessInfoSheetState extends State<DealProcessInfoSheetWidget> {
                   const SizedBox(height: 16.0),
 
                   /// FILE LIST
-
                   ListView.builder(
                       padding: EdgeInsets.zero,
                       physics: const NeverScrollableScrollPhysics(),

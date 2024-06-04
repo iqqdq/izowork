@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/profile/profile_screen.dart';
 
 class NewsCommentsViewModel with ChangeNotifier {
   final News news;
@@ -78,7 +77,7 @@ class NewsCommentsViewModel with ChangeNotifier {
             });
   }
 
-  Future createNewsComment(BuildContext context, String comment) async {
+  Future createNewsComment(String comment) async {
     await NewsRepository()
         .createNewsComment(
             NewsCommentRequest(comment: comment, newsId: news.id))
@@ -92,24 +91,10 @@ class NewsCommentsViewModel with ChangeNotifier {
               else
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 }
             })
         .whenComplete(() => notifyListeners());
-  }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showProfileScreen(BuildContext context, int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ProfileScreenWidget(
-                  isMine: false,
-                  user: _comments[index].user,
-                  onPop: (user) => null,
-                )));
   }
 
   // MARK: -

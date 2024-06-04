@@ -44,7 +44,6 @@ class _AnalyticsPageViewScreenBodyState
         appBar: AppBar(
             toolbarHeight: 112.0,
             titleSpacing: 0.0,
-            elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
@@ -127,10 +127,8 @@ class _PhaseChecklistCreateBodyState
                                           Navigator.pop(context)
                                         else
                                           Toast().showTopToast(
-                                            context,
-                                            _checklistCreateViewModel.error ??
-                                                'Возникла ошибка при добавлении чеклиста',
-                                          )
+                                              _checklistCreateViewModel.error ??
+                                                  'Возникла ошибка при добавлении чеклиста')
                                       }),
                             }),
               ]),

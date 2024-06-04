@@ -83,7 +83,10 @@ class _CommentBubbleState extends State<CommentBubbleWidget>
                               /// AVATAR
                               Stack(children: [
                                 SvgPicture.asset('assets/ic_avatar.svg',
-                                    color: HexColors.grey40,
+                                    colorFilter: ColorFilter.mode(
+                                      HexColors.grey40,
+                                      BlendMode.srcIn,
+                                    ),
                                     width: 24.0,
                                     height: 24.0,
                                     fit: BoxFit.cover),

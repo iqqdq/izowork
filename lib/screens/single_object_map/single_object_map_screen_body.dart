@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/helpers/helpers.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/map/views/map_control_widget.dart';
 import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
 import 'package:izowork/views/back_button_widget.dart';
@@ -102,7 +102,6 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
     return Scaffold(
         appBar: AppBar(
             titleSpacing: 0.0,
-            elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,

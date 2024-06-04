@@ -6,7 +6,10 @@ import 'package:izowork/views/views.dart';
 class DealCloseSheetWidget extends StatefulWidget {
   final Function(String, List<PlatformFile>) onTap;
 
-  const DealCloseSheetWidget({Key? key, required this.onTap}) : super(key: key);
+  const DealCloseSheetWidget({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   _DealCloseSheetState createState() => _DealCloseSheetState();
@@ -117,8 +120,10 @@ class _DealCloseSheetState extends State<DealCloseSheetWidget> {
                       margin: const EdgeInsets.only(top: 16.0),
                       title: Titles.closeDeal,
                       isDisabled: _textEditingController.text.isEmpty,
-                      onTap: () =>
-                          widget.onTap(_textEditingController.text, _files))
+                      onTap: () => widget.onTap(
+                            _textEditingController.text,
+                            _files,
+                          ))
                 ])));
   }
 }

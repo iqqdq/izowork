@@ -2,14 +2,11 @@
 import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
+
 import 'package:izowork/components/components.dart';
 import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/contact/contact_screen.dart';
-import 'package:izowork/screens/contact_create/contact_create_screen.dart';
-import 'package:izowork/screens/contacts/contacts_filter_sheet/contacts_filter_page_view_screen.dart';
 import 'package:izowork/screens/contacts/contacts_filter_sheet/contacts_filter_page_view_screen_body.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ContactsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -72,79 +69,27 @@ class ContactsViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
-  }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showContactScreen(BuildContext context, int index) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ContactScreenWidget(
-                contact: _contacts[index],
-                onDelete: (contact) => {
-                      _contacts
-                          .removeWhere((element) => element.id == contact.id),
-                      notifyListeners()
-                    })));
-  }
-
-  void showContactEditScreen(
-    BuildContext context,
-    Company? company,
-    Function(Contact?) onContact,
-  ) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (newContext) => ContactCreateScreenWidget(
-                company: company,
-                contact: null,
-                onDelete: null,
-                onPop: (contact) => {
-                      if (company == null)
-                        {
-                          if (contact != null)
-                            {
-                              _contacts.insert(0, contact),
-                              if (context.mounted) notifyListeners(),
-                            }
-                        }
-                      else
-                        onContact(contact)
-                    })));
-  }
-
-  void showContactsFilterSheet(BuildContext context, Function() onFilter) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => ContactsFilterPageViewScreenWidget(
-            contactsFilter: _contactsFilter,
-            onPop: (contactsFilter) => {
-                  if (contactsFilter == null)
-                    {
-                      // CLEAR
-                      resetFilter(),
-                      onFilter()
-                    }
-                  else
-                    {
-                      // FILTER
-                      _contactsFilter = contactsFilter,
-                      onFilter()
-                    }
-                }));
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
+
+  void setContact(Contact contact) {
+    _contacts.insert(0, contact);
+    notifyListeners();
+  }
+
+  void removeContact(Contact contact) {
+    _contacts.removeWhere((element) => element.id == contact.id);
+    notifyListeners();
+  }
+
+  void setFilter(ContactsFilter contactsFilter) {
+    _contactsFilter = contactsFilter;
+    notifyListeners();
+  }
 
   void resetFilter() {
     _contactsFilter = null;
@@ -171,12 +116,12 @@ class ContactsViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          webViewHelper.openWebView(url);
+          webViewHelper.open(url);
         }
       } else {
         nativeUrl != null
-            ? webViewHelper.openWebView(nativeUrl)
-            : webViewHelper.openWebView(url);
+            ? webViewHelper.open(nativeUrl)
+            : webViewHelper.open(url);
       }
     }
   }

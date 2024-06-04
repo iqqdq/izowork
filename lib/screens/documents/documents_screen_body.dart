@@ -2,9 +2,12 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
+import 'package:izowork/screens/documents/documents_filter_sheet/documents_filter_page_view_screen.dart';
+import 'package:izowork/screens/documents/documents_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class DocumentsScreenBodyWidget extends StatefulWidget {
@@ -33,7 +36,9 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
           _scrollController.position.maxScrollExtent) {
         _pagination.offset += 1;
         _documentsViewModel.getDealList(
-            pagination: _pagination, search: _textEditingController.text);
+          pagination: _pagination,
+          search: _textEditingController.text,
+        );
       }
     });
   }
@@ -43,18 +48,8 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
     _scrollController.dispose();
     _textEditingController.dispose();
     _focusNode.dispose();
+
     super.dispose();
-  }
-
-  // MARK: -
-  // MARK: - FUNCTIONS
-
-  Future _onRefresh() async {
-    _pagination = Pagination(offset: 0, size: 50);
-    await _documentsViewModel.getDealList(
-      pagination: _pagination,
-      search: _textEditingController.text,
-    );
   }
 
   @override
@@ -70,7 +65,6 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
       appBar: AppBar(
           toolbarHeight: 116.0,
           titleSpacing: 0.0,
-          elevation: 0.0,
           backgroundColor: HexColors.white90,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
           automaticallyImplyLeading: false,
@@ -153,8 +147,8 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
                         isDownloading:
                             _documentsViewModel.downloadIndex == index,
                         onTap: () => isFolder
-                            ? _documentsViewModel.openFolder(context, index)
-                            : _documentsViewModel.openFile(context, index));
+                            ? _openFolder(index)
+                            : _documentsViewModel.openFile(index));
                   })),
           const SeparatorWidget(),
 
@@ -179,17 +173,7 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
               child: Align(
                   alignment: Alignment.bottomCenter,
                   child: FilterButtonWidget(
-                      onTap: () => _documentsViewModel.showDocumentsFilterSheet(
-                          context,
-                          () => {
-                                _pagination = Pagination(offset: 0, size: 50),
-                                _documentsViewModel.getDealList(
-                                    pagination: _pagination,
-                                    search: _textEditingController.text)
-                              })
-
-                      // onClearTap: () => {}
-                      ))),
+                      onTap: () => _showDocumentsFilterSheet()))),
 
           /// INDICATOR
           _documentsViewModel.loadingStatus == LoadingStatus.searching
@@ -199,4 +183,50 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
       ),
     );
   }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    _pagination = Pagination(offset: 0, size: 50);
+    await _documentsViewModel.getDealList(
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
+  }
+
+  // MARK: -
+  // MARK: - PUSH
+
+  void _openFolder(int index) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => DocumentsScreenWidget(
+                id: _documentsViewModel.documents[index].id,
+                title: _documentsViewModel.documents[index].name,
+                namespace: _documentsViewModel.documents[index].namespace,
+              )));
+
+  void _showDocumentsFilterSheet() => showCupertinoModalBottomSheet(
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => DocumentsFilterPageViewScreenWidget(
+          documentsFilter: _documentsViewModel.documentsFilter,
+          onPop: (documentsFilter) => {
+                if (documentsFilter == null)
+                  {
+                    // CLEAR
+                    _documentsViewModel.resetFilter(),
+                    _onRefresh()
+                  }
+                else
+                  {
+                    // FILTER
+                    _documentsViewModel.updateFilter(documentsFilter),
+                    _onRefresh()
+                  }
+              }));
 }

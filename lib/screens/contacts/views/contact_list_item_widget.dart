@@ -9,14 +9,14 @@ import 'package:izowork/views/views.dart';
 class ContactListItemWidget extends StatelessWidget {
   final Contact contact;
   final VoidCallback onContactTap;
-  final VoidCallback onPhoneTap;
+  final VoidCallback? onPhoneTap;
   final Function(String) onLinkTap;
 
   const ContactListItemWidget(
       {Key? key,
       required this.contact,
       required this.onContactTap,
-      required this.onPhoneTap,
+      this.onPhoneTap,
       required this.onLinkTap})
       : super(key: key);
 
@@ -41,11 +41,16 @@ class ContactListItemWidget extends StatelessWidget {
                 Row(children: [
                   /// CONTACT AVATAR
                   Stack(children: [
-                    SvgPicture.asset('assets/ic_avatar.svg',
-                        color: HexColors.grey40,
-                        width: 40.0,
-                        height: 40.0,
-                        fit: BoxFit.cover),
+                    SvgPicture.asset(
+                      'assets/ic_avatar.svg',
+                      colorFilter: ColorFilter.mode(
+                        HexColors.grey40,
+                        BlendMode.srcIn,
+                      ),
+                      width: 40.0,
+                      height: 40.0,
+                      fit: BoxFit.cover,
+                    ),
                     contact.avatar == null
                         ? Container()
                         : ClipRRect(
@@ -115,10 +120,13 @@ class ContactListItemWidget extends StatelessWidget {
                                   : 2)
                 ]),
                 const SizedBox(height: 10.0),
-                const TitleWidget(
-                    text: Titles.phone,
-                    padding: EdgeInsets.zero,
-                    isSmall: true),
+                GestureDetector(
+                  onTap: () => onPhoneTap == null ? {} : onPhoneTap!(),
+                  child: const TitleWidget(
+                      text: Titles.phone,
+                      padding: EdgeInsets.zero,
+                      isSmall: true),
+                ),
                 const SizedBox(height: 4.0),
 
                 /// PHONE

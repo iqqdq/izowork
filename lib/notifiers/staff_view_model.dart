@@ -8,8 +8,6 @@ import 'package:get_it/get_it.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/dialog/dialog_screen.dart';
-import 'package:izowork/screens/profile/profile_screen.dart';
 
 class StaffViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -19,6 +17,10 @@ class StaffViewModel with ChangeNotifier {
   final List<User> _users = [];
 
   List<User> get users => _users;
+
+  Chat? _chat;
+
+  Chat? get chat => _chat;
 
   StaffViewModel() {
     setUserId().whenComplete(
@@ -74,10 +76,7 @@ class StaffViewModel with ChangeNotifier {
         .whenComplete(() => notifyListeners());
   }
 
-  Future createUserChat(
-    BuildContext context,
-    int index,
-  ) async {
+  Future createUserChat(int index) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -86,34 +85,12 @@ class StaffViewModel with ChangeNotifier {
         .then((response) => {
               if (response is Chat)
                 {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DialogScreenWidget(chat: response)))
+                  loadingStatus = LoadingStatus.completed,
+                  _chat = response,
                 }
             })
-        .whenComplete(() => {
-              loadingStatus = LoadingStatus.completed,
-              notifyListeners(),
-            });
+        .whenComplete(() => notifyListeners());
   }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showProfileScreen(
-    BuildContext context,
-    User user,
-  ) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProfileScreenWidget(
-                    isMine: false,
-                    user: user,
-                    onPop: (user) => null,
-                  )));
 
   // MARK: -
   // MARK: - FUNCTIONS
@@ -143,12 +120,12 @@ class StaffViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          webViewHelper.openWebView(url);
+          webViewHelper.open(url);
         }
       } else {
         nativeUrl != null
-            ? webViewHelper.openWebView(nativeUrl)
-            : webViewHelper.openWebView(url);
+            ? webViewHelper.open(nativeUrl)
+            : webViewHelper.open(url);
       }
     }
   }

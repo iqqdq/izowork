@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/phase_checklist_messages/views/phase_checklist_comment_item_widget.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/views/views.dart';
@@ -69,43 +69,42 @@ class _PhaseChecklistCommentsBodyState
     );
 
     return Scaffold(
+      backgroundColor: HexColors.white,
+      appBar: AppBar(
+        titleSpacing: 0.0,
+        centerTitle: true,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: HexColors.white,
-        appBar: AppBar(
-          titleSpacing: 0.0,
-          elevation: 0.0,
-          centerTitle: true,
-          systemOverlayStyle: SystemUiOverlayStyle.dark,
-          backgroundColor: HexColors.white,
-          automaticallyImplyLeading: false,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: BackButtonWidget(
-              asset: 'assets/ic_close.svg',
-              onTap: () => Navigator.pop(context),
-            ),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(right: 16.0 + 24.0),
-            child: Row(children: [
-              /// PHASE CHECKLIST TITLE
-              Expanded(
-                child: Text(
-                  _phaseChecklistMessagesViewModel.phaseChecklist.name,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                    color: HexColors.black,
-                    fontSize: 18.0,
-                    fontFamily: 'PT Root UI',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ]),
+        automaticallyImplyLeading: false,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16.0),
+          child: BackButtonWidget(
+            asset: 'assets/ic_close.svg',
+            onTap: () => Navigator.pop(context),
           ),
         ),
-        body: SizedBox.expand(
-            child: Stack(children: [
+        title: Padding(
+          padding: const EdgeInsets.only(right: 16.0 + 24.0),
+          child: Row(children: [
+            /// PHASE CHECKLIST TITLE
+            Expanded(
+              child: Text(
+                _phaseChecklistMessagesViewModel.phaseChecklist.name,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  color: HexColors.black,
+                  fontSize: 18.0,
+                  fontFamily: 'PT Root UI',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ]),
+        ),
+      ),
+      body: SizedBox.expand(
+        child: Stack(children: [
           Column(children: [
             const SeparatorWidget(),
 
@@ -210,7 +209,9 @@ class _PhaseChecklistCommentsBodyState
                   LoadingStatus.searching
               ? const LoadingIndicatorWidget()
               : Container()
-        ])));
+        ]),
+      ),
+    );
   }
 
   Future _onRefresh() async {

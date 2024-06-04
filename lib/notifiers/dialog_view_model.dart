@@ -1,32 +1,26 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'dart:io';
-import 'dart:io' as dartio;
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:open_filex/open_filex.dart';
 import 'package:record/record.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
+import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/dialog/views/dialog_add_task_widget.dart';
-import 'package:izowork/screens/participants/participants_screen.dart';
-import 'package:izowork/screens/profile/profile_screen.dart';
-import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/api/api.dart';
 
 class DialogViewModel with ChangeNotifier {
-  final Socket? chatSocket;
-  final Chat chat;
-  final record = Record();
-
   LoadingStatus loadingStatus = LoadingStatus.searching;
+
+  final String id;
+
+  final Socket? chatSocket;
+
+  final record = Record();
 
   String? token;
 
@@ -34,26 +28,33 @@ class DialogViewModel with ChangeNotifier {
 
   int current = 0;
 
+  Chat? _chat;
+
+  Chat? get chat => _chat;
+
   Socket? _socket;
-
-  final List<Message> _messages = [];
-
-  bool _isSending = false;
-
-  int _downloadIndex = -1;
 
   Socket? get socket => _socket;
 
+  final List<Message> _messages = [];
+
   List<Message> get messages => _messages;
 
+  bool _isSending = false;
+
   bool get isSending => _isSending;
+
+  int _downloadIndex = -1;
 
   int get downloadIndex => _downloadIndex;
 
   DialogViewModel(
+    this.id,
     this.chatSocket,
-    this.chat,
   );
+
+  // MARK: -
+  // MARK: - API CALL
 
   Future connectSocket() async {
     _socket = chatSocket ??
@@ -67,8 +68,20 @@ class DialogViewModel with ChangeNotifier {
     _socket?.connect();
   }
 
-  // MARK: -
-  // MARK: - API CALL
+  Future getChatById() async {
+    await DialogRepository().getChat(id: id).then((response) => {
+          if (response is Chat)
+            {
+              loadingStatus = LoadingStatus.completed,
+              _chat = response,
+            }
+          else if (response is ErrorResponse)
+            {
+              loadingStatus = LoadingStatus.error,
+              Toast().showTopToast(response.message ?? 'Ошибка')
+            }
+        });
+  }
 
   Future getMessageList({required Pagination pagination}) async {
     if (pagination.offset == 0) {
@@ -77,8 +90,8 @@ class DialogViewModel with ChangeNotifier {
 
     await DialogRepository()
         .getMessages(
+          id: id,
           pagination: pagination,
-          id: chat.id,
         )
         .then((response) => {
               if (response is List<Message>)
@@ -107,9 +120,10 @@ class DialogViewModel with ChangeNotifier {
                     },
                   loadingStatus = LoadingStatus.completed
                 }
-              else
+              else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 }
             })
         .then((value) => readMessages());
@@ -117,18 +131,17 @@ class DialogViewModel with ChangeNotifier {
 
   Future readMessages() async {
     await DialogRepository()
-        .readChatMessages(MessageReadRequest(chatId: chat.id))
+        .readChatMessages(MessageReadRequest(chatId: id))
         .whenComplete(() => notifyListeners());
   }
 
   Future uploadFile(
-    BuildContext context,
     File file,
     bool isVoice,
   ) async {
     await DialogRepository()
         .addChatFile(MessageFileRequest(
-          chat.id,
+          id,
           file,
           isVoice,
         ))
@@ -137,11 +150,10 @@ class DialogViewModel with ChangeNotifier {
               _isSending = false,
               notifyListeners(),
 
-              // SHOW ERROR
               if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 }
             });
   }
@@ -157,22 +169,14 @@ class DialogViewModel with ChangeNotifier {
     userId = user?.id;
   }
 
-  Future<String> getLocalAudioPath() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final path = directory.path + '/audio_message.m4a';
-
-    return path;
-  }
-
-  /// AUDIO
+  Future<String> getLocalAudioPath() async =>
+      (await getApplicationDocumentsDirectory()).path + '/audio_message.m4a';
 
   Future clearAudio() async {
     /// CLEAR RECENT AUDIO
     File file = File(await getLocalAudioPath());
 
-    if (await file.exists()) {
-      file.delete();
-    }
+    if (await file.exists()) file.delete();
   }
 
   void recordAudio() async {
@@ -181,10 +185,11 @@ class DialogViewModel with ChangeNotifier {
     /// RECORD AUDIO
     if (await record.hasPermission()) {
       await record.start(
-          path: await getLocalAudioPath(),
-          encoder: AudioEncoder.aacLc,
-          bitRate: 128000,
-          samplingRate: 44100);
+        path: await getLocalAudioPath(),
+        encoder: AudioEncoder.aacLc,
+        bitRate: 128000,
+        samplingRate: 44100,
+      );
     }
   }
 
@@ -192,7 +197,7 @@ class DialogViewModel with ChangeNotifier {
     if (await record.isRecording()) await record.stop();
   }
 
-  void sendAudioMessage(BuildContext context) async {
+  void sendAudioMessage() async {
     final path = await record.stop();
 
     if (path != null) {
@@ -203,7 +208,6 @@ class DialogViewModel with ChangeNotifier {
       Future.delayed(
           const Duration(milliseconds: 100),
           () => uploadFile(
-                context,
                 File(path),
                 true,
               ));
@@ -212,42 +216,27 @@ class DialogViewModel with ChangeNotifier {
 
   /// FILE
 
-  Future openFile(BuildContext context, int index, Message message) async {
-    String url = messageMediaUrl + (message.files.first.filename ?? '');
+  Future openFile(
+    int index,
+    Message message,
+  ) async {
+    final filename = message.files.first.filename;
+    if (filename == null) return;
 
-    if (Platform.isAndroid) {
-      Directory appDocumentsDirectory =
-          await getApplicationDocumentsDirectory();
-      String appDocumentsPath = appDocumentsDirectory.path;
-      String fileName = message.files.first.name;
-      String filePath = '$appDocumentsPath/$fileName';
-      bool isFileExists = await dartio.File(filePath).exists();
-
-      if (!isFileExists) {
-        _downloadIndex = index;
-        notifyListeners();
-
-        await Dio().download(url, filePath, onReceiveProgress: (count, total) {
-          debugPrint('---Download----Rec: $count, Total: $total');
-        }).then((value) => {_downloadIndex = -1, notifyListeners()});
-      }
-
-      OpenResult openResult = await OpenFilex.open(filePath);
-
-      if (openResult.type == ResultType.noAppToOpen) {
-        Toast().showTopToast(context, Titles.unsupportedFileFormat);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-        launchUrl(Uri.parse(url.replaceAll(' ', '')));
-      } else if (await canLaunchUrl(
-          Uri.parse('https://' + url.replaceAll(' ', '')))) {
-        launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
-      }
-    }
+    FileDownloadHelper().download(
+        url: messageMediaUrl + filename,
+        filename: filename,
+        onDownload: () => {
+              _downloadIndex = index,
+              notifyListeners(),
+            },
+        onComplete: () => {
+              _downloadIndex = -1,
+              notifyListeners(),
+            });
   }
 
-  Future addFile(BuildContext context) async {
+  Future addFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowMultiple: true,
@@ -261,7 +250,6 @@ class DialogViewModel with ChangeNotifier {
         result.files.forEach((element) async {
           if (element.path != null) {
             await uploadFile(
-              context,
               File(element.path!),
               false,
             ).then((value) => {
@@ -277,49 +265,4 @@ class DialogViewModel with ChangeNotifier {
       }
     }
   }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showGroupChatUsersScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ParticipantsScreenWidget(chat: chat)));
-  }
-
-  void showAddTaskSheet(BuildContext context, String text) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => DialogAddTaskWidget(
-              text: text,
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TaskCreateScreenWidget(
-                            message: text,
-                            onCreate: (task) => Toast().showTopToast(
-                              context,
-                              '${Titles.task} "${task?.name}" создана',
-                            ),
-                          ))),
-            ));
-  }
-
-  void showProfileScreen(
-    BuildContext context,
-    Message message,
-  ) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ProfileScreenWidget(
-                    isMine: false,
-                    user: message.user!,
-                    onPop: (user) => null,
-                  )));
 }

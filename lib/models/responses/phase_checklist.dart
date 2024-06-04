@@ -32,7 +32,7 @@ class PhaseChecklist {
   final bool isCompleted;
   final String name;
   final String phaseId;
-  final String state;
+  String state;
   final String type;
 
   PhaseChecklist({

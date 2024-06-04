@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/services/web_service.dart';
 
 class ChatRepository {
-  Future<dynamic> getChats(
-      {required Pagination pagination,
-      required String search,
-      List<String>? params}) async {
+  Future<dynamic> getChats({
+    required Pagination pagination,
+    required String search,
+    List<String>? params,
+  }) async {
     var url =
         chatsUrl + '?offset=${pagination.offset}&limit=${pagination.size}';
 
@@ -31,8 +31,6 @@ class ChatRepository {
       });
       return chats;
     } catch (e) {
-      var err = ErrorResponse.fromJson(json);
-      debugPrint(err.message);
       return ErrorResponse.fromJson(json);
     }
   }

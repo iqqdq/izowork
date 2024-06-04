@@ -8,13 +8,13 @@ class MoreListItemWidget extends StatelessWidget {
   final int? count;
   final VoidCallback onTap;
 
-  const MoreListItemWidget(
-      {Key? key,
-      required this.showSeparator,
-      required this.title,
-      this.count,
-      required this.onTap})
-      : super(key: key);
+  const MoreListItemWidget({
+    Key? key,
+    required this.showSeparator,
+    required this.title,
+    this.count,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,38 +32,26 @@ class MoreListItemWidget extends StatelessWidget {
                   )
                 : Container(),
             Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: count == null ? 12.0 : 10.0,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: count == null ? 12.0 : 10.0,
+              ),
+              child: Row(children: [
+                /// TITLE
+                Expanded(
+                  child: Text(title,
+                      style: TextStyle(
+                        color: HexColors.black,
+                        fontSize: 16.0,
+                        fontFamily: 'PT Root UI',
+                        fontWeight: FontWeight.w500,
+                      )),
                 ),
-                child: Row(children: [
-                  /// TITLE
-                  Expanded(
-                    child: Text(title,
-                        style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 16.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.w500,
-                        )),
-                  ),
 
-                  /// BADGE
-                  Badge(
-                    largeSize: 24,
-                    backgroundColor: HexColors.additionalViolet,
-                    label: Text(
-                        count.toString().length > 3
-                            ? count.toString().substring(0, 2) + '...'
-                            : count.toString(),
-                        style: TextStyle(
-                          fontSize: 11.0,
-                          fontWeight: FontWeight.w500,
-                          color: HexColors.white,
-                        )),
-                    isLabelVisible: count == null ? false : count! > 0,
-                  )
-                ]))
+                /// BADGE
+                BadgeWidget(value: count ?? 0),
+              ]),
+            ),
           ]),
       onTap: () => onTap(),
     );

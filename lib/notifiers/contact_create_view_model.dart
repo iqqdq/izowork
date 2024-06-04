@@ -82,7 +82,7 @@ class ContactCreateViewModel with ChangeNotifier {
                   _contact = response,
                   if (_file == null)
                     {
-                      Toast().showTopToast(context,
+                      Toast().showTopToast(
                           '${Titles.contact} ${response.name} добавлен'),
                       loadingStatus = LoadingStatus.completed
                     }
@@ -90,7 +90,7 @@ class ContactCreateViewModel with ChangeNotifier {
                     {
                       changeAvatar(context, response.id, _file!)
                           .then((value) => {
-                                Toast().showTopToast(context,
+                                Toast().showTopToast(
                                     '${Titles.contact} ${response.name} добавлен'),
                                 loadingStatus = LoadingStatus.completed
                               })
@@ -98,7 +98,7 @@ class ContactCreateViewModel with ChangeNotifier {
                 }
               else if (response is ErrorResponse)
                 {
-                  Toast().showTopToast(context, response.message ?? 'Ошибка'),
+                  Toast().showTopToast(response.message ?? 'Ошибка'),
                   loadingStatus = LoadingStatus.error
                 }
             })
@@ -157,12 +157,12 @@ class ContactCreateViewModel with ChangeNotifier {
               if (response is Contact)
                 {
                   _contact = response,
-                  Toast().showTopToast(context, Titles.changesSuccess),
+                  Toast().showTopToast(Titles.changesSuccess),
                   loadingStatus = LoadingStatus.completed
                 }
               else if (response is ErrorResponse)
                 {
-                  Toast().showTopToast(context, response.message ?? 'Ошибка'),
+                  Toast().showTopToast(response.message ?? 'Ошибка'),
                   loadingStatus = LoadingStatus.error
                 }
             })
@@ -190,7 +190,7 @@ class ContactCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 }
             })
         .whenComplete(() => notifyListeners());
@@ -205,7 +205,7 @@ class ContactCreateViewModel with ChangeNotifier {
     await ContactRepository()
         .deleteContact(DeleteRequest(id: _contact!.id))
         .then((value) => {
-              Toast().showTopToast(context, Titles.contactWasDeleted),
+              Toast().showTopToast(Titles.contactWasDeleted),
               onDelete == null
                   ? debugPrint('Nothing to delete')
                   : onDelete!(_contact!),

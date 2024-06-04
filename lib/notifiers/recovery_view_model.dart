@@ -9,7 +9,7 @@ class RecoveryViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future sendUserEmail(BuildContext context, String email) async {
+  Future sendUserEmail(String email) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -19,13 +19,12 @@ class RecoveryViewModel with ChangeNotifier {
               if (response == true)
                 {
                   loadingStatus = LoadingStatus.completed,
-                  Navigator.pop(context),
-                  Toast().showTopToast(context, Titles.passwordRecoverySuccess),
+                  Toast().showTopToast(Titles.passwordRecoverySuccess),
                 }
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка'),
+                  Toast().showTopToast(response.message ?? 'Ошибка'),
                 }
             })
         .whenComplete(() => notifyListeners());

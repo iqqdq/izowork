@@ -59,7 +59,7 @@ class NewsCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
@@ -78,7 +78,7 @@ class NewsCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 }
             });
   }

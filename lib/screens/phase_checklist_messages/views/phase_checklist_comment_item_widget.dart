@@ -41,7 +41,10 @@ class PhaseChecklistMessageItemWidget extends StatelessWidget {
                 ),
                 child: SvgPicture.asset(
                   'assets/ic_avatar.svg',
-                  color: HexColors.grey30,
+                  colorFilter: ColorFilter.mode(
+                    HexColors.grey30,
+                    BlendMode.srcIn,
+                  ),
                   width: 40.0,
                   height: 40.0,
                   fit: BoxFit.cover,

@@ -1,17 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
-// import 'package:izowork/screens/deal_create/deal_create_screen.dart';
-import 'package:izowork/screens/phase_checklist_complete/phase_checklist_complete_screen.dart';
+import 'package:izowork/screens/phase_checklist/phase_checklist_screen.dart';
 import 'package:izowork/screens/phase_checklist_create/phase_checklist_create_screen.dart';
 import 'package:izowork/screens/phase/views/check_list_item_widget.dart';
 import 'package:izowork/screens/phase/views/contractor_list_item_widget.dart';
-import 'package:izowork/screens/phase_checklist_messages/phase_checklist_messages_screen.dart';
 import 'package:izowork/screens/phase_create/phase_create_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/views/views.dart';
@@ -21,11 +17,8 @@ import 'package:spreadsheet_table/spreadsheet_table.dart';
 import 'package:izowork/screens/phase/views/search_list_item_widget.dart';
 
 class PhaseScreenBodyWidget extends StatefulWidget {
-  final User user;
-
   const PhaseScreenBodyWidget({
     Key? key,
-    required this.user,
   }) : super(key: key);
 
   @override
@@ -34,147 +27,6 @@ class PhaseScreenBodyWidget extends StatefulWidget {
 
 class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
   late PhaseViewModel _phaseViewModel;
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void _showPhaseChecklistCommentsScreenWidget(
-          {required PhaseChecklist phaseChecklist}) =>
-      showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) =>
-            PhaseChecklistCommentsScreenWidget(phaseChecklist: phaseChecklist),
-      );
-
-  void _showPhaseChecklistCreateScreen() {
-    if (_phaseViewModel.phase == null) return;
-
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => PhaseChecklistCreateScreenWidget(
-              phaseId: _phaseViewModel.phase!.id,
-              onPop: (phaseChecklist) => {
-                if (phaseChecklist != null)
-                  Future.delayed(
-                    const Duration(milliseconds: 500),
-                    () => setState(() => _phaseViewModel
-                        .phaseChecklistResponse?.phaseChecklists
-                        .add(phaseChecklist)),
-                  )
-              },
-            ));
-  }
-
-  void _showAcceptDeclinePhaseChecklistAlert({
-    required PhaseChecklist phaseChecklist,
-    required Widget statusWidget,
-  }) =>
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (BuildContext context) {
-            return AlertDialog(
-                title: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                        child: Container(
-                      margin: const EdgeInsets.only(top: 3.0),
-                      child: Text(
-                        phaseChecklist.name,
-                        maxLines: 8,
-                        style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w400,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    )),
-                    const SizedBox(width: 12.0),
-                    statusWidget,
-                  ],
-                ),
-                actions: <Widget>[
-                  Row(children: [
-                    Expanded(
-                        child: BorderButtonWidget(
-                            margin: EdgeInsets.zero,
-                            title: Titles.accept,
-                            onTap: () {
-                              // TODO: - ACCEPT CHECKLIST
-                            })),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                        child: BorderButtonWidget(
-                            margin: EdgeInsets.zero,
-                            title: Titles.decline,
-                            isDestructive: true,
-                            onTap: () {
-                              // TODO: - DECLINE CHECKLIST
-                            })),
-                  ]),
-                ]);
-          });
-
-  void _showRemovePhaseChecklistAlert(
-          {required PhaseChecklist phaseChecklist}) =>
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (BuildContext context) {
-            return AlertDialog(
-                title: Text(
-                  '${Titles.deleteAreYouSure} "${phaseChecklist.name}"?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: HexColors.black,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                actions: <Widget>[
-                  Row(children: [
-                    Expanded(
-                      child: BorderButtonWidget(
-                          margin: EdgeInsets.zero,
-                          title: Titles.delete,
-                          isDestructive: true,
-                          onTap: () => _phaseViewModel
-                              .removePhaseChecklist(phaseChecklist.id)
-                              .then((value) => {
-                                    Navigator.pop(context),
-
-                                    /// SHOW DELETE CHECKLIST ERROR
-                                    if (mounted &&
-                                        _phaseViewModel.error != null)
-                                      Toast().showTopToast(
-                                          this.context, _phaseViewModel.error!),
-                                  })),
-                    ),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                      child: BorderButtonWidget(
-                        margin: EdgeInsets.zero,
-                        title: Titles.cancel,
-                        onTap: () => Navigator.pop(context),
-                      ),
-                    ),
-                  ]),
-                ]);
-          });
-
-  // MARK: -
-  // MARK: - BUILD
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +40,6 @@ class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        elevation: 0.0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         leading: Padding(
@@ -366,10 +217,11 @@ class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
                           child: Text(
                             Titles.contractors,
                             style: TextStyle(
-                                color: HexColors.black,
-                                fontSize: 18.0,
-                                fontFamily: 'PT Root UI',
-                                fontWeight: FontWeight.bold),
+                              color: HexColors.black,
+                              fontSize: 18.0,
+                              fontFamily: 'PT Root UI',
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
 
@@ -381,7 +233,7 @@ class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
                   /// CONTRACTOR LIST
                   ListView.builder(
                       shrinkWrap: true,
-                      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: _phaseViewModel.phaseContractors.length,
                       itemBuilder: (context, index) {
@@ -425,23 +277,6 @@ class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
                               onTap: () => _showDealScreenWidget(index),
                             );
                           }),
-
-                  /// OPEN DEAL BUTTON
-                  // _phaseViewModel.phaseChecklistResponse == null
-                  //     ? Container()
-                  //     : _phaseViewModel.phaseChecklistResponse!
-                  //             .phaseChecklists.isEmpty
-                  //         ? Container()
-                  //         : BorderButtonWidget(
-                  //             title: Titles.openDeal,
-                  //             margin: const EdgeInsets.only(
-                  //               bottom: 30.0,
-                  //               left: 16.0,
-                  //               right: 16.0,
-                  //             ),
-                  //             onTap: () => _phaseViewModel
-                  //                 .showDealCreateScreen(context),
-                  //           ),
 
                   /// SET TASK BUTTON
                   _phaseViewModel.phaseChecklistResponse == null
@@ -493,17 +328,13 @@ class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
                               isSelected: phaseChecklist.isCompleted,
                               title: phaseChecklist.name,
                               state: phaseChecklist.state,
-                              onTap: () => phaseChecklist.state ==
-                                      PhaseChecklistState.created
-                                  ? _showCompleteTaskSheet(index)
-                                  : _showPhaseChecklistCommentsScreenWidget(
-                                      phaseChecklist: phaseChecklist),
+                              onTap: () => _showCompleteTaskSheet(index),
                               onStatusTap: (statusWidget) =>
                                   _showAcceptDeclinePhaseChecklistAlert(
+                                index: index,
                                 statusWidget: statusWidget,
-                                phaseChecklist: phaseChecklist,
                               ),
-                              onRemoveTap: widget.user.state != 'DIRECTOR'
+                              onRemoveTap: !_phaseViewModel.isDirector
                                   ? null
                                   : () => _showRemovePhaseChecklistAlert(
                                       phaseChecklist: phaseChecklist),
@@ -554,7 +385,7 @@ class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
                 padding: const EdgeInsets.only(bottom: 60.0),
                 child: _phaseViewModel.loadingStatus == LoadingStatus.searching
                     ? const LoadingIndicatorWidget()
-                    : const SizedBox(height: 60.0))
+                    : Container())
           ]),
         ),
       ),
@@ -562,7 +393,7 @@ class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
   }
 
   // MARK: -
-  // MARK: - PUSH
+  // MARK: - ACTIONS
 
   void _showDealScreenWidget(int index) => Navigator.push(
       context,
@@ -570,74 +401,29 @@ class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
           builder: (context) =>
               DealScreenWidget(id: _phaseViewModel.deals[index].id)));
 
-  void _showCompleteTaskSheet(
-    int index,
-  ) async {
-    await _phaseViewModel
-        .getPhaseChecklistInfoList(
-          _phaseViewModel.phaseChecklistResponse?.phaseChecklists[index].id ??
-              '',
-        )
-        .then((value) => {
-              if (_phaseViewModel.phaseChecklistInfos.isNotEmpty)
-                if (_phaseViewModel.phaseChecklistResponse != null)
-                  {
-                    if (_phaseViewModel.phaseChecklistResponse!.canEdit)
-                      showCupertinoModalBottomSheet(
-                          enableDrag: false,
-                          topRadius: const Radius.circular(16.0),
-                          barrierColor: Colors.black.withOpacity(0.6),
-                          backgroundColor: HexColors.white,
-                          context: context,
-                          builder: (sheetContext) =>
-                              PhaseChecklistCompleteScreenWidget(
-                                  title: _phaseViewModel.phaseChecklistResponse
-                                          ?.phaseChecklists[index].name ??
-                                      '-',
-                                  phaseChecklistInfo:
-                                      _phaseViewModel.phaseChecklistInfos.first,
-                                  onTap: (text, files) => {
-                                        Navigator.pop(context),
+  void _showCompleteTaskSheet(int index) async {
+    if (_phaseViewModel.phaseChecklistResponse == null) return;
 
-                                        // Update files
-                                        files.forEach((element) {
-                                          if (element.path != null) {
-                                            _phaseViewModel.files
-                                                .add(File(element.path!));
-                                          }
-                                        }),
+    bool isInfoCreated = false;
 
-                                        // Create new phase checklist
-                                        _phaseViewModel
-                                            .createPhaseChecklistInfo(
-                                          index,
-                                          text,
-                                        )
-                                      }))
-                    else
-                      Toast().showTopToast(
-                        context,
-                        Titles.youHaveNotPermissionToFillChecklist,
-                      )
-                  }
-            });
+    showCupertinoModalBottomSheet(
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => PhaseChecklistScreenWidget(
+          phaseChecklist:
+              _phaseViewModel.phaseChecklistResponse!.phaseChecklists[index],
+          onInfoCreate: () => isInfoCreated = true),
+    ).whenComplete(() => {
+          if (isInfoCreated)
+            _phaseViewModel.updateChecklistState(
+              index,
+              PhaseChecklistState.underReview,
+            )
+        });
   }
-
-  // void _showDealCreateScreen() => Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => DealCreateScreenWidget(
-  //           phase: _phaseViewModel.phase,
-  //           object: _phaseViewModel.object,
-  //           onCreate: (deal, dealProducts) => {
-  //                 if (deal != null)
-  //                   {
-  //                     _phaseViewModel.updateDeals(deal),
-  //                     Toast().showTopToast(
-  //                         context, '${Titles.deal} №${deal.number} добавлена')
-  //                   }
-  //               }),
-  //     ));
 
   void _showPhaseCreateScreen() {
     if (_phaseViewModel.phase == null) return;
@@ -671,4 +457,143 @@ class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
           builder: (context) => TaskCreateScreenWidget(
                 onCreate: (task) => {},
               )));
+
+  void _showPhaseChecklistCreateScreen() {
+    if (_phaseViewModel.phase == null) return;
+
+    showCupertinoModalBottomSheet(
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (sheetContext) => PhaseChecklistCreateScreenWidget(
+              phaseId: _phaseViewModel.phase!.id,
+              onPop: (phaseChecklist) => {
+                if (phaseChecklist != null)
+                  Future.delayed(
+                    const Duration(milliseconds: 500),
+                    () => setState(() => _phaseViewModel
+                        .phaseChecklistResponse?.phaseChecklists
+                        .add(phaseChecklist)),
+                  )
+              },
+            ));
+  }
+
+  void _showAcceptDeclinePhaseChecklistAlert({
+    required int index,
+    required Widget statusWidget,
+  }) {
+    if (_phaseViewModel.isDirector) {
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: Container(
+                      margin: const EdgeInsets.only(top: 3.0),
+                      child: Text(
+                        _phaseViewModel.phaseChecklistResponse
+                                ?.phaseChecklists[index].name ??
+                            '',
+                        maxLines: 8,
+                        style: TextStyle(
+                          color: HexColors.black,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w400,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    )),
+                    const SizedBox(width: 12.0),
+                    statusWidget,
+                  ],
+                ),
+                actions: <Widget>[
+                  Row(children: [
+                    /// ACCEPT CHECKLIST BUTTON
+                    Expanded(
+                        child: BorderButtonWidget(
+                            margin: EdgeInsets.zero,
+                            title: Titles.accept,
+                            onTap: () => {
+                                  Navigator.pop(context),
+                                  _phaseViewModel.updateChecklistState(
+                                    index,
+                                    PhaseChecklistState.accepted,
+                                  )
+                                })),
+                    const SizedBox(width: 16.0),
+
+                    /// DECLINE CHECKLIST BUTTON
+                    Expanded(
+                        child: BorderButtonWidget(
+                            margin: EdgeInsets.zero,
+                            title: Titles.decline,
+                            isDestructive: true,
+                            onTap: () => {
+                                  Navigator.pop(context),
+                                  _phaseViewModel.updateChecklistState(
+                                    index,
+                                    PhaseChecklistState.rejected,
+                                  )
+                                }))
+                  ]),
+                ]);
+          });
+    }
+  }
+
+  void _showRemovePhaseChecklistAlert(
+          {required PhaseChecklist phaseChecklist}) =>
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: Text(
+                  '${Titles.deleteAreYouSure} "${phaseChecklist.name}"?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: HexColors.black,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                actions: <Widget>[
+                  Row(children: [
+                    Expanded(
+                      child: BorderButtonWidget(
+                          margin: EdgeInsets.zero,
+                          title: Titles.delete,
+                          isDestructive: true,
+                          onTap: () => _phaseViewModel
+                              .removePhaseChecklist(phaseChecklist.id)
+                              .then((value) => {
+                                    Navigator.pop(context),
+
+                                    /// SHOW DELETE CHECKLIST ERROR
+                                    if (mounted &&
+                                        _phaseViewModel.error != null)
+                                      Toast()
+                                          .showTopToast(_phaseViewModel.error!),
+                                  })),
+                    ),
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                      child: BorderButtonWidget(
+                        margin: EdgeInsets.zero,
+                        title: Titles.cancel,
+                        onTap: () => Navigator.pop(context),
+                      ),
+                    ),
+                  ]),
+                ]);
+          });
 }

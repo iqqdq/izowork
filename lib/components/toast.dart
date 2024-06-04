@@ -4,26 +4,20 @@ import 'package:izowork/main.dart';
 import 'package:oktoast/oktoast.dart';
 
 class Toast {
-  showTopToast(
-    BuildContext? context,
-    String message,
-  ) =>
-      showToast(
+  showTopToast(String message) => showToast(
         message,
         textStyle: TextStyle(
           color: HexColors.white,
           fontSize: 14.0,
           fontWeight: FontWeight.w400,
         ),
-        textPadding: const EdgeInsets.all(11.0),
+        textPadding: const EdgeInsets.all(12.0),
         position: const ToastPosition(align: Alignment.topCenter),
         margin: EdgeInsets.only(
-          left: 16.0,
+          left: 20.0,
           top: navigatorKey.currentContext == null
               ? 30.0
-              : MediaQuery.of(navigatorKey.currentContext!).padding.top == 0.0
-                  ? 30.0
-                  : MediaQuery.of(navigatorKey.currentContext!).padding.top,
+              : MediaQuery.of(navigatorKey.currentContext!).padding.top + 12.0,
           right: 20.0,
         ),
         backgroundColor: HexColors.additionalViolet,

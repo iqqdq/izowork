@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/company_create/company_create_screen.dart';
 
 class SearchCompanyViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -65,20 +64,4 @@ class SearchCompanyViewModel with ChangeNotifier {
             })
         .whenComplete(() => notifyListeners());
   }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showCreateCompanyScreen(
-    BuildContext context,
-    Function(Company) onCreate,
-  ) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CompanyCreateScreenWidget(
-                onPop: (company) => {
-                      if (company != null) onCreate(company),
-                    }),
-          ));
 }

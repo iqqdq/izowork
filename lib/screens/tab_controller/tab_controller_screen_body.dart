@@ -1,20 +1,29 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+
+import 'package:izowork/models/models.dart';
+import 'package:izowork/screens/deal/deal_screen.dart';
+import 'package:izowork/screens/dialog/dialog_screen.dart';
+import 'package:izowork/screens/news_page/news_page_screen.dart';
+import 'package:izowork/screens/object/object_page_view_screen.dart';
+import 'package:izowork/screens/tab_controller/tab_controller_screen.dart';
+import 'package:izowork/screens/task/task_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:izowork/screens/actions/actions_page_view_screen_body.dart';
 import 'package:izowork/screens/chat/chat_screen.dart';
 import 'package:izowork/screens/map/map_screen.dart';
 import 'package:izowork/screens/more/more_screen.dart';
-import 'package:izowork/screens/notifications/notifications_screen.dart';
 import 'package:izowork/screens/objects/objects_screen.dart';
 import 'package:izowork/screens/tab_controller/views/bottom_navigation_bar_widget.dart';
 import 'package:izowork/main.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/services/services.dart';
 
 class TabControllerScreenBodyWidget extends StatefulWidget {
-  const TabControllerScreenBodyWidget({Key? key}) : super(key: key);
+  const TabControllerScreenBodyWidget({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _TabControllerScreenBodyState createState() =>
@@ -85,32 +94,72 @@ class _TabControllerScreenBodyState
   }
 
   Future _onTabSelected(int index) async {
-    if (index == 3) {
-      _tabControllerViewModel.clearMessageCount();
-    }
-
-    if (index == 4) {
-      _tabControllerViewModel.clearNotificationCount();
-    }
+    if (index == 3) _tabControllerViewModel.clearMessageCount();
+    if (index == 4) _tabControllerViewModel.clearNotificationCount();
 
     _index = index;
     _pageController.jumpToPage(_index);
   }
 
   void _configureSelectNotificationSubject() {
-    selectNotificationStream.stream.listen((String? event) {
+    selectNotificationStream.stream.listen((String? event) async {
       if (event != null) {
-        // final notificationEntity =
-        //     NotificationEntity.fromJson(jsonDecode(event));
+        final notificationEntity =
+            NotificationEntity.fromJson(jsonDecode(event));
 
-        // TODO: if chat notification
-
-        _onTabSelected(4).whenComplete(
-          () => navigatorKey.currentState?.push(MaterialPageRoute(
-              builder: (context) =>
-                  NotificationsScreenWidget(onPop: () => {}))),
-        );
+        /// CHECK IF CURRENT WIDGET IS ROOT
+        if (navigatorKey.currentWidget == const TabControllerScreenWidget()) {
+          _pushFromNotification(notificationEntity);
+        } else {
+          /// IF IT'S NOT -> GO TO ROOT THEN PUSH
+          navigatorKey.currentState?.popUntil((route) => route.isFirst);
+          Future.delayed(const Duration(milliseconds: 300),
+              () => _pushFromNotification(notificationEntity));
+        }
       }
     });
+  }
+
+  void _pushFromNotification(NotificationEntity notificationEntity) {
+    if (notificationEntity.metadata.objectId != null) {
+      _onTabSelected(1).whenComplete(
+        () => navigatorKey.currentState?.push(MaterialPageRoute(
+            builder: (context) => ObjectPageViewScreenWidget(
+                  id: notificationEntity.metadata.objectId!,
+                  phaseId: notificationEntity.metadata.phaseId,
+                ))),
+      );
+    } else if (notificationEntity.metadata.dealId != null) {
+      _onTabSelected(2).whenComplete(
+        () => navigatorKey.currentState?.push(MaterialPageRoute(
+            builder: (context) =>
+                DealScreenWidget(id: notificationEntity.metadata.dealId!))),
+      );
+    } else if (notificationEntity.metadata.taskId != null) {
+      _onTabSelected(2).whenComplete(
+        () => navigatorKey.currentState?.push(MaterialPageRoute(
+            builder: (context) =>
+                TaskScreenWidget(id: notificationEntity.metadata.taskId!))),
+      );
+    } else if (notificationEntity.metadata.newsId != null) {
+      _onTabSelected(4).whenComplete(
+        () => navigatorKey.currentState?.push(MaterialPageRoute(
+            builder: (context) =>
+                NewsPageScreenWidget(id: notificationEntity.metadata.newsId!))),
+      );
+    } else if (notificationEntity.metadata.chatId != null) {
+      _onTabSelected(3).whenComplete(
+        () => navigatorKey.currentState?.push(MaterialPageRoute(
+            builder: (context) => DialogScreenWidget(
+                  id: notificationEntity.metadata.chatId!,
+                ))),
+      );
+    }
+
+    //  _onTabSelected(4).whenComplete(
+    //       () => navigatorKey.currentState?.push(MaterialPageRoute(
+    //           builder: (context) =>
+    //               NotificationsScreenWidget(onPop: () => {}))),
+    //     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/components.dart';
 
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/screens/analytics/analytics_page_view_screen.dart';
 import 'package:izowork/screens/authorization/authorization_screen.dart';
@@ -44,6 +44,92 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    _moreViewModel = Provider.of<MoreViewModel>(
+      context,
+      listen: true,
+    );
+
+    return Scaffold(
+        backgroundColor: HexColors.white,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+        ),
+        body: SizedBox.expand(
+          child: ListView.builder(
+              itemCount: _titles.length + 1,
+              itemBuilder: (context, index) {
+                return index == 0
+                    ? GestureDetector(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    /// AVATAR
+
+                                    Stack(children: [
+                                      SvgPicture.asset(
+                                        'assets/ic_avatar.svg',
+                                        colorFilter: ColorFilter.mode(
+                                          HexColors.grey40,
+                                          BlendMode.srcIn,
+                                        ),
+                                        width: 80.0,
+                                        height: 80.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      _moreViewModel.user?.avatar == null
+                                          ? Container()
+                                          : _moreViewModel.user!.avatar!.isEmpty
+                                              ? Container()
+                                              : ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          40.0),
+                                                  child: CachedNetworkImage(
+                                                    cacheKey: _moreViewModel
+                                                        .user!.avatar,
+                                                    imageUrl: avatarUrl +
+                                                        _moreViewModel
+                                                            .user!.avatar!,
+                                                    width: 80.0,
+                                                    height: 80.0,
+                                                    memCacheWidth: 80 *
+                                                        MediaQuery.of(context)
+                                                            .devicePixelRatio
+                                                            .round(),
+                                                    fit: BoxFit.cover,
+                                                  )),
+                                    ]),
+                                    TitleWidget(
+                                        text: _moreViewModel.user?.email ?? '',
+                                        padding: const EdgeInsets.only(
+                                          top: 14.0,
+                                          bottom: 16.0,
+                                        )),
+                                  ])
+                            ]),
+                        onTap: () => _showProfileScreen(context))
+                    : MoreListItemWidget(
+                        showSeparator: index > 1,
+                        title: _titles[index - 1],
+                        count: index == _titles.length - 1
+                            ? _moreViewModel.notificationCount
+                            : null,
+                        onTap: () => index == 9
+                            ? _showLogoutDialog(context)
+                            : _showScreen(index));
+              }),
+        ));
+  }
 
   // MARK: -
   // MARK: - PUSH
@@ -117,7 +203,7 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                   Expanded(
                       child: BorderButtonWidget(
                           margin: EdgeInsets.zero,
-                          title: Titles.logout,
+                          title: Titles.exit,
                           isDestructive: true,
                           onTap: () async {
                             await _moreViewModel.logout().then(
@@ -135,93 +221,11 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                     child: BorderButtonWidget(
                       margin: EdgeInsets.zero,
                       title: Titles.cancel,
-                      onTap: () => Navigator.of(context).pop(),
+                      onTap: () => Navigator.pop(context),
                     ),
                   ),
                 ],
               ),
             ]);
       });
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
-    _moreViewModel = Provider.of<MoreViewModel>(
-      context,
-      listen: true,
-    );
-
-    return Scaffold(
-        backgroundColor: HexColors.white,
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          automaticallyImplyLeading: false,
-        ),
-        body: SizedBox.expand(
-          child: ListView.builder(
-              itemCount: _titles.length + 1,
-              itemBuilder: (context, index) {
-                return index == 0
-                    ? GestureDetector(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    /// AVATAR
-
-                                    Stack(children: [
-                                      SvgPicture.asset('assets/ic_avatar.svg',
-                                          color: HexColors.grey40,
-                                          width: 80.0,
-                                          height: 80.0,
-                                          fit: BoxFit.cover),
-                                      _moreViewModel.user?.avatar == null
-                                          ? Container()
-                                          : _moreViewModel.user!.avatar!.isEmpty
-                                              ? Container()
-                                              : ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          40.0),
-                                                  child: CachedNetworkImage(
-                                                    cacheKey: _moreViewModel
-                                                        .user!.avatar,
-                                                    imageUrl: avatarUrl +
-                                                        _moreViewModel
-                                                            .user!.avatar!,
-                                                    width: 80.0,
-                                                    height: 80.0,
-                                                    memCacheWidth: 80 *
-                                                        MediaQuery.of(context)
-                                                            .devicePixelRatio
-                                                            .round(),
-                                                    fit: BoxFit.cover,
-                                                  )),
-                                    ]),
-                                    TitleWidget(
-                                        text: _moreViewModel.user?.email ?? '',
-                                        padding: const EdgeInsets.only(
-                                          top: 14.0,
-                                          bottom: 16.0,
-                                        )),
-                                  ])
-                            ]),
-                        onTap: () => _showProfileScreen(context))
-                    : MoreListItemWidget(
-                        showSeparator: index > 1,
-                        title: _titles[index - 1],
-                        count: index == _titles.length - 1
-                            ? _moreViewModel.notificationCount
-                            : null,
-                        onTap: () => index == 9
-                            ? _showLogoutDialog(context)
-                            : _showScreen(index));
-              }),
-        ));
-  }
 }

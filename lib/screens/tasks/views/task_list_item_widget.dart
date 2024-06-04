@@ -142,7 +142,10 @@ class TaskListItemWidget extends StatelessWidget {
                                   fit: BoxFit.cover)
                               : task.taskManager!.avatar == null
                                   ? SvgPicture.asset('assets/ic_avatar.svg',
-                                      color: HexColors.grey40,
+                                      colorFilter: ColorFilter.mode(
+                                        HexColors.grey40,
+                                        BlendMode.srcIn,
+                                      ),
                                       width: 24.0,
                                       height: 24.0,
                                       fit: BoxFit.cover)

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/profile_edit/profile_edit_screen.dart';
 
 class ProfileViewModel with ChangeNotifier {
   final User currentUser;
@@ -42,6 +41,11 @@ class ProfileViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - ACTIONS
 
+  void setUser(User user) {
+    _user = user;
+    notifyListeners();
+  }
+
   void openUrl(String url) async {
     if (url.isNotEmpty) {
       WebViewHelper webViewHelper = WebViewHelper();
@@ -62,32 +66,13 @@ class ProfileViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          webViewHelper.openWebView(url);
+          webViewHelper.open(url);
         }
       } else {
         nativeUrl != null
-            ? webViewHelper.openWebView(nativeUrl)
-            : webViewHelper.openWebView(url);
+            ? webViewHelper.open(nativeUrl)
+            : webViewHelper.open(url);
       }
-    }
-  }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showProfileEditScreen(BuildContext context) {
-    if (_user != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ProfileEditScreenWidget(
-              user: _user!,
-              onPop: (user) => {
-                    _user = user,
-                    notifyListeners(),
-                  }),
-        ),
-      );
     }
   }
 }

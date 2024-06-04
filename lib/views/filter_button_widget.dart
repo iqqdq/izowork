@@ -34,7 +34,10 @@ class FilterButtonWidget extends StatelessWidget {
                             children: [
                               Row(children: [
                                 SvgPicture.asset('assets/ic_filter.svg',
-                                    color: HexColors.grey50,
+                                    colorFilter: ColorFilter.mode(
+                                      HexColors.grey50,
+                                      BlendMode.srcIn,
+                                    ),
                                     width: 16.0,
                                     height: 16.0,
                                     fit: BoxFit.cover),

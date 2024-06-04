@@ -1,21 +1,11 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'dart:io';
-import 'dart:io' as io;
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:open_filex/open_filex.dart';
 
+import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/deal/sheets/deal_close_sheet.dart';
-import 'package:izowork/screens/deal/sheets/deal_process_action_sheet.dart';
-import 'package:izowork/screens/deal_create/deal_create_screen.dart';
-import 'package:izowork/screens/deal_process/deal_process_screen.dart';
-import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/api/api.dart';
 
 class DealViewModel with ChangeNotifier {
@@ -34,8 +24,6 @@ class DealViewModel with ChangeNotifier {
   Phase? _phase;
 
   int _downloadIndex = -1;
-
-  int current = 0;
 
   final List<int> _expanded = [];
 
@@ -123,10 +111,7 @@ class DealViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 loadingStatus = LoadingStatus.error,
             })
-        .whenComplete(() => {
-              notifyListeners(),
-              getDealProcesses(),
-            });
+        .whenComplete(() => getDealProcesses());
   }
 
   Future getDealProcesses() async {
@@ -151,237 +136,66 @@ class DealViewModel with ChangeNotifier {
     }
   }
 
-  Future uploadFile(
-    BuildContext context,
+  Future uploadFiles(
     String id,
-    File file,
+    List<File> files,
   ) async {
-    await DealRepository()
-        .addDealFile(DealFileRequest(id, file))
-        .then((response) => {
-              if (response is Document)
-                _deal?.files.add(response)
-              else if (response is ErrorResponse)
-                {
-                  loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
-                }
-            });
-  }
-
-  Future closeDeal(BuildContext context, String? comment) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
-    if (_deal != null) {
+    for (var element in files) {
       await DealRepository()
-          .updateDeal(DealRequest(
-            closed: true,
-            id: id,
-            comment: comment,
-            companyId: _deal!.companyId,
-            objectId: _deal!.objectId,
-            responsibleId: _deal!.responsibleId,
-            createdAt: _deal!.createdAt,
-            finishAt: _deal!.finishAt,
+          .addDealFile(DealFileRequest(
+            id,
+            element,
           ))
           .then((response) => {
-                if (response is Deal)
-                  {_deal = response}
+                if (response is Document)
+                  {
+                    _deal?.files.add(response),
+                    loadingStatus = LoadingStatus.completed,
+                  }
                 else if (response is ErrorResponse)
                   {
                     loadingStatus = LoadingStatus.error,
-                    Toast().showTopToast(context, response.message ?? 'Ошибка')
-                  },
-                notifyListeners()
+                    Toast().showTopToast(response.message ?? 'Ошибка')
+                  }
               });
     }
-  }
 
-  // MARK: -
-  // MARK: - ACTIONS
-
-  Future openFile(BuildContext context, int index) async {
-    String url = dealMediaUrl +
-        (_deal?.files[index].filename ?? _deal?.files[index].filename ?? '');
-
-    if (Platform.isAndroid) {
-      Directory appDocumentsDirectory =
-          await getApplicationDocumentsDirectory();
-      String appDocumentsPath = appDocumentsDirectory.path;
-      String fileName =
-          _deal?.files[index].name ?? _deal?.files[index].name ?? '';
-      String filePath = '$appDocumentsPath/$fileName';
-      bool isFileExists = await io.File(filePath).exists();
-
-      if (!isFileExists) {
-        _downloadIndex = index;
-        notifyListeners();
-
-        await Dio().download(url, filePath, onReceiveProgress: (count, total) {
-          debugPrint('---Download----Rec: $count, Total: $total');
-        }).then((value) => {
-              _downloadIndex = -1,
-              notifyListeners(),
-            });
-      }
-
-      OpenResult openResult = await OpenFilex.open(filePath);
-
-      if (openResult.type == ResultType.noAppToOpen) {
-        Toast().showTopToast(context, Titles.unsupportedFileFormat);
-      }
-    } else {
-      if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-        launchUrl(Uri.parse(url.replaceAll(' ', '')));
-      } else if (await canLaunchUrl(
-          Uri.parse('https://' + url.replaceAll(' ', '')))) {
-        launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
-      }
-    }
-  }
-
-  void expand(int index) {
-    _expanded.contains(index) ? _expanded.remove(index) : _expanded.add(index);
     notifyListeners();
   }
 
-  // MARK: -
-  // MARK: - PUSH
+  Future closeDeal(String? comment) async {
+    if (_deal == null) return;
 
-  void showDealCreateSheet(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DealCreateScreenWidget(
-            deal: _deal,
-            phase: _phase,
-            onCreate: (
-              deal,
-              dealProducts,
-            ) =>
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await DealRepository()
+        .updateDeal(DealRequest(
+          closed: true,
+          id: id,
+          comment: comment,
+          companyId: _deal!.companyId,
+          objectId: _deal!.objectId,
+          responsibleId: _deal!.responsibleId,
+          createdAt: _deal!.createdAt,
+          finishAt: _deal!.finishAt,
+        ))
+        .then((response) => {
+              if (response is Deal)
+                _deal = response
+              else if (response is ErrorResponse)
                 {
-                  _deal = deal,
-                  _dealProducts = dealProducts,
-                  notifyListeners()
-                }),
-      ),
-    );
-  }
-
-  void showDealCloseSheet(BuildContext context) {
-    if (_deal != null) {
-      showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => DealCloseSheetWidget(
-            onTap: (text, files) => {
-                  Navigator.pop(context),
-                  closeDeal(context, text).then((value) => {
-                        if (files.isNotEmpty)
-                          {
-                            files.forEach((element) async {
-                              await uploadFile(
-                                      context, _deal!.id, File(element.path!))
-                                  .then((value) => {
-                                        current++,
-                                        if (current == files.length)
-                                          {
-                                            loadingStatus =
-                                                LoadingStatus.completed,
-                                            notifyListeners(),
-                                            Toast().showTopToast(context,
-                                                '${Titles.deal} ${_deal!.number} успешно закрыта')
-                                          }
-                                      });
-                            })
-                          }
-                        else
-                          {
-                            Toast().showTopToast(context,
-                                '${Titles.deal} ${_deal!.number} успешно закрыта')
-                          }
-                      }),
-                }),
-      );
-    }
-  }
-
-  void showDealProcessScreen(
-    BuildContext context,
-    DealProcess dealProcess,
-  ) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                DealProcessScreenWidget(dealProcess: dealProcess)));
-  }
-
-  void showDealProcessSelectionSheet(BuildContext context, int index) {
-    List<String> items = [];
-
-    if (_dealStages[index].processes!.isNotEmpty) {
-      _dealStages[index].processes?.forEach((element) {
-        if (element.hidden) {
-          items.add(element.name);
-        }
-      });
-
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => SelectionScreenWidget(
-              title: Titles.addProcess,
-              value: '',
-              items: items,
-              onSelectTap: (value) => {
-                    _dealStages[index].processes?.forEach((element) {
-                      if (element.name == value) {
-                        updateDealProcess(
-                                context, false, element.id, element.status)
-                            .then((value) => {
-                                  element.hidden = false,
-                                  notifyListeners(),
-                                });
-                      }
-                    })
-                  }));
-    }
-  }
-
-  void showDealProcessActionSheet(BuildContext context, DealProcess process) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => DealProcessActionSheet(
-            title: process.name,
-            onTap: (index) => {
-                  if (index == 0) // EDIT PROCESS
-
-                    updateDealProcess(
-                      context,
-                      true,
-                      process.id,
-                      process.status,
-                    ).then((value) => {
-                          process.hidden = true,
-                          notifyListeners(),
-                        })
-                }));
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(response.message ?? 'Ошибка')
+                },
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future updateDealProcess(
-    BuildContext context,
     bool hidden,
     String id,
     String status,
@@ -390,19 +204,56 @@ class DealViewModel with ChangeNotifier {
     notifyListeners();
 
     await DealRepository()
-        .updateProcess(
-            DealProcessUpdateRequest(hidden: hidden, id: id, status: status))
+        .updateProcess(DealProcessUpdateRequest(
+          hidden: hidden,
+          id: id,
+          status: status,
+        ))
         .then((response) => {
               if (response is DealProcess)
-                {
-                  loadingStatus = LoadingStatus.completed,
-                }
+                loadingStatus = LoadingStatus.completed
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 }
             })
-        .whenComplete(() => notifyListeners());
+        .whenComplete(() => getDealProcesses());
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  void updateDeal(
+    Deal? deal,
+    List<DealProduct> dealProducts,
+  ) {
+    _deal = deal;
+    _dealProducts = dealProducts;
+    notifyListeners();
+  }
+
+  Future openFile(int index) async {
+    if (_deal!.files[index].filename == null) return;
+    final filename = _deal!.files[index].filename!;
+
+    FileDownloadHelper().download(
+        url: dealMediaUrl + filename,
+        filename: filename,
+        onDownload: () => {
+              _downloadIndex = index,
+              notifyListeners(),
+            },
+        onComplete: () => {
+              _downloadIndex = -1,
+              notifyListeners(),
+            });
+  }
+
+  void updateProcess(String id) {}
+
+  void expand(int index) {
+    _expanded.contains(index) ? _expanded.remove(index) : _expanded.add(index);
+    notifyListeners();
   }
 }

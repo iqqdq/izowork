@@ -80,8 +80,13 @@ class MapControlWidget extends StatelessWidget {
                 splashColor: Colors.transparent,
                 borderRadius:
                     const BorderRadius.only(bottomLeft: Radius.circular(10.0)),
-                child: SvgPicture.asset('assets/ic_search.svg',
-                    color: HexColors.grey50),
+                child: SvgPicture.asset(
+                  'assets/ic_search.svg',
+                  colorFilter: ColorFilter.mode(
+                    HexColors.grey50,
+                    BlendMode.srcIn,
+                  ),
+                ),
                 onTap: onSearchTap,
               ),
             ),

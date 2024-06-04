@@ -1,11 +1,20 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/models/models.dart';
+import 'package:izowork/notifiers/notifiers.dart';
+import 'package:izowork/screens/deal/sheets/deal_close_sheet.dart';
+import 'package:izowork/screens/deal/sheets/deal_process_action_sheet.dart';
 import 'package:izowork/screens/deal/views/deal_process_list_item_widget.dart';
+import 'package:izowork/screens/deal_create/deal_create_screen.dart';
+import 'package:izowork/screens/deal_process/deal_process_screen.dart';
+import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/views/views.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:spreadsheet_table/spreadsheet_table.dart';
 
@@ -47,7 +56,6 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
       backgroundColor: HexColors.white,
       appBar: AppBar(
         centerTitle: true,
-        elevation: 0.0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         leading: Padding(
@@ -397,11 +405,8 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                               isDownloading: _dealViewModel
                                                       .downloadIndex ==
                                                   index,
-                                              onTap: () =>
-                                                  _dealViewModel.openFile(
-                                                context,
-                                                index,
-                                              ),
+                                              onTap: () => _dealViewModel
+                                                  .openFile(index),
                                             );
                                     }),
 
@@ -425,6 +430,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             itemCount: _dealViewModel.dealStages.length,
                             itemBuilder: (context, index) {
                               bool containsHidden = false;
+
                               _dealViewModel.dealStages[index].processes
                                   ?.forEach((element) {
                                 if (element.hidden) {
@@ -448,22 +454,15 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                       isExpanded: _dealViewModel.expanded
                                           .contains(index),
                                       onTap: () => _dealViewModel.expand(index),
-                                      onMenuTap: (dealProcess) => _dealViewModel
-                                          .showDealProcessActionSheet(
-                                        context,
-                                        dealProcess,
-                                      ),
+                                      onMenuTap: (dealProcess) =>
+                                          _showDealProcessActionSheet(
+                                              dealProcess),
                                       onProcessTap: (dealProcess) =>
-                                          _dealViewModel.showDealProcessScreen(
-                                        context,
-                                        dealProcess,
-                                      ),
+                                          _showDealProcessScreen(dealProcess),
                                       onAddProcessTap: containsHidden
-                                          ? () => _dealViewModel
-                                                  .showDealProcessSelectionSheet(
-                                                context,
-                                                index,
-                                              )
+                                          ? () =>
+                                              _showDealProcessSelectionSheet(
+                                                  index)
                                           : null,
                                     );
                             }),
@@ -481,8 +480,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                                       right: 16.0,
                                       bottom: 16.0,
                                     ),
-                                    onTap: () => _dealViewModel
-                                        .showDealCloseSheet(context),
+                                    onTap: () => _showDealCloseSheet(),
                                   ),
                       ]),
 
@@ -498,7 +496,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
                             ? 20.0
                             : MediaQuery.of(context).padding.bottom,
                       ),
-                      onTap: () => _dealViewModel.showDealCreateSheet(context),
+                      onTap: () => _showDealCreateSheet(),
                     ),
                   ),
                   const SeparatorWidget(),
@@ -512,4 +510,121 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
             ),
     );
   }
+
+  // MARK: -
+  // MARK: - PUSH
+
+  void _showDealCreateSheet() => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DealCreateScreenWidget(
+              deal: _dealViewModel.deal,
+              phase: _dealViewModel.phase,
+              onCreate: (
+                deal,
+                dealProducts,
+              ) =>
+                  _dealViewModel.updateDeal(
+                    deal,
+                    dealProducts,
+                  )),
+        ),
+      );
+
+  void _showDealCloseSheet() {
+    if (_dealViewModel.deal == null) return;
+    List<File> files = [];
+
+    showCupertinoModalBottomSheet(
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => DealCloseSheetWidget(
+          onTap: (
+        text,
+        platformFiles,
+      ) =>
+              {
+                Navigator.pop(context),
+
+                /// Update files
+                for (var element in platformFiles)
+                  if (element.path != null) files.add(File(element.path!)),
+
+                /// Close deal
+                _dealViewModel.closeDeal(text).then((value) async => {
+                      files.isNotEmpty
+                          ? await _dealViewModel.uploadFiles(
+                              _dealViewModel.deal!.id,
+                              files,
+                            )
+                          : Toast().showTopToast(
+                              '${Titles.deal} ${_dealViewModel.deal!.number} успешно закрыта')
+                    }),
+              }),
+    );
+  }
+
+  void _showDealProcessScreen(DealProcess dealProcess) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              DealProcessScreenWidget(dealProcess: dealProcess)));
+
+  void _showDealProcessSelectionSheet(int index) {
+    List<String> items = [];
+
+    if (_dealViewModel.dealStages[index].processes!.isNotEmpty) {
+      _dealViewModel.dealStages[index].processes?.forEach((element) {
+        if (element.hidden) {
+          items.add(element.name);
+        }
+      });
+
+      showCupertinoModalBottomSheet(
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (sheetContext) => SelectionScreenWidget(
+            title: Titles.addProcess,
+            value: '',
+            items: items,
+            onSelectTap: (value) => {
+                  _dealViewModel.dealStages[index].processes
+                      ?.forEach((element) {
+                    if (element.name == value) {
+                      _dealViewModel.updateDealProcess(
+                        false,
+                        element.id,
+                        element.status,
+                      );
+                    }
+                  })
+                }),
+      );
+    }
+  }
+
+  void _showDealProcessActionSheet(DealProcess process) =>
+      showCupertinoModalBottomSheet(
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (sheetContext) => DealProcessActionSheet(
+            title: process.name,
+            onTap: (index) => {
+                  if (index == 0)
+                    _dealViewModel.updateDealProcess(
+                      true,
+                      process.id,
+                      process.status,
+                    )
+                }),
+      );
 }

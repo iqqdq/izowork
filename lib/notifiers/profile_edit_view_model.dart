@@ -7,9 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/authorization/authorization_screen.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen_body.dart';
-import 'package:izowork/views/views.dart';
 
 class ProfileEditViewModel with ChangeNotifier {
   final User currentUser;
@@ -27,8 +25,13 @@ class ProfileEditViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future changeUserInfo(BuildContext context, String name, String post,
-      String email, String phone, List<SocialInputModel> socials) async {
+  Future changeUserInfo(
+    String name,
+    String post,
+    String email,
+    String phone,
+    List<SocialInputModel> socials,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -62,23 +65,25 @@ class ProfileEditViewModel with ChangeNotifier {
       userRequest.social = social;
     }
 
-    await UserRepository().updateUser(userRequest).then((response) => {
-          if (response is User)
-            {
-              _user = response,
-              Toast().showTopToast(context, Titles.changesSuccess),
-              loadingStatus = LoadingStatus.completed
-            }
-          else if (response is ErrorResponse)
-            {
-              Toast().showTopToast(context, response.message ?? 'Ошибка'),
-              loadingStatus = LoadingStatus.error
-            },
-          notifyListeners()
-        });
+    await UserRepository()
+        .updateUser(userRequest)
+        .then((response) => {
+              if (response is User)
+                {
+                  _user = response,
+                  Toast().showTopToast(Titles.changesSuccess),
+                  loadingStatus = LoadingStatus.completed
+                }
+              else if (response is ErrorResponse)
+                {
+                  Toast().showTopToast(response.message ?? 'Ошибка'),
+                  loadingStatus = LoadingStatus.error
+                },
+            })
+        .whenComplete(() => notifyListeners());
   }
 
-  Future changeAvatar(BuildContext context, File file) async {
+  Future changeAvatar(File file) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -87,20 +92,22 @@ class ProfileEditViewModel with ChangeNotifier {
           filename: file.path.substring(file.path.length - 8, file.path.length))
     });
 
-    await UserRepository().updateAvatar(formData).then((response) => {
-          if (response is String)
-            {
-              _user?.avatar = response,
-              Toast().showTopToast(context, Titles.changesSuccess),
-              loadingStatus = LoadingStatus.completed
-            }
-          else if (response is ErrorResponse)
-            {
-              loadingStatus = LoadingStatus.error,
-              Toast().showTopToast(context, response.message ?? 'Ошибка')
-            },
-          notifyListeners()
-        });
+    await UserRepository()
+        .updateAvatar(formData)
+        .then((response) => {
+              if (response is String)
+                {
+                  _user?.avatar = response,
+                  Toast().showTopToast(Titles.changesSuccess),
+                  loadingStatus = LoadingStatus.completed
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(response.message ?? 'Ошибка')
+                }
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future deleteAccount(BuildContext context) async {
@@ -109,83 +116,33 @@ class ProfileEditViewModel with ChangeNotifier {
 
     await UserRepository()
         .deleteUser(id: _user?.id ?? currentUser.id)
-        .then((response) => {
+        .then((response) async => {
               if (response == true)
                 {
+                  /// CLEAR LOCAL STORAGE
                   loadingStatus = LoadingStatus.completed,
-                  notifyListeners(),
-                  Future.delayed(
-                      Duration.zero,
-                      () => {
-                            /// CLEAR LOCAL STORAGE
-                            GetIt.I<LocalStorageRepositoryInterface>().clear(),
-
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const AuthorizationScreenWidget()),
-                                (route) => false)
-                          })
+                  await GetIt.I<LocalStorageRepositoryInterface>().clear(),
                 }
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  notifyListeners(),
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 }
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
 
-  Future pickImage(BuildContext context) async {
-    final XFile? xFile = await ImagePicker()
-        .pickImage(source: ImageSource.gallery, imageQuality: 70);
+  Future pickImage() async {
+    final XFile? xFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 70,
+    );
 
     if (xFile != null) {
-      changeAvatar(context, File(xFile.path));
+      changeAvatar(File(xFile.path));
     }
-  }
-
-  Future showDeleteAccountDialog(BuildContext context) async {
-    return showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: Text(
-                Titles.deleteAccountAreYouSure,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: HexColors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              actions: <Widget>[
-                Row(
-                  children: [
-                    Expanded(
-                      child: BorderButtonWidget(
-                        margin: EdgeInsets.zero,
-                        title: Titles.deleteAccount,
-                        isDestructive: true,
-                        onTap: () => deleteAccount(context),
-                      ),
-                    ),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                      child: BorderButtonWidget(
-                        margin: EdgeInsets.zero,
-                        title: Titles.cancel,
-                        onTap: () => Navigator.of(context).pop(),
-                      ),
-                    ),
-                  ],
-                ),
-              ]);
-        });
   }
 }

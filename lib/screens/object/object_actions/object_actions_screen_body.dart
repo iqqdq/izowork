@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/news_page/news_page_screen.dart';
@@ -15,20 +14,28 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class ObjectActionsScreenBodyWidget extends StatefulWidget {
-  const ObjectActionsScreenBodyWidget({Key? key}) : super(key: key);
+  final VoidCallback onObjectTraceTap;
+
+  const ObjectActionsScreenBodyWidget({
+    Key? key,
+    required this.onObjectTraceTap,
+  }) : super(key: key);
 
   @override
   _ObjectActionsScreenBodyState createState() =>
       _ObjectActionsScreenBodyState();
 }
 
-class _ObjectActionsScreenBodyState
-    extends State<ObjectActionsScreenBodyWidget> {
+class _ObjectActionsScreenBodyState extends State<ObjectActionsScreenBodyWidget>
+    with AutomaticKeepAliveClientMixin {
   final ScrollController _scrollController = ScrollController();
 
   late ObjectActionsViewModel _objectActionsViewModel;
 
   Pagination _pagination = Pagination(offset: 0, size: 50);
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -51,6 +58,8 @@ class _ObjectActionsScreenBodyState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     _objectActionsViewModel = Provider.of<ObjectActionsViewModel>(
       context,
       listen: true,
@@ -127,14 +136,10 @@ class _ObjectActionsScreenBodyState
   void _onTraceTap(Trace trace) async {
     Widget? screen;
 
-    if (trace.phaseId != null) {
-      User? user = await GetIt.I<LocalStorageRepositoryInterface>().getUser();
-      if (user == null) return;
-
-      screen = PhaseScreenWidget(
-        id: trace.phaseId!,
-        user: user,
-      );
+    if (trace.objectId != null) {
+      widget.onObjectTraceTap();
+    } else if (trace.phaseId != null) {
+      screen = PhaseScreenWidget(id: trace.phaseId!);
     } else if (trace.dealId != null) {
       screen = DealScreenWidget(id: trace.dealId!);
     } else if (trace.taskId != null) {

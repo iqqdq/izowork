@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/helpers/helpers.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/views/views.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
 import 'package:izowork/screens/company_create/company_create_screen.dart';
@@ -340,7 +340,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                           )
                         else
                           Toast().showTopToast(
-                              context, '${company.name} не добавлен на карту!')
+                              '${company.name} не добавлен на карту!')
                       })
                 }
             });

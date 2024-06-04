@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/news_comments/views/comment_list_item_widget.dart';
 import 'package:izowork/api/api.dart';
+import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
@@ -52,10 +53,7 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
               key: ValueKey(_newsCommentsViewModel.comments[index].id),
               comment: _newsCommentsViewModel.comments[index],
               animate: _newsCommentsViewModel.comment?.id == element.id,
-              onUserTap: () => _newsCommentsViewModel.showProfileScreen(
-                context,
-                index,
-              ),
+              onUserTap: () => _showProfileScreen(index),
             ),
           );
 
@@ -110,57 +108,56 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
     }
 
     return Scaffold(
-        backgroundColor: HexColors.white,
-        appBar: AppBar(
-            toolbarHeight: 84.0,
-            titleSpacing: 16.0,
-            elevation: 0.0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: Colors.transparent,
-            automaticallyImplyLeading: false,
-            title: Row(children: [
-              BackButtonWidget(onTap: () => Navigator.pop(context)),
-              const SizedBox(width: 12.0),
+      backgroundColor: HexColors.white,
+      appBar: AppBar(
+          toolbarHeight: 84.0,
+          titleSpacing: 16.0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          title: Row(children: [
+            BackButtonWidget(onTap: () => Navigator.pop(context)),
+            const SizedBox(width: 12.0),
 
-              /// IMAGE
+            /// IMAGE
 
-              /// SLIDESHOW
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
-                child: _images.isEmpty
-                    ? Container()
-                    : ImageSlideshow(
-                        width: 85,
-                        height: 47.0,
-                        children: _images,
-                        initialPage: 0,
-                        indicatorColor: HexColors.white,
-                        indicatorBackgroundColor: HexColors.grey40,
-                        indicatorRadius: _images.length == 1 ? 0.0 : 4.0,
-                        autoPlayInterval: 6000,
-                        isLoop: true,
-                      ),
-              ),
-              Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    TitleWidget(
-                        text: _newsCommentsViewModel.news.user?.name ?? '-',
-                        isSmall: true),
-                    TitleWidget(text: _newsCommentsViewModel.news.name),
-                    TitleWidget(
-                      text: DateTimeFormatter().formatDateTimeToString(
-                        dateTime: _newsCommentsViewModel.news.createdAt,
-                        showTime: true,
-                        showMonthName: true,
-                      ),
-                      isSmall: true,
-                    )
-                  ]))
-            ])),
-        body: SizedBox.expand(
-            child: Stack(children: [
+            /// SLIDESHOW
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16.0),
+              child: _images.isEmpty
+                  ? Container()
+                  : ImageSlideshow(
+                      width: 85,
+                      height: 47.0,
+                      children: _images,
+                      initialPage: 0,
+                      indicatorColor: HexColors.white,
+                      indicatorBackgroundColor: HexColors.grey40,
+                      indicatorRadius: _images.length == 1 ? 0.0 : 4.0,
+                      autoPlayInterval: 6000,
+                      isLoop: true,
+                    ),
+            ),
+            Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  TitleWidget(
+                      text: _newsCommentsViewModel.news.user?.name ?? '-',
+                      isSmall: true),
+                  TitleWidget(text: _newsCommentsViewModel.news.name),
+                  TitleWidget(
+                    text: DateTimeFormatter().formatDateTimeToString(
+                      dateTime: _newsCommentsViewModel.news.createdAt,
+                      showTime: true,
+                      showMonthName: true,
+                    ),
+                    isSmall: true,
+                  )
+                ]))
+          ])),
+      body: SizedBox.expand(
+        child: Stack(children: [
           Column(children: [
             _newsCommentsViewModel.comments.isEmpty
                 ? Container()
@@ -211,7 +208,7 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
                               /// SEND COMMENT
                               _newsCommentsViewModel
                                   .createNewsComment(
-                                      context, _textEditingController.text)
+                                      _textEditingController.text)
                                   .then((value) => {
                                         /// CLEAR INPUT
                                         _textEditingController.clear(),
@@ -243,6 +240,20 @@ class _NewsCommentsScreenBodyState extends State<NewsCommentsScreenBodyWidget> {
           _newsCommentsViewModel.loadingStatus == LoadingStatus.searching
               ? const LoadingIndicatorWidget()
               : Container()
-        ])));
+        ]),
+      ),
+    );
   }
+
+  // MARK: -
+  // MARK: - PUSH
+
+  void _showProfileScreen(int index) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ProfileScreenWidget(
+                isMine: false,
+                user: _newsCommentsViewModel.comments[index].user,
+                onPop: (user) => null,
+              )));
 }

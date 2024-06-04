@@ -1,15 +1,10 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/news/news_filter_sheet/news_filter_page_view_screen.dart';
 import 'package:izowork/screens/news/news_filter_sheet/news_filter_page_view_screen_body.dart';
-import 'package:izowork/screens/news_comments/news_comments_screen.dart';
-import 'package:izowork/screens/news_create/news_create_screen.dart';
-import 'package:izowork/screens/news_page/news_page_screen.dart';
 
 class NewsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -82,78 +77,10 @@ class NewsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
+  void setFilter(NewsFilter newsFilter) {
+    _newsFilter = newsFilter;
+    notifyListeners();
+  }
+
   void resetFilter() => _newsFilter = null;
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showNewsFilterSheet(
-    BuildContext context,
-    Function() onFilter,
-  ) =>
-      showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => NewsFilterPageViewScreenWidget(
-            newsFilter: _newsFilter,
-            onPop: (newsFilter) => {
-                  if (newsFilter == null)
-                    {
-                      // CLEAR
-                      resetFilter(),
-                      onFilter()
-                    }
-                  else
-                    {
-                      // FILTER
-                      _newsFilter = newsFilter,
-                      onFilter()
-                    }
-                }),
-      );
-
-  void showNewsCreationScreen(
-    BuildContext context,
-    Pagination pagination,
-    String search,
-  ) =>
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NewsCreateScreenWidget(
-              onPop: (news) => {
-                    pagination.size += 1,
-                    getNews(
-                      pagination: pagination,
-                      search: search,
-                    ),
-                    Toast().showTopToast(
-                      context,
-                      Titles.newsWasAdded,
-                    )
-                  }),
-        ),
-      );
-
-  void showNewsPageScreen(
-    BuildContext context,
-    int index,
-  ) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => NewsPageScreenWidget(id: _news[index].id)));
-
-  void showNewsCommentsScreen(
-    BuildContext context,
-    int index,
-  ) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  NewsCommentsScreenWidget(news: _news[index])));
 }

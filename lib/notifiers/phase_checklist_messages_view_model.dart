@@ -8,7 +8,7 @@ import 'package:izowork/repositories/repositories.dart';
 class PhaseChecklistMessagesViewModel with ChangeNotifier {
   final PhaseChecklist phaseChecklist;
 
-  LoadingStatus loadingStatus = LoadingStatus.empty;
+  LoadingStatus loadingStatus = LoadingStatus.searching;
 
   PhaseChecklistMessagesResponse _phaseChecklistMessagesResponse =
       PhaseChecklistMessagesResponse(

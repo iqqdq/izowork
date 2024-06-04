@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
 
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/deal_create/views/deal_product_list_item_widget.dart';
 import 'package:izowork/views/views.dart';
@@ -73,7 +73,6 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
         backgroundColor: HexColors.white,
         appBar: AppBar(
             centerTitle: true,
-            elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             leading: Padding(
@@ -233,15 +232,17 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                         onProductSearchTap: () =>
                                             _dealCreateViewModel
                                                 .showSearchProductSheet(
-                                                    context, index),
+                                          context,
+                                          index,
+                                        ),
                                         onWeightChange: (weight) =>
                                             _dealCreateViewModel
                                                 .changeProductWeight(
-                                                    context,
-                                                    index,
-                                                    int.tryParse(weight) ?? 0),
+                                          index,
+                                          int.tryParse(weight) ?? 0,
+                                        ),
                                         onDeleteTap: () => _dealCreateViewModel
-                                            .deleteDealProduct(context, index),
+                                            .deleteDealProduct(index),
                                       );
                                     }),
 
@@ -273,35 +274,36 @@ class _DealCreateScreenBodyState extends State<DealCreateScreenBodyWidget> {
                                       ignoring: _dealCreateViewModel.downloadIndex !=
                                           -1,
                                       child: FileListItemWidget(
-                                          fileName: _dealCreateViewModel.deal == null
-                                              ? _dealCreateViewModel.files[index].path
-                                                  .substring(
-                                                      _dealCreateViewModel
+                                          fileName:
+                                              _dealCreateViewModel.deal == null
+                                                  ? _dealCreateViewModel
+                                                      .files[index].path
+                                                      .substring(
+                                                          _dealCreateViewModel
+                                                                  .files[index]
+                                                                  .path
+                                                                  .length -
+                                                              10,
+                                                          _dealCreateViewModel
                                                               .files[index]
                                                               .path
-                                                              .length -
-                                                          10,
-                                                      _dealCreateViewModel
-                                                          .files[index]
-                                                          .path
-                                                          .length)
-                                              : _dealCreateViewModel
-                                                  .deal!.files[index].name,
+                                                              .length)
+                                                  : _dealCreateViewModel
+                                                      .deal!.files[index].name,
                                           isDownloading:
                                               _dealCreateViewModel.downloadIndex ==
                                                   index,
                                           onTap: () => _dealCreateViewModel
-                                              .openFile(context, index),
-                                          onRemoveTap: () => _dealCreateViewModel
-                                              .deleteFile(context, index)));
+                                              .openFile(index),
+                                          onRemoveTap: () =>
+                                              _dealCreateViewModel.deleteFile(index)));
                                 }),
 
                             /// ADD FILE BUTTON
                             BorderButtonWidget(
                                 title: Titles.addFile,
                                 margin: const EdgeInsets.only(bottom: 30.0),
-                                onTap: () =>
-                                    _dealCreateViewModel.addFile(context)),
+                                onTap: () => _dealCreateViewModel.addFile()),
                           ]),
 
                       /// ADD TASK BUTTON

@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/helpers/helpers.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/map/views/map_control_widget.dart';
 import 'package:izowork/screens/map_company/map_object_screen_widget.dart';
 import 'package:izowork/views/views.dart';
@@ -106,7 +106,6 @@ class _SingleCompanyMapScreenBodyState
     return Scaffold(
         appBar: AppBar(
             titleSpacing: 0.0,
-            elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +31,6 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
       backgroundColor: HexColors.white,
       appBar: AppBar(
         centerTitle: true,
-        elevation: 0.0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         leading: Padding(
@@ -182,7 +181,7 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                                         '',
                                 isDownloading:
                                     _taskViewModel.downloadIndex == index,
-                                onTap: () => _openFile(index),
+                                onTap: () => _taskViewModel.openFile(index),
                               );
                             }),
                       ]),
@@ -209,13 +208,6 @@ class _TaskScreenBodyState extends State<TaskScreenBodyWidget> {
                 ]),
               ),
             ),
-    );
-  }
-
-  void _openFile(int index) {
-    _taskViewModel.openFile(
-      index,
-      () => Toast().showTopToast(context, Titles.unsupportedFileFormat),
     );
   }
 

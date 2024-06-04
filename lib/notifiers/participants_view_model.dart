@@ -89,7 +89,7 @@ class ParticipantsViewModel with ChangeNotifier {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              DialogScreenWidget(chat: response)))
+                              DialogScreenWidget(id: response.id)))
                 }
             })
         .then((value) =>
@@ -135,12 +135,12 @@ class ParticipantsViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          webViewHelper.openWebView(url);
+          webViewHelper.open(url);
         }
       } else {
         nativeUrl != null
-            ? webViewHelper.openWebView(nativeUrl)
-            : webViewHelper.openWebView(url);
+            ? webViewHelper.open(nativeUrl)
+            : webViewHelper.open(url);
       }
     }
   }

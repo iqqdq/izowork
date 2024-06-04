@@ -2,7 +2,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/task/task_screen.dart';
 import 'package:izowork/screens/task_calendar/task_calendar_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
@@ -71,7 +71,6 @@ class _TasksScreenBodyState extends State<TasksScreenBodyWidget>
         appBar: AppBar(
             toolbarHeight: 74.0,
             titleSpacing: 0.0,
-            elevation: 0.0,
             systemOverlayStyle: SystemUiOverlayStyle.dark,
             backgroundColor: Colors.transparent,
             automaticallyImplyLeading: false,

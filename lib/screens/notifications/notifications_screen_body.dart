@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
+import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/news_page/news_page_screen.dart';
 import 'package:izowork/screens/notifications/views/notification_list_item_widget.dart';
 import 'package:izowork/screens/object/object_page_view_screen.dart';
@@ -70,7 +71,6 @@ class _NotificationsScreenBodyState
       backgroundColor: HexColors.white,
       appBar: AppBar(
           titleSpacing: 16.0,
-          elevation: 0.0,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
           backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
@@ -180,6 +180,8 @@ class _NotificationsScreenBodyState
       screen = DealScreenWidget(id: metadata.dealId!);
     } else if (metadata.taskId != null) {
       screen = TaskScreenWidget(id: metadata.taskId!);
+    } else if (metadata.chatId != null) {
+      screen = DialogScreenWidget(id: metadata.chatId!);
     } else if (metadata.newsId != null) {
       screen = NewsPageScreenWidget(id: metadata.newsId!);
     }

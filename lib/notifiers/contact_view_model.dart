@@ -5,11 +5,9 @@ import 'package:izowork/components/components.dart';
 
 import 'package:izowork/models/models.dart';
 import 'package:izowork/helpers/helpers.dart';
-import 'package:izowork/screens/contact_create/contact_create_screen.dart';
 
 class ContactViewModel with ChangeNotifier {
   final Contact selectedContact;
-  final Function(Contact) onDelete;
 
   Contact? _contact;
 
@@ -17,32 +15,18 @@ class ContactViewModel with ChangeNotifier {
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
-  ContactViewModel(this.selectedContact, this.onDelete) {
+  ContactViewModel(this.selectedContact) {
     _contact = selectedContact;
     notifyListeners();
   }
 
   // MARK: -
-  // MARK: - PUSH
+  // MARK: - FUNCTIONS
 
-  void showContactEditScreen(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (sheetContext) => ContactCreateScreenWidget(
-                company: selectedContact.company,
-                contact: selectedContact,
-                onPop: (contact) => {
-                  _contact = contact,
-                  if (context.mounted) notifyListeners()
-                },
-                onDelete: (contact) => onDelete(contact),
-              )),
-    );
+  void setContact(Contact? contact) {
+    _contact = contact;
+    notifyListeners();
   }
-
-  // MARK: -
-  // MARK: - ACTIONS
 
   void openUrl(String url) async {
     if (url.isNotEmpty) {
@@ -64,12 +48,12 @@ class ContactViewModel with ChangeNotifier {
             await intent.launch();
           }
         } else {
-          webViewHelper.openWebView(url);
+          webViewHelper.open(url);
         }
       } else {
         nativeUrl != null
-            ? webViewHelper.openWebView(nativeUrl)
-            : webViewHelper.openWebView(url);
+            ? webViewHelper.open(nativeUrl)
+            : webViewHelper.open(url);
       }
     }
   }

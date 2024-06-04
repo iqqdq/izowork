@@ -56,7 +56,7 @@ class ChatListItemWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 14.0, vertical: 10.0),
                     child: Row(children: [
-                      /// USER AVATAR
+                      /// AVATAR
                       Stack(children: [
                         Container(
                           width: 40.0,
@@ -71,9 +71,10 @@ class ChatListItemWidget extends StatelessWidget {
                             _isGroupChat
                                 ? 'assets/ic_group.svg'
                                 : 'assets/ic_avatar.svg',
-                            color: _isGroupChat
-                                ? HexColors.white
-                                : HexColors.grey30,
+                            colorFilter: ColorFilter.mode(
+                              _isGroupChat ? HexColors.white : HexColors.grey30,
+                              BlendMode.srcIn,
+                            ),
                             width: 40.0,
                             height: 40.0,
                             fit: BoxFit.cover,

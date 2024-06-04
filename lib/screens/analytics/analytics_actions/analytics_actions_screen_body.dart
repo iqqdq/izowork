@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/analytics/views/analitics_action_list_item_widget.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/news_page/news_page_screen.dart';
@@ -9,7 +9,10 @@ import 'package:izowork/screens/object/object_page_view_screen.dart';
 import 'package:izowork/screens/task/task_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+
+import 'analytics_actions_filter_sheet/analytics_actions_filter_page_view_screen.dart';
 
 class AnalyticsActionsScreenBodyWidget extends StatefulWidget {
   const AnalyticsActionsScreenBodyWidget({Key? key}) : super(key: key);
@@ -95,20 +98,12 @@ class _AnalyticsActionsScreenBodyState
 
           /// FILTER BUTTON
           SafeArea(
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: FilterButtonWidget(
-                      onTap: () => _analyticsActionsViewModel
-                          .showAnalyticsActionFilterSheet(
-                              context,
-                              () => {
-                                    _pagination.offset = 0,
-                                    _analyticsActionsViewModel.getTraceList(
-                                        pagination: _pagination)
-                                  })
-
-                      // onClearTap: () => {}
-                      ))),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FilterButtonWidget(
+                  onTap: () => _showAnalyticsActionFilterSheet()),
+            ),
+          ),
 
           /// EMPTY LIST TEXT
           _analyticsActionsViewModel.loadingStatus == LoadingStatus.completed &&
@@ -133,6 +128,23 @@ class _AnalyticsActionsScreenBodyState
       ),
     );
   }
+
+  // MARK: -
+  // MARK: - PUSH
+
+  void _showAnalyticsActionFilterSheet() => showCupertinoModalBottomSheet(
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (sheetContext) => AnalyticsActionsFilterPageViewScreenWidget(
+            analyticsActionsFilter:
+                _analyticsActionsViewModel.analyticsActionsFilter,
+            onPop: (analyticsActionsFilter) => analyticsActionsFilter == null
+                ? _analyticsActionsViewModel.resetFilter()
+                : _analyticsActionsViewModel.setFilter(analyticsActionsFilter)),
+      );
 
   void _onTraceTap(Trace trace) {
     Widget? screen;

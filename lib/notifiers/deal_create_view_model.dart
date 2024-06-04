@@ -1,14 +1,11 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'dart:io';
-import 'dart:io' as io;
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:izowork/helpers/helpers.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
@@ -154,24 +151,17 @@ class DealCreateViewModel with ChangeNotifier {
                   if (_files.isNotEmpty)
                     {
                       _files.forEach((element) async {
-                        await uploadFile(context, response.id, element).then(
-                            (value) => {
-                                  current++,
-                                  if (current == _files.length)
-                                    onCreate(response)
-                                });
+                        await uploadFile(response.id, element).then((value) => {
+                              current++,
+                              if (current == _files.length) onCreate(response)
+                            });
                       })
                     }
                   else
                     onCreate(response)
                 }
-              else if (response is ErrorResponse)
-                {
-                  loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
-                },
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future editDeal(
@@ -200,7 +190,7 @@ class DealCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
               notifyListeners()
             });
@@ -256,7 +246,7 @@ class DealCreateViewModel with ChangeNotifier {
                 else if (response is ErrorResponse)
                   {
                     loadingStatus = LoadingStatus.error,
-                    Toast().showTopToast(context, response.message ?? 'Ошибка')
+                    Toast().showTopToast(response.message ?? 'Ошибка')
                   }
               })
           .whenComplete(() => notifyListeners());
@@ -264,34 +254,32 @@ class DealCreateViewModel with ChangeNotifier {
   }
 
   Future updateDealProduct(
-    BuildContext context,
     int index,
     String id,
     String productId,
     int count,
   ) async {
-    // loadingStatus = LoadingStatus.searching;
-    // notifyListeners();
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
 
     await DealRepository()
         .updateProduct(DealProductRequest(
-            count: count, id: id, dealId: deal!.id, productId: productId))
+          count: count,
+          id: id,
+          dealId: deal!.id,
+          productId: productId,
+        ))
         .then((response) => {
               if (response is DealProduct)
                 {
                   _dealProducts[index] = response,
                   loadingStatus = LoadingStatus.completed,
                 }
-              else if (response is ErrorResponse)
-                {
-                  loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
-                }
             })
         .whenComplete(() => notifyListeners());
   }
 
-  Future deleteDealProduct(BuildContext context, int index) async {
+  Future deleteDealProduct(int index) async {
     if (deal != null && _dealProducts.isNotEmpty) {
       loadingStatus = LoadingStatus.searching;
       notifyListeners();
@@ -304,34 +292,23 @@ class DealCreateViewModel with ChangeNotifier {
                     loadingStatus = LoadingStatus.completed,
                     _dealProducts.removeAt(index)
                   }
-                else if (response is ErrorResponse)
-                  {
-                    loadingStatus = LoadingStatus.error,
-                    Toast().showTopToast(context, response.message ?? 'Ошибка')
-                  },
-                notifyListeners()
-              });
+              })
+          .whenComplete(() => notifyListeners());
     }
   }
 
-  Future uploadFile(BuildContext context, String id, File file) async {
+  Future uploadFile(
+    String id,
+    File file,
+  ) async {
     await DealRepository()
         .addDealFile(DealFileRequest(id, file))
         .then((response) => {
-              if (response is Document)
-                {
-                  loadingStatus = LoadingStatus.completed,
-                  _documents.add(response)
-                }
-              else if (response is ErrorResponse)
-                {
-                  loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
-                }
+              if (response is Document) _documents.add(response),
             });
   }
 
-  Future deleteFile(BuildContext context, int index) async {
+  Future deleteFile(int index) async {
     if (deal == null) {
       _files.removeAt(index);
       notifyListeners();
@@ -347,20 +324,15 @@ class DealCreateViewModel with ChangeNotifier {
                     loadingStatus = LoadingStatus.completed,
                     _documents.removeAt(index)
                   }
-                else if (response is ErrorResponse)
-                  {
-                    loadingStatus = LoadingStatus.error,
-                    Toast().showTopToast(context, response.message ?? 'Ошибка')
-                  },
-                notifyListeners()
-              });
+              })
+          .whenComplete(() => notifyListeners());
     }
   }
 
   // MARK: -
   // MARK: - ACTIONS
 
-  Future addFile(BuildContext context) async {
+  Future addFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowMultiple: true,
@@ -381,15 +353,14 @@ class DealCreateViewModel with ChangeNotifier {
 
           result.files.forEach((element) async {
             if (element.path != null) {
-              await uploadFile(context, deal!.id, File(element.path!))
-                  .then((value) => {
-                        current++,
-                        if (current == result.files.length)
-                          {
-                            loadingStatus = LoadingStatus.completed,
-                            notifyListeners()
-                          }
-                      });
+              await uploadFile(deal!.id, File(element.path!)).then((value) => {
+                    current++,
+                    if (current == result.files.length)
+                      {
+                        loadingStatus = LoadingStatus.completed,
+                        notifyListeners()
+                      }
+                  });
             }
           });
         }
@@ -397,61 +368,36 @@ class DealCreateViewModel with ChangeNotifier {
     }
   }
 
-  Future openFile(BuildContext context, int index) async {
+  Future openFile(int index) async {
     if (deal == null) {
       OpenResult openResult = await OpenFilex.open(_files[index].path);
-
       if (openResult.type == ResultType.noAppToOpen) {
-        Toast().showTopToast(context, Titles.unsupportedFileFormat);
+        Toast().showTopToast(Titles.unsupportedFileFormat);
       }
     } else {
-      String url = dealMediaUrl + (deal!.files[index].filename ?? '');
+      if (deal!.files[index].filename == null) return;
+      final filename = deal!.files[index].filename!;
 
-      if (Platform.isAndroid) {
-        Directory appDocumentsDirectory =
-            await getApplicationDocumentsDirectory();
-        String appDocumentsPath = appDocumentsDirectory.path;
-        String fileName = deal!.files[index].name;
-        String filePath = '$appDocumentsPath/$fileName';
-        bool isFileExists = await io.File(filePath).exists();
-
-        if (!isFileExists) {
-          _downloadIndex = index;
-          notifyListeners();
-
-          await Dio().download(url, filePath,
-              onReceiveProgress: (count, total) {
-            debugPrint('---Download----Rec: $count, Total: $total');
-          }).whenComplete(() => {
+      FileDownloadHelper().download(
+          url: dealMediaUrl + filename,
+          filename: filename,
+          onDownload: () => {
+                _downloadIndex = index,
+                notifyListeners(),
+              },
+          onComplete: () => {
                 _downloadIndex = -1,
                 notifyListeners(),
               });
-        }
-
-        OpenResult openResult = await OpenFilex.open(filePath);
-
-        if (openResult.type == ResultType.noAppToOpen) {
-          Toast().showTopToast(context, Titles.unsupportedFileFormat);
-        }
-      } else {
-        if (await canLaunchUrl(Uri.parse(url.replaceAll(' ', '')))) {
-          launchUrl(Uri.parse(url.replaceAll(' ', '')));
-        } else if (await canLaunchUrl(
-            Uri.parse('https://' + url.replaceAll(' ', '')))) {
-          launchUrl(Uri.parse('https://' + url.replaceAll(' ', '')));
-        }
-      }
     }
   }
 
   void changeProductWeight(
-    BuildContext context,
     int index,
     int weight,
   ) {
     _dealProducts[index].count = weight;
     updateDealProduct(
-      context,
       index,
       _dealProducts[index].id,
       _dealProducts[index].productId!,
@@ -592,26 +538,30 @@ class DealCreateViewModel with ChangeNotifier {
 
   void showSearchProductSheet(BuildContext context, int index) {
     showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchProductScreenWidget(
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (product) => {
-                  Navigator.pop(context),
-                  if (product != null)
-                    {
-                      _dealProducts[index].product = product,
-                      _dealProducts[index].productId = product.id,
-                      updateDealProduct(context, index, _dealProducts[index].id,
-                              product.id, _dealProducts[index].count)
-                          .then(
-                        (value) => notifyListeners(),
-                      )
-                    }
-                }));
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => SearchProductScreenWidget(
+          isRoot: true,
+          onFocus: () => {},
+          onPop: (product) => {
+                Navigator.pop(context),
+                if (product != null)
+                  {
+                    _dealProducts[index].product = product,
+                    _dealProducts[index].productId = product.id,
+                    updateDealProduct(
+                      index,
+                      _dealProducts[index].id,
+                      product.id,
+                      _dealProducts[index].count,
+                    ).then(
+                      (value) => notifyListeners(),
+                    )
+                  }
+              }),
+    );
   }
 }

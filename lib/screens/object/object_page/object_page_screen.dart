@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/object/object_page/object_page_screen_body.dart';
 import 'package:provider/provider.dart';
 
 class ObjectPageScreenWidget extends StatelessWidget {
   final String id;
+  final String? phaseId;
   final VoidCallback onCoordCopy;
 
   const ObjectPageScreenWidget({
     Key? key,
     required this.id,
+    required this.phaseId,
     required this.onCoordCopy,
   }) : super(key: key);
 
@@ -17,6 +19,9 @@ class ObjectPageScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => ObjectPageViewModel(id),
-        child: ObjectPageScreenBodyWidget(onCoordCopy: onCoordCopy));
+        child: ObjectPageScreenBodyWidget(
+          phaseId: phaseId,
+          onCoordCopy: onCoordCopy,
+        ));
   }
 }

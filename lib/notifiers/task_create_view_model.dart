@@ -1,16 +1,13 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 import 'dart:io';
-import 'dart:io' as io;
-import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/helpers/browser.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:open_filex/open_filex.dart';
 
+import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/api/api.dart';
-import 'package:open_filex/open_filex.dart';
 
 class TaskCreateViewModel with ChangeNotifier {
   final Task? task;
@@ -296,39 +293,27 @@ class TaskCreateViewModel with ChangeNotifier {
     }
   }
 
-  Future openFile(
-    int index,
-    VoidCallback onFileOpenError,
-  ) async {
+  Future openFile(int index) async {
     if (task == null) {
-      OpenResult openResult = await OpenFilex.open(_files[index].path);
-      if (openResult.type == ResultType.noAppToOpen) onFileOpenError();
+      if ((await OpenFilex.open(_files[index].path)).type ==
+          ResultType.noAppToOpen) {
+        Toast().showTopToast(Titles.unsupportedFileFormat);
+      }
     } else {
-      String url = taskMediaUrl + (task!.files[index].filename ?? '');
+      final filename = task!.files[index].filename;
+      if (filename == null) return;
 
-      if (Platform.isAndroid) {
-        Directory appDocumentsDirectory =
-            await getApplicationDocumentsDirectory();
-        String appDocumentsPath = appDocumentsDirectory.path;
-        String fileName = task!.files[index].name;
-        String filePath = '$appDocumentsPath/$fileName';
-        bool isFileExists = await io.File(filePath).exists();
-
-        if (!isFileExists) {
-          _downloadIndex = index;
-          notifyListeners();
-
-          await Dio().download(url, filePath).then((value) => {
+      FileDownloadHelper().download(
+          url: taskMediaUrl + filename,
+          filename: filename,
+          onDownload: () => {
+                _downloadIndex = index,
+                notifyListeners(),
+              },
+          onComplete: () => {
                 _downloadIndex = -1,
                 notifyListeners(),
               });
-        }
-
-        OpenResult openResult = await OpenFilex.open(filePath);
-        if (openResult.type == ResultType.noAppToOpen) onFileOpenError();
-      } else {
-        WebViewHelper().openWebView(url);
-      }
     }
   }
 }

@@ -370,7 +370,12 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                         SvgPicture.asset(
                           'assets/ic_arrow_cancel.svg',
                           fit: BoxFit.scaleDown,
-                          color: _isRecording ? null : Colors.transparent,
+                          colorFilter: _isRecording
+                              ? null
+                              : const ColorFilter.mode(
+                                  Colors.transparent,
+                                  BlendMode.srcIn,
+                                ),
                         ),
                         const SizedBox(width: 8.0),
                         Material(

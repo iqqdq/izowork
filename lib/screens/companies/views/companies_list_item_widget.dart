@@ -34,11 +34,16 @@ class CompaniesListItemWidget extends StatelessWidget {
                   Row(children: [
                     /// AVATAR
                     Stack(children: [
-                      SvgPicture.asset('assets/ic_avatar.svg',
-                          color: HexColors.grey40,
-                          width: 40.0,
-                          height: 40.0,
-                          fit: BoxFit.cover),
+                      SvgPicture.asset(
+                        'assets/ic_avatar.svg',
+                        colorFilter: ColorFilter.mode(
+                          HexColors.grey40,
+                          BlendMode.srcIn,
+                        ),
+                        width: 40.0,
+                        height: 40.0,
+                        fit: BoxFit.cover,
+                      ),
                       ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child: company.image == null

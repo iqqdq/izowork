@@ -175,16 +175,13 @@ class ObjectsViewModel with ChangeNotifier {
               builder: (context) =>
                   ObjectPageViewScreenWidget(id: _objects[index].id)));
 
-  void showObjectCreateScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ObjectCreateScreenWidget(
-              onPop: (object) => {
-                    if (object != null)
-                      Toast()
-                          .showTopToast(context, '${Titles.object} добавлен!')
-                  }),
-        ));
-  }
+  void showObjectCreateScreen(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ObjectCreateScreenWidget(
+            onPop: (object) => {
+                  if (object != null)
+                    Toast().showTopToast('${Titles.object} добавлен!')
+                }),
+      ));
 }

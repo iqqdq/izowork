@@ -44,7 +44,6 @@ class _SplashScreenState extends State<SplashScreenWidget> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0.0,
-        elevation: 0.0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
       ),

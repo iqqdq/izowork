@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/search_company/search_company_screen.dart';
 import 'package:izowork/screens/search_object/search_object_screen.dart';
 import 'package:izowork/screens/search_user/search_user_screen.dart';
@@ -74,7 +74,6 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
       backgroundColor: HexColors.white,
       appBar: AppBar(
         centerTitle: true,
-        elevation: 0.0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         leading: Padding(
@@ -237,7 +236,7 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                                 : _taskCreateViewModel.task!.files[index].name,
                             isDownloading:
                                 _taskCreateViewModel.downloadIndex == index,
-                            onTap: () => _openFile(index),
+                            onTap: () => _taskCreateViewModel.openFile(index),
                             onRemoveTap: () =>
                                 _taskCreateViewModel.deleteTaskFile(index),
                           ),
@@ -422,10 +421,5 @@ class _TaskCreateScreenBodyState extends State<TaskCreateScreenBodyWidget> {
                       Navigator.pop(context),
                     }
                 });
-  }
-
-  void _openFile(int index) {
-    _taskCreateViewModel.openFile(index,
-        () => Toast().showTopToast(context, Titles.unsupportedFileFormat));
   }
 }

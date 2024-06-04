@@ -1,12 +1,9 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/product/product_screen.dart';
-import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen.dart';
 import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen_body.dart';
 
 class ProductsViewModel with ChangeNotifier {
@@ -31,7 +28,7 @@ class ProductsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future getProductById(BuildContext context, String id) async {
+  Future getProductById(String id) async {
     loadingStatus = LoadingStatus.searching;
 
     await ProductRepository()
@@ -45,7 +42,7 @@ class ProductsViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
@@ -101,43 +98,10 @@ class ProductsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
+  void setFilter(ProductsFilter productsFilter) {
+    _productsFilter = productsFilter;
+    notifyListeners();
+  }
+
   void resetFilter() => _productsFilter = null;
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showProductPageViewScreen(
-          BuildContext context, int index) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  ProductPageScreenWidget(product: _products[index])));
-
-  void showProductFilterSheet(
-    BuildContext context,
-    Function() onFilter,
-  ) =>
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => ProductsFilterPageViewScreenWidget(
-              productsFilter: _productsFilter,
-              onPop: (productsFilter) => {
-                    if (productsFilter == null)
-                      {
-                        // CLEAR
-                        resetFilter(),
-                        onFilter()
-                      }
-                    else
-                      {
-                        // FILTER
-                        _productsFilter = productsFilter,
-                        onFilter()
-                      }
-                  }));
 }

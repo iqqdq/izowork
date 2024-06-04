@@ -1,17 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/components.dart';
-import 'package:izowork/notifiers/domain.dart';
+import 'package:izowork/notifiers/notifiers.dart';
+import 'package:izowork/screens/dialog/dialog_screen.dart';
+import 'package:izowork/screens/documents/documents_screen.dart';
 import 'package:izowork/screens/object/object_page/views/object_stage_header_widget.dart';
 import 'package:izowork/screens/object/object_page/views/object_stage_list_item_widget.dart';
+import 'package:izowork/screens/object_analytics/object_analytics_screen.dart';
+import 'package:izowork/screens/object_create/object_create_screen.dart';
+import 'package:izowork/screens/phase/phase_screen.dart';
+import 'package:izowork/screens/single_object_map/single_object_map_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:provider/provider.dart';
 
 class ObjectPageScreenBodyWidget extends StatefulWidget {
+  final String? phaseId;
   final VoidCallback onCoordCopy;
 
-  const ObjectPageScreenBodyWidget({Key? key, required this.onCoordCopy})
-      : super(key: key);
+  const ObjectPageScreenBodyWidget({
+    Key? key,
+    this.phaseId,
+    required this.onCoordCopy,
+  }) : super(key: key);
 
   @override
   _ObjectPageScreenBodyState createState() => _ObjectPageScreenBodyState();
@@ -23,6 +33,25 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // PUSH FROM NOTIFICATION's SCREEN
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (widget.phaseId == null) return;
+
+      if (mounted) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PhaseScreenWidget(
+                      id: widget.phaseId!,
+                    ))).whenComplete(() => _showPhaseScreen(widget.phaseId!));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,11 +129,13 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                 ]),
                           ),
                           GestureDetector(
-                              onTap: () =>
-                                  _objectPageViewModel.showObjectOnMap(context),
+                              onTap: () => _showObjectOnMap(),
                               child: SvgPicture.asset(
                                 'assets/ic_map.svg',
-                                color: HexColors.primaryMain,
+                                colorFilter: ColorFilter.mode(
+                                  HexColors.primaryMain,
+                                  BlendMode.srcIn,
+                                ),
                               ))
                         ]),
 
@@ -282,19 +313,19 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                   isDownloading:
                                       _objectPageViewModel.downloadIndex ==
                                           index,
-                                  onTap: () => _objectPageViewModel.openFile(
-                                        context,
-                                        index,
-                                      ));
+                                  onTap: () =>
+                                      _objectPageViewModel.openFile(index));
                             }),
 
-                        /// PHASES TABLE
+                        /// PHASE LIST
                         Container(
                             decoration: BoxDecoration(
                                 color: HexColors.white,
                                 borderRadius: BorderRadius.circular(16.0),
                                 border: Border.all(
-                                    width: 1.0, color: HexColors.grey20)),
+                                  width: 1.0,
+                                  color: HexColors.grey20,
+                                )),
                             child: ListView(
                                 physics: const NeverScrollableScrollPhysics(),
                                 padding: EdgeInsets.zero,
@@ -303,41 +334,29 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                   const ObjectStageHeaderWidget(),
                                   const SizedBox(height: 10.0),
                                   const SeparatorWidget(),
-                                  _objectPageViewModel.phases.isEmpty
-                                      ? const SizedBox(
-                                          height: 400.0,
-                                          child: LoadingIndicatorWidget())
-                                      : ListView.builder(
-                                          shrinkWrap: true,
-                                          padding: EdgeInsets.zero,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemCount: _objectPageViewModel
-                                              .phases.length,
-                                          itemBuilder: (context, index) {
-                                            return ObjectStageListItemWidget(
-                                                key: ValueKey(
-                                                    _objectPageViewModel
-                                                        .phases[index].id),
-                                                title: _objectPageViewModel
-                                                    .phases[index].name,
-                                                effectivenes:
-                                                    _objectPageViewModel
-                                                        .phases[index]
-                                                        .efficiency,
-                                                readiness: _objectPageViewModel
-                                                    .phases[index].readiness,
-                                                showSeparator: index <
-                                                    _objectPageViewModel
-                                                            .phases.length -
-                                                        1,
-                                                onTap: () =>
-                                                    _objectPageViewModel
-                                                        .showPhaseScreen(
-                                                      context,
-                                                      index,
-                                                    ));
-                                          })
+                                  ListView.builder(
+                                      shrinkWrap: true,
+                                      padding: EdgeInsets.zero,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount:
+                                          _objectPageViewModel.phases.length,
+                                      itemBuilder: (context, index) {
+                                        var phase =
+                                            _objectPageViewModel.phases[index];
+
+                                        return ObjectStageListItemWidget(
+                                          key: ValueKey(phase.id),
+                                          phase: phase,
+                                          showSeparator: index <
+                                              _objectPageViewModel
+                                                      .phases.length -
+                                                  1,
+                                          onTap: () => _showPhaseScreen(
+                                              _objectPageViewModel
+                                                  .phases[index].id),
+                                        );
+                                      })
                                 ])),
                         const SizedBox(height: 20.0),
 
@@ -346,8 +365,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                           margin: const EdgeInsets.only(bottom: 10.0),
                           title: '',
                           value: Titles.documents,
-                          onTap: () =>
-                              _objectPageViewModel.showDocumentsScreen(context),
+                          onTap: () => _showDocumentsScreen(),
                         ),
 
                         /// ANALYTICS BUTTON
@@ -355,8 +373,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                           margin: const EdgeInsets.only(bottom: 10.0),
                           title: '',
                           value: Titles.analytics,
-                          onTap: () => _objectPageViewModel
-                              .showObjectAnalyticsPageViewScreen(context),
+                          onTap: () => _showObjectAnalyticsPageViewScreen(),
                         ),
 
                         /// SHOW CHAT BUTTON
@@ -366,8 +383,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                 margin: const EdgeInsets.only(bottom: 20.0),
                                 title: '',
                                 value: Titles.chat,
-                                onTap: () => _objectPageViewModel
-                                    .showDialogScreen(context),
+                                onTap: () => _showDialogScreen(),
                               ),
 
                         /// CHANGE OBJECT STAGE DIRECTOR BUTTON
@@ -388,7 +404,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                                       .loadingStatus ==
                                                   LoadingStatus.completed)
                                                 {
-                                                  Toast().showTopToast(context,
+                                                  Toast().showTopToast(
                                                       Titles.objectStageChanged)
                                                 }
                                             }),
@@ -411,7 +427,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                                       .loadingStatus ==
                                                   LoadingStatus.completed)
                                                 {
-                                                  Toast().showTopToast(context,
+                                                  Toast().showTopToast(
                                                       Titles.objectStageChanged)
                                                 }
                                             }),
@@ -433,7 +449,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                                                   .loadingStatus ==
                                               LoadingStatus.completed)
                                             {
-                                              Toast().showTopToast(context,
+                                              Toast().showTopToast(
                                                   Titles.objectStageChanged)
                                             }
                                         }),
@@ -452,8 +468,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                               ? 20.0
                               : MediaQuery.of(context).padding.bottom,
                         ),
-                        onTap: () =>
-                            _objectPageViewModel.showObjectCreateSheet(context),
+                        onTap: () => _showObjectCreateSheet(),
                       )),
                   const SeparatorWidget(),
 
@@ -466,4 +481,49 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
             ),
     );
   }
+
+// MARK: -
+// MARK: - PUSH
+
+  void _showObjectCreateSheet() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ObjectCreateScreenWidget(
+              object: _objectPageViewModel.object,
+              onPop: (object) => _objectPageViewModel.updateObject(object))));
+
+  void _showObjectOnMap() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => SingleObjectMapScreenWidget(
+              object: _objectPageViewModel.object!)));
+
+  void _showObjectAnalyticsPageViewScreen() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ObjectAnalyticsScreenWidget(
+                object: _objectPageViewModel.object!,
+                phases: _objectPageViewModel.phases,
+              )));
+
+  void _showDocumentsScreen() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              DocumentsScreenWidget(id: _objectPageViewModel.objectId)));
+
+  void _showPhaseScreen(String id) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => PhaseScreenWidget(
+                id: id,
+              ))).whenComplete(() => _objectPageViewModel.getPhaseList());
+
+  void _showDialogScreen() => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => DialogScreenWidget(
+                id: _objectPageViewModel.object!.chat!.id,
+                onPop: (message) => {},
+              )));
 }

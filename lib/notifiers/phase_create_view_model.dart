@@ -62,7 +62,7 @@ class PhaseCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
@@ -80,7 +80,7 @@ class PhaseCreateViewModel with ChangeNotifier {
               if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
@@ -101,7 +101,7 @@ class PhaseCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
@@ -122,7 +122,7 @@ class PhaseCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
@@ -141,7 +141,7 @@ class PhaseCreateViewModel with ChangeNotifier {
               if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
               notifyListeners()
             })
@@ -163,7 +163,7 @@ class PhaseCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
@@ -183,7 +183,7 @@ class PhaseCreateViewModel with ChangeNotifier {
               if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(context, response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Ошибка')
                 }
             });
   }
@@ -323,8 +323,8 @@ class PhaseCreateViewModel with ChangeNotifier {
         builder: (context) => TaskCreateScreenWidget(
             onCreate: (task) => {
                   if (task != null)
-                    Toast().showTopToast(
-                        context, '${Titles.task} "${task.name}" создана')
+                    Toast()
+                        .showTopToast('${Titles.task} "${task.name}" создана')
                 }),
       ));
 }
