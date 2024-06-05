@@ -91,7 +91,7 @@ class NewsCommentsViewModel with ChangeNotifier {
               else
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 }
             })
         .whenComplete(() => notifyListeners());

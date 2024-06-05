@@ -34,6 +34,9 @@ class PhaseChecklistMessagesViewModel with ChangeNotifier {
   Future getPhaseChecklistMessagesList({required Pagination pagination}) async {
     if (pagination.offset == 0) {
       _phaseChecklistMessagesResponse.messages.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await PhaseRepository()

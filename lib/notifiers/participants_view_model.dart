@@ -7,23 +7,22 @@ import 'package:get_it/get_it.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/dialog/dialog_screen.dart';
-import 'package:izowork/screens/profile/profile_screen.dart';
 
 class ParticipantsViewModel with ChangeNotifier {
   final Chat chat;
 
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
-  String? userId;
-
   final List<User> _users = [];
 
   List<User> get users => _users;
 
+  Chat? _newChat;
+
+  Chat? get newChat => _newChat;
+
   ParticipantsViewModel(this.chat) {
-    setUserId().then((value) =>
-        getParticipantList(pagination: Pagination(offset: 0, size: 50)));
+    getParticipantList(pagination: Pagination(offset: 0, size: 50));
   }
 
   // MARK: -
@@ -35,6 +34,9 @@ class ParticipantsViewModel with ChangeNotifier {
   }) async {
     if (pagination.offset == 0) {
       _users.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await UserRepository()
@@ -76,44 +78,31 @@ class ParticipantsViewModel with ChangeNotifier {
         .whenComplete(() => notifyListeners());
   }
 
-  Future createUserChat(BuildContext context, int index) async {
+  Future createUserChat(String id) async {
+    User? user = await GetIt.I<LocalStorageRepositoryInterface>().getUser();
+    String? userId = user?.id;
+
+    if (userId == id) return;
+
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
     await ChatRepository()
-        .createDmChat(chatDmRequest: ChatDmRequest(userId: _users[index].id))
+        .createDmChat(chatDmRequest: ChatDmRequest(userId: id))
         .then((response) => {
               if (response is Chat)
-                {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DialogScreenWidget(id: response.id)))
-                }
+                _newChat = chat
+              else if (response is ErrorResponse)
+                Toast().showTopToast(response.message ?? 'Произошла ошибка')
             })
-        .then((value) =>
-            {loadingStatus = LoadingStatus.completed, notifyListeners()});
-  }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showProfileScreen(BuildContext context, User user) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ProfileScreenWidget(
-                isMine: false, user: user, onPop: (user) => null)));
+        .whenComplete(() => {
+              loadingStatus = LoadingStatus.completed,
+              notifyListeners(),
+            });
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
-
-  Future setUserId() async {
-    User? user = await GetIt.I<LocalStorageRepositoryInterface>().getUser();
-    userId = user?.id;
-  }
 
   void openUrl(String url) async {
     if (url.isNotEmpty) {

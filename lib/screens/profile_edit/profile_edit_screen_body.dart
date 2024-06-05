@@ -345,7 +345,7 @@ class _ProfileEditScreenBodyState extends State<ProfileEditScreenBodyWidget> {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   Future _showDeleteAccountDialog() async => showDialog(
         context: context,

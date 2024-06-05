@@ -35,7 +35,8 @@ class BottomButtonWidget extends StatelessWidget {
                 child: Center(
                     child: Padding(
                         padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).padding.bottom),
+                          bottom: MediaQuery.of(context).padding.bottom,
+                        ),
                         child: Text(title,
                             textAlign: TextAlign.center,
                             style: TextStyle(

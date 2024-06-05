@@ -46,7 +46,7 @@ class CompanyViewModel with ChangeNotifier {
                 }
               else if (response is ErrorResponse)
                 {
-                  Toast().showTopToast(response.message ?? 'Ошибка'),
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка'),
                   loadingStatus = LoadingStatus.error,
                 }
             })

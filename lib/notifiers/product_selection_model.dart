@@ -23,6 +23,9 @@ class ProductSelectionViewModel with ChangeNotifier {
       {required Pagination pagination, String? search}) async {
     if (pagination.offset == 0) {
       _products.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await ProductRepository().getProducts(

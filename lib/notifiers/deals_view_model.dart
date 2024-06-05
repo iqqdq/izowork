@@ -94,9 +94,11 @@ class DealsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  void setFilter(DealsFilter dealsFilter) {
+  void setFilter(
+    String search,
+    DealsFilter dealsFilter,
+  ) {
     _dealsFilter = dealsFilter;
-    notifyListeners();
   }
 
   void resetFilter() {

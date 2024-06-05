@@ -15,12 +15,10 @@ import 'package:provider/provider.dart';
 
 class ObjectPageScreenBodyWidget extends StatefulWidget {
   final String? phaseId;
-  final VoidCallback onCoordCopy;
 
   const ObjectPageScreenBodyWidget({
     Key? key,
     this.phaseId,
-    required this.onCoordCopy,
   }) : super(key: key);
 
   @override
@@ -48,7 +46,7 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
             MaterialPageRoute(
                 builder: (context) => PhaseScreenWidget(
                       id: widget.phaseId!,
-                    ))).whenComplete(() => _showPhaseScreen(widget.phaseId!));
+                    ))).whenComplete(() => _objectPageViewModel.getPhaseList());
       }
     });
   }

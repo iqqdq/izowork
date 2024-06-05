@@ -2,14 +2,9 @@
 
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/product_selection/product_selection_screen.dart';
-import 'package:izowork/screens/search_company/search_company_screen.dart';
-import 'package:izowork/screens/search_user/search_user_screen.dart';
-import 'package:izowork/screens/task_create/task_create_screen.dart';
 
 class PhaseCreateViewModel with ChangeNotifier {
   final Phase phase;
@@ -35,10 +30,7 @@ class PhaseCreateViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - API CALL
 
-  Future createContractor(
-    BuildContext context,
-    int? index,
-  ) async {
+  Future createContractor(int? index) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -62,31 +54,32 @@ class PhaseCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
   }
 
-  Future updateContractor(BuildContext context, int index) async {
+  Future updateContractor(int index) async {
     await PhaseRepository()
         .updatePhaseContractor(PhaseContractorUpdateRequest(
-            id: phaseContractors[index].id,
-            coExecutorId: phaseContractors[index].coExecutorId,
-            contractorId: phaseContractors[index].contractorId,
-            observerId: phaseContractors[index].observerId,
-            responsibleId: phaseContractors[index].responsibleId))
+          id: phaseContractors[index].id,
+          coExecutorId: phaseContractors[index].coExecutorId,
+          contractorId: phaseContractors[index].contractorId,
+          observerId: phaseContractors[index].observerId,
+          responsibleId: phaseContractors[index].responsibleId,
+        ))
         .then((response) => {
               if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
   }
 
-  Future deleteContractor(BuildContext context, int index) async {
+  Future deleteContractor(int index) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -101,13 +94,13 @@ class PhaseCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
   }
 
-  Future createProduct(BuildContext context) async {
+  Future createProduct() async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -122,13 +115,13 @@ class PhaseCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
   }
 
-  Future updateProduct(BuildContext context, int index) async {
+  Future updateProduct(int index) async {
     await PhaseRepository()
         .updatePhaseProduct(PhaseProductUpdateRequest(
           id: phaseProducts[index].id,
@@ -141,14 +134,14 @@ class PhaseCreateViewModel with ChangeNotifier {
               if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 },
               notifyListeners()
             })
         .whenComplete(() => notifyListeners());
   }
 
-  Future deletePhaseProduct(BuildContext context, int index) async {
+  Future deletePhaseProduct(int index) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -163,14 +156,13 @@ class PhaseCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
   }
 
   Future uploadFile(
-    BuildContext context,
     String id,
     File file,
   ) async {
@@ -183,148 +175,84 @@ class PhaseCreateViewModel with ChangeNotifier {
               if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 }
             });
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
+
+  void changeContracor(
+    Company? company,
+    int index,
+  ) {
+    if (company == null) return;
+    phaseContractors[index].contractor = company;
+    phaseContractors[index].contractorId = company.id;
+
+    updateContractor(index);
+  }
+
+  void changeResponsible(
+    User? user,
+    int index,
+  ) {
+    if (user == null) return;
+    phaseContractors[index].responsible = user;
+    phaseContractors[index].responsibleId = user.id;
+
+    updateContractor(index);
+  }
+
+  void changeCoExecutor(
+    User? user,
+    int index,
+  ) {
+    if (user == null) return;
+    phaseContractors[index].coExecutor = user;
+    phaseContractors[index].coExecutorId = user.id;
+
+    updateContractor(index);
+  }
+
+  void changeObserver(
+    User? user,
+    int index,
+  ) {
+    if (user == null) return;
+    phaseContractors[index].observer = user;
+    phaseContractors[index].observerId = user.id;
+
+    updateContractor(index);
+  }
+
+  void changeProduct(
+    Product? product,
+    int index,
+  ) {
+    if (product == null) return;
+    phaseProducts[index].productId = product.id;
+    phaseProducts[index].product = product;
+
+    updateProduct(index);
+  }
 
   void changeProductTermInDays(
-    BuildContext context,
     int index,
     int days,
   ) {
     phaseProducts[index].termInDays = days;
-    updateProduct(context, index);
+
+    updateProduct(index);
   }
 
   void changeProductCount(
-    BuildContext context,
     int index,
     int count,
   ) {
     phaseProducts[index].count = count;
-    updateProduct(context, index);
+
+    updateProduct(index);
   }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void changeContractor(
-    BuildContext context,
-    int index,
-  ) =>
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => SearchCompanyScreenWidget(
-              title: Titles.contractor,
-              isRoot: true,
-              onFocus: () => {},
-              onPop: (company) => {
-                    Navigator.pop(context),
-                    phaseContractors[index].contractor = company,
-                    phaseContractors[index].contractorId = company?.id,
-                    updateContractor(context, index)
-                  }));
-
-  void changeContractorResponsible(
-    BuildContext context,
-    int index,
-  ) =>
-      showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchUserScreenWidget(
-            title: Titles.responsible,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (user) => {
-                  Navigator.pop(context),
-                  phaseContractors[index].responsible = user,
-                  phaseContractors[index].responsibleId = user?.id,
-                  updateContractor(context, index)
-                }),
-      );
-
-  void changeContractorCoExecutor(
-    BuildContext context,
-    int index,
-  ) =>
-      showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchUserScreenWidget(
-            title: Titles.coExecutor,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (user) => {
-                  Navigator.pop(context),
-                  phaseContractors[index].coExecutor = user,
-                  phaseContractors[index].coExecutorId = user?.id,
-                  updateContractor(context, index)
-                }),
-      );
-
-  void changeContractorObserver(
-    BuildContext context,
-    int index,
-  ) =>
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => SearchUserScreenWidget(
-              title: Titles.observer,
-              isRoot: true,
-              onFocus: () => {},
-              onPop: (user) => {
-                    Navigator.pop(context),
-                    phaseContractors[index].observer = user,
-                    phaseContractors[index].observerId = user?.id,
-                    updateContractor(context, index)
-                  }));
-
-  void showProductSearchSheet(
-    BuildContext context,
-    int index,
-  ) =>
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => ProductSelectionScreenWidget(
-              title: Titles.product,
-              onPop: (product) => {
-                    Navigator.pop(context),
-                    phaseProducts[index].productId = product?.id,
-                    phaseProducts[index].product = product,
-                    updateProduct(context, index)
-                  }));
-
-  void showTaskCreateScreen(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => TaskCreateScreenWidget(
-            onCreate: (task) => {
-                  if (task != null)
-                    Toast()
-                        .showTopToast('${Titles.task} "${task.name}" создана')
-                }),
-      ));
 }

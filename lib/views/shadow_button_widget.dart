@@ -21,7 +21,7 @@ class ShadowButtonWidget extends StatefulWidget {
 
 class _ShadowButtonState extends State<ShadowButtonWidget> {
   late bool _isDisabled;
-  bool _isHighlighted = false;
+  bool _isSelected = false;
 
   @override
   void initState() {
@@ -37,37 +37,43 @@ class _ShadowButtonState extends State<ShadowButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: widget.margin == null
-            ? const EdgeInsets.symmetric(horizontal: 16.0)
-            : widget.margin!,
-        height: 40.0,
-        decoration: BoxDecoration(
-            color: _isDisabled
-                ? HexColors.shadowButtonDisableColor
-                : HexColors.white,
-            borderRadius: BorderRadius.circular(12.0),
-            boxShadow: _isDisabled ? [] : [Shadows.shadow]),
-        child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-                highlightColor: HexColors.shadowButtonHighlightColor,
-                splashColor: Colors.transparent,
-                borderRadius: BorderRadius.circular(12.0),
-                child: Center(
-                    child: Text(widget.title,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 14.0,
-                            overflow: TextOverflow.ellipsis,
-                            fontFamily: 'PT Root UI',
-                            fontWeight: FontWeight.w500,
-                            color: _isDisabled
-                                ? HexColors.shadowButtonDisableTitleColor
-                                : _isHighlighted
-                                    ? HexColors.primaryMain
-                                    : HexColors.primaryDark))),
-                onTap: _isDisabled ? null : () => widget.onTap(),
-                onHighlightChanged: (value) =>
-                    setState(() => _isHighlighted = value))));
+      margin: widget.margin == null
+          ? const EdgeInsets.symmetric(horizontal: 16.0)
+          : widget.margin!,
+      height: 40.0,
+      decoration: BoxDecoration(
+        color:
+            _isDisabled ? HexColors.shadowButtonDisableColor : HexColors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: _isDisabled ? [] : [Shadows.shadow],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          highlightColor: HexColors.shadowButtonHighlightColor,
+          splashColor: Colors.transparent,
+          borderRadius: BorderRadius.circular(12.0),
+          child: Center(
+            child: Text(
+              widget.title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14.0,
+                overflow: TextOverflow.ellipsis,
+                fontFamily: 'PT Root UI',
+                fontWeight: FontWeight.w500,
+                color: _isDisabled
+                    ? HexColors.shadowButtonDisableTitleColor
+                    : _isSelected
+                        ? HexColors.primaryMain
+                        : HexColors.primaryDark,
+              ),
+            ),
+          ),
+          onTap: _isDisabled ? null : () => widget.onTap(),
+          onHighlightChanged: (value) => setState(() => _isSelected = value),
+        ),
+      ),
+    );
   }
 }

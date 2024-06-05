@@ -24,7 +24,6 @@ class NewsCreateViewModel with ChangeNotifier {
   // MARK: - API CALL
 
   Future createNewDeal(
-    BuildContext context,
     String name,
     String description,
     bool important,
@@ -45,12 +44,13 @@ class NewsCreateViewModel with ChangeNotifier {
                   if (_files.isNotEmpty)
                     {
                       _files.forEach((element) async {
-                        await uploadFile(context, response.id, element)
-                            .whenComplete(() => {
-                                  current++,
-                                  if (current == _files.length)
-                                    onCreate(response)
-                                });
+                        await uploadFile(
+                          response.id,
+                          element,
+                        ).whenComplete(() => {
+                              current++,
+                              if (current == _files.length) onCreate(response)
+                            });
                       })
                     }
                   else
@@ -59,14 +59,13 @@ class NewsCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
   }
 
   Future uploadFile(
-    BuildContext context,
     String id,
     File file,
   ) async {
@@ -78,7 +77,7 @@ class NewsCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 }
             });
   }

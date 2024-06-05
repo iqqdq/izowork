@@ -135,11 +135,11 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
         /// FILTER BUTTON
         Align(
           alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 6.0),
-            child: FilterButtonWidget(
-              onTap: () => _showFilterSheet(),
-            ),
+          child: FilterButtonWidget(
+            isSelected: _mapViewModel.isObjectMarkers
+                ? _mapViewModel.objectsFilter != null
+                : _mapViewModel.companiesFilter != null,
+            onTap: () => _showFilterSheet(),
           ),
         )
       ]),
@@ -274,7 +274,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   void _showObject(MapObject? object) {
     bool found = false;

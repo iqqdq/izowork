@@ -21,10 +21,6 @@ class _ObjectAnalyticsScreenBodyState
 
   @override
   Widget build(BuildContext context) {
-    final _bottomPadding = MediaQuery.of(context).padding.bottom == 0.0
-        ? 12.0
-        : MediaQuery.of(context).padding.bottom;
-
     _objectAnalyticsViewModel = Provider.of<ObjectAnalyticsViewModel>(
       context,
       listen: true,
@@ -50,12 +46,15 @@ class _ObjectAnalyticsScreenBodyState
         child: Stack(children: [
           /// INDICATOR
           _objectAnalyticsViewModel.loadingStatus == LoadingStatus.searching
-              ? const Padding(
-                  padding: EdgeInsets.only(bottom: 60.0),
-                  child: LoadingIndicatorWidget())
+              ? const LoadingIndicatorWidget()
               : ListView(
                   shrinkWrap: true,
-                  padding: EdgeInsets.only(top: 12.0, bottom: _bottomPadding),
+                  padding: EdgeInsets.only(
+                    top: 12.0,
+                    bottom: MediaQuery.of(context).padding.bottom == 0.0
+                        ? 12.0
+                        : MediaQuery.of(context).padding.bottom,
+                  ),
                   children: [
                       Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),

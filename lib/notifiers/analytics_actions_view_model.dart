@@ -37,12 +37,13 @@ class AnalyticsActionsViewModel with ChangeNotifier {
 
     await TraceRepository()
         .getTraces(
-            pagination: pagination,
-            objectId: objectId,
-            subjectId: subjectId,
-            group: group,
-            type: type,
-            params: _analyticsActionsFilter?.params)
+          pagination: pagination,
+          objectId: objectId,
+          subjectId: subjectId,
+          group: group,
+          type: type,
+          params: _analyticsActionsFilter?.params,
+        )
         .then((response) => {
               if (response is List<Trace>)
                 {
@@ -79,9 +80,17 @@ class AnalyticsActionsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  void setFilter(AnalyticsActionsFilter? analyticsActionsFilter) {
+  void setFilter(
+    String search,
+    AnalyticsActionsFilter? analyticsActionsFilter,
+  ) {
     _analyticsActionsFilter = analyticsActionsFilter;
-    notifyListeners();
+
+    getTraceList(
+        pagination: Pagination(
+      offset: 0,
+      size: 50,
+    ));
   }
 
   void resetFilter() {

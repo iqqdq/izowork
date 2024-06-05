@@ -170,10 +170,14 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
 
           /// FILTER BUTTON
           SafeArea(
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: FilterButtonWidget(
-                      onTap: () => _showDocumentsFilterSheet()))),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FilterButtonWidget(
+                isSelected: _documentsViewModel.documentsFilter != null,
+                onTap: () => _showDocumentsFilterSheet(),
+              ),
+            ),
+          ),
 
           /// INDICATOR
           _documentsViewModel.loadingStatus == LoadingStatus.searching

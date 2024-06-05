@@ -32,11 +32,11 @@ class SegmentedControlWidget extends StatefulWidget {
 }
 
 class _SegmentedControlState extends State<SegmentedControlWidget> {
-  late int _selectedIndex;
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    _selectedIndex = widget.initialIndex ?? 0;
+    _selectedIndex = widget.initialIndex ?? _selectedIndex;
 
     const _borderWidth = 1.0;
     const _padding = 4.0;

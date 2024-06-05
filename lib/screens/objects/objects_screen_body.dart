@@ -2,10 +2,14 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
+import 'package:izowork/screens/object/object_page_view_screen.dart';
+import 'package:izowork/screens/object_create/object_create_screen.dart';
+import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen.dart';
 import 'package:izowork/screens/objects/views/object_list_item_widget.dart';
 import 'package:izowork/views/views.dart';
 import 'package:izowork/notifiers/notifiers.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class ObjectsScreenBodyWidget extends StatefulWidget {
@@ -115,9 +119,8 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
             const SeparatorWidget()
           ])),
       floatingActionButton: FloatingButtonWidget(
-          onTap: () => _objectsViewModel.showObjectCreateScreen(
-                context,
-              )),
+        onTap: () => _showObjectCreateScreen(),
+      ),
       body: SizedBox.expand(
         child: Stack(children: [
           /// OBJECTS LIST VIEW
@@ -141,31 +144,19 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                         return ObjectListItemWidget(
                             key: ValueKey(_objectsViewModel.objects[index].id),
                             object: _objectsViewModel.objects[index],
-                            onTap: () =>
-                                _objectsViewModel.showObjectPageViewScreen(
-                                  context,
-                                  index,
-                                ));
+                            onTap: () => _showObjectPageViewScreen(index));
                       }))),
 
           /// FILTER BUTTON
           SafeArea(
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                      padding: const EdgeInsets.only(bottom: 6.0),
-                      child: FilterButtonWidget(
-                        onTap: () => _objectsViewModel.showObjectsFilterSheet(
-                            context,
-                            () => {
-                                  _pagination = Pagination(offset: 0, size: 50),
-                                  _objectsViewModel.getObjectList(
-                                    pagination: _pagination,
-                                    search: _textEditingController.text,
-                                  )
-                                }),
-                        // onClearTap: () => {}
-                      )))),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FilterButtonWidget(
+                isSelected: _objectsViewModel.objectsFilter != null,
+                onTap: () => _showObjectsFilterSheet(),
+              ),
+            ),
+          ),
 
           /// EMPTY LIST TEXT
           _objectsViewModel.loadingStatus == LoadingStatus.completed &&
@@ -173,13 +164,21 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
                   !_isSearching
               ? Center(
                   child: Padding(
-                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                      child: Text(Titles.noResult,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 16.0,
-                              color: HexColors.grey50))))
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 20.0,
+                    ),
+                    child: Text(
+                      Titles.noResult,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 16.0,
+                        color: HexColors.grey50,
+                      ),
+                    ),
+                  ),
+                )
               : Container(),
 
           /// INDICATOR
@@ -202,4 +201,43 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
       search: _textEditingController.text,
     );
   }
+// MARK: -
+  // MARK: - PUSH
+
+  void _showObjectsFilterSheet() {
+    if (_objectsViewModel.objectStages == null) return;
+
+    showCupertinoModalBottomSheet(
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => ObjectsFilterPageViewScreenWidget(
+          objectStages: _objectsViewModel.objectStages!,
+          objectsFilter: _objectsViewModel.objectsFilter,
+          onPop: (objectsFilter) => {
+                objectsFilter == null
+                    ? _objectsViewModel.resetFilter()
+                    : _objectsViewModel.setFilter(objectsFilter),
+                _onRefresh(),
+              }),
+    );
+  }
+
+  void _showObjectPageViewScreen(int index) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ObjectPageViewScreenWidget(
+              id: _objectsViewModel.objects[index].id)));
+
+  void _showObjectCreateScreen() => Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ObjectCreateScreenWidget(
+            onPop: (object) => {
+                  if (object != null)
+                    Toast().showTopToast('${Titles.object} добавлен!')
+                }),
+      ));
 }

@@ -54,7 +54,8 @@ class _PhaseChecklistBodyState extends State<PhaseChecklistBodyWidget> {
       listen: true,
     );
 
-    return Material(
+    return SafeArea(
+      child: Material(
         type: MaterialType.transparency,
         child: Container(
           color: HexColors.white,
@@ -87,22 +88,23 @@ class _PhaseChecklistBodyState extends State<PhaseChecklistBodyWidget> {
 
               const SizedBox(height: 16.0),
             ]),
-            _phaseChecklistViewModel.loadingStatus == LoadingStatus.searching
-                ? const Expanded(child: LoadingIndicatorWidget())
-                : Expanded(
-                    child: ListView(
-                        controller: _scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        padding: EdgeInsets.only(
-                          left: 16.0,
-                          right: 16.0,
-                          bottom: MediaQuery.of(context).padding.bottom == 0.0
-                              ? MediaQuery.of(context).viewInsets.bottom + 20.0
-                              : MediaQuery.of(context).viewInsets.bottom +
-                                  MediaQuery.of(context).padding.bottom,
-                        ),
-                        children: [
+            Expanded(
+              child: _phaseChecklistViewModel.loadingStatus ==
+                      LoadingStatus.searching
+                  ? const LoadingIndicatorWidget()
+                  : ListView(
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                        left: 16.0,
+                        right: 16.0,
+                        bottom: MediaQuery.of(context).padding.bottom == 0.0
+                            ? MediaQuery.of(context).viewInsets.bottom + 20.0
+                            : MediaQuery.of(context).viewInsets.bottom +
+                                MediaQuery.of(context).padding.bottom,
+                      ),
+                      children: [
                           /// REASON INPUT
                           _phaseChecklistViewModel.phaseChecklistInfo == null
                               ? InputWidget(
@@ -166,19 +168,6 @@ class _PhaseChecklistBodyState extends State<PhaseChecklistBodyWidget> {
                                 )
                               : Container(),
 
-                          /// COMMENTS BUTTON
-                          _phaseChecklistViewModel.phaseChecklistInfo != null
-                              ? BorderButtonWidget(
-                                  margin: const EdgeInsets.only(bottom: 16.0),
-                                  title: Titles.comments,
-                                  onTap: () =>
-                                      _showPhaseChecklistCommentsScreenWidget(
-                                          phaseChecklist:
-                                              _phaseChecklistViewModel
-                                                  .phaseChecklist),
-                                )
-                              : Container(),
-
                           /// ADD BUTTON
                           _phaseChecklistViewModel.phaseChecklistInfo == null
                               ? ButtonWidget(
@@ -190,9 +179,24 @@ class _PhaseChecklistBodyState extends State<PhaseChecklistBodyWidget> {
                                 )
                               : Container(),
                         ]),
-                  ),
+            ),
+
+            /// COMMENTS BUTTON
+            _phaseChecklistViewModel.phaseChecklistInfo != null
+                ? BorderButtonWidget(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                    ),
+                    title: Titles.comments,
+                    onTap: () => _showPhaseChecklistCommentsScreenWidget(
+                        phaseChecklist:
+                            _phaseChecklistViewModel.phaseChecklist),
+                  )
+                : Container(),
           ]),
-        ));
+        ),
+      ),
+    );
   }
 
   // MARK: -

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:izowork/components/components.dart';
-import 'package:izowork/screens/analytics/analytics_actions/analytics_actions_screen.dart';
-import 'package:izowork/screens/analytics/analytics_companies/analytics_companies_screen.dart';
-import 'package:izowork/screens/analytics/analytics_objects/analytics_objects_screen.dart';
 import 'package:izowork/views/views.dart';
+import 'analytics_companies/analytics_companies_screen.dart';
+import 'analytics_objects/analytics_objects_screen.dart';
+import 'analytics_actions/analytics_actions_screen.dart';
 
 class AnalyticsPageViewScreenBodyWidget extends StatefulWidget {
   const AnalyticsPageViewScreenBodyWidget({Key? key}) : super(key: key);

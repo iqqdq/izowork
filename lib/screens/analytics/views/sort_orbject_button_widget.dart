@@ -19,7 +19,7 @@ class SortObjectButtonWidget extends StatefulWidget {
 }
 
 class _SortObjectButtonState extends State<SortObjectButtonWidget> {
-  bool _isHighlighted = false;
+  bool _isSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +29,11 @@ class _SortObjectButtonState extends State<SortObjectButtonWidget> {
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
             borderRadius: BorderRadius.circular(8.0),
-            onHighlightChanged: (value) =>
-                setState(() => _isHighlighted = value),
+            onHighlightChanged: (value) => setState(() => _isSelected = value),
             child: Row(children: [
               Text(widget.title,
                   style: TextStyle(
-                      color:
-                          _isHighlighted ? HexColors.grey80 : HexColors.grey50,
+                      color: _isSelected ? HexColors.grey80 : HexColors.grey50,
                       fontSize: 14.0,
                       fontFamily: 'PT Root UI')),
               const SizedBox(width: 8.0),
@@ -43,7 +41,7 @@ class _SortObjectButtonState extends State<SortObjectButtonWidget> {
                   ? Container()
                   : SvgPicture.asset(
                       widget.imagePath,
-                      colorFilter: _isHighlighted
+                      colorFilter: _isSelected
                           ? ColorFilter.mode(
                               HexColors.grey80,
                               BlendMode.srcIn,

@@ -42,7 +42,7 @@ class ProductsViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 },
             })
         .whenComplete(() => notifyListeners());
@@ -54,6 +54,9 @@ class ProductsViewModel with ChangeNotifier {
   }) async {
     if (pagination.offset == 0) {
       _products.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await ProductRepository()

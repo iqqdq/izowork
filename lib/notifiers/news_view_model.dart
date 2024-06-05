@@ -33,6 +33,9 @@ class NewsViewModel with ChangeNotifier {
   }) async {
     if (pagination.offset == 0) {
       _news.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await NewsRepository()
@@ -79,7 +82,6 @@ class NewsViewModel with ChangeNotifier {
 
   void setFilter(NewsFilter newsFilter) {
     _newsFilter = newsFilter;
-    notifyListeners();
   }
 
   void resetFilter() => _newsFilter = null;

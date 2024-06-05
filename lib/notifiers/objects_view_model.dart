@@ -1,13 +1,9 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/object/object_page_view_screen.dart';
-import 'package:izowork/screens/object_create/object_create_screen.dart';
-import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen.dart';
 import 'package:izowork/screens/objects/objects_filter_sheet/objects_filter_page_view_screen_body.dart';
 
 class ObjectsViewModel with ChangeNotifier {
@@ -15,22 +11,25 @@ class ObjectsViewModel with ChangeNotifier {
 
   final List<MapObject> _objects = [];
 
-  Object? _object;
-
-  ObjectsFilter? _objectsFilter;
-
-  List<ObjectStage>? _objectStages;
-
   List<MapObject> get objects => _objects;
+
+  Object? _object;
 
   Object? get object => _object;
 
+  ObjectsFilter? _objectsFilter;
+
   ObjectsFilter? get objectsFilter => _objectsFilter;
+
+  List<ObjectStage>? _objectStages;
 
   List<ObjectStage>? get objectStages => _objectStages;
 
   ObjectsViewModel() {
-    getStageList();
+    getStageList().whenComplete(
+      () => getObjectList(
+          pagination: Pagination(offset: 0, size: 50), search: ''),
+    );
   }
 
   // MARK: -
@@ -43,19 +42,9 @@ class ObjectsViewModel with ChangeNotifier {
     await ObjectRepository()
         .getObjectStages()
         .then((response) => {
-              if (response is List<ObjectStage>)
-                {
-                  _objectStages = response,
-                  for (var element in _objectStages!)
-                    {
-                      debugPrint('id: ${element.id}, name: ${element.name}'),
-                    }
-                },
+              if (response is List<ObjectStage>) _objectStages = response,
             })
-        .then((value) => getObjectList(
-              pagination: Pagination(offset: 0, size: 50),
-              search: '',
-            ));
+        .whenComplete(() => notifyListeners());
   }
 
   Future getObjectList({
@@ -64,6 +53,9 @@ class ObjectsViewModel with ChangeNotifier {
   }) async {
     if (pagination.offset == 0) {
       _objects.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await ObjectRepository()
@@ -101,87 +93,21 @@ class ObjectsViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error,
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
 
-  // Future sortByName() async {
-  //   if (_objectsFilter == null) {
-  //     _objectsFilter =
-  //         ObjectsFilter(null, null, null, [], [], ['&sortBy=name']);
-  //   } else {
-  //     if (!_objectsFilter!.params.contains('&sortBy=name')) {
-  //       _objectsFilter!.params.add('&sortBy=name');
-  //     }
-  //   }
-  // }
+  void setFilter(ObjectsFilter? objectsFilter) {
+    if (objectsFilter == null) return;
+    _objectsFilter = objectsFilter;
 
-  // Future sortByEfficiency() async {
-  //   if (_objectsFilter == null) {
-  //     _objectsFilter =
-  //         ObjectsFilter(null, null, null, [], [], ['&sortBy=efficiency']);
-  //   } else {
-  //     if (!_objectsFilter!.params.contains('&sortBy=efficiency')) {
-  //       _objectsFilter!.params.add('&sortBy=efficiency');
-  //     }
-  //   }
-  // }
+    notifyListeners();
+  }
 
   void resetFilter() {
     _objectsFilter = null;
   }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showObjectsFilterSheet(BuildContext context, Function() onFilter) {
-    if (_objectStages != null) {
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => ObjectsFilterPageViewScreenWidget(
-              objectStages: _objectStages!,
-              objectsFilter: _objectsFilter,
-              onPop: (objectsFilter) => {
-                    if (objectsFilter == null)
-                      {
-                        // CLEAR
-                        resetFilter(),
-                        onFilter()
-                      }
-                    else
-                      {
-                        // FILTER
-                        _objectsFilter = objectsFilter,
-                        onFilter()
-                      }
-                  }));
-    }
-  }
-
-  void showObjectPageViewScreen(
-    BuildContext context,
-    int index,
-  ) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  ObjectPageViewScreenWidget(id: _objects[index].id)));
-
-  void showObjectCreateScreen(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ObjectCreateScreenWidget(
-            onPop: (object) => {
-                  if (object != null)
-                    Toast().showTopToast('${Titles.object} добавлен!')
-                }),
-      ));
 }

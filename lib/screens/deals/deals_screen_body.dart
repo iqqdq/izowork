@@ -113,7 +113,10 @@ class _DealsScreenBodyState extends State<DealsScreenBodyWidget>
                                             ));
                                   })
                                 },
-                            onClearTap: () => _onRefresh()),
+                            onClearTap: () => {
+                                  _dealsViewModel.resetFilter(),
+                                  _onRefresh(),
+                                }),
                   ),
 
                   /// CALENDAR BUTTON
@@ -159,9 +162,9 @@ class _DealsScreenBodyState extends State<DealsScreenBodyWidget>
           SafeArea(
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 6.0),
-                child: FilterButtonWidget(onTap: () => _showDealsFilterSheet()),
+              child: FilterButtonWidget(
+                isSelected: _dealsViewModel.dealsFilter != null,
+                onTap: () => _showDealsFilterSheet(),
               ),
             ),
           ),
@@ -199,7 +202,9 @@ class _DealsScreenBodyState extends State<DealsScreenBodyWidget>
   Future _onRefresh() async {
     _pagination.offset = 0;
     await _dealsViewModel.getDealList(
-        pagination: _pagination, search: _textEditingController.text);
+      pagination: _pagination,
+      search: _textEditingController.text,
+    );
   }
 
   // MARK: -
@@ -228,9 +233,17 @@ class _DealsScreenBodyState extends State<DealsScreenBodyWidget>
       context: context,
       builder: (sheetContext) => DealsFilterPageViewScreenWidget(
           dealsFilter: _dealsViewModel.dealsFilter,
-          onPop: (dealsFilter) => dealsFilter == null
-              ? _onRefresh()
-              : _dealsViewModel.setFilter(dealsFilter)));
+          onPop: (dealsFilter) => {
+                dealsFilter == null
+                    ? {
+                        _dealsViewModel.resetFilter(),
+                        _onRefresh(),
+                      }
+                    : _dealsViewModel.setFilter(
+                        '',
+                        dealsFilter,
+                      ),
+              }));
 
   void _showDealScreenWidget(String id) => Navigator.push(context,
       MaterialPageRoute(builder: (context) => DealScreenWidget(id: id)));

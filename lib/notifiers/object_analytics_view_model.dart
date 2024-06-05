@@ -35,7 +35,7 @@ class ObjectAnalyticsViewModel with ChangeNotifier {
           .getPhaseProducts(element.id)
           .then((response) => {
                 if (response is List<PhaseProduct>)
-                  {_phaseProductList.add(response)}
+                  _phaseProductList.add(response)
               })
           .then((value) => {
                 if (index == phases.length - 1)
@@ -50,7 +50,7 @@ class ObjectAnalyticsViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   Future openFile(int index) async {
     final filename = object.files[index].filename;

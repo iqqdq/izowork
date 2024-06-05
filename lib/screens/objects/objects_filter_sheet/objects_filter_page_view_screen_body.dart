@@ -18,8 +18,15 @@ class ObjectsFilter {
   final List<int> tags2;
   final List<String> params;
 
-  ObjectsFilter(this.manager, this.designer, this.contractor, this.customer,
-      this.tags, this.tags2, this.params);
+  ObjectsFilter(
+    this.manager,
+    this.designer,
+    this.contractor,
+    this.customer,
+    this.tags,
+    this.tags2,
+    this.params,
+  );
 }
 
 class ObjectsFilterPageViewScreenBodyWidget extends StatefulWidget {
@@ -37,7 +44,7 @@ class _ObjectsFilterPageViewScreenBodyState
     extends State<ObjectsFilterPageViewScreenBodyWidget> {
   final PageController _pageController = PageController();
   late ObjectsFilterViewModel _objectsFilterViewModel;
-  // bool _isSearching = false;
+
   int _index = 0;
 
   @override
@@ -116,13 +123,14 @@ class _ObjectsFilterPageViewScreenBodyState
                           onApplyTap: () => {
                                 _objectsFilterViewModel.apply((params) => {
                                       widget.onPop(ObjectsFilter(
-                                          _objectsFilterViewModel.manager,
-                                          _objectsFilterViewModel.designer,
-                                          _objectsFilterViewModel.contractor,
-                                          _objectsFilterViewModel.customer,
-                                          _objectsFilterViewModel.tags,
-                                          _objectsFilterViewModel.tags2,
-                                          params)),
+                                        _objectsFilterViewModel.manager,
+                                        _objectsFilterViewModel.designer,
+                                        _objectsFilterViewModel.contractor,
+                                        _objectsFilterViewModel.customer,
+                                        _objectsFilterViewModel.tags,
+                                        _objectsFilterViewModel.tags2,
+                                        params,
+                                      )),
                                       Navigator.pop(context)
                                     })
                               },

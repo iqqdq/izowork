@@ -7,9 +7,12 @@ import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/company/company_screen.dart';
+import 'package:izowork/screens/contacts/contacts_screen.dart';
 import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
 import 'package:izowork/api/api.dart';
+import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/views/views.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class CompanyCreateScreenBodyWidget extends StatefulWidget {
@@ -234,23 +237,24 @@ class _CompanyCreateScreenBodyState
 
                 /// CHANGE AVATAR BUTTON
                 BorderButtonWidget(
-                    title: _url == null && _companyCreateViewModel.file == null
-                        ? Titles.addAvatar
-                        : Titles.changeAvatar,
-                    margin: EdgeInsets.zero,
-                    onTap: () => _companyCreateViewModel.pickImage(context)),
+                  title: _url == null && _companyCreateViewModel.file == null
+                      ? Titles.addAvatar
+                      : Titles.changeAvatar,
+                  margin: EdgeInsets.zero,
+                  onTap: () => _companyCreateViewModel.pickImage(),
+                ),
                 const SizedBox(height: 24.0),
 
                 /// COMPANY TYPE SELECTION
                 SelectionInputWidget(
-                    margin: const EdgeInsets.only(bottom: 10.0),
-                    title: Titles.type,
-                    value: _companyCreateViewModel.type ??
-                        _companyCreateViewModel.company?.type ??
-                        Titles.notSelected,
-                    isVertical: true,
-                    onTap: () => _companyCreateViewModel
-                        .showCompanyTypeSelectionSheet(context)),
+                  margin: const EdgeInsets.only(bottom: 10.0),
+                  title: Titles.type,
+                  value: _companyCreateViewModel.type ??
+                      _companyCreateViewModel.company?.type ??
+                      Titles.notSelected,
+                  isVertical: true,
+                  onTap: () => _showCompanyTypeSelectionSheet(),
+                ),
 
                 /// NAME INPUT
                 InputWidget(
@@ -372,14 +376,14 @@ class _CompanyCreateScreenBodyState
 
                 /// PRODUCTS TYPE SELECTION
                 SelectionInputWidget(
-                    margin: const EdgeInsets.only(bottom: 10.0),
-                    title: Titles.productsType,
-                    value: _companyCreateViewModel.productType?.name ??
-                        _companyCreateViewModel.company?.productType?.name ??
-                        Titles.notSelected,
-                    isVertical: true,
-                    onTap: () => _companyCreateViewModel
-                        .showProductTypeSelectionSheet(context)),
+                  margin: const EdgeInsets.only(bottom: 10.0),
+                  title: Titles.productsType,
+                  value: _companyCreateViewModel.productType?.name ??
+                      _companyCreateViewModel.company?.productType?.name ??
+                      Titles.notSelected,
+                  isVertical: true,
+                  onTap: () => _showProductTypeSelectionSheet(),
+                ),
 
                 _companyCreateViewModel.company == null
                     ? const Padding(
@@ -407,8 +411,7 @@ class _CompanyCreateScreenBodyState
                                     .company?.contacts[index] ??
                                 _companyCreateViewModel
                                     .company!.contacts[index],
-                            onContactTap: () => _companyCreateViewModel
-                                .showContactSelectionSheet(context),
+                            onContactTap: () => _showContactSelectionSheet(),
                             onPhoneTap: () => {},
                             onLinkTap: (url) =>
                                 _companyCreateViewModel.openUrl(url),
@@ -426,8 +429,8 @@ class _CompanyCreateScreenBodyState
                               : 0.0,
                           bottom: 20.0,
                         ),
-                        onTap: () => _companyCreateViewModel
-                            .showContactSelectionSheet(context)),
+                        onTap: () => _showContactSelectionSheet(),
+                      ),
 
                 /// CREATE/EDIT BUTTON
                 ButtonWidget(
@@ -442,58 +445,9 @@ class _CompanyCreateScreenBodyState
                           _bimTextEditingController.text.isEmpty
                       : _addressTextEditingController.text.isEmpty ||
                           _nameTextEditingController.text.isEmpty,
-                  onTap: () =>
-
-                      /// CREATE
-                      _companyCreateViewModel.company == null
-                          ? _companyCreateViewModel.createNewCompany(
-                              context,
-                              _addressTextEditingController.text,
-                              _coordinatesTextEditingController.text,
-                              _nameTextEditingController.text,
-                              _companyCreateViewModel.phone ??
-                                  _companyCreateViewModel
-                                      .selectedCompany?.phone ??
-                                  '',
-                              _descriptionTextEditingController.text,
-                              _requisitesTextEditingController.text,
-                              _emailTextEditingConrtoller.text,
-                              (company) => {
-                                    if (widget.onPop == null)
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CompanyScreenWidget(
-                                                  company: company,
-                                                  onPop: null,
-                                                )),
-                                      )
-                                    else
-                                      {
-                                        widget.onPop!(company),
-                                        Navigator.pop(context)
-                                      }
-                                  })
-
-                          /// UPDATE
-                          : _companyCreateViewModel.editCompany(
-                              context,
-                              _addressTextEditingController.text,
-                              _coordinatesTextEditingController.text,
-                              _nameTextEditingController.text,
-                              _companyCreateViewModel.phone ??
-                                  _companyCreateViewModel
-                                      .selectedCompany?.phone ??
-                                  '',
-                              _descriptionTextEditingController.text,
-                              _requisitesTextEditingController.text,
-                              _emailTextEditingConrtoller.text,
-                              (company) => {
-                                widget.onPop!(company),
-                                Navigator.pop(context)
-                              },
-                            ),
+                  onTap: () => _companyCreateViewModel.company == null
+                      ? _createCompany()
+                      : _updateCompany(),
                 ),
               ]),
         ),
@@ -503,6 +457,114 @@ class _CompanyCreateScreenBodyState
             ? const LoadingIndicatorWidget()
             : Container()
       ]),
+    );
+  }
+
+  // MARK: -
+  // MARK: FUNCTIONS
+
+  void _createCompany() => _companyCreateViewModel.createNewCompany(
+      _addressTextEditingController.text,
+      _coordinatesTextEditingController.text,
+      _nameTextEditingController.text,
+      _companyCreateViewModel.phone ??
+          _companyCreateViewModel.selectedCompany?.phone ??
+          '',
+      _descriptionTextEditingController.text,
+      _requisitesTextEditingController.text,
+      _emailTextEditingConrtoller.text,
+      (company) => {
+            if (widget.onPop == null)
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CompanyScreenWidget(
+                          company: company,
+                          onPop: null,
+                        )),
+              )
+            else
+              {widget.onPop!(company), Navigator.pop(context)}
+          });
+
+  void _updateCompany() => _companyCreateViewModel.editCompany(
+        _addressTextEditingController.text,
+        _coordinatesTextEditingController.text,
+        _nameTextEditingController.text,
+        _companyCreateViewModel.phone ??
+            _companyCreateViewModel.selectedCompany?.phone ??
+            '',
+        _descriptionTextEditingController.text,
+        _requisitesTextEditingController.text,
+        _emailTextEditingConrtoller.text,
+        (company) => {widget.onPop!(company), Navigator.pop(context)},
+      );
+
+  // MARK: -
+  // MARK: PUSH
+
+  void _showCompanyTypeSelectionSheet() {
+    if (_companyCreateViewModel.companyType == null) return;
+
+    List<String> items = [];
+    if (_companyCreateViewModel.companyType!.states.isNotEmpty) {
+      for (var element in _companyCreateViewModel.companyType!.states) {
+        items.add(element);
+      }
+    }
+
+    showCupertinoModalBottomSheet(
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => SelectionScreenWidget(
+        title: Titles.productType,
+        value: _companyCreateViewModel.type ??
+            _companyCreateViewModel.selectedCompany?.type ??
+            '',
+        items: items,
+        onSelectTap: (type) => _companyCreateViewModel.changeCompanyType(type),
+      ),
+    );
+  }
+
+  void _showContactSelectionSheet() => showCupertinoModalBottomSheet(
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (sheetContext) => ContactsScreenWidget(
+          company: _companyCreateViewModel.company,
+          onPop: (contact) =>
+              _companyCreateViewModel.updateContactInfo(contact),
+        ),
+      );
+
+  void _showProductTypeSelectionSheet() {
+    if (_companyCreateViewModel.productTypes.isEmpty) return;
+
+    List<String> items = [];
+    for (var element in _companyCreateViewModel.productTypes) {
+      items.add(element.name);
+    }
+
+    showCupertinoModalBottomSheet(
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => SelectionScreenWidget(
+        title: Titles.productType,
+        value: _companyCreateViewModel.productType?.name ??
+            _companyCreateViewModel.selectedCompany?.productType?.name ??
+            '',
+        items: items,
+        onSelectTap: (type) => _companyCreateViewModel.productType,
+      ),
     );
   }
 }

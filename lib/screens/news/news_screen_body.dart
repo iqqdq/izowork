@@ -114,10 +114,7 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
                               },
                           onClearTap: () => {
                                 _newsViewModel.resetFilter(),
-                                _pagination.offset = 0,
-                                _newsViewModel.getNews(
-                                    pagination: _pagination,
-                                    search: _textEditingController.text)
+                                _onRefresh(),
                               }))
             ])
           ])),
@@ -175,20 +172,18 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
 
           /// FILTER BUTTON
           SafeArea(
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: FilterButtonWidget(
-                      onTap: () => _showNewsFilterSheet(),
-                    ),
-                  ))),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: FilterButtonWidget(
+                isSelected: _newsViewModel.newsFilter != null,
+                onTap: () => _showNewsFilterSheet(),
+              ),
+            ),
+          ),
 
           /// INDICATOR
           _newsViewModel.loadingStatus == LoadingStatus.searching
-              ? const Padding(
-                  padding: EdgeInsets.only(bottom: 90.0),
-                  child: LoadingIndicatorWidget())
+              ? const LoadingIndicatorWidget()
               : Container()
         ]),
       ),
@@ -217,9 +212,12 @@ class _NewsScreenBodyState extends State<NewsScreenBodyWidget> {
         context: context,
         builder: (sheetContext) => NewsFilterPageViewScreenWidget(
             newsFilter: _newsViewModel.newsFilter,
-            onPop: (newsFilter) => newsFilter == null
-                ? _onRefresh()
-                : _newsViewModel.setFilter(newsFilter)),
+            onPop: (newsFilter) => {
+                  newsFilter == null
+                      ? _newsViewModel.resetFilter()
+                      : _newsViewModel.setFilter(newsFilter),
+                  _onRefresh(),
+                }),
       );
 
   void _showNewsCreationScreen(

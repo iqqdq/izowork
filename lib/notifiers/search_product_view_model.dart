@@ -25,6 +25,9 @@ class SearchProductViewModel with ChangeNotifier {
   }) async {
     if (pagination.offset == 0) {
       _products.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await ProductRepository()

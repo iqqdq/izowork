@@ -25,6 +25,9 @@ class SearchCompanyViewModel with ChangeNotifier {
   }) async {
     if (pagination.offset == 0) {
       _companies.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await CompanyRepository()

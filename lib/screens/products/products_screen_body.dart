@@ -154,7 +154,10 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
           SafeArea(
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: FilterButtonWidget(onTap: () => _showProductFilterSheet()),
+              child: FilterButtonWidget(
+                isSelected: _productsViewModel.productsFilter != null,
+                onTap: () => _showProductFilterSheet(),
+              ),
             ),
           ),
 
@@ -181,9 +184,7 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
           /// INDICATOR
           _productsViewModel.loadingStatus == LoadingStatus.searching ||
                   _isSearching
-              ? const Padding(
-                  padding: EdgeInsets.only(bottom: 90.0),
-                  child: LoadingIndicatorWidget())
+              ? const LoadingIndicatorWidget()
               : Container()
         ]),
       ),
@@ -220,7 +221,8 @@ class _ProductsScreenBodyState extends State<ProductsScreenBodyWidget> {
             onPop: (productsFilter) => {
                   productsFilter == null
                       ? _productsViewModel.resetFilter()
-                      : _productsViewModel.setFilter(productsFilter)
+                      : _productsViewModel.setFilter(productsFilter),
+                  _onRefresh(),
                 }),
       );
 }

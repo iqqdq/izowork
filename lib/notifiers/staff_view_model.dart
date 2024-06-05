@@ -36,6 +36,9 @@ class StaffViewModel with ChangeNotifier {
   }) async {
     if (pagination.offset == 0) {
       _users.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await UserRepository()

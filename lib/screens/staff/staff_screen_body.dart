@@ -173,22 +173,23 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
                   !_isSearching
               ? Center(
                   child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20.0, right: 20.0, bottom: 100.0),
-                      child: Text(Titles.noResult,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 16.0,
-                              color: HexColors.grey50))))
+                    padding: const EdgeInsets.only(
+                        left: 20.0, right: 20.0, bottom: 100.0),
+                    child: Text(Titles.noResult,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 16.0,
+                          color: HexColors.grey50,
+                        )),
+                  ),
+                )
               : Container(),
 
           /// INDICATOR
           _staffViewModel.loadingStatus == LoadingStatus.searching ||
                   _isSearching
-              ? const Padding(
-                  padding: EdgeInsets.only(bottom: 90.0),
-                  child: LoadingIndicatorWidget())
+              ? const LoadingIndicatorWidget()
               : Container()
         ]),
       ),
@@ -196,7 +197,7 @@ class _StaffScreenBodyState extends State<StaffScreenBodyWidget> {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   void _showProfileScreen(
     BuildContext context,

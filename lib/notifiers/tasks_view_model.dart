@@ -66,6 +66,9 @@ class TasksViewModel with ChangeNotifier {
   }) async {
     if (pagination.offset == 0) {
       _tasks.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await TaskRepository()

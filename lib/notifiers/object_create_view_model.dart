@@ -3,84 +3,79 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_filex/open_filex.dart';
 
 import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/search_company/search_company_screen.dart';
-import 'package:izowork/screens/search_office/search_office_screen.dart';
-import 'package:izowork/screens/search_user/search_user_screen.dart';
-import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/api/api.dart';
 
 class ObjectCreateViewModel with ChangeNotifier {
+  LoadingStatus loadingStatus = LoadingStatus.searching;
+
   final MapObject? object;
 
   final List<File> _files = [];
 
-  LoadingStatus loadingStatus = LoadingStatus.searching;
+  List<File> get files => _files;
 
   bool _isKiso = true;
 
-  bool _hideDir = true;
-
-  ObjectType? _objectType;
-
-  List<ObjectType> _objectTypes = [];
-
-  ObjectStage? _objectStage;
-
-  List<ObjectStage> _objectStages = [];
-
-  User? _techManager;
-
-  Office? _office;
-
-  User? _manager;
-
-  Company? _designer;
-
-  Company? _customer;
-
-  Company? _contractor;
-
-  List<Document> _documents = [];
-
-  int _downloadIndex = -1;
-
-  int current = 0;
-
   bool get isKiso => _isKiso;
+
+  bool _hideDir = true;
 
   bool get hideDir => _hideDir;
 
-  List<Document> get documents => _documents;
-
-  List<File> get files => _files;
-
-  ObjectStage? get objectStage => _objectStage;
-
-  List<ObjectStage> get objectStages => _objectStages;
+  ObjectType? _objectType;
 
   ObjectType? get objectType => _objectType;
 
+  List<ObjectType> _objectTypes = [];
+
   List<ObjectType> get objectTypes => _objectTypes;
+
+  ObjectStage? _objectStage;
+
+  ObjectStage? get objectStage => _objectStage;
+
+  List<ObjectStage> _objectStages = [];
+
+  List<ObjectStage> get objectStages => _objectStages;
+
+  User? _techManager;
 
   User? get techManager => _techManager;
 
+  Office? _office;
+
   Office? get office => _office;
+
+  User? _manager;
 
   User? get manager => _manager;
 
+  Company? _designer;
+
   Company? get designer => _designer;
+
+  Company? _customer;
 
   Company? get customer => _customer;
 
+  Company? _contractor;
+
   Company? get contractor => _contractor;
 
+  List<Document> _documents = [];
+
+  List<Document> get documents => _documents;
+
+  int _downloadIndex = -1;
+
   int get downloadIndex => _downloadIndex;
+
+  int current = 0;
 
   ObjectCreateViewModel(this.object) {
     if (object != null) {
@@ -104,18 +99,21 @@ class ObjectCreateViewModel with ChangeNotifier {
   // MARK: - API CALL
 
   Future getTypeList() async {
-    await ObjectRepository().getObjectTypes().then((response) => {
-          if (response is List<ObjectType>)
-            {
-              _objectTypes = response,
-              _objectTypes.forEach((element) {
-                if (object?.objectTypeId == element.id) {
-                  _objectType = element;
-                  return;
+    await ObjectRepository()
+        .getObjectTypes()
+        .then((response) => {
+              if (response is List<ObjectType>)
+                {
+                  _objectTypes = response,
+                  _objectTypes.forEach((element) {
+                    if (object?.objectTypeId == element.id) {
+                      _objectType = element;
+                      return;
+                    }
+                  })
                 }
-              })
-            }
-        });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future getStageList() async {
@@ -138,7 +136,6 @@ class ObjectCreateViewModel with ChangeNotifier {
   }
 
   Future createNewObject(
-    BuildContext context,
     String address,
     int? area,
     int? constructionPeriod,
@@ -184,8 +181,8 @@ class ObjectCreateViewModel with ChangeNotifier {
                       if (_files.isNotEmpty)
                         {
                           _files.forEach((element) async {
-                            await uploadFile(context, response.id, element)
-                                .then((value) => {
+                            await uploadFile(response.id, element).then(
+                                (value) => {
                                       current++,
                                       if (current == _files.length)
                                         onCreate(response)
@@ -198,7 +195,8 @@ class ObjectCreateViewModel with ChangeNotifier {
                   else if (response is ErrorResponse)
                     {
                       loadingStatus = LoadingStatus.error,
-                      Toast().showTopToast(response.message ?? 'Ошибка')
+                      Toast()
+                          .showTopToast(response.message ?? 'Произошла ошибка')
                     },
                 })
             .whenComplete(() => notifyListeners());
@@ -209,7 +207,6 @@ class ObjectCreateViewModel with ChangeNotifier {
   }
 
   Future editObject(
-    BuildContext context,
     String address,
     int? area,
     int? constructionPeriod,
@@ -263,7 +260,8 @@ class ObjectCreateViewModel with ChangeNotifier {
                   else if (response is ErrorResponse)
                     {
                       loadingStatus = LoadingStatus.error,
-                      Toast().showTopToast(response.message ?? 'Ошибка')
+                      Toast()
+                          .showTopToast(response.message ?? 'Произошла ошибка')
                     },
                 })
             .whenComplete(() => notifyListeners());
@@ -273,7 +271,10 @@ class ObjectCreateViewModel with ChangeNotifier {
     }
   }
 
-  Future uploadFile(BuildContext context, String id, File file) async {
+  Future uploadFile(
+    String id,
+    File file,
+  ) async {
     await ObjectRepository()
         .addObjectFile(ObjectFileRequest(id, file))
         .then((response) => {
@@ -285,12 +286,12 @@ class ObjectCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 }
             });
   }
 
-  Future deleteObjectFile(BuildContext context, int index) async {
+  Future deleteObjectFile(int index) async {
     if (object == null) {
       _files.removeAt(index);
       notifyListeners();
@@ -309,7 +310,7 @@ class ObjectCreateViewModel with ChangeNotifier {
                 else if (response is ErrorResponse)
                   {
                     loadingStatus = LoadingStatus.error,
-                    Toast().showTopToast(response.message ?? 'Ошибка')
+                    Toast().showTopToast(response.message ?? 'Произошла ошибка')
                   },
               })
           .whenComplete(() => notifyListeners());
@@ -317,9 +318,75 @@ class ObjectCreateViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
-  Future addFile(BuildContext context) async {
+  void checkKiso() {
+    _isKiso = !_isKiso;
+    notifyListeners();
+  }
+
+  void checkCreateFolder() {
+    _hideDir = !_hideDir;
+    notifyListeners();
+  }
+
+  void changeObjectStage(ObjectStage? objectStage) {
+    if (objectStage == null) return;
+    _objectStage = objectStage;
+
+    notifyListeners();
+  }
+
+  void changeObjectType(ObjectType? objectType) {
+    if (objectType == null) return;
+    _objectType = objectType;
+
+    notifyListeners();
+  }
+
+  void changeTechManager(User? user) {
+    if (user == null) return;
+    _techManager = user;
+
+    notifyListeners();
+  }
+
+  void changeManager(User? user) {
+    if (user == null) return;
+    _manager = user;
+
+    notifyListeners();
+  }
+
+  void changeCustomer(Company? company) {
+    if (company == null) return;
+    _customer = company;
+
+    notifyListeners();
+  }
+
+  void changeContractor(Company? company) {
+    if (company == null) return;
+    _contractor = company;
+
+    notifyListeners();
+  }
+
+  void changeDesigner(Company? company) {
+    if (company == null) return;
+    _designer = company;
+
+    notifyListeners();
+  }
+
+  void changeOffice(Office? office) {
+    if (office == null) return;
+    _office = office;
+
+    notifyListeners();
+  }
+
+  Future addFile() async {
     final List<XFile>? selectedImages = await ImagePicker().pickMultiImage();
 
     if (selectedImages != null) {
@@ -339,7 +406,7 @@ class ObjectCreateViewModel with ChangeNotifier {
       notifyListeners();
 
       _files.forEach((element) async {
-        await uploadFile(context, object!.id, element).then((value) => {
+        await uploadFile(object!.id, element).then((value) => {
               current++,
               if (current == _files.length)
                 {
@@ -349,16 +416,6 @@ class ObjectCreateViewModel with ChangeNotifier {
             });
       });
     }
-  }
-
-  void checkKiso() {
-    _isKiso = !_isKiso;
-    notifyListeners();
-  }
-
-  void checkCreateFolder() {
-    _hideDir = !_hideDir;
-    notifyListeners();
   }
 
   Future openFile(int index) async {
@@ -384,127 +441,4 @@ class ObjectCreateViewModel with ChangeNotifier {
               });
     }
   }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showTypeSelectionSheet(BuildContext context) {
-    if (_objectTypes.isNotEmpty) {
-      List<String> items = [];
-      _objectTypes.forEach((element) {
-        items.add(element.name);
-      });
-
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => SelectionScreenWidget(
-              title: Titles.objectType,
-              value: _objectType?.name ?? object?.objectType?.name ?? '',
-              items: items,
-              onSelectTap: (type) => {
-                    _objectTypes.forEach((element) {
-                      if (type == element.name) {
-                        _objectType = element;
-                        notifyListeners();
-                      }
-                    })
-                  }));
-    }
-  }
-
-  void showStageSelectionSheet(BuildContext context) {
-    if (_objectStages.isNotEmpty) {
-      List<String> items = [];
-      _objectStages.forEach((element) {
-        items.add(element.name);
-      });
-
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => SelectionScreenWidget(
-              title: Titles.stage,
-              value: _objectStage?.name ?? object?.objectStage?.name ?? '',
-              items: items,
-              onSelectTap: (stage) => {
-                    _objectStages.forEach((element) {
-                      if (stage == element.name) {
-                        _objectStage = element;
-                        notifyListeners();
-                      }
-                    })
-                  }));
-    }
-  }
-
-  void showSearchUserSheet(BuildContext context, int index) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchUserScreenWidget(
-            title: index == 0 ? Titles.techManager : Titles.manager,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (user) => {
-                  index == 0 ? _techManager = user : _manager = user,
-                  notifyListeners(),
-                  Navigator.pop(context),
-                }));
-  }
-
-  void showSearchCompanySheet(BuildContext context, int index) =>
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => SearchCompanyScreenWidget(
-              title: index == 0
-                  ? Titles.generalContractor
-                  : index == 1
-                      ? Titles.developer
-                      : index == 2
-                          ? Titles.customer
-                          : Titles.designer,
-              isRoot: true,
-              onFocus: () => {},
-              onPop: (company) => {
-                    index == 0
-                        ? _contractor = company
-                        : index == 1
-                            ? debugPrint(index.toString())
-                            : index == 2
-                                ? _customer = company
-                                : _designer = company,
-                    notifyListeners(),
-                    Navigator.pop(context),
-                  }));
-
-  void showSearchOfficeSheet(BuildContext context) =>
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => SearchOfficeScreenWidget(
-              title: Titles.filial,
-              isRoot: true,
-              onFocus: () => {},
-              onPop: (office) => {
-                    _office = office,
-                    notifyListeners(),
-                    Navigator.pop(context),
-                  }));
 }

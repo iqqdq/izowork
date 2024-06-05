@@ -46,7 +46,7 @@ class ProductTypeSelectionViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   void select(int index) {
     _productType = productTypes[index];

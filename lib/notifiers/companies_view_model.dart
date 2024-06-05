@@ -3,11 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen_body.dart';
-import 'package:izowork/screens/company/company_screen.dart';
-import 'package:izowork/screens/company_create/company_create_screen.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class CompaniesViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -82,64 +78,23 @@ class CompaniesViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
+  void updateCompany(
+    int index,
+    Company? company,
+  ) {
+    if (company == null) return;
+
+    _companies.removeWhere((element) => element.id == company.id);
+    _companies.insert(index, company);
+    notifyListeners();
+  }
+
+  void setFiler(CompaniesFilter companiesFilter) {
+    _companiesFilter = companiesFilter;
+    notifyListeners();
+  }
+
   void resetFilter() {
     _companiesFilter = null;
-  }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showCompanyPageViewScreen(
-    BuildContext context,
-    int index,
-  ) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CompanyScreenWidget(
-                company: _companies[index],
-                onPop: (company) => {
-                      if (company != null)
-                        {
-                          _companies.removeWhere(
-                            (element) => element.id == company.id,
-                          ),
-                          _companies.insert(index, company),
-                          notifyListeners()
-                        }
-                    })));
-  }
-
-  void showCompaniesFilterSheet(BuildContext context, Function() onFilter) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => CompaniesFilterPageViewScreenWidget(
-            companiesFilter: _companiesFilter,
-            onPop: (companiesFilter) => {
-                  if (companiesFilter == null)
-                    {
-                      // CLEAR
-                      resetFilter(),
-                      onFilter()
-                    }
-                  else
-                    {
-                      // FILTER
-                      _companiesFilter = companiesFilter,
-                      onFilter()
-                    }
-                }));
-  }
-
-  void showCreateCompanyScreen(BuildContext context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const CompanyCreateScreenWidget(onPop: null),
-        ));
   }
 }

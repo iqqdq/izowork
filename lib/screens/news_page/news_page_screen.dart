@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:izowork/notifiers/news_page_view_model.dart';
-import 'package:izowork/screens/news_page/news_page_screen_body.dart';
 import 'package:provider/provider.dart';
+
+import 'package:izowork/notifiers/notifiers.dart';
+import 'package:izowork/screens/news_page/news_page_screen_body.dart';
 
 class NewsPageScreenWidget extends StatelessWidget {
   final String id;

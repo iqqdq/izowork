@@ -39,7 +39,7 @@ class ProfileViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   void setUser(User user) {
     _user = user;

@@ -4,15 +4,15 @@ import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
 
 class PhaseChecklistCreateViewModel with ChangeNotifier {
-  final String phaseId;
-
   LoadingStatus loadingStatus = LoadingStatus.empty;
+
+  final String phaseId;
 
   PhaseChecklist? _phaseChecklist;
 
-  String? _error;
-
   PhaseChecklist? get phaseChecklist => _phaseChecklist;
+
+  String? _error;
 
   String? get error => _error;
 

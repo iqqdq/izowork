@@ -88,38 +88,35 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
             const SizedBox(height: 16.0),
             Row(children: [
               Expanded(
-                  child:
+                child:
 
-                      /// SEARCH INPUT
-                      InputWidget(
-                          textEditingController: _textEditingController,
-                          focusNode: _focusNode,
-                          margin: const EdgeInsets.symmetric(horizontal: 16.0),
-                          isSearchInput: true,
-                          placeholder: '${Titles.search}...',
-                          onTap: () => setState,
-                          onChange: (text) => {
-                                setState(() => _isSearching = true),
-                                EasyDebounce.debounce('contact_debouncer',
-                                    const Duration(milliseconds: 500),
-                                    () async {
-                                  _pagination = Pagination(offset: 0, size: 50);
+                    /// SEARCH INPUT
+                    InputWidget(
+                        textEditingController: _textEditingController,
+                        focusNode: _focusNode,
+                        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                        isSearchInput: true,
+                        placeholder: '${Titles.search}...',
+                        onTap: () => setState,
+                        onChange: (text) => {
+                              setState(() => _isSearching = true),
+                              EasyDebounce.debounce('contact_debouncer',
+                                  const Duration(milliseconds: 500), () async {
+                                _pagination = Pagination(offset: 0, size: 50);
 
-                                  _contactsViewModel
-                                      .getContactList(
-                                          pagination: _pagination,
-                                          search: _textEditingController.text)
-                                      .then((value) =>
-                                          setState(() => _isSearching = false));
-                                })
-                              },
-                          onClearTap: () => {
-                                _contactsViewModel.resetFilter(),
-                                _pagination.offset = 0,
-                                _contactsViewModel.getContactList(
-                                    pagination: _pagination,
-                                    search: _textEditingController.text)
-                              }))
+                                _contactsViewModel
+                                    .getContactList(
+                                        pagination: _pagination,
+                                        search: _textEditingController.text)
+                                    .then((value) =>
+                                        setState(() => _isSearching = false));
+                              })
+                            },
+                        onClearTap: () => {
+                              _contactsViewModel.resetFilter(),
+                              _onRefresh(),
+                            }),
+              )
             ])
           ])),
       body: SizedBox.expand(
@@ -157,8 +154,10 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
           SafeArea(
             child: Align(
               alignment: Alignment.bottomCenter,
-              child:
-                  FilterButtonWidget(onTap: () => _showContactsFilterSheet()),
+              child: FilterButtonWidget(
+                isSelected: _contactsViewModel.contactsFilter != null,
+                onTap: () => _showContactsFilterSheet(),
+              ),
             ),
           ),
 
@@ -253,8 +252,9 @@ class _ContactsScreenBodyState extends State<ContactsScreenBodyWidget> {
             contactsFilter: _contactsViewModel.contactsFilter,
             onPop: (contactsFilter) => {
                   contactsFilter == null
-                      ? _onRefresh()
-                      : _contactsViewModel.setFilter(contactsFilter)
+                      ? _contactsViewModel.resetFilter()
+                      : _contactsViewModel.setFilter(contactsFilter),
+                  _onRefresh(),
                 }),
       );
 }

@@ -78,7 +78,7 @@ class DialogViewModel with ChangeNotifier {
           else if (response is ErrorResponse)
             {
               loadingStatus = LoadingStatus.error,
-              Toast().showTopToast(response.message ?? 'Ошибка')
+              Toast().showTopToast(response.message ?? 'Произошла ошибка')
             }
         });
   }
@@ -123,7 +123,7 @@ class DialogViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 }
             })
         .then((value) => readMessages());
@@ -153,7 +153,7 @@ class DialogViewModel with ChangeNotifier {
               if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 }
             });
   }

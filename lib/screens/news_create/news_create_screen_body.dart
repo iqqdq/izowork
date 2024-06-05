@@ -207,12 +207,13 @@ class _NewsCreateScreenBodyState extends State<NewsCreateScreenBodyWidget> {
                       isDisabled: _titleTextEditingController.text.isEmpty ||
                           _descriptionTextEditingController.text.isEmpty,
                       onTap: () => _newsCreateViewModel.createNewDeal(
-                          context,
                           _titleTextEditingController.text,
                           _descriptionTextEditingController.text,
                           _newsCreateViewModel.important,
-                          (news) =>
-                              {widget.onPop(news), Navigator.pop(context)}),
+                          (news) => {
+                                widget.onPop(news),
+                                Navigator.pop(context),
+                              }),
                     ),
                   ),
           ]),

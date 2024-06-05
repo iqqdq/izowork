@@ -102,8 +102,7 @@ class FirebaseMessagingService {
                 channelDescription: channel.description,
                 icon: '@mipmap/ic_launcher',
                 largeIcon: const DrawableResourceAndroidBitmap(
-                  '@mipmap/launcher_icon',
-                ),
+                    '@mipmap/launcher_icon'),
               ),
               iOS: const DarwinNotificationDetails(
                 presentAlert: true,

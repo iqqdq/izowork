@@ -218,7 +218,7 @@ class TaskCreateViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   void changeUser(
     int index,

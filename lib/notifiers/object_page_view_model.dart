@@ -154,7 +154,7 @@ class ObjectPageViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   Future openFile(int index) async {
     final filename = _object?.files[index].filename;

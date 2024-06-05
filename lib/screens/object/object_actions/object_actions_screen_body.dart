@@ -100,9 +100,7 @@ class _ObjectActionsScreenBodyState extends State<ObjectActionsScreenBodyWidget>
 
           /// INDICATOR
           _objectActionsViewModel.loadingStatus == LoadingStatus.searching
-              ? const Padding(
-                  padding: EdgeInsets.only(bottom: 90.0),
-                  child: LoadingIndicatorWidget())
+              ? const LoadingIndicatorWidget()
               : Container()
         ]),
       ),

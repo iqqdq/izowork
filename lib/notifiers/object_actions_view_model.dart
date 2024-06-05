@@ -24,6 +24,9 @@ class ObjectActionsViewModel with ChangeNotifier {
   Future getTraceList({required Pagination pagination}) async {
     if (pagination.offset == 0) {
       _traces.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await TraceRepository()

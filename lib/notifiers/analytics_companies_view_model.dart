@@ -1,43 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/profile/profile_screen.dart';
-import 'package:izowork/screens/search_office/search_office_screen.dart';
-import 'package:izowork/screens/search_product/search_product_screen.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class AnalyticsCompaniesViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
   ProductAnalytics? _productAnalytics;
 
-  CompanyAnalytics? _companyAnalytics;
-
-  ObjectAnalytics? _objectAnalytics;
-
-  ManagerAnalytics? _managerAnalytics;
-
-  Office? _office;
-
-  Office? _managerOffice;
-
-  Product? _product;
-
-  int _dealCount = 0;
-
   ProductAnalytics? get productAnalytics => _productAnalytics;
+
+  CompanyAnalytics? _companyAnalytics;
 
   CompanyAnalytics? get companyAnalytics => _companyAnalytics;
 
+  ObjectAnalytics? _objectAnalytics;
+
   ObjectAnalytics? get objectAnalytics => _objectAnalytics;
+
+  ManagerAnalytics? _managerAnalytics;
 
   ManagerAnalytics? get managerAnalytics => _managerAnalytics;
 
+  Office? _office;
+
   Office? get office => _office;
+
+  Office? _managerOffice;
 
   Office? get managerOffice => _managerOffice;
 
+  Product? _product;
+
   Product? get product => _product;
+
+  int _dealCount = 0;
 
   int get dealCount => _dealCount;
 
@@ -120,73 +116,27 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - PUSH
+  // MARK: - FUNCTIONS
 
-  void showSearchOfficeSheet(
-    BuildContext context,
+  void changeOffice(
+    Office? office,
     bool isManagerOffice,
-  ) =>
-      showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchOfficeScreenWidget(
-            isRoot: true,
-            title: Titles.filial,
-            onFocus: () => {},
-            onPop: (office) => {
-                  Navigator.pop(context),
-                  if (office != null)
-                    {
-                      if (isManagerOffice)
-                        {
-                          _managerOffice = office,
-                          getManagerList(office.id),
-                        }
-                      else
-                        {
-                          _office = office,
-                          getDealCount(office.id),
-                        }
-                    }
-                }),
-      );
+  ) {
+    if (office == null) return;
 
-  void showSearchProductSheet(BuildContext context) =>
-      showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchProductScreenWidget(
-            isRoot: true,
-            title: Titles.product,
-            onFocus: () => {},
-            onPop: (product) => {
-                  Navigator.pop(context),
-                  if (product != null)
-                    {
-                      _product = product,
-                      notifyListeners(),
-                      getProductChart(product.id)
-                    }
-                }),
-      );
+    if (isManagerOffice) {
+      _managerOffice = office;
+      getManagerList(office.id);
+    } else {
+      _office = office;
+      getDealCount(office.id);
+    }
+  }
 
-  void showProfileScreen(
-    BuildContext context,
-    int index,
-  ) =>
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProfileScreenWidget(
-              isMine: false,
-              user: _managerAnalytics!.users[index],
-              onPop: (user) => null,
-            ),
-          ));
+  void changeProduct(Product? product) {
+    if (product == null) return;
+
+    _product = product;
+    getProductChart(product.id);
+  }
 }

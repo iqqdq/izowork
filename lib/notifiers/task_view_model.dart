@@ -41,7 +41,7 @@ class TaskViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   Future openFile(int index) async {
     if (_task!.files[index].filename == null) return;

@@ -162,11 +162,9 @@ class _TasksScreenBodyState extends State<TasksScreenBodyWidget>
           SafeArea(
             child: Align(
               alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 6.0),
-                child: FilterButtonWidget(
-                  onTap: () => _showTasksFilterSheet(),
-                ),
+              child: FilterButtonWidget(
+                isSelected: _tasksViewModel.tasksFilter != null,
+                onTap: () => _showTasksFilterSheet(),
               ),
             ),
           ),

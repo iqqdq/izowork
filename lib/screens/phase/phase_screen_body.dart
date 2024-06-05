@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
+import 'package:spreadsheet_table/spreadsheet_table.dart';
+
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/notifiers/notifiers.dart';
@@ -11,9 +15,6 @@ import 'package:izowork/screens/phase/views/contractor_list_item_widget.dart';
 import 'package:izowork/screens/phase_create/phase_create_screen.dart';
 import 'package:izowork/screens/task_create/task_create_screen.dart';
 import 'package:izowork/views/views.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:provider/provider.dart';
-import 'package:spreadsheet_table/spreadsheet_table.dart';
 import 'package:izowork/screens/phase/views/search_list_item_widget.dart';
 
 class PhaseScreenBodyWidget extends StatefulWidget {
@@ -393,7 +394,7 @@ class _PhaseScreenBodyState extends State<PhaseScreenBodyWidget> {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   void _showDealScreenWidget(int index) => Navigator.push(
       context,

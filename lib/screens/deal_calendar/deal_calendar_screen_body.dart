@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/helpers/helpers.dart';
+import 'package:izowork/screens/deal_event/deal_event_screen.dart';
 import 'package:izowork/views/views.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_clean_calendar/controllers/clean_calendar_controller.dart';
 import 'package:izowork/notifiers/notifiers.dart';
@@ -20,6 +22,11 @@ class DealCalendarScreenBodyWidget extends StatefulWidget {
 }
 
 class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
+  static const TextStyle _textStyle = TextStyle(
+    overflow: TextOverflow.ellipsis,
+    fontFamily: 'PT Root UI',
+  );
+
   late DealCalendarViewModel _dealCalendarViewModel;
   CleanCalendarController? _cleanCalendarController;
 
@@ -36,34 +43,35 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
       listen: true,
     );
 
-    const TextStyle _textStyle = TextStyle(
-      overflow: TextOverflow.ellipsis,
-      fontFamily: 'PT Root UI',
+    _cleanCalendarController = CleanCalendarController(
+      minDate: DateTime(_dealCalendarViewModel.pickedDateTime.year, 1),
+      maxDate: DateTime(_dealCalendarViewModel.pickedDateTime.year, 12),
+      initialFocusDate: _dealCalendarViewModel.pickedDateTime,
+      onDayTapped: (dateTime) => {
+        _dealCalendarViewModel.selectDateTime(dateTime),
+        _showDealEventScreenSheet()
+      },
     );
 
-    _cleanCalendarController = CleanCalendarController(
-        minDate: DateTime(_dealCalendarViewModel.pickedDateTime.year, 1),
-        maxDate: DateTime(_dealCalendarViewModel.pickedDateTime.year, 12),
-        initialFocusDate: _dealCalendarViewModel.pickedDateTime,
-        onDayTapped: (dateTime) =>
-            _dealCalendarViewModel.selectDateTime(context, dateTime));
-
     return Scaffold(
-        backgroundColor: HexColors.white,
-        appBar: AppBar(
-            centerTitle: true,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: Colors.transparent,
-            leading: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: BackButtonWidget(onTap: () => Navigator.pop(context))),
-            title: Text(Titles.dealCalendar,
-                style: _textStyle.copyWith(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w700,
-                    color: HexColors.black))),
-        body: SizedBox.expand(
-            child: Stack(children: [
+      backgroundColor: HexColors.white,
+      appBar: AppBar(
+        centerTitle: true,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        backgroundColor: Colors.transparent,
+        leading: Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: BackButtonWidget(onTap: () => Navigator.pop(context))),
+        title: Text(
+          Titles.dealCalendar,
+          style: _textStyle.copyWith(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w700,
+              color: HexColors.black),
+        ),
+      ),
+      body: SizedBox.expand(
+        child: Stack(children: [
           /// CALENDAR
           ScrollableCleanCalendar(
               padding: EdgeInsets.only(
@@ -154,42 +162,101 @@ class _DealCalendarScreenBodyState extends State<DealCalendarScreenBodyWidget> {
 
           /// MONTH / YEAR SELECTION
           Container(
-              margin: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom == 0.0
-                    ? 12.0
-                    : MediaQuery.of(context).padding.bottom,
+            margin: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom == 0.0
+                  ? 12.0
+                  : MediaQuery.of(context).padding.bottom,
+            ),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: IgnorePointer(
+                ignoring: _dealCalendarViewModel.loadingStatus ==
+                    LoadingStatus.searching,
+                child: MonthYearSelectionWidget(
+                  dateTime: _dealCalendarViewModel.pickedDateTime,
+                  onTap: () => _showDateTimeSelectionSheet(),
+                ),
               ),
-              child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: IgnorePointer(
-                      ignoring: _dealCalendarViewModel.loadingStatus ==
-                          LoadingStatus.searching,
-                      child: MonthYearSelectionWidget(
-                          dateTime: _dealCalendarViewModel.pickedDateTime,
-                          onTap: () =>
-                              _dealCalendarViewModel.showDateTimeSelectionSheet(
-                                  context,
-                                  _textStyle,
-                                  (dateTimeDidUpdate) => {
-                                        // SCROLL TO MONTH
-                                        if (dateTimeDidUpdate)
-                                          _cleanCalendarController
-                                              ?.scrollToMonth(
-                                            date: _dealCalendarViewModel
-                                                .pickedDateTime,
-                                            duration: const Duration(
-                                                milliseconds: 200),
-                                            curve: Curves.bounceIn,
-                                          )
-                                      }))))),
+            ),
+          ),
 
           /// INDICATOR
           _dealCalendarViewModel.loadingStatus == LoadingStatus.searching
-              ? const Padding(
-                  padding: EdgeInsets.only(bottom: 60.0),
-                  child: LoadingIndicatorWidget(),
-                )
+              ? const LoadingIndicatorWidget()
               : Container()
-        ])));
+        ]),
+      ),
+    );
+  }
+
+  // MARK: -
+  // MARK: - PUSH
+
+  void _showDealEventScreenSheet() {
+    if (_dealCalendarViewModel.deals.isEmpty) return;
+    if (_dealCalendarViewModel.selectedDateTime == null) return;
+
+    showCupertinoModalBottomSheet(
+      enableDrag: false,
+      topRadius: const Radius.circular(16.0),
+      barrierColor: Colors.black.withOpacity(0.6),
+      backgroundColor: HexColors.white,
+      context: context,
+      builder: (sheetContext) => DealEventScreenWidget(
+        dateTime: _dealCalendarViewModel.selectedDateTime!,
+        deals: _dealCalendarViewModel.deals,
+      ),
+    );
+  }
+
+  void _showDateTimeSelectionSheet() {
+    DateTime? newDateTime;
+
+    showCupertinoModalBottomSheet(
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (sheetContext) => DateTimeWheelPickerWidget(
+            minDateTime: _dealCalendarViewModel.minDateTime,
+            maxDateTime: _dealCalendarViewModel.maxDateTime,
+            initialDateTime: _dealCalendarViewModel.pickedDateTime,
+            showDays: false,
+            locale: Platform.localeName,
+            backgroundColor: HexColors.white,
+            buttonColor: HexColors.primaryMain,
+            buttonHighlightColor: HexColors.primaryDark,
+            buttonTitle: Titles.apply,
+            buttonTextStyle: _textStyle.copyWith(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w700,
+              color: HexColors.black,
+            ),
+            selecteTextStyle: _textStyle.copyWith(
+              fontSize: 14.0,
+              color: HexColors.black,
+              fontWeight: FontWeight.w400,
+            ),
+            unselectedTextStyle: _textStyle.copyWith(
+              fontSize: 12.0,
+              color: HexColors.grey70,
+              fontWeight: FontWeight.w400,
+            ),
+            onTap: (dateTime) => {
+                  newDateTime = dateTime,
+                  Navigator.pop(context),
+                })).whenComplete(() => {
+          _dealCalendarViewModel.changePickedDateTime(newDateTime),
+          // CALL CALENDAR SCROLL TO PICKED DATE TIME
+          Future.delayed(
+              const Duration(milliseconds: 200),
+              () => // SCROLL TO MONTH
+                  _cleanCalendarController?.scrollToMonth(
+                    date: _dealCalendarViewModel.pickedDateTime,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.bounceIn,
+                  )),
+        });
   }
 }

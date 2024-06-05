@@ -25,6 +25,9 @@ class SearchOfficeViewModel with ChangeNotifier {
   }) async {
     if (pagination.offset == 0) {
       _offices.clear();
+
+      loadingStatus = LoadingStatus.searching;
+      notifyListeners();
     }
 
     await OfficeRepository()

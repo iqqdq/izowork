@@ -3,19 +3,12 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/helpers/helpers.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:open_filex/open_filex.dart';
 
+import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/search_company/search_company_screen.dart';
-import 'package:izowork/screens/search_object/search_object_screen.dart';
-import 'package:izowork/screens/search_product/search_product_screen.dart';
-import 'package:izowork/screens/search_user/search_user_screen.dart';
-import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/api/api.dart';
-import 'package:izowork/views/views.dart';
 
 class DealCreateViewModel with ChangeNotifier {
   final Deal? deal;
@@ -127,7 +120,6 @@ class DealCreateViewModel with ChangeNotifier {
   // MARK: - API CALL
 
   Future createNewDeal(
-    BuildContext context,
     String? comment,
     Function(Deal) onCreate,
   ) async {
@@ -165,7 +157,6 @@ class DealCreateViewModel with ChangeNotifier {
   }
 
   Future editDeal(
-    BuildContext context,
     String? comment,
     Function(Deal) onCreate,
   ) async {
@@ -186,32 +177,32 @@ class DealCreateViewModel with ChangeNotifier {
         ))
         .then((response) => {
               if (response is Deal)
-                {onCreate(response)}
+                onCreate(response)
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 },
-              notifyListeners()
-            });
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future getDealProductList() async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
-    await DealRepository().getProduts(deal!.id).then((response) => {
-          if (response is List<DealProduct>)
-            {
-              loadingStatus = LoadingStatus.completed,
-              _dealProducts = response,
-            }
-          else if (response is ErrorResponse)
-            {
-              loadingStatus = LoadingStatus.error,
-            },
-          notifyListeners()
-        });
+    await DealRepository()
+        .getProduts(deal!.id)
+        .then((response) => {
+              if (response is List<DealProduct>)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _dealProducts = response,
+                }
+              else if (response is ErrorResponse)
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future getPhaseList(String id) async {
@@ -230,27 +221,27 @@ class DealCreateViewModel with ChangeNotifier {
         .whenComplete(() => notifyListeners());
   }
 
-  Future addDealProduct(BuildContext context) async {
-    if (deal != null) {
-      loadingStatus = LoadingStatus.searching;
-      notifyListeners();
+  Future addDealProduct() async {
+    if (deal == null) return;
 
-      await DealRepository()
-          .addProduct(DealProductRequest(count: 0, dealId: deal!.id))
-          .then((response) => {
-                if (response is DealProduct)
-                  {
-                    loadingStatus = LoadingStatus.completed,
-                    _dealProducts.add(response),
-                  }
-                else if (response is ErrorResponse)
-                  {
-                    loadingStatus = LoadingStatus.error,
-                    Toast().showTopToast(response.message ?? 'Ошибка')
-                  }
-              })
-          .whenComplete(() => notifyListeners());
-    }
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await DealRepository()
+        .addProduct(DealProductRequest(count: 0, dealId: deal!.id))
+        .then((response) => {
+              if (response is DealProduct)
+                {
+                  loadingStatus = LoadingStatus.completed,
+                  _dealProducts.add(response),
+                }
+              else if (response is ErrorResponse)
+                {
+                  loadingStatus = LoadingStatus.error,
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
+                }
+            })
+        .whenComplete(() => notifyListeners());
   }
 
   Future updateDealProduct(
@@ -330,7 +321,51 @@ class DealCreateViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
+
+  void changePhase(String? stage) {
+    for (var element in phases) {
+      if (stage == element.name) {
+        _phase = element;
+        notifyListeners();
+      }
+    }
+  }
+
+  void changeStartDateTime(DateTime dateTime) {
+    _startDateTime = dateTime;
+    notifyListeners();
+  }
+
+  void changeEndDateTime(DateTime dateTime) {
+    _endDateTime = dateTime;
+    notifyListeners();
+  }
+
+  void changeResponsible(User user) {
+    _responsible = user;
+    notifyListeners();
+  }
+
+  void changeObject(MapObject? object) {
+    _object = object;
+    _phase = null;
+  }
+
+  void changeCompany(Company? company) {
+    _company = company;
+    notifyListeners();
+  }
+
+  void changeProduct(
+    int index,
+    Product? product,
+  ) {
+    if (product == null) return;
+
+    _dealProducts[index].product = product;
+    _dealProducts[index].productId = product.id;
+  }
 
   Future addFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -406,162 +441,5 @@ class DealCreateViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - PUSH
-
-  void showSelectionSheet(BuildContext context) {
-    if (_phases.isNotEmpty) {
-      List<String> items = [];
-      _phases.forEach((element) {
-        items.add(element.name);
-      });
-
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) => SelectionScreenWidget(
-              title: Titles.phase,
-              value: _phase?.name ?? selectedPhase?.name ?? '',
-              items: items,
-              onSelectTap: (stage) => {
-                    _phases.forEach((element) {
-                      if (stage == element.name) {
-                        _phase = element;
-                        notifyListeners();
-                      }
-                    })
-                  }));
-    }
-  }
-
-  void showDateTimeSelectionSheet(BuildContext context, int index) {
-    TextStyle textStyle = const TextStyle(
-        overflow: TextOverflow.ellipsis, fontFamily: 'PT Root UI');
-
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => DateTimeWheelPickerWidget(
-            minDateTime: _minDateTime,
-            maxDateTime: _maxDateTime,
-            initialDateTime: index == 0 ? _startDateTime : _endDateTime,
-            showDays: true,
-            locale: Platform.localeName,
-            backgroundColor: HexColors.white,
-            buttonColor: HexColors.primaryMain,
-            buttonHighlightColor: HexColors.primaryDark,
-            buttonTitle: Titles.apply,
-            buttonTextStyle: textStyle.copyWith(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w700,
-                color: HexColors.black),
-            selecteTextStyle: textStyle.copyWith(
-                fontSize: 14.0,
-                color: HexColors.black,
-                fontWeight: FontWeight.w400),
-            unselectedTextStyle: textStyle.copyWith(
-                fontSize: 12.0,
-                color: HexColors.grey70,
-                fontWeight: FontWeight.w400),
-            onTap: (dateTime) => {
-                  Navigator.pop(context),
-                  index == 0
-                      ? _startDateTime = dateTime
-                      : _endDateTime = dateTime,
-                  notifyListeners(),
-                }));
-  }
-
-  void showSearchUserSheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchUserScreenWidget(
-            title: Titles.responsible,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (user) => {
-                  _responsible = user,
-                  notifyListeners(),
-                  Navigator.pop(context)
-                }));
-  }
-
-  void showSearchObjectSheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchObjectScreenWidget(
-            title: Titles.object,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (object) => {
-                  if (object != null)
-                    {
-                      _object = object,
-                      _phases.clear(),
-                      _phase = null,
-                      getPhaseList(object.id)
-                    },
-                  Navigator.pop(context)
-                }));
-  }
-
-  void showSearchCompanySheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchCompanyScreenWidget(
-            title: Titles.company,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (company) => {
-                  _company = company,
-                  notifyListeners(),
-                  Navigator.pop(context)
-                }));
-  }
-
-  void showSearchProductSheet(BuildContext context, int index) {
-    showCupertinoModalBottomSheet(
-      enableDrag: false,
-      topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
-      backgroundColor: HexColors.white,
-      context: context,
-      builder: (sheetContext) => SearchProductScreenWidget(
-          isRoot: true,
-          onFocus: () => {},
-          onPop: (product) => {
-                Navigator.pop(context),
-                if (product != null)
-                  {
-                    _dealProducts[index].product = product,
-                    _dealProducts[index].productId = product.id,
-                    updateDealProduct(
-                      index,
-                      _dealProducts[index].id,
-                      product.id,
-                      _dealProducts[index].count,
-                    ).then(
-                      (value) => notifyListeners(),
-                    )
-                  }
-              }),
-    );
-  }
+  // MARK: - FUNCTIONS
 }

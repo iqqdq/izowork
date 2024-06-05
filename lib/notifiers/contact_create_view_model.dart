@@ -4,29 +4,29 @@ import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen_body.dart';
-import 'package:izowork/screens/search_company/search_company_screen.dart';
 
 class ContactCreateViewModel with ChangeNotifier {
   final Company? selectedCompany;
+
   final Contact? selectedContact;
+
   final Function(Contact)? onDelete;
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
   Contact? _contact;
 
-  Company? _company;
-
-  File? _file;
-
   Contact? get contact => _contact;
 
+  Company? _company;
+
   Company? get company => _company;
+
+  File? _file;
 
   File? get file => _file;
 
@@ -44,7 +44,6 @@ class ContactCreateViewModel with ChangeNotifier {
   // MARK: - API CALL
 
   Future createNewContact(
-    BuildContext context,
     String name,
     String post,
     String email,
@@ -88,25 +87,32 @@ class ContactCreateViewModel with ChangeNotifier {
                     }
                   else
                     {
-                      changeAvatar(context, response.id, _file!)
-                          .then((value) => {
-                                Toast().showTopToast(
-                                    '${Titles.contact} ${response.name} добавлен'),
-                                loadingStatus = LoadingStatus.completed
-                              })
+                      changeAvatar(
+                        response.id,
+                        _file!,
+                      ).then((value) => {
+                            Toast().showTopToast(
+                                '${Titles.contact} ${response.name} добавлен'),
+                            loadingStatus = LoadingStatus.completed
+                          })
                     }
                 }
               else if (response is ErrorResponse)
                 {
-                  Toast().showTopToast(response.message ?? 'Ошибка'),
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка'),
                   loadingStatus = LoadingStatus.error
                 }
             })
         .whenComplete(() => notifyListeners());
   }
 
-  Future updateContactInfo(BuildContext context, String name, String post,
-      String email, String phone, List<SocialInputModel> socials) async {
+  Future updateContactInfo(
+    String name,
+    String post,
+    String email,
+    String phone,
+    List<SocialInputModel> socials,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -162,14 +168,17 @@ class ContactCreateViewModel with ChangeNotifier {
                 }
               else if (response is ErrorResponse)
                 {
-                  Toast().showTopToast(response.message ?? 'Ошибка'),
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка'),
                   loadingStatus = LoadingStatus.error
                 }
             })
         .whenComplete(() => notifyListeners());
   }
 
-  Future changeAvatar(BuildContext context, String id, File file) async {
+  Future changeAvatar(
+    String id,
+    File file,
+  ) async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -190,54 +199,35 @@ class ContactCreateViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка')
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка')
                 }
             })
         .whenComplete(() => notifyListeners());
   }
 
-  Future delete(BuildContext context) async {
+  Future delete() async {
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
-    int count = 0;
-
     await ContactRepository()
         .deleteContact(DeleteRequest(id: _contact!.id))
-        .then((value) => {
+        .whenComplete(() => {
               Toast().showTopToast(Titles.contactWasDeleted),
               onDelete == null
                   ? debugPrint('Nothing to delete')
                   : onDelete!(_contact!),
-              Navigator.popUntil(context, (route) => count++ >= 2)
             });
-  }
-
-  // MARK: -
-  // MARK: - PUSH
-
-  void showSearchCompanySheet(BuildContext context) {
-    showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => SearchCompanyScreenWidget(
-            title: Titles.company,
-            isRoot: true,
-            onFocus: () => {},
-            onPop: (company) => {
-                  _company = company,
-                  notifyListeners(),
-                  Navigator.pop(context)
-                }));
   }
 
   // MARK: -
   // MARK: - FUNCTIONS
 
-  Future pickImage(BuildContext context) async {
+  void changeCompany(Company? company) {
+    _company = company;
+    notifyListeners();
+  }
+
+  Future pickImage() async {
     final XFile? xFile = await ImagePicker()
         .pickImage(source: ImageSource.gallery, imageQuality: 70);
 
@@ -246,7 +236,10 @@ class ContactCreateViewModel with ChangeNotifier {
         _file = File(xFile.path);
         notifyListeners();
       } else {
-        changeAvatar(context, selectedContact!.id, File(xFile.path));
+        changeAvatar(
+          selectedContact!.id,
+          File(xFile.path),
+        );
       }
     }
   }

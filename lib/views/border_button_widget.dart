@@ -26,7 +26,7 @@ class BorderButtonWidget extends StatefulWidget {
 class _BorderButtonState extends State<BorderButtonWidget> {
   late bool _isDisabled;
   late bool _isDestructive;
-  bool _isHighlighted = false;
+  bool _isSelected = false;
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _BorderButtonState extends State<BorderButtonWidget> {
           width: 1.0,
           color: _isDisabled
               ? Colors.transparent
-              : _isHighlighted
+              : _isSelected
                   ? _isDestructive
                       ? HexColors.additionalRed
                       : HexColors.primaryDark
@@ -84,7 +84,7 @@ class _BorderButtonState extends State<BorderButtonWidget> {
                 fontWeight: FontWeight.w500,
                 color: _isDisabled
                     ? HexColors.borderButtonDisableTitleColor
-                    : _isHighlighted
+                    : _isSelected
                         ? _isDestructive
                             ? HexColors.additionalRed
                             : HexColors.primaryDark
@@ -95,7 +95,7 @@ class _BorderButtonState extends State<BorderButtonWidget> {
             ),
           ),
           onTap: _isDisabled ? null : () => widget.onTap(),
-          onHighlightChanged: (value) => setState(() => _isHighlighted = value),
+          onHighlightChanged: (value) => setState(() => _isSelected = value),
         ),
       ),
     );

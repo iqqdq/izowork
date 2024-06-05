@@ -51,7 +51,7 @@ class SingleObjectMapViewModel with ChangeNotifier {
   }
 
   // MARK: -
-  // MARK: - ACTIONS
+  // MARK: - FUNCTIONS
 
   void zoomIn(GoogleMapController googleMapController) {
     if (_position != null) {

@@ -1,13 +1,8 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/deal_event/deal_event_screen.dart';
-import 'package:izowork/views/views.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DealCalendarViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
@@ -23,6 +18,8 @@ class DealCalendarViewModel with ChangeNotifier {
     1,
   );
 
+  DateTime get minDateTime => _minDateTime;
+
   final DateTime _maxDateTime = DateTime(
     DateTime(
           DateTime.now().year,
@@ -34,7 +31,7 @@ class DealCalendarViewModel with ChangeNotifier {
     1,
   );
 
-  final List<DateTime> _eventDateTimes = [];
+  DateTime get maxDateTime => _maxDateTime;
 
   DateTime _pickedDateTime = DateTime(
     DateTime.now().year,
@@ -42,17 +39,19 @@ class DealCalendarViewModel with ChangeNotifier {
     DateTime.now().day,
   );
 
-  DateTime? _selectedDateTime;
-
-  final List<Deal> _deals = [];
-
-  List<DateTime> get eventDateTimes => _eventDateTimes;
-
   DateTime get pickedDateTime => _pickedDateTime;
+
+  DateTime? _selectedDateTime;
 
   DateTime? get selectedDateTime => _selectedDateTime;
 
+  final List<Deal> _deals = [];
+
   List<Deal> get deals => _deals;
+
+  final List<DateTime> _eventDateTimes = [];
+
+  List<DateTime> get eventDateTimes => _eventDateTimes;
 
   DealCalendarViewModel() {
     getDealList(_pickedDateTime);
@@ -134,75 +133,13 @@ class DealCalendarViewModel with ChangeNotifier {
     return count;
   }
 
-  // MARK: -
-  // MARK: - ACTIONS
-
-  void showDateTimeSelectionSheet(
-    BuildContext context,
-    TextStyle textStyle,
-    Function(bool) didUpdateDateTime,
-  ) =>
-      showCupertinoModalBottomSheet(
-        enableDrag: false,
-        topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
-        backgroundColor: HexColors.white,
-        context: context,
-        builder: (sheetContext) => DateTimeWheelPickerWidget(
-            minDateTime: _minDateTime,
-            maxDateTime: _maxDateTime,
-            initialDateTime: _pickedDateTime,
-            showDays: false,
-            locale: Platform.localeName,
-            backgroundColor: HexColors.white,
-            buttonColor: HexColors.primaryMain,
-            buttonHighlightColor: HexColors.primaryDark,
-            buttonTitle: Titles.apply,
-            buttonTextStyle: textStyle.copyWith(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w700,
-              color: HexColors.black,
-            ),
-            selecteTextStyle: textStyle.copyWith(
-              fontSize: 14.0,
-              color: HexColors.black,
-              fontWeight: FontWeight.w400,
-            ),
-            unselectedTextStyle: textStyle.copyWith(
-              fontSize: 12.0,
-              color: HexColors.grey70,
-              fontWeight: FontWeight.w400,
-            ),
-            onTap: (dateTime) => {
-                  Navigator.pop(context),
-
-                  // UPDATE PICKED DATE TIME
-                  Future.delayed(
-                      const Duration(milliseconds: 400),
-                      () => {
-                            _pickedDateTime = dateTime,
-                            notifyListeners(),
-                          }).then((value) =>
-                      // CALL CALENDAR SCROLL TO PICKED DATE TIME
-                      Future.delayed(const Duration(milliseconds: 100),
-                          () => didUpdateDateTime(true)))
-                }),
-      );
-
-  // MARK: -
-  // MARK: - FUNCTIONS
-
   void addDateTime(DateTime dateTime) {
     _eventDateTimes.add(dateTime);
     notifyListeners();
   }
 
-  void selectDateTime(
-    BuildContext context,
-    DateTime dateTime,
-  ) {
+  void selectDateTime(DateTime dateTime) {
     _selectedDateTime = dateTime;
-    notifyListeners();
 
     List<Deal> deals = [];
 
@@ -214,15 +151,13 @@ class DealCalendarViewModel with ChangeNotifier {
       }
     });
 
-    if (deals.isNotEmpty) {
-      showCupertinoModalBottomSheet(
-          enableDrag: false,
-          topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
-          backgroundColor: HexColors.white,
-          context: context,
-          builder: (sheetContext) =>
-              DealEventScreenWidget(dateTime: dateTime, deals: deals));
-    }
+    notifyListeners();
+  }
+
+  void changePickedDateTime(DateTime? dateTime) {
+    if (dateTime == null) return;
+    _pickedDateTime = dateTime;
+
+    notifyListeners();
   }
 }

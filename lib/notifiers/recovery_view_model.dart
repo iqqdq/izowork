@@ -24,7 +24,7 @@ class RecoveryViewModel with ChangeNotifier {
               else if (response is ErrorResponse)
                 {
                   loadingStatus = LoadingStatus.error,
-                  Toast().showTopToast(response.message ?? 'Ошибка'),
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка'),
                 }
             })
         .whenComplete(() => notifyListeners());

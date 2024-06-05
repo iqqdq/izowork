@@ -52,21 +52,9 @@ class _AnalyticsActionsScreenBodyState
     super.dispose();
   }
 
-  // MARK: -
-  // MARK: - FUNCTIONS
-
-  Future _onRefresh() async {
-    _pagination.offset = 0;
-    await _analyticsActionsViewModel.getTraceList(pagination: _pagination);
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    final _bottomPadding = MediaQuery.of(context).padding.bottom == 0.0
-        ? 12.0
-        : MediaQuery.of(context).padding.bottom;
 
     _analyticsActionsViewModel = Provider.of<AnalyticsActionsViewModel>(
       context,
@@ -84,7 +72,11 @@ class _AnalyticsActionsScreenBodyState
               springAnimationDurationInMilliseconds: 300,
               onRefresh: _onRefresh,
               child: ListView.builder(
-                  padding: EdgeInsets.only(bottom: _bottomPadding + 64.0),
+                  padding: EdgeInsets.only(
+                      bottom: (MediaQuery.of(context).padding.bottom == 0.0
+                              ? 12.0
+                              : MediaQuery.of(context).padding.bottom) +
+                          64.0),
                   shrinkWrap: true,
                   itemCount: _analyticsActionsViewModel.traces.length,
                   itemBuilder: (context, index) {
@@ -101,7 +93,10 @@ class _AnalyticsActionsScreenBodyState
             child: Align(
               alignment: Alignment.bottomCenter,
               child: FilterButtonWidget(
-                  onTap: () => _showAnalyticsActionFilterSheet()),
+                isSelected:
+                    _analyticsActionsViewModel.analyticsActionsFilter != null,
+                onTap: () => _showAnalyticsActionFilterSheet(),
+              ),
             ),
           ),
 
@@ -130,6 +125,14 @@ class _AnalyticsActionsScreenBodyState
   }
 
   // MARK: -
+  // MARK: - FUNCTIONS
+
+  Future _onRefresh() async {
+    _pagination.offset = 0;
+    await _analyticsActionsViewModel.getTraceList(pagination: _pagination);
+  }
+
+  // MARK: -
   // MARK: - PUSH
 
   void _showAnalyticsActionFilterSheet() => showCupertinoModalBottomSheet(
@@ -141,9 +144,17 @@ class _AnalyticsActionsScreenBodyState
         builder: (sheetContext) => AnalyticsActionsFilterPageViewScreenWidget(
             analyticsActionsFilter:
                 _analyticsActionsViewModel.analyticsActionsFilter,
-            onPop: (analyticsActionsFilter) => analyticsActionsFilter == null
-                ? _analyticsActionsViewModel.resetFilter()
-                : _analyticsActionsViewModel.setFilter(analyticsActionsFilter)),
+            onPop: (analyticsActionsFilter) => {
+                  analyticsActionsFilter == null
+                      ? {
+                          _analyticsActionsViewModel.resetFilter(),
+                          _onRefresh(),
+                        }
+                      : _analyticsActionsViewModel.setFilter(
+                          '',
+                          analyticsActionsFilter,
+                        ),
+                }),
       );
 
   void _onTraceTap(Trace trace) {
