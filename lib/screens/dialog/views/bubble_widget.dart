@@ -1,13 +1,13 @@
 import 'dart:io';
-
 import 'package:audioplayers/audioplayers.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/dialog/views/date_header_widget.dart';
 import 'package:izowork/api/api.dart';
+import 'package:izowork/views/views.dart';
 
 class BubbleWidget extends StatefulWidget {
   final bool animate;
@@ -435,38 +435,12 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                           onTap: widget.onUserTap == null
                               ? null
                               : () => widget.onUserTap!(),
-                          child: Stack(children: [
-                            SvgPicture.asset(
-                              'assets/ic_avatar.svg',
-                              colorFilter: ColorFilter.mode(
-                                HexColors.grey40,
-                                BlendMode.srcIn,
-                              ),
-                              width: 24.0,
-                              height: 24.0,
-                              fit: BoxFit.cover,
-                            ),
-                            widget.user == null
-                                ? Container()
-                                : widget.user!.avatar == null
-                                    ? Container()
-                                    : widget.user!.avatar!.isEmpty
-                                        ? Container()
-                                        : ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                            child: CachedNetworkImage(
-                                                cacheKey: widget.user!.avatar,
-                                                imageUrl: avatarUrl +
-                                                    widget.user!.avatar!,
-                                                width: 24.0,
-                                                height: 24.0,
-                                                memCacheWidth: 24 *
-                                                    MediaQuery.of(context)
-                                                        .devicePixelRatio
-                                                        .round(),
-                                                fit: BoxFit.cover)),
-                          ]))
+                          child: AvatarWidget(
+                            url: avatarUrl,
+                            endpoint: widget.user!.avatar,
+                            size: 24.0,
+                          ),
+                        )
                       : SizedBox(width: widget.user == null ? 0.0 : 24.0),
                 ),
           Expanded(child: bubble)

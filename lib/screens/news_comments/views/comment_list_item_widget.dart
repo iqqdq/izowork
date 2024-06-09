@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/api/api.dart';
+import 'package:izowork/views/views.dart';
 
 class CommentBubbleWidget extends StatefulWidget {
   final NewsComment comment;
@@ -81,37 +80,13 @@ class _CommentBubbleState extends State<CommentBubbleWidget>
                             borderRadius: BorderRadius.circular(16.0),
                             child: Row(children: [
                               /// AVATAR
-                              Stack(children: [
-                                SvgPicture.asset('assets/ic_avatar.svg',
-                                    colorFilter: ColorFilter.mode(
-                                      HexColors.grey40,
-                                      BlendMode.srcIn,
-                                    ),
-                                    width: 24.0,
-                                    height: 24.0,
-                                    fit: BoxFit.cover),
-                                widget.comment.user.avatar == null
-                                    ? Container()
-                                    : widget.comment.user.avatar!.isEmpty
-                                        ? Container()
-                                        : ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                            child: CachedNetworkImage(
-                                              cacheKey:
-                                                  widget.comment.user.avatar,
-                                              imageUrl: avatarUrl +
-                                                  widget.comment.user.avatar!,
-                                              width: 24.0,
-                                              height: 24.0,
-                                              memCacheWidth: 24 *
-                                                  MediaQuery.of(context)
-                                                      .devicePixelRatio
-                                                      .round(),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                              ]),
+
+                              AvatarWidget(
+                                url: avatarUrl,
+                                endpoint: widget.comment.user.avatar,
+                                size: 24.0,
+                              ),
+
                               const SizedBox(width: 10.0),
 
                               ///   NAME

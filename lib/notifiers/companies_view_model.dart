@@ -84,9 +84,8 @@ class CompaniesViewModel with ChangeNotifier {
   ) {
     if (company == null) return;
 
-    _companies.removeWhere((element) => element.id == company.id);
-    _companies.insert(index, company);
-    notifyListeners();
+    _companies[index] = company;
+    Future.delayed(const Duration(milliseconds: 300), () => notifyListeners());
   }
 
   void setFiler(CompaniesFilter companiesFilter) {

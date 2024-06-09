@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/screens/object/object_page/object_page_screen.dart';
 import 'package:izowork/screens/object/object_actions/object_actions_screen.dart';
 import 'package:izowork/views/views.dart';
@@ -9,11 +10,13 @@ import 'package:izowork/views/views.dart';
 class ObjectPageViewScreenWidget extends StatefulWidget {
   final String id;
   final String? phaseId;
+  final Function(MapObject?) onPop;
 
   const ObjectPageViewScreenWidget({
     Key? key,
     required this.id,
     this.phaseId,
+    required this.onPop,
   }) : super(key: key);
 
   @override
@@ -25,12 +28,15 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
   List<Widget>? _pages;
   int _index = 0;
 
+  MapObject? _object;
+
   @override
   void initState() {
     _pages = [
       ObjectPageScreenWidget(
         id: widget.id,
         phaseId: widget.phaseId,
+        onPop: (object) => _object = object,
       ),
       ObjectActionsScreenWidget(
         id: widget.id,
@@ -51,6 +57,7 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
   @override
   void dispose() {
     _pageController.dispose();
+    widget.onPop(_object);
 
     super.dispose();
   }
@@ -102,7 +109,7 @@ class _ObjectPageViewScreenState extends State<ObjectPageViewScreenWidget> {
         body: PageView(
           controller: _pageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: _pages!,
+          children: _pages ?? [],
           onPageChanged: (page) => setState(() => _index = page),
         ));
   }

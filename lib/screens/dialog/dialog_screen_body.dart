@@ -1,10 +1,8 @@
 import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:blur/blur.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -109,39 +107,13 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
           /// AVATAR
           _dialogViewModel.chat == null
               ? Container()
-              : Stack(children: [
-                  Container(
-                      width: 30.0,
-                      height: 30.0,
-                      padding: EdgeInsets.all(_isGroupChat ? 6.0 : 0.0),
-                      decoration: BoxDecoration(
-                          color: _isGroupChat
-                              ? HexColors.additionalViolet.withOpacity(0.8)
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(15.0)),
-                      child: SvgPicture.asset(
-                          _isGroupChat
-                              ? 'assets/ic_group.svg'
-                              : 'assets/ic_avatar.svg',
-                          colorFilter: ColorFilter.mode(
-                            _isGroupChat ? HexColors.white : HexColors.grey30,
-                            BlendMode.srcIn,
-                          ),
-                          width: 30.0,
-                          height: 30.0,
-                          fit: BoxFit.cover)),
-                  _url == null
-                      ? Container()
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(15.0),
-                          child: CachedNetworkImage(
-                              cacheKey: _url,
-                              imageUrl: avatarUrl + _url,
-                              width: 30.0,
-                              height: 30.0,
-                              fit: BoxFit.cover),
-                        ),
-                ]),
+              : AvatarWidget(
+                  url: avatarUrl,
+                  endpoint: _url,
+                  size: 30.0,
+                  isGroupAvatar: _isGroupChat,
+                ),
+
           const SizedBox(width: 12.0),
 
           /// CHAT/USER NAME

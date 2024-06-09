@@ -229,7 +229,9 @@ class _ObjectsScreenBodyState extends State<ObjectsScreenBodyWidget>
       context,
       MaterialPageRoute(
           builder: (context) => ObjectPageViewScreenWidget(
-              id: _objectsViewModel.objects[index].id)));
+                id: _objectsViewModel.objects[index].id,
+                onPop: (object) => _objectsViewModel.updateObject(object),
+              )));
 
   void _showObjectCreateScreen() => Navigator.push(
       context,

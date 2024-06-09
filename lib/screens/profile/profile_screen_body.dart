@@ -1,14 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/screens/profile_edit/profile_edit_screen.dart';
 import 'package:izowork/views/views.dart';
-import 'package:provider/provider.dart';
 
 class ProfileScreenBodyWidget extends StatefulWidget {
   final bool isMine;
@@ -89,31 +88,11 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
             children: [
               /// AVATAR
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Stack(children: [
-                  SvgPicture.asset('assets/ic_avatar.svg',
-                      colorFilter: ColorFilter.mode(
-                        HexColors.grey40,
-                        BlendMode.srcIn,
-                      ),
-                      width: 80.0,
-                      height: 80.0,
-                      fit: BoxFit.cover),
-                  _url == null
-                      ? Container()
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(40.0),
-                          child: CachedNetworkImage(
-                              cacheKey: _url,
-                              imageUrl: avatarUrl + _url,
-                              width: 80.0,
-                              height: 80.0,
-                              memCacheWidth: 80 *
-                                  MediaQuery.of(context)
-                                      .devicePixelRatio
-                                      .round(),
-                              fit: BoxFit.cover),
-                        ),
-                ])
+                AvatarWidget(
+                  url: avatarUrl,
+                  endpoint: _url,
+                  size: 80.0,
+                ),
               ]),
               const SizedBox(height: 14.0),
 

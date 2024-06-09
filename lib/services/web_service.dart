@@ -7,6 +7,7 @@ import 'package:izowork/repositories/local_storage/local_storage_repository_inte
 
 class WebService {
   final _dio = Dio();
+
   WebService() {
     _dio.interceptors.add(CurlLoggerDioInterceptor());
   }

@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/api/api.dart';
@@ -33,35 +31,12 @@ class CompaniesListItemWidget extends StatelessWidget {
                 children: [
                   Row(children: [
                     /// AVATAR
-                    Stack(children: [
-                      SvgPicture.asset(
-                        'assets/ic_avatar.svg',
-                        colorFilter: ColorFilter.mode(
-                          HexColors.grey40,
-                          BlendMode.srcIn,
-                        ),
-                        width: 40.0,
-                        height: 40.0,
-                        fit: BoxFit.cover,
-                      ),
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: company.image == null
-                              ? Container()
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  child: CachedNetworkImage(
-                                      cacheKey: company.image!,
-                                      imageUrl:
-                                          companyMedialUrl + company.image!,
-                                      width: 40.0,
-                                      height: 40.0,
-                                      memCacheWidth: 40 *
-                                          (MediaQuery.of(context)
-                                                  .devicePixelRatio)
-                                              .round(),
-                                      fit: BoxFit.cover)))
-                    ]),
+                    AvatarWidget(
+                      url: companyMedialUrl,
+                      endpoint: company.image!,
+                      size: 40.0,
+                    ),
+
                     const SizedBox(width: 10.0),
 
                     /// NAME

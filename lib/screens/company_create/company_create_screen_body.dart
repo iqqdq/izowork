@@ -1,19 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/components.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 
 import 'package:izowork/models/models.dart';
 import 'package:izowork/notifiers/notifiers.dart';
-import 'package:izowork/screens/company/company_screen.dart';
+import 'package:izowork/screens/company/company_page_view_screen.dart';
 import 'package:izowork/screens/contacts/contacts_screen.dart';
 import 'package:izowork/screens/contacts/views/contact_list_item_widget.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/screens/selection/selection_screen.dart';
 import 'package:izowork/views/views.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:provider/provider.dart';
 
 class CompanyCreateScreenBodyWidget extends StatefulWidget {
   final String? address;
@@ -76,7 +74,7 @@ class _CompanyCreateScreenBodyState
             _companyCreateViewModel.company?.name ?? '';
 
         _bimTextEditingController.text =
-            _companyCreateViewModel.company?.phone ?? '';
+            _companyCreateViewModel.company?.bim ?? '';
 
         _addressTextEditingController.text =
             _companyCreateViewModel.company?.address ?? '';
@@ -196,42 +194,11 @@ class _CompanyCreateScreenBodyState
               children: [
                 /// AVATAR
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Stack(children: [
-                    SvgPicture.asset(
-                      'assets/ic_avatar.svg',
-                      colorFilter: ColorFilter.mode(
-                        HexColors.grey40,
-                        BlendMode.srcIn,
-                      ),
-                      width: 80.0,
-                      height: 80.0,
-                      fit: BoxFit.cover,
-                    ),
-
-                    /// URL AVATAR
-                    _url == null
-                        ? Container()
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(40.0),
-                            child: CachedNetworkImage(
-                                cacheKey: _url,
-                                imageUrl: companyMedialUrl + _url,
-                                width: 80.0,
-                                height: 80.0,
-                                memCacheWidth: 80 *
-                                    MediaQuery.of(context)
-                                        .devicePixelRatio
-                                        .round(),
-                                fit: BoxFit.cover)),
-
-                    /// FILE AVATAR
-                    _companyCreateViewModel.file != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(40.0),
-                            child: Image.file(_companyCreateViewModel.file!,
-                                width: 80.0, height: 80.0, fit: BoxFit.cover))
-                        : Container(),
-                  ])
+                  AvatarWidget(
+                    url: companyMedialUrl,
+                    endpoint: _url,
+                    size: 80.0,
+                  ),
                 ]),
                 const SizedBox(height: 24.0),
 
@@ -248,7 +215,7 @@ class _CompanyCreateScreenBodyState
                 /// COMPANY TYPE SELECTION
                 SelectionInputWidget(
                   margin: const EdgeInsets.only(bottom: 10.0),
-                  title: Titles.type,
+                  title: '${Titles.type}*',
                   value: _companyCreateViewModel.type ??
                       _companyCreateViewModel.company?.type ??
                       Titles.notSelected,
@@ -263,7 +230,7 @@ class _CompanyCreateScreenBodyState
                   textEditingController: _nameTextEditingController,
                   focusNode: _nameFocusNode,
                   textCapitalization: TextCapitalization.sentences,
-                  placeholder: Titles.companyName,
+                  placeholder: '${Titles.companyName}*',
                   onTap: () => setState(() => {
                         FocusScope.of(context).unfocus(),
                         _nameFocusNode.requestFocus()
@@ -275,7 +242,7 @@ class _CompanyCreateScreenBodyState
                       setState(() => _nameTextEditingController.clear()),
                 ),
 
-                /// PHONE INPUT
+                /// BIM INPUT
                 InputWidget(
                   margin: const EdgeInsets.only(bottom: 10.0),
                   height: 56.0,
@@ -283,7 +250,7 @@ class _CompanyCreateScreenBodyState
                   focusNode: _bimFocusNode,
                   textCapitalization: TextCapitalization.sentences,
                   textInputType: TextInputType.phone,
-                  placeholder: Titles.companyBIM,
+                  placeholder: '${Titles.companyBIM}*',
                   onTap: () => setState(() => {
                         FocusScope.of(context).unfocus(),
                         _bimFocusNode.requestFocus()
@@ -301,7 +268,7 @@ class _CompanyCreateScreenBodyState
                   textEditingController: _addressTextEditingController,
                   focusNode: _addressFocusNode,
                   textCapitalization: TextCapitalization.sentences,
-                  placeholder: Titles.address,
+                  placeholder: '${Titles.address}*',
                   onTap: () => setState(() => {
                         FocusScope.of(context).unfocus(),
                         _addressFocusNode.requestFocus()
@@ -388,13 +355,17 @@ class _CompanyCreateScreenBodyState
                 _companyCreateViewModel.company == null
                     ? const Padding(
                         padding: EdgeInsets.only(top: 10.0),
-                        child: Text('* ${Titles.addContactWillAllow}',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 14.0,
-                                fontFamily: 'PT Root UI',
-                                fontWeight: FontWeight.w500)))
+                        child: Text(
+                          '* ${Titles.addContactWillAllow}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontSize: 14.0,
+                            fontFamily: 'PT Root UI',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      )
                     : ListView.builder(
                         padding: const EdgeInsets.only(top: 10.0),
                         physics: const NeverScrollableScrollPhysics(),
@@ -402,15 +373,13 @@ class _CompanyCreateScreenBodyState
                         itemCount:
                             _companyCreateViewModel.company?.contacts.length,
                         itemBuilder: (context, index) {
+                          var contact = _companyCreateViewModel
+                                  .company?.contacts[index] ??
+                              _companyCreateViewModel.company!.contacts[index];
+
                           return ContactListItemWidget(
-                            key: ValueKey(_companyCreateViewModel
-                                    .company?.contacts[index] ??
-                                _companyCreateViewModel
-                                    .company!.contacts[index]),
-                            contact: _companyCreateViewModel
-                                    .company?.contacts[index] ??
-                                _companyCreateViewModel
-                                    .company!.contacts[index],
+                            key: ValueKey(contact.id),
+                            contact: contact,
                             onContactTap: () => _showContactSelectionSheet(),
                             onPhoneTap: () => {},
                             onLinkTap: (url) =>
@@ -467,8 +436,8 @@ class _CompanyCreateScreenBodyState
       _addressTextEditingController.text,
       _coordinatesTextEditingController.text,
       _nameTextEditingController.text,
-      _companyCreateViewModel.phone ??
-          _companyCreateViewModel.selectedCompany?.phone ??
+      _companyCreateViewModel.bim ??
+          _companyCreateViewModel.selectedCompany?.bim ??
           '',
       _descriptionTextEditingController.text,
       _requisitesTextEditingController.text,
@@ -478,21 +447,24 @@ class _CompanyCreateScreenBodyState
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => CompanyScreenWidget(
-                          company: company,
-                          onPop: null,
+                    builder: (context) => CompanyPageViewScreenWidget(
+                          id: company.id,
+                          onPop: (company) {},
                         )),
               )
             else
-              {widget.onPop!(company), Navigator.pop(context)}
+              {
+                widget.onPop!(company),
+                Navigator.pop(context),
+              }
           });
 
   void _updateCompany() => _companyCreateViewModel.editCompany(
         _addressTextEditingController.text,
         _coordinatesTextEditingController.text,
         _nameTextEditingController.text,
-        _companyCreateViewModel.phone ??
-            _companyCreateViewModel.selectedCompany?.phone ??
+        _companyCreateViewModel.bim ??
+            _companyCreateViewModel.selectedCompany?.bim ??
             '',
         _descriptionTextEditingController.text,
         _requisitesTextEditingController.text,

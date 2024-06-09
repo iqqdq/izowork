@@ -105,14 +105,18 @@ class _AnalyticsActionsScreenBodyState
                   _analyticsActionsViewModel.traces.isEmpty
               ? Center(
                   child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20.0, right: 20.0, bottom: 100.0),
-                      child: Text(Titles.noResult,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: 16.0,
-                              color: HexColors.grey50))))
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      Titles.noResult,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 16.0,
+                        color: HexColors.grey50,
+                      ),
+                    ),
+                  ),
+                )
               : Container(),
 
           /// INDICATOR
@@ -165,9 +169,13 @@ class _AnalyticsActionsScreenBodyState
         screen = ObjectPageViewScreenWidget(
           id: trace.objectId!,
           phaseId: trace.phaseId,
+          onPop: (object) {},
         );
       } else {
-        screen = ObjectPageViewScreenWidget(id: trace.objectId!);
+        screen = ObjectPageViewScreenWidget(
+          id: trace.objectId!,
+          onPop: (object) {},
+        );
       }
     } else if (trace.dealId != null) {
       screen = DealScreenWidget(id: trace.dealId!);

@@ -4,7 +4,7 @@ import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/screens/deal/deal_screen.dart';
 import 'package:izowork/screens/news_page/news_page_screen.dart';
-import 'package:izowork/screens/object/object_actions/object_action_create_screen.dart';
+import 'package:izowork/screens/action_create/action_create_screen.dart';
 import 'package:izowork/screens/object/object_actions/views/object_action_list_item_widget.dart';
 import 'package:izowork/screens/phase/phase_screen.dart';
 import 'package:izowork/screens/task/task_screen.dart';
@@ -67,9 +67,8 @@ class _ObjectActionsScreenBodyState extends State<ObjectActionsScreenBodyWidget>
 
     return Scaffold(
       backgroundColor: HexColors.white,
-      floatingActionButton: FloatingButtonWidget(
-        onTap: () => _showActionCreateScreen(),
-      ),
+      floatingActionButton:
+          FloatingButtonWidget(onTap: () => _showActionCreateScreen()),
       body: SizedBox.expand(
         child: Stack(children: [
           const SeparatorWidget(),
@@ -98,6 +97,25 @@ class _ObjectActionsScreenBodyState extends State<ObjectActionsScreenBodyWidget>
                     );
                   })),
 
+          /// EMPTY LIST TEXT
+          _objectActionsViewModel.loadingStatus == LoadingStatus.completed &&
+                  _objectActionsViewModel.traces.isEmpty
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      Titles.noResult,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 16.0,
+                        color: HexColors.grey50,
+                      ),
+                    ),
+                  ),
+                )
+              : Container(),
+
           /// INDICATOR
           _objectActionsViewModel.loadingStatus == LoadingStatus.searching
               ? const LoadingIndicatorWidget()
@@ -124,7 +142,7 @@ class _ObjectActionsScreenBodyState extends State<ObjectActionsScreenBodyWidget>
       barrierColor: Colors.black.withOpacity(0.6),
       backgroundColor: HexColors.white,
       context: context,
-      builder: (sheetContext) => ObjectActionCreateSheetWidget(
+      builder: (sheetContext) => ActionCreateSheetWidget(
             onTap: (text) => {
               Navigator.pop(context),
               _objectActionsViewModel.addObjectTrace(text)

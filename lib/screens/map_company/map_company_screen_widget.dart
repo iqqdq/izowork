@@ -4,27 +4,27 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:izowork/components/components.dart';
-import 'package:izowork/screens/company/company_screen.dart';
+import 'package:izowork/screens/company/company_page_view_screen.dart';
 import 'package:izowork/screens/profile/profile_screen.dart';
 import 'package:izowork/api/api.dart';
 import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/views/views.dart';
 
-class MapCompanyScreenBodyWidget extends StatefulWidget {
+class MapCompanyScreenWidget extends StatefulWidget {
   final Company company;
   final bool? hideInfoButton;
 
-  const MapCompanyScreenBodyWidget({
+  const MapCompanyScreenWidget({
     Key? key,
     required this.company,
     this.hideInfoButton,
   }) : super(key: key);
 
   @override
-  _MapCompanyScreenBodyState createState() => _MapCompanyScreenBodyState();
+  _MapCompanyScreenState createState() => _MapCompanyScreenState();
 }
 
-class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
+class _MapCompanyScreenState extends State<MapCompanyScreenWidget> {
   late Company _company;
 
   @override
@@ -32,33 +32,6 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
     _company = widget.company;
 
     super.initState();
-  }
-
-  void _showCompanyScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CompanyScreenWidget(
-          company: _company,
-          onPop: (company) => setState(() => _company = company ?? _company),
-        ),
-      ),
-    );
-  }
-
-  Future _showUserScreen() async {
-    User? user = await GetIt.I<LocalStorageRepositoryInterface>().getUser();
-
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ProfileScreenWidget(
-              isMine: _company.manager?.id == user?.id,
-              user: _company.manager!,
-              onPop: (user) => {
-                    if (context.mounted) setState(() => _company.manager = user)
-                  }),
-        ));
   }
 
   @override
@@ -134,6 +107,17 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
                   ]),
                   const SizedBox(height: 16.0),
 
+                  ///  NAME
+                  const TitleWidget(
+                    padding: EdgeInsets.only(bottom: 4.0),
+                    text: Titles.companyName,
+                    isSmall: true,
+                  ),
+                  SubtitleWidget(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    text: _company.name,
+                  ),
+
                   /// MANAGER
                   GestureDetector(
                     child: Column(
@@ -150,7 +134,6 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400,
                               fontFamily: 'PT Root UI',
-                              decoration: TextDecoration.underline,
                             ),
                           ),
                         ]),
@@ -199,15 +182,19 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
                   ),
                   const SizedBox(height: 16.0),
 
-                  /// PHONE
+                  /// BIM
                   const TitleWidget(
-                    text: Titles.phone,
+                    text: Titles.companyBIM,
                     padding: EdgeInsets.zero,
                     isSmall: true,
                   ),
                   const SizedBox(height: 4.0),
                   Text(
-                    _company.phone ?? '-',
+                    _company.bim == null
+                        ? '-'
+                        : _company.bim!.isEmpty
+                            ? '-'
+                            : _company.bim!,
                     style: TextStyle(
                       color: HexColors.black,
                       fontSize: 14.0,
@@ -266,21 +253,8 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
                     isSmall: true,
                   ),
                   const SizedBox(height: 4.0),
-                  Text(_company.productType?.name ?? '-',
-                      style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 14.0,
-                          fontFamily: 'PT Root UI')),
-                  const SizedBox(height: 16.0),
-
-                  /// SUCCESS DEAL COUNT
-                  const TitleWidget(
-                      text: Titles.successDealCount,
-                      padding: EdgeInsets.zero,
-                      isSmall: true),
-                  const SizedBox(height: 4.0),
                   Text(
-                    _company.successfulDeals.toString(),
+                    _company.productType?.name ?? '-',
                     style: TextStyle(
                       color: HexColors.black,
                       fontSize: 14.0,
@@ -288,9 +262,16 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
+
+                  /// SUCCESS DEAL COUNT
+                  const TitleWidget(
+                    text: Titles.successDealCount,
+                    padding: EdgeInsets.zero,
+                    isSmall: true,
+                  ),
                   const SizedBox(height: 4.0),
                   Text(
-                    _company.productType?.name ?? '-',
+                    _company.successfulDeals.toString(),
                     style: TextStyle(
                       color: HexColors.black,
                       fontSize: 14.0,
@@ -330,5 +311,36 @@ class _MapCompanyScreenBodyState extends State<MapCompanyScreenBodyWidget> {
         ]),
       ),
     );
+  }
+
+  // MARK: -
+  // MARK: - FUNCTIONS
+
+  void _showCompanyScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CompanyPageViewScreenWidget(
+          id: _company.id,
+          onPop: (company) => _company = company ?? _company,
+        ),
+      ),
+    ).whenComplete(() =>
+        Future.delayed(const Duration(milliseconds: 500), () => setState));
+  }
+
+  Future _showUserScreen() async {
+    User? user = await GetIt.I<LocalStorageRepositoryInterface>().getUser();
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileScreenWidget(
+              isMine: _company.manager?.id == user?.id,
+              user: _company.manager!,
+              onPop: (user) => {
+                    if (context.mounted) setState(() => _company.manager = user)
+                  }),
+        ));
   }
 }

@@ -17,20 +17,20 @@ class Trace {
       required this.traceGroup,
       this.office});
 
-  String id;
-  String? subjectId;
-  String? objectId;
-  String? dealId;
-  String? taskId;
-  String? newsId;
-  String? phaseId;
-  String? traceTypeId;
-  String? traceGroupId;
-  String? description;
-  DateTime createdAt;
-  TraceType traceType;
-  TraceGroup traceGroup;
-  Office? office;
+  final String id;
+  final String? subjectId;
+  final String? objectId;
+  final String? dealId;
+  final String? taskId;
+  final String? newsId;
+  final String? phaseId;
+  final String? traceTypeId;
+  final String? traceGroupId;
+  final String? description;
+  final DateTime createdAt;
+  final TraceType traceType;
+  final TraceGroup traceGroup;
+  final Office? office;
 
   factory Trace.fromJson(Map<String, dynamic> json) => Trace(
         id: json["id"],

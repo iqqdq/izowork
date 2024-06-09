@@ -64,7 +64,7 @@ class FirebaseMessagingService {
           AuthorizationStatus.provisional) {
         return true;
       } else {
-        return true;
+        return false;
       }
     }
 

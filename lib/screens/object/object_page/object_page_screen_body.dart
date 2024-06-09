@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/components.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/dialog/dialog_screen.dart';
 import 'package:izowork/screens/documents/documents_screen.dart';
@@ -15,10 +16,12 @@ import 'package:provider/provider.dart';
 
 class ObjectPageScreenBodyWidget extends StatefulWidget {
   final String? phaseId;
+  final Function(MapObject?) onPop;
 
   const ObjectPageScreenBodyWidget({
     Key? key,
     this.phaseId,
+    required this.onPop,
   }) : super(key: key);
 
   @override
@@ -49,6 +52,13 @@ class _ObjectPageScreenBodyState extends State<ObjectPageScreenBodyWidget>
                     ))).whenComplete(() => _objectPageViewModel.getPhaseList());
       }
     });
+  }
+
+  @override
+  void dispose() {
+    widget.onPop(_objectPageViewModel.object);
+
+    super.dispose();
   }
 
   @override

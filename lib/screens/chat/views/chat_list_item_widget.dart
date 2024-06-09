@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/api/api.dart';
@@ -57,46 +55,13 @@ class ChatListItemWidget extends StatelessWidget {
                         horizontal: 14.0, vertical: 10.0),
                     child: Row(children: [
                       /// AVATAR
-                      Stack(children: [
-                        Container(
-                          width: 40.0,
-                          height: 40.0,
-                          padding: EdgeInsets.all(_isGroupChat ? 8.0 : 0.0),
-                          decoration: BoxDecoration(
-                              color: _isGroupChat
-                                  ? HexColors.additionalViolet.withOpacity(0.8)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(20.0)),
-                          child: SvgPicture.asset(
-                            _isGroupChat
-                                ? 'assets/ic_group.svg'
-                                : 'assets/ic_avatar.svg',
-                            colorFilter: ColorFilter.mode(
-                              _isGroupChat ? HexColors.white : HexColors.grey30,
-                              BlendMode.srcIn,
-                            ),
-                            width: 40.0,
-                            height: 40.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        url == null
-                            ? Container()
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: CachedNetworkImage(
-                                  cacheKey: url,
-                                  imageUrl: avatarUrl + url,
-                                  width: 40.0,
-                                  height: 40.0,
-                                  memCacheWidth: 40 *
-                                      MediaQuery.of(context)
-                                          .devicePixelRatio
-                                          .round(),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                      ]),
+                      AvatarWidget(
+                        url: avatarUrl,
+                        endpoint: url,
+                        size: 40.0,
+                        isGroupAvatar: _isGroupChat,
+                      ),
+
                       const SizedBox(width: 10.0),
 
                       Expanded(

@@ -1,6 +1,7 @@
 export 'authorization.dart';
 export 'chat.dart';
 export 'company.dart';
+export 'company_action.dart';
 export 'company_analytics.dart';
 export 'company_type.dart';
 export 'contact.dart';

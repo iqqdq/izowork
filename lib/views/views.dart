@@ -27,3 +27,4 @@ export 'status_widget.dart';
 export 'subtitle_widget.dart';
 export 'title_widget.dart';
 export 'transparent_button_widget_widget.dart';
+export 'avatar_widget.dart';

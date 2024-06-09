@@ -17,3 +17,4 @@ export 'product_repository.dart';
 export 'task_repository.dart';
 export 'trace_repository.dart';
 export 'user_repository.dart';
+export 'company_action_repository.dart';

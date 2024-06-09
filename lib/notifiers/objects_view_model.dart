@@ -100,6 +100,15 @@ class ObjectsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
+  void updateObject(MapObject? object) {
+    if (object == null) return;
+
+    int index = _objects.indexWhere((element) => element.id == object.id);
+    _objects[index] = object;
+
+    Future.delayed(const Duration(milliseconds: 300), () => notifyListeners());
+  }
+
   void setFilter(ObjectsFilter? objectsFilter) {
     if (objectsFilter == null) return;
     _objectsFilter = objectsFilter;

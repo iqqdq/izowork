@@ -4,6 +4,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+import 'package:izowork/screens/map_company/map_company_screen_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,6 @@ import 'package:izowork/views/views.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
 import 'package:izowork/screens/company_create/company_create_screen.dart';
 import 'package:izowork/screens/map/views/map_control_widget.dart';
-import 'package:izowork/screens/map_company/map_object_screen_widget.dart';
 import 'package:izowork/screens/map_object/map_object_screen_widget.dart';
 import 'package:izowork/screens/map_object/views/map_add_object_widget.dart';
 import 'package:izowork/screens/object_create/object_create_screen.dart';
@@ -362,9 +362,8 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                 ),
               )
             : MapCompanyScreenWidget(
-                company: _mapViewModel.companies.firstWhere(
-                  (element) => element.id == id,
-                ),
+                company: _mapViewModel.companies
+                    .firstWhere((element) => element.id == id),
               ),
       );
 

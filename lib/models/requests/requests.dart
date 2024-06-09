@@ -2,6 +2,7 @@ export 'authorization_request.dart';
 export 'chat_connect_request.dart';
 export 'chat_dm_request.dart';
 export 'company_request.dart';
+export 'company_action_request.dart';
 export 'contact_request.dart';
 export 'deal_file_request.dart';
 export 'deal_process_info_request.dart';

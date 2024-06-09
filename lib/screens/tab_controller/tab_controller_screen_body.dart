@@ -127,6 +127,7 @@ class _TabControllerScreenBodyState
             builder: (context) => ObjectPageViewScreenWidget(
                   id: notificationEntity.metadata.objectId!,
                   phaseId: notificationEntity.metadata.phaseId,
+                  onPop: (object) {},
                 ))),
       );
     } else if (notificationEntity.metadata.dealId != null) {

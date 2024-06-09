@@ -1,10 +1,3 @@
-import 'dart:convert';
-
-TraceRequest traceRequestFromJson(String str) =>
-    TraceRequest.fromJson(json.decode(str));
-
-String traceRequestToJson(TraceRequest data) => json.encode(data.toJson());
-
 class TraceRequest {
   String action;
   String objectId;

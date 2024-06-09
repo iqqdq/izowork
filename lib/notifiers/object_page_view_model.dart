@@ -178,6 +178,7 @@ class ObjectPageViewModel with ChangeNotifier {
 
   void updateObject(MapObject? object) {
     _object = object;
-    notifyListeners();
+
+    Future.delayed(const Duration(milliseconds: 300), () => notifyListeners());
   }
 }

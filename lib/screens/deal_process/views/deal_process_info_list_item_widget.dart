@@ -1,7 +1,6 @@
 // import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/api/api.dart';
@@ -45,52 +44,34 @@ class DealProcessInfoListItemWidget extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             children: [
-              /// AVATAR
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Expanded(
-                    child: GestureDetector(
-                        onTap: () => onUserTap(),
-                        child: Row(children: [
-                          Stack(children: [
-                            SvgPicture.asset('assets/ic_avatar.svg',
-                                colorFilter: ColorFilter.mode(
-                                  HexColors.grey40,
-                                  BlendMode.srcIn,
-                                ),
-                                width: 24.0,
-                                height: 24.0,
-                                fit: BoxFit.cover),
-                            url == null
-                                ? Container()
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: CachedNetworkImage(
-                                      cacheKey: url,
-                                      imageUrl: avatarUrl + url,
-                                      width: 24.0,
-                                      height: 24.0,
-                                      memCacheWidth: 24 *
-                                          MediaQuery.of(context)
-                                              .devicePixelRatio
-                                              .round(),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                          ]),
-                          const SizedBox(width: 10.0),
+                  child: GestureDetector(
+                    onTap: () => onUserTap(),
+                    child: Row(children: [
+                      /// AVATAR
+                      AvatarWidget(
+                        url: avatarUrl,
+                        endpoint: url,
+                        size: 24.0,
+                      ),
 
-                          /// NAME
-                          Expanded(
-                              child: Text(
-                            information.user?.name ?? '-',
-                            style: TextStyle(
-                                color: HexColors.black,
-                                fontSize: 14.0,
-                                fontFamily: 'PT Root UI',
-                                fontWeight: FontWeight.w600),
-                          )),
-                          const SizedBox(width: 10.0),
-                        ]))),
+                      const SizedBox(width: 10.0),
+
+                      /// NAME
+                      Expanded(
+                          child: Text(
+                        information.user?.name ?? '-',
+                        style: TextStyle(
+                            color: HexColors.black,
+                            fontSize: 14.0,
+                            fontFamily: 'PT Root UI',
+                            fontWeight: FontWeight.w600),
+                      )),
+                      const SizedBox(width: 10.0),
+                    ]),
+                  ),
+                ),
 
                 /// DATE
                 SubtitleWidget(

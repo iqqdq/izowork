@@ -230,7 +230,8 @@ class DealViewModel with ChangeNotifier {
   ) {
     _deal = deal;
     _dealProducts = dealProducts;
-    notifyListeners();
+
+    Future.delayed(const Duration(milliseconds: 300), () => notifyListeners());
   }
 
   Future openFile(int index) async {
@@ -249,8 +250,6 @@ class DealViewModel with ChangeNotifier {
               notifyListeners(),
             });
   }
-
-  void updateProcess(String id) {}
 
   void expand(int index) {
     _expanded.contains(index) ? _expanded.remove(index) : _expanded.add(index);

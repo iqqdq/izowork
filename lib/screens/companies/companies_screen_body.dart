@@ -5,7 +5,7 @@ import 'package:izowork/components/components.dart';
 import 'package:izowork/notifiers/notifiers.dart';
 import 'package:izowork/screens/companies/companies_filter_sheet/companies_filter_page_view_screen.dart';
 import 'package:izowork/screens/companies/views/companies_list_item_widget.dart';
-import 'package:izowork/screens/company/company_screen.dart';
+import 'package:izowork/screens/company/company_page_view_screen.dart';
 import 'package:izowork/screens/company_create/company_create_screen.dart';
 import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -202,8 +202,8 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
   void _showCompanyPageViewScreen(int index) => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CompanyScreenWidget(
-            company: _companiesViewModel.companies[index],
+          builder: (context) => CompanyPageViewScreenWidget(
+            id: _companiesViewModel.companies[index].id,
             onPop: (company) => _companiesViewModel.updateCompany(
               index,
               company,
@@ -213,25 +213,26 @@ class _CompaniesScreenBodyState extends State<CompaniesScreenBodyWidget> {
       );
 
   void _showCompaniesFilterSheet() => showCupertinoModalBottomSheet(
-      enableDrag: false,
-      topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
-      backgroundColor: HexColors.white,
-      context: context,
-      builder: (sheetContext) => CompaniesFilterPageViewScreenWidget(
-          companiesFilter: _companiesViewModel.companiesFilter,
-          onPop: (companiesFilter) => {
-                if (companiesFilter == null)
-                  {
-                    _companiesViewModel.resetFilter(),
-                    _onRefresh(),
-                  }
-                else
-                  {
-                    _companiesViewModel.setFiler(companiesFilter),
-                    _onRefresh(),
-                  }
-              }));
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withOpacity(0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (sheetContext) => CompaniesFilterPageViewScreenWidget(
+            companiesFilter: _companiesViewModel.companiesFilter,
+            onPop: (companiesFilter) => {
+                  if (companiesFilter == null)
+                    {
+                      _companiesViewModel.resetFilter(),
+                      _onRefresh(),
+                    }
+                  else
+                    {
+                      _companiesViewModel.setFiler(companiesFilter),
+                      _onRefresh(),
+                    }
+                }),
+      );
 
   void _showCreateCompanyScreen() => Navigator.push(
       context,

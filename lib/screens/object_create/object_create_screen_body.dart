@@ -485,8 +485,10 @@ class _ObjectCreateScreenBodyState extends State<ObjectCreateScreenBodyWidget> {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ObjectPageViewScreenWidget(id: object.id)))
+                      builder: (context) => ObjectPageViewScreenWidget(
+                            id: object.id,
+                            onPop: (object) {},
+                          )))
             }
         },
       );

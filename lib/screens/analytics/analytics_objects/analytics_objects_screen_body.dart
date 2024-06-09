@@ -145,5 +145,7 @@ class _AnalyticsObjectsScreenBodyState
       context,
       MaterialPageRoute(
           builder: (context) => ObjectPageViewScreenWidget(
-              id: _objectsViewModel.objects[index].id)));
+                id: _objectsViewModel.objects[index].id,
+                onPop: (object) {},
+              )));
 }

@@ -61,7 +61,8 @@ class MoreViewModel with ChangeNotifier {
 
   void updateUser(User user) {
     _user = user;
-    notifyListeners();
+
+    Future.delayed(const Duration(milliseconds: 300), () => notifyListeners());
   }
 
   Future logout() async =>

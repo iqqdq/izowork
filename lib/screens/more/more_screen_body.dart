@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:izowork/components/components.dart';
 
 import 'package:izowork/notifiers/notifiers.dart';
@@ -74,41 +72,13 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     /// AVATAR
+                                    AvatarWidget(
+                                      url: avatarUrl,
+                                      endpoint: _moreViewModel.user?.avatar,
+                                      size: 80.0,
+                                    ),
 
-                                    Stack(children: [
-                                      SvgPicture.asset(
-                                        'assets/ic_avatar.svg',
-                                        colorFilter: ColorFilter.mode(
-                                          HexColors.grey40,
-                                          BlendMode.srcIn,
-                                        ),
-                                        width: 80.0,
-                                        height: 80.0,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      _moreViewModel.user?.avatar == null
-                                          ? Container()
-                                          : _moreViewModel.user!.avatar!.isEmpty
-                                              ? Container()
-                                              : ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          40.0),
-                                                  child: CachedNetworkImage(
-                                                    cacheKey: _moreViewModel
-                                                        .user!.avatar,
-                                                    imageUrl: avatarUrl +
-                                                        _moreViewModel
-                                                            .user!.avatar!,
-                                                    width: 80.0,
-                                                    height: 80.0,
-                                                    memCacheWidth: 80 *
-                                                        MediaQuery.of(context)
-                                                            .devicePixelRatio
-                                                            .round(),
-                                                    fit: BoxFit.cover,
-                                                  )),
-                                    ]),
+                                    /// EMAIL
                                     TitleWidget(
                                         text: _moreViewModel.user?.email ?? '',
                                         padding: const EdgeInsets.only(

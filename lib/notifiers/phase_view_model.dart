@@ -164,10 +164,10 @@ class PhaseViewModel with ChangeNotifier {
         .whenComplete(() => notifyListeners());
   }
 
-  void updateDeals(Deal deal) {
-    _deals.add(deal);
-    notifyListeners();
-  }
+  // void updateDeals(Deal deal) {
+  //   _deals.add(deal);
+  //   notifyListeners();
+  // }
 
   void updatePhaseParams(
     List<PhaseProduct> newPhaseProducts,

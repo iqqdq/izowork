@@ -17,7 +17,7 @@ class CompanyCreateViewModel with ChangeNotifier {
 
   CompanyType? _companyType;
 
-  String? _phone;
+  String? _bim;
 
   String? _type;
 
@@ -35,7 +35,7 @@ class CompanyCreateViewModel with ChangeNotifier {
 
   Company? get company => _company;
 
-  String? get phone => _phone;
+  String? get bim => _bim;
 
   String? get type => _type;
 
@@ -44,7 +44,7 @@ class CompanyCreateViewModel with ChangeNotifier {
   CompanyCreateViewModel(this.selectedCompany) {
     if (selectedCompany != null) {
       _company = selectedCompany;
-      _phone = selectedCompany?.phone;
+      _bim = selectedCompany?.bim;
       _productType = selectedCompany?.productType;
       notifyListeners();
     }

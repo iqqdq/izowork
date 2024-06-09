@@ -2,14 +2,12 @@
 import 'dart:io';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
-
 import 'package:izowork/components/components.dart';
 import 'package:izowork/helpers/helpers.dart';
 import 'package:izowork/repositories/repositories.dart';
-import 'package:izowork/screens/products/products_filter_sheet/products_filter_page_view_screen_body.dart';
 
-class CompanyViewModel with ChangeNotifier {
-  final Company selectedCompany;
+class CompanyPageViewModel with ChangeNotifier {
+  final String id;
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
 
@@ -17,17 +15,8 @@ class CompanyViewModel with ChangeNotifier {
 
   Company? get company => _company;
 
-  final List<Product> _products = [];
-
-  List<Product> get products => _products;
-
-  ProductsFilter? _productsFilter;
-
-  ProductsFilter? get productsFilter => _productsFilter;
-
-  CompanyViewModel(this.selectedCompany) {
-    _company = selectedCompany;
-    getCompanyById(selectedCompany.id);
+  CompanyPageViewModel(this.id) {
+    getCompanyById(id);
   }
 
   // MARK: -
@@ -57,26 +46,16 @@ class CompanyViewModel with ChangeNotifier {
   // MARK: - FUNCTIONS
 
   void setManager(User? user) {
+    if (user == null) return;
+
     _company?.manager = user;
     notifyListeners();
   }
 
   void setContact(Contact contact) {
-    if (_company != null) {
-      _company?.contacts.removeWhere(
-        (element) => element.id == contact.id,
-      );
-    }
-
-    selectedCompany.contacts.removeWhere(
-      (element) => element.id == contact.id,
-    );
+    _company?.contacts.insert(0, contact);
 
     notifyListeners();
-  }
-
-  void resetFilter() {
-    _productsFilter = null;
   }
 
   void openUrl(String url) async {

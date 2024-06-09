@@ -172,9 +172,13 @@ class _NotificationsScreenBodyState
         screen = ObjectPageViewScreenWidget(
           id: metadata.objectId!,
           phaseId: metadata.phaseId,
+          onPop: (object) {},
         );
       } else {
-        screen = ObjectPageViewScreenWidget(id: metadata.objectId!);
+        screen = ObjectPageViewScreenWidget(
+          id: metadata.objectId!,
+          onPop: (object) {},
+        );
       }
     } else if (metadata.dealId != null) {
       screen = DealScreenWidget(id: metadata.dealId!);

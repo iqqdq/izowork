@@ -3,14 +3,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:izowork/components/components.dart';
-
 import 'package:izowork/models/models.dart';
 import 'package:izowork/api/api.dart';
-import 'package:izowork/views/status_widget.dart';
-import 'package:izowork/views/transparent_button_widget_widget.dart';
+import 'package:izowork/views/views.dart';
 
 class NewsListItemWidget extends StatefulWidget {
   final String tag;
@@ -247,43 +244,13 @@ class _NewsListItemState extends State<NewsListItemWidget> {
                                 borderRadius: BorderRadius.circular(16.0),
                                 child: Row(children: [
                                   /// AVATAR
-                                  Stack(children: [
-                                    SvgPicture.asset(
-                                      'assets/ic_avatar.svg',
-                                      colorFilter: ColorFilter.mode(
-                                        HexColors.grey40,
-                                        BlendMode.srcIn,
-                                      ),
-                                      width: 24.0,
-                                      height: 24.0,
-                                      fit: BoxFit.cover,
-                                    ),
-                                    widget.news.user == null
-                                        ? Container()
-                                        : widget.news.user!.avatar == null
-                                            ? Container()
-                                            : widget.news.user!.avatar!.isEmpty
-                                                ? Container()
-                                                : ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12.0),
-                                                    child: CachedNetworkImage(
-                                                      cacheKey: widget
-                                                          .news.user!.avatar,
-                                                      imageUrl: avatarUrl +
-                                                          widget.news.user!
-                                                              .avatar!,
-                                                      width: 24.0,
-                                                      height: 24.0,
-                                                      memCacheWidth: 24 *
-                                                          MediaQuery.of(context)
-                                                              .devicePixelRatio
-                                                              .round(),
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                  ]),
+
+                                  AvatarWidget(
+                                    url: avatarUrl,
+                                    endpoint: widget.news.user!.avatar,
+                                    size: 24.0,
+                                  ),
+
                                   const SizedBox(width: 10.0),
 
                                   /// COMMENT NAME

@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:izowork/api/api.dart';
 
 import 'package:izowork/components/components.dart';
@@ -30,43 +28,12 @@ class PhaseChecklistMessageItemWidget extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         GestureDetector(
           child: Row(children: [
-            /// USER AVATAR
-            Stack(children: [
-              Container(
-                width: 30.0,
-                height: 30.0,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: SvgPicture.asset(
-                  'assets/ic_avatar.svg',
-                  colorFilter: ColorFilter.mode(
-                    HexColors.grey30,
-                    BlendMode.srcIn,
-                  ),
-                  width: 40.0,
-                  height: 40.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-              /// AVATAR
-              _url == null
-                  ? Container()
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: CachedNetworkImage(
-                        cacheKey: _url,
-                        imageUrl: avatarUrl + _url,
-                        width: 30.0,
-                        height: 30.0,
-                        memCacheWidth: 30 *
-                            MediaQuery.of(context).devicePixelRatio.round(),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-            ]),
+            ///  AVATAR
+            AvatarWidget(
+              url: avatarUrl,
+              endpoint: _url,
+              size: 30.0,
+            ),
             const SizedBox(width: 12.0),
 
             /// USER NAME

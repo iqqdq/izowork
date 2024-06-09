@@ -72,7 +72,7 @@ class ObjectActionsViewModel with ChangeNotifier {
     notifyListeners();
 
     await TraceRepository()
-        .doAction(TraceRequest(
+        .createAction(TraceRequest(
           action: text,
           objectId: id,
         ))

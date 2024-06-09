@@ -5,7 +5,7 @@ class Company {
     required this.id,
     required this.name,
     required this.address,
-    required this.phone,
+    required this.bim,
     this.lat,
     this.long,
     this.email,
@@ -22,7 +22,7 @@ class Company {
   String id;
   String name;
   String? address;
-  String? phone;
+  String? bim;
   double? lat;
   double? long;
   String? email;
@@ -39,7 +39,7 @@ class Company {
         id: json["id"],
         name: json["name"],
         address: json["address"],
-        phone: json["phone"],
+        bim: json["phone"],
         lat: json["lat"] == 0 ? null : json["lat"],
         long: json["long"] == 0 ? null : json["long"],
         email: json["email"] ?? '-',
