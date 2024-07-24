@@ -54,17 +54,21 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       if (_seconds == 60) {
         timer.cancel();
-        setState(() => {_isRecording = false, _seconds = 0, _minutes = 0});
+        setState(() {
+          _isRecording = false;
+          _seconds = 0;
+          _minutes = 0;
+        });
 
         if (widget.onRecordCanceled != null) {
           widget.onRecord!();
         }
       } else {
-        setState(() => {
-              _seconds++,
-              _seconds = _seconds == 59 ? 0 : _seconds,
-              _minutes = _seconds ~/ 60
-            });
+        setState(() {
+          _seconds++;
+          _seconds = _seconds == 59 ? 0 : _seconds;
+          _minutes = _seconds ~/ 60;
+        });
       }
     });
   }
@@ -184,18 +188,22 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                        onTap: () => widget.onClipTap!(),
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
-                                        child: Center(
-                                            child: SvgPicture.asset(
-                                                'assets/ic_clip.svg',
-                                                width: 38.0,
-                                                height: 38.0,
-                                                fit: BoxFit.scaleDown))))
-                              ])),
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () => widget.onClipTap!(),
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    child: Center(
+                                      child: SvgPicture.asset(
+                                        'assets/ic_clip.svg',
+                                        width: 38.0,
+                                        height: 38.0,
+                                        fit: BoxFit.scaleDown,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ]),
+                        ),
 
               _isRecording
                   ? Padding(
@@ -283,11 +291,11 @@ class _ChatMessageBarState extends State<ChatMessageBarWidget> {
                                   /// CANCEL RECORD AUDIO
                                   widget.onRecordCanceled!(),
                                 },
-                              setState(() => {
-                                    _isRecording = false,
-                                    _seconds = 0,
-                                    _minutes = 0
-                                  }),
+                              setState(() {
+                                _isRecording = false;
+                                _seconds = 0;
+                                _minutes = 0;
+                              }),
                               _timer?.cancel(),
                             })
               ]),

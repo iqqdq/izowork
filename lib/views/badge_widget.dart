@@ -19,7 +19,7 @@ class BadgeWidget extends StatelessWidget {
       backgroundColor: HexColors.additionalViolet,
       label: Text(
           value.toString().length > 3
-              ? value.toString().substring(0, 2) + '...'
+              ? value.toString().substring(0, 3) + '...'
               : value.toString(),
           style: TextStyle(
             fontSize: 12.0,

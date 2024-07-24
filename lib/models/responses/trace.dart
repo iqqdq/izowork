@@ -43,7 +43,7 @@ class Trace {
         traceTypeId: json["trace_type_id"],
         traceGroupId: json["trace_group_id"],
         description: json["description"],
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: DateTime.parse(json["created_at"]).toUtc().toLocal(),
         traceType: TraceType.fromJson(json["trace_type"]),
         traceGroup: TraceGroup.fromJson(json["trace_group"]),
         office: json["office"] == null ? null : Office.fromJson(json["office"]),

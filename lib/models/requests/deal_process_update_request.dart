@@ -1,8 +1,3 @@
-import 'dart:convert';
-
-String dealProcessUpdateRequestToJson(DealProcessUpdateRequest data) =>
-    json.encode(data.toJson());
-
 class DealProcessUpdateRequest {
   DealProcessUpdateRequest({
     required this.hidden,

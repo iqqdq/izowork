@@ -27,17 +27,19 @@ class _BackButtonState extends State<BackButtonWidget> {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         child: Row(children: [
-          SvgPicture.asset(widget.asset ?? 'assets/ic_back_arrow.svg',
-              colorFilter: widget.asset == null
-                  ? ColorFilter.mode(
-                      _isHighlight
-                          ? HexColors.secondaryDark
-                          : HexColors.primaryDark,
-                      BlendMode.srcIn,
-                    )
-                  : null,
-              width: 24.0,
-              height: 24.0),
+          SvgPicture.asset(
+            widget.asset ?? 'assets/ic_back_arrow.svg',
+            colorFilter: widget.asset == null
+                ? ColorFilter.mode(
+                    _isHighlight
+                        ? HexColors.secondaryDark
+                        : HexColors.primaryDark,
+                    BlendMode.srcIn,
+                  )
+                : null,
+            width: 24.0,
+            height: 24.0,
+          ),
           SizedBox(width: widget.title == null ? 0.0 : 4.0),
           widget.title == null
               ? Container()

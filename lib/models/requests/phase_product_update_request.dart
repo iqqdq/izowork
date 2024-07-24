@@ -1,8 +1,3 @@
-import 'dart:convert';
-
-String phaseProductUpdateRequestToJson(PhaseProductUpdateRequest data) =>
-    json.encode(data.toJson());
-
 class PhaseProductUpdateRequest {
   PhaseProductUpdateRequest({
     this.count,

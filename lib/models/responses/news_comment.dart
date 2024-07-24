@@ -19,7 +19,7 @@ class NewsComment {
 
   factory NewsComment.fromJson(Map<String, dynamic> json) => NewsComment(
         comment: json["comment"],
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: DateTime.parse(json["created_at"]).toUtc().toLocal(),
         id: json["id"],
         newsId: json["news_id"],
         user: User.fromJson(json["user"]),

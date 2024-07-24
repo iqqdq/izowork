@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-String userRequestToJson(UserRequest data) => json.encode(data.toJson());
-
 class UserRequest {
   UserRequest({
     this.email,

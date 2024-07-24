@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-String newsRequestToJson(NewsRequest data) => json.encode(data.toJson());
-
 class NewsRequest {
   NewsRequest({
     required this.description,

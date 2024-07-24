@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-String objectRequestToJson(ObjectRequest data) => json.encode(data.toJson());
-
 class ObjectRequest {
   ObjectRequest({
     this.id,

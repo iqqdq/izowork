@@ -1,4 +1,4 @@
-extension DateTimeExtension on DateTime {
+extension DateTimeDayExtension on DateTime {
   String getDayShortName() {
     switch (month) {
       case 1:

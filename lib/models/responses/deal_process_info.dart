@@ -10,7 +10,7 @@ class DealProcessInfo {
       required this.userId,
       this.user});
 
-  String createdAt;
+  DateTime createdAt;
   String dealStageProcessId;
   String description;
   List<DealProcessInfoFile> files;
@@ -20,7 +20,7 @@ class DealProcessInfo {
 
   factory DealProcessInfo.fromJson(Map<String, dynamic> json) =>
       DealProcessInfo(
-        createdAt: json["created_at"],
+        createdAt: DateTime.parse(json["created_at"]).toUtc().toLocal(),
         dealStageProcessId: json["deal_stage_process_id"],
         description: json["description"],
         files: List<DealProcessInfoFile>.from(

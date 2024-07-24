@@ -34,3 +34,4 @@ export 'task.dart';
 export 'task_state.dart';
 export 'trace.dart';
 export 'user.dart';
+export 'folder.dart';

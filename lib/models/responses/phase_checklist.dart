@@ -32,8 +32,9 @@ class PhaseChecklist {
   final bool isCompleted;
   final String name;
   final String phaseId;
-  String state;
+  final String state;
   final String type;
+  final DateTime? deadline;
 
   PhaseChecklist({
     required this.id,
@@ -42,6 +43,7 @@ class PhaseChecklist {
     required this.phaseId,
     required this.state,
     required this.type,
+    this.deadline,
   });
 
   factory PhaseChecklist.fromJson(Map<String, dynamic> json) => PhaseChecklist(
@@ -51,5 +53,8 @@ class PhaseChecklist {
         phaseId: json["phase_id"],
         state: json["state"],
         type: json["type"],
+        deadline: json["deadline"] == null
+            ? null
+            : DateTime.parse(json["deadline"]).toUtc().toLocal(),
       );
 }

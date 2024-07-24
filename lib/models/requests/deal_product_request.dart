@@ -1,8 +1,3 @@
-import 'dart:convert';
-
-String dealProductRequestToJson(DealProductRequest data) =>
-    json.encode(data.toJson());
-
 class DealProductRequest {
   DealProductRequest({
     required this.count,

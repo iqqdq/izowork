@@ -17,7 +17,7 @@ class CompanyAction {
 
   factory CompanyAction.fromJson(Map<String, dynamic> json) => CompanyAction(
         companyId: json["company_id"],
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: DateTime.parse(json["created_at"]).toUtc().toLocal(),
         description: json["description"],
         id: json["id"],
         user: User.fromJson(json["user"]),

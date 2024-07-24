@@ -28,3 +28,4 @@ export 'subtitle_widget.dart';
 export 'title_widget.dart';
 export 'transparent_button_widget_widget.dart';
 export 'avatar_widget.dart';
+export 'no_result_title.dart';

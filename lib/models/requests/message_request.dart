@@ -1,8 +1,3 @@
-import 'dart:convert';
-
-String messageRequestRequestToJson(MessageRequest data) =>
-    json.encode(data.toJson());
-
 class MessageRequest {
   MessageRequest({
     required this.chatId,

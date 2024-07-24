@@ -1,14 +1,17 @@
 class PhaseChecklistRequest {
-  final String? name;
-  final String? phaseId;
+  final String name;
+  final String phaseId;
+  final String? deadline;
 
   PhaseChecklistRequest({
-    this.name,
-    this.phaseId,
+    required this.name,
+    required this.phaseId,
+    this.deadline,
   });
 
   Map<String, dynamic> toJson() => {
         "name": name,
         "phase_id": phaseId,
+        "deadline": deadline,
       };
 }

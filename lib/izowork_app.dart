@@ -5,7 +5,7 @@ import 'package:oktoast/oktoast.dart';
 
 import 'package:izowork/components/components.dart';
 import 'package:izowork/main.dart';
-import 'package:izowork/screens/splash/splash_screen.dart';
+import 'package:izowork/features/splash/view/splash_screen.dart';
 
 class IzoworkApp extends StatefulWidget {
   const IzoworkApp({super.key});

@@ -1,9 +1,15 @@
 class Pagination {
-  Pagination({
-    required this.offset,
-    required this.size,
-  });
+  int page = 1;
+  int offset = 0;
+  int size = 50;
 
-  int offset;
-  int size;
+  void increase() {
+    page++;
+    offset = page * size - size;
+  }
+
+  void reset() {
+    page = 1;
+    offset = 0;
+  }
 }

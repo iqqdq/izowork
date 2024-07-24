@@ -21,9 +21,9 @@ class Deal {
 
   String? comment;
   String? companyId;
-  String createdAt;
+  DateTime createdAt;
   List<Document> files;
-  String finishAt;
+  DateTime finishAt;
   String id;
   int number;
   String? objectId;
@@ -39,11 +39,11 @@ class Deal {
   factory Deal.fromJson(Map<String, dynamic> json) => Deal(
       comment: json["comment"],
       companyId: json["company_id"],
-      createdAt: json["created_at"],
+      createdAt: DateTime.parse(json["created_at"]).toUtc().toLocal(),
       files: json["files"] == null
           ? []
           : List<Document>.from(json["files"].map((x) => Document.fromJson(x))),
-      finishAt: json["finish_at"],
+      finishAt: DateTime.parse(json["finish_at"]).toUtc().toLocal(),
       id: json["id"],
       number: json["number"],
       objectId: json["object_id"],

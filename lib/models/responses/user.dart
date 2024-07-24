@@ -31,7 +31,7 @@ class User {
         id: json["id"],
         createdAt: json["created_at"] == null
             ? null
-            : DateTime.parse(json["created_at"]),
+            : DateTime.parse(json["created_at"]).toUtc().toLocal(),
         state: json["state"],
         name: json["name"] ?? '-',
         email: json["email"],

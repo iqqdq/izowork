@@ -34,3 +34,7 @@ export 'task_file_request.dart';
 export 'task_request.dart';
 export 'trace_request.dart';
 export 'user_request.dart';
+export 'common_folder_request.dart';
+export 'folder_pin_request.dart';
+export 'common_file_request.dart';
+export 'object_folder_request.dart';

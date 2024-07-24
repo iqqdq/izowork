@@ -6,9 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:get_it/get_it.dart';
-
+import 'package:izowork/injection_container.dart';
 import 'package:izowork/izowork_app.dart';
 import 'package:izowork/repositories/repositories.dart';
 import 'package:izowork/firebase_options.dart';
@@ -45,12 +43,23 @@ Future firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Init depencies
+  await initializeDependencies();
+
   // Init firebase app
   await Firebase.initializeApp(
     name: 'Izowork',
     options: Platform.isIOS
         ? DefaultFirebaseOptions.ios
         : DefaultFirebaseOptions.android,
+  );
+
+  // Set device orientation
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  // Clear app badge
+  await FlutterAppBadger.isAppBadgeSupported().then(
+    (value) => {if (value == true) FlutterAppBadger.removeBadge()},
   );
 
   // Set the background messaging handler early on, as a named top-level function
@@ -78,19 +87,6 @@ void main() async {
     onDidReceiveNotificationResponse: notificationTapBackground,
     onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
-
-  // Register local storage repository singleton
-  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-  GetIt.I.registerLazySingleton<LocalStorageRepositoryInterface>(
-      () => LocalStorageRepositoryImpl(sharedPreferences: sharedPreferences));
-
-  // Set device orientation
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
-  // Clear app badge
-  await FlutterAppBadger.isAppBadgeSupported().then((value) => {
-        if (value == true) FlutterAppBadger.removeBadge(),
-      });
 
   runApp(const IzoworkApp());
 }

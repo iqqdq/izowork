@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-String companyRequestToJson(CompanyRequest data) => json.encode(data.toJson());
-
 class CompanyRequest {
   CompanyRequest({
     this.id,

@@ -24,7 +24,7 @@ class NotificationEntity {
         id: json["id"],
         text: json["text"],
         userId: json["user_id"],
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: DateTime.parse(json["created_at"]).toUtc().toLocal(),
         type: json["type"],
         metadata: json["metadata"] is String
             ? Metadata.fromJson(jsonDecode(json["metadata"]))

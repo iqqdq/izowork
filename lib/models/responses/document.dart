@@ -1,41 +1,41 @@
 class Document {
-  Document(
-      {required this.filename,
-      required this.id,
-      required this.mimeType,
-      required this.name,
-      this.namespace,
-      this.type,
-      this.dealId,
-      this.messageId});
+  final String id;
+  final String name;
+  final bool pinned;
+  final bool isFolder;
+  // final DateTime createdAt;
+  final String? filename;
+  final String? mimeType;
+  final String? officeId;
+  final String? folderId;
+  final bool? isCommon;
+  final String? parentFolder;
 
-  String? filename;
-  String id;
-  String? mimeType;
-  String name;
-  String? namespace;
-  String? type;
-  String? dealId;
-  String? messageId;
+  Document({
+    required this.id,
+    required this.name,
+    required this.pinned,
+    required this.isFolder,
+    // required this.createdAt,
+    this.filename,
+    this.mimeType,
+    this.officeId,
+    this.folderId,
+    this.isCommon,
+    this.parentFolder,
+  });
 
   factory Document.fromJson(Map<String, dynamic> json) => Document(
-      filename: json["filename"] ?? '',
-      id: json["id"],
-      mimeType: json["mime_type"] ?? '',
-      name: json["name"],
-      namespace: json["namespace"] ?? '',
-      type: json["type"],
-      dealId: json["deal_id"],
-      messageId: json["message_id"]);
-
-  Map<String, dynamic> toJson() => {
-        "filename": filename,
-        "id": id,
-        "mime_type": mimeType,
-        "name": name,
-        "namespace": namespace,
-        "type": type,
-        "deal_id": dealId,
-        "messageId": messageId
-      };
+        id: json["id"],
+        name: json["name"],
+        filename: json["filename"],
+        mimeType: json["mime_type"],
+        officeId: json["office_id"],
+        pinned: json["pinned"],
+        folderId: json["folder_id"],
+        isCommon: json["is_common"],
+        parentFolder: json["parent_folder"],
+        isFolder: json.containsKey("is_folder") ? json["is_folder"] : false,
+        // createdAt: DateTime.parse(json["created_at"]),
+      );
 }

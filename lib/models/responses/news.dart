@@ -26,7 +26,7 @@ class News {
 
   factory News.fromJson(Map<String, dynamic> json) => News(
         id: json["id"],
-        createdAt: DateTime.parse(json["created_at"]),
+        createdAt: DateTime.parse(json["created_at"]).toUtc().toLocal(),
         name: json["name"],
         description: json["description"],
         important: json["important"],

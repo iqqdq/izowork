@@ -54,6 +54,8 @@ abstract class Titles {
   static const stop = 'Остановить';
   static const save = 'Сохранить';
   static const delete = 'Удалить';
+  static const pin = 'Закрепить';
+  static const unpin = 'Открепить';
   static const addAvatar = 'Добавить аватар';
   static const changeAvatar = 'Изменить аватар';
   static const cancel = 'Отмена';
@@ -61,6 +63,7 @@ abstract class Titles {
   static const addComment = 'Добавить комментарий';
   static const addContact = 'Добавить контакт';
   static const addAction = 'Добавить действие';
+  static const addFolder = 'Добавить папку';
   static const sendInfo = 'Отправить информацию';
   static const goChat = 'Перейти в чат';
   static const sendToApproval = 'Отправить на согласовение';
@@ -76,8 +79,11 @@ abstract class Titles {
   static const title = 'Заголовок';
   static const text = 'Текст';
   static const audioMessage = 'Аудиосообщение';
+  static const folder = 'Папка';
+  static const folderName = 'Название папки';
   static const file = 'Файл';
   static const files = 'Файлы';
+  static const images = 'Изображения';
   static const process = 'Процесс';
   static const processes = 'Процессы';
   static const news = 'Новости';
@@ -239,6 +245,7 @@ abstract class Titles {
   static const fromDate = 'Дата от';
   static const toDate = 'Дата до';
   static const unit = 'Ед.изм.';
+  static const until = 'до';
 
   static const textReason = 'Напишите причину';
   static const taskCompleteInfo = 'Информация о выполнении';
@@ -278,7 +285,6 @@ abstract class Titles {
   static const infoWasAdded = 'Информация добавлена';
   static const infoWasUpdated = 'Информация обнавлена';
   static const newsWasAdded = 'Новость добавлена';
-
   static const showAllUsers = 'Показать всех участников';
 
   /// ALERTS
@@ -292,4 +298,5 @@ abstract class Titles {
       'Добавление контактов станет доступно\n после создания компании';
   static const uHaveNotPermissionToEdit = 'У вас нет прав на редактирование';
   static const commentAdded = 'Комментарий добавлен';
+  static const objectStageHasBeenChanged = 'Стадия объекта изменена';
 }

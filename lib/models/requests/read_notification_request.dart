@@ -1,11 +1,3 @@
-import 'dart:convert';
-
-ReadNotificationRequest readNotificationRequestFromJson(String str) =>
-    ReadNotificationRequest.fromJson(json.decode(str));
-
-String readNotificationRequestToJson(ReadNotificationRequest data) =>
-    json.encode(data.toJson());
-
 class ReadNotificationRequest {
   ReadNotificationRequest({
     required this.id,

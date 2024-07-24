@@ -1,8 +1,3 @@
-import 'dart:convert';
-
-String newsCommentRequestToJson(NewsCommentRequest data) =>
-    json.encode(data.toJson());
-
 class NewsCommentRequest {
   NewsCommentRequest({
     required this.comment,

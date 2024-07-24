@@ -1,10 +1,3 @@
-import 'dart:convert';
-
-DeleteRequest deleteRequestFromJson(String str) =>
-    DeleteRequest.fromJson(json.decode(str));
-
-String deleteRequestToJson(DeleteRequest data) => json.encode(data.toJson());
-
 class DeleteRequest {
   DeleteRequest({
     required this.id,

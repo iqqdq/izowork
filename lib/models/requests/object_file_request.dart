@@ -3,14 +3,17 @@ import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 
 class ObjectFileRequest {
-  final String taskId;
+  final String objectId;
   final File file;
 
-  ObjectFileRequest(this.taskId, this.file);
+  ObjectFileRequest({
+    required this.objectId,
+    required this.file,
+  });
 
   Future<FormData> toFormData() async {
     return dio.FormData.fromMap({
-      "object_id": taskId,
+      "object_id": objectId,
       "file": await MultipartFile.fromFile(file.path,
           filename: file.path.substring(
               file.path.length > 12

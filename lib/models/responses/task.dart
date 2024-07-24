@@ -25,7 +25,7 @@ class Task {
   int number;
   String name;
   String state;
-  String deadline;
+  DateTime deadline;
   String? responsibleId;
   String? taskManagerId;
   String? coExecutorId;
@@ -44,7 +44,7 @@ class Task {
         number: json["number"],
         name: json["name"],
         state: json["state"],
-        deadline: json["deadline"],
+        deadline: DateTime.parse(json["deadline"]).toUtc().toLocal(),
         responsibleId: json["responsible_id"],
         taskManagerId: json["task_manager_id"],
         coExecutorId: json["co_executor_id"],
