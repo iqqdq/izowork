@@ -20,23 +20,27 @@ class CommonFileRequest {
         ? dio.FormData.fromMap({
             "office_id": officeId,
             "is_common": isCommon,
-            "file": await MultipartFile.fromFile(file.path,
-                filename: file.path.substring(
-                    file.path.length > 12
-                        ? file.path.length - 10
-                        : file.path.length - 6,
-                    file.path.length)),
+            "file": await MultipartFile.fromFile(
+              file.path,
+              filename: file.path.substring(
+                  file.path.length > 12
+                      ? file.path.length - 10
+                      : file.path.length - 6,
+                  file.path.length),
+            ),
           })
         : dio.FormData.fromMap({
             "office_id": officeId,
             "folder_id": folderId,
             "is_common": isCommon,
-            "file": await MultipartFile.fromFile(file.path,
-                filename: file.path.substring(
-                    file.path.length > 12
-                        ? file.path.length - 10
-                        : file.path.length - 6,
-                    file.path.length)),
+            "file": await MultipartFile.fromFile(
+              file.path,
+              filename: file.path.substring(
+                  file.path.length > 12
+                      ? file.path.length - 10
+                      : file.path.length - 6,
+                  file.path.length),
+            ),
           });
   }
 }

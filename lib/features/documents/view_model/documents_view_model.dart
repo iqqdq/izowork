@@ -345,6 +345,9 @@ class DocumentsViewModel with ChangeNotifier {
   }
 
   Future createObjectFile(ObjectFileRequest objectFileRequest) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
     await sl<DocumentRepositoryInterface>()
         .createObjectFile(objectFileRequest)
         .then((response) => {
@@ -389,7 +392,7 @@ class DocumentsViewModel with ChangeNotifier {
 
   void _sortDocuments() {
     _documents
-        .sort((a, b) => a.pinned.toString().compareTo(b.pinned.toString()));
+        .sort((a, b) => b.pinned.toString().compareTo(a.pinned.toString()));
     notifyListeners();
   }
 
@@ -411,13 +414,14 @@ class DocumentsViewModel with ChangeNotifier {
             if (objectId != null) {
               await createObjectFile(ObjectFileRequest(
                 objectId: objectId!,
+                folderId: document?.id,
                 file: File(element.path!),
               ));
               // IF COMMON FILE'S
             } else if (officeId != null) {
               await createCommonFile(CommonFileRequest(
                 officeId: officeId!,
-                folderId: document?.folderId,
+                folderId: document?.id,
                 isCommon: true,
                 file: File(element.path!),
               ));
