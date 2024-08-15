@@ -40,6 +40,7 @@ class _MapCompanyScreenState extends State<MapCompanyScreenWidget> {
       type: MaterialType.transparency,
       child: Container(
         padding: EdgeInsets.only(
+          top: 16.0,
           bottom: MediaQuery.of(context).padding.bottom == 0.0
               ? 12.0
               : MediaQuery.of(context).padding.bottom,

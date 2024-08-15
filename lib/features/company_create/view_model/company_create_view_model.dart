@@ -308,12 +308,16 @@ class CompanyCreateViewModel with ChangeNotifier {
       _file = File(xFile.path);
       notifyListeners();
 
-      if (selectedCompany == null || _file == null) return;
+      if (_file == null) return;
 
-      changeCompanyAvatar(
-        _file!,
-        selectedCompany!.id,
-      );
+      if (selectedCompany == null) {
+        notifyListeners();
+      } else {
+        changeCompanyAvatar(
+          _file!,
+          selectedCompany!.id,
+        );
+      }
     }
   }
 

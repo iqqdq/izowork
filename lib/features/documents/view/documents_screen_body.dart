@@ -15,11 +15,11 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 class DocumentsScreenBodyWidget extends StatefulWidget {
-  final String title;
+  final Document? document;
 
   const DocumentsScreenBodyWidget({
     Key? key,
-    required this.title,
+    required this.document,
   }) : super(key: key);
 
   @override
@@ -43,7 +43,7 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
 
         _documentsViewModel.getDocuments(
           pagination: _pagination,
-          officeId: _documentsViewModel.officeId,
+          params: _documentsViewModel.documentsFilter?.params,
         );
       }
     });
@@ -63,6 +63,9 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
       listen: true,
     );
 
+    bool isOfficeListViewHidden =
+        _documentsViewModel.objectId != null || widget.document != null;
+
     return Scaffold(
       extendBodyBehindAppBar: false,
       backgroundColor: HexColors.white,
@@ -73,9 +76,7 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title:
-            // Column(children: [
-            Padding(
+        title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             BackButtonWidget(onTap: () => Navigator.pop(context)),
@@ -83,7 +84,7 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
               child: Padding(
                 padding: const EdgeInsets.only(right: 24.0),
                 child: Text(
-                  widget.title,
+                  widget.document?.name ?? Titles.documents,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: HexColors.black,
@@ -101,44 +102,111 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
           FloatingButtonWidget(onTap: () => _showAddDialogAction()),
       body: SizedBox.expand(
         child: Stack(children: [
-          /// DOCUMENTS LIST VIEW
-          LiquidPullToRefresh(
-            color: HexColors.primaryMain,
-            backgroundColor: HexColors.white,
-            springAnimationDurationInMilliseconds: 300,
-            onRefresh: _onRefresh,
-            child: ListView.builder(
-                physics: const AlwaysScrollableScrollPhysics(),
-                shrinkWrap: true,
-                controller: _scrollController,
-                padding: EdgeInsets.only(
-                  left: 16.0,
-                  right: 16.0,
-                  top: 16.0,
-                  bottom: 80.0 + MediaQuery.of(context).padding.bottom,
-                ),
-                itemCount: _documentsViewModel.documents.length,
-                itemBuilder: (context, index) {
-                  final document = _documentsViewModel.documents[index];
-                  final isFolder =
-                      document.isFolder || document.filename == null;
-
-                  return FileListItemWidget(
-                    key: ValueKey(document.id),
-                    fileName: document.name,
-                    isFolder: isFolder,
-                    isPinned: document.pinned,
-                    isDownloading: _documentsViewModel.downloadIndex == index,
-                    onTap: () => isFolder
-                        ? _openFolder(_documentsViewModel.documents[index])
-                        : _documentsViewModel.openDocument(index),
-                    onLongPress: () => _showClipOrDeleteDialogAction(
-                      isFolder,
-                      document,
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            isOfficeListViewHidden
+                ? Container()
+                : Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: const TitleWidget(
+                      text: Titles.filial,
+                      isSmall: true,
                     ),
-                  );
-                }),
-          ),
+                  ),
+
+            /// FILLIAL HORIZONTAL LIST
+            isOfficeListViewHidden
+                ? Container()
+                : SizedBox(
+                    height: 28.0,
+                    child: ListView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        itemCount: _documentsViewModel.offices.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            key:
+                                ValueKey(_documentsViewModel.offices[index].id),
+                            child: Container(
+                              margin: const EdgeInsets.only(right: 10.0),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0,
+                                vertical: 4.0,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: _documentsViewModel.officeId ==
+                                          _documentsViewModel.offices[index].id
+                                      ? HexColors.additionalViolet
+                                      : HexColors.grey10,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(18.0),
+                                  )),
+                              child: Text(
+                                _documentsViewModel.offices[index].name,
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: _documentsViewModel.officeId ==
+                                          _documentsViewModel.offices[index].id
+                                      ? FontWeight.w500
+                                      : FontWeight.w400,
+                                  color: _documentsViewModel.officeId ==
+                                          _documentsViewModel.offices[index].id
+                                      ? HexColors.white
+                                      : HexColors.black,
+                                  fontFamily: 'PT Root UI',
+                                ),
+                              ),
+                            ),
+                            onTap: () => {
+                              _documentsViewModel.selectOffice(index),
+                              _onRefresh()
+                            },
+                          );
+                        })),
+            const SizedBox(height: 8.0),
+
+            /// DOCUMENTS LIST VIEW
+            Expanded(
+              child: LiquidPullToRefresh(
+                color: HexColors.primaryMain,
+                backgroundColor: HexColors.white,
+                springAnimationDurationInMilliseconds: 300,
+                onRefresh: _onRefresh,
+                child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    controller: _scrollController,
+                    padding: EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                      top: 8.0,
+                      bottom: 80.0 + MediaQuery.of(context).padding.bottom,
+                    ),
+                    itemCount: _documentsViewModel.documents.length,
+                    itemBuilder: (context, index) {
+                      final document = _documentsViewModel.documents[index];
+                      final isFolder =
+                          document.isFolder || document.filename == null;
+
+                      return FileListItemWidget(
+                        key: ValueKey(document.id),
+                        fileName: document.name,
+                        isFolder: isFolder,
+                        isPinned: document.pinned,
+                        isDownloading:
+                            _documentsViewModel.downloadIndex == index,
+                        onTap: () => isFolder
+                            ? _openFolder(_documentsViewModel.documents[index])
+                            : _documentsViewModel.openDocument(index),
+                        onLongPress: () => _showClipOrDeleteDialogAction(
+                          isFolder,
+                          document,
+                        ),
+                      );
+                    }),
+              ),
+            ),
+          ]),
           const SeparatorWidget(),
 
           /// EMPTY LIST TEXT
@@ -175,7 +243,6 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
     _documentsViewModel.objectId == null
         ? await _documentsViewModel.getDocuments(
             pagination: _pagination,
-            officeId: _documentsViewModel.officeId,
             params: _documentsViewModel.documentsFilter?.params,
           )
         : await _documentsViewModel.getObjectDocuments(
@@ -299,7 +366,6 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
       MaterialPageRoute(
           builder: (context) => DocumentsScreenWidget(
                 objectId: _documentsViewModel.objectId,
-                officeId: _documentsViewModel.officeId,
                 document: document,
               )));
 

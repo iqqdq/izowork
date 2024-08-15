@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +10,7 @@ class AvatarWidget extends StatelessWidget {
   final String? endpoint;
   final double size;
   final bool? isGroupAvatar;
+  final File? file;
 
   const AvatarWidget({
     super.key,
@@ -15,6 +18,7 @@ class AvatarWidget extends StatelessWidget {
     required this.endpoint,
     required this.size,
     this.isGroupAvatar,
+    this.file,
   });
 
   @override
@@ -38,19 +42,36 @@ class AvatarWidget extends StatelessWidget {
 
     var avatar = Stack(children: [
       placeholder,
+
+      /// FILE IMAGE
+      file == null
+          ? Container()
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(size / 2.0),
+              child: Image.file(
+                file!,
+                width: size,
+                height: size,
+                fit: BoxFit.cover,
+              ),
+            ),
+
+      /// URL IMAGE
       endpoint == null
           ? Container()
           : ClipRRect(
-              borderRadius: BorderRadius.circular(40.0),
-              child: CachedNetworkImage(
-                cacheKey: endpoint,
-                imageUrl: url + endpoint!,
-                width: size,
-                height: size,
-                memCacheWidth: size.toInt() *
-                    MediaQuery.of(context).devicePixelRatio.round(),
-                fit: BoxFit.cover,
-              ),
+              borderRadius: BorderRadius.circular(size / 2.0),
+              child: file == null
+                  ? CachedNetworkImage(
+                      cacheKey: endpoint,
+                      imageUrl: url + endpoint!,
+                      width: size,
+                      height: size,
+                      memCacheWidth: size.toInt() *
+                          MediaQuery.of(context).devicePixelRatio.round(),
+                      fit: BoxFit.cover,
+                    )
+                  : Image.file(file!),
             ),
     ]);
 

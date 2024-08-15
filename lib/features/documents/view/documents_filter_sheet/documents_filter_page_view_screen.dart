@@ -8,9 +8,11 @@ class DocumentsFilterPageViewScreenWidget extends StatelessWidget {
   final DocumentsFilter? documentsFilter;
   final Function(DocumentsFilter?) onPop;
 
-  const DocumentsFilterPageViewScreenWidget(
-      {Key? key, this.documentsFilter, required this.onPop})
-      : super(key: key);
+  const DocumentsFilterPageViewScreenWidget({
+    Key? key,
+    this.documentsFilter,
+    required this.onPop,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

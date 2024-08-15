@@ -69,40 +69,8 @@ class _CompanyCreateScreenBodyState
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_companyCreateViewModel.company != null) {
-        _nameTextEditingController.text =
-            _companyCreateViewModel.company?.name ?? '';
-
-        _bimTextEditingController.text =
-            _companyCreateViewModel.company?.bim ?? '';
-
-        _addressTextEditingController.text =
-            _companyCreateViewModel.company?.address ?? '';
-
-        _coordinatesTextEditingController.text = _companyCreateViewModel
-                    .company?.lat ==
-                null
-            ? ''
-            : '${_companyCreateViewModel.company?.lat}, ${_companyCreateViewModel.company?.long}';
-
-        _emailTextEditingConrtoller.text =
-            _companyCreateViewModel.company?.email ?? '';
-
-        _descriptionTextEditingController.text =
-            _companyCreateViewModel.company?.description ?? '';
-
-        _requisitesTextEditingController.text =
-            _companyCreateViewModel.company?.details ?? '';
-      } else {
-        _addressTextEditingController.text = widget.address ?? '';
-
-        _coordinatesTextEditingController.text =
-            widget.lat == null || widget.long == null
-                ? ''
-                : '${widget.lat}, ${widget.long}';
-      }
-    });
+    // Prepare company text field's
+    WidgetsBinding.instance.addPostFrameCallback((_) => _prepareCompanyInfo());
   }
 
   @override
@@ -157,30 +125,31 @@ class _CompanyCreateScreenBodyState
     return Scaffold(
       backgroundColor: HexColors.white,
       appBar: AppBar(
-          titleSpacing: 0.0,
-          systemOverlayStyle: SystemUiOverlayStyle.dark,
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          title: Column(children: [
-            Stack(children: [
-              Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: BackButtonWidget(
-                    onTap: () => Navigator.pop(context),
-                  )),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text(
-                    _companyCreateViewModel.company == null
-                        ? Titles.newCompany
-                        : Titles.editCompany,
-                    style: TextStyle(
-                        color: HexColors.black,
-                        fontSize: 18.0,
-                        fontFamily: 'PT Root UI',
-                        fontWeight: FontWeight.bold))
-              ])
+        titleSpacing: 0.0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        title: Column(children: [
+          Stack(children: [
+            Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: BackButtonWidget(
+                  onTap: () => Navigator.pop(context),
+                )),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                  _companyCreateViewModel.company == null
+                      ? Titles.newCompany
+                      : Titles.editCompany,
+                  style: TextStyle(
+                      color: HexColors.black,
+                      fontSize: 18.0,
+                      fontFamily: 'PT Root UI',
+                      fontWeight: FontWeight.bold))
             ])
-          ])),
+          ])
+        ]),
+      ),
       body: Stack(children: [
         GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -199,6 +168,7 @@ class _CompanyCreateScreenBodyState
                     url: companyMedialUrl,
                     endpoint: _url,
                     size: 80.0,
+                    file: _companyCreateViewModel.file,
                   ),
                 ]),
                 const SizedBox(height: 24.0),
@@ -436,13 +406,48 @@ class _CompanyCreateScreenBodyState
   // MARK: -
   // MARK: FUNCTIONS
 
+  void _prepareCompanyInfo() {
+    // EDIT EXISTING COMPANY
+    if (_companyCreateViewModel.company != null) {
+      _nameTextEditingController.text =
+          _companyCreateViewModel.company?.name ?? '';
+
+      _bimTextEditingController.text =
+          _companyCreateViewModel.company?.bim ?? '';
+
+      _addressTextEditingController.text =
+          _companyCreateViewModel.company?.address ?? '';
+
+      _coordinatesTextEditingController.text = _companyCreateViewModel
+                  .company?.lat ==
+              null
+          ? ''
+          : '${_companyCreateViewModel.company?.lat}, ${_companyCreateViewModel.company?.long}';
+
+      _emailTextEditingConrtoller.text =
+          _companyCreateViewModel.company?.email ?? '';
+
+      _descriptionTextEditingController.text =
+          _companyCreateViewModel.company?.description ?? '';
+
+      _requisitesTextEditingController.text =
+          _companyCreateViewModel.company?.details ?? '';
+    } else {
+      // CREATE NEW COMPANY
+      _addressTextEditingController.text = widget.address ?? '';
+
+      _coordinatesTextEditingController.text =
+          widget.lat == null || widget.long == null
+              ? ''
+              : '${widget.lat}, ${widget.long}';
+    }
+  }
+
   void _createCompany() => _companyCreateViewModel.createNewCompany(
       _addressTextEditingController.text,
       _coordinatesTextEditingController.text,
       _nameTextEditingController.text,
-      _companyCreateViewModel.bim ??
-          _companyCreateViewModel.selectedCompany?.bim ??
-          '',
+      _bimTextEditingController.text,
       _descriptionTextEditingController.text,
       _requisitesTextEditingController.text,
       _emailTextEditingConrtoller.text,
@@ -467,9 +472,7 @@ class _CompanyCreateScreenBodyState
         _addressTextEditingController.text,
         _coordinatesTextEditingController.text,
         _nameTextEditingController.text,
-        _companyCreateViewModel.bim ??
-            _companyCreateViewModel.selectedCompany?.bim ??
-            '',
+        _bimTextEditingController.text,
         _descriptionTextEditingController.text,
         _requisitesTextEditingController.text,
         _emailTextEditingConrtoller.text,
@@ -527,6 +530,8 @@ class _CompanyCreateScreenBodyState
       items.add(element.name);
     }
 
+    String? newType;
+
     showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
@@ -539,8 +544,11 @@ class _CompanyCreateScreenBodyState
             _companyCreateViewModel.selectedCompany?.productType?.name ??
             '',
         items: items,
-        onSelectTap: (type) => _companyCreateViewModel.productType,
+        onSelectTap: (type) => newType = type,
       ),
-    );
+    ).whenComplete(() {
+      if (newType == null) return;
+      _companyCreateViewModel.changeProductType(newType!);
+    });
   }
 }

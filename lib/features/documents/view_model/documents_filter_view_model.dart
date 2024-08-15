@@ -14,6 +14,7 @@ class DocumentsFilterViewModel with ChangeNotifier {
     if (documentsFilter != null) {
       tags = documentsFilter!.tags;
       tags2 = documentsFilter!.tags2;
+
       notifyListeners();
     }
   }
@@ -39,10 +40,11 @@ class DocumentsFilterViewModel with ChangeNotifier {
       tags2.clear();
       tags2.add(index);
     }
+
     notifyListeners();
   }
 
-  Future apply(Function(List<String>) didReturnParams) async {
+  Future apply(Function(List<String> params) didReturnParams) async {
     String sortBy = '&sort_by=';
     String sortOrder = '&sort_order=';
     List<String> params = [];
@@ -92,7 +94,9 @@ class DocumentsFilterViewModel with ChangeNotifier {
   void reset(VoidCallback onResetTap) {
     tags.clear();
     tags2.clear();
+
     notifyListeners();
+
     onResetTap();
   }
 }

@@ -11,7 +11,7 @@ import 'package:izowork/features/object/view/object_page_view_screen.dart';
 import 'package:izowork/features/tab_controller/view/tab_controller_screen.dart';
 import 'package:izowork/features/task/view/task_screen.dart';
 import 'package:izowork/features/actions/view/actions_page_view_screen_body.dart';
-import 'package:izowork/features/chat/view/chat_screen.dart';
+import 'package:izowork/features/chat/view/chats_screen.dart';
 import 'package:izowork/features/map/view/map_screen.dart';
 import 'package:izowork/features/more/view/more_screen.dart';
 import 'package:izowork/features/objects/view/objects_screen.dart';
@@ -38,7 +38,7 @@ class _TabControllerScreenBodyState
     const MapScreenWidget(),
     const ObjectsScreenWidget(),
     const ActionsPageViewScreenWidget(),
-    const ChatScreenWidget(),
+    const ChatsScreenWidget(),
     const MoreScreenWidget()
   ];
 

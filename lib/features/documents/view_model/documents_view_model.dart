@@ -14,10 +14,16 @@ import 'package:izowork/services/services.dart';
 
 class DocumentsViewModel with ChangeNotifier {
   final String? objectId;
-  final String? officeId;
+  // final String? officeId;
   final Document? document;
 
   LoadingStatus loadingStatus = LoadingStatus.empty;
+
+  String? _officeId;
+  String? get officeId => _officeId;
+
+  List<Office> _offices = [];
+  List<Office> get offices => _offices;
 
   final List<Document> _documents = [];
   List<Document> get documents => _documents;
@@ -30,18 +36,15 @@ class DocumentsViewModel with ChangeNotifier {
 
   DocumentsViewModel(
     this.objectId,
-    this.officeId,
+    // this.officeId,
     this.document,
   ) {
-    objectId == null
-        ? getDocuments(
-            pagination: Pagination(),
-            officeId: officeId,
-          )
+    setOffices().whenComplete(() => objectId == null
+        ? getDocuments(pagination: Pagination())
         : getObjectDocuments(
             pagination: Pagination(),
             objectId: objectId,
-          );
+          ));
   }
 
   // MARK: -
@@ -49,7 +52,6 @@ class DocumentsViewModel with ChangeNotifier {
 
   Future getDocuments({
     required Pagination pagination,
-    required String? officeId,
     List<String>? params,
   }) async {
     if (pagination.offset == 0) {
@@ -62,7 +64,7 @@ class DocumentsViewModel with ChangeNotifier {
     await sl<DocumentRepositoryInterface>()
         .getDocuments(
           pagination: pagination,
-          officeId: officeId,
+          officeId: _officeId,
           folderId: document?.id,
           params: _documentsFilter?.params,
         )
@@ -99,7 +101,7 @@ class DocumentsViewModel with ChangeNotifier {
     bool isCommon,
     String name,
   ) async {
-    if (officeId == null) return;
+    if (_officeId == null) return;
     if (name.isEmpty) return;
 
     loadingStatus = LoadingStatus.searching;
@@ -109,7 +111,7 @@ class DocumentsViewModel with ChangeNotifier {
         .createCommonFolder(CommonFolderRequest(
           isCommon: isCommon,
           name: name,
-          officeId: officeId!,
+          officeId: _officeId!,
           parentFolder: document?.id,
         ))
         .then((response) => {
@@ -390,9 +392,27 @@ class DocumentsViewModel with ChangeNotifier {
   // MARK: -
   // MARK: - FUNCTIONS
 
+  Future setOffices() async {
+    User? user = await sl<LocalStorageRepositoryInterface>().getUser();
+
+    if (user == null) return;
+    if (user.offices == null) return;
+
+    _offices = user.offices ?? [];
+    _officeId = _offices.first.id;
+
+    notifyListeners();
+  }
+
+  void selectOffice(int index) {
+    _officeId = _offices[index].id;
+  }
+
   void _sortDocuments() {
     _documents
         .sort((a, b) => b.pinned.toString().compareTo(a.pinned.toString()));
+    loadingStatus = LoadingStatus.completed;
+
     notifyListeners();
   }
 
@@ -418,9 +438,9 @@ class DocumentsViewModel with ChangeNotifier {
                 file: File(element.path!),
               ));
               // IF COMMON FILE'S
-            } else if (officeId != null) {
+            } else if (_officeId != null) {
               await createCommonFile(CommonFileRequest(
-                officeId: officeId!,
+                officeId: _officeId!,
                 folderId: document?.id,
                 isCommon: true,
                 file: File(element.path!),

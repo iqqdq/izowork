@@ -14,14 +14,14 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-class ChatScreenBodyWidget extends StatefulWidget {
-  const ChatScreenBodyWidget({Key? key}) : super(key: key);
+class ChatsScreenBodyWidget extends StatefulWidget {
+  const ChatsScreenBodyWidget({Key? key}) : super(key: key);
 
   @override
-  _ChatScreenBodyState createState() => _ChatScreenBodyState();
+  _ChatsScreenBodyState createState() => _ChatsScreenBodyState();
 }
 
-class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
+class _ChatsScreenBodyState extends State<ChatsScreenBodyWidget>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController _textEditingController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
@@ -31,7 +31,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
   Pagination _pagination = Pagination();
   bool _isSearching = false;
 
-  late ChatViewModel _chatViewModel;
+  late ChatsViewModel _chatsViewModel;
 
   @override
   bool get wantKeepAlive => true;
@@ -56,7 +56,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
   Widget build(BuildContext context) {
     super.build(context);
 
-    _chatViewModel = Provider.of<ChatViewModel>(
+    _chatsViewModel = Provider.of<ChatsViewModel>(
       context,
       listen: true,
     );
@@ -93,7 +93,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                           () async {
                         _pagination = Pagination();
 
-                        _chatViewModel
+                        _chatsViewModel
                             .getChatList(
                                 pagination: _pagination,
                                 search: _textEditingController.text)
@@ -103,7 +103,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                     },
                     onClearTap: () => {
                       _pagination.offset = 0,
-                      _chatViewModel.getChatList(
+                      _chatsViewModel.getChatList(
                           pagination: _pagination,
                           search: _textEditingController.text)
                     },
@@ -129,9 +129,9 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                     top: 16.0,
                     bottom: 16.0 + 64.0,
                   ),
-                  itemCount: _chatViewModel.chats.length,
+                  itemCount: _chatsViewModel.chats.length,
                   itemBuilder: (context, index) {
-                    final chat = _chatViewModel.chats[index];
+                    final chat = _chatsViewModel.chats[index];
 
                     return ChatListItemWidget(
                         key: ValueKey(chat.id),
@@ -140,8 +140,14 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
                   }),
             ),
 
+            /// EMPTY LIST TEXT
+            _chatsViewModel.loadingStatus == LoadingStatus.completed &&
+                    _chatsViewModel.chats.isEmpty
+                ? const NoResultTitle()
+                : Container(),
+
             /// INDICATOR
-            _chatViewModel.loadingStatus == LoadingStatus.searching ||
+            _chatsViewModel.loadingStatus == LoadingStatus.searching ||
                     _isSearching
                 ? const LoadingIndicatorWidget()
                 : Container()
@@ -153,26 +159,26 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
   // MARK: - FUNCTIONS
 
   void _updateChats() async {
-    await _chatViewModel.getLocalStorageParams();
+    await _chatsViewModel.getLocalStorageParams();
 
-    await _chatViewModel.connectSocket();
+    await _chatsViewModel.connectSocket();
 
-    await _chatViewModel.getChatList(
+    await _chatsViewModel.getChatList(
       pagination: _pagination,
       search: _textEditingController.text,
     );
 
-    _addSocketListener(_chatViewModel.socket);
+    _addSocketListener(_chatsViewModel.socket);
   }
 
   void _addSocketListener(Socket? socket) {
     socket?.onConnect((_) {
       debugPrint('SOCKET CONNECTION SUCCESS');
 
-      if (_chatViewModel.token != null) {
+      if (_chatsViewModel.token != null) {
         socket.emit(
           'join',
-          ChatConnectRequest(accessToken: _chatViewModel.token!),
+          ChatConnectRequest(accessToken: _chatsViewModel.token!),
         );
       }
     });
@@ -181,8 +187,8 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
         'message',
         (data) => {
               // UPDATE CHAT LAST MESSAGE DATA
-              _chatViewModel.clearChats(),
-              _chatViewModel
+              _chatsViewModel.clearChats(),
+              _chatsViewModel
                   .getChatList(
                     pagination: _pagination,
                     search: _textEditingController.text,
@@ -193,7 +199,7 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
 
   Future _onRefresh() async {
     _pagination.reset();
-    await _chatViewModel.getChatList(
+    await _chatsViewModel.getChatList(
       pagination: _pagination,
       search: _textEditingController.text,
     );
@@ -203,15 +209,15 @@ class _ChatScreenBodyState extends State<ChatScreenBodyWidget>
   // MARK: - PUSH
 
   void _showDialogScreen(int index) {
-    _chatViewModel.clearUndreadMessageCount(index);
+    _chatsViewModel.clearUndreadMessageCount(index);
 
     Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => DialogScreenWidget(
-              socket: _chatViewModel.socket,
-              id: _chatViewModel.chats[index].id,
-              onPop: (message) => _chatViewModel.replaceLastMassage(message)),
+              socket: _chatsViewModel.socket,
+              id: _chatsViewModel.chats[index].id,
+              onPop: (message) => _chatsViewModel.replaceLastMassage(message)),
         ));
   }
 

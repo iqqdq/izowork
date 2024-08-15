@@ -144,14 +144,7 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
         screen = const AnalyticsPageViewScreenBodyWidget();
         break;
       case 7:
-        if (_moreViewModel.user != null) {
-          if (_moreViewModel.user!.offices != null) {
-            if (_moreViewModel.user!.offices!.isNotEmpty) {
-              screen = DocumentsScreenWidget(
-                  officeId: _moreViewModel.user!.offices!.first.id);
-            }
-          }
-        }
+        screen = const DocumentsScreenWidget();
         break;
       case 8:
         screen = NotificationsScreenWidget(

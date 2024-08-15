@@ -31,7 +31,7 @@ class Document {
         filename: json["filename"],
         mimeType: json["mime_type"],
         officeId: json["office_id"],
-        pinned: json["pinned"],
+        pinned: json.containsKey("pinned") ? json["pinned"] : false,
         folderId: json["folder_id"],
         isCommon: json["is_common"],
         parentFolder: json["parent_folder"],

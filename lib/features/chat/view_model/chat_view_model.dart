@@ -7,7 +7,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/repositories/repositories.dart';
 
-class ChatViewModel with ChangeNotifier {
+class ChatsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
   String? token;

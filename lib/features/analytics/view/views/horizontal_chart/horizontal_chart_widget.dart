@@ -20,7 +20,7 @@ class HorizontalChartWidget extends StatefulWidget {
 class _HorizontalChartState extends State<HorizontalChartWidget> {
   final ScrollController _scrollController = ScrollController();
 
-  int _maxValue = 0;
+  int _maxValue = 1;
 
   @override
   void initState() {
@@ -54,14 +54,16 @@ class _HorizontalChartState extends State<HorizontalChartWidget> {
           itemCount: widget.values.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
+            final value = widget.values[index];
+
             return Align(
-                key: ValueKey(widget.values[index]),
+                key: ValueKey(value),
                 alignment: Alignment.bottomCenter,
                 child: HorizontalChartListItemWidget(
                   index: index,
                   maxHeight: _maxHeight,
-                  height: (_maxHeight / _maxValue) * widget.values[index],
-                  value: widget.values[index],
+                  height: (_maxHeight / _maxValue) * value,
+                  value: value,
                   month: widget.labels[index],
                 ));
           }),
