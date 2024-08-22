@@ -12,8 +12,8 @@ class ClusterHelper {
         places,
         updateMarkers,
         markerBuilder: markerBuilder,
-        stopClusteringZoom: 20.0,
-        extraPercent: 0.2,
+        stopClusteringZoom: 12.0,
+        extraPercent: 0.0,
         levels: [
           1,
           4.25,

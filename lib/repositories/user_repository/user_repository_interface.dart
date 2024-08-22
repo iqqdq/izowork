@@ -9,6 +9,8 @@ abstract class UserRepositoryInterface {
 
   Future<dynamic> updateAvatar(FormData formData);
 
+  Future<dynamic> getUserRating(String id);
+
   Future<dynamic> getUsers({
     required Pagination pagination,
     String? search,

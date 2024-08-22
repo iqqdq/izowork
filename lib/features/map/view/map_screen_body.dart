@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -86,9 +87,9 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
                       .whenComplete(() => _showUserLocation()),
                 )
           },
-          onCameraMove: (position) => {
-            _mapViewModel.onCameraMove(position),
-            _clusterManager?.onCameraMove(position),
+          onCameraMove: (position) {
+            _mapViewModel.onCameraMove(position);
+            _clusterManager?.onCameraMove(position);
           },
           onCameraIdle: () =>
               _updateMarkers(isObjectMarkers: _mapViewModel.isObjectMarkers),
@@ -161,31 +162,48 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           markerId: MarkerId(clusterPlace.getId()),
           position: clusterPlace.location,
           onTap: () async {
-            debugPrint('---- $cluster');
-
             if (clusterPlace.isMultiple) {
-              LatLngBounds? bounds = BoundsHelper().getBounds(clusterPlace.items
-                  .map(
-                    (marker) => LatLng(
-                      marker.location.latitude,
-                      marker.location.longitude,
-                    ),
-                  )
-                  .toList());
+              if ((cluster.items as List).length > 10) {
+                _googleMapController.getZoomLevel().then((value) =>
+                    _googleMapController.animateCamera(
+                        CameraUpdate.newCameraPosition(CameraPosition(
+                      target: clusterPlace.location,
+                      zoom: value + 1.25,
+                    ))));
+              } else {
+                // create points for the bounds
+                double north = cluster.location.latitude;
+                double south = cluster.location.latitude;
+                double east = cluster.location.longitude;
+                double west = cluster.location.longitude;
 
-              await _googleMapController
-                  .animateCamera(CameraUpdate.newLatLngBounds(
-                bounds,
-                40.0,
-              ));
+                // extend the bound points with the markers in the cluster
+                for (var clusterMarker in cluster.items) {
+                  south = min(south, clusterMarker.location.latitude);
+                  north = max(north, clusterMarker.location.latitude);
+                  west = min(west, clusterMarker.location.longitude);
+                  east = max(east, clusterMarker.location.longitude);
+                }
+
+                // create the CameraUpdate with LatLngBounds
+                CameraUpdate clusterView = CameraUpdate.newLatLngBounds(
+                    LatLngBounds(
+                        southwest: LatLng(south, west),
+                        northeast: LatLng(north, east)),
+                    32 // this is the padding to add on top of the bounds
+                    );
+
+                // set the new view
+                _googleMapController.animateCamera(clusterView);
+              }
             } else {
               await _googleMapController
                   .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-                    target: clusterPlace.location,
-                    zoom: 20.0,
-                  )))
-                  .whenComplete(
-                      () => _showMarkerSheet(id: clusterPlace.items.first.id));
+                target: clusterPlace.location,
+                zoom: 20.0,
+              )));
+
+              _showMarkerSheet(id: clusterPlace.items.first.id);
             }
           },
           icon: _mapViewModel.isObjectMarkers
@@ -215,22 +233,12 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
         () async {
       isObjectMarkers
           ? await _mapViewModel.getObjectList(
-              latLngBounds: await _googleMapController
-                  .getVisibleRegion()
-                  .whenComplete(() => _updateClusters()),
-            )
+              latLngBounds: await _googleMapController.getVisibleRegion())
           : await _mapViewModel.getCompanyList(
-              latLngBounds: await _googleMapController
-                  .getVisibleRegion()
-                  .whenComplete(() => _updateClusters()),
-            );
-    });
-  }
+              latLngBounds: await _googleMapController.getVisibleRegion());
 
-  void _updateClusters() {
-    _mapViewModel
-        .updatePlaces()
-        .then((value) => _clusterManager?.setItems(_mapViewModel.places));
+      _clusterManager?.setItems(_mapViewModel.places);
+    });
   }
 
   // MARK: -

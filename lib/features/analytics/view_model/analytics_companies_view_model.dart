@@ -83,7 +83,9 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
         .whenComplete(() => notifyListeners());
   }
 
-  Future getDealCount(String id) async {
+  Future getDealCount(String? id) async {
+    if (id == null) return;
+
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
@@ -99,7 +101,9 @@ class AnalyticsCompaniesViewModel with ChangeNotifier {
         .whenComplete(() => notifyListeners());
   }
 
-  Future getManagerList(String id) async {
+  Future getManagerList(String? id) async {
+    if (id == null) return;
+
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 

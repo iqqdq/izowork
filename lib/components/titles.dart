@@ -9,6 +9,7 @@ abstract class Titles {
   /// TITLES
   static const authorization = 'Авторизация';
   static const passwordRecovery = 'Восстановление\nпароля';
+  static const privacyPolicy = 'Политика конфиденциальности';
 
   /// BUTTONS
   static const enter = 'Войти';
@@ -83,6 +84,7 @@ abstract class Titles {
   static const folderName = 'Название папки';
   static const file = 'Файл';
   static const files = 'Файлы';
+  static const commonFiles = 'Общие файлы';
   static const images = 'Изображения';
   static const process = 'Процесс';
   static const processes = 'Процессы';
@@ -232,6 +234,7 @@ abstract class Titles {
   static const byEffectiveness = 'По эффективности';
   static const type = 'Тип';
   static const post = 'Должность';
+  static const rating = 'Рейтинг';
   static const speciality = 'Специальность';
   static const socialLinks = 'Ссылки на социальные сети';
   static const socialLink = 'Ссылка на соц. сеть';

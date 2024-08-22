@@ -46,79 +46,103 @@ class _AuthorizationScreenBodyState
 
     return Scaffold(
       backgroundColor: HexColors.white,
-      body: SizedBox.expand(
-        child: Stack(children: [
-          Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            ListView(
-                physics: const NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                shrinkWrap: true,
-                children: [
-                  Text(
-                    Titles.authorization,
-                    style: TextStyle(
-                      color: HexColors.black,
-                      fontSize: 32.0,
-                      fontFamily: 'PT Root UI',
-                      fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: SizedBox.expand(
+          child: Stack(children: [
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              ListView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  shrinkWrap: true,
+                  children: [
+                    Text(
+                      Titles.authorization,
+                      style: TextStyle(
+                        color: HexColors.black,
+                        fontSize: 32.0,
+                        fontFamily: 'PT Root UI',
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24.0),
+                    const SizedBox(height: 24.0),
 
-                  /// LOGIN INPUT
-                  InputWidget(
+                    /// LOGIN INPUT
+                    InputWidget(
+                        height: 56.0,
+                        textEditingController: _loginTextEditingController,
+                        focusNode: _loginFocusNode,
+                        textInputType: TextInputType.emailAddress,
+                        textCapitalization: TextCapitalization.none,
+                        margin: EdgeInsets.zero,
+                        placeholder: Titles.login,
+                        onTap: () => setState(() {}),
+                        onChange: (text) => setState(() {}),
+                        onClearTap: () => setState(() {}),
+                        onEditingComplete: () => {
+                              setState(() {}),
+                              Future.delayed(Duration.zero,
+                                  () => _passwordFocusNode.requestFocus())
+                            }),
+                    const SizedBox(height: 16.0),
+
+                    /// PASSWORD INPUT
+                    InputWidget(
                       height: 56.0,
-                      textEditingController: _loginTextEditingController,
-                      focusNode: _loginFocusNode,
-                      textInputType: TextInputType.emailAddress,
+                      textEditingController: _passwordTextEditingController,
+                      focusNode: _passwordFocusNode,
+                      obscureText: true,
                       textCapitalization: TextCapitalization.none,
                       margin: EdgeInsets.zero,
-                      placeholder: Titles.login,
+                      placeholder: Titles.password,
                       onTap: () => setState(() {}),
                       onChange: (text) => setState(() {}),
                       onClearTap: () => setState(() {}),
-                      onEditingComplete: () => {
-                            setState(() {}),
-                            Future.delayed(Duration.zero,
-                                () => _passwordFocusNode.requestFocus())
-                          }),
-                  const SizedBox(height: 16.0),
+                    ),
+                    const SizedBox(height: 24.0),
+                    ButtonWidget(
+                      isDisabled: _loginTextEditingController.text.isEmpty ||
+                          _passwordTextEditingController.text.isEmpty,
+                      title: Titles.enter,
+                      margin: EdgeInsets.zero,
+                      onTap: () => _authorize(),
+                    ),
+                    const SizedBox(height: 24.0),
+                    TransparentButtonWidget(
+                      title: Titles.forgotPassword,
+                      margin: EdgeInsets.zero,
+                      onTap: () => _showRecoveryScreen(),
+                    )
+                  ]),
+            ]),
 
-                  /// PASSWORD INPUT
-                  InputWidget(
-                    height: 56.0,
-                    textEditingController: _passwordTextEditingController,
-                    focusNode: _passwordFocusNode,
-                    obscureText: true,
-                    textCapitalization: TextCapitalization.none,
-                    margin: EdgeInsets.zero,
-                    placeholder: Titles.password,
-                    onTap: () => setState(() {}),
-                    onChange: (text) => setState(() {}),
-                    onClearTap: () => setState(() {}),
-                  ),
-                  const SizedBox(height: 24.0),
-                  ButtonWidget(
-                    isDisabled: _loginTextEditingController.text.isEmpty ||
-                        _passwordTextEditingController.text.isEmpty,
-                    title: Titles.enter,
-                    margin: EdgeInsets.zero,
-                    onTap: () => _authorize(),
-                  ),
-                  const SizedBox(height: 24.0),
-                  TransparentButtonWidget(
-                    title: Titles.forgotPassword,
-                    margin: EdgeInsets.zero,
-                    onTap: () => _showRecoveryScreen(),
+            /// PRIVACY POLICY
+            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () =>
+                        _authorizationViewModel.showPrivacyPolicy(),
+                    child: Text(
+                      Titles.privacyPolicy,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: HexColors.primaryDark,
+                        decorationColor: HexColors.primaryDark,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
                   )
-                ]),
-          ]),
+                ],
+              )
+            ]),
 
-          /// INDICATOR
-          _authorizationViewModel.loadingStatus == LoadingStatus.searching
-              ? const LoadingIndicatorWidget()
-              : Container()
-        ]),
+            /// INDICATOR
+            _authorizationViewModel.loadingStatus == LoadingStatus.searching
+                ? const LoadingIndicatorWidget()
+                : Container()
+          ]),
+        ),
       ),
     );
   }

@@ -1,10 +1,10 @@
 class Office {
   Office({
-    required this.id,
+    this.id,
     required this.name,
   });
 
-  String id;
+  String? id;
   String name;
 
   factory Office.fromJson(Map<String, dynamic> json) => Office(

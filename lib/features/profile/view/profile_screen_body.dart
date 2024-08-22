@@ -131,6 +131,23 @@ class _ProfileScreenBodyState extends State<ProfileScreenBodyWidget> {
               const SeparatorWidget(),
               const SizedBox(height: 16.0),
 
+              /// RATING
+              const TitleWidget(
+                  text: Titles.rating,
+                  padding: EdgeInsets.only(bottom: 4.0),
+                  isSmall: true),
+              SelectionArea(
+                child: Text((_profileViewModel.rating ?? 0).toString() + ' %',
+                    style: TextStyle(
+                      color: HexColors.black,
+                      fontSize: 14.0,
+                      fontFamily: 'PT Root UI',
+                    )),
+              ),
+              const SizedBox(height: 16.0),
+              const SeparatorWidget(),
+              const SizedBox(height: 16.0),
+
               /// EMAIL
               const TitleWidget(
                   text: Titles.email,

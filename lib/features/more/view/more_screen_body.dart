@@ -82,11 +82,13 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
 
                                     /// EMAIL
                                     TitleWidget(
-                                        text: user?.email ?? '',
-                                        padding: const EdgeInsets.only(
-                                          top: 14.0,
-                                          bottom: 16.0,
-                                        )),
+                                      text: user?.email ?? '',
+                                      padding: const EdgeInsets.only(
+                                        top: 14.0,
+                                        bottom: 16.0,
+                                      ),
+                                      nonSelectable: true,
+                                    ),
                                   ])
                             ]),
                         onTap: () => _showProfileScreen(context),

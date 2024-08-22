@@ -102,29 +102,28 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
     _clusterManager ??= _initClusterManager();
 
     return Scaffold(
-        appBar: AppBar(
-            titleSpacing: 0.0,
-            systemOverlayStyle: SystemUiOverlayStyle.dark,
-            backgroundColor: Colors.transparent,
-            automaticallyImplyLeading: false,
-            title: Column(children: [
-              Stack(children: [
-                Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child:
-                        BackButtonWidget(onTap: () => Navigator.pop(context))),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(_singleObjectMapViewModel.object.name,
-                      style: TextStyle(
-                          color: HexColors.black,
-                          fontSize: 18.0,
-                          fontFamily: 'PT Root UI',
-                          fontWeight: FontWeight.bold)),
-                ])
+      appBar: AppBar(
+          titleSpacing: 0.0,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          title: Column(children: [
+            Stack(children: [
+              Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: BackButtonWidget(onTap: () => Navigator.pop(context))),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text(_singleObjectMapViewModel.object.name,
+                    style: TextStyle(
+                        color: HexColors.black,
+                        fontSize: 18.0,
+                        fontFamily: 'PT Root UI',
+                        fontWeight: FontWeight.bold)),
               ])
-            ])),
-        body: SizedBox.expand(
-            child: Stack(children: [
+            ])
+          ])),
+      body: SizedBox.expand(
+        child: Stack(children: [
           /// GOOGLE MAP
           GoogleMap(
               compassEnabled: false,
@@ -158,21 +157,26 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
 
           /// MAP CONTROL
           Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                  padding: const EdgeInsets.only(bottom: 60.0),
-                  child: MapControlWidget(
-                      onZoomInTap: () => _singleObjectMapViewModel
-                          .zoomIn(_googleMapController),
-                      onZoomOutTap: () => _singleObjectMapViewModel
-                          .zoomOut(_googleMapController),
-                      onShowLocationTap: () => _singleObjectMapViewModel
-                                  .hasPermission &&
-                              _singleObjectMapViewModel.userPosition != null
-                          ? _singleObjectMapViewModel
-                              .showUserLocation(_googleMapController)
-                          : _singleObjectMapViewModel.getLocationPermission(),
-                      onSearchTap: null))),
-        ])));
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 60.0),
+              child: MapControlWidget(
+                onZoomInTap: () =>
+                    _singleObjectMapViewModel.zoomIn(_googleMapController),
+                onZoomOutTap: () =>
+                    _singleObjectMapViewModel.zoomOut(_googleMapController),
+                onShowLocationTap: () =>
+                    _singleObjectMapViewModel.hasPermission &&
+                            _singleObjectMapViewModel.userPosition != null
+                        ? _singleObjectMapViewModel
+                            .showUserLocation(_googleMapController)
+                        : _singleObjectMapViewModel.getLocationPermission(),
+                onSearchTap: null,
+              ),
+            ),
+          ),
+        ]),
+      ),
+    );
   }
 }

@@ -51,6 +51,18 @@ class UserRepositoryImpl implements UserRepositoryInterface {
   }
 
   @override
+  Future<dynamic> getUserRating(String id) async {
+    dynamic json =
+        await await sl<WebServiceInterface>().get(userRatingUrl + '?id=$id');
+
+    try {
+      return json["rating"] as num;
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  @override
   Future<dynamic> getUsers({
     required Pagination pagination,
     String? search,

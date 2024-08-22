@@ -113,7 +113,7 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
                     ),
                   ),
 
-            /// FILLIAL HORIZONTAL LIST
+            /// OFFICE HORIZONTAL LIST
             isOfficeListViewHidden
                 ? Container()
                 : SizedBox(
@@ -252,27 +252,29 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
           );
   }
 
-  void _showAddDialogAction() => showModalActionSheet(
-        title: Titles.add,
-        actions: [
-          const SheetAction(
-            label: Titles.folder,
-            key: 0,
-          ),
-          const SheetAction(
-            label: Titles.file,
-            key: 1,
-          ),
-        ],
-        cancelLabel: Titles.cancel,
-        context: context,
-      ).then((value) => {
-            FocusScope.of(context).unfocus(),
-            if (value == 0)
-              _showTextViewSheetScreen()
-            else if (value == 1)
-              _documentsViewModel.addFile()
-          });
+  void _showAddDialogAction() {
+    showModalActionSheet(
+      title: Titles.add,
+      actions: [
+        const SheetAction(
+          label: Titles.folder,
+          key: 0,
+        ),
+        const SheetAction(
+          label: Titles.file,
+          key: 1,
+        ),
+      ],
+      cancelLabel: Titles.cancel,
+      context: context,
+    ).then((value) => {
+          FocusScope.of(context).unfocus(),
+          if (value == 0)
+            _showTextViewSheetScreen()
+          else if (value == 1)
+            _documentsViewModel.addFile()
+        });
+  }
 
   void _showClipOrDeleteDialogAction(
     bool isFolder,
@@ -353,7 +355,7 @@ class _DocumentsScreenBodyState extends State<DocumentsScreenBodyWidget> {
       if (folder!.isEmpty) return;
 
       _documentsViewModel.objectId == null
-          ? _documentsViewModel.createCommonFolder(true, folder!)
+          ? _documentsViewModel.createCommonFolder(folder!)
           : _documentsViewModel.createObjectFolder(folder!);
     });
   }

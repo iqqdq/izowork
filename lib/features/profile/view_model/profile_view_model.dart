@@ -15,14 +15,19 @@ class ProfileViewModel with ChangeNotifier {
 
   User? get user => _user;
 
+  num? _rating;
+
+  num? get rating => _rating;
+
   ProfileViewModel(this.currentUser) {
-    getUserProfile(currentUser.id);
+    getUserProfile(currentUser.id)
+        .whenComplete(() => getUserRating(currentUser.id));
   }
 
   // MARK: -
   // MARK: - API CALL
 
-  Future getUserProfile(String? id) async {
+  Future getUserProfile(String id) async {
     loadingStatus = LoadingStatus.searching;
 
     await sl<UserRepositoryInterface>()
@@ -31,6 +36,23 @@ class ProfileViewModel with ChangeNotifier {
               if (response is User)
                 {
                   _user = response,
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else
+                loadingStatus = LoadingStatus.error,
+            })
+        .whenComplete(() => notifyListeners());
+  }
+
+  Future getUserRating(String id) async {
+    loadingStatus = LoadingStatus.searching;
+
+    await sl<UserRepositoryInterface>()
+        .getUserRating(id)
+        .then((response) => {
+              if (response is num)
+                {
+                  _rating = response,
                   loadingStatus = LoadingStatus.completed,
                 }
               else

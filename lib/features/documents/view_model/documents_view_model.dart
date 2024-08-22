@@ -36,7 +36,6 @@ class DocumentsViewModel with ChangeNotifier {
 
   DocumentsViewModel(
     this.objectId,
-    // this.officeId,
     this.document,
   ) {
     setOffices().whenComplete(() => objectId == null
@@ -97,21 +96,18 @@ class DocumentsViewModel with ChangeNotifier {
         .whenComplete(() => _sortDocuments());
   }
 
-  Future createCommonFolder(
-    bool isCommon,
-    String name,
-  ) async {
-    if (_officeId == null) return;
+  Future createCommonFolder(String name) async {
     if (name.isEmpty) return;
+    if (_offices.length < 2) return;
 
     loadingStatus = LoadingStatus.searching;
     notifyListeners();
 
     await sl<DocumentRepositoryInterface>()
         .createCommonFolder(CommonFolderRequest(
-          isCommon: isCommon,
+          isCommon: _officeId == null,
           name: name,
-          officeId: _officeId!,
+          officeId: _officeId == null ? _offices[1].id! : _officeId!,
           parentFolder: document?.id,
         ))
         .then((response) => {
@@ -399,6 +395,10 @@ class DocumentsViewModel with ChangeNotifier {
     if (user.offices == null) return;
 
     _offices = user.offices ?? [];
+    _offices.insert(0, Office(id: null, name: 'Все'));
+    _offices.insert(2,
+        Office(id: '21f25da3-ffbc-48a0-a5c9-a1c6b00b6a21', name: 'Караганда'));
+
     _officeId = _offices.first.id;
 
     notifyListeners();
@@ -417,6 +417,8 @@ class DocumentsViewModel with ChangeNotifier {
   }
 
   Future addFile() async {
+    if (_offices.length < 2) return;
+
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowMultiple: true,
@@ -438,11 +440,11 @@ class DocumentsViewModel with ChangeNotifier {
                 file: File(element.path!),
               ));
               // IF COMMON FILE'S
-            } else if (_officeId != null) {
+            } else {
               await createCommonFile(CommonFileRequest(
-                officeId: _officeId!,
+                officeId: _officeId == null ? _offices[1].id! : _officeId!,
                 folderId: document?.id,
-                isCommon: true,
+                isCommon: _officeId == null,
                 file: File(element.path!),
               ));
             }

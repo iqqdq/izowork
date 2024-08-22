@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:izowork/api/api.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/injection_container.dart';
 import 'package:izowork/repositories/repositories.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AuthorizationViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.empty;
+
+  void showPrivacyPolicy() => launchUrlString(privacyPolicyUrl);
 
   // MARK: -
   // MARK: - API CALLS

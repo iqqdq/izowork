@@ -107,7 +107,8 @@ class MapViewModel with ChangeNotifier {
                 }
               else
                 loadingStatus = LoadingStatus.error
-            });
+            })
+        .whenComplete(() async => await updatePlaces());
   }
 
   Future getCompanyList({LatLngBounds? latLngBounds}) async {
@@ -122,11 +123,11 @@ class MapViewModel with ChangeNotifier {
                   loadingStatus = LoadingStatus.completed,
                   _companies.clear(),
                   _companies.addAll(response),
-                  updatePlaces()
                 }
               else
                 loadingStatus = LoadingStatus.error
-            });
+            })
+        .whenComplete(() async => await updatePlaces());
   }
 
   // MARK: -
