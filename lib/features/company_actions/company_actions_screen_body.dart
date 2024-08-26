@@ -1,5 +1,7 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:izowork/features/company/view_model/company_actions_view_model.dart';
+import 'package:izowork/features/company_actions/view_model/company_actions_view_model.dart';
+import 'package:izowork/models/models.dart';
 import 'package:izowork/views/views.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -65,7 +67,7 @@ class _CompanyActionsScreenBodyState
     return Scaffold(
       backgroundColor: HexColors.white,
       floatingActionButton:
-          FloatingButtonWidget(onTap: () => _showTextViewSheetScreen()),
+          FloatingButtonWidget(onTap: () => _showTextViewSheetScreen(null)),
       body: SizedBox.expand(
         child: Stack(children: [
           const SeparatorWidget(),
@@ -91,6 +93,8 @@ class _CompanyActionsScreenBodyState
                   return CompanyActionListItemWidget(
                     key: ValueKey(companyAction.id),
                     companyAction: companyAction,
+                    onLongPress: () =>
+                        _showUpdateOrDeleteDialogAction(companyAction),
                   );
                 }),
           ),
@@ -121,7 +125,7 @@ class _CompanyActionsScreenBodyState
   // MARK: -
   // MARK: - PUSH
 
-  void _showTextViewSheetScreen() {
+  void _showTextViewSheetScreen(CompanyAction? companyAction) {
     String? action;
 
     showCupertinoModalBottomSheet(
@@ -131,13 +135,50 @@ class _CompanyActionsScreenBodyState
         backgroundColor: HexColors.white,
         context: context,
         builder: (sheetContext) => TextViewSheetWidget(
-              title: Titles.addAction,
+              title: companyAction == null
+                  ? Titles.addAction
+                  : Titles.updateAction,
               label: Titles.action,
+              text: companyAction?.description,
               onTap: (text) => {
                 action = text,
                 Navigator.pop(context),
               },
-            )).whenComplete(
-        () => _companyActionsViewModel.addCompanyAction(action ?? ''));
+            )).whenComplete(() {
+      if (companyAction == null) {
+        _companyActionsViewModel.addCompanyAction(action ?? '');
+      } else {
+        _companyActionsViewModel.updateCompanyAction(
+          companyAction.id,
+          action ?? '',
+        );
+      }
+    });
+  }
+
+  void _showUpdateOrDeleteDialogAction(CompanyAction companyAction) {
+    final actions = [
+      const SheetAction(
+        label: Titles.update,
+        key: 0,
+      ),
+      const SheetAction(
+        label: Titles.delete,
+        key: 1,
+        isDestructiveAction: true,
+      )
+    ];
+
+    showModalActionSheet(
+      title: companyAction.description,
+      actions: actions,
+      cancelLabel: Titles.cancel,
+      context: context,
+    ).then((value) => {
+          FocusScope.of(context).unfocus(),
+          value == 0
+              ? _showTextViewSheetScreen(companyAction)
+              : _companyActionsViewModel.deleteCompanyAction(companyAction.id)
+        });
   }
 }

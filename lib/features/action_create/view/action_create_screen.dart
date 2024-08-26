@@ -5,12 +5,14 @@ import 'package:izowork/views/views.dart';
 class TextViewSheetWidget extends StatefulWidget {
   final String title;
   final String label;
+  final String? text;
   final Function(String) onTap;
 
   const TextViewSheetWidget({
     Key? key,
     required this.title,
     required this.label,
+    this.text,
     required this.onTap,
   }) : super(key: key);
 
@@ -24,6 +26,8 @@ class _TextViewSheetState extends State<TextViewSheetWidget> {
 
   @override
   void initState() {
+    _textEditingController.text = widget.text ?? '';
+
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {

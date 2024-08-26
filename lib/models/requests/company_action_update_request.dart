@@ -1,17 +1,17 @@
-class CompanyActionRequest {
+class CompanyActionUpdateRequest {
   final String companyId;
   final String description;
-  final String? userId;
+  final String? id;
 
-  CompanyActionRequest({
+  CompanyActionUpdateRequest({
     required this.companyId,
     required this.description,
-    required this.userId,
+    required this.id,
   });
 
   Map<String, dynamic> toJson() => {
         "company_id": companyId,
         "description": description,
-        "user_id": userId,
+        "id": id,
       };
 }

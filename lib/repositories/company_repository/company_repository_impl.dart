@@ -118,4 +118,34 @@ class CompanyRepositoryImpl implements CompanyRepositoryInterface {
       return ErrorResponse.fromJson(json);
     }
   }
+
+  @override
+  Future<dynamic> updateCompanyAction(
+      CompanyActionUpdateRequest companyActionUpdateRequest) async {
+    dynamic json = await sl<WebServiceInterface>().patch(
+      companyActionUpdateUrl,
+      companyActionUpdateRequest.toJson(),
+      null,
+    );
+
+    try {
+      return CompanyAction.fromJson(json["action"]);
+    } catch (e) {
+      return ErrorResponse.fromJson(json);
+    }
+  }
+
+  @override
+  Future<dynamic> deleteCompanyAction(DeleteRequest deleteRequest) async {
+    dynamic json = await sl<WebServiceInterface>().delete(
+      companyActionDeleteUrl,
+      deleteRequest.toJson(),
+    );
+
+    if (json == true) {
+      return json;
+    } else {
+      return ErrorResponse.fromJson(json);
+    }
+  }
 }

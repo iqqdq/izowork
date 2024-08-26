@@ -11,16 +11,16 @@ class FileListItemWidget extends StatelessWidget {
   final VoidCallback? onLongPress;
   final VoidCallback? onRemoveTap;
 
-  const FileListItemWidget(
-      {Key? key,
-      required this.fileName,
-      this.isFolder,
-      this.isDownloading,
-      this.isPinned,
-      this.onTap,
-      this.onLongPress,
-      this.onRemoveTap})
-      : super(key: key);
+  const FileListItemWidget({
+    Key? key,
+    required this.fileName,
+    this.isFolder,
+    this.isDownloading,
+    this.isPinned,
+    this.onTap,
+    this.onLongPress,
+    this.onRemoveTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -21,4 +21,9 @@ abstract class CompanyRepositoryInterface {
 
   Future<dynamic> createCompanyAction(
       CompanyActionRequest companyActionRequest);
+
+  Future<dynamic> updateCompanyAction(
+      CompanyActionUpdateRequest companyActionUpdateRequest);
+
+  Future<dynamic> deleteCompanyAction(DeleteRequest deleteRequest);
 }

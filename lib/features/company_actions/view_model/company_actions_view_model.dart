@@ -95,4 +95,56 @@ class CompanyActionsViewModel with ChangeNotifier {
             })
         .whenComplete(() => notifyListeners());
   }
+
+  Future updateCompanyAction(
+    String id,
+    String description,
+  ) async {
+    if (description.isEmpty) return;
+
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await sl<CompanyRepositoryInterface>()
+        .updateCompanyAction(CompanyActionUpdateRequest(
+          companyId: this.id,
+          description: description,
+          id: id,
+        ))
+        .then((response) => {
+              if (response is CompanyAction)
+                {
+                  _companyActions[_companyActions
+                      .indexWhere((element) => element.id == id)] = response,
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else if (response is ErrorResponse)
+                {
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка'),
+                  loadingStatus = LoadingStatus.error,
+                }
+            })
+        .whenComplete(() => notifyListeners());
+  }
+
+  Future deleteCompanyAction(String id) async {
+    loadingStatus = LoadingStatus.searching;
+    notifyListeners();
+
+    await sl<CompanyRepositoryInterface>()
+        .deleteCompanyAction(DeleteRequest(id: id))
+        .then((response) => {
+              if (response == true)
+                {
+                  _companyActions.removeWhere((element) => element.id == id),
+                  loadingStatus = LoadingStatus.completed,
+                }
+              else if (response is ErrorResponse)
+                {
+                  Toast().showTopToast(response.message ?? 'Произошла ошибка'),
+                  loadingStatus = LoadingStatus.error,
+                }
+            })
+        .whenComplete(() => notifyListeners());
+  }
 }

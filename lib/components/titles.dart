@@ -54,6 +54,7 @@ abstract class Titles {
   static const decline = 'Отклонить';
   static const stop = 'Остановить';
   static const save = 'Сохранить';
+  static const update = 'Изменить';
   static const delete = 'Удалить';
   static const pin = 'Закрепить';
   static const unpin = 'Открепить';
@@ -64,6 +65,7 @@ abstract class Titles {
   static const addComment = 'Добавить комментарий';
   static const addContact = 'Добавить контакт';
   static const addAction = 'Добавить действие';
+  static const updateAction = 'Изменить действие';
   static const addFolder = 'Добавить папку';
   static const sendInfo = 'Отправить информацию';
   static const goChat = 'Перейти в чат';
