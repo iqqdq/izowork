@@ -24,9 +24,9 @@ class ChatListItemWidget extends StatelessWidget {
         ? false
         : chat.lastMessage!.files.isEmpty
             ? false
-            : chat.lastMessage!.files.first.mimeType == null
+            : chat.lastMessage!.files.first.filename == null
                 ? false
-                : chat.lastMessage!.files.first.mimeType!.contains('audio') ||
+                : chat.lastMessage!.files.first.filename!.contains('audio') ||
                     chat.lastMessage!.files.first.name.contains('m4a');
 
     bool isFile = chat.lastMessage == null

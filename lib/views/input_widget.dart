@@ -46,6 +46,13 @@ class InputWidget extends StatefulWidget {
 
 class _InputWidgetState extends State<InputWidget> {
   @override
+  void dispose() {
+    FocusScope.of(context).unfocus();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _maxLines = widget.maxLines ?? 1;
 
@@ -56,10 +63,11 @@ class _InputWidgetState extends State<InputWidget> {
             : false;
 
     final _textStyle = TextStyle(
-        fontFamily: 'PT Root UI',
-        fontSize: 16.0,
-        fontWeight: FontWeight.w400,
-        color: HexColors.black);
+      fontFamily: 'PT Root UI',
+      fontSize: 16.0,
+      fontWeight: FontWeight.w400,
+      color: HexColors.black,
+    );
 
     return Container(
       height: widget.height ?? 44.0,
@@ -156,8 +164,8 @@ class _InputWidgetState extends State<InputWidget> {
               onEditingComplete: widget.onEditingComplete == null
                   ? () => FocusScope.of(context).unfocus()
                   : () => {
-                        widget.onEditingComplete!(),
-                        FocusScope.of(context).unfocus()
+                        FocusScope.of(context).unfocus(),
+                        widget.focusNode.unfocus(),
                       }),
         ),
       ]),

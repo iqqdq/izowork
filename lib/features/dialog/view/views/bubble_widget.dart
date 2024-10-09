@@ -88,27 +88,31 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
 
   Future _initAudioPlayer() async {
     if (Platform.isIOS) {
-      const AudioContext audioContext = AudioContext(
+      AudioContext audioContext = AudioContext(
           iOS: AudioContextIOS(
-        category: AVAudioSessionCategory.ambient,
-        options: [
+        category: AVAudioSessionCategory.playAndRecord,
+        options: const {
           AVAudioSessionOptions.defaultToSpeaker,
           AVAudioSessionOptions.mixWithOthers,
-        ],
+        },
       ));
 
-      AudioPlayer.global.setGlobalAudioContext(audioContext);
+      AudioPlayer.global.setAudioContext(audioContext);
     }
 
     _audioPlayer = AudioPlayer();
     _audioPlayer?.setSourceUrl(widget.text);
 
     _audioPlayer?.onDurationChanged.listen((event) {
-      setState(() => _duration = event.inSeconds);
+      if (mounted) {
+        setState(() => _duration = event.inSeconds);
+      }
     });
 
     _audioPlayer?.onPositionChanged.listen((event) {
-      setState(() => _position = event.inSeconds);
+      if (mounted) {
+        setState(() => _position = event.inSeconds);
+      }
     });
 
     _audioPlayer?.onPlayerStateChanged.listen(
@@ -163,8 +167,8 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                 fontSize: 12.0,
                 fontFamily: 'PT Root UI',
                 color: widget.isMine
-                    ? HexColors.white.withOpacity(0.6)
-                    : HexColors.black.withOpacity(0.6))));
+                    ? HexColors.white.withValues(alpha: 0.6)
+                    : HexColors.black.withValues(alpha: 0.6))));
 
     final readAndTime =
         Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -182,8 +186,8 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
     //         fontSize: 12.0,
     //         fontFamily: 'PT Root UI',
     //         color: widget.isMine
-    //             ? HexColors.white.withOpacity(0.6)
-    //             : HexColors.black.withOpacity(0.6)));
+    //             ? HexColors.white.withValues(alpha:0.6)
+    //             : HexColors.black.withValues(alpha:0.6)));
 
     final current = Text(
         _position.toString().length > 1
@@ -265,11 +269,13 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                                 ? Colors.white
                                 : HexColors.additionalViolet,
                             activeColor: widget.isMine
-                                ? HexColors.white.withOpacity(0.75)
-                                : HexColors.additionalViolet.withOpacity(0.75),
+                                ? HexColors.white.withValues(alpha: 0.75)
+                                : HexColors.additionalViolet
+                                    .withValues(alpha: 0.75),
                             inactiveColor: widget.isMine
-                                ? HexColors.white.withOpacity(0.3)
-                                : HexColors.additionalViolet.withOpacity(0.3),
+                                ? HexColors.white.withValues(alpha: 0.3)
+                                : HexColors.additionalViolet
+                                    .withValues(alpha: 0.3),
                             onChanged: (value) => _audioPlayer
                                 ?.seek(Duration(seconds: value.toInt()))),
                       ),
@@ -307,7 +313,7 @@ class _BubbleState extends State<BubbleWidget> with TickerProviderStateMixin {
                 ? null
                 : [
                     BoxShadow(
-                      color: HexColors.black.withOpacity(0.05),
+                      color: HexColors.black.withValues(alpha: 0.05),
                       blurRadius: 4.0,
                       offset: const Offset(0.0, 4.0),
                     )

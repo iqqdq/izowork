@@ -6,9 +6,9 @@ abstract class HexColors {
   static var white = HexColor("#FFFFFF");
 
   /// BACKGROUND
-  static var opacity90 = grey.withOpacity(0.9);
-  static var opcaity70 = grey.withOpacity(0.7);
-  static var overlay = black.withOpacity(0.6);
+  static var opacity90 = grey.withValues(alpha: 0.9);
+  static var opcaity70 = grey.withValues(alpha: 0.7);
+  static var overlay = black.withValues(alpha: 0.6);
 
   /// PRIMARY
   static var primaryDark = HexColor("#A7C100");
@@ -16,9 +16,9 @@ abstract class HexColors {
   static var primaryLight = HexColor("#296ACC");
 
   /// SECONDARY
-  static var secondaryDark = primaryDark.withOpacity(0.45);
-  static var secondaryMain = primaryMain.withOpacity(0.3);
-  static var secondaryLight = primaryLight.withOpacity(0.1);
+  static var secondaryDark = primaryDark.withValues(alpha: 0.45);
+  static var secondaryMain = primaryMain.withValues(alpha: 0.3);
+  static var secondaryLight = primaryLight.withValues(alpha: 0.1);
 
   /// ADDITIONAL
   static var additionalRed = HexColor("#CB2A2A");
@@ -43,24 +43,24 @@ abstract class HexColors {
   static var grey90 = HexColor("#2E2E2D");
 
   /// WHITE
-  static var white90 = white.withOpacity(0.9);
-  static var white80 = white.withOpacity(0.8);
-  static var white70 = white.withOpacity(0.7);
-  static var white60 = white.withOpacity(0.6);
-  static var white50 = white.withOpacity(0.5);
-  static var white40 = white.withOpacity(0.4);
-  static var white30 = white.withOpacity(0.3);
-  static var white20 = white.withOpacity(0.2);
-  static var white10 = white.withOpacity(0.1);
+  static var white90 = white.withValues(alpha: 0.9);
+  static var white80 = white.withValues(alpha: 0.8);
+  static var white70 = white.withValues(alpha: 0.7);
+  static var white60 = white.withValues(alpha: 0.6);
+  static var white50 = white.withValues(alpha: 0.5);
+  static var white40 = white.withValues(alpha: 0.4);
+  static var white30 = white.withValues(alpha: 0.3);
+  static var white20 = white.withValues(alpha: 0.2);
+  static var white10 = white.withValues(alpha: 0.1);
 
   /// SHADOW
-  static var card = black.withOpacity(0.05);
+  static var card = black.withValues(alpha: 0.05);
 
   /// BUTTON
   static var shadowButtonHighlightColor = HexColor("#EEEEEE");
-  static var shadowButtonDisableColor = white.withOpacity(0.3);
+  static var shadowButtonDisableColor = white.withValues(alpha: 0.3);
   static var shadowButtonDisableTitleColor = HexColor("#BDBDC7");
-  static var borderButtonHighlightColor = secondaryDark.withOpacity(0.6);
+  static var borderButtonHighlightColor = secondaryDark.withValues(alpha: 0.6);
   static var borderButtonDisableTitleColor = HexColor("#D7D7E0");
 
   /// CHART

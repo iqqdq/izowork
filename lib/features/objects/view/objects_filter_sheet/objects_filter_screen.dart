@@ -46,10 +46,10 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
     return Material(
         type: MaterialType.transparency,
         child: Container(
-          padding: EdgeInsets.only(
+          margin: EdgeInsets.only(
               bottom: MediaQuery.of(context).padding.bottom == 0.0
                   ? 12.0
-                  : MediaQuery.of(context).padding.bottom),
+                  : MediaQuery.of(context).padding.bottom + 12.0),
           color: HexColors.white,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,7 +73,6 @@ class ObjectsFilterScreenWidget extends StatelessWidget {
                 Expanded(
                   child: ListView(
                       physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
                       padding: const EdgeInsets.only(top: 8.0),
                       children: [
                         const SizedBox(height: 17.0),

@@ -83,7 +83,8 @@ class _ObjectAnalyticsScreenBodyState
                       Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 10.0),
-                          color: HexColors.secondaryMain.withOpacity(0.35),
+                          color:
+                              HexColors.secondaryMain.withValues(alpha: 0.35),
                           child: Row(children: [
                             Expanded(
                                 child: ListView(

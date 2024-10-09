@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:flutter_app_badge/flutter_app_badge.dart';
+
 import 'package:oktoast/oktoast.dart';
 
 import 'package:izowork/components/components.dart';
@@ -47,8 +48,5 @@ class _IzoworkAppState extends State<IzoworkApp> {
   // MARK: -
   // MARK: - FUNCTIONS
 
-  void _removeAppBadger() async {
-    await FlutterAppBadger.isAppBadgeSupported()
-        .then((value) => FlutterAppBadger.removeBadge());
-  }
+  void _removeAppBadger() async => await FlutterAppBadge.count(0);
 }

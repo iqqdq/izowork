@@ -227,7 +227,7 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
     showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       backgroundColor: HexColors.white,
       context: context,
       builder: (sheetContext) => SearchCompanyScreenWidget(
@@ -250,7 +250,7 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
     showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       backgroundColor: HexColors.white,
       context: context,
       builder: (sheetContext) => SearchUserScreenWidget(
@@ -273,7 +273,7 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
     showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       backgroundColor: HexColors.white,
       context: context,
       builder: (sheetContext) => SearchUserScreenWidget(
@@ -296,7 +296,7 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
     showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       backgroundColor: HexColors.white,
       context: context,
       builder: (sheetContext) => SearchUserScreenWidget(
@@ -319,7 +319,7 @@ class _PhaseCreateScreenBodyState extends State<PhaseCreateScreenBodyWidget> {
     showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       backgroundColor: HexColors.white,
       context: context,
       builder: (sheetContext) => ProductSelectionScreenWidget(

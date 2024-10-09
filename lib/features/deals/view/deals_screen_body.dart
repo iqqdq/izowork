@@ -199,41 +199,57 @@ class _DealsScreenBodyState extends State<DealsScreenBodyWidget>
   // MARK: -
   // MARK: - PUSH
 
-  void _showCalendarScreen() => Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => const DealCalendarScreenWidget()));
+  void _showCalendarScreen() {
+    FocusScope.of(context).unfocus();
 
-  void _showDealCreateScreen() => Navigator.push(
+    Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => DealCreateScreenWidget(
-              onCreate: (deal, dealProducts) => {
-                    if (deal != null) _dealsViewModel.getDealById(deal.id),
-                  }),
-        ),
-      );
+            builder: (context) => const DealCalendarScreenWidget()));
+  }
 
-  void _showDealsFilterSheet() => showCupertinoModalBottomSheet(
-      enableDrag: false,
-      topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
-      backgroundColor: HexColors.white,
-      context: context,
-      builder: (sheetContext) => DealsFilterPageViewScreenWidget(
-          dealsFilter: _dealsViewModel.dealsFilter,
-          onPop: (dealsFilter) => {
-                dealsFilter == null
-                    ? {
-                        _dealsViewModel.resetFilter(),
-                        _onRefresh(),
-                      }
-                    : _dealsViewModel.setFilter(
-                        '',
-                        dealsFilter,
-                      ),
-              }));
+  void _showDealCreateScreen() {
+    FocusScope.of(context).unfocus();
 
-  void _showDealScreenWidget(String id) => Navigator.push(context,
-      MaterialPageRoute(builder: (context) => DealScreenWidget(id: id)));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DealCreateScreenWidget(
+            onCreate: (deal, dealProducts) => {
+                  if (deal != null) _dealsViewModel.getDealById(deal.id),
+                }),
+      ),
+    );
+  }
+
+  void _showDealsFilterSheet() {
+    FocusScope.of(context).unfocus();
+
+    showCupertinoModalBottomSheet(
+        enableDrag: false,
+        topRadius: const Radius.circular(16.0),
+        barrierColor: Colors.black.withValues(alpha: 0.6),
+        backgroundColor: HexColors.white,
+        context: context,
+        builder: (sheetContext) => DealsFilterPageViewScreenWidget(
+            dealsFilter: _dealsViewModel.dealsFilter,
+            onPop: (dealsFilter) => {
+                  dealsFilter == null
+                      ? {
+                          _dealsViewModel.resetFilter(),
+                          _onRefresh(),
+                        }
+                      : _dealsViewModel.setFilter(
+                          '',
+                          dealsFilter,
+                        ),
+                }));
+  }
+
+  void _showDealScreenWidget(String id) {
+    FocusScope.of(context).unfocus();
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => DealScreenWidget(id: id)));
+  }
 }

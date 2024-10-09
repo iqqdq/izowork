@@ -191,7 +191,7 @@ class MapViewModel with ChangeNotifier {
           id: object.id,
           name: object.manager?.name ?? '-',
           color: object.hasOverdueTask == true
-              ? HexColors.additionalRed.withOpacity(0.75)
+              ? HexColors.additionalRed.withValues(alpha: 0.75)
               : object.objectStage?.color == null
                   ? HexColors.primaryMain
                   : HexColor(object.objectStage!.color!),

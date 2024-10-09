@@ -534,7 +534,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
     showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       backgroundColor: HexColors.white,
       context: context,
       builder: (sheetContext) => DealCloseSheetWidget(
@@ -582,7 +582,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
       showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
+        barrierColor: Colors.black.withValues(alpha: 0.6),
         backgroundColor: HexColors.white,
         context: context,
         builder: (sheetContext) => SelectionScreenWidget(
@@ -609,7 +609,7 @@ class _DealScreenBodyState extends State<DealScreenBodyWidget> {
       showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
+        barrierColor: Colors.black.withValues(alpha: 0.6),
         backgroundColor: HexColors.white,
         context: context,
         builder: (sheetContext) => DealProcessActionSheet(

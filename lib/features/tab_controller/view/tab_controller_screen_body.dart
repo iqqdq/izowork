@@ -93,6 +93,8 @@ class _TabControllerScreenBodyState
   }
 
   Future _onTabSelected(int index) async {
+    FocusScope.of(context).unfocus();
+
     if (index == 3) _tabControllerViewModel.clearMessageCount();
     if (index == 4) _tabControllerViewModel.clearNotificationCount();
 

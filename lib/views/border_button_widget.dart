@@ -62,7 +62,7 @@ class _BorderButtonState extends State<BorderButtonWidget> {
                       ? HexColors.additionalRed
                       : HexColors.primaryDark
                   : _isDestructive
-                      ? HexColors.additionalRed.withOpacity(0.5)
+                      ? HexColors.additionalRed.withValues(alpha: 0.5)
                       : HexColors.borderButtonHighlightColor,
         ),
         borderRadius: BorderRadius.circular(12.0),
@@ -89,7 +89,7 @@ class _BorderButtonState extends State<BorderButtonWidget> {
                             ? HexColors.additionalRed
                             : HexColors.primaryDark
                         : _isDestructive
-                            ? HexColors.additionalRed.withOpacity(0.75)
+                            ? HexColors.additionalRed.withValues(alpha: 0.75)
                             : HexColors.primaryDark,
               ),
             ),

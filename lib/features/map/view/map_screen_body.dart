@@ -4,7 +4,8 @@ import 'dart:math';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_cluster_manager_2/google_maps_cluster_manager_2.dart';
+import 'package:google_maps_cluster_manager_2/google_maps_cluster_manager_2.dart'
+    as cluster_manager;
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
@@ -39,7 +40,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
 
   late MapViewModel _mapViewModel;
 
-  ClusterManager? _clusterManager;
+  cluster_manager.ClusterManager? _clusterManager;
 
   @override
   bool get wantKeepAlive => true;
@@ -169,7 +170,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
   // MARK: - CLUSTER FUNCTIONS
 
   Future<Marker> Function(dynamic) get _markerBuilder => (cluster) async {
-        final Cluster<Place> clusterPlace = cluster;
+        final cluster_manager.Cluster<Place> clusterPlace = cluster;
 
         return Marker(
           markerId: MarkerId(clusterPlace.getId()),
@@ -221,11 +222,11 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
           },
           icon: _mapViewModel.isObjectMarkers
               ? await MarkerHelper().getObjectMarkerBitmap(
-                  cluster.isMultiple ? 160 : 120,
+                  cluster.isMultiple ? 48 : 40,
                   cluster,
                 )
               : await MarkerHelper().getCompanyMarkerBitmap(
-                  cluster.isMultiple ? 160 : 120,
+                  cluster.isMultiple ? 48 : 40,
                   cluster,
                 ),
         );
@@ -380,7 +381,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
   void _showMarkerSheet({required String id}) => showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
+        barrierColor: Colors.black.withValues(alpha: 0.6),
         backgroundColor: HexColors.white,
         context: context,
         builder: (sheetContext) => _mapViewModel.isObjectMarkers
@@ -402,7 +403,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
       showCupertinoModalBottomSheet(
           enableDrag: false,
           topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
+          barrierColor: Colors.black.withValues(alpha: 0.6),
           backgroundColor: HexColors.white,
           context: context,
           builder: (sheetContext) => _mapViewModel.isObjectMarkers
@@ -442,7 +443,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
         .whenComplete(() => showCupertinoModalBottomSheet(
               enableDrag: false,
               topRadius: const Radius.circular(16.0),
-              barrierColor: Colors.black.withOpacity(0.6),
+              barrierColor: Colors.black.withValues(alpha: 0.6),
               backgroundColor: HexColors.white,
               context: context,
               builder: (sheetContext) => MapAddObjectScreenWidget(
@@ -482,7 +483,7 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
   void _showSearchMapObjectSheet() => showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       backgroundColor: HexColors.white,
       context: context,
       builder: (sheetContext) => _mapViewModel.isObjectMarkers == true

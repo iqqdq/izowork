@@ -26,9 +26,11 @@ class NotificationEntity {
         userId: json["user_id"],
         createdAt: DateTime.parse(json["created_at"]).toUtc().toLocal(),
         type: json["type"],
-        metadata: json["metadata"] is String
-            ? Metadata.fromJson(jsonDecode(json["metadata"]))
-            : Metadata.fromJson(json["metadata"]),
+        metadata: !json.containsKey("metadata")
+            ? Metadata()
+            : json["metadata"] is String
+                ? Metadata.fromJson(jsonDecode(json["metadata"]))
+                : Metadata.fromJson(json["metadata"]),
         read: json["read"] is String ? jsonDecode(json["read"]) : json["read"],
       );
 }

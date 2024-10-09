@@ -1,4 +1,4 @@
-import 'package:audiofileplayer/audiofileplayer.dart';
+import 'package:audiofilereader/audiofileplayer.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

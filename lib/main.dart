@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:flutter_app_badge/flutter_app_badge.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:izowork/injection_container.dart';
@@ -30,9 +30,7 @@ void notificationTapBackground(NotificationResponse notificationResponse) =>
     selectNotificationStream.add(notificationResponse.payload);
 
 Future firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await FlutterAppBadger.isAppBadgeSupported().then((value) => {
-        if (value == true) FlutterAppBadger.updateBadgeCount(1),
-      });
+  await FlutterAppBadge.count(1);
 
   await Firebase.initializeApp(
     name: 'Izowork',
@@ -58,9 +56,7 @@ void main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Clear app badge
-  await FlutterAppBadger.isAppBadgeSupported().then(
-    (value) => {if (value == true) FlutterAppBadger.removeBadge()},
-  );
+  await FlutterAppBadge.count(0);
 
   // Set the background messaging handler early on, as a named top-level function
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);

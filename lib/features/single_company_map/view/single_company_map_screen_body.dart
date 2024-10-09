@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_cluster_manager_2/google_maps_cluster_manager_2.dart';
+import 'package:google_maps_cluster_manager_2/google_maps_cluster_manager_2.dart'
+    as cluster_manager;
 import 'package:izowork/features/map_company/view/map_company_screen_widget.dart';
 import 'package:izowork/features/single_company_map/view_model/single_company_map_view_model.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -28,7 +29,7 @@ class _SingleCompanyMapScreenBodyState
     extends State<SingleCompanyMapScreenBodyWidget> {
   late GoogleMapController _googleMapController;
   late SingleCompanyMapViewModel _singleCompanyMapViewModel;
-  ClusterManager? _clusterManager;
+  cluster_manager.ClusterManager? _clusterManager;
 
   @override
   void dispose() {
@@ -128,13 +129,12 @@ class _SingleCompanyMapScreenBodyState
   // MARK: -
   // MARK: - CLUSTER FUNCTIONS
 
-  ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(
-      _singleCompanyMapViewModel.places,
-      _singleCompanyMapViewModel.updateMarkers,
-      markerBuilder: _markerBuilder,
-    );
-  }
+  cluster_manager.ClusterManager _initClusterManager() =>
+      cluster_manager.ClusterManager<Place>(
+        _singleCompanyMapViewModel.places,
+        _singleCompanyMapViewModel.updateMarkers,
+        markerBuilder: _markerBuilder,
+      );
 
   Future<Marker> Function(dynamic) get _markerBuilder => (cluster) async {
         return Marker(
@@ -152,7 +152,7 @@ class _SingleCompanyMapScreenBodyState
             _pushMapCompanyScreenWidget();
           },
           icon: await MarkerHelper().getCompanyMarkerBitmap(
-            120,
+            40,
             cluster,
           ),
         );
@@ -173,7 +173,7 @@ class _SingleCompanyMapScreenBodyState
         () => showCupertinoModalBottomSheet(
             enableDrag: false,
             topRadius: const Radius.circular(16.0),
-            barrierColor: Colors.black.withOpacity(0.6),
+            barrierColor: Colors.black.withValues(alpha: 0.6),
             backgroundColor: HexColors.white,
             context: context,
             builder: (sheetContext) => MapCompanyScreenWidget(

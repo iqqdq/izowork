@@ -55,6 +55,7 @@ class _MoreScreenBodyState extends State<MoreScreenBodyWidget>
     return Scaffold(
         backgroundColor: HexColors.white,
         extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,

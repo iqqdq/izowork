@@ -2,7 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_cluster_manager_2/google_maps_cluster_manager_2.dart';
+import 'package:google_maps_cluster_manager_2/google_maps_cluster_manager_2.dart'
+    as cluster_manager;
 import 'package:izowork/components/hex_colors.dart';
 import 'package:izowork/features/single_object_map/view_model/single_object_map_view_model.dart';
 import 'package:izowork/helpers/helpers.dart';
@@ -25,7 +26,7 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
   late GoogleMapController _googleMapController;
 
   late SingleObjectMapViewModel _singleObjectMapViewModel;
-  ClusterManager? _clusterManager;
+  cluster_manager.ClusterManager? _clusterManager;
 
   @override
   void dispose() {
@@ -36,13 +37,12 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
   // MARK: -
   // MARK: - CLUSTER FUNCTIONS
 
-  ClusterManager _initClusterManager() {
-    return ClusterManager<Place>(
-      _singleObjectMapViewModel.places,
-      _singleObjectMapViewModel.updateMarkers,
-      markerBuilder: _markerBuilder,
-    );
-  }
+  cluster_manager.ClusterManager _initClusterManager() =>
+      cluster_manager.ClusterManager<Place>(
+        _singleObjectMapViewModel.places,
+        _singleObjectMapViewModel.updateMarkers,
+        markerBuilder: _markerBuilder,
+      );
 
   Future<Marker> Function(dynamic) get _markerBuilder => (cluster) async {
         return Marker(
@@ -60,7 +60,7 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
             _pushMapObjectScreenWidget();
           },
           icon: await MarkerHelper().getObjectMarkerBitmap(
-            120,
+            40,
             cluster,
           ),
         );
@@ -82,7 +82,7 @@ class _SingleMapScreenBodyState extends State<SingleObjectMapScreenBodyWidget> {
       () => showCupertinoModalBottomSheet(
           enableDrag: false,
           topRadius: const Radius.circular(16.0),
-          barrierColor: Colors.black.withOpacity(0.6),
+          barrierColor: Colors.black.withValues(alpha: 0.6),
           backgroundColor: HexColors.white,
           context: context,
           builder: (sheetContext) => MapObjectScreenWidget(

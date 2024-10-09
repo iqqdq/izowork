@@ -495,7 +495,7 @@ class _CompanyCreateScreenBodyState
     showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       backgroundColor: HexColors.white,
       context: context,
       builder: (sheetContext) => SelectionScreenWidget(
@@ -512,7 +512,7 @@ class _CompanyCreateScreenBodyState
   void _showContactSelectionSheet() => showCupertinoModalBottomSheet(
         enableDrag: false,
         topRadius: const Radius.circular(16.0),
-        barrierColor: Colors.black.withOpacity(0.6),
+        barrierColor: Colors.black.withValues(alpha: 0.6),
         backgroundColor: HexColors.white,
         context: context,
         builder: (sheetContext) => ContactsScreenWidget(
@@ -535,7 +535,7 @@ class _CompanyCreateScreenBodyState
     showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       backgroundColor: HexColors.white,
       context: context,
       builder: (sheetContext) => SelectionScreenWidget(

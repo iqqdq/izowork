@@ -2,7 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:google_maps_cluster_manager_2/google_maps_cluster_manager_2.dart';
+import 'package:google_maps_cluster_manager_2/google_maps_cluster_manager_2.dart'
+    as cluster_manager;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:izowork/components/components.dart';
@@ -11,10 +12,10 @@ import 'package:izowork/models/models.dart';
 class MarkerHelper {
   Future<BitmapDescriptor> getObjectMarkerBitmap(
     int size,
-    Cluster<Place> cluster,
+    cluster_manager.Cluster<Place> cluster,
   ) async {
     double newSize =
-        Platform.isAndroid ? size.toDouble() / 1.75 : size.toDouble();
+        Platform.isAndroid ? size.toDouble() * 0.9 : size.toDouble();
 
     final PictureRecorder pictureRecorder = PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
@@ -29,8 +30,8 @@ class MarkerHelper {
           newSize,
           newSize,
           const Radius.elliptical(
-            10.0,
-            10.0,
+            4.0,
+            4.0,
           ),
         ),
       );
@@ -38,13 +39,13 @@ class MarkerHelper {
     final Path path2 = Path()
       ..addRRect(
         RRect.fromLTRBR(
-          8.0,
-          8.0,
-          newSize - 8.0,
-          newSize - 8.0,
+          2.0,
+          2.0,
+          newSize - 2.0,
+          newSize - 2.0,
           const Radius.elliptical(
-            10.0,
-            10.0,
+            4.0,
+            4.0,
           ),
         ),
       );
@@ -52,13 +53,13 @@ class MarkerHelper {
     final Path path3 = Path()
       ..addRRect(
         RRect.fromLTRBR(
-          16.0,
-          16.0,
-          newSize - 16.0,
-          newSize - 16.0,
+          4.0,
+          4.0,
+          newSize - 4.0,
+          newSize - 4.0,
           const Radius.elliptical(
-            10.0,
-            10.0,
+            4.0,
+            4.0,
           ),
         ),
       );
@@ -117,15 +118,15 @@ class MarkerHelper {
 
     final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
 
-    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+    return BitmapDescriptor.bytes(data.buffer.asUint8List());
   }
 
   Future<BitmapDescriptor> getCompanyMarkerBitmap(
     int size,
-    Cluster<Place> cluster,
+    cluster_manager.Cluster<Place> cluster,
   ) async {
     double newSize =
-        Platform.isAndroid ? size.toDouble() / 1.75 : size.toDouble();
+        Platform.isAndroid ? size.toDouble() * 0.9 : size.toDouble();
 
     final PictureRecorder pictureRecorder = PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
@@ -178,6 +179,6 @@ class MarkerHelper {
         );
     final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
 
-    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+    return BitmapDescriptor.bytes(data.buffer.asUint8List());
   }
 }

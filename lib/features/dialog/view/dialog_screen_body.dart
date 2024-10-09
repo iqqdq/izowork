@@ -1,4 +1,4 @@
-import 'package:audiofileplayer/audiofileplayer.dart';
+import 'package:audiofilereader/audiofileplayer.dart';
 import 'package:blur/blur.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -143,29 +143,33 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
           Column(children: [
             /// DIALOG LIST VIEW
             Expanded(
-                child: Container(
-                    color: HexColors.grey,
-                    child: RawScrollbar(
-                        controller: _scrollController,
-                        thumbColor: HexColors.grey50,
-                        thickness: 3,
-                        child: SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            controller: _scrollController,
-                            reverse: true,
-                            child: GestureDetector(
-                                onTap: () => FocusScope.of(context).unfocus(),
-                                child: ListView.builder(
-                                  cacheExtent: 0.0,
-                                  reverse: false,
-                                  primary: false,
-                                  shrinkWrap: true,
-                                  padding: const EdgeInsets.only(
-                                      top: 12.0, left: 10.0, right: 10.0),
-                                  itemCount: _bubbles.length,
-                                  itemBuilder: (context, index) =>
-                                      _bubbles[index],
-                                )))))),
+              child: Container(
+                color: HexColors.grey,
+                child: RawScrollbar(
+                  controller: _scrollController,
+                  thumbColor: HexColors.grey50,
+                  thickness: 3,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    controller: _scrollController,
+                    reverse: true,
+                    child: GestureDetector(
+                      onTap: () => FocusScope.of(context).unfocus(),
+                      child: ListView.builder(
+                        cacheExtent: 0.0,
+                        reverse: false,
+                        primary: false,
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.only(
+                            top: 12.0, left: 10.0, right: 10.0),
+                        itemCount: _bubbles.length,
+                        itemBuilder: (context, index) => _bubbles[index],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
 
             /// MESSAGE BAR
             ChatMessageBarWidget(
@@ -383,9 +387,9 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
 
       if (_dialogViewModel.messages[index].files.length == 1) {
         // SHOW SINGLE FILE
-        isAudio = _dialogViewModel.messages[index].files.first.mimeType == null
+        isAudio = _dialogViewModel.messages[index].files.first.filename == null
             ? false
-            : _dialogViewModel.messages[index].files.first.mimeType!
+            : _dialogViewModel.messages[index].files.first.filename!
                     .contains('audio') ||
                 _dialogViewModel.messages[index].files.first.name
                     .contains('m4a');
@@ -501,7 +505,7 @@ class _DialogScreenBodyState extends State<DialogScreenBodyWidget> {
   void _showAddTaskSheet(String text) => showCupertinoModalBottomSheet(
       enableDrag: false,
       topRadius: const Radius.circular(16.0),
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       backgroundColor: HexColors.white,
       context: context,
       builder: (sheetContext) => DialogAddTaskWidget(

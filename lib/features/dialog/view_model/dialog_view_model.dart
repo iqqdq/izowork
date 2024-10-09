@@ -18,7 +18,7 @@ class DialogViewModel with ChangeNotifier {
 
   final String id;
   final Socket? chatSocket;
-  final record = Record();
+  final record = AudioRecorder();
 
   String? token;
   String? userId;
@@ -174,12 +174,17 @@ class DialogViewModel with ChangeNotifier {
 
     /// RECORD AUDIO
     if (await record.hasPermission()) {
-      await record.start(
+      record.start(
+        const RecordConfig(),
         path: await getLocalAudioPath(),
-        encoder: AudioEncoder.aacLc,
-        bitRate: 128000,
-        samplingRate: 44100,
       );
+
+      // await record.start(
+      //   path: await getLocalAudioPath(),
+      //   encoder: AudioEncoder.aacLc,
+      //   bitRate: 128000,
+      //   samplingRate: 44100,
+      // );
     }
   }
 

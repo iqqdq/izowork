@@ -37,7 +37,7 @@ class ProductsFilterScreenWidget extends StatelessWidget {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).padding.bottom == 0.0
                     ? 12.0
-                    : MediaQuery.of(context).padding.bottom),
+                    : MediaQuery.of(context).padding.bottom + 12.0),
             color: HexColors.white,
             child: Column(children: [
               /// TITLE

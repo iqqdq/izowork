@@ -40,7 +40,7 @@ class DealsFilterScreenWidget extends StatelessWidget {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).padding.bottom == 0.0
                     ? 12.0
-                    : MediaQuery.of(context).padding.bottom),
+                    : MediaQuery.of(context).padding.bottom + 12.0),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
