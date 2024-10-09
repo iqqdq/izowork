@@ -396,9 +396,6 @@ class DocumentsViewModel with ChangeNotifier {
 
     _offices = user.offices ?? [];
     _offices.insert(0, Office(id: null, name: 'Все'));
-    _offices.insert(2,
-        Office(id: '21f25da3-ffbc-48a0-a5c9-a1c6b00b6a21', name: 'Караганда'));
-
     _officeId = _offices.first.id;
 
     notifyListeners();

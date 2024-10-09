@@ -70,9 +70,10 @@ class PhaseChecklistViewModel with ChangeNotifier {
                         if (element.path == null) return;
 
                         await uploadFile(
-                          response.id,
-                          File(element.path!),
-                        ).then((value) => {
+                            response.id,
+                            File(
+                              element.path!,
+                            )).then((value) => {
                               current++,
                               if (current == _files.length)
                                 loadingStatus = LoadingStatus.completed,
@@ -113,7 +114,9 @@ class PhaseChecklistViewModel with ChangeNotifier {
 
   Future openFile(int index) async {
     if (phaseChecklistInfo == null) {
-      if ((await OpenFilex.open(_files[index].path)).type ==
+      if (_files[index].path == null) return;
+
+      if ((await OpenFilex.open(_files[index].path!)).type ==
           ResultType.noAppToOpen) {
         Toast().showTopToast(Titles.unsupportedFileFormat);
       }

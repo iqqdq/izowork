@@ -10,30 +10,29 @@ class ObjectsFilterViewModel with ChangeNotifier {
   final List<ObjectStage> objectStages;
 
   final List<String> _options = [];
+  List<String> get options => _options;
+
   List<int> tags = [];
 
   final List<String> options2 = ['По возрастанию', 'По убыванию'];
   List<int> tags2 = [];
 
   User? _manager;
-
-  Company? _designer;
-
-  Company? _contractor;
-
-  Company? _customer;
-
   User? get manager => _manager;
 
+  Company? _designer;
   Company? get designer => _designer;
 
+  Company? _contractor;
   Company? get contractor => _contractor;
 
+  Company? _customer;
   Company? get customer => _customer;
 
-  List<String> get options => _options;
-
-  ObjectsFilterViewModel(this.objectStages, this.objectsFilter) {
+  ObjectsFilterViewModel(
+    this.objectStages,
+    this.objectsFilter,
+  ) {
     objectStages.forEach((element) {
       _options.add(element.name);
     });

@@ -5,15 +5,15 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager_2/google_maps_cluster_manager_2.dart';
-import 'package:izowork/features/map/view_model/map_view_model.dart';
-import 'package:izowork/features/map_company/view/map_company_screen_widget.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
+import 'package:izowork/features/map/view_model/map_view_model.dart';
+import 'package:izowork/features/map_company/view/map_company_screen_widget.dart';
+import 'package:izowork/izowork_app.dart';
 import 'package:izowork/components/components.dart';
 import 'package:izowork/models/models.dart';
 import 'package:izowork/helpers/helpers.dart';
-
 import 'package:izowork/views/views.dart';
 import 'package:izowork/features/companies/view/companies_filter_sheet/companies_filter_page_view_screen.dart';
 import 'package:izowork/features/company_create/view/company_create_screen.dart';
@@ -33,7 +33,7 @@ class MapScreenBodyWidget extends StatefulWidget {
 }
 
 class _MapScreenBodyState extends State<MapScreenBodyWidget>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, RouteAware {
   final Completer<GoogleMapController> _completer = Completer();
   late GoogleMapController _googleMapController;
 
@@ -45,9 +45,22 @@ class _MapScreenBodyState extends State<MapScreenBodyWidget>
   bool get wantKeepAlive => true;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+  }
+
+  @override
   void dispose() {
+    routeObserver.unsubscribe(this);
     _googleMapController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // Covering route was popped off the navigator.
+    _updateMarkers(isObjectMarkers: _mapViewModel.isObjectMarkers);
   }
 
   @override

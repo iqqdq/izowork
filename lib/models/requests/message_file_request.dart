@@ -17,12 +17,10 @@ class MessageFileRequest {
     return dio.FormData.fromMap({
       "chat_id": chatId,
       "is_voice": isVoice,
-      "file": await MultipartFile.fromFile(file.path,
-          filename: file.path.substring(
-              file.path.length > 12
-                  ? file.path.length - 10
-                  : file.path.length - 6,
-              file.path.length))
+      "file": await MultipartFile.fromFile(
+        file.path,
+        filename: file.path.split('/').last,
+      )
     });
   }
 }

@@ -182,8 +182,12 @@ class _PhaseChecklistBodyState extends State<PhaseChecklistBodyWidget> {
             /// COMMENTS BUTTON
             _phaseChecklistViewModel.phaseChecklistInfo != null
                 ? BorderButtonWidget(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
+                    margin: EdgeInsets.only(
+                      left: 16.0,
+                      right: 16.0,
+                      bottom: MediaQuery.of(context).padding.bottom == 0.0
+                          ? 12.0
+                          : 0.0,
                     ),
                     title: Titles.comments,
                     onTap: () => _showPhaseChecklistCommentsScreenWidget(

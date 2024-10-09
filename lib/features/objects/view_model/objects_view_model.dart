@@ -11,25 +11,20 @@ class ObjectsViewModel with ChangeNotifier {
   LoadingStatus loadingStatus = LoadingStatus.searching;
 
   final List<MapObject> _objects = [];
-
   List<MapObject> get objects => _objects;
 
   Object? _object;
-
   Object? get object => _object;
 
   ObjectsFilter? _objectsFilter;
-
   ObjectsFilter? get objectsFilter => _objectsFilter;
 
   List<ObjectStage>? _objectStages;
-
   List<ObjectStage>? get objectStages => _objectStages;
 
   ObjectsViewModel() {
     getStageList().whenComplete(
-      () => getObjectList(pagination: Pagination(), search: ''),
-    );
+        () => getObjectList(pagination: Pagination(), search: ''));
   }
 
   // MARK: -

@@ -122,11 +122,10 @@ class DealProcessViewModel with ChangeNotifier {
       File file = File(element.path!);
       FormData formData = dio.FormData.fromMap({
         "deal_stage_process_information_id": id,
-        "file": await MultipartFile.fromFile(file.path,
-            filename: file.path.substring(
-              file.path.length - 8,
-              file.path.length,
-            ))
+        "file": await MultipartFile.fromFile(
+          file.path,
+          filename: file.path.split('/').last,
+        )
       });
 
       await sl<DealRepositoryInterface>()

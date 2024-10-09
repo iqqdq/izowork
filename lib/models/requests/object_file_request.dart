@@ -19,11 +19,7 @@ class ObjectFileRequest {
             "object_id": objectId,
             "file": await MultipartFile.fromFile(
               file.path,
-              filename: file.path.substring(
-                  file.path.length > 12
-                      ? file.path.length - 10
-                      : file.path.length - 6,
-                  file.path.length),
+              filename: file.path.split('/').last,
             )
           })
         : dio.FormData.fromMap({
@@ -31,11 +27,7 @@ class ObjectFileRequest {
             "folder_id": folderId,
             "file": await MultipartFile.fromFile(
               file.path,
-              filename: file.path.substring(
-                  file.path.length > 12
-                      ? file.path.length - 10
-                      : file.path.length - 6,
-                  file.path.length),
+              filename: file.path.split('/').last,
             )
           });
   }

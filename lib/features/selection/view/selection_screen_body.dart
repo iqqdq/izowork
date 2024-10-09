@@ -40,73 +40,77 @@ class _SelectionScreenBodyState extends State<SelectionScreenBodyWidget> {
     );
 
     return Material(
-        type: MaterialType.transparency,
-        child: Container(
-            color: HexColors.white,
-            child: NotificationListener<ScrollEndNotification>(
-                onNotification: (notification) {
-                  if (_scrollController.position.pixels == 0.0 &&
-                      MediaQuery.of(context).viewInsets.bottom == 0.0) {
-                    Navigator.pop(context);
-                  }
+      type: MaterialType.transparency,
+      child: Container(
+        color: HexColors.white,
+        child: NotificationListener<ScrollEndNotification>(
+          onNotification: (notification) {
+            if (_scrollController.position.pixels == 0.0 &&
+                MediaQuery.of(context).viewInsets.bottom == 0.0) {
+              Navigator.pop(context);
+            }
 
-                  // Return true to cancel the notification bubbling. Return false (or null) to
-                  // allow the notification to continue to be dispatched to further ancestors.
-                  return true;
-                },
-                child: ListView(
-                    controller: _scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(
-                        top: 8.0,
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: (MediaQuery.of(context).padding.bottom == 0.0
-                                ? 20.0
-                                : MediaQuery.of(context).padding.bottom) +
-                            MediaQuery.of(context).viewInsets.bottom),
-                    children: [
-                      /// DISMISS INDICATOR
-                      const SizedBox(height: 6.0),
-                      const DismissIndicatorWidget(),
+            // Return true to cancel the notification bubbling. Return false (or null) to
+            // allow the notification to continue to be dispatched to further ancestors.
+            return true;
+          },
+          child: ListView(
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              shrinkWrap: true,
+              padding: EdgeInsets.only(
+                  top: 8.0,
+                  left: 16.0,
+                  right: 16.0,
+                  bottom: (MediaQuery.of(context).padding.bottom == 0.0
+                          ? 20.0
+                          : MediaQuery.of(context).padding.bottom) +
+                      MediaQuery.of(context).viewInsets.bottom),
+              children: [
+                /// DISMISS INDICATOR
+                const SizedBox(height: 6.0),
+                const DismissIndicatorWidget(),
 
-                      /// TITLE
-                      TitleWidget(padding: EdgeInsets.zero, text: widget.title),
-                      const SizedBox(height: 16.0),
+                /// TITLE
+                TitleWidget(padding: EdgeInsets.zero, text: widget.title),
+                const SizedBox(height: 16.0),
 
-                      /// SCROLLABLE LIST
-                      SizedBox(
-                        height: 64.0 * _selectionViewModel.items.length,
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.zero,
-                            itemCount: _selectionViewModel.items.length,
-                            itemBuilder: (context, index) {
-                              final item = _selectionViewModel.items[index];
+                /// SCROLLABLE LIST
+                SizedBox(
+                  height: 64.0 * _selectionViewModel.items.length,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      itemCount: _selectionViewModel.items.length,
+                      itemBuilder: (context, index) {
+                        final item = _selectionViewModel.items[index];
 
-                              return SelectionListItemWidget(
-                                  isSelected: widget.value == item &&
-                                          _selectionViewModel.index == -1
-                                      ? true
-                                      : _selectionViewModel.index == index,
-                                  name: item,
-                                  onTap: () =>
-                                      _selectionViewModel.select(index));
-                            }),
-                      ),
+                        return SelectionListItemWidget(
+                            isSelected: widget.value == item &&
+                                    _selectionViewModel.index == -1
+                                ? true
+                                : _selectionViewModel.index == index,
+                            name: item,
+                            onTap: () => _selectionViewModel.select(index));
+                      }),
+                ),
 
-                      const SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
 
-                      ButtonWidget(
-                          title: Titles.apply,
-                          margin: EdgeInsets.zero,
-                          onTap: () => {
-                                widget.onSelectTap(_selectionViewModel
-                                    .items[_selectionViewModel.index]),
-                                Navigator.pop(context)
-                              }),
-                    ]))));
+                ButtonWidget(
+                    title: Titles.apply,
+                    margin: EdgeInsets.zero,
+                    onTap: () => {
+                          _selectionViewModel.index == -1
+                              ? widget.onSelectTap(widget.value)
+                              : widget.onSelectTap(_selectionViewModel
+                                  .items[_selectionViewModel.index]),
+                          Navigator.pop(context)
+                        }),
+              ]),
+        ),
+      ),
+    );
   }
 }

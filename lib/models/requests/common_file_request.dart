@@ -22,11 +22,7 @@ class CommonFileRequest {
             "is_common": isCommon,
             "file": await MultipartFile.fromFile(
               file.path,
-              filename: file.path.substring(
-                  file.path.length > 12
-                      ? file.path.length - 10
-                      : file.path.length - 6,
-                  file.path.length),
+              filename: file.path.split('/').last,
             ),
           })
         : dio.FormData.fromMap({
@@ -35,11 +31,7 @@ class CommonFileRequest {
             "is_common": isCommon,
             "file": await MultipartFile.fromFile(
               file.path,
-              filename: file.path.substring(
-                  file.path.length > 12
-                      ? file.path.length - 10
-                      : file.path.length - 6,
-                  file.path.length),
+              filename: file.path.split('/').last,
             ),
           });
   }

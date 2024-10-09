@@ -11,12 +11,10 @@ class DealFileRequest {
   Future<FormData> toFormData() async {
     return dio.FormData.fromMap({
       "deal_id": taskId,
-      "file": await MultipartFile.fromFile(file.path,
-          filename: file.path.substring(
-              file.path.length > 12
-                  ? file.path.length - 10
-                  : file.path.length - 6,
-              file.path.length))
+      "file": await MultipartFile.fromFile(
+        file.path,
+        filename: file.path.split('/').last,
+      )
     });
   }
 }
